@@ -1,4 +1,4 @@
-## New Wiki for OpenIPC
+## Wiki for OpenIPC
 
 * [EN](en/index) - English
 * [RU](ru/index) - Русский
