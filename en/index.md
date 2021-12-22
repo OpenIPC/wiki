@@ -1,4 +1,7 @@
 # English version
 
-[The old notes for resorting](old-notes-for-resorting)
+## Resources for recycling
+
+* [The old notes for resorting](old-notes-for-resorting)
+* https://github.com/OpenIPC/camerasrnd
 
