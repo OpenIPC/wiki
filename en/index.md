@@ -8,5 +8,6 @@
 * [https://github.com/OpenIPC/camerasrnd](https://github.com/OpenIPC/camerasrnd)
 * [https://github.com/OpenIPC/firmware/wiki](https://github.com/OpenIPC/firmware/wiki)
 * [https://github.com/OpenIPC/openipc.github.io](https://github.com/OpenIPC/openipc.github.io)
+* [https://github.com/OpenIPC/openipc.github.io/blob/main/docs/manual.md](https://github.com/OpenIPC/openipc.github.io/blob/main/docs/manual.md)
 * [https://openwrt.org/docs/techref/hardware/soc/soc.hisilicon.hi35xx](https://openwrt.org/docs/techref/hardware/soc/soc.hisilicon.hi35xx)
 
