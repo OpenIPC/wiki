@@ -4,6 +4,6 @@
 
 ## Ресурсы для переработки и интеграции
 
-* https://github.com/OpenIPC/camerasrnd/blob/master/docs/FAQ-ru.md
+* [https://github.com/OpenIPC/camerasrnd/blob/master/docs/FAQ-ru.md](https://github.com/OpenIPC/camerasrnd/blob/master/docs/FAQ-ru.md)
 * ?
 
