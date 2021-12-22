@@ -5,5 +5,7 @@
 ## Ресурсы для переработки и интеграции
 
 * [https://github.com/OpenIPC/camerasrnd/blob/master/docs/FAQ-ru.md](https://github.com/OpenIPC/camerasrnd/blob/master/docs/FAQ-ru.md)
-* ?
+
+
+* [Заметки от Игоря Залатова](https://github.com/OpenIPC/wiki/blob/master/ru/discussion.md)
 
