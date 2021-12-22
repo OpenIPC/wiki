@@ -161,16 +161,200 @@ if(pinfo->mem->start = 0x20250000 /* address i2c-2 */) {
 #endif
 ```
 
-# R&D related information
+## R&D related information
 
-##### How to [[login inside]] original firmware
+### How to [[login inside]] original firmware
 
-##### [[Majestic Log]] comments
+### [[Majestic Log]] comments
 
-##### [[DevTools]]
+### [[DevTools]]
 
-##### [[Docs on different IP cameras]] 
+### [[Docs on different IP cameras]] 
 
-#### Groups in Telegram related to development:
+### Groups in Telegram related to development:
 
 [Majestic Test Group](https://t.me/joinchat/YgHc5Bg4NOoxOTdi)
+
+
+## Tools used in Research and Development
+
+[hisi-trace](https://github.com/OpenIPC/hisi-trace) --> tool to run Sofia inside the OpenIPC. Allows porting stock Sofia functions to the target system without loading in the original firmware.
+
+[some tools for dissassembling](https://github.com/TekuConcept/ArmElfDisassembler)
+
+## Docs on currently unsupported SoC:
+
+[[Novatek NV98515 SoC|https://github.com/hn/reolink-camera]]
+
+Different hack & mod related to IP Cameras forums:
+
+[[https://www.goprawn.com/]]
+
+Below are some examples how to record video streams with various utilities.
+
+#### gstreamer
+
+* rtsp h264 stream:
+
+`gst-launch-1.0 rtspsrc location=rtsp://192.168.1.10:554/stream=0 ! rtpjitterbuffer ! rtph264depay ! h264parse ! mp4mux ! filesink location=stream0_h264.mp4 -e`
+
+* rtsp h265 stream:
+
+`gst-launch-1.0 rtspsrc location=rtsp://192.168.1.10:554/stream=0 ! rtpjitterbuffer ! rtph265depay ! h265parse ! mp4mux ! filesink location=stream0_h265.mp4 -e`
+
+#### ffmpeg
+
+#### vlc
+
+## How to login inside original firmware
+
+Information applicable only for XM-based camera firmware.
+
+### Enable telnet server
+
+In U-Boot console:
+
+```
+setenv telnetctrl 1; saveenv
+```
+
+### Connect with telnet
+
+```
+LocalHost login: root
+Password: xmhdipc
+Welcome to HiLinux.
+```
+
+Also can try [other pairs](https://gist.github.com/gabonator/74cdd6ab4f733ff047356198c781f27d)
+
+### Optional: enable Linux kernel verbose boot (where armbenv exists)
+
+```
+# armbenv -s xmuart 0
+# reboot
+```
+
+Or in case where XmEnv exists:
+
+```
+# XmEnv -s xmuart 0
+# reboot
+```
+### Enable telnet without even open your camera (remotely)
+
+* Find proper zip with recent firmware update using [link](https://translate.google.com/translate?hl=en&sl=ru&tl=en&u=https%3A%2F%2Fwww.cctvsp.ru%2Farticles%2Fobnovlenie-proshivok-dlya-ip-kamer-ot-xiong-mai) and download it.
+
+* Unzip it and choose proper `bin` file from several options.
+
+* It's recommended update your camera using this stock firmware without
+    modifying it. It will help understand possible issues. Use `General...` if
+    not sure which option you want.
+
+* Unzip `bin` file as it would be ordinary zip archive.
+
+* Copy `add_xmuart.sh` from `utils` directory of the repository inside directory
+    with unpacked files.
+
+* Run `./add_xmaurt.sh` and then ensure that `u-boot.env.img` has
+    `xmuart=1telnetctrl=1` near the end of file.
+
+* Repack `bin` file adding changed `u-boot.env.img` there like this: `zip -u General_IPC_HI3516EV200_85H30AI_S38.Nat.dss.OnvifS.HIK_V5.00.R02.20200507_all.bin u-boot.env.img`
+
+* Upgrade camera using new `bin` file
+
+Document origin is [here](https://github.com/OpenIPC/camerasrnd/blob/master/get_telnet.md)
+
+## Commands to measure chip temperature on various SoCs
+
+`Hi3516CV200 / Hi3518EV200 / Hi3518EV201`
+```sh
+devmem 0x20270110 32 0x60FA0000 ; devmem 0x20270114 8  | awk '{print "CPU temperature: " ((($1)*180)/256)-40}'
+```
+
+`Hi3516CV300 / Hi3518EV100`
+```sh
+devmem 0x1203009C 32 0x60FA0000 ; devmem 0x120300A4 16 | awk '{print "CPU temperature: " (((($1)-125.0)/806)*165)-40}'
+```
+
+`Hi3516EV200 / Hi3516EV300`
+```sh
+devmem 0x120280B4 32 0xC3200000 ; devmem 0x120280BC 16 | awk '{print "CPU temperature: " (((($1)-117)/798)*165)-40}'
+```
+
+`Hi3536D`
+```sh
+himm 0x0120E0110 0x60320000 > /dev/null; himm 0x120E0118 | awk '{print $4}' | dd skip=1 bs=7 2>/dev/null | awk '{print "0x"$1}' | awk '{print "CPU temperature: " (($1*180)/256)-40}'
+```
+
+`Hi3536C`
+```sh
+himm 0x0120E0110 0x60320000 > /dev/null; himm 0x120E0118 | awk '{print $4}' | dd skip=1 bs=7 2>/dev/null | awk '{print "0x"$1}' | awk '{print "CPU temperature: " (($1-125)/806)*165-40}'
+```
+
+`HI3520DV200 `
+```sh
+devmem 20060020 32
+```
+
+`Hi3516AV200`
+```sh
+#PERI_PMC68 0x120a0110 (disable-->enable)
+himm 0x120a0110 0 > /dev/null;
+himm 0x120a0110 0x40000000 > /dev/null;
+
+usleep 100000
+#PERI_PMC70 0x120a0118 read temperature
+DATA0=$(himm 0x120a0118 0 | grep 0x120a0118)
+DATA1=$(printf "$DATA0" | sed 's/0x120a0118: //')
+DATA2=$(printf "$DATA1" | sed 's/ --> 0x00000000//')
+
+let "var=$DATA2&0x3ff"
+if [ $var -ge 125 -a $var -le 931 ];then
+    echo `awk -v x="$var" 'BEGIN{printf "chip temperature: %f\n",(x-125)*10000/806*165/10000-40}'`
+else
+    echo "$var ---> invalid. [125,931]"
+fi
+```
+
+## Direct streaming to YouTube
+
+YouTube offers not only LiveStreming but also can record this stream.
+
+Up to 12 hours of LiveStream can be recorded. 
+
+Direct streaming to YouTube is possible but not currently supported by OpenIPC.
+
+### Direct streaming can be done with MiniHttp
+
+Direct streaming to YouTube could be done with the help of RTMP but there are currently no plans add this protocol to the main streamer MiniHttp.
+
+### Direct streaming can be done with FFMPEG
+
+There are two modes available: "old one", H264 over RTMP an a "new one", H265 over HLS. 
+
+Both methods were not tested in production and still in development mode. See following links for details:
+
+### H264 over RTMP
+
+Navigate to the compiled package [H264 over RTMP](https://github.com/ZigFisher/Glutinium/tree/master/hi35xx-ffmpeg/files)
+
+Copy file **silence.aac** to /usr/lib/
+
+and file **ffmpeg** to /usr/sbin/
+
+Also set execution permission:
+
+`chmod +x /usr/sbin/ffmpeg`
+
+Run ffmpeg with the following parameters:
+
+ffmpeg -stream_loop -1 -i /usr/lib/silence.aac -rtsp_transport udp -thread_queue_size 64 -i rtsp://127.0.0.1:554/stream=0 -c
+:v copy -c:a copy -f flv rtmp://a.rtmp.youtube.com/live2/<your key>
+
+
+[H265 over HLS](https://gist.github.com/widgetii/ec275524dd621cd55774c952bee4c622)
+
+Some build instructions:
+
+https://github.com/ZigFisher/Glutinium/blob/master/hi35xx-ffmpeg/0_Build.sh
