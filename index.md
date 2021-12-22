@@ -1,3 +1,4 @@
 ## New Wiki for OpenIPC
 
-Create repo
+* [EN](en/index) - English
+* [RU](ru/index) - Русский
