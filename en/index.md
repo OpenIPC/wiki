@@ -2,6 +2,15 @@
 
 # English version
 
+
+## Available resources
+
+* [coupler](https://openipc.github.io/coupler)
+* [firmware](https://openipc.github.io/firmware)
+* [ipctool](https://openipc.github.io/ipctool)
+* [telemetry](https://openipc.github.io/telemetry)
+
+
 ## Resources for recycling and integration
 
 * [https://github.com/OpenIPC/wiki/blob/master/en/old-notes-for-resorting.md](https://github.com/OpenIPC/wiki/blob/master/en/old-notes-for-resorting.md)
