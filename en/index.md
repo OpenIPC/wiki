@@ -1,3 +1,5 @@
+![OpenIPC logo](https://cdn.themactep.com/images/logo_openipc.png "OpenIPC logo")
+
 # English version
 
 ## Resources for recycling and integration
