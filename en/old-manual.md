@@ -98,7 +98,7 @@ killall -sigint majestic; export SENSOR=$(ipctool --sensor_id); majestic 2>&1 | 
 ### Camera related URLs in firmware
 
 
-Information on the streamer URL's and their description can be found in the [Wiki](https://github.com/OpenIPC/openipc-2.1/wiki/majestic_streamer)
+Information on the streamer URL's and their description can be found in the [Wiki](https://github.com/OpenIPC/firmware/wiki/majestic_streamer)
 
 
 ### Statistical data
