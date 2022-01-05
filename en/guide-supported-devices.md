@@ -16,3 +16,6 @@ Reading this page, you may want to add new supported device and you can do it [h
 | Rotek     | Switcam HS303 (v3)   | HI3518EV200  |          |               | No       | RTL8188EU | WiFi | Yes    |
 |           |                      |              |          |               |          |           |      |        |
 | Xiaomi    | MJSXJ02HL            | HI3518EV300  |          |               | No       |           |      | Yes    |
+|           |                      |              |          |               |          |           |      |        |
+| Zenotech  | HI3516D_MB_V13_RA    | HI3516DV100  | OV9689   | GD25Q128CSIG  | Yes      | No        |      | No     |
+
