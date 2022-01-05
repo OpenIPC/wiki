@@ -15,7 +15,7 @@ version of our firmware is to open[^1] the camera case and take a look at the
 chip markings. Then look up your chip in the [list of supported hardware][1]
 and check its development status.
 
-If you still have your doubts, take as hi-res pictures of the hardware close-ups
+If you still have your doubts, take hi-res pictures of the hardware close-ups
 and ask for help in one of our Telegram groups.
 
 [^1]: Attention! Doing so, you are taking full responsibility for your actions.
