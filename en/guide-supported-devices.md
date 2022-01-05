@@ -2,7 +2,7 @@
 
 # Supported devices
 
-Reading this page, you may want to add new supported device and you can do it [here](https://github.com/OpenIPC/wiki/edit/master/en/guide-supported-devices.md).
+Reading this page, you may want to add new supported device and you can do it [here](https://github.com/OpenIPC/wiki/blob/master/en/guide-supported-devices.md).
 
 | Brand     | Model                | Processor    | Sensor   | Flash         | Ethernet | WiFi      | USB  | SD/MMC |
 |-----------|:--------------------:|:------------:|:--------:|:-------------:|:--------:|:---------:|:----:|:------:|
