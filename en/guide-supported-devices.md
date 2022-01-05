@@ -2,6 +2,8 @@
 
 # Supported devices
 
+Reading this page, you may want to add new supported device and you can do it [here](https://github.com/OpenIPC/wiki/edit/master/en/guide-supported-devices.md).
+
 | Brand     | Model                | Processor    | Sensor   | Flash         | Ethernet | WiFi      | USB  | SD/MMC |
 |-----------|:--------------------:|:------------:|:--------:|:-------------:|:--------:|:---------:|:----:|:------:|
 | Rotek     | Switcam HS303 (v1)   | HI3518EV200  |          |               | No       | RTL8188FU | WiFi | Yes    |
