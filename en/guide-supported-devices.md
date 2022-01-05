@@ -4,4 +4,6 @@
 
 | Brand     | Model                | Processor    | Sensor   | Flash         | Ethernet | WiFi      | USB  | SD/MMC |
 |-----------|:--------------------:|:------------:|:--------:|:-------------:|:--------:|:---------:|:----:|:------:|
-| Rotek     | Switcam HS303 (v2)   | HI3518EV200  | OV9732   | GD25Q128CSIG  | No       | RTL8188EU | WiFi | yes    |
+| Rotek     | Switcam HS303 (v1)   | HI3518EV200  |          |               | No       | RTL8188FU | WiFi | Yes    |
+| Rotek     | Switcam HS303 (v2)   | HI3518EV200  | OV9732   | GD25Q128CSIG  | No       | RTL8188EU | WiFi | Yes    |
+| Rotek     | Switcam HS303 (v3)   | HI3518EV200  |          |               | No       | RTL8188EU | WiFi | Yes    |
