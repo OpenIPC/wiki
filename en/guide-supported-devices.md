@@ -7,7 +7,8 @@ Reading this page, you may want to add new supported device and you can do it [h
 | Brand     | Model                | Processor    | Sensor   | Flash         | Ethernet | WiFi      | USB  | SD/MMC |
 |-----------|:--------------------:|:------------:|:--------:|:-------------:|:--------:|:---------:|:----:|:------:|
 |           |                      |              |          |               |          |           |      |        |
-| Anjoy     | YM-J10D              | SSC337       | IMX307   |               | Yes      | No        | No   | No     |
+| Anjoy     | MS-J10               | SSC335       | IMX307   |               | Yes      | No        | Yes  | No     |
+| Anjoy     | YM-J10D              | SSC337       | IMX307   |               | Yes      | No        | Yes  | No     |
 |           |                      |              |          |               |          |           |      |        |
 | LTV       | CNE-724 48           | HI3516EV200  |          |               | Yes      | No        | No   | Yes    |
 |           |                      |              |          |               |          |           |      |        |
