@@ -2,8 +2,10 @@
 
 # English version
 
+* [Supported devices](https://openipc.org/wiki/en/guide-supported-devices)
 
-## Available resources
+
+## Available subprojects
 
 * [coupler](https://openipc.github.io/coupler)
 * [firmware](https://openipc.github.io/firmware)
