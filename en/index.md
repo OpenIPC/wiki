@@ -2,7 +2,11 @@
 
 # English version
 
+## Manuals and Instructions
+
 * [Supported devices](https://openipc.org/wiki/en/guide-supported-devices)
+
+* [Firmware Partitions Calculation by themactep](https://themactep.com/tools/firmware-partitions-calculation)
 
 
 ## Available subprojects
