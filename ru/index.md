@@ -112,6 +112,7 @@ OpenIPC -- это увлекательный эксперимент, в кото
 
 * [Часто задаваемые вопросы и ответы на них][faq1]
 * [Заметки от Игоря Залатова][faq2]
+* [заметки от Олега Левина][faq3]
 
 
 ## Установка прошивки OpenIPC.
@@ -124,5 +125,6 @@ OpenIPC -- это увлекательный эксперимент, в кото
 [socs]: https://github.com/OpenIPC/firmware/wiki/supported_devices
 [faq1]: https://github.com/OpenIPC/camerasrnd/blob/master/docs/FAQ-ru.md
 [faq2]: https://github.com/OpenIPC/wiki/blob/master/ru/discussion.md
+[faq3]: https://alarmsystem-cctv.ru/openipc-%D0%BE%D1%82%D0%BA%D1%80%D1%8B%D1%82%D1%8B%D0%B9-%D0%BA%D0%BE%D0%BB%D0%BB%D0%B5%D0%BA%D1%82%D0%B8%D0%B2/
 [g-usbttl]: https://google.com/search?q=ftdi+usb+ttl
 [g-3.3ttl]: https://google.com/search?q=logic+level+converter+3.3v+5v
