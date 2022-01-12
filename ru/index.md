@@ -118,7 +118,7 @@ OpenIPC -- это увлекательный эксперимент, в кото
 ## Установка прошивки OpenIPC.
 
 Итак, если вы всё ещё хотите попробовать прошивку OpenIPC на своей камере,
-вам поможет [пошаговая инструкция](/wiki/ru/installation.md).
+вам поможет [пошаговая инструкция](/wiki/ru/installation).
 
 
 [logo]: https://cdn.themactep.com/images/logo_openipc.png
