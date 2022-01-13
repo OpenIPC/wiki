@@ -1,46 +1,46 @@
 ![OpenIPC logo](https://cdn.themactep.com/images/logo_openipc.png "OpenIPC logo")
 
-# Navigation Menu
+## Navigation Menu
 
 * **Introduction**
-  * [Supported devices](supported_devices)
-  * [Show changelog](show_changelog)
+  * [Supported devices](transfer-supported-devices)
+  * [Show changelog](transfer-show-changelog)
 * **Installation**
-  * [Goke based boards](install_goke)
-  * [HiSilicon based boards](install_hisi)
-  * [Novatek based boards](install_novatek)
-  * [SigmaStar based boards](install_ssc335)
-  * [XM510 based boards](install_xm510)
-  * [XM530 based boards](install_xm530)
+  * [Goke based boards](transfer-install-goke)
+  * [HiSilicon based boards](transfer-install-hisi)
+  * [Novatek based boards](transfer-install-novatek)
+  * [SigmaStar based boards](transfer-install-ssc335)
+  * [XM510 based boards](transfer-install-xm510)
+  * [XM530 based boards](transfer-install-xm530)
 * **Usage**
-  * [System features](system_features)
-  * [Majestic streamer](majestic_streamer)
-  * [Microbe WEB interface](microbe-web)
-  * [Upgrade firmware](sysupgrade)
-  * [Image quality tuning](Image-quality-tuning)
-  * [Memory tuning](Memory-tuning)
-  * [Using ipctool](example_ipctool)
-  * [GPIO settings](gpio_settings)
-  * [ACMEv2](ACMEv2)
-  * [YouTube streaming](YouTube-streaming)
-  * [WiFi XM530](wifi_xm530)
+  * [System features](transfer-system-features)
+  * [Majestic streamer](transfer-majestic-streamer)
+  * [Microbe WEB interface](transfer-microbe-web)
+  * [Upgrade firmware](transfer-sysupgrade)
+  * [Image quality tuning](transfer-image-quality-tuning)
+  * [Memory tuning](transfer-memory-tuning)
+  * [Using ipctool](transfer-example-ipctool)
+  * [GPIO settings](transfer-gpio-settings)
+  * [ACMEv2](transfer-acmev2)
+  * [YouTube streaming](transfer-youtube-streaming)
+  * [WiFi XM530](transfer-wifi-xm530)
 * **Firmware**
   * [Releases in GitHub](https://github.com/OpenIPC/firmware/releases/tag/latest)
   * [Releases in Telegram](https://t.me/s/openipc_dev)
-  * [Source code](source_code)
+  * [Source code](transfer-source-code)
 * **Development**
-  * [Interesting tricks](dev_tricks)
-  * [Boot device with NFS](dev_nfs_boot)
-  * [FFMPEG usage](dev_ffmpeg_usage)
+  * [Interesting tricks](transfer-dev-tricks)
+  * [Boot device with NFS](transfer-dev-nfs-boot)
+  * [FFMPEG usage](transfer-dev-ffmpeg-usage)
 * **Device Integration**
-  * [Kernel configuration](integration_kernel)
+  * [Kernel configuration](transfer-integration-kernel)
 * **Specialized device settings**
-  * [Switcam HS303(v2)](special_hs303v2)
+  * [Switcam HS303(v2)](transfer-special-hs303v2)
 * **Contacts**
   * [Bug reports](https://github.com/OpenIPC/firmware/issues)
 * **Roadmap**
-  * [ToDo](todo_all)
-  * [Discussion (ru)](discussion_ru)
-  * [Developers](developers)
+  * [ToDo](transfer-todo-all)
+  * [Discussion (ru)](transfer-discussion-ru)
+  * [Developers](transfer-developers)
 
 -----
