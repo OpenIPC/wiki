@@ -8,10 +8,10 @@
 * [Show changelog](transfer-show-changelog)
 
 ## Available subprojects
-* [coupler](https://openipc.github.io/coupler)
-* [firmware](https://openipc.github.io/firmware)
-* [ipctool](https://openipc.github.io/ipctool)
-* [telemetry](https://openipc.github.io/telemetry)
+* [coupler](https://openipc.org/coupler)
+* [firmware](https://openipc.org/firmware)
+* [ipctool](https://openipc.org/ipctool)
+* [telemetry](https://openipc.org/telemetry)
 * [Firmware Partitions Calculation by themactep](https://themactep.com/tools/firmware-partitions-calculation)
 
 ## Installation
