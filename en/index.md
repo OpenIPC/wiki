@@ -2,8 +2,6 @@
 
 # English version
 
-## Manuals and Instructions
-
 ## Introduction
 * [About project](transfer-menu-index)
 * [Supported devices](https://openipc.org/wiki/en/guide-supported-devices)
@@ -16,7 +14,7 @@
 * [ipctool](https://openipc.github.io/ipctool)
 * [telemetry](https://openipc.github.io/telemetry)
 
-* **Installation**
+## Installation
 * [Goke based boards](transfer-install-goke)
 * [HiSilicon based boards](transfer-install-hisi)
 * [Novatek based boards](transfer-install-novatek)
