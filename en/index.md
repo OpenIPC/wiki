@@ -47,17 +47,13 @@
 * [FFMPEG usage](transfer-dev-ffmpeg-usage)
 * [Kernel configuration for adding new platforms](transfer-integration-kernel)
 
-## Specialized device settings
-* [Switcam HS303(v2)](transfer-special-hs303v2)
-
 ## Contacts
 * [Bug reports](https://github.com/OpenIPC/firmware/issues)
 
 ## Roadmap
 * [ToDo](transfer-todo-all)
-* [Discussion (ru)](transfer-discussion-ru)
 * [Developers](transfer-developers)
-* [Developers](transfer-notes-for-resorting)
+* [Notes from old sources](transfer-notes-for-resorting)
 
 ## Resources for recycling and integration
 * [https://github.com/OpenIPC/camerasrnd](https://github.com/OpenIPC/camerasrnd)

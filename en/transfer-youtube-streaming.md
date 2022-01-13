@@ -95,5 +95,5 @@ Navigate https://studio.youtube.com/
 On right side click on 'CREATE' button and then 'Go live'
 
 credits (c) Victor
-Origin 
+Origin
 https://github.com/OpenIPC/camerasrnd/blob/master/streaming/youtube.md
