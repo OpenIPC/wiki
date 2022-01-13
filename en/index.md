@@ -6,13 +6,13 @@
 * [About project](transfer-menu-index)
 * [Supported devices](https://openipc.org/wiki/en/guide-supported-devices)
 * [Show changelog](transfer-show-changelog)
-* [Firmware Partitions Calculation by themactep](https://themactep.com/tools/firmware-partitions-calculation)
 
 ## Available subprojects
 * [coupler](https://openipc.github.io/coupler)
 * [firmware](https://openipc.github.io/firmware)
 * [ipctool](https://openipc.github.io/ipctool)
 * [telemetry](https://openipc.github.io/telemetry)
+* [Firmware Partitions Calculation by themactep](https://themactep.com/tools/firmware-partitions-calculation)
 
 ## Installation
 * [Goke based boards](transfer-install-goke)
@@ -59,8 +59,6 @@
 * [Developers](transfer-developers)
 * [Developers](transfer-notes-for-resorting)
 
-
 ## Resources for recycling and integration
 * [https://github.com/OpenIPC/camerasrnd](https://github.com/OpenIPC/camerasrnd)
-* [https://github.com/OpenIPC/openipc.github.io](https://github.com/OpenIPC/openipc.github.io)
 * [https://openwrt.org/docs/techref/hardware/soc/soc.hisilicon.hi35xx](https://openwrt.org/docs/techref/hardware/soc/soc.hisilicon.hi35xx)
