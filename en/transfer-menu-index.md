@@ -11,9 +11,9 @@ We would be grateful for the feedback and suggestions.
 
 ## Official links
 
+* [OpenIPC on Wiki](https://openipc.github.io/wiki) - Collection of various documentation and instructions
 * [OpenIPC on GitHub](https://github.com/OpenIPC/) - GitHub organization, most projects are hosted here
 * [OpenIPC on OpenCollective](https://opencollective.com/openipc) - OpenCollective community
-* [OpenIPC on Docker Hub](https://hub.docker.com/u/openipc) - Docker containers for building
 * [OpenIPC on Twitter](https://twitter.com/openipc) - Our main news
 * [OpenIPC on YouTube](https://www.youtube.com/channel/UCaXlbR2uGTRFh8jQ2lCFd2g) - Our instructions and streams (in the plans)
 
