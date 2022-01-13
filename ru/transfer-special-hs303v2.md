@@ -1,8 +1,8 @@
-## Specialized device settings for Switcam HS303(v2)
+## Специализированные настройки для устройств Switcam HS303(v2)
 
-A discussion of the operation of these cameras is available by a specialized subscription to [OpenIPC paywall](https://paywall.pw/openipc)
+Обсуждение работы этих камер доступно по специальной подписке на [OpenIPC paywall](https://paywall.pw/openipc)
 
-### Modified part from the /etc/network/interface file
+### Модифицированный блок из файла /etc/network/interface
 
 ```
 auto wlan0
@@ -18,7 +18,7 @@ iface wlan0 inet dhcp
     post-down killall -q wpa_supplicant
 ```
 
-### Modified part from the /etc/majestic.yaml file
+### Модифицированный блок из файла /etc/majestic.yaml
 
 ```
 nightMode:
