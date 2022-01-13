@@ -1,0 +1,1 @@
+Our resources: [OpenIPC](https://openipc.org) | [OpenCollective](https://opencollective.com/openipc) | [Twitter](https://twitter.com/OpenIPC) | [Telegram](https://t.me/openipc)
