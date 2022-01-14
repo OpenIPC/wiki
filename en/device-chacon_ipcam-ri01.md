@@ -371,8 +371,36 @@ openipc-hi3518ev300 login:
 (soon...)
 
 ### Motor driver
-(soon...)
+The camera has 2 stepper motors to control the tilt (up/down) and pan (left/right).
 
+Replace the motor driver at /lib/modules/4.9.37/hisilicon/camhi-motor.ko with the one included below.
+
+The .zip file also includes a slightly modified build of the [sample control code](https://github.com/OpenIPC/motors) that you can copy to /bin.
+
+[camhi-motor.zip](https://github.com/ljalves/wiki/files/7873614/camhi-motor.zip)
+
+Usage:
+```
+motor_ctrl -d u        # move/tile up (by default 20 steps)
+motor_ctrl -d d        # move/tilt down
+motor_ctrl -d l        # move/pan left
+motor_ctrl -d r -s 50  # move/pan right by 50 steps
+```
+
+
+### Majestic sensor/pin configuration
+
+```
+image:
+  mirror: true
+  flip: true
+(...)
+nightMode:
+  irCutPin1: 15
+  irCutPin2: 12
+  backlightPin: 40
+
+```
 
 ### LEDs
 The camera has a dual color led (red/blue) connected to gpio's 50 and 51.
