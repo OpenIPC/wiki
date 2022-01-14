@@ -21,9 +21,11 @@ I'm sure there are other cameras out there that are using the same hardware (or 
 | Component | Status |
 |-----------|--------|
 | WiFi | [Working](https://github.com/OpenIPC/firmware/issues/48) |
-| Motors | [Working](https://github.com/OpenIPC/wiki/new/master/en#motor-driver) (patched driver) |
-| Red/Blue leds | Manual gpio control possible |
-| IR Cut | Manual gpio control possible |
+| Motors | [Working](#motor-driver) (patched driver) |
+| Red/Blue leds | [Working](#leds) |
+| IR Led | Working |
+| IR Cut | Working |
+
 
 #### Hardware details
 
@@ -372,6 +374,26 @@ openipc-hi3518ev300 login:
 (soon...)
 
 
+### LEDs
+The camera has a dual color led (red/blue) connected to gpio's 50 and 51.
+To control those leds you can use the /sys api:
+```
+# make the gpios accessible
+echo 50 > /sys/class/gpio/export
+# and set direction (only need to do once)
+echo out > /sys/class/gpio50/direction
+echo out > /sys/class/gpio51/direction
+
+# turn on blue led
+echo 1 > /sys/class/gpio50/value
+# turn off blue led
+echo 0 > /sys/class/gpio50/value
+
+# turn on red led
+echo 1 > /sys/class/gpio51/value
+# turn off red led
+echo 0 > /sys/class/gpio51/value
+```
 
 ## Flashing
 (soon...)
