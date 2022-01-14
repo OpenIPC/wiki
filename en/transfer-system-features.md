@@ -1,20 +1,15 @@
-## System features
+System features
+---------------
 
 * Supports for most TrueType (.ttf) and certain OpenType (.otf) fonts.
 
------
-
 ### Random Number Generator
 
-It WORKs now on Hi3516Ev200/Hi3516Ev300 devices
-
------
+Works on Hi3516Ev200/Hi3516Ev300 devices.
 
 ### Watchdog
 
-It WORKs now on Hi3516Ev200/Hi3516Ev300 devices
-
------
+Works on Hi3516Ev200/Hi3516Ev300 devices.
 
 ### WiFi
 

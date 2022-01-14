@@ -133,4 +133,4 @@ logging.
 [sysklogd: add -Z option to adjust message timezones](http://lists.busybox.net/pipermail/busybox/2017-May/085437.html)
 
 
-[logo]: https://cdn.themactep.com/images/logo_openipc.png
+[logo]: ../images/logo_openipc.png

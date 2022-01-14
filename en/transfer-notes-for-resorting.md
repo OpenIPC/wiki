@@ -1,6 +1,7 @@
-## Installation: how to make OpenIPC running on certain HW
+Installation: how to make OpenIPC running on certain hardware
+-------------------------------------------------------------
 
-Supported HW and installation procedures are given on [openipc.org](https://openipc.org/firmware/) site.
+Supported hardware and installation procedures are given on [openipc.org](https://openipc.org/firmware/) site.
 
 Please follow on site instructions for your CPU and video chip!
 

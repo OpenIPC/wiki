@@ -1,14 +1,15 @@
 ![OpenIPC logo](https://cdn.themactep.com/images/logo_openipc.png "OpenIPC logo")
 
-## Supported devices
+Supported devices
+=================
 
 Unfortunately, we cannot provide you a long list of devices that are undoubtedly
 compatible with our firmware. Camera manufacturers tend to change hardware
 design and swap components even within the same model line, without any notice.
 
 Below, we listed some of the cameras we had in our possession, but again, there
-is no guarantee that if you buy one of those cameras today you won't end up with
-unsupported hardware on your hands.
+is no guarantee that if you'll buy one of those cameras today you won't end up
+with an unsupported hardware on your hands.
 
 Somewhat working method to determine if your camera is supported by the recent
 version of our firmware is to open[^1] the camera case and take a look at the

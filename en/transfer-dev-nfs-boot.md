@@ -1,4 +1,5 @@
-## Boot device with NFS
+Boot device with NFS
+--------------------
 
 Example for HI3516EV200 device
 

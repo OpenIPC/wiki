@@ -1,6 +1,9 @@
-# How to setup HTTPS certificates on your camera
+How to install HTTPS certificates on your camera
+------------------------------------------------
 
-Make sure your camera is accessible from the Internet and both 80 (HTTP) and 443 (HTTPS) ports are redirected on your router to the camera. 
+Make sure your camera is accessible from the Internet on both port 80 (HTTP)
+and port 443 (HTTPS). You might need to set up port forwarding on your router
+for that.
 
 Create an ACME account:
 
@@ -8,17 +11,17 @@ Create an ACME account:
 $ uacme -y -v new
 ```
 
-then issue a certificate for your domain by doing
+Issue a certificate for your domain:
 
 ```console
 $ uacme -y -v -h /usr/share/uacme/uacme.sh -t EC issue www.your.domain.com
 ```
 
-If everything goes well uacme asks you to set up a challenge, for example
+If everything goes well, uacme will ask you to set up a challenge, e.g.:
 
 ```
 uacme: challenge=http-01 ident=www.your.domain.com token=kZjqYgAss_sl4XXDfFq-jeQV1_lqsE76v2BoCGegFk4
 key_auth=kZjqYgAss_sl4XXDfFq-jeQV1_lqsE76v2BoCGegFk4.2evcXalKLhAybRuxxE-HkSUihdzQ7ZDAKA9EZYrTXwU
 ```
 
-Then restart majestic and test access to https://www.your.domain.com
+Restart majestic and test access to https://www.your.domain.com/

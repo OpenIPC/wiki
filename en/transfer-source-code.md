@@ -1,19 +1,19 @@
-## Source code
+Source code
+-----------
 
 **At the moment, we are working on creating a high-quality repository with source code.**
 
 **Please be patient because we want to provide a completely beautiful and ready-made project.**
-
------
 
 ### Quick build from sources
 
 Install some packages to system and clone OpenIPC repo
 
 ```
-sudo apt-get update -y ; sudo apt-get install -y bc build-essential git unzip
+sudo apt-get update -y
+sudo apt-get install -y bc build-essential git unzip
 git clone --depth=1 https://github.com/OpenIPC/firmware.git
-cd openipc-2.1
+cd firmware
 ```
 Run the commands below for your board and your files will end up in the "output/images" directory
 
@@ -101,5 +101,3 @@ PLATFORM=sigmastar  make br-sigmastar-osdrv-ssc335-{dirclean,rebuild}
 #
 PLATFORM=xiongmai   make br-xiongmai-osdrv-xm530-{dirclean,rebuild}
 ```
-
-
