@@ -113,7 +113,7 @@ OpenIPC -- это увлекательный эксперимент, в кото
 ## Установка прошивки OpenIPC.
 
 Итак, если вы всё ещё хотите попробовать прошивку OpenIPC на своей камере,
-вам поможет [пошаговая инструкция](/wiki/ru/installation).
+вам поможет [пошаговая инструкция](installation.md).
 
 [socs]: https://github.com/OpenIPC/firmware/wiki/supported_devices
 [g-usbttl]: https://google.com/search?q=ftdi+usb+ttl
