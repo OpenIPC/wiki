@@ -1,6 +1,7 @@
-## WiFi for XM530 based devices
+WiFi for XM530 based devices
+----------------------------
 
-Script /usr/sbin/wifi
+Save this script as `/usr/sbin/wifi`
 
 ```
 #!/bin/sh
@@ -18,7 +19,7 @@ if [ "$WIFI" = "xm711" ]; then
 fi
 ```
 
-Settings on /etc/network/interfaces
+Save these settings to `/etc/network/interfaces`
 
 ```
 auto eth2

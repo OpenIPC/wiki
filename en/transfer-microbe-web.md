@@ -1,3 +1,4 @@
-## Microbe WEB interface
+Microbe web interface
+---------------------
 
-Default login/password - admin/12345
+Default login/password: admin/12345

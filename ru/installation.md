@@ -104,4 +104,4 @@ _...to be continued._
 ** ПРОВЕРИТЬ ВСЕ КОМАНДЫ НА ЖИВОЙ СИСТЕМЕ!***
 
 
-[logo]: https://cdn.themactep.com/images/logo_openipc.png
+[logo]: ../images/logo_openipc.png

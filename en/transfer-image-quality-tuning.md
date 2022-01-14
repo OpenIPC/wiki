@@ -1,4 +1,5 @@
-## Overview
+Overview
+--------
 
 Each SoC manufacturer has its own software to adjust picture quality:
 
@@ -44,8 +45,15 @@ pqtools:Waiting for connection from client!
 
 #### Run client software on Windows
 
-* [Download](https://ssd.mathworks.com/supportfiles/MCR_Runtime/R2012a/MCR_R2012a_win32_installer.exe) and install MATLAB Compiler Runtime.
+Download and install [MATLAB Compiler Runtime][mcr].
 
-* [Download PQTools](https://drive.google.com/file/d/1c4XZRbJKXjMBwfMJaLl5jUPcVqMbO936/view?usp=sharing) and extract a zip archive somewhere on your desktop. Launch `HiPQTools.exe`, select `Hi3516EV200_V1.0.1.2`, type IP address of your camera and click `OK`
+Download [PQTools][pqt] and extract a zip archive somewhere on your PC.
 
-Use [the manual](https://drive.google.com/file/d/1mY1lXMZVNz2Ia5CPvTF-K-907eIioSYU/view?usp=sharing) as a reference.
+Launch `HiPQTools.exe`, select `Hi3516EV200_V1.0.1.2`, type IP address of your
+camera and click `OK`.
+
+Use [this manual][man] as a reference.
+
+[mcr]: https://ssd.mathworks.com/supportfiles/MCR_Runtime/R2012a/MCR_R2012a_win32_installer.exe
+[pqt]: https://drive.google.com/file/d/1c4XZRbJKXjMBwfMJaLl5jUPcVqMbO936/view?usp=sharing
+[man]: https://drive.google.com/file/d/1mY1lXMZVNz2Ia5CPvTF-K-907eIioSYU/view?usp=sharing

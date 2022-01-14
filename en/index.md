@@ -1,6 +1,7 @@
-![OpenIPC logo](https://cdn.themactep.com/images/logo_openipc.png "OpenIPC logo")
+![OpenIPC logo][logo]
 
-# English version
+Wiki
+====
 
 ## Introduction
 * [About project](transfer-menu-index)
@@ -12,7 +13,7 @@
 * [firmware](https://openipc.org/firmware)
 * [ipctool](https://openipc.org/ipctool)
 * [telemetry](https://openipc.org/telemetry)
-* [Firmware Partitions Calculation by themactep](https://themactep.com/tools/firmware-partitions-calculation)
+* [Firmware Partitions Calculation](https://themactep.com/tools/firmware-partitions-calculation)
 
 ## Installation
 * [Goke based boards](transfer-install-goke)
@@ -56,5 +57,7 @@
 * [Notes from old sources](transfer-notes-for-resorting)
 
 ## Resources for recycling and integration
-* [https://github.com/OpenIPC/camerasrnd](https://github.com/OpenIPC/camerasrnd)
-* [https://openwrt.org/docs/techref/hardware/soc/soc.hisilicon.hi35xx](https://openwrt.org/docs/techref/hardware/soc/soc.hisilicon.hi35xx)
+* <https://github.com/OpenIPC/camerasrnd>
+* <https://openwrt.org/docs/techref/hardware/soc/soc.hisilicon.hi35xx>
+
+[logo]: ../images/logo_openipc.png

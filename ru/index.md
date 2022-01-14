@@ -1,7 +1,5 @@
 ![OpenIPC logo][logo]
 
-# Русская версия
-
 ## Прошивка OpenIPC -- что это?
 
 Прошивка OpenIPC (OpenIPC firmware) -- это коллективный труд многих
@@ -126,7 +124,7 @@ OpenIPC -- это увлекательный эксперимент, в кото
 вам поможет [пошаговая инструкция](/wiki/ru/installation).
 
 
-[logo]: https://cdn.themactep.com/images/logo_openipc.png
+[logo]: ../images/logo_openipc.png
 [socs]: https://github.com/OpenIPC/firmware/wiki/supported_devices
 [faq1]: https://github.com/OpenIPC/camerasrnd/blob/master/docs/FAQ-ru.md
 [faq2]: https://github.com/OpenIPC/wiki/blob/master/ru/discussion.md

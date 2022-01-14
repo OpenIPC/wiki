@@ -1,8 +1,8 @@
-
-## Run ipctool
+Run ipctool
+-----------
 
 ```
-root@ipcam:/# ipctool 
+root@ipcam:/# ipctool
 ---
 board:
   vendor: OpenIPC
@@ -41,7 +41,7 @@ ram:
   media: 32M
 firmware:
   kernel: "3.10.103+ (SMP Fri Apr 23 21:29:40 UTC 2021)"
-  toolchain: gcc version 7.5.0 (Buildroot 2020.02-gb5b7c71) 
+  toolchain: gcc version 7.5.0 (Buildroot 2020.02-gb5b7c71)
   god-app: ipctool
 sensors:
 - vendor: SmartSens
@@ -50,5 +50,5 @@ sensors:
     bus: 0
     type: i2c
     addr: 0x30
-root@ipcam:/# 
+root@ipcam:/#
 ```
