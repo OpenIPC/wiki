@@ -1,7 +1,7 @@
 OpenIPC Wiki
 ============
 
-[English](en/index.md) | [Русский](ru/about.md)
+[English](en/index.md) | [Русский](ru/index.md)
 
 
 > "Improving the world, one patch at a time."
