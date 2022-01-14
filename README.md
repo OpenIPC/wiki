@@ -1,1 +1,1 @@
-# The new OpenIPC wiki
+# The OpenIPC Wiki
