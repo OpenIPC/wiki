@@ -1,63 +1,67 @@
-![OpenIPC logo][logo]
-
-Wiki
-====
+# OpenIPC Wiki
+[Table of Content](index.md)
 
 ## Introduction
-* [About project](transfer-menu-index.md)
-* [Supported devices](https://openipc.org/wiki/en/guide-supported-devices)
-* [Show changelog](transfer-show-changelog.md)
+- [About project](menu-index.md)
+- [Supported devices](https://openipc.org/wiki/en/guide-supported-devices)
+- [Show changelog](show-changelog.md)
 
-## Available subprojects
-* [coupler](https://openipc.org/coupler)
-* [firmware](https://openipc.org/firmware)
-* [ipctool](https://openipc.org/ipctool)
-* [telemetry](https://openipc.org/telemetry)
-* [Firmware Partitions Calculation](https://themactep.com/tools/firmware-partitions-calculation)
+## Subprojects
+- [coupler](https://openipc.org/coupler)
+- [firmware](https://openipc.org/firmware)
+- [ipctool](https://openipc.org/ipctool)
+- [telemetry](https://openipc.org/telemetry)
+- [Firmware Partitions Calculation](https://themactep.com/tools/firmware-partitions-calculation)
 
 ## Installation
-* [Goke based boards](transfer-install-goke.md)
-* [HiSilicon based boards](transfer-install-hisi.md)
-* [Novatek based boards](transfer-install-novatek.md)
-* [SigmaStar based boards](transfer-install-ssc335.md)
-* [XM510 based boards](transfer-install-xm510.md)
-* [XM530 based boards](transfer-install-xm530.md)
-* [Veryld full manual](transfer-old-manual.md)
+- [Installation on Goke based boards](install-goke.md)
+- [Installation on HiSilicon based boards](install-hisi.md)
+- [Installation on Novatek based boards](install-novatek.md)
+- [Installation on SigmaStar based boards](install-ssc335.md)
+- [Installation on XM510 based boards](install-xm510.md)
+- [Installation on XM530 based boards](install-xm530.md)
+- [Veryld full manual](old-manual.md)
 
 ## Usage
-* [System features](transfer-system-features.md)
-* [Majestic streamer](transfer-majestic-streamer.md)
-* [Microbe WEB interface](transfer-microbe-web.md)
-* [Upgrade firmware](transfer-sysupgrade.md)
-* [Image quality tuning](transfer-image-quality-tuning.md)
-* [Memory tuning](transfer-memory-tuning.md)
-* [Using ipctool](transfer-example-ipctool.md)
-* [GPIO settings](transfer-gpio-settings.md)
-* [ACMEv2](transfer-acmev2.md)
-* [YouTube streaming](transfer-youtube-streaming.md)
-* [WiFi XM530](transfer-wifi-xm530.md)
+- [System features](system-features.md)
+- [Majestic streamer](majestic-streamer.md)
+- [Microbe web interface](microbe-web.md)
+- [Upgrade firmware](sysupgrade.md)
+- [Image quality tuning](image-quality-tuning.md)
+- [Memory tuning](memory-tuning.md)
+- [Using ipctool](transfer-example-ipctool.md)
+- [GPIO settings](gpio-settings.md)
+- [ACMEv2](acme-v2.md)
+- [YouTube streaming](youtube-streaming.md)
+- [WiFi XM530](wifi-xm530.md)
 
 ## Firmware
-* [Releases in GitHub](https://github.com/OpenIPC/firmware/releases/tag/latest)
-* [Releases in Telegram](https://t.me/s/openipc_dev)
-* [Source code](transfer-source-code.md)
+- [Releases in GitHub](https://github.com/OpenIPC/firmware/releases/tag/latest)
+- [Releases in Telegram](https://t.me/s/openipc_dev)
+- [Source code](source-code.md)
 
 ## Development
-* [Interesting tricks](transfer-dev-tricks.md)
-* [Boot device with NFS](transfer-dev-nfs-boot.md)
-* [FFMPEG usage](transfer-dev-ffmpeg-usage.md)
-* [Kernel configuration for adding new platforms](transfer-integration-kernel.md)
+- [Interesting tricks](dev-tricks.md)
+- [Boot device with NFS](dev-nfs-boot.md)
+- [FFMPEG usage](dev-ffmpeg-usage.md)
+- [Kernel configuration for adding new platforms](integration-kernel.md)
 
 ## Contacts
-* [Bug reports](https://github.com/OpenIPC/firmware/issues)
+- [Bug reports](https://github.com/OpenIPC/firmware/issues)
+
+## Our resources
+- [OpenIPC](https://openipc.org/)
+- [OpenCollective](https://opencollective.com/openipc)
+- [Twitter](https://twitter.com/OpenIPC)
+- [Telegram](https://t.me/openipc)
 
 ## Roadmap
-* [ToDo](transfer-todo-all.md)
-* [Developers](transfer-developers.md)
-* [Notes from old sources](transfer-notes-for-resorting.md)
+- [ToDo](todo-all.md)
+- [Developers](developers.md)
+- [Notes from old sources](notes-for-resorting.md)
 
 ## Resources for recycling and integration
-* <https://github.com/OpenIPC/camerasrnd>
-* <https://openwrt.org/docs/techref/hardware/soc/soc.hisilicon.hi35xx>
+- <https://github.com/OpenIPC/camerasrnd>
+- <https://openwrt.org/docs/techref/hardware/soc/soc.hisilicon.hi35xx>
 
 [logo]: ../images/logo_openipc.png

@@ -1,7 +1,8 @@
-![OpenIPC logo](https://cdn.themactep.com/images/logo_openipc.png "OpenIPC logo")
+# OpenIPC Wiki
+[Table of Content](index.md)
 
 Supported devices
-=================
+-----------------
 
 Unfortunately, we cannot provide you a long list of devices that are undoubtedly
 compatible with our firmware. Camera manufacturers tend to change hardware
