@@ -123,6 +123,14 @@ The camera uBoot is password protected with "pps_password".
 ### Creating a backup
 To backup the original firmware you need a usb serial adapter connected to the board and a mmc card.
 
+Find out your flash chip size:
+```
+pps # getinfo spi
+Block:64KB Chip:8MB*1
+D:0x20 0x70 0x17
+Name:"XM25QH64AHIG"
+```
+
 uBoot commands to backup the entire flash memory on the mmc card (**mmc card contents will be destroyed**).
 Depending on your camera flash memory size replace \<size1\>/\<size2\> with: (size2 = size1 / 512)
 - 0x800000/0x4000 for 8M flash
@@ -445,7 +453,7 @@ BusyBox v1.26.2 (2019-04-16 05:35:27 PDT) built-in shell (ash)
 ```
 
 
-### [ipctool](https://github.com/OpenIPC/ipctool) output (8Mb flash output):
+### [ipctool](https://github.com/OpenIPC/ipctool) output (8Mb flash):
 
 ```
 /mnt/mmc01 # ./ipctool
