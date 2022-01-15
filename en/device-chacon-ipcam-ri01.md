@@ -13,7 +13,7 @@ I'm sure there are other cameras out there that are using the same hardware (or 
 |--------|-------------------|
 | SoC    | HI3518EV300       |
 | Sensor | JXF23             |
-| Flash  | 16Mb (XM25QH128A) |
+| Flash  | 16Mb (XM25QH128A) or 8Mb (XM25QH64A) |
 | WiFi   | RTL8188FU         |
 
 #### OpenIPC status
@@ -118,7 +118,44 @@ If you find it hard to solder the wires on the camera micro usb connector get a 
 
 ## Original firmware
 
-The camera has a password protected uBoot.
+The camera uBoot is password protected with "pps_password".
+
+### Creating a backup
+To backup the original firmware you need a usb serial adapter connected to the board and a mmc card.
+
+uBoot commands to backup the entire flash memory on the mmc card (**mmc card contents will be destroyed**).
+Depending on your camera flash memory size replace <size1>/<size2> with (size2 = size1 / 512):
+  - 0x800000/0x4000 for 8M flash
+  - 0x1000000/0x8000 for a 16Mb flash
+
+```
+sf probe
+sf read 0x40000000 0 <size1>
+mmc write 0 0x40000000 0 <size2>
+```
+
+Example output (8Mb flash):
+```
+pps # sf probe
+pps # sf read 0x40000000 0 0x800000
+device 0 whole chip
+
+SF: 8388608 bytes @ 0x0 Read: OK
+pps # mmc write 0 0x40000000 0 0x4000
+had init
+
+MMC write: dev # 0, block # 0, count 16384 ... had init
+16384 blocks written: OK
+pps # 
+```
+
+This will write the entire flash to the mmc card in "raw mode" (no filesystem).
+To get the dump into a file insert the card in a system running linux and:
+```
+dd if=/dev/mmcblk0 of=./flash_backup.bin bs=512 count=<size2>
+```
+
+
 
 ### [ipctool](https://github.com/OpenIPC/ipctool) output:
 (soon...)
@@ -144,6 +181,9 @@ mtd9: 00020000 00010000 "oeminfo" 131072        16646144 - 16777216
 
 
 ## OpenIPC firmware
+
+## Flashing OpenIPC
+(soon...)
 
 #### Boot dump
 ```
@@ -371,8 +411,36 @@ openipc-hi3518ev300 login:
 (soon...)
 
 ### Motor driver
-(soon...)
 
+The camera has 2 stepper motors to control the tilt (up/down) and pan (left/right).
+
+Replace the motor driver at /lib/modules/4.9.37/hisilicon/camhi-motor.ko with the one included below.
+
+The .zip file also includes a slightly modified build of the [sample control code](https://github.com/OpenIPC/motors) that you can copy to /bin.
+
+[camhi-motor.zip](https://github.com/ljalves/wiki/files/7873614/camhi-motor.zip)
+
+Usage:
+```
+motor_ctrl -d u        # move/tile up (by default 20 steps)
+motor_ctrl -d d        # move/tilt down
+motor_ctrl -d l        # move/pan left
+motor_ctrl -d r -s 50  # move/pan right by 50 steps
+```
+
+### Majestic sensor/pin configuration
+
+```
+image:
+  mirror: true
+  flip: true
+(...)
+nightMode:
+  irCutPin1: 15
+  irCutPin2: 12
+  backlightPin: 40
+
+```
 
 ### LEDs
 The camera has a dual color led (red/blue) connected to gpio's 50 and 51.
@@ -395,5 +463,3 @@ echo 1 > /sys/class/gpio51/value
 echo 0 > /sys/class/gpio51/value
 ```
 
-## Flashing
-(soon...)
