@@ -397,7 +397,8 @@ ____set essid
 
 ### Starting telnetd
 
-The camera original FW runs a REST server that with authentication (user: PpStRoNg, password: #%&wL1@\*tU123zv)
+The camera original FW runs a REST server with authentication (user: PpStRoNg, password: #%&wL1@\*tU123zv).
+
 One of the most interesting features is the "runcmd" function (replace \<your_cam_ip\> with your camera IP address):
 
 Send request (note the \\ escaping the & for the password):
