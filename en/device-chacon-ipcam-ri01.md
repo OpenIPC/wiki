@@ -121,7 +121,7 @@ If you find it hard to solder the wires on the camera micro usb connector get a 
 The camera uBoot is password protected with "pps_password".
 
 ### Creating a backup
-To backup the original firmware you need a usb serial adapter connected to the board and a mmc card.
+To backup the original firmware you need a usb serial adapter connected to the board and a sdcard.
 
 Find out your flash chip size:
 ```
@@ -131,10 +131,11 @@ D:0x20 0x70 0x17
 Name:"XM25QH64AHIG"
 ```
 
-uBoot commands to backup the entire flash memory on the mmc card (**mmc card contents will be destroyed**).
-Depending on your camera flash memory size replace \<size1\>/\<size2\> with: (size2 = size1 / 512)
+uBoot commands to backup the entire flash memory on the sdcard (**all sdcard contents will be lost**).
+Depending on your camera flash memory size replace \<size1\>/\<size2\> with:
 - 0x800000/0x4000 for 8M flash
 - 0x1000000/0x8000 for a 16Mb flash
+(size2 = size1 / 512)
 
 ```
 sf probe
@@ -159,15 +160,27 @@ pps #
 
 This will write the entire flash to the mmc card in "raw mode" (no filesystem).
 
-NOTE: if you leave the card inserted in the camera and boot the original FW it will format and backup is lost!
+**WARNING**: if you leave the card inserted in the camera and it boots the original FW, the card will be formated and the backup lost!
   
-To get the dump into a file insert the card in a system running linux and:
+Then to save the dump to a file, insert the card in a system running linux and:
 ```
 dd if=/dev/mmcblk0 of=./flash_backup.bin bs=512 count=<size2>
 ```
 
 
 ### cat /proc/mtd
+
+8Mb flash version
+```
+dev:    size   erasesize  name
+mtd0: 00030000 00010000 "bld"     196608        0
+mtd1: 00010000 00010000 "env"     65536         196608
+mtd2: 00010000 00010000 "enc"     65536         262144
+mtd3: 00010000 00010000 "sysflg"  65536         327680
+mtd4: 00310000 00010000 "sys"     3211264       393216
+mtd5: 00420000 00010000 "app"     4325376       3604480
+mtd6: 00070000 00010000 "cfg"     458752        7929856 - 8388608
+```
 
 16Mb flash version
 ```
@@ -182,18 +195,6 @@ mtd6: 00180000 00010000 "cfg"     1572864       11075584
 mtd7: 00100000 00010000 "recove"  1048576       12648448
 mtd8: 002d0000 00010000 "user"    2949120       13697024
 mtd9: 00020000 00010000 "oeminfo" 131072        16646144 - 16777216
-```
-
-8Mb flash version
-```
-dev:    size   erasesize  name
-mtd0: 00030000 00010000 "bld"     196608        0
-mtd1: 00010000 00010000 "env"     65536         196608
-mtd2: 00010000 00010000 "enc"     65536         262144
-mtd3: 00010000 00010000 "sysflg"  65536         327680
-mtd4: 00310000 00010000 "sys"     3211264       393216
-mtd5: 00420000 00010000 "app"     4325376       3604480
-mtd6: 00070000 00010000 "cfg"     458752        7929856 - 8388608
 ```
 
 
@@ -411,7 +412,7 @@ One of the most interesting features is the "runcmd" function (replace \<your_ca
 
 Send request (note the \\ escaping the & for the password):
 ```
-curl -u PpStRoNg:#%\&wL1@*tU123zv -i http://\<your_cam_ip\>:80/devices/runcmd --request POST --data '{"cmd":"ls"}'
+curl -u PpStRoNg:#%\&wL1@*tU123zv -i http://<your_cam_ip>:80/devices/runcmd --request POST --data '{"cmd":"ls"}'
 HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Length: 0
@@ -419,7 +420,7 @@ Content-Length: 0
 
 Get output (json format):
 ```
-curl -u PpStRoNg:#%\&wL1@*tU123zv -i http://\<your_cam_ip\>:80/devices/runcmd
+curl -u PpStRoNg:#%\&wL1@*tU123zv -i http://<your_cam_ip>:80/devices/runcmd
 HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Length: 129
@@ -434,15 +435,15 @@ In the latest FW they have removed the "telnetd" binary so you need to place it 
 
 To start the server copy the telnetd binary to the sdcard and run:
 ```
-curl -u PpStRoNg:#%\&wL1@*tU123zv -i http://\<your_cam_ip\>:80/devices/runcmd --request POST --data '{"cmd":"echo 'anyone::0:0:root:/:/bin/sh' >> /etc/passwd"}'
-curl -u PpStRoNg:#%\&wL1@*tU123zv -i http://\<your_cam_ip\>:80/devices/runcmd --request POST --data '{"cmd":"/mnt/mmc01/telnetd &"}'
+curl -u PpStRoNg:#%\&wL1@*tU123zv -i http://<your_cam_ip>:80/devices/runcmd --request POST --data '{"cmd":"echo 'anyone::0:0:root:/:/bin/sh' >> /etc/passwd"}'
+curl -u PpStRoNg:#%\&wL1@*tU123zv -i http://<your_cam_ip>:80/devices/runcmd --request POST --data '{"cmd":"/mnt/mmc01/telnetd &"}'
 ```
 
 At this point you should be able to telnet to the camera:
 ```
-$ telnet \<your_cam_ip\>
-Trying \<your_cam_ip\>...
-Connected to \<your_cam_ip\>.
+$ telnet <your_cam_ip>
+Trying <your_cam_ip>...
+Connected to <your_cam_ip>.
 Escape character is '^]'.
 (none) login: anyone
 
