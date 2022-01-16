@@ -13,7 +13,7 @@ I'm sure there are other cameras out there that are using the same hardware (or 
 |--------|-------------------|
 | SoC    | HI3518EV300       |
 | Sensor | JXF23             |
-| Flash  | 16Mb (XM25QH128A) |
+| Flash  | 16Mb (XM25QH128A) or 8Mb (XM25QH64A) |
 | WiFi   | RTL8188FU         |
 
 #### OpenIPC status
@@ -118,12 +118,71 @@ If you find it hard to solder the wires on the camera micro usb connector get a 
 
 ## Original firmware
 
-The camera has a password protected uBoot.
+The camera uBoot is password protected with "pps_password".
 
-### [ipctool](https://github.com/OpenIPC/ipctool) output:
-(soon...)
+### Creating a backup
+To backup the original firmware you need a usb serial adapter connected to the board and a sdcard.
 
-#### cat /proc/mtd
+Find out your flash chip size:
+```
+pps # getinfo spi
+Block:64KB Chip:8MB*1
+D:0x20 0x70 0x17
+Name:"XM25QH64AHIG"
+```
+
+uBoot commands to backup the entire flash memory on the sdcard (**all sdcard contents will be lost**).
+Depending on your camera flash memory size replace \<size1\>/\<size2\> with:
+- 0x800000/0x4000 for 8M flash
+- 0x1000000/0x8000 for a 16Mb flash
+(size2 = size1 / 512)
+
+```
+sf probe
+sf read 0x40000000 0 <size1>
+mmc write 0 0x40000000 0 <size2>
+```
+
+Example output (8Mb flash):
+```
+pps # sf probe
+pps # sf read 0x40000000 0 0x800000
+device 0 whole chip
+
+SF: 8388608 bytes @ 0x0 Read: OK
+pps # mmc write 0 0x40000000 0 0x4000
+had init
+
+MMC write: dev # 0, block # 0, count 16384 ... had init
+16384 blocks written: OK
+pps # 
+```
+
+This will write the entire flash to the mmc card in "raw mode" (no filesystem).
+
+**WARNING**: if you leave the card inserted in the camera and it boots the original FW, the card will be formated and the backup lost!
+  
+Then to save the dump to a file, insert the card in a system running linux and:
+```
+dd if=/dev/mmcblk0 of=./flash_backup.bin bs=512 count=<size2>
+```
+
+
+### cat /proc/mtd
+
+8Mb flash version
+```
+dev:    size   erasesize  name
+mtd0: 00030000 00010000 "bld"     196608        0
+mtd1: 00010000 00010000 "env"     65536         196608
+mtd2: 00010000 00010000 "enc"     65536         262144
+mtd3: 00010000 00010000 "sysflg"  65536         327680
+mtd4: 00310000 00010000 "sys"     3211264       393216
+mtd5: 00420000 00010000 "app"     4325376       3604480
+mtd6: 00070000 00010000 "cfg"     458752        7929856 - 8388608
+```
+
+16Mb flash version
 ```
 dev:    size   erasesize  name
 mtd0: 00060000 00010000 "bld"     393216        0
@@ -140,10 +199,323 @@ mtd9: 00020000 00010000 "oeminfo" 131072        16646144 - 16777216
 
 
 ### dmesg
-(soon...)
+```
+Booting Linux on physical CPU 0x0
+Linux version 4.9.37
+CPU: ARMv7 Processor [410fc075] revision 5 (ARMv7), cr=10c53c7d
+CPU: div instructions available: patching division code
+CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing instruction cache
+OF: fdt:Machine model: Hisilicon HI3518EV300 DEMO Board
+Memory policy: Data cache writeback
+On node 0 totalpages: 9472
+free_area_init_node: node 0, pgdat c0565e98, node_mem_map c24a9000
+  Normal zone: 74 pages used for memmap
+  Normal zone: 0 pages reserved
+  Normal zone: 9472 pages, LIFO batch:1
+CPU: All CPU(s) started in SVC mode.
+pcpu-alloc: s0 r0 d32768 u32768 alloc=1*32768
+pcpu-alloc: [0] 0
+Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 9398
+Kernel command line: mem=37M console=ttyAMA0,115200n8 mtdparts=hi_sfc:192k(bld)ro,64k(env)ro,64k(enc)ro,64k(sysflg)ro,3136k(sys),4224k(app),448k(cfg) ppsAppParts=5 ppsWatchInitEnd
+PID hash table entries: 256 (order: -2, 1024 bytes)
+Dentry cache hash table entries: 8192 (order: 3, 32768 bytes)
+Inode-cache hash table entries: 4096 (order: 2, 16384 bytes)
+Memory: 31728K/37888K available (3575K kernel code, 121K rwdata, 904K rodata, 888K init, 146K bss, 6160K reserved, 0K cma-reserved)
+Virtual kernel memory layout:
+    vector  : 0xffff0000 - 0xffff1000   (   4 kB)
+    fixmap  : 0xffc00000 - 0xfff00000   (3072 kB)
+    vmalloc : 0xc2800000 - 0xff800000   ( 976 MB)
+    lowmem  : 0xc0000000 - 0xc2500000   (  37 MB)
+    modules : 0xbf000000 - 0xc0000000   (  16 MB)
+      .text : 0xc0008000 - 0xc0386068   (3577 kB)
+      .init : 0xc046a000 - 0xc0548000   ( 888 kB)
+      .data : 0xc0548000 - 0xc05664e0   ( 122 kB)
+       .bss : 0xc0568000 - 0xc058ca60   ( 147 kB)
+SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+NR_IRQS:16 nr_irqs:16 16
+Gic dist init...
+arm_arch_timer: Architected cp15 timer(s) running at 50.00MHz (phys).
+clocksource: arch_sys_counter: mask: 0xffffffffffffff max_cycles: 0xb8812736b, max_idle_ns: 440795202655 ns
+sched_clock: 56 bits at 50MHz, resolution 20ns, wraps every 4398046511100ns
+Switching to timer-based delay loop, resolution 20ns
+clocksource: arm,sp804: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 637086815595 ns
+Console: colour dummy device 80x30
+Calibrating delay loop (skipped), value calculated using timer frequency.. 100.00 BogoMIPS (lpj=500000)
+pid_max: default: 32768 minimum: 301
+Mount-cache hash table entries: 1024 (order: 0, 4096 bytes)
+Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes)
+CPU: Testing write buffer coherency: ok
+Setting up static identity map for 0x40008240 - 0x40008298
+VFP support v0.3: implementor 41 architecture 2 part 30 variant 7 rev 5
+clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+futex hash table entries: 256 (order: -1, 3072 bytes)
+pinctrl core: initialized pinctrl subsystem
+NET: Registered protocol family 16
+DMA: preallocated 256 KiB pool for atomic coherent allocations
+Serial: AMBA PL011 UART driver
+watchdo uboot init end
+12040000.uart: ttyAMA0 at MMIO 0x12040000 (irq = 21, base_baud = 0) is a PL011 rev2
+console [ttyAMA0] enabled
+12041000.uart: ttyAMA1 at MMIO 0x12041000 (irq = 22, base_baud = 0) is a PL011 rev2
+12042000.uart: ttyAMA2 at MMIO 0x12042000 (irq = 23, base_baud = 0) is a PL011 rev2
+usbcore: registered new interface driver usbfs
+usbcore: registered new interface driver hub
+usbcore: registered new device driver usb
+clocksource: Switched to clocksource arch_sys_counter
+NET: Registered protocol family 2
+TCP established hash table entries: 1024 (order: 0, 4096 bytes)
+TCP bind hash table entries: 1024 (order: 0, 4096 bytes)
+TCP: Hash tables configured (established 1024 bind 1024)
+UDP hash table entries: 256 (order: 0, 4096 bytes)
+UDP-Lite hash table entries: 256 (order: 0, 4096 bytes)
+NET: Registered protocol family 1
+workingset: timestamp_bits=30 max_order=13 bucket_order=0
+jffs2: version 2.2. (NAND) © 2001-2006 Red Hat, Inc.
+io scheduler noop registered
+io scheduler deadline registered (default)
+io scheduler cfq registered
+hisi-sfc hisi_spi_nor.0: SPI Nor ID Table Version 1.2
+hisi-sfc hisi_spi_nor.0: The ID: 0x20 isn't in the BP table, Current device can't not protect
+hisi-sfc hisi_spi_nor.0: xm25qh64a (Chipsize 8 Mbytes, Blocksize 64KiB)
+7 cmdlinepart partitions found on MTD device hi_sfc
+7 cmdlinepart partitions found on MTD device hi_sfc
+Creating 7 MTD partitions on "hi_sfc":
+0x000000000000-0x000000030000 : "bld"
+0x000000030000-0x000000040000 : "env"
+0x000000040000-0x000000050000 : "enc"
+0x000000050000-0x000000060000 : "sysflg"
+0x000000060000-0x000000370000 : "sys"
+0x000000370000-0x000000790000 : "app"
+0x000000790000-0x000000800000 : "cfg"
+dwc3 10030000.hidwc3: Configuration mismatch. dr_mode forced to host
+xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
+xhci-hcd xhci-hcd.0.auto: hcc params 0x0220fe6c hci version 0x110 quirks 0x20010010
+xhci-hcd xhci-hcd.0.auto: irq 54, io mem 0x10030000
+hub 1-0:1.0: USB hub found
+hub 1-0:1.0: 1 port detected
+xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 2
+usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
+hub 2-0:1.0: USB hub found
+hub 2-0:1.0: hub can't support USB3.0
+i2c /dev entries driver
+hibvt-i2c 12060000.i2c: hibvt-i2c0@100000hz registered
+hibvt-i2c 12061000.i2c: hibvt-i2c1@100000hz registered
+hibvt-i2c 12062000.i2c: hibvt-i2c2@100000hz registered
+sdhci: Secure Digital Host Controller Interface driver
+sdhci: Copyright(c) Pierre Ossman
+sdhci-pltfm: SDHCI platform and OF driver helper
+mmc0: SDHCI controller on 10010000.sdhci [10010000.sdhci] using ADMA in legacy mode
+mmc1: SDHCI controller on 10020000.sdhci [10020000.sdhci] using ADMA in legacy mode
+Initializing XFRM netlink socket
+NET: Registered protocol family 17
+NET: Registered protocol family 15
+Key type dns_resolver registered
+PM: Hibernation image not present or could not be loaded.
+uart-pl011 12040000.uart: no DMA platform data
+Freeing unused kernel memory: 888K (c046a000 - c0548000)
+This architecture does not have kernel memory protection.
+random: S80network: uninitialized urandom read (4 bytes read)
+Strnio: loading out-of-tree module taints kernel.
+pcbversion:,S4S_H1_V10
+pcb____S4S_H1_V10
+sensor:,soif23mipi
+pcbname:,S5S_H1_V10_F23
+factoryname:,PPSTRONG
+platform:,C5
+viewmirrow:,vertical_horizontal
+mem:,37
+flash:,8
+mmz:,27
+ ###cfg gpio OK name:redLed
+ cfg gpio err name:syncRedLed
+ cfg gpio err name:syncBlueLed
+==============led init finished
+ ###cfg gpio OK name:irRed
+ ###cfg gpio OK name:irCut_1
+ ###cfg gpio OK name:irCut_2
+ ###cfg gpio OK name:Restbutton
+ cfg gpio err name:doorbell_key
+ ###cfg gpio OK name:wlanPwr
+ cfg gpio err name:4GPwr
+wlanPwr,open pwr
+ ###cfg gpio OK name:AcShdn
+AcShdn,close pwr
+ cfg gpio err name:MicShdn
+ cfg gpio err name:4GPowOn
+ cfg gpio err name:4GCheck
+ cfg gpio err name:4GReset
+ cfg gpio err name:Uart1Rxd
+ cfg gpio err name:Uart1Txd
+ cfg gpio err name:GarageDoorOpen
+ cfg gpio err name:GarageDoorClose
+ cfg gpio err name:GarageDoorStop
+ ###cfg gpio OK name:si7020_SDA
+ ###cfg gpio OK name:si7020_SCL
+usb 1-1: new high-speed USB device number 2 using xhci-hcd
+ ###cfg gpio OK name:4wir_Tain1
+ ###cfg gpio OK name:4wir_Tain2
+ ###cfg gpio OK name:4wir_Tbin1
+ ###cfg gpio OK name:4wir_Tbin2
+ cfg gpio err name:motor_shared
+ ###cfg gpio OK name:4wir_Pain1
+ ###cfg gpio OK name:4wir_Pain2
+ ###cfg gpio OK name:4wir_Pbin1
+ ###cfg gpio OK name:4wir_Pbin2
+ rtw_pps_set_runsta ok
+USB_SPEED_HIGH
+random: fast init done
+usbcore: registered new interface driver rtl8188fu
+======online_flag = 0, cmos_yuv_flag = 0, sensor=soif23mipi, chip=hi3518ev300, board=meari======
+meari init success!
+Module himedia: init ok
+Hisilicon Media Memory Zone Manager
+hi_osal 1.0 init success!
+hi3516ev200_base: module license 'Proprietary' taints kernel.
+Disabling lock debugging due to kernel taint
+load sys.ko for Hi3516EV200...OK!
+load tde.ko for HI3516EV200...OK!
+load region.ko for Hi3516EV200...OK!
+load vgs.ko for Hi3516EV200...OK!
+load vi.ko for Hi3516EV200...OK !
+ISP Mod init!
+load vpss.ko for Hi3516EV200...OK!
+load rc.ko for Hi3516EV200...OK!
+load venc.ko for Hi3516EV200...OK!
+load chnl.ko for Hi3516EV200...OK!
+load vedu.ko for Hi3516EV200...OK!
+load h264e.ko for Hi3516EV200...OK!
+load h265e.ko for Hi3516EV200...OK!
+load jpege.ko for Hi3516EV200...OK!
+load ive.ko for Hi3516EV200...OK!
+load mipi_rx driver successful!
+close app check
+ ###cfg gpio OK name:blueLed
+ Strnio_ioctl
+ recfgcodec
+start recfgcodec
+ 0xCC----ff031a00
+ 0xCC----aa031a00
+packets in tx buffer - 0x204=e9000c, 0x200=e9000c
+sys irq:30
+ cfg gpio err name:PirInput
+____set essid
+____set essid
+```
+
+### Starting telnetd
+
+The camera original FW runs a REST server with authentication (user: PpStRoNg, password: #%&wL1@\*tU123zv).
+
+One of the most interesting features is the "runcmd" function (replace \<your_cam_ip\> with your camera IP address):
+
+Send request (note the \\ escaping the & for the password):
+```
+curl -u PpStRoNg:#%\&wL1@*tU123zv -i http://<your_cam_ip>:80/devices/runcmd --request POST --data '{"cmd":"ls"}'
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 0
+```
+
+Get output (json format):
+```
+curl -u PpStRoNg:#%\&wL1@*tU123zv -i http://<your_cam_ip>:80/devices/runcmd
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 129
+{
+        "value":        "usr\nsys\netc\nmnt\nlib\nproc\nboot\nopt\nlinuxrc\nbin\ndev\ninit\nhome\nsbin\nnfsroot\nroot\ntmp\nvar\ndevinfo\n"
+}
+```
+
+In the latest FW they have removed the "telnetd" binary so you need to place it on the sdcard:
+[telnetd.zip](https://github.com/ljalves/wiki/files/7875319/telnetd.zip)
+
+
+To start the server copy the telnetd binary to the sdcard and run:
+```
+curl -u PpStRoNg:#%\&wL1@*tU123zv -i http://<your_cam_ip>:80/devices/runcmd --request POST --data '{"cmd":"echo 'anyone::0:0:root:/:/bin/sh' >> /etc/passwd"}'
+curl -u PpStRoNg:#%\&wL1@*tU123zv -i http://<your_cam_ip>:80/devices/runcmd --request POST --data '{"cmd":"/mnt/mmc01/telnetd &"}'
+```
+
+At this point you should be able to telnet to the camera:
+```
+$ telnet <your_cam_ip>
+Trying <your_cam_ip>...
+Connected to <your_cam_ip>.
+Escape character is '^]'.
+(none) login: anyone
+
+
+BusyBox v1.26.2 (2019-04-16 05:35:27 PDT) built-in shell (ash)
+
+/ #
+```
+
+
+### [ipctool](https://github.com/OpenIPC/ipctool) output (8Mb flash):
+
+```
+/mnt/mmc01 # ./ipctool
+---
+chip:
+  vendor: HiSilicon
+  model: 3518EV300
+  id: 022c40074e0038f1ee70030a0d73b5d32549ab0c81a025e3
+mdio busy
+mdio busy
+ethernet:
+  mac: "c4:3a:35:75:bf:71"
+  u-mdio-phyaddr: 0
+  phy-id: 0x00000000
+  d-mdio-phyaddr: 0
+rom:
+  - type: nor
+    block: 64K
+    partitions:
+      - name: sys
+        size: 0x310000
+        sha1: c890f4a1
+      - name: app
+        size: 0x420000
+        sha1: 32c12243
+      - name: cfg
+        size: 0x70000
+        path: /home/cfg,jffs2,rw
+    size: 7M
+    addr-mode: 3-byte
+ram:
+  total: 64M
+  media: 27M
+firmware:
+  kernel: "4.9.37 (Mon Jul 22 00:51:54 PDT 2019)"
+  libc: uClibc 0.9.33.2
+  sdk: "Hi3516EV200_MPP_V1.0.1.0 B050 Release (May  9 2019, 22:51:50)"
+  main-app: ./ppsapp
+sensors:
+- vendor: Silicon Optronics
+  model: JXF23
+  control:
+    bus: 0
+    type: i2c
+    addr: 0x80
+  data:
+    type: MIPI
+    input-data-type: DATA_TYPE_RAW_10BIT
+    lane-id:
+    - 0
+    - 1
+    image: 1920x1080
+  clock: 27MHz
+/mnt/mmc01 #
+```
 
 
 ## OpenIPC firmware
+
+## Flashing OpenIPC
+(soon...)
 
 #### Boot dump
 ```
@@ -371,8 +743,36 @@ openipc-hi3518ev300 login:
 (soon...)
 
 ### Motor driver
-(soon...)
 
+The camera has 2 stepper motors to control the tilt (up/down) and pan (left/right).
+
+Replace the motor driver at /lib/modules/4.9.37/hisilicon/camhi-motor.ko with the one included below.
+
+The .zip file also includes a slightly modified build of the [sample control code](https://github.com/OpenIPC/motors) that you can copy to /bin.
+
+[camhi-motor.zip](https://github.com/ljalves/wiki/files/7873614/camhi-motor.zip)
+
+Usage:
+```
+motor_ctrl -d u        # move/tile up (by default 20 steps)
+motor_ctrl -d d        # move/tilt down
+motor_ctrl -d l        # move/pan left
+motor_ctrl -d r -s 50  # move/pan right by 50 steps
+```
+
+### Majestic sensor/pin configuration
+
+```
+image:
+  mirror: true
+  flip: true
+(...)
+nightMode:
+  irCutPin1: 15
+  irCutPin2: 12
+  backlightPin: 40
+
+```
 
 ### LEDs
 The camera has a dual color led (red/blue) connected to gpio's 50 and 51.
@@ -395,5 +795,3 @@ echo 1 > /sys/class/gpio51/value
 echo 0 > /sys/class/gpio51/value
 ```
 
-## Flashing
-(soon...)
