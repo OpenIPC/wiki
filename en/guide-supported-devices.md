@@ -34,6 +34,8 @@ _If you have another supported device to add, please do it [here][2]._
 | Anjoy    | MS-J10             | SSC335      | IMX307 |              | Yes | No        | Yes  | No   |
 | Anjoy    | YM-J10D            | SSC337      | IMX307 |              | Yes | No        | Yes  | No   |
 |          |                    |             |        |              |     |           |      |      |
+| Chacon   | [IPCAM-RI01](https://github.com/OpenIPC/wiki/blob/master/en/device-chacon-ipcam-ri01.md) | HI3518EV300 | JXF23  | XM25QH128A   | No  | RTL8188FTV | WiFi | Yes  | 
+|          |                    |             |        |              |     |           |      |      |
 | LTV      | CNE-724 48         | HI3516EV200 |        |              | Yes | No        | No   | Yes  |
 |          |                    |             |        |              |     |           |      |      |
 | Rotek    | Switcam HS303 (v1) | HI3518EV200 |        |              | No  | RTL8188FU | WiFi | Yes  |
