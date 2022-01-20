@@ -2,9 +2,9 @@
 [Table of Content](index.md)
 
 ## Introduction
-- [About project](menu-index.md)
+- [About the project](menu-index.md)
 - [Supported devices](https://openipc.org/wiki/en/guide-supported-devices)
-- [Show changelog](show-changelog.md)
+- [Changelog](show-changelog.md)
 
 ## Subprojects
 - [coupler](https://openipc.org/coupler)
@@ -20,7 +20,7 @@
 - [Installation on SigmaStar based boards](install-ssc335.md)
 - [Installation on XM510 based boards](install-xm510.md)
 - [Installation on XM530 based boards](install-xm530.md)
-- [Veryld full manual](old-manual.md)
+- [Very old full manual](old-manual.md)
 
 ## Usage
 - [System features](system-features.md)
@@ -45,6 +45,9 @@
 - [Boot device with NFS](dev-nfs-boot.md)
 - [FFMPEG usage](dev-ffmpeg-usage.md)
 - [Kernel configuration for adding new platforms](integration-kernel.md)
+
+## Help, Tips, and Tricks
+- [U-boot](help-uboot.md)
 
 ## Contacts
 - [Bug reports](https://github.com/OpenIPC/firmware/issues)
