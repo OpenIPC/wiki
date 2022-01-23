@@ -130,5 +130,5 @@ Thank you.
 [motors]: https://github.com/OpenIPC/motors
 [smolrtsp]: https://github.com/OpenIPC/smolrtsp
 [webui]: https://github.com/OpenIPC/microbe-web
-[wiki]: https://github.com/OpenIPC/firmware/wiki
+[wiki]: https://github.com/wiki
 [yaml-cli]: https://github.com/OpenIPC/yaml-cli

@@ -59,4 +59,4 @@ sf write 0x42000000 0x0 ${filesize}
 reset
 ```
 
-[1]: https://github.com/OpenIPC/firmware/wiki/supported_devices
+[1]: guide-supported_devices.md
