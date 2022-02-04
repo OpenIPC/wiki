@@ -48,6 +48,7 @@
 
 ## Help, Tips, and Tricks
 - [U-boot](help-uboot.md)
+- [Web UI](help-webui.md)
 
 ## Contacts
 - [Bug reports](https://github.com/OpenIPC/firmware/issues)
