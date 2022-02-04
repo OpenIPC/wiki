@@ -1,3 +1,6 @@
+# OpenIPC Wiki
+[Table of Content](index.md)
+
 Help: U-boot
 ------------
 
