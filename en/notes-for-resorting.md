@@ -40,7 +40,7 @@ Buildroot is faster for initial development for new platforms as it is minimalis
 
 ### Other FAQs
 
-* https://github.com/OpenIPC/camerasrnd/blob/master/doc/FAQ-ru.md
+* [OpenIPC Wiki (ru)](../ru/index.md)
 
 
 ## Network related stuff
@@ -188,11 +188,11 @@ if(pinfo->mem->start = 0x20250000 /* address i2c-2 */) {
 
 ## Docs on currently unsupported SoC:
 
-[[Novatek NV98515 SoC|https://github.com/hn/reolink-camera]]
+[Novatek NV98515 SoC](https://github.com/hn/reolink-camera)
 
 Different hack & mod related to IP Cameras forums:
 
-[[https://www.goprawn.com/]]
+https://www.goprawn.com/
 
 Below are some examples how to record video streams with various utilities.
 
