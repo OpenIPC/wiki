@@ -3,7 +3,7 @@
 
 ## Introduction
 - [About the project](menu-index.md)
-- [Supported devices](https://openipc.org/wiki/en/guide-supported-devices)
+- [Supported devices](guide-supported-devices.md)
 - [Changelog](show-changelog.md)
 
 ## Subprojects
@@ -29,7 +29,7 @@
 - [Upgrade firmware](sysupgrade.md)
 - [Image quality tuning](image-quality-tuning.md)
 - [Memory tuning](memory-tuning.md)
-- [Using ipctool](transfer-example-ipctool.md)
+- [Using ipctool](example-ipctool.md)
 - [GPIO settings](gpio-settings.md)
 - [ACMEv2](acme-v2.md)
 - [YouTube streaming](youtube-streaming.md)
