@@ -59,4 +59,4 @@ sf write 0x42000000 0x0 ${filesize}
 reset
 ```
 
-[1]: guide-supported_devices.md
+[1]: guide-supported-devices.md
