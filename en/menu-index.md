@@ -125,7 +125,7 @@ Thank you.
 [firmware]: https://github.com/OpenIPC/firmware
 [hisi-trace]: https://github.com/OpenIPC/hisi-trace
 [ipctool]: https://github.com/OpenIPC/ipctool
-[majestic]: https://github.com/OpenIPC/majestic_issues
+[majestic]: https://github.com/OpenIPC/majestic
 [mini]: https://github.com/OpenIPC/mini
 [motors]: https://github.com/OpenIPC/motors
 [smolrtsp]: https://github.com/OpenIPC/smolrtsp
