@@ -40,7 +40,7 @@ Buildroot is faster for initial development for new platforms as it is minimalis
 
 ### Other FAQs
 
-* [OpenIPC Wiki (ru)](../ru/index.md)
+* [OpenIPC Wiki (ru)](https://github.com/OpenIPC/camerasrnd/blob/master/docs/FAQ-ru.md)
 
 
 ## Network related stuff
