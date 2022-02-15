@@ -699,6 +699,7 @@ To be written...
 * [Filsion/Camasmart](http://www.camasmart.com/)
 * [FSAN](http://www.fsan.cn/)
 * [Herospeed](http://www.herospeed.net/en/)
+* [Huatu](http://huatudigital.com/)
 * [IPCAM](http://www.ipcam.xin/)
 * [Jovision](http://www.jovision.com/)
 * [JVT](http://www.jvt.cc/)
