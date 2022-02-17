@@ -38,9 +38,4 @@ run uk; run ur; reset
 After you have finished flashing new firmware, please run `firstboot` command
 to format jffs2 partition used to store settings.
 
-### Load kernel modules
-
-```
-cd /lib/modules/3.0.101\+/xiongmai/
-/usr/bin/load_xiongmai
-```
+### Known issues
