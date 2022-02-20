@@ -38,16 +38,4 @@ run uk; run ur; reset
 After you have finished flashing new firmware, please run `firstboot` command
 to format jffs2 partition used to store settings.
 
-### Load kernel modules
-
-```
-cd /lib/modules/3.0.101\+/xiongmai/
-/usr/bin/load_xiongmai
-```
-
 ### Known issues
-
-For Linux kernel built with the original toolchain (gcc 4.9.2) everything works
-as expected, but for the same .config built with OpenIPC toolchain (gcc 7.5.0)
-pty (and only pty) doesn't work. That is weird, and we also ran out of ideas how
-to fix that. https://t.me/openipc/20225
