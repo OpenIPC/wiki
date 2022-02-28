@@ -8,6 +8,7 @@
 - [Темы для дискуссий разработчиков](discussion.md)
 - [Программный переход с openipc-1.0 (OpenWrt) на openipc-2.x (Buildroot)](upgrade-from-1.md)
 - [Вопросы и ответы](faq.md)
+- [Хочу помочь!](participate.md)
 
 ### Помощь
 
