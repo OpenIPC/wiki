@@ -14,7 +14,7 @@ Install some packages to system and clone OpenIPC repo
 
 ```
 sudo apt-get update -y
-sudo apt-get install -y bc build-essential git unzip
+sudo apt-get install -y bc build-essential git tcl unzip
 git clone --depth=1 https://github.com/OpenIPC/firmware.git
 cd firmware
 ```
