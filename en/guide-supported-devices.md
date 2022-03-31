@@ -44,6 +44,8 @@ _If you have another supported device to add, please do it [here][2]._
 |          |                    |             |        |              |     |            |      |      |
 | Xiaomi   | MJSXJ02HL          | HI3518EV300 |        |              | No  |            |      | Yes  |
 |          |                    |             |        |              |     |            |      |      |
+| XM       | BLK18EV-0062-0035  | HI3518EV200 | JXH62  |              | Yes |            |      | Yes  |
+|          |                    |             |        |              |     |            |      |      |
 | Zenotech | HI3516D_MB_V13_RA  | HI3516DV100 | OV9689 | GD25Q128CSIG | Yes | No         |      | No   |
 
 [1]: https://github.com/OpenIPC/firmware#current-development-status-
