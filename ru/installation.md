@@ -442,7 +442,7 @@ mw.b 0x80007fc0 ff 1000000
 tftp 0x80007fc0 rootfs.squashfs.${soc}
 sf probe 0
 sf erase 0x250000 0x500000
-sf write 0x80007fc 0x250000 ${filesize}
+sf write 0x80007fc0 0x250000 ${filesize}
 
 reset
 ```
