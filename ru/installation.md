@@ -421,7 +421,7 @@ setenv sensor <sensor>   #
 setenv totalmem <memory> # 32M for xm510, 64M for xm530, 128M for xm550.
 
 setenv osmem <osmemory>  # 18M for xm510, 35M for xm530, 64M for xm550.
-setenv bootargs 'mem=$(osmem) console=ttyAMA0,115200 panic=20 root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=xm_sfc:256k(boot),64k(env),2048k(kernel),5120k(rootfs),-(rootfs_data)'
+setenv bootargs 'mem=35M console=ttyAMA0,115200 panic=20 root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=xm_sfc:256k(boot),64k(env),2048k(kernel),5120k(rootfs),-(rootfs_data)'
 setenv bootcmd 'sf probe 0; sf read 0x80007fc0 0x50000 0x200000; bootm 0x80007fc0'
 
 setenv ethaddr 00:00:00:00:00:00
