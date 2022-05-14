@@ -4,7 +4,7 @@
 For XM boards with Hi35{16Ev200,16Ev300,18Ev300} SoC ONLY!!!
 ------------------------------------------------------------
 
-Other boards may have different memory layout like HI3518Fv200
+Other boards may have different memory layout like HI3518Ev200
 uses 0x82000000 instead 0x42000000
 
 ### Supported sensors
