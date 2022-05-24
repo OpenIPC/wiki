@@ -48,7 +48,20 @@ killall -9 majestic && ulimit -c unlimited && echo /tmp/%e.%p.%s.%t.core > /proc
 ```
 scp /tmp/*.core username@192.168.1.2:
 ```
+Можно даже автоматизировать сохранение полученного дампа при перезапуске камеры.
+Для этого создайте скрипт `/etc/init.d/S97coredump` следующего содержания 
+(не забудьте отредактировать содержимое переменной STORAGE):
+```
+#!/bin/sh
+
+COREDUMP=/tmp/*.core
+STORAGE=username@192.168.1.2:/path/to/save/dumps/  # adjust to match your setup!
+
+ls $COREDUMP 2>/dev/null
+if [ $? -eq 0 ]; then
+  scp $COREDUMP $STORAGE && rm $COREDUMP
+fi
+```
 
 ##### Можно-ли вывести данные для настройки автоматической фокусировки линз вместо текущего sample_af в стандартный /metrics?
-
 Нет, это отдельный тяжелый алгоритм, его нет смысла запускать просто так.
