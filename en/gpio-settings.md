@@ -27,6 +27,8 @@ GPIO Settings
 | Hi3516Ev300 | 10     | 11     |       | 7i      |
 | Hi3518Ev200 | 1      | 2      | 48    |         |
 | Hi3518Ev300 |        |        |       |         |
+|             |        |        |       |         |
+| T31         | 57     | 58     |       |         |
 
 _i - inverted value_
 
