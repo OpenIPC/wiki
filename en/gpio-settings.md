@@ -42,7 +42,7 @@ _i - inverted value_
 | Hi3516Cv200 |
 | Hi3516Cv300 |
 | Hi3518Ev200 | 64     | 65     |
-| Hi3516Ev200 |
+| Hi3516Ev200 | 12     | 13     |          | 4     |
 | Hi3516Av300 | 5      | 6      |
 
 ### Jabsco boards
