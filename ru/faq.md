@@ -40,28 +40,7 @@ ssh root@192.168.1.666
 ### Majestic
 
 #### Как получить дамп памяти для отладки?
-Зайдите на камеру через ssh и выполните следующую команду:
-```
-killall -9 majestic && ulimit -c unlimited && echo /tmp/%e.%p.%s.%t.core > /proc/sys/kernel/core_pattern && majestic
-```
-Файл с дампом будет находится в каталоге /tmp/, окуда вы можете скопировать его на другой компьютер командой `scp`, например:
-```
-scp /tmp/*.core username@192.168.1.2:
-```
-Можно даже автоматизировать сохранение полученного дампа при перезапуске камеры.
-Для этого создайте скрипт `/etc/init.d/S97coredump` следующего содержания 
-(не забудьте отредактировать содержимое переменной STORAGE):
-```
-#!/bin/sh
-
-COREDUMP=/tmp/*.core
-STORAGE=username@192.168.1.2:/path/to/save/dumps/  # adjust to match your setup!
-
-ls $COREDUMP 2>/dev/null
-if [ $? -eq 0 ]; then
-  scp $COREDUMP $STORAGE && rm $COREDUMP
-fi
-```
+Включите и настройте отсылку Core Dump в меню Majestic > Majestic Debugging.
 
 #### Изображение с камеры имеет розовый оттенок
 Вам нужно указать GPIO пины для управления инфракрасным фильтром. Настройки для некоторых камер можно найти [в таблице](https://openipc.org/wiki/en/gpio-settings.html). Если вашей камеры в таблице нет, то вам потребуется утилита [ipctool](https://github.com/OpenIPC/ipctool/releases/download/latest/ipctool).
