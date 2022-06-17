@@ -34,7 +34,6 @@
 - [ACMEv2](acme-v2.md)
 - [YouTube streaming](youtube-streaming.md)
 - [WiFi XM530](wifi-xm530.md)
-- [Board manufacturers](board-manufacturers.md)
 
 ## Firmware
 - [Releases in GitHub](https://github.com/OpenIPC/firmware/releases/tag/latest)
@@ -50,6 +49,10 @@
 ## Help, Tips, and Tricks
 - [U-boot](help-uboot.md)
 - [Web UI](help-webui.md)
+
+## Reference Book
+- [Board manufacturers](board-manufacturers.md)
+- [Company names](company-names.md)
 
 ## Contacts
 - [Bug reports](https://github.com/OpenIPC/firmware/issues)
