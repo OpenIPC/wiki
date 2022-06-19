@@ -531,4 +531,4 @@ _...to be continued._
 
 [logo]: ../images/logo_openipc.png
 [ftdi]: https://www.google.com/search?q=ftdi+usb+ttl
-[ttlc]: https://google.com/search?q=logic+level+converter+3.3v+5v
+[tllc]: https://google.com/search?q=logic+level+converter+3.3v+5v
