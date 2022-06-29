@@ -102,3 +102,11 @@ _i - inverted value_
 | Processor   | IRCUT1 | IRCUT2 | IRLED | DEVICE ID                |
 |-------------|--------|--------|-------|--------------------------|
 | Hi3516Ev300 | 40     | 41     | 65    | unknown                  |
+
+
+### Jovision boards
+
+| Processor   | IRCUT1 | IRCUT2 | LIGHT |
+|-------------|--------|--------|-------|
+| Hi3516Ev200 | 53     | 52     | 4     |
+
