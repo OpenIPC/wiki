@@ -39,3 +39,32 @@ After you have finished flashing new firmware, please run `firstboot` command
 to format jffs2 partition used to store settings.
 
 ### Known issues
+
+
+### Uboot with out tftp command
+
+```
+setenv uk1 'mw.b 0x81000000 ff 1000000; setenv bootfile uImage.${soc}; tftpboot'
+setenv uk2 'sf probe 0; sf erase 0x50000 0x200000; sf write 0x81000000 0x50000 ${filesize}'
+setenv uk 'run uk1 ; run uk2'
+setenv ur1 'mw.b 0x81000000 ff 1000000; setenv bootfile rootfs.squashfs.${soc}; tftpboot'
+setenv ur2 'sf probe 0; sf erase 0x250000 0x500000; sf write 0x81000000 0x250000 ${filesize}'
+setenv ur 'run ur1 ; run ur2'
+saveenv
+
+run uk; run ur; reset
+```
+
+### Backup device (no tftpput)
+
+open the serial console with a logfile
+Note: dumping via Serial takes long
+
+```
+sf probe 0
+sf read 0x81000000 0x0 0x800000
+md.b 0x81000000 0x800000
+```
+
+use `cut -b 11-57 | xxd -r -p` to reconstruct the binary from `md.b` output
+
