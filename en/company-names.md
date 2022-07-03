@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](index.md)
+[Table of Content](../index.md)
 
 ## Company names
 
@@ -19,4 +19,3 @@
 - Shenzhen Zhongwei Century Technology Co., Ltd.
 - Shenzhen Hichip Vision Technology Co., Ltd.
 - Chengdu Powerview Science and Technology Co., Ltd.
-

@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](index.md)
+[Table of Content](../index.md)
 
 Introduction
 ------------
@@ -585,7 +585,7 @@ reboot
 
 ### Recover backup firmware
 
-If something goes horribly wrong and you want back your backed up firmware
+If something goes horribly wrong, and you want your backed up firmware back
 
 **Restore backup up firmware via serial**
 
