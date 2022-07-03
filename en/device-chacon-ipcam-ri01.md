@@ -4,27 +4,27 @@
 
 [Product datasheet](https://chacon.com/datasharing/doc/IPCAM-RI01/ipcam-ri01_user_manual.pdf)
 
-This camera is a rebrand of a manufacturing company identified by "PPStrong".
+This camera is a rebranding of a manufacturing company identified by "PPStrong".
 I'm sure there are other cameras out there that are using the same hardware (or similar with minor changes).
 
 ## Hardware
 
-| System | Description       |
-|--------|-------------------|
-| SoC    | HI3518EV300       |
-| Sensor | JXF23             |
+| System | Description                          |
+|--------|--------------------------------------|
+| SoC    | HI3518EV300                          |
+| Sensor | JXF23                                |
 | Flash  | 16Mb (XM25QH128A) or 8Mb (XM25QH64A) |
-| WiFi   | RTL8188FU         |
+| WiFi   | RTL8188FU                            |
 
 #### OpenIPC status
 
-| Component | Status |
-|-----------|--------|
-| WiFi | [Working](https://github.com/OpenIPC/firmware/issues/48) |
-| Motors | [Working](#motor-driver) (patched driver) |
-| Red/Blue leds | [Working](#leds) |
-| IR Led | Working |
-| IR Cut | Working |
+| Component     | Status                                                   |
+|---------------|----------------------------------------------------------|
+| WiFi          | [Working](https://github.com/OpenIPC/firmware/issues/48) |
+| Motors        | [Working](#motor-driver) (patched driver)                |
+| Red/Blue LEDs | [Working](#leds)                                         |
+| IR LED        | Working                                                  |
+| IR Cut        | Working                                                  |
 
 
 #### Hardware details
@@ -34,7 +34,7 @@ The camera mainboard is identified by "SPEED5S-H1MB_F23".
 ![device_chacon_ipcam-ri01_board_top](https://user-images.githubusercontent.com/1659543/149513254-d326f57f-902b-4c58-98e6-73bfe7fa33d2.jpg)
 At the top of the mainboard:
 - a micro sdcard slot on the right
-- connector labeled "IR" powers the IR led, a red led and a blue led
+- connector labeled "IR" powers the IR LED, a red LED and a blue LED
 - connector "ICR" powers the IR cut filter
 - non-identified connector is an input for the microphone
 - SPI NOR flash chip (QH128A)
@@ -83,24 +83,24 @@ At the bottom of the mainboard:
 
 ### GPIOs
 
-| nr  | Description |
-|-----|-------------|
-| 0x0f (15) | irCut_1 |
-| 0x0c (12) | irCut_2 |
-| 0x28 (40) | IR Led |
-| 0x33 (51) | Red Led |
-| 0x32 (50) | Blue Led |
-| 0x0d (13) | wlan power |
-| 0x00 (0)  | AcShdn |
-| 0x09 (9)  | Reset button |
+| nr        | Description   |
+|-----------|---------------|
+| 0x0f (15) | irCut_1       |
+| 0x0c (12) | irCut_2       |
+| 0x28 (40) | IR LED        |
+| 0x33 (51) | Red LED       |
+| 0x32 (50) | Blue LED      |
+| 0x0d (13) | wlan power    |
+| 0x00 (0)  | AcShdn        |
+| 0x09 (9)  | Reset button  |
 | 0x3b (59) | Tilt motor A1 |
 | 0x3a (58) | Tilt motor A2 |
 | 0x39 (57) | Tilt motor B1 |
 | 0x38 (56) | Tilt motor B2 |
-| 0x47 (71) | Pan motor A1 |
-| 0x45 (69) | Pan motor A2 |
-| 0x46 (70) | Pan motor B1 |
-| 0x44 (68) | Pan motor B2 |
+| 0x47 (71) | Pan motor A1  |
+| 0x45 (69) | Pan motor A2  |
+| 0x46 (70) | Pan motor B1  |
+| 0x44 (68) | Pan motor B2  |
 
 ### Mods
 #### USB Serial port
@@ -121,7 +121,7 @@ If you find it hard to solder the wires on the camera micro usb connector get a 
 The camera uBoot is password protected with "pps_password".
 
 ### Creating a backup
-To backup the original firmware you need a usb serial adapter connected to the board and a sdcard.
+To back up the original firmware you need a USB serial adapter connected to the board and a sdcard.
 
 Find out your flash chip size:
 ```
@@ -131,7 +131,7 @@ D:0x20 0x70 0x17
 Name:"XM25QH64AHIG"
 ```
 
-uBoot commands to backup the entire flash memory on the sdcard (**all sdcard contents will be lost**).
+uBoot commands to back up the entire flash memory on the sdcard (**all sdcard contents will be lost**).
 Depending on your camera flash memory size replace \<size1\>/\<size2\> with:
 - 0x800000/0x4000 for 8M flash
 - 0x1000000/0x8000 for a 16Mb flash
@@ -160,7 +160,7 @@ pps #
 
 This will write the entire flash to the mmc card in "raw mode" (no filesystem).
 
-**WARNING**: if you leave the card inserted in the camera and it boots the original FW, the card will be formated and the backup lost!
+**WARNING**: if you leave the card inserted in the camera, and it boots the original FW, the card will be formated and the backup lost!
   
 Then to save the dump to a file, insert the card in a system running linux and:
 ```
@@ -429,7 +429,7 @@ Content-Length: 129
 }
 ```
 
-In the latest FW they have removed the "telnetd" binary so you need to place it on the sdcard:
+In the latest FW they have removed the "telnetd" binary, so you need to place it on the sdcard:
 [telnetd.zip](https://github.com/ljalves/wiki/files/7875319/telnetd.zip)
 
 
@@ -775,23 +775,22 @@ nightMode:
 ```
 
 ### LEDs
-The camera has a dual color led (red/blue) connected to gpio's 50 and 51.
-To control those leds you can use the /sys api:
+The camera has a dual color LED (red/blue) connected to GPIO's 50 and 51.
+To control those LEDs you can use the /sys api:
 ```
-# make the gpios accessible
+# make the GPIOs accessible
 echo 50 > /sys/class/gpio/export
 # and set direction (only need to do once)
 echo out > /sys/class/gpio50/direction
 echo out > /sys/class/gpio51/direction
 
-# turn on blue led
+# turn on blue LED
 echo 1 > /sys/class/gpio50/value
-# turn off blue led
+# turn off blue LED
 echo 0 > /sys/class/gpio50/value
 
-# turn on red led
+# turn on red LED
 echo 1 > /sys/class/gpio51/value
-# turn off red led
+# turn off red LED
 echo 0 > /sys/class/gpio51/value
 ```
-

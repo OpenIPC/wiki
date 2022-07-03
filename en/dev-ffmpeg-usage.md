@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](index.md)
+[Table of Content](../index.md)
 
 FFMPEG, RTSP and SRT examples
 -----------------------------
