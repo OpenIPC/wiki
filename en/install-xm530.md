@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](index.md)
+[Table of Content](../index.md)
 
 For XM vendor boards with XM530/XM550 SoC ONLY !!!
 --------------------------------------------------

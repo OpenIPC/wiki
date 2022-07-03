@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](index.md)
+[Оглавление](../index.md)
 
 Помощь: Веб-интерфейс
 ---------------------

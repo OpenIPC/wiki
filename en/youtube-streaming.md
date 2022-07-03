@@ -1,11 +1,11 @@
 # OpenIPC Wiki
-[Table of Content](index.md)
+[Table of Content](../index.md)
 
 Configuration requirements
 --------------------------
 
 To prevent accidental stream termination on temporary connection drops
-schedule live streaming with a start date in the far future (e.g. December 31st
+schedule live-streaming with a start date in the far future (e.g. December 31st
 of the current year). It will work smoothly when you go live, disconnect the
 camera and then continue streaming.
 
@@ -37,7 +37,7 @@ for more information.
   deselect 'API Key' option, then press 'Execute' button below.
 - Authorize yourself using your YouTube connected account.
 - Make sure that you got 200 response otherwise check errors and repeat.
-  Trivial error is when [live streaming](https://support.google.com/youtube/answer/2474026?hl=en)
+  Trivial error is when [live-streaming](https://support.google.com/youtube/answer/2474026?hl=en)
   was not previously enabled in your account.
 - Save "channelId" from the response (it looks like "UCPJRjbxYlq6h2cCqy8RCRjg").
 

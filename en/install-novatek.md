@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](index.md)
+[Table of Content](../index.md)
 
 For XM vendor boards with NT98562 and NT98566 SoC ONLY!!!
 ---------------------------------------------------------
