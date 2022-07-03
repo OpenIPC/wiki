@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](index.md)
+[Table of Content](../index.md)
 
 For XM vendor boards with XM530/XM550 SoC ONLY !!!
 --------------------------------------------------
@@ -55,7 +55,7 @@ saveenv
 run uk; run ur; reset
 ```
 
-### backup device (no tftpput)
+### Backup device (no tftpput)
 
 open the serial console with a logfile
 Note: dumping via Serial takes long
@@ -67,3 +67,4 @@ md.b 0x81000000 0x800000
 ```
 
 use `cut -b 11-57 | xxd -r -p` to reconstruct the binary from `md.b` output
+
