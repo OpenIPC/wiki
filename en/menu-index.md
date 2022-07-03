@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](index.md)
+[Table of Content](../index.md)
 
 ## Basic information
 
@@ -111,7 +111,7 @@ You can make a financial contribution to the project at [Open Collective](https:
 
 Thank you.
 
-<p align="center">
+<p style="text-align:center">
 <a href="https://opencollective.com/openipc/contribute/backer-14335/checkout" target="_blank"><img src="https://opencollective.com/webpack/donate/button@2x.png?color=blue" width="375" alt="Open Collective donate button"></a>
 </p>
 

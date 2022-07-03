@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](index.md)
+[Table of Content](../index.md)
 
 How to install HTTPS certificates on your camera
 ------------------------------------------------
