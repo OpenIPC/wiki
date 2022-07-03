@@ -68,3 +68,36 @@ reset
 ```
 
 [1]: guide-supported-devices.md
+
+
+### Uboot without tftp command
+
+```
+setenv uk 'mw.b 0x42000000 ff 1000000; setenv bootfile uImage.${soc} && tftpboot && sf probe 0; sf erase 0x50000 0x200000; sf write 0x40080000 0x50000 ${filesize}'
+setenv ur 'mw.b 0x42000000 ff 1000000; setenv bootfile rootfs.squashfs.${soc} && tftpboot && sf probe 0; sf erase 0x250000 0x500000; sf write 0x40080000 0x250000 ${filesize}'
+```
+
+
+### backup device
+
+```
+setenv ipaddr 192.168.1.10
+setenv serverip 192.168.1.254    # Your TFTP server IP address.
+
+sf read 0x42000000 0x0 0x800000
+tftpput 0x42000000 0x800000 backup.img
+```
+
+
+### restore device
+
+if something goes wrong uboot can be bricked!
+
+```
+setenv bootfile backup.img
+tftpboot
+sf probe 0
+sf erase 0x0000 0x800000
+sf write 0x40080000 0x0 ${filesize}
+reset
+```
