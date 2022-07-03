@@ -1,4 +1,5 @@
 # OpenIPC Wiki
+
 [Table of Content](../index.md)
 
 Additional requirements for kernel configuration
