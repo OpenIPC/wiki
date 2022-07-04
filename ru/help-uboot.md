@@ -44,8 +44,8 @@ $ screen -L -Logfile fulldump.log /dev/ttyUSB0 115200
 Чтение 8МБ флэш-памяти:
 
 ```
-sf probe 0
 mw.b 0x82000000 ff 0x800000
+sf probe 0
 sf read 0x82000000 0x0 0x800000
 md.b 0x0 0x800000
 ```
@@ -53,8 +53,8 @@ md.b 0x0 0x800000
 Чтение 16МБ флэш-памяти:
 
 ```
-sf probe 0
 mw.b 0x82000000 ff 0x1000000
+sf probe 0
 sf read 0x82000000 0x0 0x1000000
 md.b 0x0 0x1000000
 ```
