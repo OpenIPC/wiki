@@ -31,19 +31,31 @@ like this:
 $ screen -L -Logfile fulldump.log /dev/ttyUSB0 115200
 ```
 
-After connecting to bootloader console, run a command for reading hexadecimal
-dump of data from the very beginning of the flash memery to the very end of it.
+After connecting to the bootloader console, run a set of commands for reading
+whole amount of data from flash memory chip into RAM, and then dumping it as
+hexadecimal values into terminal window.
+
 Use hexadecimal notation for addresses, where 0 is 0x0, 8 MB is 8x00000, and
 16 MB is 0x1000000. 
 
 For reading whole 8 MB flash memory run 
+
 ```
+sf probe 0
+mw.b 0x82000000 ff 0x800000
+sf read 0x82000000 0x0 0x800000
 md.b 0x0 0x800000
 ```
+
 and for 16 MB flash memory run
+
 ```
+sf probe 0
+mw.b 0x82000000 ff 0x1000000
+sf read 0x82000000 0x0 0x1000000
 md.b 0x0 0x1000000
 ```
+
 Since the process of reading is going to take a considerable amount of time
 (literally hours), you might want to disconnect from the terminal session to
 avoid accidental keystrokes contaminating the output. Press `Ctrl-a` followed
