@@ -41,8 +41,8 @@ Use hexadecimal notation for addresses, where 0 is 0x0, 8 MB is 8x00000, and
 For reading whole 8 MB flash memory run 
 
 ```
-sf probe 0
 mw.b 0x82000000 ff 0x800000
+sf probe 0
 sf read 0x82000000 0x0 0x800000
 md.b 0x0 0x800000
 ```
@@ -50,8 +50,8 @@ md.b 0x0 0x800000
 and for 16 MB flash memory run
 
 ```
-sf probe 0
 mw.b 0x82000000 ff 0x1000000
+sf probe 0
 sf read 0x82000000 0x0 0x1000000
 md.b 0x0 0x1000000
 ```
