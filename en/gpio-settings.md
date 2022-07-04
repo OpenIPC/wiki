@@ -106,7 +106,7 @@ _i - inverted value_
 
 ### Jovision boards
 
-| Processor   | IRCUT1 | IRCUT2 | LIGHT |
-|-------------|--------|--------|-------|
-| Hi3516Ev200 | 53     | 52     | 4     |
-
+| Processor   | IRCUT1 | IRCUT2 | LIGHT |  TESTED BOARDS  |
+|-------------|--------|--------|-------|-----------------|
+| Hi3516Ev200 | 53     | 52     | 4     |                 |
+| Hi3516Cv100 | 42     | 43     | 6     | IPG5020A-H-V1.0 |
