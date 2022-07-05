@@ -64,10 +64,14 @@ need to reconnect it later, after the size of the log file will stop growing.
 Reading of an 8 MB flash memory should result in a ~40 MB log file, and for a
 16 MB chip the file should be twice that size.
 
-Convert the hex dump into a binary firmware file using `xxd` and keep it for
-further research or restoring camera to its pristine state.
+Convert the hex dump into a binary firmware file and use it for further research
+or restoring camera to its pristine state.
 
-Using [binwalk](https://github.com/ReFirmLabs/binwalk) to unpack the binary file. 
+```
+xxd -r fulldump.log > fulldump.bin
+```
+
+Use [binwalk](https://github.com/ReFirmLabs/binwalk) to unpack the binary file.
 
 #### Saving firmware via SD card.
 
