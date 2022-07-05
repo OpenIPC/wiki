@@ -44,7 +44,7 @@ For reading whole 8 MB flash memory run
 mw.b 0x82000000 ff 0x800000
 sf probe 0
 sf read 0x82000000 0x0 0x800000
-md.b 0x0 0x800000
+md.b 0x82000000 0x800000
 ```
 
 and for 16 MB flash memory run
@@ -53,7 +53,7 @@ and for 16 MB flash memory run
 mw.b 0x82000000 ff 0x1000000
 sf probe 0
 sf read 0x82000000 0x0 0x1000000
-md.b 0x0 0x1000000
+md.b 0x82000000 0x1000000
 ```
 
 Since the process of reading is going to take a considerable amount of time
