@@ -127,6 +127,37 @@ Use `dd` command to copy data from the card to a binary file on the computer.
 dd bs=512 skip=16 count=32768 if=/dev/sdc of=./fulldump.bin
 ```
 
+### Uploading binary image via serial connection.
+
+There are cameras that only have wireless connection unavailable directly from
+bootloader. Most of such cameras also have SD card slot but some don't, or it does
+not work for some reason, or you don't have a card, or something. Anyway, you still
+can upload a binary image onto camera and either run it, or save it into the flash
+memory. Here's how.
+
+First of all, you'll need to install `lrzsz` package on your desktop computer.
+I presume it runs Linux and preferrably of a Debian family, that'll be easier on 
+examples. So, run this command to satisfy prerequisites:
+```
+apt install lrzsz
+```
+Now you are ready.
+
+Place the binary file you are going to upload into the same directory where you will
+be starting a `screen` session to your camera from. Start the session and boot into
+the bootloader console interrupting booting routine with a key combo.
+
+Now you can run `help` and check what data transfer protocols are supported by your 
+version of bootloader. If you see `loady` in the list of commands, then you can use
+ymodem protocol. Run `loady` on you camera, then press `Ctrl-a` followed by `:` 
+(semi-colon). It will switch you into command line at the very bottom of the screen.
+Enter `exec !! sz --ymodem filename.bin` where _filename.bin_ and see your file
+uploading via serial connection. At 115200 bps. Slow, very slow.
+
+After the file is uploaded, you can do the usual magic. Either boot from the memory
+image right away using `bootm`, or write it into the flash memory.
+
+
 ### Bypassing password-protected bootloader.
 
 Changing the bootloader is a risky operation. There's a high probability of
