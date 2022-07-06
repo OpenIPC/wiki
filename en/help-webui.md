@@ -11,3 +11,39 @@ try to update Web UI once more, overriding version checking for the second updat
 This may be required because of some changes we have possibly made to the updating
 routine, thus you shall retrieve the updating routine code with the first update,
 and then use it for the consecutive update.
+
+### Web UI Development
+
+If you want to help us with developing of the web interface for our
+firmware, here is what you need to know beforehands. Cameras are very
+limited in terms of space and performance. The only available option
+we have now in the firmware which is more or less suitable for dynamic
+generating of HTML pages is `haserl`, a fancy cousin of `ash` bent for
+serving as a CGI wrapper. Did I say `ash`? Right, because we don't have
+`bash', `tcsh`, `zsh` in our Linux. Ash it is. As in A shell, full name
+Almquist shell. Tiny, lightweight, and kinda limited. System is limited,
+too -- in most parts it is `busybox`. So, if you still feel comfortable
+tonmake your hands dirty with a very 80s style of web development then
+welcome aboard.
+
+Recent interface is built around [Bootstrap](https://getbootstrap.com/)
+CSS framework which is a little overkill for the purpouse but allowed us
+to fasttrack from the original microbe web to what we have now. We would
+like to slim down the original Bootstrap bundle and create a custom pack
+with only the features we use. If you posses such a skill, come and work
+with us.
+
+Also, we're considering the possibility of switching to a client-side
+web interface builder, leaving only data-tossing to the server. Vue.js
+or similar. Have something to add here? Spill it out.
+
+Any other ideas? We would like to listen them, too.
+
+### Running a deleloper's version of code.
+
+To start improving the web interface, clone its GitHub repo locally and
+set up an NFS mount on your camera to the root directory of the local copy
+```
+mkdir -p /tmp/dev
+mount -t nfs -o nolock myserverip:/home/username/path/to/web /tmp/dev
+```
