@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](index.md)
+[Table of Content](../index.md)
 
 Source code
 -----------
@@ -14,7 +14,7 @@ Install some packages to system and clone OpenIPC repo
 
 ```
 sudo apt-get update -y
-sudo apt-get install -y bc build-essential git unzip
+sudo apt-get install -y bc build-essential git tcl unzip
 git clone --depth=1 https://github.com/OpenIPC/firmware.git
 cd firmware
 ```
@@ -48,7 +48,7 @@ make BOARD=unknown_unknown_xm530_openipc all
 
 ## Statistical data
 
-Software might do product usage data collection including SoC and sensor model name to gather statistics used in QA process..
+Software might do product usage data collection including SoC and sensor model name to gather statistics used in QA process.
 
 We guaranty that the data is fully anonymized, and does not contain anything that can arguably be considered data about an individual, that could be considered end-user data; or that could be sensitive or confidential to users.
 

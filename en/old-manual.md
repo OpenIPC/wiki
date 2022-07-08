@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](index.md)
+[Table of Content](../index.md)
 
 Introduction
 ------------
@@ -19,7 +19,7 @@ This page describes OpenWRT-based firmware variant.
 * Run arbitrary command from u-boot ENV (linux_cmd=)
 * Simple L2/L3 VPN with traffic shaping and compression (vtun)
 * Simply sender Telegram bot (estgb)
-* Low cost  3G USB modems support in hilink and ppp modes
+* Low cost 3G/4G USB modems support in hilink mode
 * µVPN tunnel service
 * and more ...
 
@@ -32,48 +32,6 @@ unable to deliver.
 
 The list is constantly updated, please visit often and/or follow our Telegram
 groups for new release notifications.
-
-
-#### OpenIPC 1.0 (OpenWRT based)
-
-| Processor   | Sensor          | Vendor     | SKU          | Board                           | Status |
-|-------------|-----------------|------------|--------------|---------------------------------|--------|
-| Hi3516Cv100 | IMX222_spi_dc   | XM         |              | [BLK18C-0222-38X38_S-V1.03][1]  | test   |
-| Hi3518Ev100 | OV9712_i2c_dc   | CamHi/Xin  |              | IPC18E_9712_V2.0/V3.1           | test   |
-|             |                 |            |              |                                 |        |
-| Hi3516Cv200 | IMX323_i2c_dc   | XM         |              | BLK16CV-0323-38X38-V1.01        | yes    |
-| Hi3516Cv200 | IMX323_i2c_dc   | JVT        | S323H16VF    | IPS323-H16V-38X38-V2            | yes    |
-| Hi3516Cv200 | IMX323_i2c_mipi | XM         |              |                                 | ?      |
-| Hi3518Ev200 | AR0130_i2c_dc   | XM         |              | BLK18EV-0732-0035-38X38-V1.01   | yes    |
-| Hi3518Ev200 | JXF22_i2c_dc    | XM         |              | BLK18EV-0002-2035-38X38-V1.01   | yes    |
-| Hi3518Ev200 | JXF22_i2c_dc    | XM         |              | BLK18EV-0022-0130-38X38-V1.01   | yes    |
-| Hi3518Ev200 | OV2735_i2c_dc   | Dahua      | DH-IPC-C22P  | E305654 JX02 94V-0              | wip    |
-| Hi3518Ev200 | OV9732_         | XM         |              | BLK18EV-0732-0035-38X38-V1.01   | yes    |
-| Hi3518Ev200 | OV9732_i2c_dc   | Longse/HS  | LS-IP100/40  | 3518EV200-OV9732-V1.0           | yes    |
-| Hi3518Ev200 | OV9732_i2c_dc   | Rostelecom | QVC-IPC-136W | E305654 JX02 94V-0              | wip    |
-| Hi3518Ev200 | SC2135_i2c_dc   | XM         |              | BLK18EV-0035-0042-38X38_S-V1.01 | yes    |
-| Hi3518Ev200 | SC2235_i2c_dc   | XM         |              | BLK18EV-0235-38X38-B-V1.01      | yes    |
-|             |                 |            |              |                                 |        |
-| Hi3516Cv300 | AR0237_i2c_dc   | XM         |              | BLK16CV3-0237P-38X38-S-V1.01    | yes    |
-| Hi3516Cv300 | IMX307_i2c_lvds | Raysharp   |              | RS-CM-188D 2018-03-16 E150111   | yes    |
-| Hi3516Cv300 | IMX323_i2c_dc   | Longse/HS  |              | HI3516CV300-IMX323-POE-TF V1.1  | yes    |
-| Hi3516Cv300 | IMX323_i2c_dc   | Sunywo     | ZB6323       | IPG5020A-T-N6-V0.1              | yes    |
-| Hi3516Cv300 | IMX323_i2c_dc   | XM         |              | [IVG-HP201Y-AE][2]              | yes    |
-| Hi3516Cv300 | IMX291_i2c_lvds | XM         |              | [IVG-HP203Y-AE][3]              | yes    |
-| Hi3516Cv300 | IMX323_spi_dc   | JVT        | S323H16XF    | IPS323-H16X-38X38-V2/V3         | yes    |
-| Hi3516Cv300 | JXF22_i2c_dc    | XM         |              | BLK16CV3-0022-38X38-S-V1.01     | yes    |
-| Hi3516Ev100 | IMX323_i2c_dc   | XM         |              | BLK16E-0323-38X38-B-V1.01       | yes    |
-| Hi3516Ev100 | SC2235P_i2c_dc  | XM         | 80HE20PS-S   | BLK16E-0235-38X38-S-V2.03       | yes    |
-
-
-#### OpenIPC 2.1 (Buildroot based)
-
-| Processor   | Sensor           | Vendor | SKU | Board                | Status |
-|-------------|------------------|--------|-----|----------------------|--------|
-| Hi3516Ev200 | IMX307_i2c_mipi  | XM     |     | [IVG-85HF20PY-S][4]  | yes    |
-| Hi3516Ev200 | SC4239P_i2c_mipi | XM     |     | [IVG-85HF30PS-S][5]  | yes    |
-| Hi3516Ev300 | IMX335_i2c_mipi  | XM     |     | [IVG-85HG50PYA-S][6] | yes    |
-| SSC335      | SC3335           |        |     | [Uniview][7]         | yes    |
 
 More information about sensors: [https://cctvsp.ru][8] (translated from Russian
 with Google Translate).
@@ -627,7 +585,7 @@ reboot
 
 ### Recover backup firmware
 
-If something goes horribly wrong and you want back your backed up firmware
+If something goes horribly wrong, and you want your backed up firmware back
 
 **Restore backup up firmware via serial**
 
@@ -686,43 +644,6 @@ sf write 0x82000000 0x0 ${filesize}
 ## Reference Book
 
 To be written...
-
-### Vendors
-
-* [ACTi](https://www.acti.com/)
-* [Anjvision](http://www.anjvision.com/), <http://icamra.cn/>
-* [Ansjer](https://www.ansjer.com/)
-* [Anviz](http://www.anviz.com/)
-* [Brovotech](https://brovotech.com/)
-* [Cantonk](http://cantonk.com/)
-* [CCDCAM](http://www.ccdcam.com/) th?
-* [Filsion/Camasmart](http://www.camasmart.com/)
-* [FSAN](http://www.fsan.cn/)
-* [GeoVision](https://www.geovision.com.tw/)
-* [Herospeed](http://www.herospeed.net/en/)
-* [Huatu](http://huatudigital.com/)
-* [IPCAM](http://www.ipcam.xin/)
-* [Jovision](http://www.jovision.com/)
-* [JVT](http://www.jvt.cc/)
-* [LENOTEL](http://www.lenoteltechnology.com/) th?
-* [Longse](http://www.longse.com/)
-* [Milesight](http://www.milesight.com/)
-* [Raysharp](http://raysharp.cn/en/)
-* [Ruision](http://www.ruision.com/?lang=en)
-* [Safer](http://www.safer.net.cn/) th?
-* [Synuwo](http://www.sunywo.com/)
-* [Tiandy](http://en.tiandy.com/)
-* [Topsee](http://www.en.tpsee.com/)
-* [TVT](http://www.tvt.net.cn/)
-* [UNIVIEW](http://uniview.com/)
-* [VandSec/Yoosee](http://vandsec.com/) th?
-* [VStarcam](http://www.vstarcam.com/) th?
-* [Wansview](http://wansview.com/)
-* [XM](http://www.xiongmaitech.com/en/)
-* [Z-BEN](http://www.z-ben.cn/) th?
-* [ZOSI](https://www.zositech.com/)
-
-_th? -- possibly a trading house_
 
 [1]: https://aliexpress.com/item/32493067946.html
 [2]: https://aliexpress.com/item/32851596596.html

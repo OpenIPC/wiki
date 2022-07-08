@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Оглавление](index.md)
+[Оглавление](../index.md)
 
 Установка OpenIPC. Шаг за шагом.
 --------------------------------
@@ -64,7 +64,7 @@ __Прежде чем подключать адаптер к камере, уб�
 запустите на компьютере программу подключения к серийному порту и установите
 соединение с адаптером. Используйте скорость подключения 115200 bps. После этого
 соедините контакт `RX` адаптера с предполагаемым контактом `TX` порта UART.
-Подайте питание на камеру. Если вы угадали правильно, на экране появится ло
+Подайте питание на камеру. Если вы угадали правильно, на экране появится лог
 загрузки. Если же экран остался чистым -- повторите процедуру с другим свободным
 контактом UART. После того как вы определили порт `RX`, подключите порт `TX`
 адаптера к оставшемуся свободному контакту порта UART. Попробуйте прервать
@@ -421,7 +421,7 @@ setenv sensor <sensor>   #
 setenv totalmem <memory> # 32M for xm510, 64M for xm530, 128M for xm550.
 
 setenv osmem <osmemory>  # 18M for xm510, 35M for xm530, 64M for xm550.
-setenv bootargs 'mem=$(osmem) console=ttyAMA0,115200 panic=20 root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=xm_sfc:256k(boot),64k(env),2048k(kernel),5120k(rootfs),-(rootfs_data)'
+setenv bootargs 'mem=35M console=ttyAMA0,115200 panic=20 root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=xm_sfc:256k(boot),64k(env),2048k(kernel),5120k(rootfs),-(rootfs_data)'
 setenv bootcmd 'sf probe 0; sf read 0x80007fc0 0x50000 0x200000; bootm 0x80007fc0'
 
 setenv ethaddr 00:00:00:00:00:00
@@ -442,7 +442,7 @@ mw.b 0x80007fc0 ff 1000000
 tftp 0x80007fc0 rootfs.squashfs.${soc}
 sf probe 0
 sf erase 0x250000 0x500000
-sf write 0x80007fc 0x250000 ${filesize}
+sf write 0x80007fc0 0x250000 ${filesize}
 
 reset
 ```
@@ -531,4 +531,4 @@ _...to be continued._
 
 [logo]: ../images/logo_openipc.png
 [ftdi]: https://www.google.com/search?q=ftdi+usb+ttl
-[ttlc]: https://google.com/search?q=logic+level+converter+3.3v+5v
+[tllc]: https://google.com/search?q=logic+level+converter+3.3v+5v

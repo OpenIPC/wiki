@@ -1,8 +1,8 @@
 # OpenIPC Wiki
-[Table of Content](index.md)
+[Table of Content](../index.md)
 
-WiFi for XM530 based devices
-----------------------------
+Wi-Fi for XM530 based devices
+-----------------------------
 
 Save this script as `/usr/sbin/wifi`
 
