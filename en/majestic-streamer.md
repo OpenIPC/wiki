@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](index.md)
+[Table of Content](../index.md)
 
 Majestic Streamer
 -----------------
@@ -36,7 +36,7 @@ With firmware running, you can access the camera using URLs below
      and others are image width and height.
 * http://192.168.1.10/image.heif - image snapshot in [HEIF][heif] format,
   use `stream` parameter to specify channel (the same approach as for RTSP channels)
-* http://192.168.1.10/image.yuv - image snapshot in [YUV420][yuv] format.
+* http://192.168.1.10/image.yuv420 - image snapshot in [YUV420][yuv] format.
 * http://192.168.1.10/image.dng - [raw image][raw] snapshot from the sensor in
   [Adobe DNG][dng] format (only for v>=2 HiSilicon processors).
 
@@ -50,7 +50,7 @@ convert -verbose -sampling-factor 4:2:0 -size 1920x1080 -depth 8 image.yuv image
 where `1920x1080` is the picture resolution of video0, and `.png` is the target
 image format.
 
-### Audio input
+### Audio
 
 * http://192.168.1.10/audio.opus - [Opus][opus] audio stream.
 * http://192.168.1.10/audio.m4a - [AAC][aac] audio stream.
