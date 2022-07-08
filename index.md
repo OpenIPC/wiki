@@ -83,6 +83,7 @@ In Russian
 ----------
 - [О проекте](ru/about.md)
 - [Установка. Шаг за шагом.](ru/installation.md)
+- [Настройка.](ru/configuration.md)
 - [Темы для дискуссий разработчиков](ru/discussion.md)
 - [Программный переход с openipc-1.0 (OpenWrt) на openipc-2.x (Buildroot)](ru/upgrade-from-1.md)
 - [Вопросы и ответы](ru/faq.md)
