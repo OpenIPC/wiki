@@ -75,8 +75,8 @@ or whatnot.
 
 Connect `GND` pin on your camera to `GND` pad of the adapter, connect USB
 connector of the adapter to a USB port on your PC, start a terminal emulator
-application and connect to your adapter. Use connection speed of 115200 bps,
-no flow control, no parity bit.
+application and connect to your adapter. Set your terminal settings to 
+115200 bps baudrate, 8 bits, no parity, 1 stopbit, no flow control.
 
 Then, connect `RX` pin on the adapter to a possible `TX` contact of UART port
 on your camera. Power the camera with its standard power adapter. If you had a
