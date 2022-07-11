@@ -35,7 +35,7 @@ After connecting to the bootloader console, run a set of commands for reading
 whole amount of data from flash memory chip into RAM, and then dumping it as
 hexadecimal values into terminal window.
 
-Use hexadecimal notation for addresses, where 0 is 0x0, 8 MB is 8x00000, and
+Use hexadecimal notation for addresses, where 0 is 0x0, 8 MB is 0x800000, and
 16 MB is 0x1000000. 
 
 For reading whole 8 MB flash memory run 
