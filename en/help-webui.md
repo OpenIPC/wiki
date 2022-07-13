@@ -20,7 +20,7 @@ If you want to help us with developing of the web interface for our
  we have now in the firmware which is more or less suitable for dynamic
  generating of HTML pages is `haserl`, a fancy cousin of `ash` bent for
  serving as a CGI wrapper. Did I say `ash`? Right, because we don't have
- `bash', `tcsh`, `zsh` in our Linux. Ash it is. As in A shell, full name
+ `bash`, `tcsh`, `zsh` in our Linux. Ash it is. As in A shell, full name
  Almquist shell. Tiny, lightweight, and kinda limited. System is limited,
  too -- in most parts it is `busybox`. So, if you still feel comfortable
  tonmake your hands dirty with a very 80s style of web development then
