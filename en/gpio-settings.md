@@ -14,9 +14,9 @@ GPIO Settings
 
 ### CamHi/Xin boards
 
-| Processor   | IRCUT1 | IRCUT2 | LIGHT | USB_ENA | RS485_DE |
-|-------------|--------|--------|-------|---------|----------|
-| Gk7205v200  |        |        |       | 9i      | 54       |
+| Processor   | IRCUT1 | IRCUT2 | LIGHT | USB_ENA | RS485_DE | UART2_RXD/RS485_RO | UART2_TXD/RS485_DI |
+|-------------|--------|--------|-------|---------|----------|--------------------|--------------------|
+| Gk7205v200  |        |        |       | 9i      | 54       | 12                 | 13                 |
 | Gk7205v300  | 10     | 11     |       | 7i      |
 |             |        |        |       |         |
 | Hi3516Cv100 |        |        |       |         |
@@ -31,6 +31,9 @@ GPIO Settings
 | T31         | 57     | 58     |       |         |
 
 _i - inverted value_
+
+mux 12->UART2_RXD/RS485_RO: devmem 0x112c0070 32 2 
+mux 13->UART2_TXD/RS485_DI: devmem 0x112c0074 32 2
 
 ### Herospeed/Longse/Cantonk boards
 
