@@ -157,6 +157,41 @@ uploading via serial connection. At 115200 bps. Slow, very slow.
 After the file is uploaded, you can do the usual magic. Either boot from the memory
 image right away using `bootm`, or write it into the flash memory.
 
+### Reading binary image from SD card.
+
+If your camera supports SD card and you have `fatload` command in bootloader, then
+you can read firmware binary files from an SD card.
+
+First, prepage the card: format it into FAT filesystem and place bootloader, kernel,
+and rootsf binary files there. Insert the card in camera and boot into bootloader 
+console. Check that you have access to the card.
+```
+mmc rescan
+```
+Then unlock access to flash memory and start writing content of the files from the card
+into the flash memory.
+
+NB! Please note that load address and names of files used in this example not necessarily
+match those for your particular camera. Consult documentation, or seek help on [our Telegram channel][telegram].
+
+```
+sf probe 0
+
+mw.b 0x80600000 ff 1000000
+sf erase 0x0 0x50000
+fatload mmc 0:1 0x80600000 u-boot-with-spl.bin
+sf write 0x80600000 0x0 ${filesize}
+
+mw.b 0x80600000 ff 1000000
+sf erase 0x50000 0x200000
+fatload mmc 0:1 0x80600000 uimage.t31
+sf write 0x80600000 0x50000 ${filesize}
+
+mw.b 0x80600000 ff 1000000
+sf erase 0x250000 0x500000
+fatload mmc 0:1 0x80600000 rootfs.squashfs.t31
+sf write 0x80600000 0x250000 ${filesize}
+```
 
 ### Bypassing password-protected bootloader.
 
@@ -175,3 +210,6 @@ for Xiongmai cameras the bootloader password protection started popping up
 somewhere around July 2021, hence you need a firmware for your camera from an
 earlier date. After you successfully downgrade your camera to a password-free
 bootloader, you could install the OpenIPC firmware in a regular way.
+
+
+[telegram]: https://t.me/OpenIPC
