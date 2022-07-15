@@ -53,12 +53,16 @@ OpenIPC Wiki
 - [Kernel configuration for adding new platforms](en/integration-kernel.md)
 
 ### Help, Tips, and Tricks
-- [U-boot](en/help-uboot.md)
-- [Web UI](en/help-webui.md)
+- [U-Boot Tips](en/help-uboot.md)
+- [Web UI Help](en/help-webui.md)
 
 ### Reference Book
 - [Board manufacturers](en/board-manufacturers.md)
 - [Company names](en/company-names.md)
+
+### Developer manuals
+- [Buildroot User Manual](https://buildroot.org/docs.html)
+- [U-Boot Documentation](https://u-boot.readthedocs.io/)
 
 ### Contacts
 - [Bug reports](https://github.com/OpenIPC/firmware/issues)
