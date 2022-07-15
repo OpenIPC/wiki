@@ -73,7 +73,7 @@ xxd -r fulldump.log > fulldump.bin
 
 Use [binwalk](https://github.com/ReFirmLabs/binwalk) to unpack the binary file.
 
-#### Saving firmware via SD card.
+### Saving firmware via SD card.
 
 Sometimes your camera only has a wireless connection, which does not work
 directly from the bootloader. Very often such cameras have a microSD card slot.
@@ -163,8 +163,10 @@ If your camera supports SD card and you have `fatload` command in bootloader, th
 you can read firmware binary files from an SD card.
 
 First, prepage the card: format it into FAT filesystem and place bootloader, kernel,
-and rootsf binary files there. Insert the card in camera and boot into bootloader 
-console. Check that you have access to the card.
+and rootsf binary files there. Insert the card into camera and boot into bootloader 
+console.
+
+Check that you have access to the card.
 ```
 mmc rescan
 ```
