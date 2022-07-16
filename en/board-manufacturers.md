@@ -37,6 +37,7 @@
 * [UNIVIEW](http://uniview.com/)
 * [VandSec/Yoosee](http://vandsec.com/) th?
 * [VStarcam](http://www.vstarcam.com/) th?
+* [Vatilon](https://www.vatilon.cn/ProductInfoCategory?categoryId=400431,400432,400433,400434,400435,400436)
 * [Wansview](http://wansview.com/)
 * [XM](http://www.xiongmaitech.com/en/)
 * [Z-BEN](http://www.z-ben.cn/) th?
