@@ -124,3 +124,4 @@ Tested on Gk7205v200:
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS |
 |-------------|--------|--------|----------|
 | Hi3518Ev200 | 63     | 64     | 65       |
+
