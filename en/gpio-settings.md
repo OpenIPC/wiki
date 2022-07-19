@@ -118,7 +118,8 @@ Tested on Gk7205v200:
 | Hi3516Ev200 | 53     | 52     | 4     |                 |
 | Hi3516Cv100 | 42     | 43     | 6     | IPG5020A-H-V1.0 |
 
-### ROTEK SWITCAM E200\T200 JXF23 sensor
+
+### Rotek Switcam E200/T200 JXF23 sensor
 
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS |
 |-------------|--------|--------|----------|
