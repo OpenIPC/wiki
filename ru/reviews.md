@@ -37,10 +37,10 @@
 - [Камера видеонаблюдения Reolink RLC-820A](https://mysku.club/blog/aliexpress/85188.html)
 
 
-#### Hi3516EV300 + IMX335:
-- https://mysku.club/blog/aliexpress/81221.html
+#### Hi3516EV300 + IMX335(но это не точно):
+- [Камера видеонаблюдения AZISHN AZ00416](https://mysku.club/blog/aliexpress/81221.html)
 
-Но магаз на али пишет что расклад такой:
+Магазин на али пишет что расклад такой:
 * 5MP:XM550AI+1/2.7"SC5335P CMOS
 * 3MP:XM535AI+1/2.7" SC3235 cmos
 * 2MP:XM530AI+1/2.9" SC2235P cmos
