@@ -91,6 +91,7 @@ In Russian
 - [Темы для дискуссий разработчиков](ru/discussion.md)
 - [Программный переход с openipc-1.0 (OpenWrt) на openipc-2.x (Buildroot)](ru/upgrade-from-1.md)
 - [Вопросы и ответы](ru/faq.md)
+- [Использование для FPV](ru/fpv.md)
 - [Хочу помочь!](ru/contribute.md)
 
 ### Помощь
