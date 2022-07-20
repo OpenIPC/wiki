@@ -100,6 +100,7 @@ In Russian
 ### Камеры
 - [Switcam HS-303](ru/hardware-hs303.md)
 - [Ростелекомовская камера с NAND](ru/hardware-rtk-nand.md)
+- [Полезные ссылки](ru/resources.md)
 - [Обзоры камер разных производителей](ru/reviews.md)
 
 ## Что можно прочитать про прошивку OpenIPC?
