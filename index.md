@@ -78,6 +78,10 @@ OpenIPC Wiki
 - [Developers](en/developers.md)
 - [Notes from old sources](en/notes-for-resorting.md)
 
+### Hardware
+- [SoC Manufacturers](en/hardware-soc-manufacturers.md)
+- [Image Sensors Manufacturers](en/hardware-sensor-manufacturers.md)
+
 ### Resources for recycling and integration
 - <https://github.com/OpenIPC/camerasrnd>
 - <https://openwrt.org/docs/techref/hardware/soc/soc.hisilicon.hi35xx>
