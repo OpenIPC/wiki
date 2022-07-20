@@ -57,7 +57,6 @@ OpenIPC Wiki
 - [Web UI Help](en/help-webui.md)
 
 ### Reference Book
-- [Board manufacturers](en/board-manufacturers.md)
 - [Company names](en/company-names.md)
 
 ### Developer manuals
@@ -79,8 +78,9 @@ OpenIPC Wiki
 - [Notes from old sources](en/notes-for-resorting.md)
 
 ### Hardware
-- [SoC Manufacturers](en/hardware-soc-manufacturers.md)
-- [Image Sensors Manufacturers](en/hardware-sensor-manufacturers.md)
+- [SoC manufacturers](en/hardware-soc-manufacturers.md)
+- [Image sensors manufacturers](en/hardware-sensor-manufacturers.md)
+- [IPC boards manufacturers](en/hardware-board-manufacturers.md)
 
 ### Resources for recycling and integration
 - <https://github.com/OpenIPC/camerasrnd>
