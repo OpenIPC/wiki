@@ -3,12 +3,12 @@
 
 SoC
 ---
-- <https://www.augentix.com/>
-- <http://www.goke.com/>
-- <https://www.hisilicon.com/>
-- <http://www.ingenic.com.cn/>
-- <http://www.novatek.com.tw/>
-- <http://www.sigmastarsemi.com/>
+- [Augentix](https://www.augentix.com/)
+- [Goke](http://www.goke.com/)
+- [HiSilicon](https://www.hisilicon.com/)
+- [Ingenic](http://www.ingenic.com.cn/)
+- [Novatek](http://www.novatek.com.tw/)
+- [SigmaStar](http://www.sigmastarsemi.com/)
 
 Полезные ссылки
 ---------------
