@@ -1,8 +1,8 @@
 # OpenIPC Wiki
 [Table of Contents](../index.md)
 
-Hardware: Image Sensors
------------------------
+Hardware: Image Sensors Manufacturers
+-------------------------------------
 - [Forza Silicon](https://www.forzasilicon.com/)
 - [GalaxyCore](https://en.gcoreinc.com/)
 - [OmniVision](https://www.ovt.com/)
