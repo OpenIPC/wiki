@@ -81,3 +81,32 @@ sudo ip link set wlan0 up
 32180236	ANT	0	250:-48:-45:-44
 ```
 * Запустите Gstreamer `gst-launch-1.0 -vvv udpsrc port=5600 ! application/x-rtp,encoding-name=H265,payload=96 ! rtph264depay ! h265parse ! queue ! avdec_h265 ! autovideosink sync=false -e` и проверьте качество изображения
+
+### Заливка образа на пустую флеш с помощью burn
+
+Запускаем [burn](https://github.com/OpenIPC/burn) при выключенной плате:
+```
+./hi35xx-tool --chip gk7205v200 --type=ddr --file=u-boot-gk7205v200-universal.bin -d ; screen -L /dev/ttyUSB0 115200
+```
+
+включаем питание платы и ждем заливки U-Boot и появления командной строки. Далее выполяем следующие команды, где `192.168.0.8` - адрес TFTP сервера и `192.168.0.200` - временный адрес IP камеры.
+
+```
+setenv ipaddr 192.168.0.200
+setenv serverip 192.168.0.8
+
+sf probe 0; sf lock 0
+mw.b 0x42000000 ff 1000000; tftpboot 0x42000000 u-boot-gk7205v200-universal.bin; sf probe 0
+sf erase 0x0 0x50000; sf write 0x42000000 0x0 ${filesize}
+reset
+
+run setnor16m
+
+setenv ipaddr 192.168.0.200
+setenv serverip 192.168.0.8
+
+run uknor16m ; run urnor16m
+
+saveenv
+reset
+```
