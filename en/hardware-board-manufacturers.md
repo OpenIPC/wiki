@@ -1,8 +1,8 @@
 # OpenIPC Wiki
 [Table of Content](../index.md)
 
-IPC Board Manufacturers
------------------------
+Hardware: IPC Board Manufacturers
+---------------------------------
 * [ACTi](https://www.acti.com/)
 * [Anjvision](http://www.anjvision.com/), <http://icamra.cn/>
 * [Ansjer](https://www.ansjer.com/)
