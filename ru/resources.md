@@ -3,33 +3,6 @@
 Железо и его производители
 --------------------------
 
-### Процессоры
-
-- [Ambarella](https://www.ambarella.com/)
-- [Anyka](http://www.anyka.com/)
-- [Fullhan](https://www.fullhan.com/)
-- [Goke](http://www.goke.com/)
-- [Grain Media (Novatek)](https://www.novatek.com.tw/)
-- [Hisilicon](https://www.hisilicon.com/en/)
-- [Ingenic](http://www.ingenic.com.cn/en/)
-- [MStar (MediaTek)](http://www.mstarsemi.com/)
-- [Nextchip](http://www.nextchip.com/)
-- [Novatek](https://www.novatek.com.tw/)
-- [SigmaStar](http://www.sigmastarsemi.com/)
-- [XiongmaiTech](https://www.xiongmaitech.com/)
-
-
-### Матрицы
-
-- [Forza Silicon](https://www.forzasilicon.com/)
-- [GalaxyCore](https://en.gcoreinc.com/)
-- [OmniVision](https://www.ovt.com/)
-- [ON Semiconductor](https://www.onsemi.com/)
-- [Silicon Optronics](https://www.soinc.com.tw/)
-- [SmartSens Technology](https://www.smartsenstech.com/)
-- [Sony Semiconductor](https://www.sony-semicon.co.jp/)
-
-
 ### Периферия
 
 - [Realtek](https://www.realtek.com/)
@@ -105,6 +78,8 @@
 Интересные ресурсы
 ------------------
 
+- <https://zftlab.org/>
+
 - [CNX Software](https://www.cnx-software.com/)
 - [Unifore](https://www.unifore.net/)
 - [Image Sensors World](http://image-sensors-world.blogspot.com/)
@@ -113,3 +88,8 @@
 - <http://www.hasecu.com/>
 - <http://www.hasecurity.com/>
 - <http://www.hlong.asia/>
+- <http://www.ipcam.xin/>
+- <https://ipcamtalk.com/>
+- <https://www.nvripc.com/>
+- <https://www.dvraid.com/>
+
