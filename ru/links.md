@@ -23,7 +23,7 @@ SoC
 
 * [Anyka AK3918ev300](https://mysku.club/blog/aliexpress/89849.html)
 * [GK7102](https://mysku.club/blog/aliexpress/79873.html)
-* [Hi3516CV200 + IMX307] (https://mysku.club/blog/aliexpress/76939.html)
+* [Hi3516CV200 + IMX307](https://mysku.club/blog/aliexpress/76939.html)
 * [Hi3516EV300 + IMX335](https://mysku.club/blog/aliexpress/81221.html)
 * [Hi3516EV300 + IMX335](https://mysku.club/blog/aliexpress/80747.html)
 * [Ingenic T20](https://mysku.club/blog/jd/79711.html)
