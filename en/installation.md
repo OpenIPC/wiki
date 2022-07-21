@@ -1,10 +1,46 @@
 # OpenIPC Wiki
 [Table of Content](../index.md)
 
-OpenIPC firmware installation, step by step.
-------------------------------
+Available Installation Methods
+==============================
 
-### Step 1. Determine the CPU chip
+Unfortunately IP camera manufacturers aren't **yet** shipping hardware with
+OpenIPC preinstalled, so to install OpenIPC onto a camera which is still using
+factory firmware images, one of the following methods must be used:
+
+* The [Coupler](https://openipc.github.io/coupler/) project makes available
+  firmware images which can be installed using the firmware upgrade mechanisms
+  which are built into the factory firmware of many cameras.
+
+* Flashing the OpenIPC firmware using the [*U Boot*
+  bootloader](https://en.wikipedia.org/wiki/Das_U-Boot) which is included in
+  the vendor firmware. This method interrupts the normal boot process of the
+  vendor firmware, and instead instructs U-Boot to load the OpenIPC firmware
+  over the network, and write it to the flash storage (replacing the main
+  portion of the vendor firmware). **This method requires the camera's case to
+  be opened** to connect a [**UART adapter**][FTDI] to the camera's internal
+  "console" serial/debug port.
+
+
+OpenIPC firmware installation using Coupler.
+--------------------------------------------
+
+Instructions for using [Coupler](https://openipc.github.io/coupler/) can be found in [the project's documenation](https://openipc.github.io/coupler/).
+
+OpenIPC firmware installation via TFTP and UART, step by step.
+--------------------------------------------------------------
+
+### Step 1. Determine the System on Chip.
+
+The SoC includes the CPU core of the camera, as well as all the necessary
+periperhals such as the camera and network interfaces. For various reasons
+(including the limited onboard storage space on most IP Cameras), the OpenIPC
+project currently builds separate firmware binaries for each SoC model.  **You
+must identify the SoC which your camera uses**, so that you can use the correct
+firmware binaries.  This can be done by reading the markings on the SoC IC
+package on the camera's main PCB (see example photo below), or by using
+software such as [ipctool](https://openipc.github.io/ipctool/) to identify the
+SoC model from the vendor firmware.
 
 ![SoC Marking](../images/soc-hisilicon.jpg)
 
@@ -14,7 +50,7 @@ _Hisilicon Hi3518EV100 SoC marking. Relevant symbols highlighted with yellow._
 
 Go to <https://github.com/OpenIPC/firmware> and find your SoC in the table of
 supported hardware. Make sure there is a downloadable binary file for that SoC.
-If you are lucky and there is a pre-compiled firmware file for your processor --
+Hopefully there is a pre-compiled firmware file for your processor --
 download it onto your PC.
 
 ### Step 3. Install and set up a TFTP server.
