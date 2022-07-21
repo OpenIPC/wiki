@@ -110,6 +110,8 @@ sudo ip link set wlan0 up
 
 * Через команду `sudo tcpdump -i wlan0` на десктопе без запуска WFG-ng вы можете проверить, что передатчик действительно отправляет пакеты в эфир:
 
+![SoC Marking](../images/fpv-tcpdump.jpg)
+
 ### Заливка образа на пустую флеш с помощью burn (если нет программатора)
 
 Запускаем [burn](https://github.com/OpenIPC/burn) при выключенной плате:
