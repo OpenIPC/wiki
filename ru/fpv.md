@@ -5,7 +5,7 @@
 --------------------------------
 
 <p align="center">
-  <img src="https://github.com/widgetii/wiki/blob/master/images/fpv-logo.jpg?raw=true" alt="Logo"/>
+  <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-logo.jpg?raw=true" alt="Logo"/>
 </p>
 
 Классический сетап в проекте [OpenHD](https://openhdfpv.org/) (и других похожих проектов) состоит из MIPI- или USB- камеры, подключенной к Raspberry Pi и Jetson Nano, которые выступают видеоэнкодером и роутером воздушной системы и в свою очередь соединены с WiFi адаптером по USB и с полетным контроллером по UART. Наземная станция обычно состоит из такого же WiFi адаптера, роутера и высококонтрастного монитора или очков.
@@ -62,7 +62,7 @@
 * Припаяйте трехпроводной разъем UART к свободным площадкам на плате камеры
 
 <p align="center">
-<img src="https://github.com/widgetii/wiki/blob/master/images/fpv-imx307-uart.jpg?raw=true" alt="Logo"/>
+<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-imx307-uart.jpg?raw=true" alt="Logo"/>
 </p>
 
 * Подключите UART-USB адаптер к компьютеру (скорость порта 115200N1, управление потоком отключено) и проверьте, что при включении камеры идет вывод данных и вы можете прервать загрузку через `Ctrl-C` (работают обе RX и TX линии).
@@ -70,7 +70,7 @@
 При работе феном желательно снять объектив и изолировать остальные компоненты, особенно пластиковые разъемы [каптоновой лентой](https://aliexpress.com/item/1005003563721341.html) (на крайний случай фольгой от шоколадки). Ни в коем случае [не используйте сплав Розе](https://habr.com/ru/post/437778/). Если не очень дружите с пальником, то проще зайти в ближайший сервис по ремонту мобильных телефонов и показать мастеру часть этой инструкции.
 
 <p align="center">
-<img src="https://github.com/widgetii/wiki/blob/master/images/fpv-imx307-spinor.jpg?raw=true" alt="Logo"/>
+<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-imx307-spinor.jpg?raw=true" alt="Logo"/>
 </p>
 
 * Залейте [U-Boot](https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-gk7205v200-universal.bin) в новую 16 мегабайтную флеш (в начало памяти) и припаяйте его на плату. Проверьте, что U-Boot запускается и вы попадаете в строку приглашения.
@@ -87,8 +87,8 @@
 * Припаяйте к USB площадкам GND, DP и DM (USB 5V питание подключать к плате не нужно из-за высокого потребления энергии адаптером), а также отдельно 5V и GND для питания WiFi адаптера (возможно через дополнительный DC-DC преобразователь в зависимости от вашей схемы). USB провод, который подходит к плате, необходимо зафиксировать стяжкой во избежание отрыва пятаков на контактной площадке:
 
 <p align="center">
-<img src="https://github.com/widgetii/wiki/blob/master/images/fpv-pinout.jpg?raw=true" width=50%/>
-<img src="https://github.com/widgetii/wiki/blob/master/images/fpv-usb-colors.jpg?raw=true" width=50%/>
+<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-pinout.jpg?raw=true" width=50%/>
+<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-usb-colors.jpg?raw=true" width=50%/>
 </p>
 
 * Проверьте, что после загрузки через команду `lsusb` появилось новое устройство
@@ -194,8 +194,10 @@ reset
 Можно. Фотография от подписчика:
 
 <p align="center">
-<img src="https://github.com/widgetii/wiki/blob/master/images/fpv-sd-card.jpg?raw=true" width=50%/>
-<img src="https://github.com/widgetii/wiki/blob/master/images/fpv-usb-sd.jpg?raw=true" width=50%/>
+<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-sd-card.jpg?raw=true" width=50%/>
+</p>
+<p align="center">
+<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-usb-sd.jpg?raw=true" width=50%/>
 </p>
 
 #### Какую дополнительную периферию еще можно подключить?
