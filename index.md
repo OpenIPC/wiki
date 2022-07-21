@@ -39,7 +39,6 @@ OpenIPC Wiki
 - [ACMEv2](en/acme-v2.md)
 - [YouTube streaming](en/youtube-streaming.md)
 - [WiFi XM530](en/wifi-xm530.md)
-- [Board manufacturers](en/board-manufacturers.md)
 
 ### Firmware
 - [Releases in GitHub](https://github.com/OpenIPC/firmware/releases/tag/latest)
@@ -57,7 +56,6 @@ OpenIPC Wiki
 - [Web UI Help](en/help-webui.md)
 
 ### Reference Book
-- [Board manufacturers](en/board-manufacturers.md)
 - [Company names](en/company-names.md)
 
 ### Developer manuals
@@ -77,6 +75,11 @@ OpenIPC Wiki
 - [ToDo](en/todo-all.md)
 - [Developers](en/developers.md)
 - [Notes from old sources](en/notes-for-resorting.md)
+
+### Hardware
+- [SoC manufacturers](en/hardware-soc-manufacturers.md)
+- [Image sensors manufacturers](en/hardware-sensor-manufacturers.md)
+- [IPC boards manufacturers](en/hardware-board-manufacturers.md)
 
 ### Resources for recycling and integration
 - <https://github.com/OpenIPC/camerasrnd>
@@ -100,6 +103,8 @@ In Russian
 ### Камеры
 - [Switcam HS-303](ru/hardware-hs303.md)
 - [Ростелекомовская камера с NAND](ru/hardware-rtk-nand.md)
+- [Полезные ссылки](ru/resources.md)
+- [Обзоры камер разных производителей](ru/reviews.md)
 
 ## Что можно прочитать про прошивку OpenIPC?
 - [Часто задаваемые вопросы и ответы на них][faq1]
