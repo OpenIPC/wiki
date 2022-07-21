@@ -197,7 +197,7 @@ reset
 Можно. Фотография от подписчика:
 
 <p align="center">
-<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-sd-card.jpg?raw=true" width=50%/>
+<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-sd-card.jpg?raw=true" width="50%"/>
 </p>
 
 Таблица распиновки вспомогательного разъема:
