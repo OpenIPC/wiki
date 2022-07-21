@@ -88,6 +88,9 @@
 
 <p align="center">
 <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-pinout.jpg?raw=true" width=50%/>
+</p>
+  
+<p align="center">
 <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-usb-colors.jpg?raw=true" width=50%/>
 </p>
 
@@ -196,6 +199,7 @@ reset
 <p align="center">
 <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-sd-card.jpg?raw=true" width=50%/>
 </p>
+
 <p align="center">
 <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-usb-sd.jpg?raw=true" width=50%/>
 </p>
