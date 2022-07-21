@@ -18,7 +18,7 @@ OpenIPC Wiki
 - [Firmware Partitions Calculation](https://themactep.com/tools/firmware-partitions-calculation)
 
 ### Installation
-- [Installation, step by step](en/installation.md)
+- [Installation, step by step, and overall options](en/installation.md)
 - [Installation on Goke based boards](en/install-goke.md)
 - [Installation on HiSilicon based boards](en/install-hisi.md)
 - [Installation on Novatek based boards](en/install-novatek.md)
