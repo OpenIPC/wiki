@@ -200,6 +200,8 @@ reset
 <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-sd-card.jpg?raw=true" width=50%/>
 </p>
 
+Таблица распиновки вспомогательного разъема:
+
 <p align="center">
 <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-usb-sd.jpg?raw=true" width=50%/>
 </p>
