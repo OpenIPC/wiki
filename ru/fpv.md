@@ -87,11 +87,8 @@
 * Припаяйте к USB площадкам GND, DP и DM (USB 5V питание подключать к плате не нужно из-за высокого потребления энергии адаптером), а также отдельно 5V и GND для питания WiFi адаптера (возможно через дополнительный DC-DC преобразователь в зависимости от вашей схемы). USB провод, который подходит к плате, необходимо зафиксировать стяжкой во избежание отрыва пятаков на контактной площадке:
 
 <p align="center">
-<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-pinout.jpg?raw=true" width=50%/>
-</p>
-  
-<p align="center">
-<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-usb-colors.jpg?raw=true" width=50%/>
+<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-pinout.jpg?raw=true" width="50%/">  
+<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-usb-colors.jpg?raw=true" width="50%/">
 </p>
 
 * Проверьте, что после загрузки через команду `lsusb` появилось новое устройство
@@ -203,7 +200,7 @@ reset
 Таблица распиновки вспомогательного разъема:
 
 <p align="center">
-<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-usb-sd.jpg?raw=true" width=50%/>
+<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-usb-sd.jpg?raw=true" width="50%"/>
 </p>
 
 #### Какую дополнительную периферию еще можно подключить?
