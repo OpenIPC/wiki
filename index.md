@@ -46,7 +46,6 @@ OpenIPC Wiki
 - [Source code](en/source-code.md)
 
 ### Development
-- [Interesting tricks](en/dev-tricks.md)
 - [Boot device with NFS](en/dev-nfs-boot.md)
 - [FFMPEG usage](en/dev-ffmpeg-usage.md)
 - [Kernel configuration for adding new platforms](en/integration-kernel.md)
@@ -54,6 +53,8 @@ OpenIPC Wiki
 ### Help, Tips, and Tricks
 - [U-Boot Tips](en/help-uboot.md)
 - [Web UI Help](en/help-webui.md)
+- [Interesting tricks](en/dev-tricks.md)
+- [Questions and answers](en/faq.md)
 
 ### Reference Book
 - [Company names](en/company-names.md)
