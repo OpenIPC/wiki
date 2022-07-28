@@ -23,7 +23,7 @@ If you want to help us with developing of the web interface for our
  `bash`, `tcsh`, `zsh` in our Linux. Ash it is. As in A shell, full name
  Almquist shell. Tiny, lightweight, and kinda limited. System is limited,
  too -- in most parts it is `busybox`. So, if you still feel comfortable
- tonmake your hands dirty with a very 80s style of web development then
+ to make your hands dirty with a very 80s style of web development then
  welcome aboard.
 
 Recent interface is built around [Bootstrap](https://getbootstrap.com/)
