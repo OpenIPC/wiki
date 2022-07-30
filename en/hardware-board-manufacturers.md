@@ -29,6 +29,7 @@ Hardware: IPC Board Manufacturers
 * [Raysharp](http://raysharp.cn/en/)
 * [Ruision](http://www.ruision.com/col/70560?lang=en)
 * [Safer](http://www.safer.net.cn/) th?
+* [SV3C](https://sv3c.com/)
 * [Synuwo](http://www.sunywo.com/cn/product/41_0.shtml)
 * [Tiandy](http://en.tiandy.com/)
 * [Topsee](http://www.en.tpsee.com/product.html)
