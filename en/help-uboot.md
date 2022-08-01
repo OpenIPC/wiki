@@ -68,7 +68,8 @@ Convert the hex dump into a binary firmware file and use it for further research
 or restoring camera to its pristine state.
 
 ```
-xxd -r -p fulldump.log fulldump.bin
+cat fulldump.log | sed -E "s/^[0-9a-f]{8}\b: //i" | sed "s/    .*$//" > fulldump.hex
+xxd -r -p fulldump.hex fulldump.bin
 ```
 
 Use [binwalk](https://github.com/ReFirmLabs/binwalk) to unpack the binary file.
