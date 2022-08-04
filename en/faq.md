@@ -4,7 +4,7 @@
 Questions and answers
 ----------------
 
-### How to find orininal MAC address in a firmware dump
+### How to find original MAC address in a firmware dump
 
 ```
 strings dumpfile.bin | grep ^ethaddr
