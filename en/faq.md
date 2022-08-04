@@ -4,6 +4,12 @@
 Questions and answers
 ----------------
 
+### How to find orininal MAC address in a firmware dump
+
+```
+strings dumpfile.bin | grep ^ethaddr
+```
+
 ### How to configure ssh session authorization by key
 
 __On the camera__: Open an ssh session and create a non-empty password for the root user. By default, in our firmware
