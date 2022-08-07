@@ -18,7 +18,7 @@ With firmware running, you can access the camera using URLs below
 
 #### Live video
 
-* http://192.168.1.10/ - [HLS][hls] live streaming is web browser.
+* http://192.168.1.10/hls - [HLS][hls] live streaming is web browser.
 * http://192.168.1.10/mjpeg.html - [MJPEG][mjpeg] & [MP3][mp3] streaming in web browser.
 * http://192.168.1.10/video.mp4 - [MP4][mp4] video (Fragmented MP4).
 * rtsp://192.168.1.10 - Main channel of [RTSP][rtsp] streamer (video0 in config).
