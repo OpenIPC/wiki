@@ -28,7 +28,7 @@ GPIO Settings
 | Hi3518Ev200 | 1      | 2      | 48       |       |         |
 | Hi3518Ev300 |        |        |          |       |         |
 |             |        |        |          |       |         |
-| T31         | 57     | 58     |          |       |         |
+| T31         | 58     | 57     |          |       |         |
 
 _i - inverted value_
 
@@ -37,6 +37,12 @@ Tested on Gk7205v200:
   mux 12->UART2_RXD/RS485_RO: devmem 0x112c0070 32 2 
   mux 13->UART2_TXD/RS485_DI: devmem 0x112c0074 32 2
 ```
+
+### GSA boards
+
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA |
+|-------------|--------|--------|----------|-------|---------|
+| T31L        | 58     | 57     |          |       |         |
 
 
 ### Herospeed/Longse/Cantonk boards
