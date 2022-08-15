@@ -25,6 +25,7 @@ Hardware: IPC Board Manufacturers
 * [JVT](http://www.jvt.cc/)
 * [LENOTEL](http://www.lenoteltechnology.com/) th?
 * [Longse](http://www.longse.com/)
+* [Mercury](https://www.mercurycom.com.cn/)
 * [Milesight](http://www.milesight.com/)
 * [Powerview](http://powerview.cn/en/)
 * [Raysharp](http://raysharp.cn/en/)
