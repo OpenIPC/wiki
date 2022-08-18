@@ -197,21 +197,13 @@ SPI Nor total size: 16MB
 
 To dump the original firmware, you need to save the contents of camera's flash
 memory to a file. For that, you must first load the contents into RAM. Here's
-how you do that. Initialize the Flash memory. Clean a region of RAM of 0x1000000
-bytes long starting from address 0x82000000*. Read contents of the Flash from
-address 0x0 0x1000000 bytes long and place it into the prepared region or RAM.
-Now, you only have to export it to a file on the TFTP server.
+how you do that. Initialize the Flash memory. Clean a region of RAM large enough to
+fit whole content of flash memory chip. Read contents of the flash from into that
+region, then export it to a file on the TFTP server.
 
-```
-sf probe 0
-mw.b 0x82000000 ff 0x1000000
-sf read 0x82000000 0x0 0x1000000
-tftp 0x82000000 firmware-full.bin 0x1000000
-```
-
-NB! Please note, that the starting address and length will be different for
-different cameras with different Flash memory chips. Consult data sheets or
-seek help on [our Telegram channel][telegram].
+Please note, that flash type, size and starting address differ for different cameras!
+For exact commands please use [automatically generated instructions](https://openipc.org/supported-hardware/)
+for your hardware, consult data sheets, or seek help on [our Telegram channel][telegram].
 
 ### Step 7. Install OpenIPC firmware.
 
@@ -251,256 +243,26 @@ So, we have a guinea pig, a camera with hi3518ev100 SoC, equipped with a OV9712
 sensor and 64 MB of RAM.
 
 Connect to the camera via the UART port and access the bootloader console.
-Set the component parameters to the appropriate environment variables:
-
-```
-setenv soc hi3518ev100
-setenv sensor ov9712
-setenv totalmem 64M
-```
-
-Set environment variables for loading the Linux kernel and the root file system
-of the new firmware:
-
-```
-setenv osmem 32M
-setenv bootargs 'mem=${osmem:-32M} console=ttyAMA0,115200 panic=20 root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=hi_sfc:256k(boot),64k(env),2048k(kernel),5120k(rootfs),-(rootfs_data)'
-setenv bootcmd 'setenv setargs setenv bootargs ${bootargs}; run setargs; sf probe 0; sf read 0x82000000 0x50000 0x200000; bootm 0x82000000'
-```
-
-Set environment variables for the camera to access local network, where
-`ethaddr` is the original camera MAC address, `ipaddr` is camera's IP address
+Set the component parameters to the appropriate environment variables. Set 
+environment variables for loading the Linux kernel and the root file system
+of the new firmware. Set environment variables for the camera to access local network,
+where `ethaddr` is the original camera MAC address, `ipaddr` is camera's IP address
 on the network, `gatewayip` is the IP address of a router to access the network,
 `netmask` is the subnet mask, and `serverip` is am IP address of the TFTP server
-from step 3.
+from step 3. Save updated values to flash memory.
 
-```
-setenv ethaddr 00:12:16:00:00:00
-setenv ipaddr 192.168.1.10
-setenv netmask 255.255.255.0
-setenv gatewayip 192.168.1.1
-setenv serverip 192.168.1.254
-```
-
-Save updated values to flash memory.
-
-```
-saveenv
-```
+For exact commands please use [automatically generated instructions](https://openipc.org/supported-hardware/)
+for your hardware, consult data sheets, or seek help on [our Telegram channel][telegram].
 
 ##### Installation.
 
-First, clear the memory region at address 0x82000000, 0x1000000 bytes long, by
-writing 0xff to it. Then retrieve kernel file for the camera from the TFTP
-server and place it into memory starting with address 0x82000000.
-
-The `$soc` variable in the name of the requested file is substituted with its
-value from the environment variables created earlier. In this example, the file
-named `uImage.hi3518ev100` will be requested from the server.
-
-```
-mw.b 0x82000000 ff 1000000
-tftp 0x82000000 uImage.${soc}
-```
+For exact commands please use [automatically generated instructions](https://openipc.org/supported-hardware/)
+for your hardware, consult data sheets, or seek help on [our Telegram channel][telegram].
 
 NB! Pay attention to the messages on the terminal screen! If any of the commands
 throws an error, find out what went wrong. Maybe you made a typo? In any case,
 do not continue the procedure until all previous commands succeed. Otherwise,
 you might end up with a bricked camera!
-
-So, you've made sure that the file is downloaded and placed in the camera's RAM.
-Now you need to write it down to the flash memory. To do that, you need to get
-access to the flash memory, then clean erase the region from address 0x50000
-that is 0x200000 bytes long, and copy the contents of camera's RAM from address
-0x82000000 and the size of the kernel file to the flash memory starting at
-address 0x50000.
-
-```
-sf probe 0
-sf erase 0x50000 0x200000
-sf write 0x82000000 0x50000 ${filesize}
-```
-
-Next, you need to repeat the process for the root file system, saving it to the
-next region starting from address 0x250000 of 0x500000 bytes long.
-
-NB! 0x500000 bytes is a hexadecimal equivalent of 5242880 bytes in decimal
-system, and equals 5120 kilobytes, exactly what we have prepared for rootfs
-in `bootargs` parameter.
-
-It is easy to memorize the sequence if you give it a little thought:
-clean RAM, download file there, unlock flash chip, wipe the target region in
-flash memory, write file from memory into there.
-
-```
-mw.b 0x82000000 ff 1000000
-tftp 0x82000000 rootfs.squashfs.${soc}
-sf probe 0
-sf erase 0x250000 0x500000
-sf write 0x82000000 0x250000 ${filesize}
-```
-
-After both partitions have been successfully written to the flash memory and all
-necessary changes have been made to the bootloader to prepare it for starting
-the new firmware, it is time to reboot the camera. To do that, type this command
-in the console:
-
-```
-reset
-```
-
-#### Part two.
-
-If you have read the first part of this section (if not - go read it), then you
-already know what manipulations and why you need to do to install the OpenIPC
-firmware. And all you need are the commands suitable for your particular camera.
-
-Below are samples of such commands for cameras equipped with [Goke](#goke),
-[HiSilicon](#hisilicon), [SigmaStar/MStar](#sigmastarmstar), [XM](#xm) SoCs.
-
-##### Goke
-
-SoC: gk7202v300, gk7205v200, gk7205v300
-
-```
-setenv soc <processor>   # gk7202v300, gk7205v200, or gk7205v300.
-setenv sensor <sensor>   #
-setenv totalmem <memory> # 64M for gk7202v300, gk7205v200, 128M for gk7205v300.
-
-setenv osmem 32M
-setenv bootargs 'mem=${osmem:-32M} console=ttyAMA0,115200 panic=20 root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=sfc:256k(boot),64k(env),2048k(kernel),5120k(rootfs),-(rootfs_data)'
-setenv bootcmd 'setenv setargs setenv bootargs ${bootargs}; run setargs; sf probe 0; sf read 0x42000000 0x50000 0x200000; bootm 0x42000000'
-
-setenv ethaddr 00:00:00:00:00:00
-setenv ipaddr 192.168.1.10
-setenv netmask 255.255.255.0
-setenv gatewayip 192.168.1.1
-setenv serverip 192.168.1.254
-
-saveenv
-
-mw.b 0x42000000 ff 1000000
-tftp 0x42000000 uImage.${soc}
-sf probe 0
-sf erase 0x50000 0x200000
-sf write 0x42000000 0x50000 ${filesize}
-
-mw.b 0x42000000 ff 1000000
-tftp 0x42000000 rootfs.squashfs.${soc}
-sf probe 0
-sf erase 0x250000 0x500000
-sf write 0x42000000 0x250000 ${filesize}
-
-reset
-```
-
-##### HiSilicon
-
-SoC: hi3516ev200, hi3516ev300, hi3518ev300.
-
-```
-setenv soc <processor>   # hi3516ev200, hi3516ev300, or hi3518ev300.
-setenv sensor <sensor>   #
-setenv totalmem <memory> # 64M for hi3516ev200, hi3518ev300, 128M for hi3516ev300.
-
-setenv osmem 32M
-setenv bootargs 'mem=${osmem:-32M} console=ttyAMA0,115200 panic=20 root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=hi_sfc:256k(boot),64k(env),2048k(kernel),5120k(rootfs),-(rootfs_data)'
-setenv bootcmd 'setenv setargs setenv bootargs ${bootargs}; run setargs; sf probe 0; sf read 0x42000000 0x50000 0x200000; bootm 0x42000000'
-
-setenv ethaddr 00:00:00:00:00:00
-setenv ipaddr 192.168.1.10
-setenv netmask 255.255.255.0
-setenv gatewayip 192.168.1.1
-setenv serverip 192.168.1.254
-
-saveenv
-
-mw.b 0x42000000 ff 1000000
-tftp 0x42000000 uImage.${soc}
-sf probe 0
-sf erase 0x50000 0x200000
-sf write 0x42000000 0x50000 ${filesize}
-
-mw.b 0x42000000 ff 1000000
-tftp 0x42000000 rootfs.squashfs.${soc}
-sf probe 0
-sf erase 0x250000 0x500000
-sf write 0x42000000 0x250000 ${filesize}
-
-reset
-```
-
-##### SigmaStar/MStar
-
-SoC: ssc325, ssc335, ssc337.
-
-```
-setenv soc <processor>   # ssc325, ssc335, or ssc337.
-setenv sensor <sensor>   # gc2053, imx307, or sc3335.
-setenv totalmem 64M
-
-setenv osmem 32M
-setenv bootargs 'mem=${osmem:-32M} console=ttyS0,115200 panic=20 root=/dev/mtdblock3 rootfstype=squashfs init=/init LX_MEM=0x3fe0000 mma_heap=mma_heap_name0,miu=0,sz=0x1C00000 mma_memblock_remove=1 mtdparts=NOR_FLASH:256k(boot),64k(tech),2048k(kernel),5120k(rootfs),-(rootfs_data)'
-setenv bootcmd 'setenv setargs setenv bootargs ${bootargs}; run setargs; sf probe 0; sf read 0x21000000 0x50000 0x200000; bootm 0x21000000'
-
-setenv ethaddr 00:00:00:00:00:00
-setenv ipaddr 192.168.1.10
-setenv netmask 255.255.255.0
-setenv gatewayip 192.168.1.1
-setenv serverip 192.168.1.254
-
-saveenv
-
-mw.b 0x21000000 ff 1000000
-tftpboot 0x21000000 uImage.${soc}
-sf probe 0
-sf erase 0x50000 0x200000
-sf write 0x21000000 0x50000 ${filesize}
-
-mw.b 0x21000000 ff 1000000
-tftpboot 0x21000000 rootfs.squashfs.${soc}
-sf probe 0
-sf erase 0x250000 0x500000
-sf write 0x21000000 0x250000 ${filesize}
-
-reset
-```
-
-##### XM
-
-SoC: xm510, xm530, xm550.
-
-```
-setenv soc <processor>   # xm510 for xm510, xm530 for both xm530 and xm550.
-setenv sensor <sensor>   #
-setenv totalmem <memory> # 32M for xm510, 64M for xm530, 128M for xm550.
-
-setenv osmem <osmemory>  # 18M for xm510, 35M for xm530, 64M for xm550.
-setenv bootargs 'mem=35M console=ttyAMA0,115200 panic=20 root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=xm_sfc:256k(boot),64k(env),2048k(kernel),5120k(rootfs),-(rootfs_data)'
-setenv bootcmd 'sf probe 0; sf read 0x80007fc0 0x50000 0x200000; bootm 0x80007fc0'
-
-setenv ethaddr 00:00:00:00:00:00
-setenv ipaddr 192.168.1.10
-setenv netmask 255.255.255.0
-setenv gatewayip 192.168.1.1
-setenv serverip 192.168.1.254
-
-saveenv
-
-mw.b 0x80007fc0 ff 1000000
-tftp 0x80007fc0 uImage.${soc}
-sf probe 0
-sf erase 0x50000 0x200000
-sf write 0x80007fc0 0x50000 ${filesize}
-
-mw.b 0x80007fc0 ff 1000000
-tftp 0x80007fc0 rootfs.squashfs.${soc}
-sf probe 0
-sf erase 0x250000 0x500000
-sf write 0x80007fc0 0x250000 ${filesize}
-
-reset
-```
 
 ### Step 8. First boot.
 
@@ -512,64 +274,6 @@ partition. Run this in your terminal window:
 
 ```
 firstboot
-```
-
-### Step aside.
-
-To facilitate subsequent firmware upgrades directly from the bootloader console,
-create two macros with sequences of commands needed to boot from the TFTP server
-and write kernel and root file system for your camera model into flash memory.
-
-We will use `uk` and `ur` for macro names, which can be decoded as `update kernel`
-and `update rootfs`. Easy to remember.
-
-As you remember, in the example above we used the following commands to install the kernel:
-
-```
-mw.b 0x42000000 ff 1000000
-tftp 0x42000000 uImage.${soc}
-sf probe 0
-sf erase 0x50000 0x200000
-sf write 0x42000000 0x50000 ${filesize}
-```
-
-To create the `uk` macro, join all the above commands into one line, alternating
-them with semicolons. For added protection against writing invalid data to flash
-memory in case file downloading from TFTP server fails, replace semicolon before
-`sf probe 0` with logical AND operator (`&&`). It will make macro to abort if
-file fails to download.
-```
-fw_setenv uk 'mw.b 0x42000000 ff 1000000; tftp 0x42000000 uImage.${soc} && sf probe 0; sf erase 0x50000 0x200000; sf write 0x42000000 0x50000 ${filesize}'
-```
-
-Do the same with the root file system commands:
-```
-mw.b 0x82000000 ff 1000000
-tftp 0x82000000 rootfs.squashfs.${soc}
-sf probe 0
-sf erase 0x250000 0x500000
-sf write 0x82000000 0x250000 ${filesize}
-```
-
-saving result as `ur` macro:
-```
-fw_setenv ur 'mw.b 0x42000000 ff 1000000; tftp 0x42000000 rootfs.squashfs.${soc} && sf probe 0; sf erase 0x250000 0x500000; sf write 0x42000000 0x250000 ${filesize}'
-```
-
-Naturally, to create your own macro, you should use the commands suitable for
-your specific camera, not mindlessly copying the above lines, but using them as
-an example and understanding the actions to be taken.
-
-NB! Although these commands create a macro to run in the bootloader console,
-they must be executed inside Linux environment. This way we avoid the
-restrictions on the number of arguments in the `setenv` command existing in
-some older versions of the bootloader.
-
-You will now be able to flash both kernel and root file system followed by
-rebooting the camera directly from the bootloader console. It's as easy as that!
-
-```
-run uk; run ur; reset
 ```
 
 [logo]: ../images/logo_openipc.png
