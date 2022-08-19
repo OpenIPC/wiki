@@ -77,3 +77,8 @@ scp: Connection closed
 ```
 scp -O ~/myfile root@192.168.1.65:/tmp/
 ```
+
+### Как поменять MAC адрес на камере?
+
+__Через веб консоль__: Откройте веб-консоль, выполните команду fw_setenv ethaddr AA:BB:CC:DD:EE:FF, где AA:BB:CC:DD:EE:FF соответствует необходимому адресу.
+```
