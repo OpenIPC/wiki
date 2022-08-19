@@ -19,12 +19,12 @@ OpenIPC Wiki
 
 ### Installation
 - [Installation, step by step, and overall options](en/installation.md)
-- [Installation on Goke based boards](en/install-goke.md)
-- [Installation on HiSilicon based boards](en/install-hisi.md)
-- [Installation on Novatek based boards](en/install-novatek.md)
-- [Installation on SigmaStar based boards](en/install-ssc335.md)
-- [Installation on XM510 based boards](en/install-xm510.md)
-- [Installation on XM530 based boards](en/install-xm530.md)
+- [Installation on Goke based boards](en/install-goke.md), but you'd better use <https://openipc.org/cameras/vendors/goke>
+- [Installation on HiSilicon based boards](en/install-hisi.md), but you'd better use <https://openipc.org/cameras/vendors/hisilicon>
+- [Installation on Novatek based boards](en/install-novatek.md), but you'd better use <https://openipc.org/cameras/vendors/novatek>
+- [Installation on SigmaStar based boards](en/install-ssc335.md), but you'd better use <https://openipc.org/cameras/vendors/sigmastar>
+- [Installation on XM510 based boards](en/install-xm510.md), but you'd better use <https://openipc.org/cameras/vendors/xiongmai>
+- [Installation on XM530 based boards](en/install-xm530.md), but you'd better use <https://openipc.org/cameras/vendors/xiongmai>
 - [Very old full manual](en/old-manual.md)
 
 ### Usage
