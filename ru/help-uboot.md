@@ -71,7 +71,8 @@ md.b 0x82000000 0x1000000
 изучения или для восстановления камеры в её оригинальный вид.
 
 ```
-xxd -r fulldump.log > fulldump.bin
+cat fulldump.log | sed -E "s/^[0-9a-f]{8}\b: //i" | sed -E "s/ {4}.{16}\r?$//" > fulldump.hex
+xxd -revert -plain fulldump.hex fulldump.bin
 ```
 
 Используйте [binwalk](https://github.com/ReFirmLabs/binwalk) для доступа к содержимому
