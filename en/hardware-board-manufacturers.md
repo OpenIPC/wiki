@@ -17,6 +17,7 @@ Hardware: IPC Board Manufacturers
 * [Haicam](https://haicam.tech)
 * [Herospeed](http://www.herospeed.net/en/)
 * [Hichip](http://hichip.net/en/)
+* [TT Int'l, HTW Tech Limited](http://www.cctv-camera.cc/)
 * [Huatu](http://huatudigital.com/)
 * [Huishi](https://web.archive.org/web/20220209053811/http://hscctvcn.com/ProductInfoCategory?categoryId=400431,400432,400433,400434,400435,400436&PageInfoId=0)
 * [Hupuu](https://hupuu.com/category/camera-board)
