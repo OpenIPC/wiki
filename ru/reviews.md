@@ -29,10 +29,6 @@
 - [Обзор IP камеры LarmTek 1080P (Q16-1080P-BL)](https://mysku.club/blog/aliexpress/89849.html)
 
 
-#### Ingenic T21:
-- [4G-камера Zilink DH57H-1080P-WH-4G](https://mysku.club/blog/aliexpress/82897.html)
-
-
 #### Novatek NT98523MBG + IMX???:
 - [Камера видеонаблюдения Reolink RLC-820A](https://mysku.club/blog/aliexpress/85188.html)
 
@@ -51,12 +47,18 @@
 #### Hi3516CE200 + IMX307:
 - [Камера наблюдения GADINAN на сенсоре IMX307](https://mysku.club/blog/aliexpress/76939.html)
 
+#### Hi3516EV100 + IMX323:
+- [Нашёл оптимальные IP-камеры видеонаблюдения по соотношению цена/качество](https://mysku.club/blog/aliexpress/73607.html)
+
 #### GK7102:
 - [IP камера SHIWOJIA IL-HIP288-2M-AI - 1080p wifi камера](https://mysku.club/blog/aliexpress/79873.html)
 
 #### Ingenic T20:
 - [IP камера-кубик Xiaomi XiaoFang 1S](https://mysku.club/blog/jd/79711.html)
 
+#### Ingenic T21:
+- [4G-камера Zilink DH57H-1080P-WH-4G](https://mysku.club/blog/aliexpress/82897.html)
 
-Как заключение, могу сказать что никто по ценам и по соответствию указанных параметров в описании на Али не переплевывает любимого народом Volderli:
+
+Как заключение, могу сказать что никто по ценам и по соответствию указанных параметров в описании на Али не переплевывает любимого народом Voldreli:
 https://www.aliexpress.com/store/2673046
