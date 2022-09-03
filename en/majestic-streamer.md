@@ -16,6 +16,10 @@ Unneeded options can be switched off for better security and performance.
 Majestic supports multiple audio, video and still image formats, and more.
 You can find the full list of available endpoints on [this page](https://openipc.org/majestic-endpoints).
 
+The long JPEG control parameter did not fit into the example on the site and we publish it here:
+
+`/image.jpg?width=640&height=360&qfactor=73&color2gray=1`
+
 ##### Tips:
 
 To convert YUV image to a more common image format, use `convert` command from
