@@ -92,7 +92,6 @@ In Russian
 - [О проекте](ru/about.md)
 - [Установка. Шаг за шагом.](ru/installation.md)
 - [Настройка.](ru/configuration.md)
-- [Темы для дискуссий разработчиков](ru/discussion.md)
 - [Программный переход с openipc-1.0 (OpenWrt) на openipc-2.x (Buildroot)](ru/upgrade-from-1.md)
 - [Вопросы и ответы](ru/faq.md)
 - [Использование для FPV](ru/fpv.md)
@@ -111,6 +110,10 @@ In Russian
 ## Что можно прочитать про прошивку OpenIPC?
 - [Часто задаваемые вопросы и ответы на них][faq1]
 - [Заметки от Олега Левшина][faq3]
+
+## Дискуссии
+- [Дискуссия по дорожной карте проекта](ru/discussion-roadmap.md)
+- [Темы для дискуссий разработчиков](ru/discussion.md)
 
 #### This is an open project, so you can help, too.
 
