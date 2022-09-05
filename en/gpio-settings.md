@@ -64,6 +64,19 @@ Tested on Gk7205v200:
 |-------------|--------|--------|----------|
 | Hi3516Ev200 | 52     | 53     | 9        |
 
+### Jovision boards
+
+| Processor   | IRCUT1 | IRCUT2 | LIGHT |  TESTED BOARDS  |
+|-------------|--------|--------|-------|-----------------|
+| Hi3516Ev200 | 53     | 52     | 4     |                 |
+| Hi3516Cv100 | 42     | 43     | 6     | IPG5020A-H-V1.0 |
+
+### JUAN boards (Sannce)
+
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS      | TESTED BOARDS | DEVICE ID |
+|-------------|--------|--------|---------------|---------------|-----------|
+| Hi3518Ev200 | 65     | 64     | 62 (inverted) | 18EV200_V205P | N18EV2W   |
+
 ### JVT boards
 
 | Processor   | IRCUT1 | IRCUT2 | LIGHT |
@@ -74,11 +87,17 @@ Tested on Gk7205v200:
 | Hi3516Ev200 |
 | Hi3518Ev200 | 64     | 65     | 47    |
 
-### JUAN boards (Sannce)
+### Netcam boards
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS      | TESTED BOARDS | DEVICE ID |
-|-------------|--------|--------|---------------|---------------|-----------|
-| Hi3518Ev200 | 65     | 64     | 62 (inverted) | 18EV200_V205P | N18EV2W   |
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRLED    |
+|-------------|--------|--------|----------|----------|
+| T10         | 25     | 26     | 81       | 80       |
+
+### Rotek Switcam E200/T200 JXF23 sensor
+
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS |
+|-------------|--------|--------|----------|
+| Hi3518Ev200 | 63     | 64     | 65       |
 
 ### Tiandy boards
 
@@ -116,24 +135,3 @@ Tested on Gk7205v200:
 | Processor   | IRCUT1 | IRCUT2 | IRLED | DEVICE ID                |
 |-------------|--------|--------|-------|--------------------------|
 | Hi3516Ev300 | 40     | 41     | 65    | unknown                  |
-
-
-### Jovision boards
-
-| Processor   | IRCUT1 | IRCUT2 | LIGHT |  TESTED BOARDS  |
-|-------------|--------|--------|-------|-----------------|
-| Hi3516Ev200 | 53     | 52     | 4     |                 |
-| Hi3516Cv100 | 42     | 43     | 6     | IPG5020A-H-V1.0 |
-
-
-### Rotek Switcam E200/T200 JXF23 sensor
-
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS |
-|-------------|--------|--------|----------|
-| Hi3518Ev200 | 63     | 64     | 65       |
-
-### unidentified boards
-
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRLED    |
-|-------------|--------|--------|----------|----------|
-| T10         | 25     | 26     | 81       | 80       |
