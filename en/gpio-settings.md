@@ -87,7 +87,7 @@ Tested on Gk7205v200:
 | Hi3516Ev200 |
 | Hi3518Ev200 | 64     | 65     | 47    |
 
-### Netcam boards
+### Netcam NVT boards
 
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRLED    |
 |-------------|--------|--------|----------|----------|
