@@ -113,6 +113,7 @@ In Russian
 
 ## Дискуссии
 - [Дискуссия по дорожной карте проекта](ru/discussion-roadmap.md)
+- [Дискуссия по watchdog и rtc](ru/discussion-watchdog.md)
 - [Темы для дискуссий разработчиков](ru/discussion.md)
 
 #### This is an open project, so you can help, too.
