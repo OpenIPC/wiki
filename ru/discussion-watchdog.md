@@ -20,3 +20,4 @@
 
 - [Linux kernel module_alias](https://lwn.net/Articles/47412/)
 - [Watchdog: iTCO_wdt: add platform driver module alias](https://scm.linefinity.com/common/linux-stable/commit/e5de32e3ec9d4d5a355659760d5045b80c0a05d8)
+- [HiSilicon external watchdog driver](https://blog.karatos.in/a?ID=00550-03a9ba75-fb52-4f63-a238-56e2c66a5c26)
