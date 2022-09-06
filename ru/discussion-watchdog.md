@@ -11,7 +11,7 @@
 | HiSilicon HI3516CV100 | wdt                  | Используем бинарный модуль из SDK ? |
 | HiSilicon HI3516CV200 | wdt                  | Используем бинарный модуль из SDK ? |
 | HiSilicon HI3516CV300 | hi3516cv300_wdt      | Используем бинарный модуль из SDK ? |
-| HiSilicon HI3516EV200 | open_wdt             | Открытый модуль из OpenHiSilicon    |
+| HiSilicon HI3516EV200 | open_wdt             | Открытый модуль из OpenHiSilicon, в старых прошивках использовался hi3516ev200_wdt |
 |                       |                      |                                     |
 | список дополнить      |                      |                                     |
 
