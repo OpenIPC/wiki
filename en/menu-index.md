@@ -31,7 +31,6 @@ We would be grateful for any feedback and suggestions.
 * [OpenIPC modding](https://t.me/openipc_modding) (RU) - general issues on modifying IPCam device firmware, [*](https://combot.org/c/-1001247643198)
 * [OpenIPC development](https://t.me/openipc_software) (RU) - HiSilicon, XM porting in OpenWrt and programmer issues, [*](https://combot.org/c/-1001196905312)
 * [OpenIPC advice](https://t.me/openipc_advice) (RU) - problems, finding solutions, long conversations, [*](https://combot.org/c/1385065634)
-* [OpenIPC majestic](https://t.me/joinchat/YgHc5Bg4NOoxOTdi) (RU) - for Majestic streamer testers, [*](#)
 * [OpenIPC Iranian](https://t.me/joinchat/T_GwQUBTJdfXJrFb) (IR) - special group for Iranian users / تیم OpenIPC برای کاربران ایرانی, [*](https://combot.org/c/-1001341239361)
 * [OpenIPC demo](https://t.me/openipc_demo)  (EN/RU) - test bot with buttons, after connecting, give the "/menu", [*](https://combot.org/c/1414887196)
 * [OpenIPC ExIPCam](https://t.me/ExIPCam) (RU) - ExIPCam program and hardware/software repairing devices, [*](https://combot.org/c/1213889378)
