@@ -189,7 +189,6 @@ if(pinfo->mem->start = 0x20250000 /* address i2c-2 */) {
 
 ### Groups in Telegram related to development:
 
-[Majestic Test Group](https://t.me/joinchat/YgHc5Bg4NOoxOTdi)
 
 
 ## Tools used in Research and Development
