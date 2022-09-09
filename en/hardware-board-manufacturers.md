@@ -19,7 +19,7 @@ Hardware: IPC Board Manufacturers
 * [Hichip](http://hichip.net/en/)
 * [TT Int'l, HTW Tech Limited](http://www.cctv-camera.cc/)
 * [Huatu](http://huatudigital.com/)
-* [Huishi](https://web.archive.org/web/20220209053811/http://hscctvcn.com/ProductInfoCategory?categoryId=400431,400432,400433,400434,400435,400436&PageInfoId=0)
+* [Huishi](https://web.archive.org/web/20220209053811/http://hscctvcn.com/ProductInfoCategory?categoryId=400431,400432,400433,400434,400435,400436&PageInfoId=0) and [Huishi](https://www.vatilon.cn/)
 * [Hupuu](https://hupuu.com/category/camera-board)
 * [IPCAM](http://www.ipcam.xin/)
 * [Jovision](http://www.jovision.com/)
