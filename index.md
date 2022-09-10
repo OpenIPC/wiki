@@ -58,6 +58,7 @@ OpenIPC Wiki
 
 ### Reference Book
 - [Company names](en/company-names.md)
+- [Hikvision IP Camera Model naming convention](https://www.vueville.com/home-security/cctv/ip-cameras/hikvision-network-camera-guide/#model-naming-convention)
 
 ### Developer manuals
 - [Buildroot User Manual](https://buildroot.org/docs.html)
