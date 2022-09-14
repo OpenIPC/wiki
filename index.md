@@ -35,7 +35,7 @@ OpenIPC Wiki
 - [Image quality tuning](en/image-quality-tuning.md)
 - [Memory tuning](en/memory-tuning.md)
 - [Using ipctool](en/example-ipctool.md)
-- [GPIO settings](en/gpio-settings.md)
+- [Board specific GPIO settings list](en/gpio-settings.md)
 - [ACMEv2](en/acme-v2.md)
 - [YouTube streaming](en/youtube-streaming.md)
 - [WiFi XM530](en/wifi-xm530.md)
