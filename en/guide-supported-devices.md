@@ -95,7 +95,7 @@ _If you have another supported device to add, please do it [here][2]._
 
 
 
-[1]: https://github.com/OpenIPC/firmware#current-development-status-
+[1]: https://openipc.org/supported-hardware
 [2]: https://github.com/OpenIPC/wiki/blob/master/en/guide-supported-devices.md
 [3]: https://github.com/OpenIPC/wiki/blob/master/en/device-chacon-ipcam-ri01.md
 [4]: https://ipcamtalk.com/threads/smartwares-cip-37210-wifi.64605/
