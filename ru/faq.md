@@ -109,3 +109,49 @@ https://github.com/OpenIPC/burn
 ```
 pip install -r requirements.txt
 ```
+### Самостоятельная сборка прошивки из исходников
+
+### У меня нет Linux. Как собрать прошивку под Windows? 
+
+Это несколько сложнее, но возможно. 
+Для начала необходимо установить подсистему Linux для Windows (WSL)
+Как это сделать, моэно прочесть, например, тут: https://docs.microsoft.com/ru-ru/windows/wsl/install
+
+Однако, этого мало: нужно настроить переменные окружения, иначе скрипт будет отваливаться с ошибкой. 
+Ругается на наличие неправильных символов в переменной окружения `$PATH`.  Причина проста: винда и свои пути пихает: 
+под WSL не собирается. ругается на наличие неправильных символов в переменной окружения `$PATH`.  Причина проста: винда и свои пути пихает: 
+
+```diff
+$ echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files (x86)/VMware/VMware Workstation/bin/:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/mnt/c/Program Files (x86)/Common Files/Intel/Shared Files/cpp/bin/Intel64:/mnt/c/Program Files (x86)/Intel/iCLS Client/:/mnt/c/Program Files/Intel/iCLS Client/:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files (x86)/PuTTY/:/mnt/c/Program Files/Intel/Intel(R) Management Engine Components/DAL:/mnt/c/Program Files/Intel/Intel(R) Management Engine Components/IPT:/mnt/c/Program Files (x86)/Intel/Intel(R) Management Engine Components/DAL:/mnt/c/Program Files (x86)/Intel/Intel(R) Management Engine Components/IPT:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/Program Files/LLVM/bin:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Intel/WiFi/bin/:/mnt/c/Program Files/Common Files/Intel/WirelessCommon/:/mnt/c/Program Files (x86)/Common Files/Acronis/SnapAPI/:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/c/Program Files (x86)/Intel/Platform Flash Tool Lite:/mnt/c/Program Files (x86)/Paragon Software/LinuxFS for Windows/:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/WireGuard/:/mnt/c/Program Files/dotnet/:/mnt/c/Users/USER/Python/Scripts/:/mnt/c/Users/USER/Python/:/mnt/c/Users/USER/AppData/Local/Programs/Python/Python37-32/Scripts/:/mnt/c/Users/USER/AppData/Local/Programs/Python/Python37-32/:/mnt/c/Users/USER/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/USER/AppData/Local/atom/bin:/mnt/c/Program Files/Intel/WiFi/bin/:/mnt/c/Program Files/Common Files/Intel/WirelessCommon/:/mnt/c/Users/USER/AppData/Local/Microsoft/WindowsApps:/mnt/c/Program Files/Multipass/bin:/mnt/c/Users/USER/AppData/Local/Programs/Microsoft VS Code/bin:/snap/bin
+```
+Как видно, в путях есть пробелы, которые не нравятся linux. Нужно избавиться от такого наследия.
+
+Нужно создать файлик  `/etc/wsl.conf`
+```diff
+[automount]
+enabled = true
+root = /mnt
+options = "metadata,umask=22,fmask=11"
+mountFsTab = true
+[network]
+generateHosts = true
+generateResolvConf = true
+[interop]
+enabled = false
+appendWindowsPath = false
+```
+... и ребутнуть машину: 
+
+`exit` 
+
+`wsl --shutdown`
+
+В блоке `[interop]` как раз и содержатся нужные настройки
+
+Результат:
+```diff
+$ echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/snap/bin
+```
+(с) SterX aka zalessky
