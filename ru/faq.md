@@ -154,3 +154,15 @@ $ echo $PATH
 /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/snap/bin
 ```
 (с) SterX aka zalessky
+
+### Чем отличаются базовая версия прошивки (Lite) от расширенной версии (Ultimate) ?
+
+- поддержка NAND flash
+- файловая система UBI
+- поддержка WiFi
+- сканер QR кода
+- сетевой экран
+- MQTT (на некоторых Lite то-же есть)
+- ZeroTier
+- WireGuard
+- множество фич Majestic в т.ч. стрим на Youtube/Telegram и т.д.
