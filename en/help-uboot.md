@@ -204,6 +204,8 @@ flash a new bootloader you have to weigh up all the risks and benefits. In most
 cases the original bootloader plus new kernel and new operating system should
 work just fine. But there are exceptions.
 
+#### Downgrading stock firmware.
+
 Today, we see more and more cameras where access to bootloader console is
 protected with a password. Thus, even if you connect to the camera's UART port,
 all you will see after interrupting the standard boot cycle is a prompt for
@@ -213,6 +215,20 @@ for Xiongmai cameras the bootloader password protection started popping up
 somewhere around July 2021, hence you need a firmware for your camera from an
 earlier date. After you successfully downgrade your camera to a password-free
 bootloader, you could install the OpenIPC firmware in a regular way.
+
+#### Side-loading unlocked bootloader.
+
+Modern cameras utilize fastboot protocol that allows camera to sideload a bootloader 
+into memory and then run it from there. Check if [burn](https://github.com/OpenIPC/burn) 
+utility supports your SoC.
+
+#### Modifying stock firmware.
+
+One way to bypass the bootloader protection is to dump original firmware and replace
+bootloader there with an unlocked alternative. Or you could flash the entire OpenIPC 
+firmware since you have the chip in the programmer, anyway.
+
+__DO NOT FORGET TO MAKE A BACKUP OF YOUR ORIGINAL FIRMWARE!__
 
 
 [telegram]: https://t.me/OpenIPC
