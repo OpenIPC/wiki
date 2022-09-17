@@ -1,8 +1,8 @@
 # OpenIPC Wiki
 [Table of Content](../index.md)
 
-GPIO Settings
--------------
+Board specific GPIO settings list
+---------------------------------
 
 ### Anjoy boards
 
