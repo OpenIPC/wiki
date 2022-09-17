@@ -7,8 +7,9 @@
 ### Шаг 1. Определите тип процессора.
 
 ![SoC Marking](../images/soc-hisilicon.jpg)
+![SoC Marking](../images/soc-ingenic.jpg)
 
-_Пример маркировки процессора Hisilicon Hi3518EV100.
+_Пример маркировки процессоров Hisilicon Hi3518EV100 и Ingenic T20.
 Значимые символы обведены жёлтым._
 
 ### Шаг 2. Скачайте прошивку.
