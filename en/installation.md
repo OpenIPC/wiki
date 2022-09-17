@@ -43,9 +43,11 @@ software such as [ipctool](https://openipc.github.io/ipctool/) to identify the
 SoC model from the vendor firmware.
 
 ![SoC Marking](../images/soc-hisilicon.jpg)
-![SoC Marking](../images/soc-ingenic.jpg)
+![SoC Marking](../images/soc-ingenic-t20.jpg)
+![SoC Marking](../images/soc-ingenic-t40.jpg)
 
-_Hisilicon Hi3518EV100 and Ingenic T20 SoC marking. Relevant symbols highlighted with yellow._
+_Hisilicon Hi3518EV100, Ingenic T20 and Ingenic T40 SoCs marking.
+Relevant symbols highlighted with yellow._
 
 ### Step 2. Download the firmware.
 
