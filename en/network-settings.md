@@ -5,7 +5,6 @@ A collection of practical networking settings
 ---------------------------------------------
 
 
-
 ### ETH0 | DHCP for all platforms
 
 ```
@@ -69,7 +68,6 @@ iface ppp0 inet ppp
 ```
 
 
-
 ### USB0 | HI3516EV300/GK7205V300 | CamHi/Xin
 
 ```
@@ -100,7 +98,7 @@ iface wg0 inet static
 ```
 
 
-### WLANO | HI3516EV300/GK7205V300 | CamHi/Xin
+### WLAN0 | HI3516EV300/GK7205V300 | CamHi/Xin
 
 ```
 auto wlan0
@@ -119,7 +117,7 @@ iface wlan0 inet dhcp
 ```
 
 
-### WLANO | HI3516EV300/GK7205V300 | CamHi/Xin
+### WLAN0 | HI3516EV300/GK7205V300 | CamHi/Xin
 
 ```
 auto wlan0
@@ -139,7 +137,7 @@ iface wlan0 inet dhcp
 ```
 
 
-### WLANO | T10 | Netcam
+### WLAN0 | T10 | Netcam
 
 ```
 auto wlan0
@@ -154,8 +152,7 @@ iface wlan0 inet dhcp
 ```
 
 
-
-### WLANO | T31 | CamHi/Xin
+### WLAN0 | T31 | CamHi/Xin
 
 ```
 auto wlan0
