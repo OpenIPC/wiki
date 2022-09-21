@@ -28,6 +28,7 @@ OpenIPC Wiki
 - [Very old full manual](en/old-manual.md)
 
 ### Usage
+- [Network settings](en/network-settings.md)
 - [System features](en/system-features.md)
 - [Majestic streamer](en/majestic-streamer.md)
 - [Microbe web interface](en/microbe-web.md)
