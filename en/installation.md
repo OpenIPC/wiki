@@ -44,9 +44,10 @@ SoC model from the vendor firmware.
 
 ![SoC Marking](../images/soc-hisilicon.jpg)
 ![SoC Marking](../images/soc-ingenic-t20.jpg)
+![SoC Marking](../images/soc-ingenic-t31.jpg)
 ![SoC Marking](../images/soc-ingenic-t40.jpg)
 
-_Hisilicon Hi3518EV100, Ingenic T20 and Ingenic T40 SoCs marking.
+_Hisilicon Hi3518EV100, Ingenic T20, T31 and T40 SoCs marking.
 Relevant symbols highlighted with yellow._
 
 ### Step 2. Download the firmware.
