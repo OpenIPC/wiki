@@ -111,7 +111,7 @@ iface wlan0 inet dhcp
 ```
 
 
-### WLAN0 | HI3516EV300/GK7205V300 | CamHi/Xin
+### WLAN0 | HI3516EV200/GK7205V200/GK7205V210 | CamHi/Xin
 
 ```
 auto wlan0
