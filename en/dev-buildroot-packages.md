@@ -1,7 +1,9 @@
 # OpenIPC Wiki
 [Table of Content](../index.md)
 
-## OpenIPC and Buildroot packages
+## OpenIPC Buildroot packages
+
+List of OpenIPC Buildroot packages and shadowed original Buildroot packages per releases.
 
 | OpenIPC                             | Buildroot 2020.02.12    | Buildroot 2021.02       | Buildroot 2022.08       |
 |-------------------------------------|-------------------------|-------------------------|-------------------------|
