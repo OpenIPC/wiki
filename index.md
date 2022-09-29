@@ -42,6 +42,7 @@ OpenIPC Wiki
 - [WiFi XM530](en/wifi-xm530.md)
 
 ### Firmware
+- [List of OpenIPC Buildroot packages](en/dev-buildroot-packages.md)
 - [Releases in GitHub](https://github.com/OpenIPC/firmware/releases/tag/latest)
 - [Releases in Telegram](https://t.me/s/openipc_dev)
 - [Source code](en/source-code.md)
