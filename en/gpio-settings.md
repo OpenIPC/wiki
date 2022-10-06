@@ -89,9 +89,9 @@ Tested on Gk7205v200:
 
 ### iSNATCH (HeySmart) mini "cube" camera
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRLED    |
-|-------------|--------|--------|----------|----------|
-| T10         | 25     | 26     | -        | 19       |
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRLED    | RESET  |
+|-------------|--------|--------|----------|----------|---------
+| T10         | 25     | 26     | -        | 19       |  60i   |
 
 ### Netcam NVT boards
 
