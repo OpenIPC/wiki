@@ -87,3 +87,62 @@ reset
 - rtsp://admin:password@ip-address:554/stream=1 — второй поток
  
 где: password — ваш пароль, ip-address — адрес камеры.
+
+## Переключение день/ночь
+При наступлении тёмного времени суток или выключении источников света, как правило, видеокамеры переходят в ночной режим. Происходит перевод изображения в чёрно-белый режим, отключается ИК-фильтр и включается ИК-подсветка. В обратной ситуации производятся обратные действия.
+
+Система может определять отсутствие света либо по датчику, либо по изображению. Пока **Majestic** умеет работать только с датчиком. В этой модели камеры его нет. Значит надо задать параметры управляющих выходов, а управлять ими придётся с помощью скрипта.
+### Настройка GPIO
+- Включить **Enable night mode**
+- Задать **GPIO pin1 of signal for IRcut filter: 105**
+- Задать **GPIO pin2 of signal for IRcut filter: 104**
+- Задать **GPIO pin to turn on night mode illumination: 114**
+
+Теперь **Majestic** знает про **GPIO** и можно попробовать поуправлять переключением вручную из командной строки через **API**. Нужно войти в систему под пользователем **root** без пароля. Команды следующие:
+
+```
+curl http://ip-address/night/on         //включить ночной режим.
+curl http://ip-address/night/off        //выключить ночной режим.
+curl http://ip-address/night/toggle     //переключить режим.
+```
+Если всё работает, движемся дальше — автоматизируем процесс управления переключением режима на основе изменения времени экспозиции.
+
+### Скрипт управления переключением режима
+Создаём файл файл скрипта:
+```
+cat > /usr/sbin/checkexp.sh
+```
+… и вставляем содержимое через буфер обмена:
+```
+!/bin/sh
+
+login=$(cat /etc/httpd.conf | grep cgi-bin | cut -d':' -f2)
+pass=$(cat /etc/httpd.conf | grep cgi-bin | cut -d':' -f3)
+
+chtime=5 #change time to check exptime
+chexp=50 #change exptime threshold (40-80)
+day=1
+
+while true; do
+
+exp=$(curl -s http://localhost/metrics | grep ^isp_exptime | cut -d' ' -f2)
+chexp=50 #change exptime threshold (40-80)
+bri=expr $exp / 1000
+echo $bri
+
+if [ $bri -gt $chexp -a $day -eq 1 ] ;then
+day=0
+curl -u $login:$pass http://localhost/night/on
+fi
+
+if [ $bri -le $chexp -a $day -eq 0 ] ;then
+day=1
+curl -u $login:$pass http://localhost/night/off
+fi
+
+sleep $chtime
+done
+```
+Сохраняем файл нажав комбинацию **Ctrl+D** и даём разрешение на выполнение:
+```
+```
