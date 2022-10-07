@@ -138,3 +138,9 @@ Tested on Gk7205v200:
 | Processor   | IRCUT1 | IRCUT2 | IRLED | DEVICE ID                |
 |-------------|--------|--------|-------|--------------------------|
 | Hi3516Ev300 | 40     | 41     | 65    | unknown                  |
+
+### Zosi
+
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS     | DEVICE ID     |
+|-------------|--------|--------|--------------|---------------|
+| Hi3518Ev200 | 61     | 60     | 1 (inverted) | ZG2622MW      |
