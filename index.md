@@ -109,6 +109,7 @@ In Russian
 - [Ростелекомовская камера с NAND](ru/hardware-rtk-nand.md)
 - [Полезные ссылки](ru/resources.md)
 - [Обзоры камер разных производителей](ru/reviews.md)
+- [Hikvision DS-2CD2345F-IS](ru/hikvision-ds-2cd2345f-is.md)
 
 ## Что можно прочитать про прошивку OpenIPC?
 - [Часто задаваемые вопросы и ответы на них][faq1]
