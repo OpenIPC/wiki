@@ -25,7 +25,8 @@ factory firmware images, one of the following methods must be used:
 OpenIPC firmware installation using Coupler.
 --------------------------------------------
 
-Instructions for using [Coupler](https://openipc.github.io/coupler/) can be found in [the project's documenation](https://openipc.github.io/coupler/).
+Instructions for using [Coupler](https://openipc.github.io/coupler/) can be
+found in [the project's documenation](https://openipc.github.io/coupler/).
 
 OpenIPC firmware installation via TFTP and UART, step by step.
 --------------------------------------------------------------
@@ -88,6 +89,8 @@ sudo tar -C /srv/tftp/ -xvf openipc.*.tgz
 
 In order to make a connection to UART port you will need a
 [serial port adapter][FTDI] for your PC.
+
+![UART Module](../images/uart-module.webp)
 
 __Before you connect that adapter to you camera, make sure that it's working
 voltage is set to 3.3 volt!__
