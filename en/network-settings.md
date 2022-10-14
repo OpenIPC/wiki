@@ -164,7 +164,7 @@ iface wlan0 inet dhcp
 ```
 
 
-### WLAN0 | SC335 |
+### WLAN0 | SSC335 | Apical
 
 ```
 auto wlan0
@@ -185,7 +185,7 @@ iface wlan0 inet dhcp
 ```
 
 
-### WLAN0 | SC337DE | Tiandy
+### WLAN0 | SSC337DE | Tiandy
 
 ```
 auto wlan0
