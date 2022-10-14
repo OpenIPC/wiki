@@ -164,6 +164,27 @@ iface wlan0 inet dhcp
 ```
 
 
+### WLAN0 | SC335 |
+
+```
+auto wlan0
+iface wlan0 inet dhcp
+    pre-up echo 14 > /sys/class/gpio/export
+    pre-up echo out > /sys/class/gpio/gpio14/direction
+    pre-up echo 1 > /sys/class/gpio/gpio14/value
+    pre-up echo '00:24:B8:FF:FF:FF' >/tmp/.mac.info
+    pre-up modprobe mac80211
+    pre-up insmod /lib/modules/4.9.84/sigmastar/ssw101b_wifi_usb.ko
+    pre-up wpa_passphrase "SSID" "password" >/tmp/wpa_supplicant.conf
+    pre-up sed -i '2i \\tscan_ssid=1' /tmp/wpa_supplicant.conf
+    pre-up sleep 3
+    pre-up wpa_supplicant -B -D wext -i wlan0 -c/tmp/wpa_supplicant.conf
+    post-down killall -q wpa_supplicant
+    post-down echo 0 > /sys/class/gpio/gpio14/value
+    post-down echo 14 > /sys/class/gpio/unexport
+```
+
+
 ### WLAN0 | SC337DE | Tiandy
 
 ```
@@ -173,7 +194,7 @@ iface wlan0 inet dhcp
     pre-up echo out > /sys/class/gpio/gpio14/direction
     pre-up echo 1 > /sys/class/gpio/gpio14/value
     pre-up modprobe cfg80211
-    pre-up insmod /root/rtl8192eu.ko
+    pre-up insmod /lib/modules/4.9.84/sigmastar/rtl8192eu.ko
     pre-up wpa_passphrase "SSID" "password" >/tmp/wpa_supplicant.conf
     pre-up sed -i '2i \\tscan_ssid=1' /tmp/wpa_supplicant.conf
     pre-up sleep 3
