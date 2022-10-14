@@ -7,6 +7,7 @@ Hardware: IPC Board Manufacturers
 * [Anjvision](http://www.anjvision.com/), <http://icamra.cn/>
 * [Ansjer](https://www.ansjer.com/)
 * [Anviz](http://www.anviz.com/)
+* [Apical](http://www.apical.com.cn/products/)
 * [Besnt](http://www.besnt-cctv.com/)
 * [Brovotech](https://brovotech.com/)
 * [Cantonk](http://cantonk.com/)
