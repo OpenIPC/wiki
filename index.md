@@ -27,6 +27,9 @@ OpenIPC Wiki
 - [Installation on XM530 based boards](en/install-xm530.md), but you'd better use <https://openipc.org/cameras/vendors/xiongmai>
 - [Very old full manual](en/old-manual.md)
 
+### Troubleshooting
+- [Network does not work](en/trouble-network.md)
+
 ### Usage
 - [Network settings](en/network-settings.md)
 - [System features](en/system-features.md)
