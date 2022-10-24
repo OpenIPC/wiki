@@ -106,14 +106,15 @@ Swap:             0           0           0
 ### Проверка работы наземной станции (на десктопе)
 
 * Подключите второй адаптер к десктопу и скомпилируйте драйвер, который работает в режиме мониторинга (см. соответствующую документацию проекта) и при необходимости загрузите его через `insmod`
-* Активируйте интерфейс (в данном примере `wlan0` и укажите [канал](https://en.wikipedia.org/wiki/List_of_WLAN_channels) (в данном примере `169`):
+* Активируйте интерфейс (в данном примере `wlan0` и укажите [канал](https://en.wikipedia.org/wiki/List_of_WLAN_channels) (в данном примере `14`):
 ```
 sudo ip link set wlan0 down
 sudo iw wlan0 set monitor control
-sudo iwconfig wlan0 channel 169
+sudo iwconfig wlan0 channel 14
 sudo ip link set wlan0 up
 ```
-* Скомпилируйте из исходного кода [WFB-ng](https://github.com/svpcom/wifibroadcast), скопируйте ключ `gs.key` с IP-камеры и запустите прием `sudo ./wfb_rx -p 3 -u 5600 -K gs.key wlan0`
+* Убедитесь, что на камере и десктопе на WiFi адаптерах установлена одинаковая частота через команду `iwconfig`, при необходимости смените частоту через редактирование конфига `/etc/wfb.conf` на камере (параметр `channel`) или командой `sudo iwconfig <имя_адаптера> channel <номер>` на десктопе.
+* Скомпилируйте из исходного кода [WFB-ng](https://github.com/svpcom/wifibroadcast), __обязательно используйте бранч stable__, скопируйте ключ `gs.key` с IP-камеры и запустите прием `sudo ./wfb_rx -p 0 -u 5600 -K -i 7669206 gs.key wlan0`
 * Проверьте, что в консоли вывод
 ```
 32168228	PKT	0:0:0:0:0:0
@@ -134,7 +135,7 @@ sudo ip link set wlan0 up
 32180236	ANT	1	250:-54:-52:-50
 32180236	ANT	0	250:-48:-45:-44
 ```
-* Запустите Gstreamer `gst-launch-1.0 -vvv udpsrc port=5600 ! application/x-rtp,encoding-name=H265,payload=96 ! rtph265depay ! h265parse ! queue ! avdec_h265 ! autovideosink sync=false -e` и проверьте качество изображения
+* Запустите Gstreamer `gst-launch-1.0 -vvv udpsrc port=5600 ! application/x-rtp,encoding-name=H264,payload=96 ! rtph264depay ! h264parse ! queue ! avdec_h264 ! autovideosink sync=false -e` и проверьте качество изображения
 
 ### Траблшутинг
 
