@@ -166,3 +166,48 @@ $ echo $PATH
 - ZeroTier
 - WireGuard
 - множество фич Majestic в т.ч. стрим на Youtube/Telegram и т.д.
+
+### После установки не работает сеть в u-boot и в linux
+
+Иногда после установки OpenIPC на камере не работает сеть при том, что с кабелем и сетью однозначно проблем нет.
+
+#### Нет сети в uboot
+Светодиод наличия сетевого соединения на рутере/свитче для порта, куда подключена камера, не горит. Это может сопровождаться следующим сообщением
+```
+OpenIPC # run uknor8m
+Hisilicon ETH net controler
+MAC:   00-12-12-xx-xx-xx
+PHY not link.
+```
+
+В таком случае требуется некоторый тюнинг подсистемы MII (Media Independent Interface):
+```
+setenv mdio_intf rmii
+setenv phyaddru 0
+setenv phyaddrd 1
+saveenv; reset
+```
+Выше приведены чаще всего используемые настройки MII, но они могут и отличаться.
+Возможны следующие значения mdio_intf: rmii, rgmii, gmii. Эти значения и адреса проще всего взять со стоковой прошивки через ipctool. Если они не сохранены, то вам остается только перебирать все комбинации. Адреса могут меняться от 0 до 3.
+
+Проверить работоспособность сети в uboot можно следующим образом:
+```
+OpenIPC # ping 192.168.1.1
+Hisilicon ETH net controler
+MAC:   00-12-12-xx-xx-xx
+eth0 : phy status change : LINK=DOWN : DUPLEX=FULL : SPEED=100M
+eth0 : phy status change : LINK=UP : DUPLEX=FULL : SPEED=100M
+**host 192.168.1.1 is alive**
+
+```
+
+#### В uboot сеть появилась, а в Linux отсутствует сетевой интерфейс eth0
+После настройки MII в uboot для Linux тоже потребуется настройка:
+```
+fw_setnenv extras hieth.phyaddru=0 hieth.phyaddrd=1
+```
+После сохранения корректных для вашей камеры значений в переменную extras обязательно нужно перезагрузить камеру после чего интерфейс должен появиться. Проверить это можно командой ifconfig или ip addr .
+
+
+
+
