@@ -8,6 +8,7 @@ OpenIPC Wiki
 ### Introduction
 - [About the project](en/menu-index.md)
 - [Supported devices](en/guide-supported-devices.md)
+- [Supported sensors per SoC](en/guide-supported-sensors.md)
 - [Changelog](en/show-changelog.md)
 
 ### Subprojects
