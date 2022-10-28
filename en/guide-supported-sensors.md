@@ -33,7 +33,7 @@ _Note: This list does not guarantee that your sensor will work. There are nuance
 - FH8858V200
 - FH8858V210
 
-#### Goke
+### Goke
 
 - GK7102S
 - GK7202V300
@@ -98,7 +98,7 @@ _Note: This list does not guarantee that your sensor will work. There are nuance
 - MSC316DC
 - MSC316DM
 
-## Novatek
+### Novatek
 
 - NT98562
 - NT98566
@@ -108,7 +108,7 @@ _Note: This list does not guarantee that your sensor will work. There are nuance
 - RV1109
 - RV1126
 
-## SigmaStar
+### SigmaStar
 
 - SSC325
 - SSC335
@@ -116,7 +116,7 @@ _Note: This list does not guarantee that your sensor will work. There are nuance
 - SSC337
 - SSC337DE
 
-## Xiongmai
+### Xiongmai
 
 - XM510
 - XM530
