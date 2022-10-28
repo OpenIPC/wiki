@@ -116,7 +116,7 @@ _Note: This list does not guarantee that your sensor will work. There are nuance
 - SSC337
 - SSC337DE
 
-## XiangMai
+## Xiongmai
 
 - XM510
 - XM530
