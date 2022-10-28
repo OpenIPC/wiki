@@ -3,6 +3,8 @@
 
 ## Supported sensors per SoC
 
+_Note: This list does not guarantee that your sensor will work. There are nuances such as different ways of connecting sensors, relabeling of sensors, mismatch between the installed sensor and the declared sensor, etc. This is just a list of the drivers found in the SDK for the particular processor. Please take this into account._
+
 ### Ambarella
 
 - S2L
