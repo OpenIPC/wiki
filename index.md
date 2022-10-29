@@ -59,6 +59,7 @@ OpenIPC Wiki
 ### Help, Tips, and Tricks
 - [U-Boot Tips](en/help-uboot.md)
 - [Web UI Help](en/help-webui.md)
+- [Live streaming to Telegram](en/howto-streaming-telegram.md)
 - [Interesting tricks](en/dev-tricks.md)
 - [Questions and answers](en/faq.md)
 
