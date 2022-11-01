@@ -23,10 +23,11 @@ Run the commands below for your board and your files will end up in the "output/
 ```
 # Example run it on project root folder
 #
-PLATFORM=name       make br-linux-{dirclean,rebuild}
-PLATFORM=name       make br-rootfs-{squashfs,tar}
+BOARD=hi3518ev300_ultimate  make br-linux-{dirclean,rebuild}
 #
-PLATFORM=name       make br-vtund-openipc-{dirclean,rebuild}
+BOARD=hi3518ev300_ultimate  make br-rootfs-{squashfs,tar}
+#
+BOARD=hi3518ev300_ultimate  make br-vtund-openipc-{dirclean,rebuild}
 #
 ```
 
