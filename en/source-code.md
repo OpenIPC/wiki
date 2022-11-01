@@ -23,6 +23,8 @@ Run the commands below for your board and your files will end up in the "output/
 ```
 # Example run it on project root folder
 #
+./building.sh hi3518ev300_ultimate
+#
 BOARD=hi3518ev300_ultimate  make br-linux-{dirclean,rebuild}
 #
 BOARD=hi3518ev300_ultimate  make br-rootfs-{squashfs,tar}
