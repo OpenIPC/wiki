@@ -164,6 +164,28 @@ iface wlan0 inet dhcp
 ```
 
 
+### WLAN0 | HI3518EV300 | MJSXJ02HL
+
+```
+auto wlan0
+iface wlan0 inet dhcp
+    pre-up devmem 0x112C0048 32 0x1D54
+    pre-up devmem 0x112C004C 32 0x1174
+    pre-up devmem 0x112C0064 32 0x1174
+    pre-up devmem 0x112C0060 32 0x1174
+    pre-up devmem 0x112C005C 32 0x1174
+    pre-up devmem 0x112C0058 32 0x1174
+    pre-up devmem 0x10020028 32 0x28000000
+    pre-up devmem 0x10020028 32 0x20000000
+    pre-up insmod /root/8189fs.ko
+    pre-up wpa_passphrase "SSID" "password" >/tmp/wpa_supplicant.conf
+    pre-up sed -i '2i \\tscan_ssid=1' /tmp/wpa_supplicant.conf
+    pre-up sleep 3
+    pre-up wpa_supplicant -B -D nl80211 -i wlan0 -c/tmp/wpa_supplicant.conf
+    post-down killall -q wpa_supplicant
+```
+
+
 ### WLAN0 | SSC335 | Apical
 
 ```
