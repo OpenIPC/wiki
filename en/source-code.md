@@ -10,7 +10,7 @@ Source code
 
 ### Quick build from sources
 
-Install some packages to system and clone OpenIPC repo
+An example of installing the necessary packages for Debian/Ubuntu and downloading our repository
 
 ```
 sudo apt-get update -y
@@ -19,7 +19,9 @@ git clone --depth=1 https://github.com/OpenIPC/firmware.git
 cd firmware
 ```
 
-Run the command below on project root folder for your board and your files will end up in the "output/images" directory
+Example of running the command in the root of the project to build the desired version of the firmware for your processor
+
+The files will be available in the directory "output/images".
 
 ```
 ./building.sh hi3518ev300_ultimate
