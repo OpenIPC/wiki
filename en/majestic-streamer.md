@@ -20,17 +20,18 @@ The long JPEG control parameter did not fit into the example on the site and we 
 
 `/image.jpg?width=640&height=360&qfactor=73&color2gray=1`
 
-##### Tips:
+### How to convert YUV image to a more common image format
 
-To convert YUV image to a more common image format, use `convert` command from
-ImageMagick software. Run it like this:
+Use `convert` command from ImageMagick software. Run it like this:
 ```
 convert -verbose -sampling-factor 4:2:0 -size 1920x1080 -depth 8 image.yuv image.png
 ```
 where `1920x1080` is the picture resolution of video0, and `.png` is the target
 image format.
 
-To play audio stream use [ffplay][ffplay] utility from [ffmpeg][ffmpeg] package.
+### How to play audio stream
+
+Use [ffplay][ffplay] utility from [ffmpeg][ffmpeg] package.
 ```
 ffplay -ar 48000 -ac 1 -f s16le http://192.168.1.10/audio.pcm
 ffplay -ar 48000 -ac 1 -f alaw http://192.168.1.10/audio.alaw
@@ -38,7 +39,9 @@ ffplay -ar 48000 -ac 1 -f mulaw http://192.168.1.10/audio.ulaw
 ffplay -ar 8000 -ac 1 -f alaw http://192.168.1.10/audio.g711a
 ```
 
-A [PCM][pcm] file to play on camera speaker over network can be prepared using [sox][sox] program:
+### How to create an audio file to play on camera's speaker over network
+
+Using [sox][sox] program convert any source audio file to [PCM][pcm] 8kbps audio:
 ```
 sox speech.mp3 -t raw -r 8000 -e signed -b 16 -c 1 test.pcm
 ```
