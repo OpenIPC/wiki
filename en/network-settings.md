@@ -178,7 +178,7 @@ iface wlan0 inet dhcp
     pre-up devmem 0x10020028 32 0x28000000
     pre-up devmem 0x10020028 32 0x20000000
     pre-up modprobe cfg80211
-    pre-up insmod /root/8189fs.ko
+    pre-up insmod /lib/modules/4.9.37/external/8189fs_kasito.ko
     pre-up wpa_passphrase "SSID" "password" >/tmp/wpa_supplicant.conf
     pre-up sed -i '2i \\tscan_ssid=1' /tmp/wpa_supplicant.conf
     pre-up sleep 3
