@@ -18,19 +18,21 @@ sudo apt-get install -y automake autotools-dev bc build-essential curl fzf git l
 git clone --depth=1 https://github.com/OpenIPC/firmware.git
 cd firmware
 ```
-Run the commands below for your board and your files will end up in the "output/images" directory
+
+Run the command below on project root folder for your board and your files will end up in the "output/images" directory
 
 ```
-# Example run it on project root folder
-#
 ./building.sh hi3518ev300_ultimate
-#
+```
+
+Examples of rebuilding the Linux kernel, root filesystems and individual packages in our project
+
+```
 BOARD=hi3518ev300_ultimate  make br-linux-{dirclean,rebuild}
 #
 BOARD=hi3518ev300_ultimate  make br-rootfs-{squashfs,tar}
 #
 BOARD=hi3518ev300_ultimate  make br-vtund-openipc-{dirclean,rebuild}
-#
 ```
 
 -----
