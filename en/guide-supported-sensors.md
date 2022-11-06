@@ -71,6 +71,7 @@ _Note: This list does not guarantee that your sensor will work. There are nuance
 - HI3518CV100
 - HI3518EV100
 - HI3518EV200
+  - ar0130, gc1034, gc2023, imx122, imx222, imx291, imx323, jxf22, jxf23, jxh62, jxh65, mn34222, ov2718, ov2735, ov9712, ov9732, ov9750, ov9752, sc1135, sc1145, sc1235, sc2035, sc2135, sc2235
 - HI3518EV201
 - HI3518EV300
 - HI3519V101
