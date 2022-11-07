@@ -14,8 +14,8 @@ Board specific GPIO settings list
 
 ### CamHi/Xin boards
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA | UART2_RTS/RS485_DE | UART2_RXD/RS485_RO | UART2_TXD/RS485_DI | AUDIO_ENA | RESET |
-|-------------|--------|--------|----------|-------|---------|--------------------|--------------------|--------------------|-----------|-------|
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA | UART2_RTS/RS485_DE | UART2_RXD/RS485_RO | UART2_TXD/RS485_DI | AUDIO_ENA | RESET | PWM |
+|-------------|--------|--------|----------|-------|---------|--------------------|--------------------|--------------------|-----------|-------|-----|
 | Gk7205v200  | 14     | 15     | 8        | 4     | 9i      | 54                 | 12                 | 13                 |
 | Gk7205v300  | 10     | 11     |          | 72    | 7i      |          |                              |                    | 52        |
 |             |        |        |          |       |         |
@@ -28,7 +28,7 @@ Board specific GPIO settings list
 | Hi3518Ev200 | 1      | 2      | 48       |       |         |
 | Hi3518Ev300 |        |        |          |       |         |
 |             |        |        |          |       |         |
-| T31         | 58     | 57     |          | 49    | 61i     | 53                 | 55                 | 56                 |           | 11    |
+| T31         | 58     | 57     |          | 49    | 61i     | 53                 | 55                 | 56                 |           | 11    | 50  |
 
 _i - inverted value_
 
