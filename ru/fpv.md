@@ -74,7 +74,7 @@
 </p>
 
 * Залейте [U-Boot](https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-gk7205v200-universal.bin) в новую 16 мегабайтную флеш (в начало памяти) и припаяйте его на плату. Проверьте, что U-Boot запускается и вы попадаете в строку приглашения.
-* На рабочей станции установите TFTP сервер, скачайте и распакуйте в каталог [архив](https://github.com/OpenIPC/firmware/releases/download/latest/openipc.gk7205v200-fpv-br.tgz) с FPV прошивкой
+* На рабочей станции установите TFTP сервер, скачайте и распакуйте в каталог [архив](https://github.com/OpenIPC/firmware/releases/download/latest/openipc.gk7205v200-nor-fpv.tgz) с FPV прошивкой
 * Дайте команды в U-Boot (где `192.168.1.17` - это ваш TFTP сервер, а `192.168.1.33` временно присвоенный адрес камере):
 
 ```
@@ -147,7 +147,7 @@ sudo ip link set wlan0 up
 
 Запускаем [burn](https://github.com/OpenIPC/burn) при выключенной плате:
 ```
-./hi35xx-tool --chip gk7205v200 --type=ddr --file=u-boot-gk7205v200-universal.bin -d ; screen -L /dev/ttyUSB0 115200
+./burn --chip gk7205v200 --type=ddr --file=u-boot-gk7205v200-universal.bin -d ; screen -L /dev/ttyUSB0 115200
 ```
 
 включаем питание платы и ждем заливки U-Boot и появления командной строки. Далее выполяем следующие команды, где `192.168.0.8` - адрес TFTP сервера и `192.168.0.200` - временный адрес IP камеры.
