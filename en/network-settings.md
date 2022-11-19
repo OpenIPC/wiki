@@ -150,6 +150,68 @@ iface wlan0 inet dhcp
 ```
 
 
+### WLAN0 | HI3518EV200 | CIP37210
+
+```
+auto wlan0
+iface wlan0 inet dhcp
+    pre-up echo 3 > /sys/class/gpio/export
+    pre-up echo out > /sys/class/gpio/gpio3/direction
+    pre-up echo 1 > /sys/class/gpio/gpio3/value
+    pre-up modprobe mac80211
+    pre-up sleep 1
+    pre-up insmod /lib/modules/4.9.37/extra/rtl8188fu.ko
+    pre-up sleep 1
+    pre-up wpa_passphrase "OpenIPC_NFS" "project2021" >/tmp/wpa_supplicant.conf
+    pre-up sed -i '2i \\tscan_ssid=1' /tmp/wpa_supplicant.conf
+    pre-up ifconfig wlan0 up
+    pre-up wpa_supplicant -B -Dnl80211 -iwlan0 -c/tmp/wpa_supplicant.conf
+    pre-up sleep 3
+    #pre-up echo -e "nameserver 77.88.8.8\nnameserver 8.8.4.4\n" >/tmp/resolv.conf
+    post-down killall -q wpa_supplicant
+```
+
+
+### WLAN0 | HI3518EV200 | HS303v1
+
+```
+auto wlan0
+iface wlan0 inet dhcp
+    pre-up echo 3 > /sys/class/gpio/export
+    pre-up echo out > /sys/class/gpio/gpio3/direction
+    pre-up echo 1 > /sys/class/gpio/gpio3/value
+    pre-up modprobe mac80211
+    pre-up sleep 1
+    pre-up insmod /lib/modules/4.9.37/extra/rtl8188fu.ko
+    pre-up sleep 1
+    pre-up wpa_passphrase "SSID" "password" >/tmp/wpa_supplicant.conf
+    pre-up sed -i '2i \\tscan_ssid=1' /tmp/wpa_supplicant.conf
+    pre-up ifconfig wlan0 up
+    pre-up wpa_supplicant -B -Dnl80211 -iwlan0 -c/tmp/wpa_supplicant.conf
+    pre-up sleep 3
+    post-down killall -q wpa_supplicant
+```
+
+
+### WLAN0 | HI3518EV200 | HS303v2
+
+```
+auto wlan0
+iface wlan0 inet dhcp
+    pre-up echo 54 > /sys/class/gpio/export
+    pre-up echo out > /sys/class/gpio/gpio54/direction
+    pre-up echo 1 > /sys/class/gpio/gpio54/value
+    pre-up modprobe r8188eu
+    pre-up sleep 1
+    pre-up wpa_passphrase "SSID" "password" >/tmp/wpa_supplicant.conf
+    pre-up sed -i '2i \\tscan_ssid=1' /tmp/wpa_supplicant.conf
+    pre-up ifconfig wlan0 up
+    pre-up wpa_supplicant -B -Dwext -iwlan0 -c/tmp/wpa_supplicant.conf
+    pre-up sleep 3
+    post-down killall -q wpa_supplicant
+```
+
+
 ### WLAN0 | HI3518EV300 | Unknown
 
 ```
