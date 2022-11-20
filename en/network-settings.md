@@ -195,14 +195,14 @@ iface wlan0 inet dhcp
 ```
 
 
-### WLAN0 | HI3518EV200 | HS303v3 and IPC-136W, today no info about GPIO number
+### WLAN0 | HI3518EV200 | HS303v3 and IPC-136W
 
 ```
 auto wlan0
 iface wlan0 inet dhcp
-    pre-up echo ZZ > /sys/class/gpio/export
-    pre-up echo out > /sys/class/gpio/gpioZZ/direction
-    pre-up echo 1 > /sys/class/gpio/gpioZZ/value
+    pre-up echo 7 > /sys/class/gpio/export
+    pre-up echo out > /sys/class/gpio/gpio7/direction
+    pre-up echo 1 > /sys/class/gpio/gpio7/value
     pre-up modprobe r8188eu
     pre-up sleep 1
     pre-up wpa_passphrase "SSID" "password" >/tmp/wpa_supplicant.conf
@@ -211,8 +211,8 @@ iface wlan0 inet dhcp
     pre-up wpa_supplicant -B -Dwext -iwlan0 -c/tmp/wpa_supplicant.conf
     pre-up sleep 3
     post-down killall -q wpa_supplicant
-    post-down echo 0 > /sys/class/gpio/gpioZZ/value
-    post-down echo ZZ > /sys/class/gpio/unexport
+    post-down echo 0 > /sys/class/gpio/gpio7/value
+    post-down echo 7 > /sys/class/gpio/unexport
 ```
 
 
