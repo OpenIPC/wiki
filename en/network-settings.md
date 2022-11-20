@@ -200,6 +200,7 @@ iface wlan0 inet dhcp
 ```
 auto wlan0
 iface wlan0 inet dhcp
+    pre-up devmem 0x200f000c 32 0x0
     pre-up echo 7 > /sys/class/gpio/export
     pre-up echo out > /sys/class/gpio/gpio7/direction
     pre-up echo 1 > /sys/class/gpio/gpio7/value
