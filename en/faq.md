@@ -30,7 +30,7 @@ If you need to know what's in the command, search for `ipctool` in `/etc/profile
 This could work if you are lucky, you gained access into Linux shell
 on stock firmware, and it does support NFS mounting:
 ```
-fw=$(mktemp)
+fw=$(mktemp -t)
 nfs=$(dirname $fw)/nfs
 mkdir -p $nfs
 mount -t nfs -o tcp,nolock 192.168.1.123:/path/to/nfs/share $nfs
