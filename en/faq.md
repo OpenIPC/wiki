@@ -33,7 +33,7 @@ on stock firmware, and it does support NFS mounting:
 fw=$(mktemp)
 nfs=$(dirname $fw)/nfs
 mount -t nfs -o tcp,nolock 192.168.1.123:/path/to/nfs/share $nfs
-cat /dev/mtd? > $fw
+cat /dev/mtdblock? > $fw
 mv $fw ${nfs}/firmware_full.bin
 ```
 Make sure to use your own IP address and path to the NFS share!
