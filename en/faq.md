@@ -25,6 +25,21 @@ You don't see it because initially it is not there, but there is a shell command
 
 If you need to know what's in the command, search for `ipctool` in `/etc/profile` file.
 
+### How to dump full firmware to an NFS share
+
+This could work if you are lucky, you gained access into Linux shell
+on stock firmware, and it does support NFS mounting:
+```
+fw=$(mktemp)
+nfs=$(dirname $fw)/nfs
+mount -t nfs -o tcp,nolock 192.168.1.123:/path/to/nfs/share $nfs
+cat /dev/mtd? > $fw
+mv $fw ${nfs}/firmware_full.bin
+```
+Make sure to use your own IP address and path to the NFS share!
+
+
+
 ### How to find original MAC address in a firmware dump
 
 ```
