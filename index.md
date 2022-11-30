@@ -47,7 +47,7 @@ OpenIPC Wiki
 
 ### Firmware
 - [List of OpenIPC Buildroot packages](en/dev-buildroot-packages.md)
-- [List of Supported sensors](en/firmware-sensors.md)
+- [List of supported sensors](en/firmware-sensors.md)
 - [Releases in GitHub](https://github.com/OpenIPC/firmware/releases/tag/latest)
 - [Releases in Telegram](https://t.me/s/openipc_dev)
 - [Source code](en/source-code.md)
