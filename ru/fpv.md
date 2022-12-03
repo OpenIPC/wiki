@@ -137,18 +137,17 @@ sudo ip link set wlan0 up
 ```
 * Запустите Gstreamer `gst-launch-1.0 -vvv udpsrc port=5600 ! application/x-rtp,encoding-name=H264,payload=96 ! rtph264depay ! h264parse ! queue ! avdec_h264 ! autovideosink sync=false -e` и проверьте качество изображения
 
-### Развитие наземной станции
+### Развитие наземной станции, телеметрия 
 
 Предполагается, что на машине под Linux установлен wfb-ng по инструкции с [WFB-ng-install](https://github.com/svpcom/wfb-ng#quick-start-using-ubuntu-ground-station). В последующих примерах используется Хubuntu 18.04 LTS и wfb-ng 22.09.
 
 * Запустите wfb-ng, запустите консоль wfb-cli:
 ```
-d@NP300-xu:~$ sudo systemctl restart wifibroadcast@gs
-[sudo] password for d: 
-d@NP300-xu:~$ wfb-cli gs
-
+sudo systemctl restart wifibroadcast@gs
+wfb-cli gs
 ```
 
+*Убедитесь, что идут пакеты видео. Здесь же можно видеть значения RSSI антенн WiFi адаптера:
 
 
 
