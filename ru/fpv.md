@@ -147,7 +147,7 @@ sudo systemctl restart wifibroadcast@gs
 wfb-cli gs
 ```
 
-*Убедитесь, что идут пакеты видео. Здесь же можно видеть значения RSSI антенн WiFi адаптера:
+* Убедитесь, что идут пакеты видео. Здесь же можно видеть значения RSSI антенн WiFi адаптера:
 
 ![wfb-cli-video](../images/wfb-cli_video_only.png)
 
