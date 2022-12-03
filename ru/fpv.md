@@ -141,6 +141,14 @@ sudo ip link set wlan0 up
 
 Предполагается, что на машине под Linux установлен wfb-ng по инструкции с [WFB-ng-install](https://github.com/svpcom/wfb-ng#quick-start-using-ubuntu-ground-station). В последующих примерах используется Хubuntu 18.04 LTS и wfb-ng 22.09.
 
+* Запустите wfb-ng, запустите консоль wfb-cli:
+```
+d@NP300-xu:~$ sudo systemctl restart wifibroadcast@gs
+[sudo] password for d: 
+d@NP300-xu:~$ wfb-cli gs
+
+```
+
 
 
 
