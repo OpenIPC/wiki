@@ -137,6 +137,13 @@ sudo ip link set wlan0 up
 ```
 * Запустите Gstreamer `gst-launch-1.0 -vvv udpsrc port=5600 ! application/x-rtp,encoding-name=H264,payload=96 ! rtph264depay ! h264parse ! queue ! avdec_h264 ! autovideosink sync=false -e` и проверьте качество изображения
 
+### Развитие наземной станции
+
+Предполагается, что на машине под Linux установлен wfb-ng по инструкции с [WFB-ng-install](https://github.com/svpcom/wfb-ng#quick-start-using-ubuntu-ground-station). В последующих примерах используется Хubuntu 18.04 LTS и wfb-ng 22.09.
+
+
+
+
 ### Траблшутинг
 
 * Через команду `sudo tcpdump -i wlan0` на десктопе без запуска WFG-ng вы можете проверить, что передатчик действительно отправляет пакеты в эфир:
