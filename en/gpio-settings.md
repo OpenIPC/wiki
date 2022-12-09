@@ -143,7 +143,10 @@ Tested on Gk7205v200:
 
 | Processor   | IRCUT1 | IRCUT2 | IRLED | DEVICE ID                |
 |-------------|--------|--------|-------|--------------------------|
+| GK7205V200  | 58     | 59     | 8     | ZN-CM-GK200S1L-P         |
+|             |        |        |       |                          |
 | Hi3516Ev300 | 40     | 41     | 65    | unknown                  |
+
 
 ### Zosi
 
