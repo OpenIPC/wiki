@@ -147,7 +147,7 @@ sudo ip link set wlan0 up
 
 Запускаем [burn](https://github.com/OpenIPC/burn) при выключенной плате:
 ```
-./burn --chip gk7205v200 --type=ddr --file=u-boot-gk7205v200-universal.bin -d ; screen -L /dev/ttyUSB0 115200
+./burn --chip gk7205v200 --file=u-boot-gk7205v200-universal.bin -d ; screen -L /dev/ttyUSB0 115200
 ```
 
 включаем питание платы и ждем заливки U-Boot и появления командной строки. Далее выполяем следующие команды, где `192.168.0.8` - адрес TFTP сервера и `192.168.0.200` - временный адрес IP камеры.
