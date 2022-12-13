@@ -33,7 +33,7 @@ _If you have another supported device to add, please do it [here][2]._
 |            |                    |             |        |              |     |                |      |      |
 | Anjoy      | MS-J10             | SSC335      | IMX307 |              | Yes | No             | Yes  | No   |
 | Anjoy      | YM-J10D            | SSC337      | IMX307 |              | Yes | No             | Yes  | No   |
-| Amorvue    | NC1080AW           | HI3518EV200 | SC2135 | MX25L6405D   | Yes | RTL8188EUS[^5] | No   | No   |
+| Amorvue    | NC1080AW           | HI3518EV200 | SC2135 | MX25L6405D   | Yes | RTL8188EUS[^2] | No   | No   |
 | Chacon     | [IPCAM-RI01][3]    | HI3518EV300 | JXF23  | XM25QH128A   | No  | RTL8188FTV     | WiFi | Yes  |
 |            |                    |             |        |              |     |                |      |      |
 | LTV        | CNE-724 48         | HI3516EV200 |        |              | Yes | No             | No   | Yes  |
@@ -100,4 +100,5 @@ _If you have another supported device to add, please do it [here][2]._
 [2]: https://github.com/OpenIPC/wiki/blob/master/en/guide-supported-devices.md
 [3]: https://github.com/OpenIPC/wiki/blob/master/en/device-chacon-ipcam-ri01.md
 [4]: https://ipcamtalk.com/threads/smartwares-cip-37210-wifi.64605/
-[5]: WiFi can be enabled with 8MB flash using a custom build, or by upgrading to a 16MB flash and using Ultimate firmware.
+
+[^2]: WiFi can be enabled with 8MB flash using a custom build, or by upgrading to a 16MB flash and using Ultimate firmware.
