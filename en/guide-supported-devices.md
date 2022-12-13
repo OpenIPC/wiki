@@ -33,7 +33,7 @@ _If you have another supported device to add, please do it [here][2]._
 |            |                    |             |        |              |     |            |      |      |
 | Anjoy      | MS-J10             | SSC335      | IMX307 |              | Yes | No         | Yes  | No   |
 | Anjoy      | YM-J10D            | SSC337      | IMX307 |              | Yes | No         | Yes  | No   |
-|            |                    |             |        |              |     |            |      |      |
+| Amorvue    | NC1080AW           | HI3518EV200 | SC2135 | MX25L6405D   | Yes | Yes [5]    | No   | No   |
 | Chacon     | [IPCAM-RI01][3]    | HI3518EV300 | JXF23  | XM25QH128A   | No  | RTL8188FTV | WiFi | Yes  |
 |            |                    |             |        |              |     |            |      |      |
 | LTV        | CNE-724 48         | HI3516EV200 |        |              | Yes | No         | No   | Yes  |
@@ -87,6 +87,7 @@ _If you have another supported device to add, please do it [here][2]._
 | Hi3518Ev200 | OV9732_          | XM         |              | BLK18EV-0732-0035-38X38-V1.01   |
 | Hi3518Ev200 | OV9732_i2c_dc    | Longse/HS  | LS-IP100/40  | 3518EV200-OV9732-V1.0           |
 | Hi3518Ev200 | OV9732_i2c_dc    | Rostelecom | QVC-IPC-136W | E305654 JX02 94V-0              |
+| Hi3518Ev200 | SC2135_i2c_dc    | Amorvue    |              | 18EV200_V202P                   |
 | Hi3518Ev200 | SC2135_i2c_dc    | XM         |              | BLK18EV-0035-0042-38X38_S-V1.01 |
 | Hi3518Ev200 | SC2235_i2c_dc    | XM         |              | BLK18EV-0235-38X38-B-V1.01      |
 |             |                  |            |              |                                 |
@@ -99,3 +100,4 @@ _If you have another supported device to add, please do it [here][2]._
 [2]: https://github.com/OpenIPC/wiki/blob/master/en/guide-supported-devices.md
 [3]: https://github.com/OpenIPC/wiki/blob/master/en/device-chacon-ipcam-ri01.md
 [4]: https://ipcamtalk.com/threads/smartwares-cip-37210-wifi.64605/
+[5]: Wifi can be enabled with stock 8Mb flash using custom build,or by upgreading to 16Mb flash and using ultimate firmware.
