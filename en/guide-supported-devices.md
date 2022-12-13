@@ -28,27 +28,27 @@ may not be right for you.
 
 _If you have another supported device to add, please do it [here][2]._
 
-| Brand      | Model              | Processor   | Sensor | Flash Memory | LAN | WLAN          | USB  | Card |
-|------------|--------------------|-------------|--------|--------------|-----|---------------|------|------|
-|            |                    |             |        |              |     |               |      |      |
-| Anjoy      | MS-J10             | SSC335      | IMX307 |              | Yes | No            | Yes  | No   |
-| Anjoy      | YM-J10D            | SSC337      | IMX307 |              | Yes | No            | Yes  | No   |
-| Amorvue    | NC1080AW           | HI3518EV200 | SC2135 | MX25L6405D   | Yes | RTL8188EUS[5] | No   | No   |
-| Chacon     | [IPCAM-RI01][3]    | HI3518EV300 | JXF23  | XM25QH128A   | No  | RTL8188FTV    | WiFi | Yes  |
-|            |                    |             |        |              |     |               |      |      |
-| LTV        | CNE-724 48         | HI3516EV200 |        |              | Yes | No            | No   | Yes  |
-|            |                    |             |        |              |     |               |      |      |
-| Rotek      | Switcam HS303 (v1) | HI3518EV200 |        |              | No  | RTL8188FU     | WiFi | Yes  |
-| Rotek      | Switcam HS303 (v2) | HI3518EV200 | OV9732 | GD25Q128CSIG | No  | RTL8188EU     | WiFi | Yes  |
-| Rotek      | Switcam HS303 (v3) | HI3518EV200 |        |              | No  | RTL8188EU     | WiFi | Yes  |
-|            |                    |             |        |              |     |               |      |      |
-| Smartwares | [CIP-37210][4]     | HI3518EV200 |        |              | No  | RTL8188FU     | WiFi | Yes  |
-|            |                    |             |        |              |     |               |      |      |
-| Xiaomi     | MJSXJ02HL          | HI3518EV300 |        |              | No  |               |      | Yes  |
-|            |                    |             |        |              |     |               |      |      |
-| XM         | BLK18EV-0062-0035  | HI3518EV200 | JXH62  |              | Yes |               |      | Yes  |
-|            |                    |             |        |              |     |               |      |      |
-| Zenotech   | HI3516D_MB_V13_RA  | HI3516DV100 | OV9689 | GD25Q128CSIG | Yes | No            |      | No   |
+| Brand      | Model              | Processor   | Sensor | Flash Memory | LAN | WLAN           | USB  | Card |
+|------------|--------------------|-------------|--------|--------------|-----|----------------|------|------|
+|            |                    |             |        |              |     |                |      |      |
+| Anjoy      | MS-J10             | SSC335      | IMX307 |              | Yes | No             | Yes  | No   |
+| Anjoy      | YM-J10D            | SSC337      | IMX307 |              | Yes | No             | Yes  | No   |
+| Amorvue    | NC1080AW           | HI3518EV200 | SC2135 | MX25L6405D   | Yes | RTL8188EUS[^5] | No   | No   |
+| Chacon     | [IPCAM-RI01][3]    | HI3518EV300 | JXF23  | XM25QH128A   | No  | RTL8188FTV     | WiFi | Yes  |
+|            |                    |             |        |              |     |                |      |      |
+| LTV        | CNE-724 48         | HI3516EV200 |        |              | Yes | No             | No   | Yes  |
+|            |                    |             |        |              |     |                |      |      |
+| Rotek      | Switcam HS303 (v1) | HI3518EV200 |        |              | No  | RTL8188FU      | WiFi | Yes  |
+| Rotek      | Switcam HS303 (v2) | HI3518EV200 | OV9732 | GD25Q128CSIG | No  | RTL8188EU      | WiFi | Yes  |
+| Rotek      | Switcam HS303 (v3) | HI3518EV200 |        |              | No  | RTL8188EU      | WiFi | Yes  |
+|            |                    |             |        |              |     |                |      |      |
+| Smartwares | [CIP-37210][4]     | HI3518EV200 |        |              | No  | RTL8188FU      | WiFi | Yes  |
+|            |                    |             |        |              |     |                |      |      |
+| Xiaomi     | MJSXJ02HL          | HI3518EV300 |        |              | No  |                |      | Yes  |
+|            |                    |             |        |              |     |                |      |      |
+| XM         | BLK18EV-0062-0035  | HI3518EV200 | JXH62  |              | Yes |                |      | Yes  |
+|            |                    |             |        |              |     |                |      |      |
+| Zenotech   | HI3516D_MB_V13_RA  | HI3516DV100 | OV9689 | GD25Q128CSIG | Yes | No             |      | No   |
 
 
 
