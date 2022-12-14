@@ -30,6 +30,7 @@ OpenIPC Wiki
 
 ### Troubleshooting
 - [Network does not work](en/trouble-network.md)
+- [Majestic does not work, camera reboots](en/trouble-majestic.md)
 
 ### Usage
 - [Network settings](en/network-settings.md)
