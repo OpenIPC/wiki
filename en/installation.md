@@ -119,7 +119,10 @@ or whatnot.
 Connect `GND` pin on your camera to `GND` pad of the adapter, connect USB
 connector of the adapter to a USB port on your PC, start a terminal emulator
 application and connect to your adapter. Set your terminal settings to 
-115200 bps baudrate, 8 bits, no parity, 1 stopbit, no flow control.
+115200 bps baudrate, 8 bits, no parity, 1 stopbit, no flow control. If you use [PuTTY](https://www.putty.org/), this is how it should look like:
+
+![PuTTY connection screen](https://user-images.githubusercontent.com/29582865/207893170-d4db4ba4-752e-48d4-bb7a-8bc4227e0b32.png)
+![PuTTY settings screen](https://user-images.githubusercontent.com/29582865/207894192-c6f66401-7715-4aa6-bee2-8343aae6c0a9.png)
 
 Then, connect `RX` pin on the adapter to a possible `TX` contact of UART port
 on your camera. Power the camera with its standard power adapter. If you had a
