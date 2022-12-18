@@ -85,6 +85,8 @@ Extract files from the bundle you downloaded in step two into that directly.
 sudo tar -C /srv/tftp/ -xvf openipc.*.tgz
 ```
 
+> **Note**: some users reported issues (connection timeouts) when using `tftpd-hpa` with recent versions of Ubuntu. In that case, you can try with an [alternative TFTP server](https://askubuntu.com/a/457105/1074320).
+
 ### Step 4. Connect to UART port of your camera.
 
 In order to make a connection to UART port you will need a
