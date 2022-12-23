@@ -51,14 +51,7 @@ SoC model from the vendor firmware.
 _Hisilicon Hi3518EV100, Ingenic T20, T31 and T40 SoCs marking.
 Relevant symbols highlighted with yellow._
 
-### Step 2. Download the firmware.
-
-Go to <https://github.com/OpenIPC/firmware> and find your SoC in the table of
-supported hardware. Make sure there is a downloadable binary file for that SoC.
-Hopefully there is a pre-compiled firmware file for your processor --
-download it onto your PC.
-
-### Step 3. Install and set up a TFTP server.
+### Step 2. Install and set up a TFTP server.
 
 TFTP stands for _Trivial File Transfer Protocol_. As the name implies, it is a
 very simple protocol intended for transferring files over a local computer
@@ -78,16 +71,11 @@ sudo sed -i '/^TFTP_OPTIONS/s/"$/ --create"/' /etc/default/tftpd-hpa
 sudo systemctl restart tftpd-hpa.service
 ```
 
-Now you've got your own TFTP server serving files from `/srv/tftp` directory.
-Extract files from the bundle you downloaded in step two into that directly.
+> **Note**: some users reported issues (connection timeouts) when using
+`tftpd-hpa` with recent versions of Ubuntu. In that case, you can try with an
+[alternative TFTP server](https://askubuntu.com/a/457105/1074320).
 
-```
-sudo tar -C /srv/tftp/ -xvf openipc.*.tgz
-```
-
-> **Note**: some users reported issues (connection timeouts) when using `tftpd-hpa` with recent versions of Ubuntu. In that case, you can try with an [alternative TFTP server](https://askubuntu.com/a/457105/1074320).
-
-### Step 4. Connect to UART port of your camera.
+### Step 3. Connect to UART port of your camera.
 
 In order to make a connection to UART port you will need a
 [serial port adapter][FTDI] for your PC.
@@ -121,10 +109,11 @@ or whatnot.
 Connect `GND` pin on your camera to `GND` pad of the adapter, connect USB
 connector of the adapter to a USB port on your PC, start a terminal emulator
 application and connect to your adapter. Set your terminal settings to 
-115200 bps baudrate, 8 bits, no parity, 1 stopbit, no flow control. If you use [PuTTY](https://www.putty.org/), this is how it should look like:
+115200 bps baudrate, 8 bits, no parity, 1 stopbit, no flow control. If you use
+[PuTTY](https://www.putty.org/), this is how it should look like:
 
-![PuTTY connection screen](https://user-images.githubusercontent.com/29582865/207893170-d4db4ba4-752e-48d4-bb7a-8bc4227e0b32.png)
 ![PuTTY settings screen](https://user-images.githubusercontent.com/29582865/207894192-c6f66401-7715-4aa6-bee2-8343aae6c0a9.png)
+![PuTTY connection screen](https://user-images.githubusercontent.com/29582865/209340268-e34a010c-d455-4343-ae83-0866f0f0af15.png)
 
 Then, connect `RX` pin on the adapter to a possible `TX` contact of UART port
 on your camera. Power the camera with its standard power adapter. If you had a
@@ -148,7 +137,7 @@ used for powering camera during initial programming by manufacturer. We strongly
 advise not to power your camera though that pin, but use the OEM power connector
 for this purpose.
 
-### Step 5. Get access to the bootloader.
+### Step 4. Get access to the bootloader.
 
 Reboot the camera and try to interrupt its boot sequence in order to access
 bootloader console by pressing a key combination on your computer keyboard,
@@ -167,12 +156,46 @@ From this point on, we strongly advise you to keep a record of everything you do
 Enable session logging in your terminal. Even better, create a text file on your
 computer and write down all commands you run and how system responses to them.
 
+### Step 5. Determine the flash memory size.
+
+Most IP cameras nowadays are equipped with 8 or 16 MB NOR or NAND flash memory.
+You can check the type and size of the chip installed on of your camera in the
+bootloader log output. You'll see something like this:
+
+```
+U-Boot 2010.06-svn (Oct 21 2016 - 11:21:29)
+
+Check Flash Memory Controller v100 ... Found
+SPI Nor(cs 0) ID: 0xс2 0x20 0x18
+spi_general_qe_enable(294): Error: Disable Quad failed! reg: 0x2
+Block:64KB Chip:16MB Name:"MX25L128XX"
+SPI Nor total size: 16MB
+```
+
+Another example:
+
+```
+U-Boot 2013.07 (Feb 27 2019 - 02:05:08)
+
+DRAM:  64 MiB
+MMC:   msc: 0
+SF: Detected EN25QH64
+```
+
+Which shows the flash memory model (`EN25QH64`) that you can look up online to
+find a data sheet. Also, `64` in the model number hints for a 64 Megabits memory,
+which is equivalent to 8MB. Similarly, `128` would be equivalent to 16MB.
+
+You should also be able to identify the model of the flash memory by looking up
+at the board, but this is usually a difficult task because the chips are very
+small and may not come with clear markings.
+
 ### Step 6. Save the original firmware.
 
 After you get access to the bootloader console, run `help` to get a list of
 available commands. Check if you have `tftp` among them. If you do, then saving
 the original firmware should be a breeze. You only need to set up access to your
-TFTP server from step 3.
+TFTP server from step 2.
 
 NB! If your bootloader does not have `tftp`, you can still make a copy of the
 original firmware. [Read here for more](help-uboot.md).
@@ -193,20 +216,6 @@ setenv serverip 192.168.1.254
 saveenv
 ```
 
-Most IP cameras nowadays are equipped with 8 or 16 MB NOR or NAND flash memory.
-You can check the type and size of the chip installed on of your camera in the
-bootloader log output. You'll see something like this:
-
-```
-U-Boot 2010.06-svn (Oct 21 2016 - 11:21:29)
-
-Check Flash Memory Controller v100 ... Found
-SPI Nor(cs 0) ID: 0xс2 0x20 0x18
-spi_general_qe_enable(294): Error: Disable Quad failed! reg: 0x2
-Block:64KB Chip:16MB Name:"MX25L128XX"
-SPI Nor total size: 16MB
-```
-
 To dump the original firmware, you need to save the contents of camera's flash
 memory to a file. For that, you must first load the contents into RAM. Here's
 how you do that. Initialize the Flash memory. Clean a region of RAM large enough to
@@ -219,7 +228,7 @@ for your hardware, consult data sheets, or seek help on [our Telegram channel][t
 
 ### Step 7. Install OpenIPC firmware.
 
-#### Part one.
+#### Prelude.
 
 No two camera models are alike. Different camera models consist of different
 sets of components. The most important of them, the central processor and the
@@ -249,10 +258,25 @@ flash memory, do not skip this text. Read it carefully to understand the
 principle and the sequence of operations. We will provide specific commands
 for different cameras in the second part of this section.
 
-##### Preparation.
+#### Preparing the firmware and the TFTP server.
+
+Go to <https://openipc.org/supported-hardware>, find your SoC in the table of
+supported hardware. Make sure there is a downloadable binary file for that SoC.
+Hopefully there is a pre-compiled firmware file for your processor --
+download it onto your PC.
+
+If you followed step 2, you've got your own TFTP server serving files from
+`/srv/tftp` directory. Extract files from the bundle you just downloaded into
+that directory.
+
+```
+sudo tar -C /srv/tftp/ -xvf openipc.*.tgz
+```
+
+#### Preparing the camera for flashing.
 
 So, we have a guinea pig, a camera with hi3518ev100 SoC, equipped with a OV9712
-sensor and 64 MB of RAM.
+sensor, 64 MB of RAM and a 8MB NOR flash memory.
 
 Connect to the camera via the UART port and access the bootloader console.
 Set the component parameters to the appropriate environment variables. Set 
@@ -266,7 +290,7 @@ from step 3. Save updated values to flash memory.
 For exact commands please use [automatically generated instructions](https://openipc.org/supported-hardware/)
 for your hardware, consult data sheets, or seek help on [our Telegram channel][telegram].
 
-##### Installation.
+#### Installation.
 
 For exact commands please use [automatically generated instructions](https://openipc.org/supported-hardware/)
 for your hardware, consult data sheets, or seek help on [our Telegram channel][telegram].
