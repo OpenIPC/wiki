@@ -119,44 +119,38 @@ the RAM of the camera. To do that, clear a section of RAM (0x800000 bytes for a
 the entire contents to the prepared space in RAM. Then export the copied data
 from RAM to the card.
 
-NB! In the example below we use the starting address 0x2000000, but it varies
-for different cameras. Please consult SoC data sheet, or seek help on
-[our Telegram channel][telegram].
+NB! In the example below we use the ${baseaddr} assuming it is set in your camera's environment.
+If not, then set it yourself. Use numeric value from SoC data sheet, look ip up at the
+[automatically generated install instructions](https://openipc.org/supported-hardware),
+or seek help on [our Telegram channel][telegram].
 
 Example for 8MB:
-
 ```
-mw.b 0x80600000 ff 0x800000
+mw.b ${baseaddr} ff 0x800000
 sf probe 0
-sf read 0x80600000 0x0 0x800000
+sf read ${baseaddr} 0x0 0x800000
 
-mmc write 0x80600000 0x10 0x4000
+mmc write ${baseaddr} 0x10 0x4000
 ```
-
-Where `0x80600000` is the initial address, camera dependent. You should find this
-address from the [automatically generated install instructions](https://openipc.org/supported-hardware).
 
 Another example, for 16MB:
-
 ```
-mw.b 0x2000000 ff 0x1000000
+mw.b ${baseaddr} ff 0x1000000
 sf probe 0
-sf read 0x2000000 0x0 0x1000000
+sf read ${baseaddr} 0x0 0x1000000
 
-mmc write 0x2000000 0x10 0x8000
+mmc write ${baseaddr} 0x10 0x8000
 ```
 
 Remove the card from the camera and insert it into a computer running Linux.
 Use `dd` command to copy data from the card to a binary file on the computer.
 
 Example for 8MB:
-
 ```
 sudo dd bs=512 skip=16 count=16384 if=/dev/sdc of=./fulldump.bin
 ```
 
 Example for 16MB:
-
 ```
 sudo dd bs=512 skip=16 count=32768 if=/dev/sdc of=./fulldump.bin
 ```
