@@ -1,11 +1,11 @@
 # OpenIPC Wiki
 [Table of Content](../index.md)
 
-OpenIPC - Add new Wifi drivers for Ingenic T31
-----------------------------------------------
+Adding Huge-IC AH WiFi HaLow drivers for Ingenic T31
+----------------------------------------------------
 For basic users like myself, advanced users can ignore this document altogether.
 
-This document describes how to add Huge-IC's AH Halow wifi drivers to OpenIPC
+This document describes how to add a Huge-IC's AH [WiFi HaLow](https://iot4beginners.com/wi-fi-halow/) drivers to OpenIPC firmware.
 
 ### Obtain driver source and edit Makefile
 
