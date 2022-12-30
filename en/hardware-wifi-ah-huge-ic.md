@@ -11,17 +11,13 @@ This document describes how to add a Huge-IC's AH [WiFi HaLow](https://iot4begin
 
 Obtain source file of the drivers so you can compile those drivers and upload to your camera system. So that when the hardware is connected, camera (host) can identify the hardware and connect with it. Its like, when you connect an USB dongle to your computer, it loads the driver. Your microprocessor does not load drivers like your PC, so you need to do it yourself.
 
-First thing, locate Makefile. The file includes compilation instructions and failing to do it right will mean no wifi for your camera board. In the Makefile, edit values for:
+First thing, locate Makefile. The file includes compilation instructions and failing to do it right will mean no wifi for your camera board. In the Makefile, edit values for ARCH, COMPILER and LINUX_KERNEL_PATH.
 
-ARCH, 
-COMPILER AND;
-LINUX_KERNEL_PATH
-
-Ingenic uses ‘mips’ architecture so use it for ARCH ‘ARCH := mips’ 
+Ingenic uses MIPS architecture so use it for ARCH ‘ARCH := mips’ 
 
 For COMPILER and Kernel Path, it is will be a cross compilation – kind of dependent on what you got in the OpenIPC. To enlighten yourself further, read this: https://blukat.me/2017/12/cross-compile-arm-kernel-module/
 
-We can now move onto download and extract OpenIPC firmware, its extracted file will provide us the paths for Compiler and Kernal.
+We can now move onto download and extract OpenIPC firmware, its extracted file will provide us the paths for Compiler and Kernel.
 
 ### Download OpenIPC Firmware
 
@@ -50,13 +46,13 @@ If all went to plan, you should have one script file and one or more .ko extensi
 
 ###	Time to upload the drivers to camera system
 
-IF the files are small and Ingenic having extra space available, you can sideload the drivers.
+If the files are small and Ingenic having extra space available, you can sideload the drivers.
 
-Upload the .ko (drivers) and FMAC (your script file can have a different name) script file to the folder of your choosing. Please make sure to edit the corresponding paths in the (FMAC) script file if required.
+Upload the .ko (drivers) and `fmac` (your script file can have a different name) script file to the folder of your choosing. Please make sure to edit the corresponding paths in the fmac script file, if required.
 
 ###	Test
 
-Test it with your wifi hardware to ensure that it works. 
+Test it with your WiFi hardware to ensure that it works. 
 
 ###	Next, create a package
 
