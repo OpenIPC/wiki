@@ -136,11 +136,11 @@ Tested on Gk7205v200:
 | Hi3518Ev200     | 33     | 34     |          |       | 61     | 35      |         |         |       |         |
 | Hi3518Ev300[^3] | 8      |        |  55      |       | 13     |         |         |         | 15    |         | 3       |
 
-[^1] HI3516D_N81820, 00014914 firmware
+[^1]: HI3516D_N81820, 00014914 firmware
 
-[^2] Hi3516Dv100 for IPC_HI3516D_83H20 00014911
+[^2]: Hi3516Dv100 for IPC_HI3516D_83H20 00014911
 
-[^3] Hi3518EV300 for 50H20L
+[^3]: Hi3518EV300 for 50H20L
 
 ### Zenotech/Videopark
 
