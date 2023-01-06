@@ -1,21 +1,22 @@
-# SD Card - Autoconfig
+# OpenIPC Wiki
 [Table of Content](../index.md)
 
-OpenIPC can be autoconfigured throw an SD Card. This is particularly usefull for IPC with Wifi Only where UART is not acessible.
-This mecanism is managed by ```automount.sh```.
+SD Card Autoconfig
+------------------
 
-The camera need a SD Card slot for this porpose.
+OpenIPC can be configured automatically from an SD card. This method is particularly useful for WiFi-only
+IP cameras equipped with and SD card slot and where UART is not acessible.
 
-## Preparing the SD Card
+### Format an SD card with at least one FAT/FAT32/vFAT partition.
 
-The SD Card must be formatted in FAT/FAT32/vFAT with at least one partition.
-This is the commands on Windows (all data will be deleted) :
+Attention! All existing data on the SD card will be deleted!
 
+On Windows:
 ```
 diskpart
 
 list disk
-select disk <number corresponding to your SD Card>
+select disk <number corresponding to your SD card>
 clean
 create partition primary
 format quick fs=FAT32
@@ -24,43 +25,64 @@ active
 assign letter=<letter>
 ```
 
-## Inserting files to be replaced on the ipc
+### Create `automount.sh` file in the root directory of the card.
 
-Corresponding code of ```automount.sh```
 ```
-    # copy files from autoconfig folder
-    [ -d "${destdir}/$1/autoconfig" ] && cp -afv ${destdir}/$1/autoconfig/* / | logger -s -p daemon.info -t autoconfig
-```
-Create a folder ```autoconfig``` and insert the file at the destination path to be copied in OpenIPC.
-
-```<sdcard-path>/autoconfig/<path to file>/file``` will be copied to ```/<path to file>/file```
-
-### example :
-```
-<sdcard-path>/autoconfig/etc/init.d/interfaces
-```
-will be copied to
-```
-/etc/init.d/interfaces
+echo "#!/bin/sh" > <sdcard-path>/automount.sh
 ```
 
-## Inserting a script to be run only once
+### Add files to inject into firmware.
 
-Corresponding code of ```automount.sh```
-```
-    # execution of the specified commands one time
-    [ -f "${destdir}/$1/autoconfig.sh" ] && (sh ${destdir}/$1/autoconfig.sh ; rm -f ${destdir}/$1/autoconfig.sh) | logger -s -p daemon.info -t autoconfig
-```
-Create a shell script at root of the SD Card named ```autoconfig.sh```.
-The content of this script will be run, then the file removed.
+Create a folder named `autoconfig` at the root of your SD card and place there files that should
+be copied inside OpenIPC firmware with their paths following this pattern:
+`<sdcard-path>/autoconfig/<target-path>/file` => `/<target-path>/file`.
 
-## Inserting a script to be run each startup
-Corresponding code of ```automount.sh```
-```
-    # execution of the specified commands
-    [ -f "${destdir}/$1/autostart.sh" ] && sh ${destdir}/$1/autostart.sh | logger -s -p daemon.info -t autostart
-```
-Create a shell script at root of the SD Card named ```autostart.sh```.
-The content of this script will be runned at each startup.
+E.g. `<sdcard-path>/autoconfig/etc/init.d/interfaces` will be copied to `/etc/init.d/interfaces`.
 
+Add this code to `automount.sh` to handle the copying:
+```
+if [ -d "${destdir}/$1/autoconfig" ]; then
+  cp -afv ${destdir}/$1/autoconfig/* / | logger -s -p daemon.info -t autoconfig
+fi
+```
 
+### Add a one-time configuration script.
+
+Create `autoconfig.sh` file at the root of the SD card. This script will be run once, then removed.
+
+Add this code to `automount.sh` to handle the one-time execution:
+```
+if [ -f "${destdir}/$1/autoconfig.sh" ]; then
+  (sh ${destdir}/$1/autoconfig.sh; rm -f ${destdir}/$1/autoconfig.sh) | logger -s -p daemon.info -t autoconfig
+fi
+```
+
+### Add a permanent script to run on every start
+
+Create `autostart.sh` file at the root of the SD card. This script will run on every start.
+
+Add this code to `automount.sh` to hande the execution on every start:
+```
+if [ -f "${destdir}/$1/autostart.sh" ]; then
+  sh ${destdir}/$1/autostart.sh | logger -s -p daemon.info -t autostart
+fi
+```
+
+Your resulting `automount.sh` file should look like this:
+```
+#!/bin/sh
+
+if [ -d "${destdir}/$1/autoconfig" ]; then
+  cp -afv ${destdir}/$1/autoconfig/* / | logger -s -p daemon.info -t autoconfig
+fi
+
+if [ -f "${destdir}/$1/autoconfig.sh" ]; then
+  (sh ${destdir}/$1/autoconfig.sh; rm -f ${destdir}/$1/autoconfig.sh) | logger -s -p daemon.info -t autoconfig
+fi
+
+if [ -f "${destdir}/$1/autostart.sh" ]; then
+  sh ${destdir}/$1/autostart.sh | logger -s -p daemon.info -t autostart
+fi
+```
+
+Unmount the card, eject if from PC and insert it into the IPC camera. Reboot the camera.
