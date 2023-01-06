@@ -1,4 +1,4 @@
-# SP Card - Autoconfig
+# SD Card - Autoconfig
 [Table of Content](../index.md)
 
 OpenIPC can be autoconfigured throw an SD Card. This is particularly usefull for IPC with Wifi Only where UART is not acessible.
