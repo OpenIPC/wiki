@@ -117,6 +117,12 @@ Tested on Gk7205v200:
 |-------------|--------|--------|-------|--------------------------|
 | Hi3516Ev300 | 63     | 67     | 64    | Rostelecom IPC8232SWC-WE |
 
+### Wansview 
+
+| Processor   | IRCUT1 | IRCUT2 | IR LEDs | RESET | ETH_GREEN | ETH_ORANGE| DEVICE ID              |
+|-------------|--------|--------|---------|-------|-----------|-----------|------------------------|
+| T21         | 80     | 79     |  49     | 50    |    73     |     72    |   Wansview W5/W6       |
+
 ### XM boards
 
 | Processor       | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | ALM_IN | ALM_OUT | ETH_ACT | ETH_STA | RESET | USB_ENA | AUDIO_POW | RS485_CTL |  NOTES |
