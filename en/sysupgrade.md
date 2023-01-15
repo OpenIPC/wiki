@@ -46,7 +46,7 @@ Insert the SD card into your camera.
 On the camera run:
 ```
 soc=$(fw_printenv -n soc)
-sysupgrade --kernel=/mnt/mmcblk0p1/uImage.${soc} --rootfs=/mnt/mmcblk0p1/rootfs.squashfs.${soc} -z
+sysupgrade --kernel=/mnt/mmcblk0p1/uImage.${soc} --rootfs=/mnt/mmcblk0p1/rootfs.squashfs.${soc} --force_ver -z
 ```
 
 ### Troubleshooting
