@@ -4,9 +4,49 @@
 Upgrading firmware
 ------------------
 
-For old firmware `sysupgrade` without parameters is enough.
+### Upgrading from GitHub
+For old firmware running `sysupgrade` without parameters is enough. For newer firmware, run `sysupgrade -k -r` to update both kernel and rootfs.
 
-For newer firmware, use it as `sysupgrade -k -r` to update both kernel and rootfs.
+### Upgrading from a TFTP server
+Go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC.
+Extract content of the bundle into root directory of your TFTP server.
+
+On the camera run:
+```
+soc=$(fw_printenv -n soc)
+serverip=$(fw_printenv -n serverip)
+busybox tftp -r rootfs.squashfs.${soc} -g ${serverip}
+busybox tftp -r uImage.${soc} -g ${serverip}
+```
+
+### Upgrading from local files
+Go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC.
+```
+tar xvf <firmware.tgz>
+scp uImage* rootfs* root@<yourcameraip>:/tmp/
+```
+On the camera run:
+```
+soc=$(fw_printenv -n soc)
+sysupgrade --kernel=/tmp/uImage.${soc} --rootfs=/tmp/rootfs.squashfs.${soc} -z
+```
+
+### Upgrading from SD card
+
+Go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC.
+Insert an SD card into your desktop PC and run
+```
+tar xvf <firmware.tgz>
+cp uImage* rootfs* /media/<username>/<card-id>/
+```
+Insert the SD card into your camera.
+On the camera run:
+```
+soc=$(fw_printenv -n soc)
+sysupgrade --kernel=/mnt/mmcblk0p1/uImage.${soc} --rootfs=/mnt/mmcblk0p1/rootfs.squashfs.${soc} -z
+```
+
+### Troubleshooting
 
 If you got this error:
 ```
