@@ -7,7 +7,7 @@ Upgrading firmware
 ### Upgrading from GitHub
 For old firmware running `sysupgrade` without parameters is enough. For newer firmware, run `sysupgrade -k -r` to update both kernel and rootfs.
 
-__ATTENTION! Upgrading firmware can lead to "bricking" your camera. Make sure you are prepared both morally and skillwise. Have your rescure SD card or UART adapter ready. Be prepared to desolder and reprogram flash chip as the last resort. Do not upgrade production cameras unless you really have to!__
+__ATTENTION! Upgrading firmware can lead to "bricking" your camera. Make sure you are prepared both morally and skillwise. Have your rescue SD card and/or UART adapter ready. Be prepared to desolder and reprogram flash chip as the last resort. Do not upgrade production cameras unless you really have to!__
 
 ### Upgrading from a TFTP server
 Go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC.
