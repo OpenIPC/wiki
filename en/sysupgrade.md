@@ -21,6 +21,7 @@ busybox tftp -r uImage.${soc} -g ${serverip}
 
 ### Upgrading from local files
 Go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC.
+Unpack the bundle and upload files on camera using `scp`:
 ```
 tar xvf <firmware.tgz>
 scp uImage* rootfs* root@<yourcameraip>:/tmp/
