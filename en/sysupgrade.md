@@ -9,7 +9,7 @@ For old firmware running `sysupgrade` without parameters is enough. For newer fi
 
 ### Upgrading from a TFTP server
 Go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC.
-Extract content of the bundle into root directory of your TFTP server.
+Extract content of the bundle into the root directory of your TFTP server.
 
 On the camera run:
 ```
@@ -21,7 +21,7 @@ busybox tftp -r uImage.${soc} -g ${serverip}
 
 ### Upgrading from local files
 Go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC.
-Unpack the bundle and upload files on camera using `scp`:
+Unpack the bundle and upload its content on camera using `scp`:
 ```
 tar xvf <firmware.tgz>
 scp uImage* rootfs* root@<yourcameraip>:/tmp/
@@ -35,7 +35,7 @@ sysupgrade --kernel=/tmp/uImage.${soc} --rootfs=/tmp/rootfs.squashfs.${soc} -z
 ### Upgrading from SD card
 
 Go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC.
-Insert an SD card into your desktop PC and run
+Insert an SD card into your desktop PC. Unpack the bundle and copy its content to the card:
 ```
 tar xvf <firmware.tgz>
 cp uImage* rootfs* /media/<username>/<card-id>/
