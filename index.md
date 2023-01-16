@@ -38,6 +38,7 @@ OpenIPC Wiki
 - [Majestic streamer](en/majestic-streamer.md)
 - [Microbe web interface](en/microbe-web.md)
 - [Upgrade firmware](en/sysupgrade.md)
+- [Autoconfig and autostart](en/sdcardautoconfig.md)
 - [Image quality tuning](en/image-quality-tuning.md)
 - [Memory tuning](en/memory-tuning.md)
 - [Using ipctool](en/example-ipctool.md)
