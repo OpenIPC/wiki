@@ -349,7 +349,7 @@ iface wlan0 inet dhcp
 
 
 
-### WLAN0 | T31 | Xiaomi MJSXJ03HL 2К
+### WLAN0 | T31 | Xiaomi Mjsxj03Hl 2K
 
 ```
 auto wlan0
@@ -358,7 +358,7 @@ iface wlan0 inet dhcp
     pre-up insmod /lib/modules/rtl8189ftv.ko
     pre-up wpa_passphrase "SSID" "password" >/tmp/wpa_supplicant.conf
     pre-up sed -i '2i \\tscan_ssid=1' /tmp/wpa_supplicant.conf
-    pre-up sleep 10
+    pre-up sleep 1
     pre-up wpa_supplicant -B -D nl80211 -i wlan0 -c/tmp/wpa_supplicant.conf
     post-down killall -q wpa_supplicant
 ```
