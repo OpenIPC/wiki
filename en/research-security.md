@@ -13,7 +13,7 @@ When a password is found, it is wise to share it publicly, so that other develop
 cryptographic resources to discover even more yet unknown passwords. Sharing is caring, boys!
 
 ### Some passwords that we found in different firmware
-
+```
 | Hash                                  | Plain password |
 |---------------------------------------|----------------|
 | $1$0Me7S3z5$.uQ4Pr/QjJQ/0JUZI0w4m.    |                |
@@ -37,3 +37,4 @@ cryptographic resources to discover even more yet unknown passwords. Sharing is 
 | ab8nBoH3mb8.g                         | helpme         |
 | absxcfbgXtb3o                         | xc3511         |
 | xt5USRjG7rEDE                         | j1/_7sxw       |
+```
