@@ -10,10 +10,24 @@ Questions and answers
 
 There is no password by default.
 
-### How to sign in into camera web UI?
+### How to sign in into camera Web UI?
 
 Open http://<camera_ip_address>:85/ and sign in using default username _admin_ and default password _12345_.
 You will be asked to change the password after successful login. __Please note, it will also change your ssh root password!__
+
+### How to reset password for SSH/Web UI?
+
+Create a serial connection to the camera using a UART adapter and a terminal program.
+After turning on the camera, press Ctrl-C to interrupt the boot sequence and enter the bootloader shell.
+
+For a camera with 8MB flash chip, run
+```
+sf probe; sf erase 0x750000 0xb0000; reset
+```
+For a camera with 16MB flash chip, run
+```
+sf probe; sf erase 0xd50000 0x2b0000; reset
+```
 
 ### How to find information about the camera hardware and software?
 
