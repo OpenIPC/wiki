@@ -53,6 +53,9 @@ OpenIPC Wiki
 - [Releases in Telegram](https://t.me/s/openipc_dev)
 - [Source code](en/source-code.md)
 
+### Equipment
+- [CH341A programmer](en/hardware-programmer-ch341a-voltage-fix.md)
+
 ### Development
 - [Boot device with NFS](en/dev-nfs-boot.md)
 - [FFMPEG usage](en/dev-ffmpeg-usage.md)
