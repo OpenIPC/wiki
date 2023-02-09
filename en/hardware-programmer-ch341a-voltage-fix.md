@@ -14,6 +14,11 @@ programmer being set to 3.3V with the jumper.
 and artsy way.
 
 ![](../images/hardware-ch341a-hack-1.webp)
+![](../images/hardware-ch341a-hack-2.webp)
+
+Here's what you do.
+
+![](../images/hardware-ch341a-hack-6.png)
 
 Sever the connection between between 5V power line and the CH341A chip.
 With a sharp utility knife, cut the trace on the back of the programmer board.
