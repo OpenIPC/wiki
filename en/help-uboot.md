@@ -1,31 +1,36 @@
 # OpenIPC Wiki
 [Table of Content](../index.md)
 
-Help: U-boot
+Help: U-Boot
 ------------
 
-### Environment
-
-If you get `Too many args` error while trying to set an environment variable,
-try to do that from within Linux using `fw_setenv` instead of `setenv` in U-boot.
-
-__U-boot console:__
+### Prepare the enviroment
+In booloader shell, check if `baseaddr` variable is already defined.
 ```
-hisilicon # setenv uk 'mw.b 0x82000000 ff 1000000; tftp 0x82000000 uImage.${soc}; sf probe 0; sf erase 0x50000 0x200000; sf write 0x82000000 0x50000 ${filesize}'
-** Too many args (max. 16) **
+printenv baseaddr
+```
+If it is not there, set it yourself.
+```
+# Look up address for your SoC at https://openipc.org/supported-hardware/
+setenv baseaddr 0x80600000
+```
+Assign the hex size of your flash chip to a variable called `flashsize`.
+```
+# Use 0x800000 for an 8MB flash chip, 0x1000000 for 16MB.
+setenv flashsize 0x800000
+```
+Save these values into the environment afterwards.
+```
+saveenv
 ```
 
-__OpenIPC Linux:__
-```
-root@openipc-hi3518ev100:~# fw_setenv uk 'mw.b 0x82000000 ff 1000000; tftp 0x82000000 uImage.${soc}; sf probe 0; sf erase 0x50000 0x200000; sf write 0x82000000 0x50000 ${filesize}'
-root@openipc-hi3518ev100:~#
-```
+### Saving original firmware without using TFTP.
 
-### Saving original firmware without using tftp.
+Before you start, [prepare the enviroment](#prepare-the-enviroment).
 
-In the terminal program you use connect to UART port with, enable saving a log
-file of the session. I like to use `screen` for that, and my command to connect
-to the UART adapter with logging of the active session into a file would look
+In the terminal program that you use to connect to the UART port, enable saving
+log file of the session. I like to use `screen` for this and my command for
+connect to the UART adapter with logging the active session to a file would look
 like this:
 ```
 $ screen -L -Logfile fulldump.log /dev/ttyUSB0 115200
@@ -35,31 +40,17 @@ After connecting to the bootloader console, run a set of commands for reading
 whole amount of data from flash memory chip into RAM, and then dumping it as
 hexadecimal values into terminal window.
 
-Use hexadecimal notation for addresses, where 0 is 0x0, 8 MB is 0x800000, and
-16 MB is 0x1000000. 
-
-For reading whole 8 MB flash memory run 
-
 ```
-mw.b 0x82000000 ff 0x800000
+mw.b ${baseaddr} 0xff ${flashsize}
 sf probe 0
-sf read 0x82000000 0x0 0x800000
-md.b 0x82000000 0x800000
-```
-
-and for 16 MB flash memory run
-
-```
-mw.b 0x82000000 ff 0x1000000
-sf probe 0
-sf read 0x82000000 0x0 0x1000000
-md.b 0x82000000 0x1000000
+sf read ${baseaddr} 0x0 ${flashsize}
+md.b ${baseaddr} ${flashsize}
 ```
 
 Since the process of reading is going to take a considerable amount of time
 (literally hours), you might want to disconnect from the terminal session to
 avoid accidental keystrokes contaminating the output. Press `Ctrl-a` followed
-by `d` to detach the session from active terminal. Run `screen -r` when you 
+by `d` to detach the session from active terminal. Run `screen -r` when you
 need to reconnect it later, after the size of the log file will stop growing.
 Reading of an 8 MB flash memory should result in a ~40 MB log file, and for a
 16 MB chip the file should be twice that size.
@@ -75,6 +66,8 @@ xxd -revert -plain fulldump.hex fulldump.bin
 Use [binwalk](https://github.com/ReFirmLabs/binwalk) to unpack the binary file.
 
 ### Saving firmware via SD card.
+
+Before you start, [prepare the enviroment](#prepare-the-enviroment).
 
 Sometimes your camera only has a wireless connection, which does not work
 directly from the bootloader. Very often such cameras have a microSD card slot.
@@ -119,25 +112,20 @@ the RAM of the camera. To do that, clear a section of RAM (0x800000 bytes for a
 the entire contents to the prepared space in RAM. Then export the copied data
 from RAM to the card.
 
-NB! In the example below we use the ${baseaddr} assuming it is set in your camera's environment.
-If not, then set it yourself. Use numeric value from SoC data sheet, look ip up at the
-[automatically generated install instructions](https://openipc.org/supported-hardware),
-or seek help on [our Telegram channel][telegram].
-
 Example for 8MB:
 ```
-mw.b ${baseaddr} ff 0x800000
+mw.b ${baseaddr} ff ${flashsize}
 sf probe 0
-sf read ${baseaddr} 0x0 0x800000
+sf read ${baseaddr} 0x0 ${flashsize}
 
 mmc write ${baseaddr} 0x10 0x4000
 ```
 
 Another example, for 16MB:
 ```
-mw.b ${baseaddr} ff 0x1000000
+mw.b ${baseaddr} ff ${flashsize}
 sf probe 0
-sf read ${baseaddr} 0x0 0x1000000
+sf read ${baseaddr} 0x0 ${flashsize}
 
 mmc write ${baseaddr} 0x10 0x8000
 ```
@@ -158,69 +146,112 @@ sudo dd bs=512 skip=16 count=32768 if=/dev/sdc of=./fulldump.bin
 ### Uploading binary image via serial connection.
 
 There are cameras that only have wireless connection unavailable directly from
-bootloader. Most of such cameras also have SD card slot but some don't, or it does
-not work for some reason, or you don't have a card, or something. Anyway, you still
-can upload a binary image onto camera and either run it, or save it into the flash
-memory. Here's how.
+bootloader. Most of such cameras also have SD card slot but some don't, or it
+does not work for some reason, or you don't have a card, or something. Anyway,
+you still can upload a binary image onto camera and either run it, or save it
+into the flash memory. Here's how.
 
 First of all, you'll need to install `lrzsz` package on your desktop computer.
-I presume it runs Linux and preferrably of a Debian family, that'll be easier on 
-examples. So, run this command to satisfy prerequisites:
+I presume it runs Linux and preferrably of a Debian family, that'll be easier
+on examples. So, run this command to satisfy prerequisites:
 ```
 apt install lrzsz
 ```
 Now you are ready.
 
-Place the binary file you are going to upload into the same directory where you will
-be starting a `screen` session to your camera from. Start the session and boot into
-the bootloader console interrupting booting routine with a key combo.
+Place the binary file you are going to upload into the same directory where you
+will be starting a `screen` session to your camera from. Start the session and
+boot into the bootloader console interrupting booting routine with a key combo.
 
-Now you can run `help` and check what data transfer protocols are supported by your 
-version of bootloader. If you see `loady` in the list of commands, then you can use
-ymodem protocol. Run `loady` on you camera, then press `Ctrl-a` followed by `:` 
-(semi-colon). It will switch you into command line at the very bottom of the screen.
+Now you can run `help` and check what data transfer protocols are supported by
+your version of bootloader. If you see `loady` in the list of commands, then
+you can use ymodem protocol. Run `loady` on you camera, then press `Ctrl-a`
+followed by `:` (semi-colon). It will switch you into command line at the very
+bottom of the screen.
+
 Enter `exec !! sz --ymodem filename.bin` where _filename.bin_ and see your file
 uploading via serial connection. At 115200 bps. Slow, very slow.
 
-After the file is uploaded, you can do the usual magic. Either boot from the memory
-image right away using `bootm`, or write it into the flash memory.
+After the file is uploaded, you can do the usual magic. Either boot from the
+memory image right away using `bootm`, or write it into the flash memory.
+
+### Flashing full image via serial connection
+
+Before you start, [prepare the enviroment](#prepare-the-enviroment).
+
+Download the full firmware binary for your SoC and flash chip from
+[OpenIPC web site](https://openipc.org/supported-hardware/) after submitting the
+settings form and clicking the link hidden under "Alternative method" button.
+
+![](../images/firmware-full-binary-link.webp)
+
+Open `screen` and connect to UART port.
+```
+screen /dev/ttyUSB0 115200
+```
+Sign in into bootloader shell and run:
+```
+mw.b ${baseaddr} 0xff ${flashsize}
+loady
+```
+press "Ctrl-a" followed by ":", then type
+```
+exec !! sz --ymodem fullimage.bin
+```
+after the image is loaded, continue
+```
+sf probe 0
+sf erase 0x0 ${flashsize}
+sf write ${baseaddr} 0x0 ${filesize}
+```
 
 ### Reading binary image from SD card.
 
-If your camera supports SD card and you have `fatload` command in bootloader, then
-you can read firmware binary files from an SD card.
+Before you start, [prepare the enviroment](#prepare-the-enviroment).
 
-First, prepage the card: format it into FAT filesystem and place bootloader, kernel,
-and rootsf binary files there. Insert the card into camera and boot into bootloader 
-console.
+If your camera supports SD card and you have `fatload` command in bootloader,
+then you can read firmware binary files from an SD card.
+
+First, prepage the card: format it into FAT filesystem and place bootloader,
+kernel, and rootsf binary files there. Insert the card into camera and boot
+into bootloader console.
 
 Check that you have access to the card.
 ```
 mmc rescan
 ```
-Then unlock access to flash memory and start writing content of the files from the card
-into the flash memory.
+Then unlock access to flash memory and start writing content of the files from
+the card into the flash memory.
 
-NB! Please note that load address and names of files used in this example not necessarily
-match those for your particular camera. Consult documentation, or seek help on [our Telegram channel][telegram].
+NB! Please note that load address and names of files used in this example not
+necessarily match those for your particular camera. Consult documentation, or
+seek help on [our Telegram channel][telegram].
 
+Flash bootloader.
 ```
+mw.b ${baseaddr} 0xff 0x50000
 sf probe 0
-
-mw.b 0x80600000 ff 1000000
 sf erase 0x0 0x50000
-fatload mmc 0:1 0x80600000 u-boot-with-spl.bin
-sf write 0x80600000 0x0 ${filesize}
+fatload mmc 0:1 ${baseaddr} u-boot-with-spl.bin
+sf write ${baseaddr} 0x0 ${filesize}
+```
 
-mw.b 0x80600000 ff 1000000
+Flash kernel.
+```
+mw.b ${baseaddr} 0xff 0x200000
+sf probe 0
 sf erase 0x50000 0x200000
-fatload mmc 0:1 0x80600000 uimage.t31
-sf write 0x80600000 0x50000 ${filesize}
+fatload mmc 0:1 ${baseaddr} uimage.${soc}
+sf write ${baseaddr} 0x50000 ${filesize}
+```
 
-mw.b 0x80600000 ff 1000000
+Flash root filesystem.
+```
+mw.b ${baseaddr} 0xff 0x500000
+sf probe 0
 sf erase 0x250000 0x500000
-fatload mmc 0:1 0x80600000 rootfs.squashfs.t31
-sf write 0x80600000 0x250000 ${filesize}
+fatload mmc 0:1 ${baseaddr} rootfs.squashfs.${soc}
+sf write ${baseaddr} 0x250000 ${filesize}
 ```
 
 ### Bypassing password-protected bootloader.
@@ -245,17 +276,37 @@ bootloader, you could install the OpenIPC firmware in a regular way.
 
 #### Side-loading unlocked bootloader.
 
-Modern cameras utilize fastboot protocol that allows camera to sideload a bootloader 
-into memory and then run it from there. Check if [burn](https://github.com/OpenIPC/burn) 
-utility supports your SoC.
+Many modern cameras utilize fastboot protocol that allows camera to load a
+bootloader binary code directly into memory and then run it from there.
+Check if our [burn utility][burn] supports your camera's SoC.
 
 #### Modifying stock firmware.
 
-One way to bypass the bootloader protection is to dump original firmware and replace
-bootloader there with an unlocked alternative. Or you could flash the entire OpenIPC 
-firmware since you have the chip in the programmer, anyway.
+One way to bypass the bootloader protection is to dump original firmware and
+replace bootloader there with an unlocked alternative. Or you could flash the
+entire OpenIPC firmware since you have the chip in the programmer, anyway.
 
 __DO NOT FORGET TO MAKE A BACKUP OF YOUR ORIGINAL FIRMWARE!__
 
+## Troubleshooting
 
+Before you start, [prepare the enviroment](#prepare-the-enviroment).
+
+If you get `Too many args` error while trying to set an environment variable,
+try to do that from within Linux using `fw_setenv` instead of `setenv` in U-boot.
+
+__U-boot console:__
+```
+hisilicon # setenv uk 'mw.b ${baseaddr} 0xff ${flashsize}; tftp ${baseaddr} uImage.${soc}; sf probe 0; sf erase 0x50000 0x200000; sf write ${baseaddr} 0x50000 ${filesize}'
+** Too many args (max. 16) **
+```
+
+__OpenIPC Linux:__
+```
+root@openipc-hi3518ev100:~# fw_setenv uk 'mw.b ${baseaddr} 0xff ${flashsize}; tftp ${baseaddr} uImage.${soc}; sf probe 0; sf erase 0x50000 0x200000; sf write ${baseaddr} 0x50000 ${filesize}'
+```
+
+
+
+[burn]: https://github.com/OpenIPC/burn
 [telegram]: https://t.me/OpenIPC
