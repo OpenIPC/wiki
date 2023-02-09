@@ -6,10 +6,10 @@
 
 ### Шаг 1. Определите тип процессора.
 
-![SoC Marking](../images/soc-hisilicon.jpg)
-![SoC Marking](../images/soc-ingenic-t20.jpg)
-![SoC Marking](../images/soc-ingenic-t31.jpg)
-![SoC Marking](../images/soc-ingenic-t40.jpg)
+![SoC Marking](../images/soc-hisilicon.webp)
+![SoC Marking](../images/soc-ingenic-t20.webp)
+![SoC Marking](../images/soc-ingenic-t31.webp)
+![SoC Marking](../images/soc-ingenic-t40.webp)
 
 _Пример маркировки процессоров Hisilicon Hi3518EV100, Ingenic T20, T31 и T40.
 Значимые символы обведены жёлтым._

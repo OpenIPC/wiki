@@ -43,10 +43,10 @@ package on the camera's main PCB (see example photo below), or by using
 software such as [ipctool](https://openipc.github.io/ipctool/) to identify the
 SoC model from the vendor firmware.
 
-![SoC Marking](../images/soc-hisilicon.jpg)
-![SoC Marking](../images/soc-ingenic-t20.jpg)
-![SoC Marking](../images/soc-ingenic-t31.jpg)
-![SoC Marking](../images/soc-ingenic-t40.jpg)
+![SoC Marking](../images/soc-hisilicon.webp)
+![SoC Marking](../images/soc-ingenic-t20.webp)
+![SoC Marking](../images/soc-ingenic-t31.webp)
+![SoC Marking](../images/soc-ingenic-t40.webp)
 
 _Hisilicon Hi3518EV100, Ingenic T20, T31 and T40 SoCs marking.
 Relevant symbols highlighted with yellow._
