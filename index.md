@@ -11,13 +11,6 @@ OpenIPC Wiki
 - [Supported sensors per SoC](en/guide-supported-sensors.md)
 - [Changelog](en/show-changelog.md)
 
-### Subprojects
-- [coupler](https://openipc.org/coupler)
-- [firmware](https://openipc.org/firmware)
-- [ipctool](https://openipc.org/ipctool)
-- [telemetry](https://openipc.org/telemetry)
-- [Firmware Partitions Calculation](https://themactep.com/tools/firmware-partitions-calculation)
-
 ### Installation
 - [Installation, step by step, and overall options](en/installation.md)
 - [Installation on Goke based boards](en/install-goke.md), but you'd better use <https://openipc.org/cameras/vendors/goke>
@@ -27,10 +20,6 @@ OpenIPC Wiki
 - [Installation on XM510 based boards](en/install-xm510.md), but you'd better use <https://openipc.org/cameras/vendors/xiongmai>
 - [Installation on XM530 based boards](en/install-xm530.md), but you'd better use <https://openipc.org/cameras/vendors/xiongmai>
 - [Very old full manual](en/old-manual.md)
-
-### Troubleshooting
-- [Network does not work](en/trouble-network.md)
-- [Majestic does not work, camera reboots](en/trouble-majestic.md)
 
 ### Usage
 - [Network settings](en/network-settings.md)
@@ -46,12 +35,9 @@ OpenIPC Wiki
 - [YouTube streaming](en/youtube-streaming.md)
 - [WiFi XM530](en/wifi-xm530.md)
 
-### Firmware
-- [List of OpenIPC Buildroot packages](en/dev-buildroot-packages.md)
-- [List of supported sensors](en/firmware-sensors.md)
-- [Releases in GitHub](https://github.com/OpenIPC/firmware/releases/tag/latest)
-- [Releases in Telegram](https://t.me/s/openipc_dev)
-- [Source code](en/source-code.md)
+### Troubleshooting
+- [Network does not work](en/trouble-network.md)
+- [Majestic does not work, camera reboots](en/trouble-majestic.md)
 
 ### Equipment
 - [CH341A programmer](en/hardware-programmer-ch341a-voltage-fix.md)
@@ -60,6 +46,12 @@ OpenIPC Wiki
 - [Boot device with NFS](en/dev-nfs-boot.md)
 - [FFMPEG usage](en/dev-ffmpeg-usage.md)
 - [Kernel configuration for adding new platforms](en/integration-kernel.md)
+- [List of supported sensors](en/firmware-sensors.md)
+- [List of OpenIPC Buildroot packages](en/dev-buildroot-packages.md)
+- [Source code](en/source-code.md)
+- [Bug reports](https://github.com/OpenIPC/firmware/issues)
+- [Buildroot User Manual](https://buildroot.org/docs.html)
+- [U-Boot Documentation](https://u-boot.readthedocs.io/)
 
 ### Help, Tips, and Tricks
 - [U-Boot Tips](en/help-uboot.md)
@@ -68,19 +60,22 @@ OpenIPC Wiki
 - [Interesting tricks](en/dev-tricks.md)
 - [Questions and answers](en/faq.md)
 
-### Reference Book
-- [Company names](en/company-names.md)
-- [Hikvision IP Camera Model naming convention](https://www.vueville.com/home-security/cctv/ip-cameras/hikvision-network-camera-guide/#model-naming-convention)
+### Hardware
+- [SoC manufacturers](en/hardware-soc-manufacturers.md)
+- [Image sensors manufacturers](en/hardware-sensor-manufacturers.md)
+- [IPC boards manufacturers](en/hardware-board-manufacturers.md)
 
-### Developer manuals
-- [Buildroot User Manual](https://buildroot.org/docs.html)
-- [U-Boot Documentation](https://u-boot.readthedocs.io/)
-
-### Contacts
-- [Bug reports](https://github.com/OpenIPC/firmware/issues)
+### Subprojects
+- [coupler](https://openipc.org/coupler)
+- [firmware](https://openipc.org/firmware)
+- [ipctool](https://openipc.org/ipctool)
+- [telemetry](https://openipc.org/telemetry)
+- [Firmware Partitions Calculation](https://themactep.com/tools/firmware-partitions-calculation)
 
 ### Our resources
 - [OpenIPC](https://openipc.org/)
+- [Releases in GitHub](https://github.com/OpenIPC/firmware/releases/tag/latest)
+- [Releases in Telegram](https://t.me/s/openipc_dev)
 - [OpenCollective](https://opencollective.com/openipc)
 - [Twitter](https://twitter.com/OpenIPC)
 - [Telegram](https://t.me/openipc)
@@ -90,10 +85,9 @@ OpenIPC Wiki
 - [Developers](en/developers.md)
 - [Notes from old sources](en/notes-for-resorting.md)
 
-### Hardware
-- [SoC manufacturers](en/hardware-soc-manufacturers.md)
-- [Image sensors manufacturers](en/hardware-sensor-manufacturers.md)
-- [IPC boards manufacturers](en/hardware-board-manufacturers.md)
+### Reference Book
+- [Company names](en/company-names.md)
+- [Hikvision IP Camera Model naming convention](https://www.vueville.com/home-security/cctv/ip-cameras/hikvision-network-camera-guide/#model-naming-convention)
 
 ### Resources for recycling and integration
 - <https://github.com/OpenIPC/camerasrnd>
