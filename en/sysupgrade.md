@@ -10,16 +10,44 @@ For old firmware running `sysupgrade` without parameters is enough. For newer fi
 __ATTENTION! Upgrading firmware can lead to "bricking" your camera. Make sure you are prepared both morally and skillwise. Have your rescue SD card and/or UART adapter ready. Be prepared to desolder and reprogram flash chip as the last resort. Do not upgrade production cameras unless you really have to!__
 
 ### Upgrading from a TFTP server
+
+[Set up a TFTP server](installation-tftpd.md).
+
 Go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC.
 Extract content of the bundle into the root directory of your TFTP server.
 
 On the camera run:
+
+#### From Linux
 ```
 soc=$(fw_printenv -n soc)
 serverip=$(fw_printenv -n serverip)
 busybox tftp -r rootfs.squashfs.${soc} -g ${serverip}
 busybox tftp -r uImage.${soc} -g ${serverip}
 ```
+
+#### Alternatively, from U-Boot
+for 8MB image
+```
+mw.b ${baseaddr} 0xff 0x200000
+tftp ${baseaddr} uImage.${soc}
+sf probe 0; sf erase 0x50000 0x200000; sf write ${baseaddr} 0x50000 ${filesize}
+
+mw.b ${baseaddr} 0xff 0x500000
+tftp ${baseaddr} rootfs.squashfs.${soc}
+sf probe 0; sf erase 0x250000 0x500000; sf write ${baseaddr} 0x250000 ${filesize}
+```
+for 16MB image
+```
+mw.b ${baseaddr} 0xff 0x300000
+tftp ${baseaddr} uImage.${soc}
+sf probe 0; sf erase 0x50000 0x300000; sf write ${baseaddr} 0x50000 ${filesize}
+
+mw.b ${baseaddr} 0xff 0x500000
+tftp ${baseaddr} rootfs.squashfs.${soc}
+sf probe 0; sf erase 0x350000 0xa00000; sf write ${baseaddr} 0x350000 ${filesize}
+```
+
 
 ### Upgrading from local files
 Go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC.
@@ -36,6 +64,7 @@ sysupgrade --kernel=/tmp/uImage.${soc} --rootfs=/tmp/rootfs.squashfs.${soc} -z
 
 ### Upgrading from SD card
 
+#### From Linux
 Go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC.
 Insert an SD card into your desktop PC. Unpack the bundle and copy its content to the card:
 ```
@@ -47,6 +76,45 @@ On the camera run:
 ```
 soc=$(fw_printenv -n soc)
 sysupgrade --kernel=/mnt/mmcblk0p1/uImage.${soc} --rootfs=/mnt/mmcblk0p1/rootfs.squashfs.${soc} --force_ver -z
+```
+
+#### Alternatively, from U-Boot
+for 8MB image
+```
+mw.b ${baseaddr} 0xff 0x200000
+fatload mmc 0:1 ${baseaddr} uImage.${soc}
+sf probe 0; sf erase 0x50000 0x200000; sf write ${baseaddr} 0x50000 ${filesize}
+
+mw.b ${baseaddr} 0xff 0x500000
+fatload mmc 0:1 ${baseaddr} rootfs.squashfs.${soc}
+sf probe 0; sf erase 0x250000 0x500000; sf write ${baseaddr} 0x250000 ${filesize}
+```
+for 16MB image
+```
+mw.b ${baseaddr} 0xff 0x300000
+fatload mmc 0:1 ${baseaddr} uImage.${soc}
+sf probe 0; sf erase 0x50000 0x300000; sf write ${baseaddr} 0x50000 ${filesize}
+
+mw.b ${baseaddr} 0xff 0x500000
+fatload mmc 0:1 ${baseaddr} rootfs.squashfs.${soc}
+sf probe 0; sf erase 0x350000 0xa00000; sf write ${baseaddr} 0x350000 ${filesize}
+```
+
+### Flashing U-Boot via ymodem
+Clean 320K of RAM amd load bootloader file into it:
+```
+mw.b ${baseaddr} 0xff 0x50000
+loady
+```
+_(press "Ctrl-a" followed by ":", then type)_
+```
+exec !! sz --ymodem u-boot.bin
+```
+After the file if uploaded, write it into ROM:
+```
+sf probe 0
+sf erase 0x0 0x50000
+sf write ${baseaddr} 0x0 ${filesize}
 ```
 
 ### Troubleshooting
