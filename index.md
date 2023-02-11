@@ -72,6 +72,9 @@ OpenIPC Wiki
 - [Image sensors manufacturers](en/hardware-sensor-manufacturers.md)
 - [IPC boards manufacturers](en/hardware-board-manufacturers.md)
 
+### Software
+- [List of Software for Recording Video](en/software-video-recording.md)
+
 ### Subprojects
 - [coupler](https://openipc.org/coupler)
 - [firmware](https://openipc.org/firmware)
