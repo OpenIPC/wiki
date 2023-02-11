@@ -59,6 +59,7 @@ OpenIPC Wiki
 - [Live streaming to Telegram](en/howto-streaming-telegram.md)
 - [Interesting tricks](en/dev-tricks.md)
 - [Questions and answers](en/faq.md)
+- [Glossary](en/glossary.md)
 
 ### Hardware
 - [SoC manufacturers](en/hardware-soc-manufacturers.md)
