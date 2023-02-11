@@ -7,6 +7,7 @@ Video Recording Software
 - [Blue Iris](https://blueirissoftware.com/)
 - [camera.ui](https://github.com/seydx/camera.ui)
 - [ContaCam](https://www.contaware.com/contacam.html)
+- [Insentry](https://insentry.io/)
 - [iSpy](https://www.ispyconnect.com/)
 - [Frigate](https://frigate.video/)
 - [motion](https://motion-project.github.io/)
