@@ -17,3 +17,4 @@ This is where we'll be writing down our guide to flashing new devices and report
 | MODEL | IC | FCC ID | PCB VER | SoC | WIFI |
 | --- | --- | --- | --- | --- | --- |
 | WYZEC3 | 25466-WYZEC3B | 2AUIUWYZEC3B | WYZEV3_T31GC2053 V2.02_20210523 | T31ZX | SDIO: Realtek 8188ftv |
+|  |  |  | WYZEV3_T31GC2053 V2.03_20211206 | T31X | SDIO: AltoBeam 6031 |
