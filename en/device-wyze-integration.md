@@ -8,6 +8,6 @@ This is where we'll be writing down our guide to flashing new devices and report
 
 ### Current issues
 
-* Exposure does not work well
+* Exposure does not work well https://github.com/OpenIPC/majestic/issues/102
 * SD card does not work in the U-Boot (power is available)
 
