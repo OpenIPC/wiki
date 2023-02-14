@@ -10,6 +10,7 @@ This is where we'll be writing down our guide to flashing new devices and report
 
 * Exposure does not work well https://github.com/OpenIPC/majestic/issues/102
 * SD card does not work in the U-Boot (power is available)
+* Problem with loading u-boot from an sd card. It doesn't reach the promt. Not only on wyze v3 (https://t.me/openipc_modding/179369), but also on another board T31L (https://t.me/openipc/47739)
 
 ### Known camera modifications
 * WYZE Cam v3
