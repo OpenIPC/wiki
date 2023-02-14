@@ -18,4 +18,4 @@ This is where we'll be writing down our guide to flashing new devices and report
 | --- | --- | --- | --- | --- | --- | --- |
 | WYZEC3 | 25466-WYZEC3B | 2AUIUWYZEC3B | WYZEV3_T31GC2053 V2.02_20210523 | T31ZX | SDIO: Realtek 8188ftv |  |
 |  |  |  | WYZEV3_T31GC2053 V2.03_20211206 | T31X | SDIO: AltoBeam 6031 |  |
-| Pet Edition |  |  | WYZEV3_T31AGC2053 V3.2_20210714 | T31A BGA | SDIO:  | https://t.me/openipc/43299 |
+| Pet Edition |  |  | WYZEV3_T31AGC2053 V3.2_20210714 | T31A BGA | SDIO: AltoBeam 6031 | https://t.me/openipc/43299 https://t.me/openipc/38755|
