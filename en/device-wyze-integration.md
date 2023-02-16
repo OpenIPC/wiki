@@ -202,10 +202,36 @@ Then issue command `run setnor16m`
 
 After you press the Enter key the camera will almost immediately restart and you will have to catch the prompt again.
 
-Then issue command `run uknor16m` and next `run urnor16m`
+Then issue command 
+`mw.b ${baseaddr} ff 1000000; fatload mmc 0:1 ${baseaddr} uImage.${soc} ; sf probe 0; sf erase 0x50000 0x300000; sf write ${baseaddr} 0x50000 ${filesize}` 
+and next 
+`mw.b ${baseaddr} ff 1000000; fatload mmc 0:1 ${baseaddr} rootfs.squashfs.${soc} ; sf probe 0; sf erase 0x350000 0xa00000; sf write ${baseaddr} 0x350000 ${filesize}`
 
 Output sample:
 
 ```
+OpenIPC # mw.b ${baseaddr} ff 1000000; fatload mmc 0:1 ${baseaddr} uImage.${soc} ; sf probe 0; sf erase 0x50000 0x300000; sf write ${baseaddr} 0x50000 ${filesize}
+reading uImage.t31
+1855437 bytes read in 89 ms (19.9 MiB/s)
+the manufacturer 5e
+SF: Detected ZB25VQ128
+
+--->probe spend 5 ms
+SF: 3145728 bytes @ 0x50000 Erased: OK
+--->erase spend 9871 ms
+SF: 1855437 bytes @ 0x50000 Written: OK
+--->write spend 3286 ms
+
+OpenIPC # mw.b ${baseaddr} ff 1000000; fatload mmc 0:1 ${baseaddr} rootfs.squashfs.${soc} ; sf probe 0; sf erase 0x350000 0xa00000; sf write ${baseaddr} 0x350000 ${filesize}
+reading rootfs.squashfs.t31
+5079040 bytes read in 236 ms (20.5 MiB/s)
+the manufacturer 5e
+SF: Detected ZB25VQ128
+
+--->probe spend 4 ms
+SF: 10485760 bytes @ 0x350000 Erased: OK
+--->erase spend 31730 ms
+SF: 5079040 bytes @ 0x350000 Written: OK
+--->write spend 8949 ms
 
 ```
