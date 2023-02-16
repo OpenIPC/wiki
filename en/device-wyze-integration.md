@@ -34,8 +34,7 @@ Downgrade original firmware version to (Jun 2021 w-o internet)demo_wcv3_4.36.2.5
 [(WYom20200 Jun 2021 w-o internet)demo_wcv3_4.36.2.5.bin.zip](https://github.com/OpenIPC/wiki/files/10755387/WYom20200.Jun.2021.w-o.internet.demo_wcv3_4.36.2.5.bin.zip)
 
 Login with user `root` password `WYom20200` via telnet or UART console.
-Insert microSD card to camera
-Issue commands line by line, not all together:
+Insert microSD card to camera and issue commands line by line, not all together:
 
 `dd if=/dev/mtd0 of=/media/mmc/mtd0.bin`
 
