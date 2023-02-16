@@ -104,6 +104,7 @@ Save and keep this files in safe place.
 In case of any errors you should perform this operation once again, probably with microSD card replacement.
 
 * Determine SoC model
+
 Download `ipctool-mips32` to microSD card (https://github.com/OpenIPC/ipctool/releases/download/latest/ipctool-mips32) and insert microSD card in camera.
 Login to camera and issue command `/media/mmc/ipctool-mips32`
 There should be something like `model: T31ZX` in console output. Important part is `ZX`
