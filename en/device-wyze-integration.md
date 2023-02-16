@@ -29,6 +29,7 @@ This is where we'll be writing down our guide to flashing new devices and report
   or your camera should be already connected to network.
 
 * Backup
+
 Downgrade original firmware version to (Jun 2021 w-o internet)demo_wcv3_4.36.2.5.bin 
 [(WYom20200 Jun 2021 w-o internet)demo_wcv3_4.36.2.5.bin.zip](https://github.com/OpenIPC/wiki/files/10755387/WYom20200.Jun.2021.w-o.internet.demo_wcv3_4.36.2.5.bin.zip)
 
