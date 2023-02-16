@@ -102,3 +102,55 @@ mtd7: 00010000 00008000 "para"
 ```
 Save and keep this files in safe place.
 In case of any errors you should perform this operation once again, probably with microSD card replacement.
+
+* Determine SoC model
+Download `ipctool-mips32` to microSD card (https://github.com/OpenIPC/ipctool/releases/download/latest/ipctool-mips32) and insert microSD card in camera.
+Login to camera and issue command `/media/mmc/ipctool-mips32`
+There should be something like `model: T31ZX` in console output. Important part is `ZX`
+Output sample:
+```
+[root@WCV3:~]# /media/mmc/ipctool-mips32 
+---
+chip:
+  vendor: Ingenic
+  model: T31ZX
+rom:
+  - type: nor
+    block: 32K
+    partitions:
+      - name: boot
+        size: 0x40000
+        sha1: 20776e92
+      - name: kernel
+        size: 0x1f0000
+        sha1: 6887b828
+      - name: rootfs
+        size: 0x3d0000
+        sha1: d368892a
+      - name: app
+        size: 0x3d0000
+        path: /system,squashfs
+        sha1: 04b813a8
+      - name: kback
+        size: 0x1f0000
+        sha1: 83ccf23a
+      - name: aback
+        size: 0x3d0000
+        sha1: 48bbe705
+      - name: cfg
+        size: 0x60000
+        path: /configs,jffs2,rw
+      - name: para
+        size: 0x10000
+        sha1: 472a55b0
+    size: 16M
+ram:
+  total: 128M
+  media: 32M
+firmware:
+  kernel: "3.10.14__isvp_swan_1.0__ (PREEMPT Wed Apr 14 17:44:51 CST 2021)"
+  toolchain: gcc version 4.7.2 (Ingenic r2.3.3 2016.12) 
+  libc: uClibc 0.9.33.2
+  main-app: /system/bin/iCamera
+
+```
