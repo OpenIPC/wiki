@@ -180,7 +180,7 @@ Writing kb: 242/242 (100%)
 Verifying kb: 242/242 (100%) 
 ```
 Now your camera flashed with OpenIPC U-boot, but whole system is still stock. 
-So, next re/boot will load OpenIPC U-boot only (in cycling mode, until stop with `Ctrl-c` in UART console).
+So, next re/boot will load OpenIPC U-boot only (in cycling mode, until stop with `Ctrl+C` in UART console).
 
 * Flash kernel and rootfs
 
