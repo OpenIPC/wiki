@@ -238,3 +238,5 @@ SF: 5079040 bytes @ 0x350000 Written: OK
 --->write spend 8949 ms
 
 ```
+If everything went well, issue the command `reset` and camera should start boot OpenIPC.
+
