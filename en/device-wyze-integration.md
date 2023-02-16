@@ -171,6 +171,7 @@ Copy `u-boot-t31x-universal.bin` to microSD card and insert microSD card in came
 
 Login to camera and issue command:
 `flashcp -v /media/mmc/u-boot-t31x-universal.bin /dev/mtd0`
+
 Output sample:
 ```
 [root@WCV3:~]# flashcp -v /media/mmc/u-boot-t31x-universal.bin /dev/mtd0
