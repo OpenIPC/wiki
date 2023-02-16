@@ -203,8 +203,11 @@ Then issue command `run setnor16m`
 After you press the Enter key the camera will almost immediately restart and you will have to catch the prompt again.
 
 Then issue command 
+
 `mw.b ${baseaddr} ff 1000000; fatload mmc 0:1 ${baseaddr} uImage.${soc} ; sf probe 0; sf erase 0x50000 0x300000; sf write ${baseaddr} 0x50000 ${filesize}` 
+
 and next 
+
 `mw.b ${baseaddr} ff 1000000; fatload mmc 0:1 ${baseaddr} rootfs.squashfs.${soc} ; sf probe 0; sf erase 0x350000 0xa00000; sf write ${baseaddr} 0x350000 ${filesize}`
 
 Output sample:
