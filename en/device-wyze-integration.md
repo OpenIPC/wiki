@@ -181,4 +181,31 @@ Verifying kb: 242/242 (100%)
 ```
 Now your camera flashed with OpenIPC U-boot, but whole system is still stock. 
 So, next re/boot will load OpenIPC U-boot only (in cycling mode, until stop with `Ctrl-c` in UART console).
- 
+
+* Flash kernel and rootfs
+
+Since we identified our chip as Ingenic T31X open https://openipc.org/cameras/vendors/ingenic and choose T31X.
+
+In Downloads section find `OpenIPC Linux (Lite) for Ingenic T31X` and download it.
+
+https://github.com/OpenIPC/firmware/releases/download/latest/openipc.t31-nor-lite.tgz
+
+Power off the camera.
+
+Extract and copy `rootfs.squashfs.t31` `uImage.t31` to microSD card. Insert microSD card in camera. 
+
+Power on the camera.
+
+During power on the camera press `Ctrl+C` several times until it shows OpenIPC promt like this `OpenIPC # `
+
+Then issue command `run setnor16m`
+
+After you press the Enter key the camera will almost immediately restart and you will have to catch the prompt again.
+
+Then issue command `run uknor16m` and next `run urnor16m`
+
+Output sample:
+
+```
+
+```
