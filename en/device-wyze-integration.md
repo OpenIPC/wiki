@@ -240,3 +240,31 @@ SF: 5079040 bytes @ 0x350000 Written: OK
 ```
 If everything went well, issue the command `reset` and camera should start boot OpenIPC.
 
+```
+Welcome to OpenIPC
+openipc-t31 login: root
+
+    /######                                    /######  /#######    /######
+   /##__  ##                                  |_  ##_/ | ##__  ##  /##__  ##
+  | ##  \ ##   /######    /######   /#######    | ##   | ##  \ ## | ##  \__/
+  | ##  | ##  /##__  ##  /##__  ## | ##__  ##   | ##   | #######/ | ##
+  | ##  | ## | ##  \ ## | ######## | ##  \ ##   | ##   | ##____/  | ##
+  | ##  | ## | ##  | ## | ##_____/ | ##  | ##   | ##   | ##       | ##    ##
+  |  ######/ | #######/ |  ####### | ##  | ##  /###### | ##       |  ######/
+   \______/  | ##____/   \_______/ |__/  |__/ |______/ |__/        \______/
+             | ##
+             | ##                              build
+             |__/                             master+98e3bca7, 2023-02-11
+
+ Please help the OpenIPC Project to cover the cost of development and
+ long-term maintenance of what we believe is going to become a stable,
+ flexible Open IP Network Camera Framework for users worldwide.
+
+ Your contributions could help us to advance the development and keep
+ you updated on improvements and new features more regularly.
+
+ Please visit https://openipc.org/sponsor/ to learn more. Thank you.
+
+root@openipc-t31:~# 
+
+```
