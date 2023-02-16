@@ -155,3 +155,15 @@ firmware:
   main-app: /system/bin/iCamera
 
 ```
+* Flash OpenIPC U-boot
+
+Open https://openipc.org/cameras/vendors/ingenic and choose appropriate SoC model from list.
+
+In this case our choice Ingenic T31X.
+
+In Downloads section find `OpenIPC Bootloader for Ingenic T31X` and download it.
+https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-t31x-universal.bin
+
+Copy `u-boot-t31x-universal.bin` to microSD card and insert microSD card in camera.
+
+Login to camera and issue commands line by line, not all together:
