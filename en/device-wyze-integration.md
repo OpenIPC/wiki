@@ -167,7 +167,7 @@ https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-t31x-univers
 
 Copy `u-boot-t31x-universal.bin` to microSD card and insert microSD card in camera.
 
-Since this moment `telnet` would be unavailable!
+Since after this moment (flashcp) `telnet` would be unavailable!
 
 Login to camera and issue command:
 `flashcp -v /media/mmc/u-boot-t31x-universal.bin /dev/mtd0`
