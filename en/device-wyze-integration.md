@@ -167,7 +167,7 @@ https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-t31x-univers
 
 Copy `u-boot-t31x-universal.bin` to microSD card and insert microSD card in camera.
 
-Since after this moment (flashcp) `telnet` would be unavailable!
+`telnet` would be unavailable after the command below (`flashcp`) !
 
 Login to camera and issue command:
 `flashcp -v /media/mmc/u-boot-t31x-universal.bin /dev/mtd0`
@@ -178,4 +178,6 @@ Erasing block: 8/8 (100%)
 Writing kb: 242/242 (100%) 
 Verifying kb: 242/242 (100%) 
 ```
-Now your camera lashed with OpenIPC U-boot, but whole system is still stock. So, next re/boot will load OpenIPC U-boot only (in cycling mode, until stop with `Ctrl-c`). 
+Now your camera flashed with OpenIPC U-boot, but whole system is still stock. 
+So, next re/boot will load OpenIPC U-boot only (in cycling mode, until stop with `Ctrl-c` in UART console).
+ 
