@@ -162,6 +162,7 @@ Open https://openipc.org/cameras/vendors/ingenic and choose appropriate SoC mode
 In this case our choice Ingenic T31X.
 
 In Downloads section find `OpenIPC Bootloader for Ingenic T31X` and download it.
+
 https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-t31x-universal.bin
 
 Copy `u-boot-t31x-universal.bin` to microSD card and insert microSD card in camera.
