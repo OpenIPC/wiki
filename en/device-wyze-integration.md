@@ -35,57 +35,37 @@ Downgrade original firmware version to (Jun 2021 w-o internet)demo_wcv3_4.36.2.5
 [(WYom20200 Jun 2021 w-o internet)demo_wcv3_4.36.2.5.bin.zip](https://github.com/OpenIPC/wiki/files/10755387/WYom20200.Jun.2021.w-o.internet.demo_wcv3_4.36.2.5.bin.zip)
 
 Login with user `root` password `WYom20200` via telnet or UART console.
-Insert microSD card to camera and issue commands line by line, not all together:
+Insert microSD card to camera and issue command:
 
-`dd if=/dev/mtd0 of=/media/mmc/mtd0.bin`
-
-`dd if=/dev/mtd1 of=/media/mmc/mtd1.bin`
-
-`dd if=/dev/mtd2 of=/media/mmc/mtd2.bin`
-
-`dd if=/dev/mtd3 of=/media/mmc/mtd3.bin`
-
-`dd if=/dev/mtd4 of=/media/mmc/mtd4.bin`
-
-`dd if=/dev/mtd5 of=/media/mmc/mtd5.bin`
-
-`dd if=/dev/mtd6 of=/media/mmc/mtd6.bin`
-
+`for mtd in $(ls /dev/mtdblock*); do dd if=${mtd} of=/media/mmc/${mtd##/*/}.bin; done`
 
 Output sample:
 ```
-[root@WCV3:~]# dd if=/dev/mtd0 of=/media/mmc/mtd0.bin
+[root@WCV3:~]# for mtd in $(ls /dev/mtdblock*); do dd if=${mtd} of=/media/mmc/${mtd##/*/}.bin; done
 512+0 records in
 512+0 records out
-262144 bytes (256.0KB) copied, 0.133246 seconds, 1.9MB/s
-[root@WCV3:~]# dd if=/dev/mtd1 of=/media/mmc/mtd1.bin
+262144 bytes (256.0KB) copied, 0.122976 seconds, 2.0MB/s
 3968+0 records in
 3968+0 records out
-2031616 bytes (1.9MB) copied, 1.039464 seconds, 1.9MB/s
-[root@WCV3:~]# dd if=/dev/mtd2 of=/media/mmc/mtd2.bin
+2031616 bytes (1.9MB) copied, 0.975797 seconds, 2.0MB/s
 7808+0 records in
 7808+0 records out
-3997696 bytes (3.8MB) copied, 2.070890 seconds, 1.8MB/s
-[root@WCV3:~]# dd if=/dev/mtd3 of=/media/mmc/mtd3.bin
+3997696 bytes (3.8MB) copied, 1.955184 seconds, 1.9MB/s
 7808+0 records in
 7808+0 records out
-3997696 bytes (3.8MB) copied, 2.459327 seconds, 1.5MB/s
-[root@WCV3:~]# dd if=/dev/mtd4 of=/media/mmc/mtd4.bin
+3997696 bytes (3.8MB) copied, 2.808704 seconds, 1.4MB/s
 3968+0 records in
 3968+0 records out
-2031616 bytes (1.9MB) copied, 1.048184 seconds, 1.8MB/s
-[root@WCV3:~]# dd if=/dev/mtd5 of=/media/mmc/mtd5.bin
+2031616 bytes (1.9MB) copied, 0.972091 seconds, 2.0MB/s
 7808+0 records in
 7808+0 records out
-3997696 bytes (3.8MB) copied, 2.703471 seconds, 1.4MB/s
-[root@WCV3:~]# dd if=/dev/mtd6 of=/media/mmc/mtd6.bin
+3997696 bytes (3.8MB) copied, 2.299745 seconds, 1.7MB/s
 768+0 records in
 768+0 records out
-393216 bytes (384.0KB) copied, 0.201104 seconds, 1.9MB/s
-[root@WCV3:~]# dd if=/dev/mtd7 of=/media/mmc/mtd7.bin
+393216 bytes (384.0KB) copied, 0.186963 seconds, 2.0MB/s
 128+0 records in
 128+0 records out
-65536 bytes (64.0KB) copied, 0.029211 seconds, 2.1MB/s
+65536 bytes (64.0KB) copied, 0.027560 seconds, 2.3MB/s
 ```
 If there wasn't errors, then you backed up such partitions:
 ```
@@ -99,6 +79,21 @@ mtd4: 001f0000 00008000 "kback"
 mtd5: 003d0000 00008000 "aback"
 mtd6: 00060000 00008000 "cfg"
 mtd7: 00010000 00008000 "para"
+```
+Check if files on microSD card with command `ls -la /media/mmc/`
+
+```
+[root@WCV3:~]# ls -la /media/mmc/
+drwxr-xr-x    7 root     root          8192 May 14 01:52 .
+drwxrwxrwt    3 root     root            60 May 14 01:50 ..
+-rwxr-xr-x    1 root     root        262144 May 14 01:52 mtdblock0.bin
+-rwxr-xr-x    1 root     root       2031616 May 14 01:52 mtdblock1.bin
+-rwxr-xr-x    1 root     root       3997696 May 14 01:52 mtdblock2.bin
+-rwxr-xr-x    1 root     root       3997696 May 14 01:52 mtdblock3.bin
+-rwxr-xr-x    1 root     root       2031616 May 14 01:52 mtdblock4.bin
+-rwxr-xr-x    1 root     root       3997696 May 14 01:52 mtdblock5.bin
+-rwxr-xr-x    1 root     root        393216 May 14 01:52 mtdblock6.bin
+-rwxr-xr-x    1 root     root         65536 May 14 01:52 mtdblock7.bin
 ```
 Save and keep this files in safe place.
 In case of any errors you should perform this operation once again, probably with microSD card replacement.
