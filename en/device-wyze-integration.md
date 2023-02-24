@@ -10,7 +10,7 @@ This is where we'll be writing down our guide to flashing new devices and report
 
 * Exposure does not work well https://github.com/OpenIPC/majestic/issues/102
 * ~~SD card does not work in the U-Boot (power is available)~~ fixed
-* Problem with loading u-boot from an microSD card. It doesn't reach the promt. Not only on wyze v3 (https://t.me/openipc_modding/179369), but also on another board T31L (https://t.me/openipc/47739). Most likely it will be IMPOSSIBLE, because in the camera there is a microSD power management MOSFET, which must be turned on BEFORE booting from the card (the experiment with not fully loaded u-boot was possible due to direct power supply to the microSD card, bypassing the transistor). Please confirm my version if it is not possible otherwise.
+* ~~Problem with loading u-boot from an microSD card. It doesn't reach the promt. Not only on wyze v3 (https://t.me/openipc_modding/179369), but also on another board T31L (https://t.me/openipc/47739). Most likely it will be IMPOSSIBLE, because in the camera there is a microSD power management MOSFET, which must be turned on BEFORE booting from the card (the experiment with not fully loaded u-boot was possible due to direct power supply to the microSD card, bypassing the transistor). Please confirm my version if it is not possible otherwise.~~ impossible
 
 ### Known camera modifications
 * WYZE Cam v3
@@ -103,6 +103,7 @@ In case of any errors you should perform this operation once again, probably wit
 Download `ipctool-mips32` to microSD card (https://github.com/OpenIPC/ipctool/releases/download/latest/ipctool-mips32) and insert microSD card in camera.
 Login to camera and issue command `/media/mmc/ipctool-mips32`
 There should be something like `model: T31ZX` in console output. Important part is `ZX`
+
 Output sample:
 ```
 [root@WCV3:~]# /media/mmc/ipctool-mips32 
