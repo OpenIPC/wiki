@@ -97,7 +97,8 @@ OpenIPC Wiki
 
 ### Reference Book
 - [Company names](en/company-names.md)
-- [Hikvision IP Camera Model naming convention](https://www.vueville.com/home-security/cctv/ip-cameras/hikvision-network-camera-guide/#model-naming-convention)
+- [Dahua Naming Rule](https://dahuawiki.com/Name_Rule)
+- [Hikvision IP Camera Model Naming Convention](https://www.vueville.com/home-security/cctv/ip-cameras/hikvision-network-camera-guide/#model-naming-convention)
 
 ### Resources for recycling and integration
 - <https://github.com/OpenIPC/camerasrnd>
