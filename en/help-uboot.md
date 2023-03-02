@@ -262,6 +262,44 @@ flash a new bootloader you have to weigh up all the risks and benefits. In most
 cases the original bootloader plus new kernel and new operating system should
 work just fine. But there are exceptions.
 
+#### Shorting pins on flash chip
+
+If you can't interrupt the boot sequence with a key combination, or if your
+camera requires a bootloader password that you don't know, you can still make
+it stop the Linux kernel booting and throw you into the shell.
+
+The first thing to do is locate the flash memory chip on the camera circuit
+board. Typically this is a square chip with 8 pins labeled 25Q64 or 25Q128,
+rarely 25L64 or 25L128. If you have trouble locating the chip, try taking 
+some pictures of your board from both sides. Then ask for help 
+[in our Telegram channel](https://t.me/openipc).
+__Do not try to short-circuit any random chip! It will most likely burn your camera circuit.__
+
+Short-circuit pins 5 and 6 of the flash chip with a small metal object,
+a screwdriver or tweezers, right after the bootloader starts but before it
+calls up the Linux kernel.
+
+Pins 5 and 6 of the SOIC8 chip are on the opposite corner of pin 1, indicated
+by the embossed or drawn dot next to it.
+
+![](../images/flash-pins.webp)
+![](../images/flash-pins-2.webp)
+
+### How to reset camera settings from U-Boot
+
+Sometimes improper settings make the camera unstable to the point where it is
+impossible to log in or not enough time before rebooting to fix the settings.
+Here's how to completely erase the overlay partition in the OpenIPC firmware,
+right from the bootloader shell, to bring the camera back to its pristine state:
+
+__only for 8MB flash partitioning__
+```
+sf probe 0; sf erase 0x750000 0xb0000; reset
+```
+__only for 16MB flash partitioning__
+```
+sf probe 0; sf erase 0xd50000 0x2b0000; reset
+```
 #### Downgrading stock firmware.
 
 Today, we see more and more cameras where access to bootloader console is
