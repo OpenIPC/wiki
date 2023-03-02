@@ -285,21 +285,6 @@ by the embossed or drawn dot next to it.
 ![](../images/flash-pins.webp)
 ![](../images/flash-pins-2.webp)
 
-### How to reset camera settings from U-Boot
-
-Sometimes improper settings make the camera unstable to the point where it is
-impossible to log in or not enough time before rebooting to fix the settings.
-Here's how to completely erase the overlay partition in the OpenIPC firmware,
-right from the bootloader shell, to bring the camera back to its pristine state:
-
-__only for 8MB flash partitioning__
-```
-sf probe 0; sf erase 0x750000 0xb0000; reset
-```
-__only for 16MB flash partitioning__
-```
-sf probe 0; sf erase 0xd50000 0x2b0000; reset
-```
 #### Downgrading stock firmware.
 
 Today, we see more and more cameras where access to bootloader console is
