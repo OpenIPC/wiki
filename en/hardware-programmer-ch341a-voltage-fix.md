@@ -34,3 +34,12 @@ Restore power to the chip re-routing 3.3V voltage from 3v3 pin to pin 28
 of CH341A IC through 5V pin connector on the header.
 
 ![](../images/hardware-ch341a-hack-5.webp)
+
+
+### Software
+
+- [SNANDer](https://github.com/McMCCRU/SNANDer) [or this fork](https://github.com/Droid-MAX/SNANDer)
+- [ch341prog](https://github.com/setarcos/ch341prog/)
+- [flashrom](https://www.flashrom.org/Flashrom)
+
+
