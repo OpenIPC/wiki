@@ -4,6 +4,16 @@
 Frequesntly Asked Questions
 ---------------------------
 
+### How to strip U-Boot wrapper from a binary image
+
+```
+dd if=inputfile.img of=outputfile.bin bs=64 skip=1
+```
+alternatively
+```
+tail -c +65 inputfile.img > outputfile.bin
+```
+
 ### How to get into bootloader shell?
 
 [There is a handful of ways to get access to a locked bootloader shell](help-uboot.md#bypassing-password-protected-bootloader)
