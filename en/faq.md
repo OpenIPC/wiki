@@ -4,7 +4,7 @@
 Frequesntly Asked Questions
 ---------------------------
 
-### How to strip U-Boot Image wrapper from a binary image
+### How to strip U-Boot Image wrapper header from a binary image
 
 Sometimes vendor's firmware consists of binary images intended
 for use with U-Boot image loader and prepended with headers in
