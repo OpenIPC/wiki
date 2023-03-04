@@ -4,8 +4,14 @@
 Frequesntly Asked Questions
 ---------------------------
 
-### How to strip U-Boot wrapper from a binary image
+### How to strip U-Boot Image wrapper from a binary image
 
+Sometimes vendor's firmware consists of binary images intended
+for use with U-Boot image loader and prepended with headers in
+[U-Boot Image wrapper format](https://formats.kaitai.io/uimage/).
+The header should be stripped off before you can use such an image
+as a raw binary file. Here's how you can strip the first 64 bytes
+from a file:
 ```
 dd if=inputfile.img of=outputfile.bin bs=64 skip=1
 ```
