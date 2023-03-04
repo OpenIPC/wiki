@@ -205,6 +205,45 @@ sf erase 0x0 ${flashsize}
 sf write ${baseaddr} 0x0 ${filesize}
 ```
 
+### Flashing full image from TFTP
+
+Before you start, [prepare the enviroment](#prepare-the-enviroment).
+
+Download [full image binary for your SoC](https://openipc.org/supported-hardware/)
+and place it in the root directory of your local FTFP server.
+
+Start the session and boot into the bootloader console interrupting booting
+routine with a key combo. When in the console, set up parameters of your local
+network, if needed.
+
+```
+setenv ipaddr 192.168.1.10
+setenv netmask 255.255.255.0
+setenv gatewayip 192.168.1.1
+setenv serverip 192.168.1.254
+```
+
+Use the following commands to reflash your camera with the full image:
+
+Example for 8MB:
+```
+mw.b ${baseaddr} 0xff ${flashsize}
+tftpboot ${baseaddr} openipc-${soc}-lite-8mb.bin
+sf probe 0; sf erase 0x0 ${flashsize}; sf write ${baseaddr} 0x0 ${filesize}
+reset
+```
+
+Example for 16MB:
+```
+mw.b ${baseaddr} 0xff ${flashsize}
+tftpboot ${baseaddr} openipc-${soc}-ultimate-16mb.bin
+sf probe 0; sf erase 0x0 ${flashsize}; sf write ${baseaddr} 0x0 ${filesize}
+reset
+```
+At the first boot, sign in into the bootloader shell once again and remap 
+partitioning running `run setnor16m` command.
+
+
 ### Reading binary image from SD card.
 
 Before you start, [prepare the enviroment](#prepare-the-enviroment).
