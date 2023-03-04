@@ -97,7 +97,8 @@ OpenIPC Wiki
 
 ### Reference Book
 - [Company names](en/company-names.md)
-- [Hikvision IP Camera Model naming convention](https://www.vueville.com/home-security/cctv/ip-cameras/hikvision-network-camera-guide/#model-naming-convention)
+- [Dahua Naming Rule](https://dahuawiki.com/Name_Rule)
+- [Hikvision IP Camera Model Naming Convention](https://www.vueville.com/home-security/cctv/ip-cameras/hikvision-network-camera-guide/#model-naming-convention)
 
 ### Resources for recycling and integration
 - <https://github.com/OpenIPC/camerasrnd>
@@ -124,6 +125,7 @@ In Russian
 - [Полезные ссылки](ru/resources.md)
 - [Обзоры камер разных производителей](ru/reviews.md)
 - [Hikvision DS-2CD2345F-IS](ru/hikvision-ds-2cd2345f-is.md)
+- [Ростелеком IPC-HFW1230SP/IPC-HDW1230SP](ru/rostelecom-ipc-hfw1230sp.md)
 
 ## Что можно прочитать про прошивку OpenIPC?
 - [Часто задаваемые вопросы и ответы на них][faq1]
