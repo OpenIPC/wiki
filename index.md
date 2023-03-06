@@ -29,6 +29,7 @@ OpenIPC Wiki
 
 ### Usage
 - [Network settings](en/network-settings.md)
+- [Network perversions](en/network-perversions.md)
 - [System features](en/system-features.md)
 - [Majestic streamer](en/majestic-streamer.md)
 - [Microbe web interface](en/microbe-web.md)
