@@ -18,3 +18,11 @@ For Linux network
     setenv extras 'hieth.phyaddru=1 hieth.phyaddrd=2'; saveenv
 ```
 
+### CamHi/HiChip/Xin, HI3518EV200
+
+```
+For U-boot network
+    setenv phyaddru 0
+    setenv phyaddrd 1
+    saveenv
+```
