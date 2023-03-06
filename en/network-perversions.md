@@ -17,3 +17,4 @@ For U-boot network
 For Linux network
     setenv extras 'hieth.phyaddru=1 hieth.phyaddrd=2'; saveenv
 ```
+
