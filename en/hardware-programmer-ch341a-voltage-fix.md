@@ -38,7 +38,8 @@ of CH341A IC through 5V pin connector on the header.
 
 ### Software
 
-- [SNANDer](https://github.com/McMCCRU/SNANDer) [or this fork](https://github.com/Droid-MAX/SNANDer)
+- [SNANDer](https://github.com/McMCCRU/SNANDer) or [this fork](https://github.com/Droid-MAX/SNANDer)
+- [microsnander](https://github.com/OpenIPC/microsnander) from OpenIPC
 - [ch341prog](https://github.com/setarcos/ch341prog/)
 - [flashrom](https://www.flashrom.org/Flashrom)
 
