@@ -33,7 +33,7 @@ like a charm, especially after you [fix the voltage bug][1].
 Or you can but an improved model, version 1.7 and higher, where that
 problem has alredy been fixed in design.
 
-![](../images/equipmente-ch341a-v17.webp)
+![](../images/equipment-ch341a-v17.webp)
 
 Add a SOP8 208mil to DIP8 socket adapter.
 
