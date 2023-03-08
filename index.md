@@ -47,7 +47,8 @@ OpenIPC Wiki
 - [Majestic does not work, camera reboots](en/trouble-majestic.md)
 
 ### Equipment
-- [CH341A programmer](en/hardware-programmer-ch341a-voltage-fix.md)
+- [Equipment for flashing](en/equipment-flashing.md)
+- [CH341A programmer voltage fix](en/hardware-programmer-ch341a-voltage-fix.md)
 
 ### Development
 - [Boot device with NFS](en/dev-nfs-boot.md)
