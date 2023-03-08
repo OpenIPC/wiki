@@ -8,7 +8,7 @@ Unfortunately IP camera manufacturers aren't **yet** shipping hardware with
 OpenIPC preinstalled, so to install OpenIPC onto a camera which is still using
 factory firmware images, one of the following methods must be used:
 
-* The [Coupler](https://openipc.github.io/coupler/) project makes available
+* The [Coupler](https://github.com/openipc/coupler/) project makes available
   firmware images which can be installed using the firmware upgrade mechanisms
   which are built into the factory firmware of many cameras.
 
@@ -25,8 +25,8 @@ factory firmware images, one of the following methods must be used:
 OpenIPC firmware installation using Coupler.
 --------------------------------------------
 
-Instructions for using [Coupler](https://openipc.github.io/coupler/) can be
-found in [the project's documenation](https://openipc.github.io/coupler/).
+Instructions for using [Coupler](https://github.com/openipc/coupler/) can be
+found in [the project's documenation](https://github.com/openipc/coupler/).
 
 OpenIPC firmware installation via TFTP and UART, step by step.
 --------------------------------------------------------------
@@ -40,7 +40,7 @@ project currently builds separate firmware binaries for each SoC model.  **You
 must identify the SoC which your camera uses**, so that you can use the correct
 firmware binaries.  This can be done by reading the markings on the SoC IC
 package on the camera's main PCB (see example photo below), or by using
-software such as [ipctool](https://openipc.github.io/ipctool/) to identify the
+software such as [ipctool](https://github.com/openipc/ipctool/) to identify the
 SoC model from the vendor firmware.
 
 ![SoC Marking](../images/soc-hisilicon.webp)
