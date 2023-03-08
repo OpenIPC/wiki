@@ -18,7 +18,7 @@ We would be grateful for any feedback and suggestions.
 
 ## Official links
 
-* [OpenIPC on Wiki](https://openipc.github.io/wiki) - Collection of various documentation and instructions.
+* [OpenIPC on Wiki](https://github.com/openipc/wiki) - Collection of various documentation and instructions.
 * [OpenIPC on GitHub](https://github.com/OpenIPC/) - GitHub organization, most projects are hosted here.
 * [OpenIPC on OpenCollective](https://opencollective.com/openipc) - OpenCollective community.
 * [OpenIPC on Twitter](https://twitter.com/openipc) - Our main news.
@@ -42,18 +42,18 @@ We would be grateful for any feedback and suggestions.
 
 ### Firmware
 
-* [openipc-2.x](https://openipc.github.io/firmware) - Firmware development and creation system based on Buildroot.
+* [openipc-2.x](https://github.com/openipc/firmware) - Firmware development and creation system based on Buildroot.
 * [openipc-1.0][chaos_calmer] - Firmware development and creation system based on OpenWrt 15.05.
 * [coupler][coupler] - Seamless transition between video cameras firmware.
 
 ### Streamers
 
-* [majestic](https://github.com/OpenIPC/firmware/wiki/majestic_streamer) - Universal IPCam streamer.
+* [majestic](https://openipc.org/majestic-endpoints) - Universal IPCam streamer.
 * [mini][mini] - OpenSource Mini IP camera streamer.
 
 ### Tools
 
-* [ipctool](https://openipc.github.io/ipctool) - Tool (and library) for checking IP camera hardware.
+* [ipctool](https://github.com/openipc/ipctool) - Tool (and library) for checking IP camera hardware.
 * [yaml-cli][yaml-cli] - Tool for change setting in CLI.
 * [glutinium](https://github.com/ZigFisher/Glutinium) - Additional OpenWRT packages.
 

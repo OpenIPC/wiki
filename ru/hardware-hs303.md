@@ -91,7 +91,7 @@ Switcam HS-303.
 через PayWall сервис [здесь](https://paywall.pw/openipc).
 
 Пошаговая инструкция по прошивке устройств и несколько ответов на часто задаваемые
-вопросы находятся [здесь](https://openipc.github.io/wiki/ru/hardware-hs303.html).
+вопросы находятся [здесь](https://github.com/OpenIPC/wiki/blob/master/ru/hardware-hs303.md).
 
 Исходные коды проекта, для тех кому претит PayWall или кто хочет собрать прошивку
 полностью [самостоятельно](https://github.com/OpenIPC).
