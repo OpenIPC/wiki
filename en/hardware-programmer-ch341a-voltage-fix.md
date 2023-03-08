@@ -42,5 +42,4 @@ of CH341A IC through 5V pin connector on the header.
 - [microsnander](https://github.com/OpenIPC/microsnander) from OpenIPC
 - [ch341prog](https://github.com/setarcos/ch341prog/)
 - [flashrom](https://www.flashrom.org/Flashrom)
-
-
+- [DIY BCQ CH341A forum](http://www.diybcq.com/thread-144131-1-1.html) (Chinese, use Chrome automatic translation)
