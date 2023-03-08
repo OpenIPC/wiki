@@ -8,10 +8,11 @@ Equipment for flashing
 
 While some hardened technicians would insist on getting things done
 with a grandfather's kilowatt soldering iron, we suggest you to buy
-a modern soldering station with a hot air nozzle and temperature
-control. You don't need to be fancy, an entry level soldering station
-like YIHUA 882D, or JCD 8898, or YOUYUE 8586 would do, and it won't
-break the bank with its price tag of $50-70, more or less.
+a modern [soldering station with a hot air](https://www.aliexpress.com/premium/soldering-station-hot-air.html)
+and temperature control. You don't need to be fancy, an entry level 
+soldering station like YIHUA 882D, or JCD 8898, or YOUYUE 8586 would
+do, and it won't break the bank with its price tag of $50-70, more 
+or less.
 
 ![](../images/equipment-jcd8898.webp)
 ![](../images/equipment-yihua882d.webp)
@@ -25,8 +26,8 @@ perks with the soldering station.
 ### A programmer for flashing memory chips.
 
 Again, some would say that you need a multi-thousand dollar branded
-programmer but in real life the cheapest CH341A USB programmer works
-like a charm, especially after you [fix the voltage bug][1].
+programmer but in real life the [cheapest CH341A USB programmer](https://www.aliexpress.com/w/wholesale-ch341a-programmer.html)
+works like a charm, especially after you [fix the voltage bug][1].
 
 ![](../images/equipment-ch341a.webp)
 
@@ -35,7 +36,7 @@ problem has alredy been fixed in design.
 
 ![](../images/equipment-ch341a-v17.webp)
 
-Add a SOP8 208mil to DIP8 socket adapter.
+Add a [SOP8 208mil to DIP8 socket adapter](https://www.aliexpress.com/w/wholesale-SOP8-208mil-to-DIP8-socket-adapter.html).
 
 ![](../images/equipment-sop8-200mil.webp)
 
