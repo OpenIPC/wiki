@@ -31,8 +31,8 @@ works like a charm, especially after you [fix the voltage bug][1].
 
 ![](../images/equipment-ch341a.webp)
 
-Or you can but an improved model, version 1.7 and higher, where that
-problem has alredy been fixed in design.
+Or you can buy an improved model, version 1.7 and higher, where that
+problem has already been fixed in design.
 
 ![](../images/equipment-ch341a-v17.webp)
 
