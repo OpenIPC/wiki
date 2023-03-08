@@ -39,7 +39,7 @@ Add a SOP8 208mil to DIP8 socket adapter.
 
 ![](../images/equipment-sop8-200mil.webp)
 
-Also, it's a good idea to have a bunch of spare flash memory chips.
+Also, it's a good idea to have a bunch of spare [flash memory chips](https://www.aliexpress.com/w/wholesale-25Q128-SOP8.html).
 
 ![](../images/hardware-w25q64fwsig.webp)
 ![](../images/hardware-w25q128jvsq.webp)
