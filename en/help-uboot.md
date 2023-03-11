@@ -280,7 +280,7 @@ Flash kernel.
 mw.b ${baseaddr} 0xff 0x200000
 sf probe 0
 sf erase 0x50000 0x200000
-fatload mmc 0:1 ${baseaddr} uimage.${soc}
+fatload mmc 0:1 ${baseaddr} uImage.${soc}
 sf write ${baseaddr} 0x50000 ${filesize}
 ```
 
