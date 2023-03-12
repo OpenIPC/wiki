@@ -117,7 +117,8 @@ Alternative way to get access to full working system.
 You will not have original root pass but you will be able get into :)
 
 ### Limited shell access
-TESTED on GOKE SOC. over the UART interface it is possible to get into a limited shell, but this shell does not load full working system.
+TESTED on GOKE SOC. 
+Over the UART interface it is possible to get into a limited shell, but this shell does not load full working system.
 ```
 setenv bootargs ${bootargs} single init=/bin/sh
 boot
