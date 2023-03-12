@@ -1,4 +1,10 @@
-# Device info
+# OpenIPC Wiki
+[Table of Content](../index.md)
+
+Smartwares CIP-37210
+--------------------
+
+### Device info
 
 | System | Description                          |
 |--------|--------------------------------------|
@@ -7,7 +13,7 @@
 | Flash  | 16Mb (Winbond 25Q128JVSQ)            |
 | WiFi   | RTL8188FU                            |
 
-# Step-by-step flashing guide
+### Step-by-step flashing guide
 
 Beside the camera you'll need the following tools:
 - PH0 screwdriver or bit
@@ -22,16 +28,15 @@ The preferred method to flash an OpenIPC camera is via tftp, but the CIP-37210 d
 
 Because of that we will need to combine two methods deviating from the standard procedure to flash the Smartwares CIP-37210: [The burn utility](https://github.com/OpenIPC/burn) to directly boot into a u-boot bootloader compiled by the OpenIPC project to be able to flash from a microSD card and of course the [flashing from a microSD card](https://paulphilippov.com/articles/flashing-ip-camera-with-full-openipc-binary-firmware-from-sd-card).
 
-## Opening the device
+#### Opening the device
 
 Unscrew the visbile phillips screw on the back of the camera's stand with the PH0 screwdriver.
 ![unscrew](/images/cip-37210_open_001.jpg "Unscrewing the phillips screw")
 
-
 Use the blade screwdriver to pry open the camera's case, where the stand was attached:
 ![pry_open](/images/cip-37210_open_002.jpg "Pry open the camera")
 
-## Establishing the UART connection
+#### Establishing the UART connection
 
 After opening the device, it's time to establish the UART connection. Power on the open camera with the included micro USB power supply. Now it's time to check the suspicious 4 pin holes on top of the pcb: Measure the voltage of the pin holes with your multimeter, by connecting them to GND (I used one of the pads around the screws in the middle).
 
@@ -45,7 +50,7 @@ I used simple male-to-female DuPont jumper wires to connect to the pin holes. Th
 
 ![uart_cip-37210_action](/images/uart_cip-37210_action.jpg "Established UART connection.")
 
-## Saving the stock firmware
+#### Saving the stock firmware
 
 Before flashing OpenIPC it might be clever to save the stock firmware, in case you don't like OpenIPC and want to roll back or brick something. Since tftp is not possible we will save the contents of the flash to a microSD card. Since the device runs Linux you don't need to worry about formatting the microSD card now. Boot the camera while connected to your USB to TTL adapter and start screen:
 
@@ -61,8 +66,8 @@ for mtd in $(ls /dev/mtdblock*); do dd if=${mtd} of=/mnt/sd/image/${mtd##/*/}.bi
 ```
 You may want to repeat this step with another folder and compare the md5 checksums of the binary files to assure that the dump was successful. Exit screen with `C-a` followed by `d`, insert the microSD card back into your computer and backup the binaries.
 
+#### Flashing OpenIPC
 
-## Flashing OpenIPC
 Time to format the microSD card, so u-boot will be able to fatload the image. Those steps may vary depending on your Linux distribution. [There is already a script which works on Debian Sid](https://gist.github.com/themactep/d0b72f4c5d5f246e2551622e95bc9987), but sadly not on my machine. (Different fdisk version and different naming of the device and partitions). Those are the commands I ran:
 
 ```sh
@@ -88,7 +93,6 @@ Now we need to download the correct uboot-binary
 ```sh
 wget -P ./u-boot/ https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-hi3518ev200-universal.bin
 ```
-
 
 Make sure, that no process is blocking your USB to TTL adapter:
 ```sh
