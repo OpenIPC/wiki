@@ -74,6 +74,11 @@ OpenIPC Wiki
 - [Image sensors manufacturers](en/hardware-sensor-manufacturers.md)
 - [IPC boards manufacturers](en/hardware-board-manufacturers.md)
 
+### Cameras
+- [Chacon IPCAM-RI01](en/device-chacon-ipcam-ri01.md)
+- [Smartwares CIP-37210](en/device-smartwares-cip-37210.md)
+- [Wyze V3](en/device-wyze-integration.md)
+
 ### Software
 - [List of Software for Recording Video](en/software-video-recording.md)
 
