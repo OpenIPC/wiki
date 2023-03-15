@@ -99,68 +99,68 @@ discover even more yet unknown passwords. Sharing is caring, boys!
 
 ```
 
+### Hijacking the default password
+_tested on Goke_
+
+Over the UART interface, it is possible to temporarily interrupt the normal
+booting sequence and drop into a limited Linux shell at early stage of
+system startup.
+```
+setenv bootargs ${bootargs} single init=/bin/sh
+boot
+```
+This shell won't load the full working system, so you have to amend it manually.
+First, mount `/rom` filesystem:
+```
+mount -t jffs2 /dev/mtdblock3 /rom
+```
+Mount the rest of mounting points from `/etc/fstab`:
+```
+mount -a
+```
+Also mount the SD card to copy files to and from:
+```
+mount /dev/mmcblk0p1 on /mnt/s0
+```
+On `/rom` filesystem, you can edit the `/room/etc/passwd` file but once the
+device restarts it will be reset to default. This happens because there is a
+guide bin file recreating `passwd` file on each start, so we need to modify
+that executable.
+
+Copy `system.dat` to an SD card:
+```
+cp /rom/system.dat /mnt/s0
+```
+On a linux computer, unpack `system.dat` file using `unsquashfs`:
+```
+mkdir squashfs-temp
+cd squashfs-temp
+unsquashfs system.dat
+```
+Find guide file and edit its content in a hex-editor to modify the name of the
+file where password is written on every restart. Search for `/etc/passwd` and
+change a letter in its name to something different, like `/etc/passwT`.
+
+Pack the squash file system using `mksquashfs`:
+```
+mksquashfs ./squashfs-root ./file -comp xz -no-xattrs -noappend -no-exports -all-root -quiet -b 131072
+```
+and copy it from the SD card back to `/rom` directory on the camera.
+
+Now you can replace the password in `/rom/etc/passwd` with your own password, and when
+you restart the device, you will have full working system with your own password.
+
+
 ### Software
 
 - [Hashcat](https://hashcat.net/)
 - [John The Ripper](https://www.openwall.com/john/)
 - [Hydra](https://github.com/vanhauser-thc/thc-hydra)
 
-
 [1]: https://en.wikipedia.org/wiki/Rainbow_table
 [2]: https://en.wikipedia.org/wiki/Brute-force_attack
 
 
 
-Alternative way to get access to full working system.
+
 ---------------------------------------------------
-
-You will not have original root pass but you will be able get into :)
-
-### Limited shell access
-TESTED on GOKE SOC. 
-Over the UART interface it is possible to get into a limited shell, but this shell does not load full working system.
-```
-setenv bootargs ${bootargs} single init=/bin/sh
-boot
-
-```
-Once we are in limited shell it is need to mount ROM filesystem:
-```
-mount -t jffs2 /dev/mtdblock3 /rom
-```
-
-Also will be great to mount sd card to copy some files:
-```
-mount
-mount -a
-mount /dev/mmcblk0p1 on /mnt/s0
-```
-
-### Modifying the file system
-on /rom filesystem you can edit the /room/etc/passwd file but once the device restarts it will be set to default, this happens because there is a guide bin file writing to passwd file on each start, so we need to modify this executable.
-
-copy system.dat to sd card
-```
-cp /rom/system.dat /mnt/s0
-```
-
-on a linux computer it is need to unsquahfs system.dat, do some changes and resquashfs:
-```
-mkdir squashfs-temp
-cd squashfs-temp
-
-unsquashfs system.dat
-```
-
-find guide file and hexedit to modify where "/etc/passwd" is written and change one letter, for example "/etc/passwT". This file will be created on start instead of passwd replaced.
-
-re squash the file system:
-```
-mksquashfs ./squashfs-root ./file -comp xz -no-xattrs -noappend -no-exports -all-root -quiet -b 131072
-```
-
-and copy back from sd card to /rom directory on goke soc.
-
-now you can edit /rom/etc/passwd with your own pass, and when you restart the device you will have full working system with your own pass.
-
-
