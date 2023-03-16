@@ -182,6 +182,27 @@ iface wlan0 inet dhcp
     post-down echo 9 > /sys/class/gpio/unexport
 ```
 
+### WLAN0 | GK7205V200 | RTL8188
+
+```
+auto wlan0
+iface wlan0 inet dhcp
+    pre-up echo 57 > /sys/class/gpio/export
+    pre-up echo out > /sys/class/gpio/gpio57/direction
+    pre-up echo 0 > /sys/class/gpio/gpio57/value
+    pre-up modprobe mac80211
+    pre-up sleep 1
+    pre-up insmod /lib/modules/4.9.37/extra/rtl8188fu.ko
+    pre-up sleep 1
+    pre-up wpa_passphrase "OpenIPC_NFS" "project2021" >/tmp/wpa_supplicant.conf
+    pre-up sed -i '2i \\tscan_ssid=1' /tmp/wpa_supplicant.conf
+    pre-up sleep 3
+    pre-up wpa_supplicant -B -Dnl80211 -i wlan0 -c/tmp/wpa_supplicant.conf
+    post-down killall -q wpa_supplicant
+    post-down echo 1 > /sys/class/gpio/gpio57/value
+    post-down echo 57 > /sys/class/gpio/unexport
+
+```
 
 ### WLAN0 | HI3516EV300/GK7205V300 | CamHi/Xin
 
