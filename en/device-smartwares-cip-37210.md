@@ -171,3 +171,48 @@ openipc-hi3518ev200 login: root
 There is no root password set, so don't forget to set it with `passwd` after the first login!
 
 If you are struggling with this tutorial and still want to try OpenIPC on a Smartwares CIP-37210, you can [buy it with OpenIPC v2.2 firmware pre-installed at open collective](https://opencollective.com/openipc/contribute/wifi-camera-showme-by-openipc-44355).
+
+## Connecting to wifi
+Now it's time to connect the camera to your 2.4 GHz Wi-Fi network. First of all, make sure that the firmware environment variables are set correctly. This is necessary so that `udhcpc` gets a DNS lease (because it is requesting `$ipaddr`) and the gateway is set correctly.
+
+```sh
+fw_printenv ipaddr
+fw_printenv gatewayip
+fw_printenv netmask
+```
+Set the correct values according to your needs, for example:
+```sh
+fw_setenv ipaddr 10.42.42.42
+```
+The last step is to configure the wlan0 interface:
+```sh
+vi /etc/network/interfaces
+```
+Delete or outcomment the eth0 block, the device doesn't have ethernet and the auto setting will slow down boot. Add the following lines to your interfaces file, alter your SSID and password accordingly.
+
+```text
+auto wlan0
+iface wlan0 inet dhcp
+    pre-up echo 3 > /sys/class/gpio/export
+    pre-up echo out > /sys/class/gpio/gpio3/direction
+    pre-up echo 1 > /sys/class/gpio/gpio3/value
+    pre-up modprobe mac80211
+    pre-up sleep 1
+    pre-up insmod /lib/modules/4.9.37/extra/rtl8188fu.ko
+    pre-up sleep 1
+    pre-up wpa_passphrase "YOUR_WIFI_SSID" "YOUR_PASSWORD" >/tmp/wpa_supplicant.conf
+    pre-up sed -i '2i \\tscan_ssid=1' /tmp/wpa_supplicant.conf
+    pre-up ifconfig wlan0 up
+    pre-up wpa_supplicant -B -Dnl80211 -iwlan0 -c/tmp/wpa_supplicant.conf
+    pre-up sleep 3
+    post-down killall -q wpa_supplicant
+    post-down echo 0 > /sys/class/gpio/gpio3/value
+    post-down echo 3 > /sys/class/gpio/unexport
+```
+
+No it's time to check whether it's working:
+```sh
+ifup wlan0
+ip addr
+```
+Check whether you can ping and ssh into the camera. Reboot and check, if the camera connects automatically to your wifi network. Reassamble the camera, now it's time so say goodbye to UART and use ssh and the web interface. (The credentials are root and the password you set earlier.)
