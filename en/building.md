@@ -160,6 +160,14 @@ If re-creating the root filesystem in necessary, one should in addition run
 Run `make linux-rebuild all` to rebuild Linux kernel image,
 `make busybox-rebuild all` to rebuild busybox and pack it into a rootfs image.
 
+Making changes to Buildroot packages
+------------------------------------
+
+If you need to make a change to a package already supplied with Buildroot, 
+place your patches to `global/package/all-patches/<pkg-name>/` directory. 
+These patches will be added after Buildroot package is extracted and patches
+from Buildroot package applied.
+  
 Building a custom version of the firmware
 -----------------------------------------
 Sometimes your need to add a driver or a package to the firmware. How can you
