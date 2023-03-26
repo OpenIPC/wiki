@@ -96,7 +96,7 @@ discover even more yet unknown passwords. Sharing is caring, boys!
 | absxcfbgXtb3o                         | xc3511     |
 | xt5USRjG7rEDE                         | j1/_7sxw   |
 | $1$EmcmB/9a$UrsXTlmYL/6eZ9A2ST2Yl/    |            |
-
+| $1$soidjfoi$9klIbmCLq2JjYwKfEA5rH1    |            |
 ```
 
 ### Hijacking the default password
