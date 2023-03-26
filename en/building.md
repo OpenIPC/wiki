@@ -149,7 +149,7 @@ make <package>-dirclean
 make <package>-rebuild
 ```
 where _\<package>_ is the name of the package you want to recompile. Although,
-as Builroot manual states,
+as Buildroot manual states,
 
 > While `<package>-rebuild` implies `<package>-reinstall` and `<package>-reconfigure`
 implies `<package>-rebuild`, these targets as well as `<package>` only act on
