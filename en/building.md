@@ -74,7 +74,7 @@ The very first run is the longest as the script will download every source
 bundle required for successful compilation. Consequent runs will take a little
 less time.
 
-After the compilation is done, you'll find the final binary kernel and footfs
+After the compilation is done, you'll find the final binary kernel and rootfs
 image in `output/images/` directory.
 
 ```
@@ -96,10 +96,10 @@ to the firmware.
 
 You can add drivers or software not included in the our official releases, you
 can remove unneeded drivers or software that you're not going to use, to free
-up some space in the firmware. You can change default settings to better suite
+up some space in the firmware. You can change default settings to better suit
 your needs. The beauty of open source is that anyone can improve it, anytime.
-Just don't forget to contribute your changes back to the upstream so that
-everyone could benefit from it.
+Just don't forget to contribute your changes back to the upstream repo so that
+everyone can benefit from it.
 
 Please note that OpenIPC uses a slightly outdated version of Buildroot. As of
 today, it is Buildroot [2021.02.12][3], so you might need to check out the
@@ -148,7 +148,7 @@ of commands:
 make <package>-dirclean
 make <package>-rebuild
 ```
-where _<package>_ is the name of the package you want to recompile. Although,
+where _\<package>_ is the name of the package you want to recompile. Although,
 as Builroot manual states,
 
 > While `<package>-rebuild` implies `<package>-reinstall` and `<package>-reconfigure`
