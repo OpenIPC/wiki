@@ -46,6 +46,13 @@ Using [sox][sox] program convert any source audio file to [PCM][pcm] 8kbps audio
 sox speech.mp3 -t raw -r 8000 -e signed -b 16 -c 1 test.pcm
 ```
 
+### How to play audio file on camera's speaker over network
+
+```
+cat test.pcm | curl -v -u user:password -H "Content-Type: application/json" -X POST --data-binary @- http://192.168.1.10/play_audio
+```
+
+
 [aac]: https://en.wikipedia.org/wiki/Advanced_Audio_Coding
 [alaw]: https://en.wikipedia.org/wiki/A-law_algorithm
 [dng]: https://en.wikipedia.org/wiki/Digital_Negative
