@@ -14,6 +14,7 @@ Copy Server URL and Stream key from Settings.
 Open `/etc/majestic.yaml` on camera and add the URL and the key into `outgoing` section of the config.
 
 **Note:** Dont forget add `-` sign before paramethers!
+**Note:** `outgoing` section may affect another section addition. Remember it!
 
 ![](../images/howto-streaming-telegram-3.webp)
 ![](../images/howto-streaming-telegram-4.webp)
