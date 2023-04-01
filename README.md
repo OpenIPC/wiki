@@ -126,6 +126,7 @@ In Russian
 
 ### Помощь
 - [Веб-интерфейс](ru/help-webui.md)
+- [Настройка отправки в Telegram](/ru/telegram_help_ru.md)
 
 ### Камеры
 - [Switcam HS-303](ru/hardware-hs303.md)
