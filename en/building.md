@@ -154,10 +154,10 @@ as Buildroot manual states,
 implies `br-<package>-rebuild`, these targets as well as `<package>` only act on
 the said package, and do not trigger re-creating the root filesystem image.
 If re-creating the root filesystem in necessary, one should in addition run
-`make` or `make all`.
+`make br-all`.
 
-Run `make br-linux-rebuild all` to rebuild Linux kernel image,
-`make br-busybox-rebuild all` to rebuild busybox and pack it into a rootfs image.
+Run `make br-linux-rebuild br-all` to rebuild Linux kernel image, 
+`make br-busybox-rebuild br-all` to rebuild busybox and pack it into a rootfs image.
 
 Making changes to Buildroot packages
 ------------------------------------
