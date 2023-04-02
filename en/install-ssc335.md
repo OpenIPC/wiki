@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](../index.md)
+[Table of Content](../README.md)
 
 For Anjoy/Brovotech/Gospell/Uniview boards with SSC335 Soc ONLY!!!
 ------------------------------------------------------------------

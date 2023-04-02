@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](../index.md)
+[Table of Content](../README.md)
 
 Wireless settings
 ---
@@ -12,6 +12,7 @@ Wireless settings
 ```
 BR2_PACKAGE_WIRELESS_CONFIGURATION=y
 BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
+BR2_PACKAGE_MT7601U_AP_OPENIPC=y
 ```
 
 ---
@@ -47,24 +48,19 @@ iface wlan0 inet dhcp
 	pre-up sleep 3
 	pre-up wpa_supplicant -B -D nl80211 -i wlan0 -c/tmp/wpa_supplicant.conf
 	post-down killall -q wpa_supplicant
-!	post-down echo 1 > /sys/class/gpio/gpio7/value
-!	post-down echo 7 > /sys/class/gpio/unexport
+	post-down echo 1 > /sys/class/gpio/gpio7/value
++	post-down echo 7 > /sys/class/gpio/unexport
 ```
 
 ```diff
 # HI3516EV300 CamHi
 if [ "$CONFIG" = "hi3516ev300_ultimate_defconfig" ]; then
-	if [ "$1" = "start" ]; then
-+		devmem 0x100C0080 32 0x530
-+		echo 7 > /sys/class/gpio/export
-+		echo out > /sys/class/gpio/gpio7/direction
-+		echo 0 > /sys/class/gpio/gpio7/value
-+		sleep 1
-+		modprobe mt7601u
-	elif [ "$1" = "stop" ]; then
-!		echo 1 > /sys/class/gpio/gpio7/value
-!		echo 7 > /sys/class/gpio/unexport
-	fi
++	devmem 0x100C0080 32 0x530
++	echo 7 > /sys/class/gpio/export
++	echo out > /sys/class/gpio/gpio7/direction
++	echo 0 > /sys/class/gpio/gpio7/value
++	echo 7 > /sys/class/gpio/unexport
++	modprobe mt7601usta
 fi
 ```
 
