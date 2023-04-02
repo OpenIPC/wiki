@@ -142,23 +142,22 @@ Making changes and rebuilding a package
 Once you start tinkering with the packages you'll realize you need a way to
 rebuld only one particular package, without rebuilding the whole project.
 Is it even possible? Fortunately, yes. All you have to do after making changes
-to the package configs is to step into the `output/` directory and run a couple
-of commands:
+to the package configs is to run a couple of commands:
 ```
-make <package>-dirclean
-make <package>-rebuild
+make br-<package>-dirclean
+make br-<package>-rebuild
 ```
 where _\<package>_ is the name of the package you want to recompile. Although,
 as Buildroot manual states,
 
-> While `<package>-rebuild` implies `<package>-reinstall` and `<package>-reconfigure`
-implies `<package>-rebuild`, these targets as well as `<package>` only act on
+> While `br-<package>-rebuild` implies `br-<package>-reinstall` and `br-<package>-reconfigure`
+implies `br-<package>-rebuild`, these targets as well as `<package>` only act on
 the said package, and do not trigger re-creating the root filesystem image.
 If re-creating the root filesystem in necessary, one should in addition run
 `make` or `make all`.
 
-Run `make linux-rebuild all` to rebuild Linux kernel image,
-`make busybox-rebuild all` to rebuild busybox and pack it into a rootfs image.
+Run `make br-linux-rebuild all` to rebuild Linux kernel image,
+`make br-busybox-rebuild all` to rebuild busybox and pack it into a rootfs image.
 
 Making changes to Buildroot packages
 ------------------------------------
@@ -186,10 +185,10 @@ Compilation process has also built a toolchain suitable for compiling packages
 for your version of firmware. The toolchain is located in `output/host`
 directory.
 
-To customize your firmware, add or remove a package, go to `output/` directory
-and run `make menuconfig`. That will load buildroot configuration menu where
-you can make changes following [The Buildroot user manual][5]. Make your
-changes and save amended config on exit. Then run `make clean all`.
+To customize your firmware, add or remove a package run `make br-menuconfig`. 
+That will load buildroot configuration menu where you can make changes following
+[The Buildroot user manual][5]. Make your changes and save amended config on exit.
+Then run `make clean all`.
 
 __Be aware that building firmware directly with buildroot will not rename
 resulting image files adding a soc suffix to them. You either can to it
