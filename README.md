@@ -29,6 +29,7 @@ OpenIPC Wiki
 
 ### Usage
 - [Network settings](en/network-settings.md)
+- [Wireless settings](en/wireless-settings.md)
 - [Network perversions](en/network-perversions.md)
 - [System features](en/system-features.md)
 - [Majestic streamer](en/majestic-streamer.md)
@@ -45,6 +46,7 @@ OpenIPC Wiki
 ### Troubleshooting
 - [Network does not work](en/trouble-network.md)
 - [Majestic does not work, camera reboots](en/trouble-majestic.md)
+- [Sigmastar unbrick instructions](en/sigmastar-unbrick.md)
 
 ### Equipment
 - [Equipment for flashing](en/equipment-flashing.md)
