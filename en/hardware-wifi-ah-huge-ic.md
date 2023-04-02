@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](../index.md)
+[Table of Content](../README.md)
 
 Adding Huge-IC AH WiFi HaLow drivers for Ingenic T31
 ----------------------------------------------------

@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](../index.md)
+[Table of Content](../README.md)
 
 Installation: how to make OpenIPC running on certain hardware
 -------------------------------------------------------------

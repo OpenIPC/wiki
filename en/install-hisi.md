@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](../index.md)
+[Table of Content](../README.md)
 
 For XM boards with Hi35{16Ev200,16Ev300,18Ev300} SoC ONLY!!!
 ------------------------------------------------------------
