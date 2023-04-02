@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](../index.md)
+[Table of Content](../README.md)
 
 Additional requirements for kernel configuration
 ------------------------------------------------

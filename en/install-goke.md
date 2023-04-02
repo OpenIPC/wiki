@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](../index.md)
+[Table of Content](../README.md)
 
 For XM boards with SoC GK7202V300, GK7205V200, GK7205V300 ONLY!!!
 -----------------------------------------------------------------

@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Оглавление](../index.md)
+[Оглавление](../README.md)
 
 Hikvision DS-2CD2345F-IS
 --------------

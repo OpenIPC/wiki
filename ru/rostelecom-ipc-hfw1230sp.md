@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Оглавление](../index.md)
+[Оглавление](../README.md)
 
 Ростелеком IPC-HFW1230SP/IPC-HDW1230SP
 --------------
