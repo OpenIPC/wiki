@@ -48,3 +48,4 @@ The data is obtained from the original firmware.
 | SSC335    | 0xF2                          | 242                      | INFINITY6B0 SSC009A-S01A QFN88   |
 | SSC337    | 0xF2                          | 242                      | INFINITY6B0 SSC009A-S01A QFN88   |
 | SSC337DE  | 0xF2                          | 242                      | INFINITY6B0 SSC009B-S01A QFN128  |
+| SSC338Q   | 0xF1                          | 241                      | INFINITY6E SSC012B-S01A          |

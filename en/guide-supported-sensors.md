@@ -117,6 +117,7 @@ _Note: This list does not guarantee that your sensor will work. There are nuance
 - SSC335DE
 - SSC337
 - SSC337DE
+- SSC338Q
 
 ### Xiongmai
 
