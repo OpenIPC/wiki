@@ -93,6 +93,7 @@ _If you have another supported device to add, please do it [here][2]._
 |             |                  |            |              |                                 |
 |             |                  |            |              |                                 |
 | SSC335      | SC3335           | Uniview    |              | Uniview                         |
+| SSC338Q     | IMX415           | CamHi/Xin  |              | SSC338Q_38M_1.1                 |
 
 
 
