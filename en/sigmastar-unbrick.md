@@ -9,11 +9,11 @@ Sigmastar unbrick
 - RX -> SCL I2C (GPIO3)
 - GND -> GND
 
-![](../images/sigmastar-uart.jpg)
+![](../images/sigmastar-uart.webp)
 
-![](../images/sigmastar-raspberry.png)
+![](../images/sigmastar-raspberry.webp)
 
-![](../images/sigmastar-example.jpg)
+![](../images/sigmastar-example.webp)
 
 ---
 
@@ -38,21 +38,21 @@ chmod 755 snander
 sudo i2cdetect -y 1
 ```
 
-![](../images/sigmastar-detect.png)
+![](../images/sigmastar-detect.webp)
 
 **Check the device spinand with snander:**
 ```
 ./snander -i
 ```
 
-![](../images/sigmastar-check.png)
+![](../images/sigmastar-check.webp)
 
 **Read uboot with snander:**
 ```
 ./snander -a 0x2C0000 -l 0x060000 -r uboot0.bin
 ```
 
-![](../images/sigmastar-read.png)
+![](../images/sigmastar-read.webp)
 
 **Erase uboot partition:**
 ```
@@ -64,7 +64,7 @@ sudo i2cdetect -y 1
 ./snander -a 0x2C0000 -l 0x060000 -w uboot0_new.bin -v
 ```
 
-![](../images/sigmastar-write.png)
+![](../images/sigmastar-write.webp)
 
 ---
 
