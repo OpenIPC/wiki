@@ -4,6 +4,7 @@
 A collection of practical networking settings
 ---------------------------------------------
 
+> Attention! If something does not work, run `ifup -v <iface>` and check the output!
 
 ### ETH0 | DHCP for all platforms
 
