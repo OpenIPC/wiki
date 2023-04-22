@@ -192,7 +192,7 @@ screen /dev/ttyUSB0 115200
 Sign in into bootloader shell and run:
 ```
 mw.b ${baseaddr} 0xff ${flashsize}
-loady
+loady ${baseaddr}
 ```
 press "Ctrl-a" followed by ":", then type
 ```
