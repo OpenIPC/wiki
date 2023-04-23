@@ -204,7 +204,7 @@ eth0 : phy status change : LINK=UP : DUPLEX=FULL : SPEED=100M
 #### В uboot сеть появилась, а в Linux отсутствует сетевой интерфейс eth0
 После настройки MII в uboot для Linux тоже потребуется настройка:
 ```
-fw_setnenv extras hieth.phyaddru=0 hieth.phyaddrd=1
+fw_setenv extras hieth.phyaddru=0 hieth.phyaddrd=1
 ```
 После сохранения корректных для вашей камеры значений в переменную extras обязательно нужно перезагрузить камеру после чего интерфейс должен появиться. Проверить это можно командой ifconfig или ip addr .
 
