@@ -26,3 +26,14 @@ For U-boot network
     setenv phyaddrd 1
     saveenv
 ```
+### HiWatch, HI3518CV100
+
+```
+For U-boot network
+    setenv phyaddru 3
+    saveenv
+
+For Linux network
+    setenv extras 'hieth.phyaddru=3 hieth.mdioifu=0'
+    saveenv
+```
