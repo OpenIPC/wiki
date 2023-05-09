@@ -29,6 +29,7 @@ iface eth0 inet static
     hwaddress ether $(fw_printenv -n ethaddr || echo 00:24:B8:FF:FF:FF)
     pre-up echo -e "nameserver 77.88.8.8\nnameserver 8.8.4.4\n" >/tmp/resolv.conf                                                                                                       <= work
     pre-up echo -e "server 0.time.openipc.org iburst\nserver 1.time.openipc.org iburst\nserver 2.time.openipc.org iburst\nserver 3.time.openipc.org iburst" >/tmp/ntp.conf              <= proposition
+    up /usr/sbin/ntpd -N -q
 ```
 
 
