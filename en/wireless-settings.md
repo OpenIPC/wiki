@@ -7,7 +7,7 @@ Wireless settings
 ### Additional packages
 
 - Following packages are needed for the HI3516EV300 CamHi module.
-- The build configuration is: `hi3516ev300_ultimate_defconfig`
+- The example build configuration is: `hi3516ev300_lite_defconfig`
 
 ```
 BR2_PACKAGE_WIRELESS_CONFIGURATION=y
@@ -19,13 +19,14 @@ BR2_PACKAGE_MT7601U_AP_OPENIPC=y
 
 ### Initial configuration
 
-- The wireless settings are provided based on the used build defconfig:
+- The wireless settings are provided based on the chipset:
 
 ```diff
++SOC=$(fw_printenv -n soc)
+
 # HI3516EV300 CamHi
-+if [ "$CONFIG" = "hi3516ev300_ultimate_defconfig" ]; then
-	if [ "$1" = "start" ]; then
-		devmem 0x100C0080 32 0x530
++if [ "$SOC" == "hi3516ev300" ]; then
+	devmem 0x100C0080 32 0x530
 ```
 
 ---
@@ -54,7 +55,7 @@ iface wlan0 inet dhcp
 
 ```diff
 # HI3516EV300 CamHi
-if [ "$CONFIG" = "hi3516ev300_ultimate_defconfig" ]; then
+if [ "$SOC" == "hi3516ev300" ]; then
 +	devmem 0x100C0080 32 0x530
 +	echo 7 > /sys/class/gpio/export
 +	echo out > /sys/class/gpio/gpio7/direction
