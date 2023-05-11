@@ -39,7 +39,7 @@ Hardware: IPC Board Manufacturers
 * [Topsee](http://www.en.tpsee.com/product.html)
 * [Topper](http://toppervision.com/index2.asp)
 * [TVT](http://www.tvt.net.cn/)
-* [UNIVIEW](http://uniview.com/)
+* [Uniview](https://www.uniview.com/)
 * [VandSec/Yoosee](http://vandsec.com/) th?
 * [Videopark](http://www.videopark.com.cn)
 * [VStarcam](http://www.vstarcam.com/) th?
