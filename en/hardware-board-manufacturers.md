@@ -41,6 +41,7 @@ Hardware: IPC Board Manufacturers
 * [TVT](http://www.tvt.net.cn/)
 * [Uniview](https://www.uniview.com/)
 * [VandSec/Yoosee](http://vandsec.com/) th?
+* [VeeZoom](https://funcoo.en.alibaba.com/)
 * [Videopark](http://www.videopark.com.cn)
 * [VStarcam](http://www.vstarcam.com/) th?
 * [Vatilon](https://www.vatilon.cn/ProductInfoCategory?categoryId=400431,400432,400433,400434,400435,400436)
