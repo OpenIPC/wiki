@@ -36,4 +36,13 @@ git clone git@github.com:OpenIPC/firmware.git
 git format-patch master
 ```
 
+### Небольшие исправления, опечатки.
+
+Еще проще справляться с небольшими исправлениями, используя GitHub. 
+Заметили опечатку? Придумали лучшую формулировку? Заметили неработающую ссылку?
+Просто нажмите на эту кнопку, похожую на карандаш, и внесите исправления.
+
+![GutHub Correction](../images/gh-correction.webp)
+
+[gh-signup]: https://github.com/signup
 [gitdoc]: https://git-scm.com/book/ru/v2
