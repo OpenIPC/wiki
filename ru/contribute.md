@@ -17,12 +17,11 @@
 Если у вас есть аккаунт на GitHub, то все просто: сделайте копию нашего
 кода в своем аккаунте (fork).
 
-![GitHub Fork](../images/gh-fork.png)
-
+![GitHub Fork](../images/gh-fork.webp)
 Сделайте правки в своей копии, после чего отправьте запрос на включение
 ваших изменений в нашу ветку (pull request)
 
-![GitHub Contribute](../images/gh-contribute.png)
+![GitHub Contribute](../images/gh-contribute.webp)
 
 Если вы по какой-то причине не пользуетесь GitHub, вы всё-равно можете
 прислать нам свои изменения в код. Для этого сделайте локальную копию
