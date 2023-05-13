@@ -37,3 +37,11 @@ For Linux network
     setenv extras 'hieth.phyaddru=3 hieth.mdioifu=0'
     saveenv
 ```
+
+### Harex, HI3516CV100
+
+```
+For U-boot network
+    setenv extras 'hieth.phyaddru=1 hieth.mdioifu=0'
+    saveenv
+```
