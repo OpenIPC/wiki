@@ -38,7 +38,7 @@ For Linux network
     saveenv
 ```
 
-### Harex, HI3516CV100
+### Harex (5013A-CF/5020A-FF), HI3516CV100
 
 ```
 For U-boot network
