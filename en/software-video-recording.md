@@ -8,7 +8,7 @@ Video Recording Software
 - [camera.ui](https://github.com/seydx/camera.ui)
 - [ContaCam](https://www.contaware.com/contacam.html)
 - [Insentry](https://insentry.io/)
-- [iSpy](https://www.ispyconnect.com/)
+- [Agent DVR](https://www.ispyconnect.com/) (former iSpy)
 - [Frigate](https://frigate.video/)
 - [motion](https://motion-project.github.io/)
 - [motionEyeOS](https://github.com/motioneye-project/motioneyeos)
