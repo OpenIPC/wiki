@@ -66,10 +66,11 @@ Tested on Gk7205v200:
 
 ### Jovision boards
 
-| Processor   | IRCUT1 | IRCUT2 | LIGHT |  TESTED BOARDS  |
-|-------------|--------|--------|-------|-----------------|
-| Hi3516Ev200 | 53     | 52     | 4     |                 |
-| Hi3516Cv100 | 42     | 43     | 6     | IPG5020A-H-V1.0 |
+| Processor   | IRCUT1 | IRCUT2 | LIGHT |  TESTED BOARDS    |
+|-------------|--------|--------|-------|-------------------|
+| Hi3516Ev200 | 53     | 52     | 4     |                   |
+| Hi3516Cv100 | 42     | 43     | 6     | IPG5020A-H-V1.0   |
+|             |        |        |       | 5013A-CF\5020A-FF |
 
 ### JUAN boards (Sannce)
 
