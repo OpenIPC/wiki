@@ -371,8 +371,7 @@ iface wlan0 inet dhcp
 ```
 
 
-
-### WLAN0 | T31 | Xiaomi Mjsxj03Hl 2K
+### WLAN0 | T31 | Xiaomi MJSXJ03HL 2K
 
 ```
 auto wlan0
