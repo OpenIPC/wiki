@@ -73,6 +73,7 @@ OpenIPC Wiki
 ### Cameras
 - [Chacon IPCAM-RI01](en/device-chacon-ipcam-ri01.md)
 - [Smartwares CIP-37210](en/device-smartwares-cip-37210.md)
+- [Xiaomi Mi Camera 2K (MJSXJ03HL)](https://github.com/OpenIPC/device-mjsxj03hl/)
 - [Wyze V3](en/device-wyze-integration.md)
 
 ### Software
