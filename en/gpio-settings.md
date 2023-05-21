@@ -40,8 +40,8 @@ Tested on Gk7205v200:
 
 ```
 Tested on GK7205V200 for /dev/ttyАМА1
-  devmem 0x112c0074 32 2
   devmem 0x112c0070 32 2
+  devmem 0x112c0074 32 2
 ```
 
 
