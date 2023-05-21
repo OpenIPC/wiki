@@ -38,6 +38,14 @@ Tested on Gk7205v200:
   mux 13->UART2_TXD/RS485_DI: devmem 0x112c0074 32 2
 ```
 
+```
+Tested on GK7205V200 for /dev/ttyАМА1
+  devmem 0x112c0074 32 2
+  devmem 0x112c0070 32 2
+```
+
+
+
 ### GSA boards
 
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA |
