@@ -59,3 +59,10 @@ IPC Glossary
 - UPnP - Universal Plug and Play
 - USB - Universal Serial Bus
 - WDR - Wide Dynamic Range
+
+#### ffmpeg/ffplay
+
+- PTS - Presentation Time Stamp
+- fps - Average frame rate in frames per second (`AVStream.avg_frame_rate`)
+- tbr - Real base framerate of the stream (`AVStream.r_frame_rate`)
+- tbn - Timescale in ticks per second (`AVStream.time_base`)
