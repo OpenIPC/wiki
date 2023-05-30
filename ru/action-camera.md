@@ -196,5 +196,7 @@ cli -s .records.path /mnt/mmcblk0p1/%Y-%m-%d-%H.mp4
 * PQTools для настройки качества изображения
 
 <p align="center">
-  <img src="https://github.com/OpenIPC/wiki/blob/master/images/actioncam-box-1.webp" alt="Куб 1"/>
+  <img src="https://github.com/OpenIPC/wiki/blob/master/images/actioncam-box-1.webp" width="25%" alt="Куб 1"/>
+  <img src="https://github.com/OpenIPC/wiki/blob/master/images/actioncam-box-3.webp" width="25%" alt="Куб 3"/>
+  <img src="https://github.com/OpenIPC/wiki/blob/master/images/actioncam-box-2.webp" width="25%" alt="Куб 2"/>
 </p>
