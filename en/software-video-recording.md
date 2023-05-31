@@ -15,5 +15,6 @@ Video Recording Software
 - [Shinobi](https://shinobi.video/)
 - [Sighthound](https://www.sighthound.com/)
 - [tinyCam Monitor](https://tinycammonitor.com/)
+- [Viseron](https://viseron.netlify.app/)
 - [ZoneMinder](https://zoneminder.com/)
 - [Xeoma](https://felenasoft.com/xeoma/en/)
