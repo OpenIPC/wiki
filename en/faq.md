@@ -119,7 +119,7 @@ passwd
 __On the desktop__: Copy the public key to the camera by logging in with the
 password created above.
 ```
-ssh-copy-id root@192.168.1.666
+ssh-copy-id root@192.168.1.66
 ```
 
 __On the camera__: Create a `.ssh` folder in the root user's home directory
@@ -132,7 +132,7 @@ cp /etc/dropbear/authorized_keys ~/.ssh/
 __On the desktop__: Open a new session to verify that the authorization is
 passed using the public key not requesting a password.
 ```
-ssh root@192.168.1.666
+ssh root@192.168.1.66
 ```
 
 
