@@ -3,12 +3,19 @@ Attention News
 
 This is where the hot news will be posted that you should pay attention to, it's not a changelog
 
-Automatic translation: [English](https://github.com/OpenIPC/wiki/blob/master/en/attention-news.md) [Russian](https://github-com.translate.goog/OpenIPC/wiki/blob/master/en/attention-news.md?_x_tr_sl=en&_x_tr_tl=ru&_x_tr_hl=en&_x_tr_pto=wapp) [Chinese](https://github-com.translate.goog/OpenIPC/wiki/blob/master/en/attention-news.md?_x_tr_sl=en&_x_tr_tl=zh-CN&_x_tr_hl=en&_x_tr_pto=wapp)
+Automatic translation: [English](https://github.com/OpenIPC/wiki/blob/master/en/attention-news.md) | [Russian](https://github-com.translate.goog/OpenIPC/wiki/blob/master/en/attention-news.md?_x_tr_sl=en&_x_tr_tl=ru&_x_tr_hl=en&_x_tr_pto=wapp) | [Chinese](https://github-com.translate.goog/OpenIPC/wiki/blob/master/en/attention-news.md?_x_tr_sl=en&_x_tr_tl=zh-CN&_x_tr_hl=en&_x_tr_pto=wapp)
 
 
-### 01.06.2023
+## 01.06.2023
 
-Global changes in the structure of the project have caused some devices that use external WiFi modules to stop working.
+We updated the Buildroot version, changed the toolchain build system, moved and streamlined configuration files to configure network devices - a lot of changes.
+The global changes in the structure of the project caused some devices that use external WiFi modules to stop or stop working after the update.
+We kindly ask you to be understanding and until documentation and releases are corrected, please do NOT update at least these types of devices, and maybe others with WiFi:
 
-This is a draft, this post will be supplemented.
+* Smartwares CIP-37210
+* Switcam HS303 v1
+* Switcam HS303 v2
+* Switcam HS303 v3
+* Ezviz (any)
+* Xiaomi (any)
 
