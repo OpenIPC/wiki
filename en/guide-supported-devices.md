@@ -44,11 +44,14 @@ _If you have another supported device to add, please do it [here][2]._
 |            |                    |             |        |              |     |                |      |      |
 | Smartwares | [CIP-37210][4]     | HI3518EV200 |        |              | No  | RTL8188FU      | WiFi | Yes  |
 |            |                    |             |        |              |     |                |      |      |
+| TOP        | TOP-201/MCO-720P Mini Camera  | HI3518EV100 | OV9712 |  | Yes | No             | No   | No   |
+|            |                    |             |        |              |     |                |      |      |
 | Xiaomi     | MJSXJ02HL          | HI3518EV300 |        |              | No  |                |      | Yes  |
 |            |                    |             |        |              |     |                |      |      |
 | XM         | BLK18EV-0062-0035  | HI3518EV200 | JXH62  |              | Yes |                |      | Yes  |
 |            |                    |             |        |              |     |                |      |      |
 | Zenotech   | HI3516D_MB_V13_RA  | HI3516DV100 | OV9689 | GD25Q128CSIG | Yes | No             |      | No   |
+
 
 
 
