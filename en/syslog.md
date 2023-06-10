@@ -8,7 +8,7 @@ Sometimes it is necessary to get logs from multiple OpenIPC devices remotely.
 
 There is no difficulty in this, you need to configure the server by enabling the option to receive information and write its IP address in the call to the handler on the camera.
 
-Will start with the camera. Add the option -R <server-ip>:514 with the address as shown in the example and reboot the device.
+Will start with the camera. Add the option -R server-ip:514 with the address as shown in the example and reboot the device.
 
 
 ```
