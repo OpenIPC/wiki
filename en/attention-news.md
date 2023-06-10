@@ -9,7 +9,6 @@ Automatic translation: [English](https://github.com/OpenIPC/wiki/blob/master/en/
 ## 01.06.2023
 
 We updated the Buildroot version, changed the toolchain build system, moved and streamlined configuration files to configure network devices - a lot of changes.
-
 The global changes in the structure of the project caused some devices that use external WiFi modules to stop or stop working after the update.
 
 We kindly ask you to be understanding and until documentation and releases are corrected, please do NOT update at least these types of devices, and maybe others with WiFi:
@@ -23,4 +22,4 @@ We kindly ask you to be understanding and until documentation and releases are c
 
 If you broke your device, please rollback your firmware to May 1, 2023 or return to the firmware of the [sub-project](https://github.com/topics/device-openipc).
 
-You can get official OpenIPC firmware for the last half year on our [Telegram channel](https://t.me/openipc_dev), they are published automatically.
+You can get official OpenIPC firmware for the last half year on our Telegram [channel](https://t.me/openipc_dev), they are published automatically.
