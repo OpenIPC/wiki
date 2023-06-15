@@ -35,6 +35,31 @@ of CH341A IC through 5V pin connector on the header.
 
 ![](../images/hardware-ch341a-hack-5.webp)
 
+### Troubleshooting
+
+```
+libusb: error [get_usbfs_fd] libusb couldn't open USB device /dev/bus/usb/001/003, errno=13
+libusb: error [get_usbfs_fd] libusb requires write access to USB device nodes
+```
+If you get an error message like this running a programming software, you need to adjust
+permissions on the USB port for that device. 
+
+Create a udev rule file 
+```
+sudo vi /etc/udev/rules.d/99-ch341a-prog.rules
+```
+add the following content in the file:
+```
+# udev rule that sets permissions for CH341A programmer in Linux.
+# Put this file in /etc/udev/rules.d and reload udev rules or reboot to install
+SUBSYSTEM=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="5512", MODE="0666"
+```
+save the file, reload udev
+```
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+```
+then unplug the programmer and plug it back in a USB port.
 
 ### Software
 
