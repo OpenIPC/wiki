@@ -33,7 +33,7 @@ run uk; run ur; reset
 ### Notes
 
 After you have finished flashing new firmware, please run `firstboot` command
-to format jffs2 partition used to store settings.
+to format `jffs2` partition used to store settings.
 
 
 ### Other info

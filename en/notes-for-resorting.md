@@ -85,18 +85,18 @@ RJ-45 connectors and wires.
 
 * __YouTube Streaming__
 
-#### MiniHttp is the main streamer of the OpenIPC based system
+### MiniHttp is the main streamer of the OpenIPC based system
 
 It is important to tune configuration of MiniHttp by turning off unneeded
 protocols and features for better security and performance.
 
 Config file is located in `/etc/minihttp.ini`
 
-#### Debug mode:
+### Debug mode:
 
 ```killall -sigint minihttp; sleep 1; export SENSOR=`ipctool --sensor_id`; minihttp```
 
-#### Production mode:
+### Production mode:
 
 ```killall -sigint minihttp; sleep 1; export SENSOR=`ipctool --sensor_id`; minihttp 2>&1 | logger -p daemon.info -t minihttp &```
 
@@ -190,7 +190,6 @@ if(pinfo->mem->start = 0x20250000 /* address i2c-2 */) {
 ### Groups in Telegram related to development:
 
 
-
 ## Tools used in Research and Development
 
 [hisi-trace](https://github.com/OpenIPC/hisi-trace) --> tool to run Sofia inside
@@ -209,7 +208,7 @@ Different hack & mod related to IP Cameras forums:
 
 Below are some examples how to record video streams with various utilities.
 
-#### gstreamer
+### gstreamer
 
 * rtsp h264 stream:
 
@@ -219,9 +218,9 @@ Below are some examples how to record video streams with various utilities.
 
 `gst-launch-1.0 rtspsrc location=rtsp://192.168.1.10:554/stream=0 ! rtpjitterbuffer ! rtph265depay ! h265parse ! mp4mux ! filesink location=stream0_h265.mp4 -e`
 
-#### ffmpeg
+### ffmpeg
 
-#### vlc
+### vlc
 
 ## How to login inside original firmware
 
@@ -311,7 +310,7 @@ himm 0x0120E0110 0x60320000 > /dev/null; himm 0x120E0118 | awk '{print $4}' | dd
 himm 0x0120E0110 0x60320000 > /dev/null; himm 0x120E0118 | awk '{print $4}' | dd skip=1 bs=7 2>/dev/null | awk '{print "0x"$1}' | awk '{print "CPU temperature: " (($1-125)/806)*165-40}'
 ```
 
-`HI3520DV200 `
+`HI3520DV200`
 ```sh
 devmem 20060020 32
 ```

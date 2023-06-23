@@ -6,7 +6,7 @@ For XM vendor boards with NT98562 and NT98566 SoC ONLY!!!
 
 ### Initial device firmware update
 
-**This section will be completed at the end of the research**
+> **This section will be completed at the end of the research**
 
 ```
 run uk; run ur; reset            # Flash kernel, rootfs and reboot device
@@ -21,7 +21,7 @@ run uk; run ur; reset
 ### Notes
 
 After you have finished flashing new firmware, please run `firstboot` command
-to format jffs2 partition used to store settings.
+to format `jffs2` partition used to store settings.
 
 ### Known issues
 

@@ -10,9 +10,11 @@ There is no difficulty in this, you need to configure the server by enabling the
 
 Will start with the camera. Add the option -R server-ip:514 with the address as shown in the example and reboot the device.
 
-
+```bash
+root@openipc-hi3516ev300:~# differ /etc/init.d/S01syslogd
 ```
-root@openipc-hi3516ev300:~# differ /etc/init.d/S01syslogd.
+
+```diff
 --- /rom/etc/init.d/S01syslogd
 +++ /etc/init.d/S01syslogd
 @@ -3,7 +3,7 @@
@@ -28,8 +30,7 @@ root@openipc-hi3516ev300:~# differ /etc/init.d/S01syslogd.
 
 In the server configuration file, write down the options of which port numbers and protocols to listen to it and make a restart of the service.
 
-
-```
+```diff
 --- rsyslog.conf.orig 2022-09-30 16:41:52.081353630 +0300
 +++ rsyslog.conf 2023-05-01 12:44:06.098032982 +0300
 @@ -14,12 +14,12 @@
@@ -52,4 +53,3 @@ In the server configuration file, write down the options of which port numbers a
 ```
 
 Comments and additions welcome. Bye !
-
