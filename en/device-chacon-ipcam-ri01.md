@@ -16,7 +16,7 @@ I'm sure there are other cameras out there that are using the same hardware (or 
 | Flash  | 16Mb (XM25QH128A) or 8Mb (XM25QH64A) |
 | WiFi   | RTL8188FU                            |
 
-#### OpenIPC status
+### OpenIPC status
 
 | Component     | Status                                                   |
 |---------------|----------------------------------------------------------|
@@ -27,7 +27,7 @@ I'm sure there are other cameras out there that are using the same hardware (or 
 | IR Cut        | Working                                                  |
 
 
-#### Hardware details
+### Hardware details
 
 The camera mainboard is identified by "SPEED5S-H1MB_F23".
 
