@@ -1,4 +1,5 @@
 # OpenIPC Wiki
+
 [Table of Content](../README.md)
 
 Available Installation Methods
@@ -26,7 +27,7 @@ OpenIPC firmware installation using Coupler.
 --------------------------------------------
 
 Instructions for using [Coupler](https://github.com/openipc/coupler/) can be
-found in [the project's documenation](https://github.com/openipc/coupler/).
+found in [the project's documentation](https://github.com/openipc/coupler/).
 
 OpenIPC firmware installation via TFTP and UART, step by step.
 --------------------------------------------------------------
@@ -34,7 +35,7 @@ OpenIPC firmware installation via TFTP and UART, step by step.
 ### Step 1. Determine the System on Chip.
 
 The SoC includes the CPU core of the camera, as well as all the necessary
-periperhals such as the camera and network interfaces. For various reasons
+peripherals such as the camera and network interfaces. For various reasons
 (including the limited onboard storage space on most IP Cameras), the OpenIPC
 project currently builds separate firmware binaries for each SoC model.  **You
 must identify the SoC which your camera uses**, so that you can use the correct
@@ -65,7 +66,7 @@ retrieving bootable images from a designated boot server on the local network.
 most likely already exists in distro's repo, and you only need to install it and
 set it up.
 
-```
+```bash
 sudo apt install tftpd-hpa
 sudo sed -i '/^TFTP_OPTIONS/s/"$/ --create"/' /etc/default/tftpd-hpa
 sudo systemctl restart tftpd-hpa.service
@@ -108,33 +109,43 @@ or whatnot.
 
 Connect `GND` pin on your camera to `GND` pad of the adapter, connect USB
 connector of the adapter to a USB port on your PC, start a terminal emulator
-application and connect to your adapter. Set your terminal settings to 
-115200 bps baudrate, 8 bits, no parity, 1 stopbit, no flow control. 
+application and connect to your adapter. Set your terminal settings to
+115200 bps baudrate, 8 bits, no parity, 1 stopbit, no flow control.
 
 Here's a few command lines for various terminal programs with session logging. Pick your poison.
 
 #### screen
+
 Start a sessions with
-```
+
+```bash
 screen -L -Logfile ipcam-$(date +%s).log /dev/ttyUSB0 115200
 ```
+
 Use `Ctrl-a` followed by `\` to exit the session.
 
-#### minicom
+#### `minicom`
+
 Start a sessions with
-```
+
+```bash
 minicom -b 115200 -8 --capturefile=ipcam-$(date +%s).log --color=on -D /dev/ttyUSB0
 ```
+
 Use `Ctrl-a` followed by `x` to exit the session.
 
-#### picocom
+#### `picocom`
+
 Start a sessions with
-```
+
+```bash
 picocom -b 115200 --databits 8 --parity n --stopbits 1 --flow n --logfile=ipcam-$(date +%s).log /dev/ttyUSB0
 ```
+
 Use `Ctrl-a` followed by `Ctrl-x` to exit the session.
 
 #### PuTTY
+
 If you opt for a GUI terminal, namely [PuTTY](https://www.putty.org/), this is how it should look like:
 
 ![PuTTY settings screen](https://user-images.githubusercontent.com/29582865/207894192-c6f66401-7715-4aa6-bee2-8343aae6c0a9.png)
@@ -187,7 +198,7 @@ Most IP cameras nowadays are equipped with 8 or 16 MB NOR or NAND flash memory.
 You can check the type and size of the chip installed on of your camera in the
 bootloader log output. You'll see something like this:
 
-```
+```console
 U-Boot 2010.06-svn (Oct 21 2016 - 11:21:29)
 
 Check Flash Memory Controller v100 ... Found
@@ -199,7 +210,7 @@ SPI Nor total size: 16MB
 
 Another example:
 
-```
+```console
 U-Boot 2013.07 (Feb 27 2019 - 02:05:08)
 
 DRAM:  64 MiB
@@ -233,7 +244,7 @@ the values by `setenv` command (use IP addresses and netmask corresponding to
 your local network), then save the new values into environment with `saveenv`
 command.
 
-```
+```bash
 setenv ipaddr 192.168.1.253
 setenv netmask 255.255.255.0
 setenv gatewayip 192.168.1.1
@@ -294,7 +305,7 @@ If you followed step 2, you've got your own TFTP server serving files from
 `/srv/tftp` directory. Extract files from the bundle you just downloaded into
 that directory.
 
-```
+```bash
 sudo tar -C /srv/tftp/ -xvf openipc.*.tgz
 ```
 
@@ -304,7 +315,7 @@ So, we have a guinea pig, a camera with hi3518ev100 SoC, equipped with a OV9712
 sensor, 64 MB of RAM and a 8MB NOR flash memory.
 
 Connect to the camera via the UART port and access the bootloader console.
-Set the component parameters to the appropriate environment variables. Set 
+Set the component parameters to the appropriate environment variables. Set
 environment variables for loading the Linux kernel and the root file system
 of the new firmware. Set environment variables for the camera to access local network,
 where `ethaddr` is the original camera MAC address, `ipaddr` is camera's IP address
@@ -333,7 +344,7 @@ firmware. Welcome to OpenIPC!
 After the first boot with the new firmware you need to clean the overlay
 partition. Run this in your terminal window:
 
-```
+```bash
 firstboot
 ```
 

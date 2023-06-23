@@ -10,9 +10,10 @@ hash of that password while extracting a copy of the firmware image.
 
 ### Password hash
 
-```
+```console
 $1$bh2njiGH$4duacOMcXDh6myANzbZTf.
 ```
+
 The hashed salt password string consists of three parts: hashing algorithm
 identifier, salt and password hash, each of which is preceded by a dollar sign.
 The first part, `$1`, is the hashing algorithm encoded with one (rarely two)
@@ -45,7 +46,8 @@ hours, especially using high-quality dictionaries.
 
 In the example above we used password "openipc". You can check the validity of
 the password using either `mkpasswd` or `openssl`:
-```
+
+```bash
 $ mkpasswd -m md5crypt -S bh2njiGH openipc
 $1$bh2njiGH$4duacOMcXDh6myANzbZTf.
 $ openssl passwd -1 -salt bh2njiGH openipc
@@ -57,6 +59,7 @@ researchers in the field could dedicate their cryptographic resources to
 discover even more yet unknown passwords. Sharing is caring, boys!
 
 ### Some passwords that we found in different firmware
+
 ```
 | Hash                                  | Plain text |
 |---------------------------------------|------------|
@@ -100,7 +103,7 @@ discover even more yet unknown passwords. Sharing is caring, boys!
 ```
 
 ### Hijacking the default password
-_tested on Goke_
+> _tested on Goke_
 
 Over the UART interface, it is possible to temporarily interrupt the normal
 booting sequence and drop into a limited Linux shell at early stage of
@@ -142,7 +145,8 @@ file where password is written on every restart. Search for `/etc/passwd` and
 change a letter in its name to something different, like `/etc/passwT`.
 
 Pack the squash file system using `mksquashfs`:
-```
+
+```bash
 mksquashfs ./squashfs-root ./file -comp xz -no-xattrs -noappend -no-exports -all-root -quiet -b 131072
 ```
 and copy it from the SD card back to `/rom` directory on the camera.
@@ -159,8 +163,6 @@ you restart the device, you will have full working system with your own password
 
 [1]: https://en.wikipedia.org/wiki/Rainbow_table
 [2]: https://en.wikipedia.org/wiki/Brute-force_attack
-
-
 
 
 ---------------------------------------------------
