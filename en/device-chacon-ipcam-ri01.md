@@ -80,7 +80,6 @@ At the bottom of the mainboard:
 ![device_chacon_ipcam-ri01_uart](https://user-images.githubusercontent.com/1659543/149518771-a33ab23f-a4f0-44db-83a6-873bd1802056.jpg)
 
 
-
 ### GPIOs
 
 | nr        | Description   |
@@ -517,7 +516,7 @@ sensors:
 ## Flashing OpenIPC
 (soon...)
 
-#### Boot dump
+### Boot dump
 ```
 Uncompress Ok!
 

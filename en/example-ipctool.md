@@ -4,8 +4,11 @@
 Run ipctool
 -----------
 
-```
+```bash
 root@ipcam:/# ipctool
+```
+
+```yaml
 ---
 board:
   vendor: OpenIPC
@@ -53,5 +56,4 @@ sensors:
     bus: 0
     type: i2c
     addr: 0x30
-root@ipcam:/#
 ```

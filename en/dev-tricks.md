@@ -5,7 +5,8 @@ Interesting tricks
 ------------------
 
 ### Sharing output of a command via web
-```
+
+```bash
 <command> | nc seashells.io 1337
 ```
 
@@ -108,4 +109,5 @@ index d64ff27..159336e 100644
  		G.logFileSize = xatou_range(opt_s, 0, INT_MAX/1024) * 1024;
 -- 
 ```
+
 _from [sysklogd: add -Z option to adjust message timezones](http://lists.busybox.net/pipermail/busybox/2017-May/085437.html)_

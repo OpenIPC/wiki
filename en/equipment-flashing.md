@@ -9,7 +9,7 @@ Equipment for flashing
 While some hardened technicians would insist on getting things done
 with a grandfather's kilowatt soldering iron, we suggest you to buy
 a modern [soldering station with a hot air](https://www.aliexpress.com/premium/soldering-station-hot-air.html)
-and temperature control. You don't need to be fancy, an entry level 
+and temperature control. You don't need to be fancy, an entry level
 soldering station like YIHUA 882D, or JCD 8898, or YOUYUE 8586 would
 do, and it won't break the bank with its price tag of $50-70, more 
 or less.
@@ -19,8 +19,8 @@ or less.
 ![](../images/equipment-youyue8586.webp)
 
 Throw in a silicone mat, a tube of no-clean flux, a can of solder paste,
-desoldering copper wick, ceramic tweezers, nonwoven swabs and a bottle
-of isopropyl alcohol. Many of these things can be already included as 
+de-soldering copper wick, ceramic tweezers, nonwoven swabs and a bottle
+of isopropyl alcohol. Many of these things can be already included as
 perks with the soldering station.
 
 ### A programmer for flashing memory chips.

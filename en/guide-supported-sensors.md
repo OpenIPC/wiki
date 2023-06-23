@@ -56,11 +56,11 @@ _Note: This list does not guarantee that your sensor will work. There are nuance
 - HI3516CV100
   - 9m034, ar0130, ar0140, ar0330, himax1375, icx692, imx104, imx122, imx138, imx222, imx225, imx236, mn34041, mt9p006, ov2710, ov9712, ov9732, po3100k, sc1035, soih22, soih42
 - HI3516CV200
-  - 9m034, ar0130, ar0230, gc1034, gc2023, gc2033, imx122, imx222, imx291, imx307, imx323, imx327, jxf22, jxf23, jxh62, jxh65, mn34222, ov2718, ov2735, ov9712, ov9732, ov9750, ov9752, sc1135, sc1145, sc1235, sc2035, sc2135, sc2232, sc2235 
+  - 9m034, ar0130, ar0230, gc1034, gc2023, gc2033, imx122, imx222, imx291, imx307, imx323, imx327, jxf22, jxf23, jxh62, jxh65, mn34222, ov2718, ov2735, ov9712, ov9732, ov9750, ov9752, sc1135, sc1145, sc1235, sc2035, sc2135, sc2232, sc2235
 - HI3516CV300
   - ar0237, imx291, imx307, imx323, imx385, jxf22, ov2718, ov2735, sc2235p, sc2310
 - HI3516CV500
-  - gc2053, imx290, imx307, imx327, imx334, imx335, imx377, imx390, imx415, imx458, mn34220, os04b10, os05a, os08a10, ov12870, ov2775, ov9284, ps5260, sc4210 
+  - gc2053, imx290, imx307, imx327, imx334, imx335, imx377, imx390, imx415, imx458, mn34220, os04b10, os05a, os08a10, ov12870, ov2775, ov9284, ps5260, sc4210
 - HI3516DV100
 - HI3516DV200
 - HI3516DV300
@@ -76,7 +76,7 @@ _Note: This list does not guarantee that your sensor will work. There are nuance
 - HI3518EV201
 - HI3518EV300
 - HI3519V101
-  - imx178, imx185, imx226, imx274, imx290, imx326, imx327, imx385, os05a, os08a10, ov4689, sc4210 
+  - imx178, imx185, imx226, imx274, imx290, imx326, imx327, imx385, os05a, os08a10, ov4689, sc4210
 - HI3520DV100
 - HI3520DV200
 - HI3536CV100
