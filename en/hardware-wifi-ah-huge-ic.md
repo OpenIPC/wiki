@@ -13,7 +13,7 @@ Obtain source file of the drivers so you can compile those drivers and upload to
 
 First thing, locate Makefile. The file includes compilation instructions and failing to do it right will mean no wifi for your camera board. In the Makefile, edit values for ARCH, COMPILER and LINUX_KERNEL_PATH.
 
-Ingenic uses MIPS architecture so use it for ARCH ‘ARCH := mips’ 
+Ingenic uses MIPS architecture so use it for ARCH ‘ARCH := mips’
 
 For COMPILER and Kernel Path, it is will be a cross compilation – kind of dependent on what you got in the OpenIPC. To enlighten yourself further, read this: https://blukat.me/2017/12/cross-compile-arm-kernel-module/
 
@@ -52,7 +52,7 @@ Upload the .ko (drivers) and `fmac` (your script file can have a different name)
 
 ###	Test
 
-Test it with your WiFi hardware to ensure that it works. 
+Test it with your WiFi hardware to ensure that it works.
 
 ###	Next, create a package
 

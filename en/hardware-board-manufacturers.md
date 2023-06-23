@@ -1,8 +1,10 @@
 # OpenIPC Wiki
+
 [Table of Content](../README.md)
 
 Hardware: IPC Board Manufacturers
 ---------------------------------
+
 * [ACTi](https://www.acti.com/)
 * [Anjvision](http://www.anjvision.com/), <http://icamra.cn/>
 * [Ansjer](https://www.ansjer.com/)
@@ -52,4 +54,4 @@ Hardware: IPC Board Manufacturers
 * [Zenotech](http://www.videopark.com.cn)
 * [ZOSI](https://www.zositech.com/)
 
-_th? -- possibly a trading house_
+> _th? -- possibly a trading house_

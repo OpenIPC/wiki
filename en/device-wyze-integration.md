@@ -31,7 +31,7 @@ This is where we'll be writing down our guide to flashing new devices and report
 
 * Backup
 
-Downgrade original firmware version to (Jun 2021 w-o internet)demo_wcv3_4.36.2.5.bin 
+Downgrade original firmware version to (Jun 2021 w-o internet)demo_wcv3_4.36.2.5.bin
 [(WYom20200 Jun 2021 w-o internet)demo_wcv3_4.36.2.5.bin.zip](https://github.com/OpenIPC/wiki/files/10755387/WYom20200.Jun.2021.w-o.internet.demo_wcv3_4.36.2.5.bin.zip)
 
 Login with user `root` password `WYom20200` via telnet or UART console.
@@ -175,7 +175,7 @@ Erasing block: 8/8 (100%)
 Writing kb: 242/242 (100%) 
 Verifying kb: 242/242 (100%) 
 ```
-Now your camera flashed with OpenIPC U-boot, but whole system is still stock. 
+Now your camera flashed with OpenIPC U-boot, but whole system is still stock.
 So, next re/boot will load OpenIPC U-boot only (in cycling mode, until stop with `Ctrl+C` in UART console).
 
 * Flash kernel and rootfs
@@ -188,27 +188,31 @@ https://github.com/OpenIPC/firmware/releases/download/latest/openipc.t31-nor-lit
 
 Power off the camera.
 
-Extract and copy `rootfs.squashfs.t31` `uImage.t31` to microSD card. Insert microSD card in camera. 
+Extract and copy `rootfs.squashfs.t31` `uImage.t31` to microSD card. Insert microSD card in camera.
 
 Power on the camera.
 
-During power on the camera press `Ctrl+C` several times until it shows OpenIPC promt like this `OpenIPC # `
+During power on the camera press `Ctrl+C` several times until it shows OpenIPC prompt like this `OpenIPC #`
 
 Then issue command `run setnor16m`
 
 After you press the Enter key the camera will almost immediately restart and you will have to catch the prompt again.
 
-Then issue command 
+Then issue command:
 
-`mw.b ${baseaddr} ff 1000000; fatload mmc 0:1 ${baseaddr} uImage.${soc} ; sf probe 0; sf erase 0x50000 0x300000; sf write ${baseaddr} 0x50000 ${filesize}` 
+```bash
+mw.b ${baseaddr} ff 1000000; fatload mmc 0:1 ${baseaddr} uImage.${soc} ; sf probe 0; sf erase 0x50000 0x300000; sf write ${baseaddr} 0x50000 ${filesize}
+```
 
-and next 
+and next:
 
-`mw.b ${baseaddr} ff 1000000; fatload mmc 0:1 ${baseaddr} rootfs.squashfs.${soc} ; sf probe 0; sf erase 0x350000 0xa00000; sf write ${baseaddr} 0x350000 ${filesize}`
+```bash
+mw.b ${baseaddr} ff 1000000; fatload mmc 0:1 ${baseaddr} rootfs.squashfs.${soc} ; sf probe 0; sf erase 0x350000 0xa00000; sf write ${baseaddr} 0x350000 ${filesize}
+```
 
 Output sample:
 
-```
+```shell
 OpenIPC # mw.b ${baseaddr} ff 1000000; fatload mmc 0:1 ${baseaddr} uImage.${soc} ; sf probe 0; sf erase 0x50000 0x300000; sf write ${baseaddr} 0x50000 ${filesize}
 reading uImage.t31
 1855437 bytes read in 89 ms (19.9 MiB/s)
@@ -236,7 +240,7 @@ SF: 5079040 bytes @ 0x350000 Written: OK
 ```
 If everything went well, issue the command `reset` and camera should start boot OpenIPC.
 
-```
+```console
 Welcome to OpenIPC
 openipc-t31 login: root
 
