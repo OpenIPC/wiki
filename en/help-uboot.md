@@ -4,43 +4,51 @@
 Help: U-Boot
 ------------
 
-### Prepare the enviroment
+### Prepare the environment
 In booloader shell, check if `baseaddr` variable is already defined.
-```
+
+```bash
 printenv baseaddr
 ```
+
 If it is not there, set it yourself.
-```
+
+```bash
 # Look up address for your SoC at https://openipc.org/supported-hardware/
 setenv baseaddr 0x80600000
 ```
+
 Assign the hex size of your flash chip to a variable called `flashsize`.
-```
+
+```bash
 # Use 0x800000 for an 8MB flash chip, 0x1000000 for 16MB.
 setenv flashsize 0x800000
 ```
+
 Save these values into the environment afterwards.
-```
+
+```bash
 saveenv
 ```
 
 ### Saving original firmware without using TFTP.
 
-Before you start, [prepare the enviroment](#prepare-the-enviroment).
+Before you start, [prepare the environment](#prepare-the-environment).
 
 In the terminal program that you use to connect to the UART port, enable saving
 log file of the session. I like to use `screen` for this and my command for
 connect to the UART adapter with logging the active session to a file would look
 like this:
-```
-$ screen -L -Logfile fulldump.log /dev/ttyUSB0 115200
+
+```bash
+screen -L -Logfile fulldump.log /dev/ttyUSB0 115200
 ```
 
 After connecting to the bootloader console, run a set of commands for reading
 whole amount of data from flash memory chip into RAM, and then dumping it as
 hexadecimal values into terminal window.
 
-```
+```shell
 mw.b ${baseaddr} 0xff ${flashsize}
 sf probe 0
 sf read ${baseaddr} 0x0 ${flashsize}
@@ -58,7 +66,7 @@ Reading of an 8 MB flash memory should result in a ~40 MB log file, and for a
 Convert the hex dump into a binary firmware file and use it for further research
 or restoring camera to its pristine state.
 
-```
+```bash
 cat fulldump.log | sed -E "s/^[0-9a-f]{8}\b: //i" | sed -E "s/ {4}.{16}\r?$//" > fulldump.hex
 xxd -revert -plain fulldump.hex fulldump.bin
 ```
@@ -67,7 +75,7 @@ Use [binwalk](https://github.com/ReFirmLabs/binwalk) to unpack the binary file.
 
 ### Saving firmware via SD card.
 
-Before you start, [prepare the enviroment](#prepare-the-enviroment).
+Before you start, [prepare the environment](#prepare-the-environment).
 
 Sometimes your camera only has a wireless connection, which does not work
 directly from the bootloader. Very often such cameras have a microSD card slot.
@@ -94,14 +102,14 @@ blocks of 512 bytes, or 0x10 blocks in hexadecimal representation).
 
 Example for 8MB:
 
-```
+```shell
 mmc dev 0
 mmc erase 0x10 0x4000
 ```
 
 Example for a 16MB:
 
-```
+```shell
 mmc dev 0
 mmc erase 0x10 0x8000
 ```
@@ -113,7 +121,8 @@ the entire contents to the prepared space in RAM. Then export the copied data
 from RAM to the card.
 
 Example for 8MB:
-```
+
+```shell
 mw.b ${baseaddr} ff ${flashsize}
 sf probe 0
 sf read ${baseaddr} 0x0 ${flashsize}
@@ -122,7 +131,8 @@ mmc write ${baseaddr} 0x10 0x4000
 ```
 
 Another example, for 16MB:
-```
+
+```shell
 mw.b ${baseaddr} ff ${flashsize}
 sf probe 0
 sf read ${baseaddr} 0x0 ${flashsize}
@@ -134,12 +144,14 @@ Remove the card from the camera and insert it into a computer running Linux.
 Use `dd` command to copy data from the card to a binary file on the computer.
 
 Example for 8MB:
-```
+
+```bash
 sudo dd bs=512 skip=16 count=16384 if=/dev/sdc of=./fulldump.bin
 ```
 
 Example for 16MB:
-```
+
+```bash
 sudo dd bs=512 skip=16 count=32768 if=/dev/sdc of=./fulldump.bin
 ```
 
@@ -154,9 +166,11 @@ into the flash memory. Here's how.
 First of all, you'll need to install `lrzsz` package on your desktop computer.
 I presume it runs Linux and preferrably of a Debian family, that'll be easier
 on examples. So, run this command to satisfy prerequisites:
-```
+
+```bash
 apt install lrzsz
 ```
+
 Now you are ready.
 
 Place the binary file you are going to upload into the same directory where you
@@ -177,7 +191,7 @@ memory image right away using `bootm`, or write it into the flash memory.
 
 ### Flashing full image via serial connection
 
-Before you start, [prepare the enviroment](#prepare-the-enviroment).
+Before you start, [prepare the environment](#prepare-the-environment).
 
 Download the full firmware binary for your SoC and flash chip from
 [OpenIPC web site](https://openipc.org/supported-hardware/) after submitting the
@@ -186,20 +200,27 @@ settings form and clicking the link hidden under "Alternative method" button.
 ![](../images/firmware-full-binary-link.webp)
 
 Open `screen` and connect to UART port.
-```
+
+```bash
 screen /dev/ttyUSB0 115200
 ```
+
 Sign in into bootloader shell and run:
-```
+
+```shell
 mw.b ${baseaddr} 0xff ${flashsize}
 loady ${baseaddr}
 ```
+
 press "Ctrl-a" followed by ":", then type
-```
+
+```bash
 exec !! sz --ymodem fullimage.bin
 ```
+
 after the image is loaded, continue
-```
+
+```shell
 sf probe 0
 sf erase 0x0 ${flashsize}
 sf write ${baseaddr} 0x0 ${filesize}
@@ -207,26 +228,27 @@ sf write ${baseaddr} 0x0 ${filesize}
 
 ### Flashing full image from TFTP
 
-Before you start, [prepare the enviroment](#prepare-the-enviroment).
+Before you start, [prepare the environment](#prepare-the-environment).
 
 Download [full image binary for your SoC](https://openipc.org/supported-hardware/)
-and place it in the root directory of your local FTFP server.
+and place it in the root directory of your local TFTP server.
 
 Start the session and boot into the bootloader console interrupting booting
 routine with a key combo. When in the console, set up parameters of your local
 network, if needed.
 
-```
+```bash
 setenv ipaddr 192.168.1.10
 setenv netmask 255.255.255.0
 setenv gatewayip 192.168.1.1
 setenv serverip 192.168.1.254
 ```
 
-Use the following commands to reflash your camera with the full image:
+Use the following commands to re-flash your camera with the full image:
 
 Example for 8MB:
-```
+
+```shell
 mw.b ${baseaddr} 0xff ${flashsize}
 tftpboot ${baseaddr} openipc-${soc}-lite-8mb.bin
 sf probe 0; sf erase 0x0 ${flashsize}; sf write ${baseaddr} 0x0 ${filesize}
@@ -234,31 +256,34 @@ reset
 ```
 
 Example for 16MB:
-```
+
+```shell
 mw.b ${baseaddr} 0xff ${flashsize}
 tftpboot ${baseaddr} openipc-${soc}-ultimate-16mb.bin
 sf probe 0; sf erase 0x0 ${flashsize}; sf write ${baseaddr} 0x0 ${filesize}
 reset
 ```
-At the first boot, sign in into the bootloader shell once again and remap 
-partitioning running `run setnor16m` command.
 
+At the first boot, sign in into the bootloader shell once again and remap
+partitioning running `run setnor16m` command.
 
 ### Reading binary image from SD card.
 
-Before you start, [prepare the enviroment](#prepare-the-enviroment).
+Before you start, [prepare the environment](#prepare-the-environment).
 
 If your camera supports SD card and you have `fatload` command in bootloader,
 then you can read firmware binary files from an SD card.
 
-First, prepage the card: format it into FAT filesystem and place bootloader,
-kernel, and rootsf binary files there. Insert the card into camera and boot
+First, prepare the card: format it into FAT filesystem and place bootloader,
+kernel, and rootfs binary files there. Insert the card into camera and boot
 into bootloader console.
 
 Check that you have access to the card.
-```
+
+```bash
 mmc rescan
 ```
+
 Then unlock access to flash memory and start writing content of the files from
 the card into the flash memory.
 
@@ -267,7 +292,8 @@ necessarily match those for your particular camera. Consult documentation, or
 seek help on [our Telegram channel][telegram].
 
 Flash bootloader.
-```
+
+```shell
 mw.b ${baseaddr} 0xff 0x50000
 sf probe 0
 sf erase 0x0 0x50000
@@ -276,7 +302,8 @@ sf write ${baseaddr} 0x0 ${filesize}
 ```
 
 Flash kernel.
-```
+
+```shell
 mw.b ${baseaddr} 0xff 0x200000
 sf probe 0
 sf erase 0x50000 0x200000
@@ -285,7 +312,8 @@ sf write ${baseaddr} 0x50000 ${filesize}
 ```
 
 Flash root filesystem.
-```
+
+```shell
 mw.b ${baseaddr} 0xff 0x500000
 sf probe 0
 sf erase 0x250000 0x500000
@@ -309,8 +337,8 @@ it stop the Linux kernel booting and throw you into the shell.
 
 The first thing to do is locate the flash memory chip on the camera circuit
 board. Typically this is a square chip with 8 pins labeled 25Q64 or 25Q128,
-rarely 25L64 or 25L128. If you have trouble locating the chip, try taking 
-some pictures of your board from both sides. Then ask for help 
+rarely 25L64 or 25L128. If you have trouble locating the chip, try taking
+some pictures of your board from both sides. Then ask for help
 [in our Telegram channel](https://t.me/openipc).
 __Do not try to short-circuit any random chip! It will most likely burn your camera circuit.__
 
@@ -352,23 +380,23 @@ __DO NOT FORGET TO MAKE A BACKUP OF YOUR ORIGINAL FIRMWARE!__
 
 ## Troubleshooting
 
-Before you start, [prepare the enviroment](#prepare-the-enviroment).
+Before you start, [prepare the environment](#prepare-the-environment).
 
 If you get `Too many args` error while trying to set an environment variable,
 try to do that from within Linux using `fw_setenv` instead of `setenv` in U-boot.
 
 __U-boot console:__
-```
+
+```shell
 hisilicon # setenv uk 'mw.b ${baseaddr} 0xff ${flashsize}; tftp ${baseaddr} uImage.${soc}; sf probe 0; sf erase 0x50000 0x200000; sf write ${baseaddr} 0x50000 ${filesize}'
 ** Too many args (max. 16) **
 ```
 
 __OpenIPC Linux:__
-```
+
+```shell
 root@openipc-hi3518ev100:~# fw_setenv uk 'mw.b ${baseaddr} 0xff ${flashsize}; tftp ${baseaddr} uImage.${soc}; sf probe 0; sf erase 0x50000 0x200000; sf write ${baseaddr} 0x50000 ${filesize}'
 ```
-
-
 
 [burn]: https://github.com/OpenIPC/burn
 [telegram]: https://t.me/OpenIPC

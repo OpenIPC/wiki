@@ -26,7 +26,7 @@ With a sharp utility knife, cut the trace on the back of the programmer board.
 ![](../images/hardware-ch341a-hack-3.webp)
 
 Connect 3.3v output leg of the voltage regulator to pin 9 of CH341A IC bridging
-it to a corresponding trace at a nerby capacitor.
+it to a corresponding trace at a nearby capacitor.
 
 ![](../images/hardware-ch341a-hack-4.webp)
 
@@ -37,28 +37,35 @@ of CH341A IC through 5V pin connector on the header.
 
 ### Troubleshooting
 
-```
+```console
 libusb: error [get_usbfs_fd] libusb couldn't open USB device /dev/bus/usb/001/003, errno=13
 libusb: error [get_usbfs_fd] libusb requires write access to USB device nodes
 ```
-If you get an error message like this running a programming software, you need to adjust
-permissions on the USB port for that device. 
 
-Create a udev rule file 
-```
+If you get an error message like this running a programming software, you need to adjust
+permissions on the USB port for that device.
+
+Create a udev rule file
+
+```bash
 sudo vi /etc/udev/rules.d/99-ch341a-prog.rules
 ```
+
 add the following content in the file:
-```
+
+```bash
 # udev rule that sets permissions for CH341A programmer in Linux.
 # Put this file in /etc/udev/rules.d and reload udev rules or reboot to install
 SUBSYSTEM=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="5512", MODE="0666"
 ```
+
 save the file, reload udev
-```
+
+```bash
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 ```
+
 then unplug the programmer and plug it back in a USB port.
 
 ### Software

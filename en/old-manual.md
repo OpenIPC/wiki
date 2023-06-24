@@ -6,7 +6,6 @@ Introduction
 
 This page describes OpenWRT-based firmware variant.
 
-
 ### Firmware features
 
 * RTSP, ONVIF, NETIP
@@ -51,13 +50,13 @@ Unneeded options can be turned off for better security and performance.
 
 To run `majestic` in debug mode:
 
-```
+```bash
 killall -sigint majestic; export SENSOR=$(ipctool --sensor_id); majestic
 ```
 
 To run `majestic` in production mode restart the camera or run command:
 
-```
+```bash
 killall -sigint majestic; export SENSOR=$(ipctool --sensor_id); majestic 2>&1 | logger -p daemon.info -t majestic &
 ```
 
@@ -124,7 +123,7 @@ cd OpenIPC
 
 ### Use Docker for building
 
-**Default Dockerfile.openipc**
+> **Default Dockerfile.openipc**
 
 ```docker
 FROM debian:stretch
@@ -147,7 +146,7 @@ RUN ./Project_OpenIPC.sh update
 RUN ./Project_OpenIPC.sh 18ev200_DEFAULT  # <= Change this ID to you profile
 ```
 
-**Start building**
+> **Start building**
 
 ```bash
 #!/bin/bash
@@ -503,7 +502,7 @@ flash partitions from shell command line:
 flashcp -v openwrt-hi35xx-XXXXX-u-boot.bin boot
 ```
 
-**or**
+> **or**
 
 ```bash
 flashcp -v openwrt-hi35xx-XXXXX-u-boot.bin /dev/mtd0
@@ -539,7 +538,7 @@ reboot
 
 ### Installing the original MAC
 
-**U-boot ENV and Linux UCI**
+> **U-boot ENV and Linux UCI**
 
 ```txt
 fw_setenv ethaddr 00:01:02:03:04:05
@@ -550,7 +549,7 @@ uci commit
 
 ### Installing the correct sensor
 
-**Specify your correct sensor, control type, and data bus**
+> **Specify your correct sensor, control type, and data bus**
 
 ```txt
 fw_setenv sensor imx291_i2c_lvds
@@ -565,7 +564,7 @@ If something went wrong, you can reset configuration to defaults.
 
 ### Clean overlayfs (reset)
 
-**Restore to default Linux settings**
+> **Restore to default Linux settings**
 
 ```txt
 firstboot
@@ -575,7 +574,7 @@ reboot
 
 ### Clean u-boot env
 
-**Restore to default u-boot env**
+> **Restore to default u-boot env**
 
 ```txt
 flash_eraseall -j /dev/$(awk -F ':' '/env/ {print $1}' /proc/mtd)
@@ -587,7 +586,7 @@ reboot
 
 If something goes horribly wrong, and you want your backed up firmware back
 
-**Restore backup up firmware via serial**
+> **Restore backup up firmware via serial**
 
 Install kermit using [this instruction](https://glasstty.com/?p=662) or similar.
 Here are the sample commands for 8MB Flash.
@@ -625,11 +624,11 @@ OpenIPC # sf write 0x82000000 0x0 ${filesize}
 Writing at 0x800000 -- 100% complete.
 OpenIPC # 
 ```
-**Restore backup up firmware via TFTP**
+> **Restore backup up firmware via TFTP**
 
 Here are the commands for 8MB Flash.
 
-```
+```shell
 setenv ipaddr 192.168.1.10
 setenv serverip 192.168.1.254
 sf probe 0; sf lock 0

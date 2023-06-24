@@ -3,6 +3,9 @@ Building from sources
 
 Before you start building your own firmware, make a few changes to your system.
 
+General
+---
+
 ### Clone OpenIPC Firmware Git repository.
 ```
 cd
@@ -13,7 +16,8 @@ cd openipc-firmware
 ```
 
 ### Install required packages.
-```
+
+```bash
 sudo make install-deps
 ```
 
@@ -23,12 +27,13 @@ By default, Buildroot stores all downloaded files in `dl/` directory inside
 buildroot file tree.
 
 OpenIPC building script creates a fresh buildroot file tree before every
-compilation, meaning either deletes all dosnloaded packages or copies them back
+compilation, meaning either deletes all downloaded packages or copies them back
 and forth prior and after creating a fresh setup.
 
 You can set your own storage directory outside of the buildroot tree. Add the
 following piece of code to `.profile` file in your home directory:
-```
+
+```bash
 BR2_DL_DIR="${HOME}/buildroot_dl"
 [ ! -d "$BR2_DL_DIR" ] && mkdir -p $BR2_DL_DIR
 export BR2_DL_DIR
@@ -36,7 +41,7 @@ export BR2_DL_DIR
 
 Then, source the changes.
 
-```
+```bash
 source ~/.profile
 ```
 
@@ -44,7 +49,8 @@ source ~/.profile
 
 Building of a binary firmware for your IP camera is fairly easy. Just clone
 source code from the repository and run a provided script.
-```
+
+```bash
 ./building.sh
 ```
 
@@ -67,14 +73,14 @@ depending on your computer performance and selected target. If you want to
 speed up the process, make sure you use a computer with SSD rather than HDD as
 the process of compiling involves a lot of reading and writing. Faster CPU is
 also beneficial, and one cannot have too much RAM, either. You could even rent
-an online virtual server for a handfull of cents to compile your firmware with
+an online virtual server for a handful of cents to compile your firmware with
 the power of cloud computing.
 
 The very first run is the longest as the script will download every source
 bundle required for successful compilation. Consequent runs will take a little
 less time.
 
-After the compilation is done, you'll find the final binary kernel and rootfs
+After the compilation is done, you'll find the final binary kernel and `rootfs`
 image in `output/images/` directory.
 
 ```
@@ -140,7 +146,7 @@ Making changes and rebuilding a package
 ---------------------------------------
 
 Once you start tinkering with the packages you'll realize you need a way to
-rebuld only one particular package, without rebuilding the whole project.
+rebuild only one particular package, without rebuilding the whole project.
 Is it even possible? Fortunately, yes. All you have to do after making changes
 to the package configs is to run a couple of commands:
 ```
@@ -156,14 +162,14 @@ the said package, and do not trigger re-creating the root filesystem image.
 If re-creating the root filesystem in necessary, one should in addition run
 `make br-all`.
 
-Run `make br-linux-rebuild br-all` to rebuild Linux kernel image, 
+Run `make br-linux-rebuild br-all` to rebuild Linux kernel image,
 `make br-busybox-rebuild br-all` to rebuild busybox and pack it into a rootfs image.
 
 Making changes to Buildroot packages
 ------------------------------------
 
-If you need to make a change to a package already supplied with Buildroot, 
-place your patches to `global/package/all-patches/<pkg-name>/` directory. 
+If you need to make a change to a package already supplied with Buildroot,
+place your patches to `global/package/all-patches/<pkg-name>/` directory.
 These patches will be added after Buildroot package is extracted and patches
 from Buildroot package applied.
   
@@ -185,7 +191,7 @@ Compilation process has also built a toolchain suitable for compiling packages
 for your version of firmware. The toolchain is located in `output/host`
 directory.
 
-To customize your firmware, add or remove a package run `make br-menuconfig`. 
+To customize your firmware, add or remove a package run `make br-menuconfig`.
 That will load buildroot configuration menu where you can make changes following
 [The Buildroot user manual][5]. Make your changes and save amended config on exit.
 Then run `make clean all`.

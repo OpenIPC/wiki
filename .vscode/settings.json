@@ -1,0 +1,19 @@
+{
+  "markdownlint.config": {
+    "default": true,
+    "MD003": false,
+    "MD009": false,
+    "MD007": { "indent": 2 },
+    "MD012": { "maximum": 2},
+    "MD022": false,
+    "MD026": { "punctuation": ",;" },
+    "MD031": false,
+    "MD032": false,
+    "MD034": false,
+    "MD040": false,
+    "MD045": false,
+    "MD050": false,
+    "MD053": false,
+    "no-hard-tabs": false
+  }
+}
