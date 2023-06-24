@@ -5,7 +5,7 @@
 
 Some IP-cameras require additional parameters set to make the network interface work.
 
-#### For recent firmware
+### For recent firmware
 
 Use `extras` boot variable. In Linux console run this
 ```
@@ -26,7 +26,7 @@ fw_setenv extras 'hieth.mdioifu=1 hieth.mdioifd=1' && reboot
 If nothing of the above worked for you, seek help on [our Telegram channel](https://t.me/openipc).
 
 
-#### For older firmware
+### For older firmware
 
 Set `phyaddru` and `phyaddrd` variables from U-Boot console:
 ```

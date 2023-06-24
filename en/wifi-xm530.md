@@ -6,7 +6,7 @@ Wi-Fi for XM530 based devices
 
 Save this script as `/usr/sbin/wifi`
 
-```
+```bash
 #!/bin/sh
 
 WIFI=$1
@@ -24,7 +24,7 @@ fi
 
 Save these settings to `/etc/network/interfaces`
 
-```
+```bash
 auto eth2
 iface eth2 inet dhcp
     pre-up wifi xm711

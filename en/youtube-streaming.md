@@ -24,7 +24,7 @@ for more information.
   - switch "resolution" from "1080p" to "variable";
   - switch "ingestionType" from "rtmp" to "hls":
 
-```
+```json
 "cdn": {
   "ingestionType": "hls",
   "frameRate": "variable",
@@ -53,7 +53,7 @@ for more information.
   - 'scheduledEndTime' like '2020-04-21T01:00:00.000Z' (scheduled end time should be after the scheduled start time)
   - also press blue plus button inside "snippet" block and add "channelId" with given from stream step value
 
-```
+```json
 "snippet": {`
   `"title": "My Hometown Camera",`
   `"scheduledStartTime": "2021-04-12T00:00:00.000Z",`

@@ -60,7 +60,7 @@ IPC Glossary
 - USB - Universal Serial Bus
 - WDR - Wide Dynamic Range
 
-#### ffmpeg/ffplay
+### ffmpeg/ffplay
 
 - PTS - Presentation Time Stamp
 - fps - Average frame rate in frames per second (`AVStream.avg_frame_rate`)

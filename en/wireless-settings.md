@@ -9,7 +9,7 @@ Wireless settings
 - Following packages are needed for the HI3516EV300 CamHi module.
 - The example build configuration is: `hi3516ev300_lite_defconfig`
 
-```
+```shell
 BR2_PACKAGE_WIRELESS_CONFIGURATION=y
 BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
 BR2_PACKAGE_MT7601U_AP_OPENIPC=y
@@ -72,13 +72,13 @@ fi
 - For the initial setup, the device will create an access point with the name OpenIPC and password 12345678.
 - After connecting to the device, credentials can be changed with the wireless script:
 
-```
+```shell
 wireless setup [SSID] [PASS]
 ```
 
 - Additional settings are:
 
-```
+```shell
 wireless connect
 wireless reset
 wireless show

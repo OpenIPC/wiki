@@ -16,7 +16,7 @@ I'm sure there are other cameras out there that are using the same hardware (or 
 | Flash  | 16Mb (XM25QH128A) or 8Mb (XM25QH64A) |
 | WiFi   | RTL8188FU                            |
 
-#### OpenIPC status
+### OpenIPC status
 
 | Component     | Status                                                   |
 |---------------|----------------------------------------------------------|
@@ -27,7 +27,7 @@ I'm sure there are other cameras out there that are using the same hardware (or 
 | IR Cut        | Working                                                  |
 
 
-#### Hardware details
+### Hardware details
 
 The camera mainboard is identified by "SPEED5S-H1MB_F23".
 
@@ -78,7 +78,6 @@ At the bottom of the mainboard:
 ### UART pins (serial port)
 
 ![device_chacon_ipcam-ri01_uart](https://user-images.githubusercontent.com/1659543/149518771-a33ab23f-a4f0-44db-83a6-873bd1802056.jpg)
-
 
 
 ### GPIOs
@@ -517,7 +516,7 @@ sensors:
 ## Flashing OpenIPC
 (soon...)
 
-#### Boot dump
+### Boot dump
 ```
 Uncompress Ok!
 

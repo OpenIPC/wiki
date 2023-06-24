@@ -53,8 +53,6 @@ _If you have another supported device to add, please do it [here][2]._
 | Zenotech   | HI3516D_MB_V13_RA  | HI3516DV100 | OV9689 | GD25Q128CSIG | Yes | No             |      | No   |
 
 
-
-
 | Processor   | Sensor           | Vendor     | SKU          | Board identification            |
 |-------------|------------------|------------|--------------|---------------------------------|
 | Hi3516Cv100 | IMX222_spi_dc    | XM         |              | [BLK18C-0222-38X38_S-V1.03][1]  |
@@ -97,7 +95,6 @@ _If you have another supported device to add, please do it [here][2]._
 |             |                  |            |              |                                 |
 | SSC335      | SC3335           | Uniview    |              | Uniview                         |
 | SSC338Q     | IMX415           | CamHi/Xin  |              | SSC338Q_38M_1.1                 |
-
 
 
 [1]: https://openipc.org/supported-hardware

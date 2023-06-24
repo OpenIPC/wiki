@@ -1,7 +1,7 @@
 # OpenIPC Wiki
 [Table of Content](../README.md)
 
-Frequesntly Asked Questions
+Frequently Asked Questions
 ---------------------------
 
 ### How to strip U-Boot Image wrapper header from a binary image
@@ -12,11 +12,14 @@ for use with U-Boot image loader and prepended with headers in
 The header should be stripped off before you can use such an image
 as a raw binary file. Here's how you can strip the first 64 bytes
 from a file:
-```
+
+```bash
 dd if=inputfile.img of=outputfile.bin bs=64 skip=1
 ```
+
 alternatively
-```
+
+```bash
 tail -c +65 inputfile.img > outputfile.bin
 ```
 
@@ -31,11 +34,14 @@ impossible to log in or not enough time before rebooting to fix the settings.
 Here's how to completely erase the overlay partition in the OpenIPC firmware,
 right from the bootloader shell, to bring the camera back to its pristine state:
 
-__only for 8MB flash partitioning__
+> __only for 8MB flash partitioning__
+
 ```
 sf probe 0; sf erase 0x750000 0xb0000; reset
 ```
-__only for 16MB flash partitioning__
+
+> __only for 16MB flash partitioning__
+
 ```
 sf probe 0; sf erase 0xd50000 0x2b0000; reset
 ```
@@ -61,11 +67,14 @@ program. After turning on the camera, press Ctrl-C to interrupt the boot
 sequence and enter the bootloader shell.
 
 For a camera with 8MB flash chip, run
-```
+
+```bash
 sf probe; sf erase 0x750000 0xb0000; reset
 ```
+
 For a camera with 16MB flash chip, run
-```
+
+```bash
 sf probe; sf erase 0xd50000 0x2b0000; reset
 ```
 
@@ -93,7 +102,8 @@ If you need to know what is in the command, search for `ipctool` in the
 
 This could work if you are lucky, you gained access into Linux shell on stock
 firmware, and it does support NFS mounting:
-```
+
+```bash
 fw=$(mktemp -t)
 nfs=$(dirname $fw)/nfs
 mkdir -p $nfs
@@ -101,46 +111,50 @@ mount -t nfs -o tcp,nolock 192.168.1.123:/path/to/nfs/share $nfs
 cat /dev/mtdblock? > $fw
 mv $fw ${nfs}/firmware_full.bin
 ```
+
 Make sure to use your own IP address and path to the NFS share!
 
 ### How to find original MAC address in a firmware dump
 
-```
+```bash
 strings dumpfile.bin | grep ^ethaddr
 ```
 
 ### How to configure ssh session authorization by key
 
 __On the camera__: Sign in into web UI on port 85 of your camera.
-```
+
+```bash
 passwd
 ```
 
 __On the desktop__: Copy the public key to the camera by logging in with the
 password created above.
-```
+
+```bash
 ssh-copy-id root@192.168.1.66
 ```
 
 __On the camera__: Create a `.ssh` folder in the root user's home directory
 and copy the file with the authorized keystore into it.
-```
+
+```bash
 mkdir ~/.ssh
 cp /etc/dropbear/authorized_keys ~/.ssh/
 ```
 
 __On the desktop__: Open a new session to verify that the authorization is
 passed using the public key not requesting a password.
-```
+
+```bash
 ssh root@192.168.1.66
 ```
-
 
 ### Majestic
 
 #### How to get a memory dump for debugging?
 
-Enable and configure Core Dump in the menu Majestic > Majestic Debugging.
+Enable and configure Core Dump in the menu **Majestic** > **Majestic Debugging**.
 
 #### Camera image has a pink tint
 
@@ -156,16 +170,17 @@ using any tools available in the system: wget, curl, tftp etc.
 
 For example, download the ipctool utility to TFTP server on the local network,
 then download it to the camera:
-```
+
+```bash
 tftp -g -r ipctool -l /tmp/ipctool 192.168.1.1
 chmod +x /tmp/ipctool
 /tmp/ipctool
-
 ```
 
 If the camera has access to the internet, you can try to mount a public NFS
 sharing and run the utility from it, without downloading to the camera:
-```
+
+```bash
 mkdir -p /tmp/utils
 mount -o nolock 95.217.179.189:/srv/ro /tmp/utils/
 /tmp/utils/ipctool
@@ -193,19 +208,19 @@ No, this is a difficult algorithm, it does not have a sense to run it this way.
 Sometimes you need to transfer files to the camera. In addition to the above
 method using NFS (Network File System) you can use the standard Linux `scp`
 command to copy files over an SSH connection:
-```
+```bash
 scp ~/myfile root@192.168.1.65:/tmp/
 ```
 This command will copy `myfile` from the home directory to the `/tmp/`
 directory on the camera.
 
 On recent Linux systems the following error may occur:
-```
+```console
 sh: /usr/libexec/sftp-server: not found
 scp: Connection closed
 ```
 In this case, add `-O` option to the command:
-```
+```bash
 scp -O ~/myfile root@192.168.1.65:/tmp/
 ```
 

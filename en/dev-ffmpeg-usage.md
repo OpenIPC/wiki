@@ -4,7 +4,7 @@
 FFMPEG, RTSP and SRT examples
 -----------------------------
 
-```
+```bash
 # Copy from file to file
 ./ffmpeg -re -i z_input.mp4 -c copy z_output.mp4
 
