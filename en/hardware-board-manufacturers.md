@@ -17,6 +17,7 @@ Hardware: IPC Board Manufacturers
 * [Filsion/Camasmart](http://www.camasmart.com/)
 * [FSAN](http://www.fsan.cn/)
 * [GeoVision](https://www.geovision.com.tw/)
+* [Gwell Times](http://cloud.gwell.cc/)
 * [Haicam](https://haicam.tech)
 * [Herospeed](http://www.herospeed.net/en/)
 * [Hichip](http://hichip.net/en/)
