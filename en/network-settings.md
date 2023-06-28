@@ -384,3 +384,17 @@ iface wlan0 inet dhcp
     pre-up wpa_supplicant -B -D nl80211 -i wlan0 -c/tmp/wpa_supplicant.conf
     post-down killall -q wpa_supplicant
 ```
+
+### WLAN0 | T31 + ATBM6031 SDIO | Wyze V3, HL-CAM04
+
+```
+auto wlan0
+iface wlan0 inet dhcp
+    pre-up modprobe mac80211
+    pre-up modprobe atbm603x_wifi_sdio
+    pre-up wpa_passphrase "SSID" "password" >/tmp/wpa_supplicant.conf
+    pre-up sed -i '2i \\tscan_ssid=1' /tmp/wpa_supplicant.conf
+    pre-up sleep 1
+    pre-up wpa_supplicant -B -D nl80211 -i wlan0 -c/tmp/wpa_supplicant.conf
+    post-down killall -q wpa_supplicant
+```
