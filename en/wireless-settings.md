@@ -4,37 +4,37 @@
 Wireless settings
 ---
 
-### Additional packages
+### Initial configuration
 
-- Following packages are needed for the HI3516EV300 CamHi module.
-- The example build configuration is: `hi3516ev300_lite_defconfig`
+- The wireless settings are provided based on a uboot variable:
 
+```diff
+# HI3516EV300 CamHi
++if [ "$1" = "mt7601u-hi3516ev300-camhi" ]; then
+	devmem 0x100C0080 32 0x530
+```
+
+- The variables [are listed here][1] and be can set with:
 ```shell
-BR2_PACKAGE_WIRELESS_CONFIGURATION=y
-BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
-BR2_PACKAGE_MT7601U_AP_OPENIPC=y
+fw_setenv wlandevice mt7601u-hi3516ev300-camhi
 ```
 
 ---
 
-### Initial configuration
+### Enter wireless credentials
 
-- The wireless settings are provided based on the chipset:
+- Credentials can be added with:
 
-```diff
-+SOC=$(fw_printenv -n soc)
-
-# HI3516EV300 CamHi
-+if [ "$SOC" == "hi3516ev300" ]; then
-	devmem 0x100C0080 32 0x530
+```shell
+fw_setenv wlanssid OpenIPC
+fw_setenv wlanpass openipc12345
 ```
 
 ---
 
 ### Adopt custom settings
 
-- The adapter configuration is located at: `/wireless-configuration/files/script/adapter`
-- It is possible to convert existing wlan0 settings to the new wireless configuration:
+- It is possible to convert [existing wlan0 settings](../en/network-settings.md) to the [new configuration][1]:
 
 ```diff
 auto wlan0
@@ -55,31 +55,15 @@ iface wlan0 inet dhcp
 
 ```diff
 # HI3516EV300 CamHi
-if [ "$SOC" == "hi3516ev300" ]; then
+if [ "$1" = "mt7601u-hi3516ev300-camhi" ]; then
 +	devmem 0x100C0080 32 0x530
 +	echo 7 > /sys/class/gpio/export
 +	echo out > /sys/class/gpio/gpio7/direction
 +	echo 0 > /sys/class/gpio/gpio7/value
-+	echo 7 > /sys/class/gpio/unexport
-+	modprobe mt7601usta
+	sleep 1
++	modprobe mt7601u
+	exit 0
 fi
 ```
 
----
-
-### Enter wireless credentials
-
-- For the initial setup, the device will create an access point with the name OpenIPC and password 12345678.
-- After connecting to the device, credentials can be changed with the wireless script:
-
-```shell
-wireless setup [SSID] [PASS]
-```
-
-- Additional settings are:
-
-```shell
-wireless connect
-wireless reset
-wireless show
-```
+[1]: https://github.com/OpenIPC/firmware/blob/master/general/overlay/etc/wireless
