@@ -4,28 +4,30 @@
 Sigmastar unbrick
 ---
 
-**Locate the Sigmastar UART output and connect it to the Raspberry Pi I2C:**
-- TX -> SDA I2C (GPIO2)
-- RX -> SCL I2C (GPIO3)
-- GND -> GND
+**Locate the Sigmastar UART output and connect it to the CH341A I2C:**
+- TX -> SDA I2C (PIN 13)
+- RX -> SCL I2C (PIN 14)
+- GND -> GND (PIN 4)
 
-![](../images/sigmastar-uart.webp)
-
-![](../images/sigmastar-raspberry.webp)
-
-![](../images/sigmastar-example.webp)
+<img src="../images/sigmastar-ch341a.webp">
+<img src="../images/sigmastar-uart.webp">
+<img src="../images/sigmastar-example.webp">
 
 ---
 
-**Enable Raspberry I2C and install I2C tools:**
+**Download and make CH341A I2C drivers:**
 ```
-sudo raspi-config
-sudo apt-get install -y i2c-tools
+git clone https://github.com/frank-zago/ch341-i2c-spi-gpio.git
+cd ch341-i2c-spi-gpio
+make -j8
+sudo insmod ch341-core.ko
+sudo insmod i2c-ch341.ko
 ```
 
 **Download snander-mstar programmer:**
 ```
-wget https://github.com/viktorxda/snander-mstar/releases/download/latest/snander
+wget https://github.com/viktorxda/snander-mstar/releases/download/latest/snander-x64
+mv snander-x64 snander
 chmod 755 snander
 ```
 
@@ -35,40 +37,37 @@ chmod 755 snander
 - 0x49 -> isp programming
 - 0x59 -> serial debugging
 ```
-sudo i2cdetect -y 1
+sudo i2cdetect -y 0
 ```
 
-![](../images/sigmastar-detect.webp)
+<img src="../images/sigmastar-detect.webp" width=70% height=70%>
 
-**Check the device spinand with snander:**
+**Check the device flash with snander:**
 ```
-./snander -i
-```
-
-![](../images/sigmastar-check.webp)
-
-**Read uboot with snander:**
-```
-./snander -a 0x2C0000 -l 0x060000 -r uboot0.bin
+sudo ./snander -i
 ```
 
-![](../images/sigmastar-read.webp)
+<img src="../images/sigmastar-check.webp" width=70% height=70%>
 
-**Erase uboot partition:**
+**Read original uboot:**
 ```
-./snander -a 0x2C0000 -l 0x060000 -e
-```
-
-**Write and verify new uboot:**
-```
-./snander -a 0x2C0000 -l 0x060000 -w uboot0_new.bin -v
+sudo ./snander -a 0x000000 -l 0x3C0000 -r boot.bin
 ```
 
-![](../images/sigmastar-write.webp)
+<img src="../images/sigmastar-read.webp" width=70% height=70%>
+
+
+**Erase, write and verify new uboot:**
+```
+sudo ./snander -a 0x000000 -l 0x200000 -e
+sudo ./snander -a 0x000000 -l 0x200000 -w u-boot-ssc338q-spinand.bin -v
+```
+
+<img src="../images/sigmastar-write.webp" width=70% height=70%>
 
 ---
 
-**Partition table for spinand:**
+**Vendor partition table for spinand:**
 ```
 CIS		0x0000000-0x0020000	128KB
 IPL0		0x0140000-0x0200000	768KB
@@ -81,33 +80,4 @@ KERNEL		0x03C0000-0x08C0000	5120KB
 RECOVERY	0x08C0000-0x0DC0000	5120KB
 rootfs		0x0DC0000-0x13C0000	6144KB
 UBI		0x13C0000-0x8000000	110848KB
-```
-
-**Read partitions:**
-```
-./snander -a 0x000000 -l 0x020000 -r GCIS.bin
-./snander -a 0x140000 -l 0x0C0000 -r IPL.bin
-./snander -a 0x200000 -l 0x060000 -r IPL_CUST1.bin
-./snander -a 0x260000 -l 0x060000 -r IPL_CUST2.bin
-./snander -a 0x2C0000 -l 0x060000 -r UBOOT0.bin
-./snander -a 0x320000 -l 0x060000 -r UBOOT1.bin
-./snander -a 0x380000 -l 0x040000 -r ENV.bin
-```
-
-**Write partitions:**
-```
-./snander -a 0x000000 -l 0x020000 -e
-./snander -a 0x000000 -l 0x020000 -w GCIS.bin -v
-./snander -a 0x140000 -l 0x0C0000 -e
-./snander -a 0x140000 -l 0x0C0000 -w IPL.bin -v
-./snander -a 0x200000 -l 0x060000 -e
-./snander -a 0x200000 -l 0x060000 -w IPL_CUST1.bin -v
-./snander -a 0x260000 -l 0x060000 -e
-./snander -a 0x260000 -l 0x060000 -w IPL_CUST2.bin -v
-./snander -a 0x2C0000 -l 0x060000 -e
-./snander -a 0x2C0000 -l 0x060000 -w UBOOT0.bin -v
-./snander -a 0x320000 -l 0x060000 -e
-./snander -a 0x320000 -l 0x060000 -w UBOOT1.bin -v
-./snander -a 0x380000 -l 0x040000 -e
-./snander -a 0x380000 -l 0x040000 -w ENV.bin -v
 ```
