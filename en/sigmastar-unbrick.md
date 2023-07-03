@@ -15,20 +15,19 @@ Sigmastar unbrick
 
 ---
 
-**Download and make CH341A I2C drivers:**
+**Download ch341-i2c driver:**
 ```
-git clone https://github.com/frank-zago/ch341-i2c-spi-gpio.git
-cd ch341-i2c-spi-gpio
-make -j8
-sudo insmod ch341-core.ko
-sudo insmod i2c-ch341.ko
+git clone https://github.com/frank-zago/ch341-i2c-spi-gpio
+make -C ch341-i2c-spi-gpio
+sudo insmod ch341-i2c-spi-gpio/ch341-core.ko
+sudo insmod ch341-i2c-spi-gpio/i2c-ch341.ko
 ```
 
 **Download snander-mstar programmer:**
 ```
-wget https://github.com/viktorxda/snander-mstar/releases/download/latest/snander-x64
-mv snander-x64 snander
-chmod 755 snander
+git clone https://github.com/viktorxda/snander-mstar
+make -C snander-mstar/src
+mv snander-mstar/src/snander .
 ```
 
 ---
