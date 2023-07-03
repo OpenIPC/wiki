@@ -5,9 +5,9 @@ Sigmastar unbrick
 ---
 
 **Locate the Sigmastar UART output and connect it to the CH341A I2C:**
-- TX -> SDA I2C (PIN 13)
-- RX -> SCL I2C (PIN 14)
-- GND -> GND (PIN 4)
+- $\color{black}{\texttt{GND -> GND (PIN 1-4)}}$
+- $\color{deepskyblue}{\texttt{TX -> SDA I2C (PIN 5)}}$
+- $\color{orange}{\texttt{RX -> SCL I2C (PIN 6)}}$
 
 <img src="../images/sigmastar-ch341a.webp">
 <img src="../images/sigmastar-uart.webp">
