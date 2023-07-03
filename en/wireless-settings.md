@@ -50,7 +50,7 @@ iface wlan0 inet dhcp
 	pre-up wpa_supplicant -B -D nl80211 -i wlan0 -c/tmp/wpa_supplicant.conf
 	post-down killall -q wpa_supplicant
 	post-down echo 1 > /sys/class/gpio/gpio7/value
-+	post-down echo 7 > /sys/class/gpio/unexport
+	post-down echo 7 > /sys/class/gpio/unexport
 ```
 
 ```diff
