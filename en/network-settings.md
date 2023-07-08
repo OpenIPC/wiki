@@ -352,22 +352,12 @@ iface wlan0 inet dhcp
 ```
 
 
-### WLAN0 | T31 | CamHi/Xin
+### WLAN0 | MT7601U | T31 | CamHi/Xin
 
 ```
-auto wlan0
-iface wlan0 inet dhcp
-    pre-up echo 61 > /sys/class/gpio/export
-    pre-up echo out > /sys/class/gpio/gpio61/direction
-    pre-up echo 0 > /sys/class/gpio/gpio61/value
-    pre-up modprobe mac80211
-    pre-up wpa_passphrase "SSID" "password" >/tmp/wpa_supplicant.conf
-    pre-up sed -i '2i \\tscan_ssid=1' /tmp/wpa_supplicant.conf
-    pre-up sleep 10
-    pre-up wpa_supplicant -B -D wext -i wlan0 -c/tmp/wpa_supplicant.conf
-    post-down killall -q wpa_supplicant
-    post-down echo 1 > /sys/class/gpio/gpio61/value
-    post-down echo 61 > /sys/class/gpio/unexport
+fw_setenv wlandevice mt7601u-t31-camhi
+fw_setenv wlanssid MySSID
+fw_setenv wlanpass MyPassword
 ```
 
 
