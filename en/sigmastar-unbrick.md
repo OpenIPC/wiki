@@ -26,8 +26,8 @@ sudo insmod ch341-i2c-spi-gpio/i2c-ch341.ko
 **Download snander-mstar programmer:**
 ```
 git clone https://github.com/viktorxda/snander-mstar
-make -C snander-mstar/src
-mv snander-mstar/src/snander .
+make -C snander-mstar
+mv snander-mstar/snander .
 ```
 
 ---
