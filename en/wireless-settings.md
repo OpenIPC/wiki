@@ -16,7 +16,7 @@ Wireless settings
 
 - The variables [are listed here][1] and be can set with:
 ```shell
-fw_setenv wlandevice mt7601u-hi3516ev300-camhi
+fw_setenv wlandev mt7601u-hi3516ev300-camhi
 ```
 
 ---
@@ -26,8 +26,8 @@ fw_setenv wlandevice mt7601u-hi3516ev300-camhi
 - Credentials can be added with:
 
 ```shell
-fw_setenv wlanssid OpenIPC
-fw_setenv wlanpass openipc12345
+fw_setenv wlanssid MySSID
+fw_setenv wlanpass MyPassword
 ```
 
 ---
@@ -57,10 +57,7 @@ iface wlan0 inet dhcp
 # HI3516EV300 CamHi
 if [ "$1" = "mt7601u-hi3516ev300-camhi" ]; then
 +	devmem 0x100C0080 32 0x530
-+	echo 7 > /sys/class/gpio/export
-+	echo out > /sys/class/gpio/gpio7/direction
-+	echo 0 > /sys/class/gpio/gpio7/value
-	sleep 1
++	set_gpio 7 0
 +	modprobe mt7601u
 	exit 0
 fi
