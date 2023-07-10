@@ -6,11 +6,11 @@ Board specific GPIO settings list
 
 ### Anjoy boards
 
-| Processor   | IRCUT1 | IRCUT2 | LIGHT | TESTED BOARDS    |
-|-------------|--------|--------|-------|------------------|
-| SSC335      | 78     | 79     | 61    | MS-J10, YM200J10 |
-| SSC337      | 78     | 79     | 61    | MC-F40, YM-J10D  |
-| SSC337DE    | 78     | 79     | 61    | MC500L8          |
+| Processor   | IRCUT1 | IRCUT2 | LIGHT | I/O | TESTED BOARDS    |
+|-------------|--------|--------|-------|-----|------------------|
+| SSC335      | 78     | 79     | 61    | 52  | MS-J10, YM200J10 |
+| SSC337      | 78     | 79     | 61    | 52  | MC-F40, YM-J10D  |
+| SSC337DE    | 78     | 79     | 61    |     | MC500L8          |
 
 ### CamHi/Xin boards
 
