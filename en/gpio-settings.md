@@ -106,7 +106,7 @@ Tested on GK7205V200 for /dev/ttyАМА1
 |-------------|--------|--------|----------|----------|
 | T10         | 25     | 26     | 81       | 80       |
 
-# Rostelecom IPC2122SR3-RU04
+### Rostelecom IPC2122SR3-RU04
 
 | Processor   | IRCUT1 | IRCUT2 |
 |-------------|--------|--------|
