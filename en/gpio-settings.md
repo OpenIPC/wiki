@@ -106,6 +106,12 @@ Tested on GK7205V200 for /dev/ttyАМА1
 |-------------|--------|--------|----------|----------|
 | T10         | 25     | 26     | 81       | 80       |
 
+# Rostelecom IPC2122SR3-RU04
+
+| Processor   | IRCUT1 | IRCUT2 |
+|-------------|--------|--------|
+| Hi3516Cv300 | 58     | 59     |
+
 ### Rotek Switcam E200/T200 JXF23 sensor
 
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS |
