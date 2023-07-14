@@ -12,7 +12,7 @@ Board specific GPIO settings list
 | SSC337      | 78     | 79     | 61    | 52  | MC-F40, YM-J10D  |
 | SSC337DE    | 78     | 79     | 61    |     | MC500L8          |
 
-### CamHi/Xin boards
+### CamHi / Xin boards
 
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA | UART2_RTS/RS485_DE | UART2_RXD/RS485_RO | UART2_TXD/RS485_DI | AUDIO_ENA | RESET | PWM | SD_VCC |
 |-------------|--------|--------|----------|-------|---------|--------------------|--------------------|--------------------|-----------|-------|-----|--------|
@@ -43,6 +43,13 @@ Tested on GK7205V200 for /dev/ttyАМА1
   devmem 0x112c0070 32 2
   devmem 0x112c0074 32 2
 ```
+
+
+### CCDCAM / Hankvision boards
+
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA |
+|-------------|--------|--------|----------|-------|---------|
+| GK7205V200  | 68     | 70     |          |       |         |
 
 
 ### GSA boards
