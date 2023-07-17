@@ -49,8 +49,10 @@ Tested on GK7205V200 for /dev/ttyАМА1
 
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA |
 |-------------|--------|--------|----------|-------|---------|
-| GK7205V200  | 68     | 70     |          |       |         |
+| GK7205V200  | 68     | 70     |  9       |       |         |
+| GK7205V300  | 68     | 70     |  9       |       |         |
 
+> _Yes, it's amazing but it really matches on two Goke processors_
 
 ### GSA boards
 
