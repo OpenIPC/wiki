@@ -16,7 +16,7 @@ Board specific GPIO settings list
 
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA | UART2_RTS/RS485_DE | UART2_RXD/RS485_RO | UART2_TXD/RS485_DI | AUDIO_ENA | RESET | PWM | SD_VCC |
 |-------------|--------|--------|----------|-------|---------|--------------------|--------------------|--------------------|-----------|-------|-----|--------|
-| Gk7205v200  | 14     | 15     | 8        | 4     | 9i      | 54                 | 12                 | 13                 |
+| Gk7205v200  | 14     | 15     | 8        | 4     | 9i      | 54                 | 12                 | 13                 |           | 50    |
 | Gk7205v300  | 10     | 11     | 8        | 72    | 7i      |                    |                    |                    | 52        | 42    |
 |             |        |        |          |       |         |
 | Hi3516Cv100 |        |        |          |       |         |
@@ -33,24 +33,18 @@ Board specific GPIO settings list
 > _i - inverted value_
 
 ```
-Tested on Gk7205v200:
+Tested on GK7205V200 for /dev/ttyАМА1:
   mux 12->UART2_RXD/RS485_RO: devmem 0x112c0070 32 2 
   mux 13->UART2_TXD/RS485_DI: devmem 0x112c0074 32 2
 ```
 
-```
-Tested on GK7205V200 for /dev/ttyАМА1
-  devmem 0x112c0070 32 2
-  devmem 0x112c0074 32 2
-```
-
-
 ### CCDCAM / Hankvision boards
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA |
-|-------------|--------|--------|----------|-------|---------|
-| GK7205V200  | 68     | 70     |  9       |       |         |
-| GK7205V300  | 68     | 70     |  9       |       |         |
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA | Description |
+|-------------|--------|--------|----------|-------|---------|-------------|
+| GK7205V200  | 68     | 70     |  9       |       |         |             |
+| GK7205V200  | 50     | 51     |          |       |         | Old plastic domophone |
+| GK7205V300  | 68     | 70     |  9       |       |         |             |
 
 > _Yes, it's amazing but it really matches on two Goke processors_
 
