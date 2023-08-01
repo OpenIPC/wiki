@@ -6,7 +6,7 @@ A collection of practical networking perversions
 
 
 ### XiongMai, HI3518EV100
-
+On some cameras it's required to do the U-boot network configuration to get it to work in Linux
 ```
 For U-boot network
     setenv phyaddru 1
