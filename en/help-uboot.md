@@ -352,6 +352,8 @@ by the embossed or drawn dot next to it.
 ![](../images/flash-pins.webp)
 ![](../images/flash-pins-2.webp)
 
+[This hack in details](https://cybercx.co.nz/bypassing-bios-password/)
+
 #### Downgrading stock firmware.
 
 Today, we see more and more cameras where access to bootloader console is
