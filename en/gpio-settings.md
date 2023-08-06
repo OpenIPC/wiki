@@ -4,7 +4,7 @@
 Board specific GPIO settings list
 ---------------------------------
 
-### Anjoy boards
+### Anjoy / Anjvision boards
 
 | Processor   | IRCUT1 | IRCUT2 | LIGHT | I/O | TESTED BOARDS    |
 |-------------|--------|--------|-------|-----|------------------|
