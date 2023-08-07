@@ -6,7 +6,10 @@
 
 **This page is personal notes by @zigfisher for public reading only and may not be edited by others**
 
-### ssc30kq_imx335_anjoy
+
+### ssc30kq-imx335-anjoy
+
+Board names: MC-L12, MC-L12B
 
 ```
 cli -s .system.staticDir /var/www/majestic
@@ -19,6 +22,26 @@ cli -s .video0.fps 60
 cli -s .hls.enabled false
 cli -s .watchdog.enabled false
 ```
+
+
+### ssc335-imx307-anjoy
+
+Board names: MS-J10
+
+```
+cli -s .system.staticDir /var/www/majestic
+cli -s .nightMode.enabled true
+cli -s .nightMode.irSensorPin 61
+cli -s .nightMode.irSensorPinInvert false
+cli -s .nightMode.irCutPin1 78
+cli -s .nightMode.irCutPin2 79
+cli -s .video0.codec h264
+cli -s .video0.size 1920x1080
+cli -s .video0.fps 30
+cli -s .hls.enabled false
+cli -s .watchdog.enabled false
+```
+
 
 
 [logo]: https://openipc.org/assets/openipc-logo-black.svg
