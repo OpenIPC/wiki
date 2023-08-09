@@ -74,6 +74,6 @@ cli -s .watchdog.enabled false
 
 [logo]: https://openipc.org/assets/openipc-logo-black.svg
 [chat]: https://openipc.org/images/telegram_button.svg
-[site]: https://openipc.org/assets/openipc_button.svg
+[site]: https://openipc.org/images/openipc_button.svg
 [site_basic]: https://openipc.org
 [telegram_en]: https://t.me/OpenIPC
