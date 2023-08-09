@@ -9,9 +9,9 @@ Board specific GPIO settings list
 | Processor   | IRCUT1 | IRCUT2 | LIGHT | RESET | I/O | TESTED BOARDS    |
 |-------------|--------|--------|-------|-------|-----|------------------|
 | SSC30KQ     | 23     | 24     | 60    | 10    |     | MC-L12, MC-L12B  |
-| SSC335      | 78     | 79     | 61    |       | 52  | MS-J10, YM200J10 |
-| SSC337      | 78     | 79     | 61    |       | 52  | MC-F40, YM-J10D  |
-| SSC337DE    | 78     | 79     | 61    |       |     | MC500L8          |
+| SSC335      | 78     | 79     | 61    | 66    | 52  | MS-J10, YM200J10 |
+| SSC337      | 78     | 79     | 61    | 66    | 52  | MC-F40, YM-J10D  |
+| SSC337DE    | 78     | 79     | 61    | 66    |     | MC500L8          |
 
 ### CamHi / Xin boards
 
