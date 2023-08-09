@@ -2,7 +2,7 @@
 
 ## OpenIPC settings
 
-[![Telegram][chat]][telegram_en]
+[![OpenIPC][site]][site_basic]  [![Telegram][chat]][telegram_en]
 
 **This page is personal notes by @zigfisher for public reading only and may not be edited by others**
 
@@ -74,4 +74,6 @@ cli -s .watchdog.enabled false
 
 [logo]: https://openipc.org/assets/openipc-logo-black.svg
 [chat]: https://openipc.org/images/telegram_button.svg
+[site]: https://openipc.org/images/openipc_button.svg
+[site_basic]: https://openipc.org
 [telegram_en]: https://t.me/OpenIPC
