@@ -8,13 +8,28 @@
 
 ### Device table for customization
 
-* Anjoy
-    * [ssc30kq-imx335-anjoy](#ssc335-imx307-anjoy)
-    * [ssc335-imx307-anjoy](#ssc335-imx307-anjoy)
-    * [ssc335de-imx335-anjoy](#ssc335de-imx335-anjoy)
+
+* [ssc30kq-imx335-anjoy](#ssc335-imx307-anjoy)
+* [ssc335-imx307-anjoy](#ssc335-imx307-anjoy)
+* [ssc335de-imx335-anjoy](#ssc335de-imx335-anjoy)
+* [t31l-sc2335-camhi](#t31l-sc2335-camhi)
 
 
 -------
+
+
+### gk7205v200-?-xiongmai
+
+Board names: G3-0625
+
+```
+cli -s .system.staticDir /var/www/majestic
+cli -s .nightMode.enabled true
+cli -s .nightMode.irCutPin1 9
+cli -s .nightMode.irCutPin2 8
+cli -s .video0.codec h264
+cli -s .hls.enabled false
+```
 
 
 ### ssc30kq-imx335-anjoy
@@ -30,7 +45,6 @@ cli -s .video0.codec h264
 cli -s .video0.size 1280x720
 cli -s .video0.fps 60
 cli -s .hls.enabled false
-cli -s .watchdog.enabled false
 ```
 
 
@@ -49,7 +63,6 @@ cli -s .video0.codec h264
 cli -s .video0.size 1920x1080
 cli -s .video0.fps 30
 cli -s .hls.enabled false
-cli -s .watchdog.enabled false
 ```
 
 
@@ -68,8 +81,23 @@ cli -s .video0.codec h264
 cli -s .video0.size 1920x1080
 cli -s .video0.fps 30
 cli -s .hls.enabled false
-cli -s .watchdog.enabled false
 ```
+
+
+### t31l-sc2335-camhi
+
+Board names: 2G-M2122
+
+```
+cli -s .system.staticDir /var/www/majestic
+cli -s .nightMode.enabled true
+cli -s .nightMode.irCutPin1 58
+cli -s .nightMode.irCutPin2 57
+cli -s .video0.codec h264
+cli -s .hls.enabled false
+cli -s .isp.blkCnt 1
+```
+
 
 
 [logo]: https://openipc.org/assets/openipc-logo-black.svg
