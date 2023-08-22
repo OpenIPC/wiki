@@ -38,6 +38,12 @@ Tested on GK7205V200 for /dev/ttyАМА1:
   mux 12->UART2_RXD/RS485_RO: devmem 0x112c0070 32 2 
   mux 13->UART2_TXD/RS485_DI: devmem 0x112c0074 32 2
 ```
+```
+Tested on GK7205V300 for /dev/ttyАМА1:
+  devmem 0x112c0078 32 1
+  devmem 0x112c007c 32 1
+```
+
 
 ### CCDCAM / Hankvision boards
 
