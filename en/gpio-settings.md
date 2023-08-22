@@ -26,6 +26,7 @@ Board specific GPIO settings list
 | Hi3516Ev100 |        |        |          |       |         |
 | Hi3516Ev200 |        |        |          |       | 9i      |
 | Hi3516Ev300 | 10     | 11     |          |       | 7i      | 63                 |                    |                    |           | 42    |
+| Hi3518Ev100 | 43     |        | 74       |       |         |
 | Hi3518Ev200 | 1      | 2      | 48       |       |         |
 | Hi3518Ev300 |        |        |          |       |         |
 |             |        |        |          |       |         |
@@ -39,7 +40,7 @@ Tested on GK7205V200 for /dev/ttyАМА1:
   mux 13->UART2_TXD/RS485_DI: devmem 0x112c0074 32 2
 ```
 ```
-Tested on GK7205V300 camhi for /dev/ttyАМА1:
+Tested on GK7205V300 for /dev/ttyАМА1:
   mux 72->UART1_TXD: devmem 0x112c0078 32 1 
   mux 73->UART1_RXD: devmem 0x112c007c 32 1
 ```
