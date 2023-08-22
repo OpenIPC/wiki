@@ -41,8 +41,8 @@ Tested on GK7205V200 for /dev/ttyАМА1:
 ```
 ```
 Tested on GK7205V300 for /dev/ttyАМА1:
-  devmem 0x112c0078 32 1
-  devmem 0x112c007c 32 1
+  mux 72->UART1_TXD: devmem 0x112c0078 32 1 
+  mux 73->UART1_RXD: devmem 0x112c007c 32 1
 ```
 
 
