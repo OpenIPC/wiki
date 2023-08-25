@@ -30,7 +30,7 @@ fw_setenv wlanpass "password"
 reboot
 ```
 
-This will power up the USB device (WiFi card) and load the appropriate Kernel driver.
+This will power up the USB WiFi module (GPO #54), and load the appropriate Kernel driver (`8188fu`).
 
 ## LEDs
 
