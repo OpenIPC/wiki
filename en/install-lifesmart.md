@@ -15,12 +15,19 @@ Follow the [instructions](help-uboot.md#bypassing-password-protected-bootloader)
 
 Back up the flash and install OpenIPC according to the [instructions](https://openipc.org/cameras/vendors/hisilicon/socs/hi3518ev200).
 
+Select a 16MB NOR flash, and use the Ultimate firmware if you want to use WiFi.
+
 ## WiFi
 
-In order to connect to WiFi, you need to configure the [wireless device](wireless-settings.md#initial-configuration) with:
+In order to connect to WiFi, you need to configure the [wireless device](wireless-settings.md#initial-configuration) with `rtl8188fu-hi3518ev200-lifesmart`
 
 ```
-rtl8188fu-hi3518ev200-lifesmart
+fw_setenv wlandev rtl8188fu-hi3518ev200-lifesmart
+# also configure your WiFi
+fw_setenv wlanssid "MySSID"
+fw_setenv wlanpass "password"
+# and then...
+reboot
 ```
 
 This will power up the USB device (WiFi card) and load the appropriate Kernel driver.
