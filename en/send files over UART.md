@@ -6,7 +6,7 @@ How to send files over UART
 
 If SD card reader failt and there is no network configured on your cam you may need to send a new firmware over UART interface to update the camera.
 
-__Sender:__
+## Sender:
 
 First we encode the files
 
@@ -24,7 +24,8 @@ picocom -f n -p n -d 8 -b 115200  --send-cmd "ascii-xfr -snv" /dev/ttyUSB0
 Normally we want ascii-xfr on the receiving side, but since we don't have it, that -n works around this by maintaining correct line endings.
 
 
-__Receiver::__
+
+## Receiver:
 
 Now that we've connected, go to the directory where you want the received file.
 ```bash
