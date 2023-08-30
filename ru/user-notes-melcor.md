@@ -6,7 +6,7 @@
 
 Бутлоадер на пароле, flash залочена.
 
-1. Скачайте и установите у себя [tftpd сервер](https://github.com/peacepenguin/tftpd64/releases).
+1. Скачайте и установите у себя [tftpd сервер](https://bitbucket.org/phjounin/tftpd64/wiki/Download%20Tftpd64.md).
 2. Скачайте и распакуйте в отдельную папку [прошивку](https://github.com/OpenIPC/firmware/releases/download/latest/openipc.gk7205v300-br.tgz), в настройках tftpd укажите путь к папке с прошивкой.
 3. Найдите в Telegram канале [OpenIPC Users (Ru)][t1] сообщение с тэгом #GkTool, установите на компьютер ToolPlatform-1.0.0-win32-x86_64.zip
 4. Скачайте u-boot.bin.img_cut из Telegram канала [OpenIPC Users (Ru)][t1].
