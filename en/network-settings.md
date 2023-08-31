@@ -388,3 +388,22 @@ iface wlan0 inet dhcp
     pre-up wpa_supplicant -B -D nl80211 -i wlan0 -c/tmp/wpa_supplicant.conf
     post-down killall -q wpa_supplicant
 ```
+
+### WLAN0 | T31 | RTL8188FU 
+
+```
+auto wlan0
+iface wlan0 inet dhcp
+    pre-up echo 10 > /sys/class/gpio/export
+    pre-up echo out > /sys/class/gpio/gpio10/direction
+    pre-up echo 1 > /sys/class/gpio/gpio10/value
+    pre-up modprobe mac80211
+    pre-up sleep 1
+    pre-up insmod /lib/modules/8188fu.ko
+    pre-up sleep 1
+    pre-up wlan_addr=$(fw_printenv -n wlanaddr); if [ -n "$wlan_addr" ]; then ip link set dev wlan0 address $wlan_addr; fi
+    post-up wpa_passphrase "$(fw_printenv -n wlanssid || echo OpenIPC)" "$(fw_printenv -n wlanpass || echo OpenIPC12345)" > /tmp/wpa_supplicant.conf
+    post-up sed -i '2i \\tscan_ssid=1' /tmp/wpa_supplicant.conf
+    post-up wpa_supplicant -B -i wlan0 -D nl80211,wext -c /tmp/wpa_supplicant.conf
+    post-down killall -q wpa_supplicant
+```

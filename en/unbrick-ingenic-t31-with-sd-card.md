@@ -33,14 +33,14 @@ Now you will get the compiled uboot file `u-boot-with-spl.bin`
 
 ### Burn uboot to SD card
 
-Insert SD card to your PC, run `fdisk -l` to check, you should see the device like in my case `Disk /dev/sdb: 29.72 GiB, 31914983424 bytes, 62333952 sectors`. Pay attention to the physical sector size, in my case it's 512 bytes
+Insert SD card to your PC, run `fdisk -l` to check, you should see the device like in my case `Disk /dev/sdb: 29.72 GiB, 31914983424 bytes, 62333952 sectors`.
 
 **CAUTION!** double check the `/dev` device name is actually your SD card, or you may lose data on other drives
 
 ```
-dd if=./u-boot-with-spl.bin of=/dev/sdb seek=34
+dd if=./u-boot-with-spl.bin of=/dev/sdb bs=512 seek=34
 ```
-This will burn the uboot file to SD card at 34*512bytes=17KBytes offset from 0x0, where 512 is my SD card's block size. If yours is 1024, change `seek=34` to `seek=17`, to make the offset to be 17KBytes
+This will burn the uboot file to SD card at 17KBytes offset from 0x0
 
 ### Boot from SD card
 
