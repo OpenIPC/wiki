@@ -99,6 +99,19 @@ iface wg0 inet static
     post-down ip link del dev wg0
 ```
 
+### WLAN0 | Update SSID & PWD from SD card
+
+```
+auto wlan0
+iface wlan0 inet dhcp
+    sleep 2
+    pre-up wlanssid=$(cat /mnt/mmcblk0p1/wlanssid); if [ $wlanssid ]; then fw_setenv wlanssid $wlanssid; fi
+    pre-up wlanpass=$(cat /mnt/mmcblk0p1/wlanpass); if [ $wlanssid ]; then fw_setenv wlanpass $wlanpass; fi
+    post-up wpa_passphrase "$(fw_printenv -n wlanssid || echo OpenIPC)" "$(fw_printenv -n wlanpass || echo OpenIPC12345)" > /tmp/wpa_supplicant.conf
+    post-up sed -i '2i \\tscan_ssid=1' /tmp/wpa_supplicant.conf
+    post-up wpa_supplicant -B -i wlan0 -D nl80211,wext -c /tmp/wpa_supplicant.conf
+    post-down killall -q wpa_supplicant
+```
 
 ### WLAN0 | GM8135 | Unknown
 
@@ -389,7 +402,7 @@ iface wlan0 inet dhcp
     post-down killall -q wpa_supplicant
 ```
 
-### WLAN0 | T31 | RTL8188FU 
+### WLAN0 | T31 | RTL8188FU | iFlytek
 
 ```
 auto wlan0
