@@ -12,6 +12,7 @@ Video Recording Software
 - [Frigate](https://frigate.video/)
 - [motion](https://motion-project.github.io/)
 - [motionEyeOS](https://github.com/motioneye-project/motioneyeos)
+- [Skryped NVR](https://www.scrypted.app/)
 - [Shinobi](https://shinobi.video/)
 - [Sighthound](https://www.sighthound.com/)
 - [tinyCam Monitor](https://tinycammonitor.com/)
