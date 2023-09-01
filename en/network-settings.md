@@ -106,7 +106,7 @@ auto wlan0
 iface wlan0 inet dhcp
     sleep 2
     pre-up wlanssid=$(cat /mnt/mmcblk0p1/wlanssid); if [ $wlanssid ]; then fw_setenv wlanssid $wlanssid; fi
-    pre-up wlanpass=$(cat /mnt/mmcblk0p1/wlanpass); if [ $wlanssid ]; then fw_setenv wlanpass $wlanpass; fi
+    pre-up wlanpass=$(cat /mnt/mmcblk0p1/wlanpass); if [ $wlanpass ]; then fw_setenv wlanpass $wlanpass; fi
     post-up wpa_passphrase "$(fw_printenv -n wlanssid || echo OpenIPC)" "$(fw_printenv -n wlanpass || echo OpenIPC12345)" > /tmp/wpa_supplicant.conf
     post-up sed -i '2i \\tscan_ssid=1' /tmp/wpa_supplicant.conf
     post-up wpa_supplicant -B -i wlan0 -D nl80211,wext -c /tmp/wpa_supplicant.conf
