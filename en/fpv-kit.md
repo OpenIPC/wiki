@@ -12,7 +12,7 @@ Selecting hardware to complete OpenIPC FPV kits
 ### FPV kit 1
 
 - IPCam board GK7205V200 + IMX307
-- RTL8812AU x 2 (the board is debatable, maybe need an antenna connector, not a bare module) | [var.1](https://aliexpress.com/item/1005005262601564.html)
+- RTL8812AU x 2 (the board is debatable, maybe need an antenna connector, not a bare module) | [var.1](https://aliexpress.com/item/32830016946.html), [var.2](https://aliexpress.com/item/1005005262601564.html)
 - DC-DC Mini560 5V
 - lens, IR filter, mounting stands and screws and other accessories
 
