@@ -13,7 +13,8 @@ This is where we'll be writing down our guide to flashing new devices and report
 * ~~Problem with loading u-boot from an microSD card. It doesn't reach the promt. Not only on wyze v3 (https://t.me/openipc_modding/179369), but also on another board T31L (https://t.me/openipc/47739). Most likely it will be IMPOSSIBLE, because in the camera there is a microSD power management MOSFET, which must be turned on BEFORE booting from the card (the experiment with not fully loaded u-boot was possible due to direct power supply to the microSD card, bypassing the transistor). Please confirm my version if it is not possible otherwise.~~ impossible without modification (direct 3.3V power supply to the microSD card reader)
 
 ### Known camera modifications
-* WYZE Cam v3
+
+* WYZE Cam v3 and WYZE Cam Pan v3 
 
 | MODEL      | IC               | FCC ID           | PCB VER                         | SoC      | WIFI                  | NOTES                                                                            |
 |------------|------------------|------------------|---------------------------------|----------|-----------------------|----------------------------------------------------------------------------------|
@@ -27,8 +28,8 @@ This is where we'll be writing down our guide to flashing new devices and report
 | WYZECPAN3  | 25466-WYZECPAN3  | 2UAIUWYZECPAN3   | WYZE PAN V3 MB V1.3             | T31X     | SDIO: AltoBeam 6031   | MAC: D0:3F:27:9C:0D:E7 https://youtu.be/hXTbDsnN9IY                              |
 
 ### OpenIPC installation
-* Disassemble camera and connect UART adapter
-  or your camera should be already connected to network.
+
+* Disassemble camera and connect UART adapter or your camera should be already connected to network.
 
 * Backup
 
