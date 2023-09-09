@@ -15,15 +15,16 @@ This is where we'll be writing down our guide to flashing new devices and report
 ### Known camera modifications
 * WYZE Cam v3
 
-| MODEL | IC | FCC ID | PCB VER | SoC | WIFI | NOTES |
-| --- | --- | --- | --- | --- | --- | --- |
-| WYZEC3 | 25466-WYZEC3A | 2AUIUWYZEC3A | WYZEV3_T31GC2053 V1.2_20200715 | T31X | SDIO: Realtek 8189FTV | MAC: 7C:78:B2:99:6E:BA https://youtu.be/jm4wze_HY78 |
-| WYZEC3 | 25466-WYZEC3 | 2AUIUWYZEC3 | WYZEV3_T31GC2053 V1.4_20201010 | T31ZX | SDIO: Realtek 8189FTV | https://t.me/openipc/49957 MAC: 7C:78:B2:69:95:C9 https://youtu.be/t7Nzo-KXTH0 |
-| WYZEC3 | 25466-WYZEC3B | 2AUIUWYZEC3B | WYZEV3_T31GC2053 V2.02_20210523 | T31ZX | SDIO: Realtek 8189FTV | MAC: D0:3F:27:46:A7:7B https://t.me/openipc/38728 https://t.me/openipc/38753 |
-| WYZEC3 | 25466-WYZEC3A | 2AUIUWYZEC3A | WYZEV3_T31GC2053 V2.02_20210523 | T31ZX | SDIO: AltoBeam 6031 | https://t.me/openipc/49049 https://t.me/openipc/49050 |
-| WYZEC3 | 25466-WYZEC3A | 2AUIUWYZEC3A | WYZEV3_T31GC2053 V2.03_20211206 | T31X | SDIO: AltoBeam 6031 | https://t.me/openipc/45444 https://t.me/openipc/48942|
-| WYZEC3 | 25466-WYZEC3F | 2AUIUWYZEC3F | WYZEV3_T31AGC2053 V3.2_20210714 | T31A BGA | SDIO: AltoBeam 6031 | https://t.me/openipc/43299 https://t.me/openipc/38755 https://t.me/openipc/38757 |
-| WYZEC3 | 25466-WYZEC3F | 2AUIUWYZEC3F | WYZEV3_T31AGC2053 V3.2_20210714 | T31A BGA | SDIO: AltoBeam 6031 | MAC:D0:3F:27:4F:23:19 https://youtu.be/VkqX9yg0odU |
+| MODEL      | IC               | FCC ID           | PCB VER                         | SoC      | WIFI                  | NOTES                                                                            |
+|------------|------------------|------------------|---------------------------------|----------|-----------------------|----------------------------------------------------------------------------------|
+| WYZEC3     | 25466-WYZEC3A    | 2AUIUWYZEC3A     | WYZEV3_T31GC2053 V1.2_20200715  | T31X     | SDIO: Realtek 8189FTV | MAC: 7C:78:B2:99:6E:BA https://youtu.be/jm4wze_HY78                              |
+| WYZEC3     | 25466-WYZEC3     | 2AUIUWYZEC3      | WYZEV3_T31GC2053 V1.4_20201010  | T31ZX    | SDIO: Realtek 8189FTV | MAC: 7C:78:B2:69:95:C9 https://t.me/openipc/49957 https://youtu.be/t7Nzo-KXTH0   |
+| WYZEC3     | 25466-WYZEC3B    | 2AUIUWYZEC3B     | WYZEV3_T31GC2053 V2.02_20210523 | T31ZX    | SDIO: Realtek 8189FTV | MAC: D0:3F:27:46:A7:7B https://t.me/openipc/38728 https://t.me/openipc/38753     |
+| WYZEC3     | 25466-WYZEC3A    | 2AUIUWYZEC3A     | WYZEV3_T31GC2053 V2.02_20210523 | T31ZX    | SDIO: AltoBeam 6031   | https://t.me/openipc/49049 https://t.me/openipc/49050                            |
+| WYZEC3     | 25466-WYZEC3A    | 2AUIUWYZEC3A     | WYZEV3_T31GC2053 V2.03_20211206 | T31X     | SDIO: AltoBeam 6031   | https://t.me/openipc/45444 https://t.me/openipc/48942                            |
+| WYZEC3     | 25466-WYZEC3F    | 2AUIUWYZEC3F     | WYZEV3_T31AGC2053 V3.2_20210714 | T31A BGA | SDIO: AltoBeam 6031   | https://t.me/openipc/43299 https://t.me/openipc/38755 https://t.me/openipc/38757 |
+| WYZEC3     | 25466-WYZEC3F    | 2AUIUWYZEC3F     | WYZEV3_T31AGC2053 V3.2_20210714 | T31A BGA | SDIO: AltoBeam 6031   | MAC: D0:3F:27:4F:23:19 https://youtu.be/VkqX9yg0odU                              |
+| WYZECPAN3  | 25466-WYZECPAN3  | 2UAIUWYZECPAN3   | WYZE PAN V3 MB V1.3             | T31X     | SDIO: AltoBeam 6031   | MAC: D0:3F:27:9C:0D:E7 https://youtu.be/hXTbDsnN9IY                              |
 
 ### OpenIPC installation
 * Disassemble camera and connect UART adapter
