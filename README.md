@@ -36,6 +36,8 @@ OpenIPC Wiki
 - [ACMEv2](en/acme-v2.md)
 - [YouTube streaming](en/youtube-streaming.md)
 - [WiFi XM530](en/wifi-xm530.md)
+- [For FPV](en/fpv.md)
+
 
 ### Troubleshooting
 - [Network does not work](en/trouble-network.md)
