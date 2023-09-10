@@ -323,7 +323,6 @@ Our team has extensive experience in low latency media transmission (some projec
 
 **Please use the translator, there is a lot of interesting stuff on FPV here:**
 
-- https://github.com/OpenIPC/wiki/blob/master/ru/fpv.md
 - https://github.com/openipc/sandbox-fpv
 - https://github.com/OpenIPC/silicon_research
 - [OpenIPC for building FPV systems, chat in telegram messenger](https://t.me/+BMyMoolVOpkzNWUy)
