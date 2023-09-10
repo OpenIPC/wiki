@@ -60,7 +60,7 @@ Optional:
 
 * SPI NOR flash memory chip of 16 megabytes or more to replace the standard 8 megabyte one. We recommend [W25Q128FVIQ](https://www.aliexpress.com/item/1005003093500630.html) or [any other](https://www.winbond.com/hq/product/code-storage-flash-memory/serial-nor-flash/?__locale=en&selected=128Mb#Density) compatible with the firmware (new modules can also be added to the project by chip ID). Please note that there are a lot of Winbond knockoffs on the market and you should choose your seller carefully.
 
-* [SPI NOR programmer for flash memory](https://aliexpress.com/item/32902635911.html). In principle you can do without it by means of the project [burn](https://github.com/OpenIPC/burn), which allows you to pour the system into an empty/killed flash (see the section [Fill image to empty/killed flash](https://github.com/OpenIPC/burn). section [Pouring image to empty flash with burn](#openipc-wiki <b>// change me</b>)). Note that although many programmers have a "clothespin" in the kit, it is absolutely impossible to dump/program flash memory directly on the board, because of the fact that the programmer besides the chip will also power the rest of the board (there is an option to cut the VCC leg).
+* [SPI NOR programmer for flash memory](https://aliexpress.com/item/32902635911.html). In principle you can do without it by means of the project [burn](https://github.com/OpenIPC/burn), which allows you to pour the system into an empty/killed flash (see the section [Fill image to empty/killed flash](https://github.com/OpenIPC/burn). section [Pouring image to empty flash with burn](#pour-the-image-onto-an-empty-flash-using-burn-if-you-dont-have-a-programmer)). Note that although many programmers have a "clothespin" in the kit, it is absolutely impossible to dump/program flash memory directly on the board, because of the fact that the programmer besides the chip will also power the rest of the board (there is an option to cut the VCC leg).
 
 * [SoC radiators](https://aliexpress.com/item/32859349038.html) are welcome (as usual not installed by the manufacturer due to cheapening).
 
@@ -162,6 +162,162 @@ change to
 ```
 * Run Gstreamer `gst-launch-1.0 -vvvv udpsrc port=5600 ! application/x-rtp,encoding-name=H264,payload=96 ! rtph264depay ! h264parse ! queue ! avdec_h264 ! autovideosink sync=false -e` and check the image quality
 
+### Ground station development, telemetry
+
+It is assumed that the Linux machine has wfb-ng installed according to the instructions from [quick-start-using-ubuntu](https://github.com/svpcom/wfb-ng#quick-start-using-ubuntu-ground-station). The following examples use Hubuntu 18.04 LTS and wfb-ng 22.09.
+
+* Run wfb-ng, start the wfb-cli console:
+```
+sudo systemctl restart wifibroadcast@gs
+wfb-cli gs
+```
+* Make sure that video packets are streaming. Here you can also see the RSSI values of the WiFi adapter antennas:
+
+![wfb-cli-video](../images/wfb-cli_video_only.png)
+
+If the recv value remains zero and the d_err value increases, the camera and ground station keys probably do not match. Make sure that /etc/gs.key is copied to the ground station. If no packages are present - make sure that `channel=xx` in /etc/wfb.conf on the camera and `wifi_channel=xx` in /etc/wifibroadcast.cfg on the ground have the same values. For the 5.8 GHz range of the RTL8812AU adapter, channels 60 and above are recommended.
+
+* Configure the flight controller under ArduPilot to output telemetry in mavlink1 format at speed 115200 on e.g. port Serial1. In case of one-way telemetry (downlink only), make sure that the PC outputs the required telemetry stream by default, without connection to the ground station. This is accomplished through setting the SR1_xxx parameters, see [mavlink SR_ parameters]. [mavlink SR_ parameters](https://ardupilot.org/dev/docs/mavlink-requesting-data.html).
+* Connect Serial1 of the PC to the UART of the camera, rx to tx, tx to rx. In case of modern PCs on STM32F4/7 the voltage levels are the same (3.3V), in case of 5V APM a level conversion will be required. The subtlety is the camera U-Boot boot loader stops on boot after receiving any bytes on the UART input. The PC should start outputting telemetry c delayed by a few seconds, through setting the TELEM_DELAY parameter. On the table it is easier to provide a break in the line from the PC to the camera.
+* On the camera in /etc/datalink.conf file set the `telemetry=true` parameter, in /etc/telemetry.conf file set the `one_way=true` parameter for one-way or `one_way=false` for two-line telemetry respectively. The simplest way to edit files on the camera is Shell Link in Midnight Commander:
+* 
+![mc_shell_link](../images/MC_shell_link.png)
+* Restart the camera and the wfb-ng service. The second data stream - telemetry - should appear in wfb-cli:
+
+![wfb-cli-video-telem](../images/wfb-cli_video_telem.png)
+
+* Install QGroundControl. Version 4.0.11 is used here because the latest versions do not work properly with video in 18.04 LTS. No new Comm Links need to be created. QGC should see the PC connection and display the telemetry input stream:
+
+
+![QGC-map](../images/QGC_telem.png)
+
+![QGC-mavlink](../images/QGC_mavlink.png)
+
+In the case of two-way telemetry, the QGC should download parameters, allow them to be changed, allow flight modes to be switched, and missions to be loaded and unloaded:
+
+![QGC-params](../images/QGC_params.png)
+
+![QGC-mission](../images/QGC_mission.png)
+
+You can see that QGS is also already displaying video. The delay in 4.0.11 is quite significant due to purely software stream processing, it is wise to try modern versions under Ubuntu 20.04 and newer.
+
+### Troubleshooting
+
+* Via the command `sudo tcpdump -i wlan0` on the desktop without running WFG-ng, you can verify that the transmitter is actually sending packets over the air:
+
+![Tcpdump](../images/fpv-tcpdump.jpg)
+
+### Pour the image onto an empty flash using burn (if you don't have a programmer)
+
+Run [burn](https://github.com/OpenIPC/burn) with the board turned off:
+```
+./burn --chip gk7205v200 --file=u-boot-gk7205v200-universal.bin -d ; screen -L /dev/ttyUSB0 115200
+```
+
+turn on the board power and wait for U-Boot to be filled and the command line to appear. Then we execute the following commands, where `192.168.0.8` is the TFTP server address and `192.168.0.200` is the temporary IP address of the camera.
+
+```
+setenv ipaddr 192.168.0.200
+setenv serverip 192.168.0.8
+
+sf probe 0; sf lock 0
+mw.b 0x42000000 ff 1000000; tftpboot 0x42000000 u-boot-gk7205v200-universal.bin; sf probe 0
+sf erase 0x0 0x50000; sf write 0x42000000 0x0 ${filesize}
+reset
+
+run setnor16m
+
+setenv ipaddr 192.168.0.200
+setenv serverip 192.168.0.8
+
+run uknor16m ; run urnor16m
+
+saveenv
+reset
+```
+
+### Further refinements
+
+#### Development of the adapter board
+
+Taking into account that according to the text above we finalized the board from an ordinary budget video surveillance camera and the installation of USB connector was made without factory connectors, it is suggested to make an additional special board (similar to [board with built-in WiFi adapter](https://aliexpress.com/item/1005002369013873.html), which will have connectors for USB (possibly with an additional hub) and SD card. This would allow video to be broadcast with minimal latency in 720p, while simultaneously recording the original in 1080p for later publication on YouTube). If you have the ability to design such a board and share the circuit with the community, it would be greatly appreciated.
+
+### FAQ
+
+#### How much does the camera consume during its operation?
+
+Consumption depends on whether the sensor is turned on (which is itself one of the big consumers) and according to our measurements is 1.7W in active mode and y 1.1W when the sensor is turned off (but the main system is running). From this we can conclude that if necessary, we can programmatically turn off/on the streamer to further reduce the system consumption at times when it is necessary.
+
+Additionally worth considering:
+* The ability to programmatically shut down the Ethernet adapter N minutes after system startup (composing the operation immediately after startup to allow for configuration changes and debugging)
+* Put all unused GPIOs into input mode
+* [Check the datasheet](https://drive.google.com/file/d/1zGBJ_SIazFqJ8d8bguURVVwIvF4ybFs1/view) and disable all unused functional blocks of the chip using registers.
+
+#### Is WDR supported?
+
+For WDR to work properly on IP cameras, both the main chip and the sensor must support the same WDR standard (there are several types). In this case, usually the sensor starts working at double frequency (for example, 60FPS instead of 30FPS), making one frame with a long shutter speed, the second - with a short shutter speed. Then ISP (Image Signal Processor) hardware produces a gluing of two frames of one, taking dark areas from the frame with a long shutter speed and light - with a short shutter speed, forming an image with an extended color range.
+Unfortunately, to get a WDR image the whole system must work at least twice as fast (or to put it another way have more transistors, doing twice as much work at a moment in time), so the Goke V200 processor does not have this mode. If WDR support is fundamental to you, consider the next in the line of V300 processors, which is also supported by the project.
+
+#### Can I use an LTE adapter instead of WiFi?
+
+Yes, but firmware modification will be required. We recommend that you ask questions about adapting specific hardware [in the official group](https://t.me/openipc_modding).
+
+#### Can I connect SD card for video recording?
+
+Yes, you can. Photo from a subscriber:
+
+<p align="center">
+<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-sd-card.jpg?raw=true" width="50%"/>
+</p>
+
+Pinout table for the auxiliary connector:
+
+<p align="center">
+<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-usb-sd.jpg?raw=true" width="50%"/>
+</p>
+
+#### What additional peripherals can be connected?
+
+Based on the pinout of the unsoldered FC connector shown above, you can see that it is used for additional expansion cards with WiFi (via USB) and SD card. Unused pins can be reassigned as follows:
+
+|Function|Additional|
+|---|---|
+|SD_CLK|GPIO32|
+|SD_CMD|GPIO33|
+|SD_DATA0|GPIO34|
+|SD_DATA1|GPIO35|
+|SD_DATA2|GPIO36|
+|SD_DATA3|GPIO37|
+|ALARM2_GPIO82||
+|KEY_SET||
+|BAT||
+|ALARM_OUT||
+
+D/N (day/night) can only be used as an input GPIO15 (due to the transistor installed). To the left of it on the same connector is GND and GPIO16 (which can be used as a GPIO in bi-directional mode or a PWM port).
+
+There are two GPIOs on the power-network connector (ETH_STA - GPIO14, ETH_ACT - GPIO12), which are typically used to indicate active Ethernet physical connectivity and data transfer activity. They can also be used for normal two-way GPIOs, with GPIO12 being able to be set to UART2_RXD mode and realize an additional one-way UART port (for data reception only). This board has 330ohm resistors on these pins, but this should not affect UART operation.
+
+Taking into account that the SoC case is made in QFN88 format, it is possible to solder a thin wire to almost any leg of the chip and use additional ports. The chip pinout and a photo of the real board without the chip are presented below:
+
+<p align="center">
+<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-v200-pinout.png?raw=true" width="50%"/>
+</p>
+
+<p align="center">
+<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-pcb-part.jpg?raw=true" width="50%"/>
+</p>
+
+Note that this solution is far from industrial (ideally you should make your own board) and if it cannot be avoided, sawing off the chip body for a more secure contact is recommended.
+
+#### Can I use another IP camera?
+
+If you have skills of an advanced Linux user, you can join our project and adapt FPV firmware to any processor [supported by OpenIPC](https://openipc.org/supported-hardware). In most cases, no programming skills are required (or you will get them naturally as you get to know and learn the system).
+
+#### How can I reduce video latency even more?
+
+To get the lowest possible latency, our firmware uses the low latency mode available in HiSilicon/Goke processors. Specific values depend on the SoC model, sensor, its resolution, current frame exposure and even chip heating during operation. The main contributor to the delay is the FPS of the system (60FPS without any tuning will be better than 30FPS with the maximum settings), so if you need low latency pay attention to more expensive hardware. To get even lower latency it is possible to disable intermediate blocks at the expense of deteriorating picture quality or switch to more modern chipsets.
+
+Our team has extensive experience in low latency media transmission (some projects have achieved latency figures of 45ms). If you are interested in commercial services (consulting, hardware and software development, reverse engineering) [contact us](mailto:d.ilyin@openipc.org).
 
 ### Quick insertion of some links
 
