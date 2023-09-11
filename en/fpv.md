@@ -333,15 +333,28 @@ Our team has extensive experience in low latency media transmission (some projec
 - https://github.com/OpenIPC
 
 ### Usefull links
+<details>
+<summary><b>From Krzysztof Kuczek</b></summary>
 
-- [Building OpenIPC FVP Gears](https://qczek.beyondrc.com/building-openipc-fvp-gears/) by Krzysztof Kuczek
-- [Goke Gk7205V200 camera FPV case by qczek](https://www.printables.com/model/579791-goke-gk7205v200-camera-fpv-case) by Krzysztof Kuczek
+- [Building OpenIPC FVP Gears](https://qczek.beyondrc.com/building-openipc-fvp-gears/)
+- [Goke Gk7205V200 camera FPV case by qczek](https://www.printables.com/model/579791-goke-gk7205v200-camera-fpv-case)
+
+</details>
+
 
 ### YouTube videos from friends
 
+<details>
+<summary><b>From Mario</b></summary>
+
 - [Introducing OpenIPC, the cheapest digital long range FPV system in the world](https://youtu.be/Z_41Dko-Iok?si=cdGWDcFss9WrvPPN)
 - [OpenIPC Latency and Range Test with ExpressLRS and INAV 6.1](https://www.youtube.com/watch?v=4tlPJSQA6HA)
+</details>
+<details>
+<summary><b>From TipoMan</b></summary>
+
 - [DIY FPV FullHD with OpenIPC, wfb-ng, qOpenHD](https://www.youtube.com/watch?v=MwcEvywzslA)
 - [25km with OpenIPC+wfb-ng, qOpenHD. goke7205v200+imx307,3.6mm. H265 7Mbit/s. ARWing900](https://www.youtube.com/watch?v=c7XtKujrzSg)
-
 - [Clouds with OpenIPC and Lidl Glider. 1366x768 video.](https://www.youtube.com/watch?v=1LavYm6jbL0)
+</details>
+
