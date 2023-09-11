@@ -332,6 +332,10 @@ Our team has extensive experience in low latency media transmission (some projec
 - https://OpenIPC.org
 - https://github.com/OpenIPC
 
+### Usefull links
+
+- [Building OpenIPC FVP Gears](https://www.printables.com/model/579791-goke-gk7205v200-camera-fpv-case) by Krzysztof Kuczek
+- [Goke Gk7205V200 camera FPV case by qczek](https://www.printables.com/model/579791-goke-gk7205v200-camera-fpv-case) by Krzysztof Kuczek
 
 ### YouTube videos from friends
 
@@ -339,3 +343,4 @@ Our team has extensive experience in low latency media transmission (some projec
 - [OpenIPC Latency and Range Test with ExpressLRS and INAV 6.1](https://www.youtube.com/watch?v=4tlPJSQA6HA)
 - [DIY FPV FullHD with OpenIPC, wfb-ng, qOpenHD](https://www.youtube.com/watch?v=MwcEvywzslA)
 - [25km with OpenIPC+wfb-ng, qOpenHD. goke7205v200+imx307,3.6mm. H265 7Mbit/s. ARWing900](https://www.youtube.com/watch?v=c7XtKujrzSg)
+
