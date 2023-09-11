@@ -12,6 +12,7 @@ Board specific GPIO settings list
 | SSC335      | 78     | 79     | 61    | 66    | 52  | MS-J10, YM200J10 |
 | SSC337      | 78     | 79     | 61    | 66    | 52  | MC-F40, YM-J10D  |
 | SSC337DE    | 78     | 79     | 61    | 66    |     | MC500L8          |
+| SSC338Q     | 23     | 24     | 60    | 10    |     | MC800S-V3        |
 
 ### CamHi / Xin boards
 
