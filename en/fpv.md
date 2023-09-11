@@ -334,7 +334,7 @@ Our team has extensive experience in low latency media transmission (some projec
 
 ### Usefull links
 
-- [Building OpenIPC FVP Gears](https://www.printables.com/model/579791-goke-gk7205v200-camera-fpv-case) by Krzysztof Kuczek
+- [Building OpenIPC FVP Gears](https://qczek.beyondrc.com/building-openipc-fvp-gears/) by Krzysztof Kuczek
 - [Goke Gk7205V200 camera FPV case by qczek](https://www.printables.com/model/579791-goke-gk7205v200-camera-fpv-case) by Krzysztof Kuczek
 
 ### YouTube videos from friends
