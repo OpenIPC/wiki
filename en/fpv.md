@@ -22,27 +22,27 @@ The receiver in this mode operates in the so-called `monitor mode`, where it rec
 
 ## Revolution from OpenIPC
 
-The classic set-up in the [OpenHD](https://openhdfpv.org/) project (and other similar projects) consists of a MIPI or USB camera connected to a Raspberry Pi and a Jetson Nano, which act as a video encoder and router for the airborne system and in turn are connected to a WiFi adapter via USB and to the flight controller via UART. The ground station usually consists of the same WiFi adapter, router and a high-contrast monitor or goggles.
+The classic set-up in the [OpenHD](https://openhdfpv.org/) project (and other similar projects) consists of a MIPI or USB camera connected to a Raspberry Pi, which act as a video encoder and router for the airborne system and in turn are connected to a WiFi adapter via USB and to the flight controller via UART. The ground station usually consists of the same WiFi adapter, a second Raspberry Pi or an x86 linux laptop and a high-contrast monitor or goggles.
 
-Sometimes a MIPI or USB camera is swapped for an IP camera, which is both more powerful (has its own hardware encoder) and cheaper with similar characteristics. Most modern video cameras are typical devices with Linux on board (but much more modest in RAM and flash memory size compared to Raspberry and Jetson), which allows you to recompile and run almost any portable software on them.
+Sometimes a MIPI or USB camera is swapped for an IP camera, which is both more powerful (has its own hardware encoder) and cheaper with similar characteristics. Most modern video cameras are typical devices with Linux on board (but much more modest in RAM and flash memory size compared to the Raspberry Pi), which allows you to recompile and run almost any portable software on them.
 
 While working with this technology, the idea of simplifying the flight system and porting all the necessary software directly to the IP camera came up. Technically FPV firmware of OpenIPC project is a special assembly with two types of drivers of popular WiFi adapters, Majestic streamer (which performs the role of GStreamer in the classical scheme on the transmitter system) and [WFB-ng](https://github.com/svpcom/wifibroadcast).
 
 ### Benefits
 
-* Reduces system cost (H.265 IP camera vs. analog on Jetson Nano with MIPI camera)
+* Reduces system cost (H.265 IP camera vs. H.264 MIPI camera with Raspberry Pi)
 * Reduces overall consumption and increases system reliability by simplifying the circuitry
 * Reduces video latency: in our Glass-to-Glass tests, we got about 80ms latency for 1080p@60 (on mid-budget cameras), and about 60 ms for 720p@60 and about 100 ms for 1080p@30 (for the most budget cameras).
-* There is a possibility of tuning hardware encoder, for example, more frequent formation of I frame (the specifics depends on the vendor of IP camera)
+* There is a possibility of tuning hardware encoder, for example, more frequent formation of I frame (the specifics depend on the vendor of IP camera)
 * The community has accumulated a lot of experience in [repairing IP cameras](https://t.me/ExIPCam), which makes it possible to further reduce the cost of operation of the system.
 
 ### Disadvantages
 
-* Due to limited resources (installed RAM and permanent memory), most of the trendy programming languages (such as Java, Python, NodeJS) will not be supported by the camera. If you like to write in these languages (or want to port software written in these languages to the camera), you will have to look for solutions.
-Replacing flash memory with a larger one will bring joy to the house of Golang and Rust developers.
-* You'll have to do some soldering to get the super-budget boards up to snuff, but I'm sure nobody in the FPV world will be intimidated by this
+* Due to limited resources (installed RAM and permanent memory), most of the trendy programming languages (such as Java, Python, NodeJS) will not be supported by the camera. If you like to write in these languages (or want to port software written in these languages to the camera), you will have to use additionally a NanoPi and use the OpenIPC camera as a regular IP camera connected to the NanoPi(https://www.aliexpress.com/item/1005004679805441.html).
+Replacing flash memory with a larger one is another option:
+* You'll have to do some soldering to replace the onboard memory, but I'm sure nobody in the FPV world will be intimidated by this
 * In most systems the Linux kernel version is limited by the IP camera vendor due to the fact that some modules are shipped in binary form. Developing kernel drivers for new WiFi adapters or specific peripherals can be time-consuming.
-* On budget cameras (for which FPV firmware was primarily developed) very limited resources, so at the time of writing this text there are no possibilities to run neural networks. The situation should change in the near future.
+* On budget cameras (for which FPV firmware was primarily developed) there are very limited resources, so at the time of writing this text there are no possibilities to run neural networks. The situation should change in the near future.
 
 ### Ingredients
 
