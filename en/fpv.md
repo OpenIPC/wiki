@@ -333,12 +333,23 @@ Our team has extensive experience in low latency media transmission (some projec
 - https://github.com/OpenIPC
 
 ### Usefull links
+
 <details>
 <summary><b>From Krzysztof Kuczek</b></summary>
+&nbsp;
 
 - [Building OpenIPC FVP Gears](https://qczek.beyondrc.com/building-openipc-fvp-gears/)
 - [Goke Gk7205V200 camera FPV case by qczek](https://www.printables.com/model/579791-goke-gk7205v200-camera-fpv-case)
+</details>
 
+<details>
+  
+<summary><b>Examples of SigmaStar equipment from TaoBao</b></summary>
+&nbsp;
+
+- [Anjoy MC800S, SSC338Q+IM415, ~24$](https://demo.otcommerce.com/item?id=655383131557#0)
+- [Anjoy MCL12, SSC30KQ+IMX335, ~11$](https://demo.otcommerce.com/item?id=600618143992)
+- [Anjoy MC-A35, SSC337+?, ~4$](https://demo.otcommerce.com/item?id=708324402303#0)
 </details>
 
 
