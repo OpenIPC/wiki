@@ -52,9 +52,10 @@ _If you have another supported device to add, please do it [here][2]._
 |            |                    |             |        |              |     |                |      |      |
 | Zenotech   | HI3516D_MB_V13_RA  | HI3516DV100 | OV9689 | GD25Q128CSIG | Yes | No             |      | No   |
 | Tungson    | DS-YTJ5301         | SSC30KD     | GC2053 |              | Yes | RTL8188FTV     | No   | No   |
-| Haier      | HCC-18B30-U1       | T31ZX       | SC3335 | NM25Q128EVB  | No  | SSC6X5X        | No   | Yes  |
+| Haier      | HCC-18B30-U1       | T31ZX       | SC3335 | NM25Q128EVB  | No  | SSV6X5X        | No   | Yes  |
 | iFlytek    | XFP301-M           | T31ZX       | JXQ03  | XM25QH128C   | No  | RTL8188FU      | No   | Yes  |
 | Qihoo 360  | AP6PCM03           | T31ZX       | GC4653 | EN25QH256A   | Yes | ATBM6031       | No   | Yes  |
+| Goke       | [MJ-C232V5-0SW1][5]| GK7205V200  | GC2305 | XM25QH128CHIQ| Yes | RTL8188FU      | No   | No   |
 
 
 | Processor   | Sensor           | Vendor     | SKU          | Board identification            |
@@ -105,5 +106,6 @@ _If you have another supported device to add, please do it [here][2]._
 [2]: https://github.com/OpenIPC/wiki/blob/master/en/guide-supported-devices.md
 [3]: https://github.com/OpenIPC/wiki/blob/master/en/device-chacon-ipcam-ri01.md
 [4]: https://ipcamtalk.com/threads/smartwares-cip-37210-wifi.64605/
+[5]: http://www.hnamg.cn/h-col-139.html
 
 [^2]: WiFi can be enabled with 8MB flash using a custom build, or by upgrading to a 16MB flash and using Ultimate firmware.
