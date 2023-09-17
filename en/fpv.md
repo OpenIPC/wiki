@@ -90,8 +90,8 @@ There are two variants of using OpenIPC firmware on the board under consideratio
 
 ### Installation on camera (flash replacement option)
 
-* Turn off the camera, unsolder the original 8 megabyte SPI NOR flash chip and dump it with a programmer just in case. It is desirable to unsolder the chip with [hair dryer](https://aliexpress.com/item/32980690787.html), but if you really want you can use a regular soldering iron [as Alexey Tolstov suggests](https://www.youtube.com/watch?v=M69JiBtuqq8) or [like this](https://www.youtube.com/watch?v=dspjVDv7hck). After unsoldering of the chip, the pads should be well cleaned from solder residue with a piece of copper cable.
-When working with a hair dryer it is desirable to remove the lens and insulate the other components, especially the plastic connectors with [kapton tape](https://aliexpress.com/item/1005003563721341.html) (in extreme case with chocolate bar foil). Never [use Rose alloy](https://habr.com/ru/post/437778/). If you're not very good with a finger, it's easier to go to the nearest cell phone repair service and show the master a part of this manual.
+* Turn off the camera, unsolder the original 8 megabyte SPI NOR flash chip and dump it with a programmer just in case. It is desirable to unsolder the chip with [hot air soldering gun](https://aliexpress.com/item/32980690787.html), but if you really want you can use a regular soldering iron [as Alexey Tolstov suggests](https://www.youtube.com/watch?v=M69JiBtuqq8) or [like this](https://www.youtube.com/watch?v=dspjVDv7hck). After unsoldering of the chip, the pads should be well cleaned from solder residue with a piece of copper cable.
+When working with a hot air soldering gun it is desirable to remove the lens and insulate the other components, especially the plastic connectors with [kapton tape](https://aliexpress.com/item/1005003563721341.html) (in extreme case with chocolate bar foil). Never [use Rose alloy](https://habr.com/ru/post/437778/). If you're not very good with a finger, it's easier to go to the nearest cell phone repair service and show the master a part of this manual.
 
 <p align="center">
 <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-imx307-spinor.jpg?raw=true" alt="Logo"/>
@@ -108,7 +108,7 @@ When working with a hair dryer it is desirable to remove the lens and insulate t
   run uknor16m; run urnor16m
 ```
 
-### Installation on the camera (general termination)
+### Installation on the camera (general finalization)
 
 * After booting the system, verify that it has obtained an IP address via Ethernet (it can be accessed via SSH via root@<IP address of the camera> without a password). Using a modern operating system and the name `openipc.local` you can find the camera within the local network without knowing its IP address. 
 * Solder GND, DP and DM to the USB pads (USB 5V power supply should not be connected to the board due to the high power consumption of the adapter), and separately 5V and GND to power the WiFi adapter (possibly via an additional DC-DC converter depending on your circuit). The USB wire that comes to the board should be secured with a cable tie to avoid breaking off the pins on the contact pad:
