@@ -154,7 +154,7 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 |-----------------|--------|--------|----------|-------|--------|---------|---------|---------|-------|---------|-----------|-----------|--------|
 | GK7205V200      | 8      | 9      | 15       | 16    | 4, 53  | 55      | 14      | 12      | 0     |         |
 | GK7205V201      | 8      | 9      | 15       | 16    | 4, 53  | 55      | 14      | 12      | 0     |         |
-| GK7205V300      | 11     | 10     | 66       | 52    | 4      |         | 30      | 31      | 0     |         | 60        | 24        |        |
+| GK7205V300[^4]  | 11     | 10     | 66       | 52    | 4      |         | 30      | 31      | 0     |         | 60        | 24        |        |
 | GK7605V100      | 10     | 11     | 66       | 52    | 4      |         | 30      | 31      | 0     |         | 60        | 24        |        |
 |                 |        |        |          |       |        |         |         |         |       |         |
 | Hi3516Cv100     | 38     | 39     | 24       |       | 49     | 26      |         |         |       |         |
@@ -168,9 +168,16 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 | Hi3518Ev200     | 33     | 34     |          |       | 61     | 35      |         |         |       |         |
 | Hi3518Ev300[^3] | 8      |        |  55      |       | 13     |         |         |         | 15    |         | 3       |
 
+> There is a map between table's columns and parameters in `nightMode` section in `majestic.yaml`<br>
+> IRCUT1 is an irCutPin1<br>
+> IRCUT2 is an irCutPin1<br>
+> IRCTL is a backlightPin<br>
+> IRSTATUS is an irSensorPin
+
 [^1]: HI3516D_N81820, 00014914 firmware
 [^2]: Hi3516Dv100 for IPC_HI3516D_83H20 00014911
 [^3]: Hi3518EV300 for 50H20L
+[^4]: IPC_GK7205V300_G6S (000699Q3 firmware)
 
 ### Zenotech/Videopark
 
