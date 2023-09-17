@@ -38,6 +38,10 @@ flash_eraseall /dev/mtd0
 nandwrite /dev/mtd0 /mnt/mmcblk0p1/ssc338q-nand.bin
 ```
 
+#### Other notes
+
+For testing please use the MPV program, in which the Shift+I key combination can be used to get debugging information.
+
 #### Buying a device
 
 - https://aliexpress.ru/item/1005002879158570.html
