@@ -60,7 +60,7 @@ Optional:
 
 * SPI NOR flash memory chip of 16 megabytes or more to replace the standard 8 megabyte one. We recommend [W25Q128FVIQ](https://www.aliexpress.com/item/1005003093500630.html) or [any other](https://www.winbond.com/hq/product/code-storage-flash-memory/serial-nor-flash/?__locale=en&selected=128Mb#Density) compatible with the firmware (new modules can also be added to the project by chip ID). Please note that there are a lot of Winbond knockoffs on the market and you should choose your seller carefully.
 
-* [SPI NOR programmer for flash memory](https://aliexpress.com/item/32902635911.html). In principle you can do without it by means of the project [burn](https://github.com/OpenIPC/burn), which allows you to pour the system into an empty/killed flash (see the section [Fill image to empty/killed flash](https://github.com/OpenIPC/burn). section [Pouring image to empty flash with burn](#pour-the-image-onto-an-empty-flash-using-burn-if-you-dont-have-a-programmer)). Note that although many programmers have a "clothespin" in the kit, it is absolutely impossible to dump/program flash memory directly on the board, because of the fact that the programmer besides the chip will also power the rest of the board (there is an option to cut the VCC leg).
+* [SPI NOR programmer for flash memory](https://aliexpress.com/item/32902635911.html). In principle you can do without it by means of the project [burn][github_burn], which allows you to pour the system into an empty/killed flash (see the section [Fill image to empty/killed flash](https://github.com/OpenIPC/burn). section [Pouring image to empty flash with burn](#pour-the-image-onto-an-empty-flash-using-burn-if-you-dont-have-a-programmer)). Note that although many programmers have a "clothespin" in the kit, it is absolutely impossible to dump/program flash memory directly on the board, because of the fact that the programmer besides the chip will also power the rest of the board (there is an option to cut the VCC leg).
 
 * [SoC radiators](https://aliexpress.com/item/32859349038.html) are welcome (as usual not installed by the manufacturer due to cheapening).
 
@@ -83,12 +83,28 @@ There are two variants of using OpenIPC firmware on the board under consideratio
 
 * Connect the UART-USB adapter to the computer (port speed 115200N1, flow control disabled, adapter should be set to 3.3V, not 5V) and check that when the camera is turned on, data is being output and you can abort the download via `Ctrl-C` (both RX and TX lines are working).
 
-### Installation on the camera (option without soldering flash)
+### Installation using IP Cam DMS (no flash soldering)
 
 * Download, unzip the archive and run the [IP Cam DMS](https://team.openipc.org/ipcam_dms/IPCam_DMS_20201121_EN.zip) program, which allows you to control the camera using the camera manufacturer's protocol.
 * Download the [special archive](https://github.com/OpenIPC/coupler/releases/download/latest/000659A7_fpv_IPC_GK7205V200_50H20AI_S38.bin) and perform a firmware upgrade, which will effectively make a seamless transition from the original firmware to OpenIPC.
 
-### Installation on camera (flash replacement option)
+> Note! Despite the fact it is the easiest way to flash firmware it has few disadvantages:
+> * It won't backup a stock firmware. There are chances you need the backup to extract some important parameters from the stock firmware. So even if you are 100% sure you don't need the stock firmware it's still a good idea to have a backup.
+> * In fact there is a prebuild fpv version only for IPC_GK7205V200_50H20AI_S38 board. For other boards you need to find and flash the lite version first. So that makes no sense using this installation type for other than IPC_GK7205V200_50H20AI_S38 boards.
+
+### Installation using burn (no flash soldering)
+
+This will work even in case you have locked bootloader or flashed wrong bootloader to the SPI flash.
+* On the workstation, install a TFTP server
+* Find your SoC on [openIPC][supported_hardware] and Generate `Installation Guide` (note: select NOR 8M memory chip even if you have 16M or 32M chip since there is no fpv versions for those configurations. Don't worry after the first boot the overlay fs will be expanded.)
+* There is a video tutorial for the [burn][github_burn] utility: [OpenIPC BURN Utility Playlist][youtube_burn] . Just select the video for your OS and follow the guide.
+* At the end of the video tutorial you will be at the terminal with unlocked bootloader. Don't close it, you will need it further.
+* Make sure the TFTP server is run and you downloaded OpenIPC firmware from the `Installation Guide` to the proper place
+* Follow the `Installation Guide` from the second step to:
+  - Save the original firmware
+  - Flash full OpenIPC Firmware image
+
+### Installation on camera (flash replacement)
 
 * Turn off the camera, unsolder the original 8 megabyte SPI NOR flash chip and dump it with a programmer just in case. It is desirable to unsolder the chip with [hot air soldering gun](https://aliexpress.com/item/32980690787.html), but if you really want you can use a regular soldering iron [as Alexey Tolstov suggests](https://www.youtube.com/watch?v=M69JiBtuqq8) or [like this](https://www.youtube.com/watch?v=dspjVDv7hck). After unsoldering of the chip, the pads should be well cleaned from solder residue with a piece of copper cable.
 When working with a hot air soldering gun it is desirable to remove the lens and insulate the other components, especially the plastic connectors with [kapton tape](https://aliexpress.com/item/1005003563721341.html) (in extreme case with chocolate bar foil). Never [use Rose alloy](https://habr.com/ru/post/437778/). If you're not very good with a finger, it's easier to go to the nearest cell phone repair service and show the master a part of this manual.
@@ -369,3 +385,6 @@ Our team has extensive experience in low latency media transmission (some projec
 - [Clouds with OpenIPC and Lidl Glider. 1366x768 video.](https://www.youtube.com/watch?v=1LavYm6jbL0)
 </details>
 
+[youtube_burn]: https://youtube.com/playlist?list=PLh0sgk8j8CfsMPq9OraSt5dobTIe8NXmw
+[github_burn]: https://github.com/OpenIPC/burn
+[supported_hardware]: https://openipc.org/supported-hardware/featured
