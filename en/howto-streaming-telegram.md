@@ -13,6 +13,8 @@ Copy Server URL and Stream key from Settings.
 
 Open `/etc/majestic.yaml` on camera and add the URL and the key into `outgoing` section of the config.
 
+**Note:** It will stream the `video0`. It **must** be configured to video codec: `h264`.
+
 **Note:** Dont forget add `-` sign before parameters!
 
 **Note:** `outgoing` section may affect another section addition. Remember it!
