@@ -112,7 +112,7 @@ flashcp -v /tmp/${LOADER} /dev/mtd0
 flash_eraseall /dev/mtd1
 ```
 
-### How to update the ancient as shit OpenIPC firmware ?
+### How to update the ancient as shit OpenIPC firmware?
 
 Commands are executed separately by each line with a wait for the end of execution.
 The first command updates a utility whose algorithm was changed in February 2023. 
@@ -122,6 +122,17 @@ The second command updates the firmware components themselves.
 ```
 curl -L -o /tmp/ipcinfo https://github.com/OpenIPC/ipctool/releases/download/latest/ipcinfo && chmod +x /tmp/ipcinfo; /tmp/ipcinfo -csF
 curl -s https://raw.githubusercontent.com/OpenIPC/firmware/master/general/overlay/usr/sbin/sysupgrade | sh -s -- -k -r -n
+```
+
+### Is it possible to switch from “lite” to “ultimate” via “Over the Air”?
+
+It depends on the board, generally you can try to split the ultimate image to the rootfs and overlay partition and then set the correct partition layout via uboot.
+
+```
+dd if=rootfs.squashfs of=mtd3.bin bs=1k count=5120
+dd if=rootfs.squashfs of=mtd4.bin bs=1k skip=5120
+flashcp mtd3.bin /dev/mtd3 -v
+flashcp mtd4.bin /dev/mtd4 -v
 ```
 
 ### How to dump full firmware to an NFS share
