@@ -50,11 +50,11 @@ sf probe 0; sf erase 0xd50000 0x2b0000; reset
 
 `ssh root@<camera_ip_address>`
 
-There is no password by default.
+There is _12345_ password by default.
 
 ### How to sign in into camera Web UI?
 
-Open http://<camera_ip_address>:85/ and sign in using default username _admin_
+Open http://<camera_ip_address>:85/ and sign in using default username _root_
 and default password _12345_. You will be asked to change the password after
 successful login.
 
