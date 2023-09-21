@@ -50,11 +50,11 @@ sf probe 0; sf erase 0xd50000 0x2b0000; reset
 
 `ssh root@<camera_ip_address>`
 
-There is no password by default.
+There is _12345_ password by default.
 
 ### How to sign in into camera Web UI?
 
-Open http://<camera_ip_address>:85/ and sign in using default username _admin_
+Open http://<camera_ip_address>:85/ and sign in using default username _root_
 and default password _12345_. You will be asked to change the password after
 successful login.
 
@@ -97,6 +97,45 @@ on the camera afterwards.
 
 If you need to know what is in the command, search for `ipctool` in the
 `/etc/profile` file.
+
+### How to replace the bootloader from Linux? A dangerous operation for dummies!
+
+Commands are executed separately by each line with a wait for the end of execution.
+The full name of the replacement bootloader and its availability can be checked [here][3]
+
+Before running the commands, don't forget to enter the correct bootloader name!
+
+```
+export LOADER=u-boot-SOC-TYPE.bin
+curl -k -L -o /tmp/${LOADER} https://github.com/OpenIPC/firmware/releases/download/latest/${LOADER}
+flashcp -v /tmp/${LOADER} /dev/mtd0
+flash_eraseall /dev/mtd1
+```
+
+### How to update the ancient as shit OpenIPC firmware?
+
+Commands are executed separately by each line with a wait for the end of execution.
+The first command updates a utility whose algorithm was changed in February 2023. 
+If you need to update the utility on T31 processors, please add the -mips suffix to the URL of the downloaded utility.
+The second command updates the firmware components themselves. 
+
+```
+curl -L -o /tmp/ipcinfo https://github.com/OpenIPC/ipctool/releases/download/latest/ipcinfo && chmod +x /tmp/ipcinfo; /tmp/ipcinfo -csF
+curl -s https://raw.githubusercontent.com/OpenIPC/firmware/master/general/overlay/usr/sbin/sysupgrade | sh -s -- -k -r -n
+```
+
+### Is it possible to switch from “lite” to “ultimate” via “Over the Air”?
+
+It depends on the board, generally you can try to split the ultimate image to the rootfs and overlay partition and then set the correct partition layout via uboot.
+A 'blind' uboot setup is only supported on sigmastar.
+Otherwise the only way to get it working without accessing uboot is to manually set the correct variables with fw_printenv and fw_setenv.
+
+```
+dd if=rootfs.squashfs of=mtd3.bin bs=1k count=5120
+dd if=rootfs.squashfs of=mtd4.bin bs=1k skip=5120
+flashcp mtd3.bin /dev/mtd3 -v
+flashcp mtd4.bin /dev/mtd4 -v
+```
 
 ### How to dump full firmware to an NFS share
 
@@ -227,3 +266,4 @@ scp -O ~/myfile root@192.168.1.65:/tmp/
 
 [1]: https://openipc.org/wiki/en/gpio-settings.html
 [2]: https://github.com/OpenIPC/ipctool/releases/download/latest/ipctool
+[3]: https://github.com/OpenIPC/firmware/releases/tag/latest
