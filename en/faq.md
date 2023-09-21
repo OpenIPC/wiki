@@ -98,6 +98,32 @@ on the camera afterwards.
 If you need to know what is in the command, search for `ipctool` in the
 `/etc/profile` file.
 
+### How to replace the bootloader from Linux? A dangerous operation for dummies!
+
+Commands are executed separately by each line with a wait for the end of execution.
+The full name of the replacement bootloader and its availability can be checked [here][3]
+
+Before running the commands, don't forget to enter the correct bootloader name!
+
+```
+export LOADER=u-boot-SOC-TYPE.bin
+curl -k -L -o /tmp/${LOADER} https://github.com/OpenIPC/firmware/releases/download/latest/${LOADER}
+flashcp -v /tmp/${LOADER} /dev/mtd0
+flash_eraseall /dev/mtd1
+```
+
+### How to update the ancient as shit OpenIPC firmware ?
+
+Commands are executed separately by each line with a wait for the end of execution.
+The first command updates a utility whose algorithm was changed in February 2023. 
+If you need to update the utility on T31 processors, please add the -mips suffix to the URL of the downloaded utility.
+The second command updates the firmware components themselves. 
+
+```
+curl -L -o /tmp/ipcinfo https://github.com/OpenIPC/ipctool/releases/download/latest/ipcinfo && chmod +x /tmp/ipcinfo; /tmp/ipcinfo -csF
+curl -s https://raw.githubusercontent.com/OpenIPC/firmware/master/general/overlay/usr/sbin/sysupgrade | sh -s -- -k -r -n
+```
+
 ### How to dump full firmware to an NFS share
 
 This could work if you are lucky, you gained access into Linux shell on stock
@@ -227,3 +253,4 @@ scp -O ~/myfile root@192.168.1.65:/tmp/
 
 [1]: https://openipc.org/wiki/en/gpio-settings.html
 [2]: https://github.com/OpenIPC/ipctool/releases/download/latest/ipctool
+[3]: https://github.com/OpenIPC/firmware/releases/tag/latest
