@@ -127,6 +127,8 @@ curl -s https://raw.githubusercontent.com/OpenIPC/firmware/master/general/overla
 ### Is it possible to switch from “lite” to “ultimate” via “Over the Air”?
 
 It depends on the board, generally you can try to split the ultimate image to the rootfs and overlay partition and then set the correct partition layout via uboot.
+A 'blind' uboot setup is only supported on sigmastar.
+Otherwise the only way to get it working without accessing uboot is to manually set the correct variables with fw_printenv and fw_setenv.
 
 ```
 dd if=rootfs.squashfs of=mtd3.bin bs=1k count=5120
