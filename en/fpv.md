@@ -384,6 +384,11 @@ Our team has extensive experience in low latency media transmission (some projec
 - [25km with OpenIPC+wfb-ng, qOpenHD. goke7205v200+imx307,3.6mm. H265 7Mbit/s. ARWing900](https://www.youtube.com/watch?v=c7XtKujrzSg)
 - [Clouds with OpenIPC and Lidl Glider. 1366x768 video.](https://www.youtube.com/watch?v=1LavYm6jbL0)
 </details>
+<details>
+<summary><b>Егор NiKO</b></summary>
+
+- [Делаю FPV FullHD линк из китайской IP-камеры ДЕШЕВЫЙ АНАЛОГ OpenHD Digital FPV](https://www.youtube.com/watch?v=NOW99dwKbzI)
+</details>
 
 [youtube_burn]: https://youtube.com/playlist?list=PLh0sgk8j8CfsMPq9OraSt5dobTIe8NXmw
 [github_burn]: https://github.com/OpenIPC/burn
