@@ -384,6 +384,8 @@ Our team has extensive experience in low latency media transmission (some projec
 - [DIY FPV FullHD with OpenIPC, wfb-ng, qOpenHD](https://www.youtube.com/watch?v=MwcEvywzslA)
 - [25km with OpenIPC+wfb-ng, qOpenHD. goke7205v200+imx307,3.6mm. H265 7Mbit/s. ARWing900](https://www.youtube.com/watch?v=c7XtKujrzSg)
 - [Clouds with OpenIPC and Lidl Glider. 1366x768 video.](https://www.youtube.com/watch?v=1LavYm6jbL0)
+- [15 km flight with DIY FPV sytem, based on OpenIPC, wfb-ng, qOpenHD](https://www.youtube.com/watch?v=6__OMDvJ6o0)
+- [OpenIPC and wfb-ng in a windy day, imx335, mcs1, 7mbit/s, h265](https://www.youtube.com/watch?v=lUyhilWK1dE)
 </details>
 
 <details>
