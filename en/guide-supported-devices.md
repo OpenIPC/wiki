@@ -58,6 +58,8 @@ _If you have another supported device to add, please do it [here][2]._
 | Goke       | [MJ-C232V5-0SW1][5]| GK7205V200  | GC2305 | XM25QH128CHIQ| Yes | RTL8188FU      | No   | No   |
 | Uniview    | CMCC-IPC-A35       | Hi3516EV300 | SP2305 | W25N01GV     | Yes |                | No   | No   |
 | E-Life     | EF3113             | T31L        | GC2053 | ZB25VQ128    | Yes | SV6155P        | No   | Yes  |
+| E-Life     | ET-N3431H-DW       | T31X        | OS03B10| ZB25VQ128    | Yes | SV6155P        | No   | Yes  |
+| H3C        | C2041              | T31X        | JXK04  | XM25QH128C   | Yes | RTL8188FTV     | No   | Yes  |
 
 
 | Processor   | Sensor           | Vendor     | SKU          | Board identification            |
