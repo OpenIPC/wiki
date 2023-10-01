@@ -61,11 +61,11 @@ OpenIPC Wiki
 - [U-Boot Documentation](https://u-boot.readthedocs.io/)
 
 ### Help, Tips, and Tricks
+- [Frequently Asked Question (FAQ)](en/faq.md)
 - [U-Boot Tips](en/help-uboot.md)
 - [Web UI Help](en/help-webui.md)
 - [Live streaming to Telegram](en/howto-streaming-telegram.md)
 - [Interesting tricks](en/dev-tricks.md)
-- [Questions and answers](en/faq.md)
 - [Glossary](en/glossary.md)
 
 ### Hardware
