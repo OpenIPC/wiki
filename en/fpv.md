@@ -342,7 +342,7 @@ Our team has extensive experience in low latency media transmission (some projec
 - https://github.com/openipc/sandbox-fpv
 - https://github.com/OpenIPC/silicon_research
 - [OpenIPC for building FPV systems, chat in telegram messenger](https://t.me/+BMyMoolVOpkzNWUy)
-- [WFB-ng](https://github.com/svpcom/wfb-ng/blob/master/doc/wfb-ng-std-draft.md)
+- [WFB-ng Data Transport Standard (Draft)](https://github.com/svpcom/wfb-ng/blob/master/doc/wfb-ng-std-draft.md)
 
 **And our general resources:**
 
