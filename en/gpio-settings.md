@@ -118,6 +118,12 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 |-------------|--------|--------|----------|----------|
 | T10         | 25     | 26     | 81       | 80       |
 
+### Qihoo 360 Security cam D603
+
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRLED    | WIFI  |  LED  |
+|-------------|--------|--------|----------|----------|-------|-------|
+| T20         | 25     |   26   | -        | 61       |  62   |   82  |
+
 ### Rostelecom IPC2122SR3-RU04
 
 | Processor   | IRCUT1 | IRCUT2 |
