@@ -18,7 +18,7 @@ cd openipc-firmware
 ### Install required packages.
 
 ```bash
-sudo make install-deps
+sudo make deps
 ```
 
 ### Create a permanent storage for downloaded bundles.
