@@ -46,6 +46,10 @@ nandwrite /dev/mtd0 /mnt/mmcblk0p1/ssc338q-nand.bin
 
 For testing please use the [MPV](https://mpv.io/) player, in which the Shift+I key combination can be used to get debugging information.
 
-#### Buying a device
+#### Buying a device (vendor CamHi)
 
-- https://aliexpress.ru/item/1005002879158570.html
+- https://aliexpress.com/item/1005002879158570.html
+
+#### Buying a device (vendor Anjoy)
+
+- https://aliexpress.com/item/1005003738087454.html
