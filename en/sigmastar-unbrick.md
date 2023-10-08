@@ -21,16 +21,24 @@ Sigmastar unbrick
 ---
 
 **Check the device flash with snander:**
+- _0x49 -> ISP_
+- _0x59 -> DEBUG_
 ```
-snander -i
+snander -i -q
 ```
 
 <img src="../images/sigmastar-check.webp">
 
-**Erase, write and verify new uboot:**
+**Erase the boot partition:**
 ```
 snander -l 0x200000 -e
-snander -w u-boot-ssc338q-nand.bin -v
+```
+
+<img src="../images/sigmastar-erase.webp">
+
+**Write the new uboot file:**
+```
+snander -w u-boot-ssc338q-nand.bin
 ```
 
 <img src="../images/sigmastar-write.webp">
