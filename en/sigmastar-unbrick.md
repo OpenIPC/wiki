@@ -21,8 +21,7 @@ Sigmastar unbrick
 ---
 
 **Check the device flash with snander:**
-- _0x49 -> ISP_
-- _0x59 -> DEBUG_
+- Power cycling might help if the device can not be detected.
 ```
 snander -i -q
 ```
@@ -42,3 +41,9 @@ snander -w u-boot-ssc338q-nand.bin
 ```
 
 <img src="../images/sigmastar-write.webp">
+
+---
+
+**I2C devices:**
+- 0x49 -> MStar ISP
+- 0x59 -> MStar Debug
