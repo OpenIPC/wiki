@@ -1,6 +1,7 @@
 # XiongMai IPG-53H20AF
 
 2.0M Autofocal Module
+![device_ipg-53h20af](/images/device-53h20af.jpg)
 
 ## Hardware
 
