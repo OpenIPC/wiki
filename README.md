@@ -79,6 +79,7 @@ OpenIPC Wiki
 - [Xiaomi Mi Camera 2K (MJSXJ03HL)](https://github.com/OpenIPC/device-mjsxj03hl/)
 - [Wyze V3](en/device-wyze-integration.md)
 - [Digitus DN-16048 Optizoom](en/device-digitus-dn16048.md)
+- [XiongMai IPG-53H20AF](en/device-ipg-53h20af.md)
 
 ### Software
 - [List of Software for Recording Video](en/software-video-recording.md)
