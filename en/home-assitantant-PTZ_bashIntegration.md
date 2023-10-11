@@ -37,11 +37,13 @@ install sshpass
 ```
 apk add sshpass
 ```
+
+**Note:** You can test sshpass with
+
 ```
 sshpass -p '123456' ssh root@192.168.1.29
 ```
 
-**Note:** run to add the fingerprints, otherwise the script will not work
 
 Add those lines to configuration.yaml
 ```
@@ -110,35 +112,35 @@ read name
 
 echo "#!/bin/bash
 # Conctate al servidor remoto utilizando sshpass y la contraseÃ±a
-sshpass -p '"$password"' ssh "$user"@"$ip" <<EOF
+sshpass -p '"$password"'  ssh -o StrictHostKeyChecking=accept-new  "$user"@"$ip" <<EOF
 # Dentro del servidor remoto, ejecuta el comando t31-kmotor con los argumentos
 t31-kmotor -d   h -r
 EOF 
 "> "$name"_r.sh
 echo "#!/bin/bash
 # Conctate al servidor 
-sshpass -p '"$password"' ssh "$user"@"$ip" <<EOF
+sshpass -p '"$password"'  ssh -o StrictHostKeyChecking=accept-new  "$user"@"$ip" <<EOF
 # Dentro del servidor remoto, ejecuta el comando t31-kmotor
 t31-kmotor -d g -x -300 -y 0
 EOF 
 "> "$name"_x_down.sh
 echo "#!/bin/bash
 # Conctate al servidor 
-sshpass -p '"$password"' ssh "$user"@"$ip" <<EOF
+sshpass -p '"$password"'  ssh -o StrictHostKeyChecking=accept-new "$user"@"$ip" <<EOF
 # Dentro del servidor remoto, ejecuta el comando t31-kmotor
 t31-kmotor -d g -x 300 -y 0
 EOF 
 "> "$name"_x_up.sh
 echo "#!/bin/bash
 # Conctate al servidor 
-sshpass -p '"$password"' ssh "$user"@"$ip" <<EOF
+sshpass -p '"$password"'  ssh -o StrictHostKeyChecking=accept-new  "$user"@"$ip" <<EOF
 # Dentro del servidor remoto, ejecuta el comando t31-kmotor
 t31-kmotor -d g -x 0 -y -300
 EOF 
 "> "$name"_y_down.sh
 echo "#!/bin/bash
 # Conctate al servidor 
-sshpass -p '"$password"' ssh "$user"@"$ip" <<EOF
+sshpass -p '"$password"'  ssh -o StrictHostKeyChecking=accept-new  "$user"@"$ip" <<EOF
 # Dentro del servidor remoto, ejecuta el comando t31-kmotor
 t31-kmotor -d g -x 0 -y 300
 EOF 
