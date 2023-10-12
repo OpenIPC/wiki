@@ -9,7 +9,7 @@ Majestic Streamer
 Majestic is a video streaming application, the heart of our firmware (in
 relation to camera/video surveillance functionality). Majestic is configurable
 via /etc/majestic.yaml file, and has many features/services enabled by default.
-Unneeded options can be switched off for better security and performance.
+Unneeded options can be switched off for better security and performance. See /etc/majestic.full for configuration options.
 
 ### Camera related URLs in firmware
 
