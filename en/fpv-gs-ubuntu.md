@@ -1,16 +1,14 @@
 # OpenIPC Wiki
 [Table of Content](../README.md)
 
-Instructions for installing OpenIPC firmware on SigmaStar devices
+Instructions for installing GS on Ubuntu 22.04
 -----------------------------------------------------------------
 
 <p align="center">
   <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-logo.jpg?raw=true" alt="Logo"/>
 </p>
 
-## Step by step commands to run GS on Ubuntu 22.04
-
-Video version: - [OpenIPC - Prepare GroundStation: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
+Video version: [OpenIPC - Prepare GroundStation: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
 ### Prepare
 ```
 sudo apt update
