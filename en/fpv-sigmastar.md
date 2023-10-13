@@ -9,7 +9,9 @@ Instructions for installing OpenIPC firmware on SigmaStar devices
 </p>
 
 
-### SSC338Q + IMX415 + NAND flash board from CamHi
+<details>
+<summary><h3>SSC338Q + IMX415 + NAND flash, board from CamHi vendor</h3></summary>
+&nbsp;
 
 #### Quick note on experiments, will be revised and updated
 
@@ -42,14 +44,23 @@ flash_eraseall /dev/mtd0
 nandwrite /dev/mtd0 /mnt/mmcblk0p1/ssc338q-nand.bin
 ```
 
-#### Other notes
+#### Buying a device (CamHi vendor)
+
+- https://aliexpress.com/item/1005002879158570.html
+</details>
+
+
+<details>
+<summary><h3>SSC338Q + IMX415 + NAND flash board from CamHi</h3></summary>
+&nbsp;
+
+#### Buying a device (Anjoy vendor)
+
+- https://aliexpress.com/item/1005003738087454.html
+</details>
+
+
+### Other notes
 
 For testing please use the [MPV](https://mpv.io/) player, in which the Shift+I key combination can be used to get debugging information.
 
-#### Buying a device (vendor CamHi)
-
-- https://aliexpress.com/item/1005002879158570.html
-
-#### Buying a device (vendor Anjoy)
-
-- https://aliexpress.com/item/1005003738087454.html
