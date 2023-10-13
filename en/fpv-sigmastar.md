@@ -8,10 +8,10 @@ Instructions for installing OpenIPC firmware on SigmaStar devices
   <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-logo.jpg?raw=true" alt="Logo"/>
 </p>
 
+Please click on the arrow on the left to expand the menu
 
 <details>
 <summary><h3>SSC338Q + IMX415 + NAND flash, board from CamHi vendor</h3></summary>
-&nbsp;
 
 #### Quick note on experiments, will be revised and updated
 
@@ -52,7 +52,6 @@ nandwrite /dev/mtd0 /mnt/mmcblk0p1/ssc338q-nand.bin
 
 <details>
 <summary><h3>SSC338Q + IMX415 + NAND flash board from CamHi</h3></summary>
-&nbsp;
 
 #### Buying a device (Anjoy vendor)
 
