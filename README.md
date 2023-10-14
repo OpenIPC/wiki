@@ -37,6 +37,7 @@ OpenIPC Wiki
 - [YouTube streaming](en/youtube-streaming.md)
 - [WiFi XM530](en/wifi-xm530.md)
 - [For FPV](en/fpv.md)
+- [GS on Ubuntu](en/fpv-gs-ubuntu.md)
 
 
 ### Troubleshooting
