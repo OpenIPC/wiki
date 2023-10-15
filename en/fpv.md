@@ -20,6 +20,28 @@ The receiver in this mode operates in the so-called `monitor mode`, where it rec
   <img src="https://befinitiv.files.wordpress.com/2015/04/dscf11161.jpg" alt="The first ever drone controlled by Wifibroadcast" />
 </p>
 
+
+## Advice for newcomers
+<span style="color:red;">
+OpenIPC FPV is still under development. Linux skills are required for installing and using/testing it.
+If there are no such skills available or a person who does not want to learn, then it is better for the person to buy and use professional FPV Equipment which works out of the box.
+</span>
+
+You should have the following skills:
+* Connect to the IPcamera / NVR with SSH (Secure Shell)
+* Exchage files over SCP (Secure Copy)
+* Using [VIM Editor](https://github.com/vim/vim)
+* View the contents of a file using the CAT command
+* Skills in adapting or creating a bash script
+
+
+There are good books, websites and videos available which can be used to learn.
+
+* [Linux Basics Course](https://github.com/kodekloudhub/linux-basics-course)
+* [Video: Introduction to Linux – Full Course for Beginners](https://www.youtube.com/watch?v=sWbUDq4S6Y8)
+
+
+
 ## Revolution from OpenIPC
 
 The classic set-up in the [OpenHD](https://openhdfpv.org/) project (and other similar projects) consists of a MIPI or USB camera connected to a Raspberry Pi, which act as a video encoder and router for the airborne system and in turn are connected to a WiFi adapter via USB and to the flight controller via UART. The ground station usually consists of the same WiFi adapter, a second Raspberry Pi or an x86 linux laptop and a high-contrast monitor or goggles.
