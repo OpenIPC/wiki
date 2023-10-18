@@ -426,7 +426,17 @@ Our team has extensive experience in low latency media transmission (some projec
 - [Flashing GK7205V200+IMX307 to firmware from OpenIPC, memory chip replacement](https://www.youtube.com/watch?v=M69JiBtuqq8)
 </details>
 
+<details>
+<summary><b>HKR</b></summary>
 
+- [OpenIPC - Prepare GroundStation: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
+</details>
+
+<details>
+<summary><b>Joshua Bardwell</b></summary>
+
+- [OpenIPC - FPV DRONE NEWS AUG 29 2023](https://www.youtube.com/watch?v=MRxxOGuZUq8&t=2298s)
+</details>
 
 [youtube_burn]: https://youtube.com/playlist?list=PLh0sgk8j8CfsMPq9OraSt5dobTIe8NXmw
 [github_burn]: https://github.com/OpenIPC/burn
