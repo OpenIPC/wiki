@@ -172,7 +172,7 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 | Hi3516Ev100     | 53     | 54     | 64       |       |        |         |         |         |       |         |
 | Hi3516Ev200     | 8      | 9      | 15       | 16    | 4, 53  | 55      | 14      | 12      | 0     |         |
 | Hi3516Ev300     | 10     | 11     | 66       | 52    | 4, 67  | 65      | 30      | 31      | 0     |         |
-| Hi3518Ev200     | 33     | 34     |          |       | 61     | 35      |         |         |       |         |
+| Hi3518Ev200     | 33     | 34     | 24       |       | 61     | 35      |         |         |       |         | 3       |              | IPG-50HV20PET-S |
 | Hi3518Ev300[^3] | 8      |        |  55      |       | 13     |         |         |         | 15    |         | 3       |
 
 > There is a map between table's columns and parameters in `nightMode` section in `majestic.yaml`<br>
