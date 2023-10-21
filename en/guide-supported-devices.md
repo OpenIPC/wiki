@@ -44,9 +44,10 @@ _If you have another supported device to add, please do it [here][2]._
 |            |                    |             |        |              |     |                |      |      |
 | Smartwares | [CIP-37210][4]     | HI3518EV200 |        |              | No  | RTL8188FU      | WiFi | Yes  |
 |            |                    |             |        |              |     |                |      |      |
-| TOP        | TOP-201/MCO-720P Mini Camera  | HI3518EV100 | OV9712 |  | Yes | No             | No   | No   |
+| TOP        | TOP-201/MCO-720P Mini Camera  | HI3518EV100 | OV9712 |   | Yes | No             | No   | No   |
 |            |                    |             |        |              |     |                |      |      |
-| Xiaomi     | MJSXJ02HL          | HI3518EV300 |        |              | No  |                |      | Yes  |
+| Xiaomi     | [MJSXJ02HL][7]     | HI3518EV300 |        |              | No  |                |      | Yes  |
+| Xiaomi     | [MJSXJ03HL][6]     | T31N        | JXQ03 | QH128A-104HIP | No  | RTL8189FTV     | No   | Yes  |
 |            |                    |             |        |              |     |                |      |      |
 | XM         | BLK18EV-0062-0035  | HI3518EV200 | JXH62  |              | Yes |                |      | Yes  |
 |            |                    |             |        |              |     |                |      |      |
@@ -112,5 +113,8 @@ _If you have another supported device to add, please do it [here][2]._
 [3]: https://github.com/OpenIPC/wiki/blob/master/en/device-chacon-ipcam-ri01.md
 [4]: https://ipcamtalk.com/threads/smartwares-cip-37210-wifi.64605/
 [5]: http://www.hnamg.cn/h-col-139.html
+[6]: https://github.com/OpenIPC/device-mjsxj03hl
+[7]: https://github.com/OpenIPC/device-mjsxj02hl
+
 
 [^2]: WiFi can be enabled with 8MB flash using a custom build, or by upgrading to a 16MB flash and using Ultimate firmware.
