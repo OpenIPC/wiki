@@ -62,6 +62,7 @@ _If you have another supported device to add, please do it [here][2]._
 | E-Life     | ET-N3431H-DW       | T31X        | OS03B10| ZB25VQ128    | Yes | SV6155P        | No   | Yes  |
 | H3C        | C2041              | T31X        | JXK04  | XM25QH128C   | Yes | RTL8188FTV     | No   | Yes  |
 | MEGVII     | SmartEye-D1A-24A-P | T31X        | JXK04  | FM25Q128A    | Yes | No             | No   | Yes  |
+| Uniview    | IPC-D122-PF28      | SSC335      | SC2335 | XM25QH64C    | Yes | No             | No   | No   |
 
 
 | Processor   | Sensor           | Vendor     | SKU          | Board identification            |
