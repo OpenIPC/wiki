@@ -3,7 +3,7 @@
 
 Wyze integration
 ----------------
-This is where we'll be writing down our guide to flashing new devices and reports on our experiments.
+This is where we'll be writing down our guide to flashing new devices and reports on our experiments.  The tables below also include some "clones" manufactured by Hualai, the ODM vendor for Wyze for reference.
 
 ### Known camera revisions:
 
@@ -24,31 +24,39 @@ This is where we'll be writing down our guide to flashing new devices and report
 | WYZECPAN3 | WYZECPAN3 | 2AUIUWYZECPAN3 | WYZE PAN V3 MB V 1.3              | T31X     | SDIO: AltoBeam 6031   | D0:3F:27   | NO        | NOT SUPPORTED - Secure Boot ENABLED                       |
 | WYZEC3P   | WYZEC3P   | 2AUIUWYZEC3P   | WYZEV3PRO_T40GC4653_v2.2_20220228 | T40XP    | SDIO: Realtek 8192FS  | D0:3F:27   | UNTESTED  | UNTESTED                                                  |
 | WVOD2     | WVOD2     | 2AUIUWVOD2     | HL_WCO2 MAIN01 V1.0               | T31ZX    | SDIO: BCM43438        | D0:3F:27   | UNTESTED  | UNTESTED - Ingenic Zeratul Battery Platform               |
+| ATOMCAM2  |           |                | V3C_T31GC2063 V1.1_202001110      | T31ZX    | SDIO: AltoBeam 6031   | 7C:DD:E9   | YES       | AtomCam 2 Japan http://www.atomtech.co.jp                 |
+| PERSONALCAM  |           |                |                                | T31??    | SDIO: AltoBeam 6031   | ??:??:??   | YES       | Camera Personal Wifi https://tienda.personal.com.ar       |
 
 
 GPIO:
 
-| MODEL     | IRCUT1 | IRCUT2 | IR LED1 | IR LED2 | WIFI   | LED1   | LED2   | SPEAKER | TF_EN  | TF_CD  | SD_ABLE | BUTTON1 | BUTTON2 | SUB1G  | USB    |
-|-----------|--------|--------|---------|---------|--------|--------|--------|---------|--------|--------|---------|---------|---------|--------|--------|
-| WYZEC2    | GPIO26 | GPIO25 | GPIO49  |         | GPIO62 | GPIO38 | GPIO39 | GPIO63  | GPIO43 | GPIO48 | GPIO48  | GPIO46  |         |        | GPIO47 |
-| WYZECP1   |        |        |         |         |        |        |        |         |        |        |         |         |         |        |        |
-| WYZEC3    | GPIO53 | GPIO52 | GPIO47  | GPIO49  | GPIO59 | GPIO38 | GPIO39 | GPIO63  | GPIO50 | GPIO59 | GPIO48  | GPIOXX  | GPIOXX  |        |        |
-| WYZEDBV1  | GPIO53 | GPIO52 | PWM2    |         | GPIO57 | GPIO38 | GPIO39 | GPIO58  |        |        | GPIO62  | GPIO06  | GPIO07  | GPIO61 |        |
-| WYZECP2   | GPIO53 | GPIO52 | GPIO60  |         | GPIO58 | GPIO38 | GPIO39 | GPIO07  | GPIO47 | GPIO48 | GPIO54  | GPIO06  |         |        |        |
-| WYZECPAN3 |        |        |         |         |        |        |        |         |        |        |         |         |         |        |        |
-| WYZEC3PRO |        |        |         |         |        |        |        |         |        |        |         |         |         |        |        |
-| WVOD2     |        |        |         |         |        |        |        |         |        |        |         |         |         |        |        |
+| MODEL     | IRCUT1 | IRCUT2 | IR LED1 | IR LED2 | WIFI   | LED1   | LED2   | SPEAKER | TF_EN  | TF_CD  | SD_ABLE | SD_PWR |BUTTON1 | BUTTON2 | SUB1G  | USB    |
+|-----------|--------|--------|---------|---------|--------|--------|--------|---------|--------|--------|---------|--------|--------|---------|--------|--------|
+| WYZEC2    | GPIO26 | GPIO25 | GPIO49  |         | GPIO62 | GPIO38 | GPIO39 | GPIO63  | GPIO43 | GPIOXX | GPIO48  |        | GPIO46 |         |        | GPIO47 |
+| WYZECP1   |        |        |         |         |        |        |        |         |        |        |         |        |        |         |        |        |
+| WYZEC3    | GPIO53 | GPIO52 | GPIO47  | GPIO49  | GPIO59 | GPIO38 | GPIO39 | GPIO63  | GPIO50 | GPIO59 | GPIO48  |        | GPIO51 |         |        |        |
+| WYZEDBV1  | GPIO53 | GPIO52 | PWM2    |         | GPIO57 | GPIO38 | GPIO39 | GPIO58  |        |        | GPIO62  |        | GPIO06 | GPIO07  | GPIO61 |        |
+| WYZECP2   | GPIO53 | GPIO52 | GPIO60  |         | GPIO58 | GPIO38 | GPIO39 | GPIO07  | GPIO47 | GPIO48 | GPIO54  |        | GPIO06 |         |        |        |
+| WYZECPAN3 |        |        |         |         |        |        |        |         |        |        |         |        |        |         |        |        |
+| WYZEC3PRO | GPIO118| GPIO119| GPIO66  | GPIO67  | GPIO57 | GPIO105| GPIO106| GPIO63  | GPIO58 | GPIO70 | GPIO71  | GPIO121| GPIO107|         |        |        |
+| WVOD2     |        |        |         |         |        |        |        |         |        |        |         |        |        |         |        |        |
+| ATOMCAM2  | GPIO53 | GPIO52 | GPIO26  |         | GPIO57 | GPIO38 | GPIO39 | GPIO63  | GPIO50 | GPIO59 | GPIO48  |        | GPIO51 |         |        | GPIO47 |
+| PERSONALCAM  |        |        | GPIO14  |         | GPIO57 | GPIO47 | GPIO48 | GPIO63  | GPIO50 | GPIO59 | GPIO39  |        |        |         |        |        |
 
 
 MOTORS: 
-| MODEL     | HST1   | HST2   | HST3   | HST5   | VST1   | VST2   | VST3   | VST4   | HMAX | VMAX  | MAX PEED |
-|-----------|--------|--------|--------|--------|--------|--------|--------|--------|------|-------|----------|
-| WYZECP1   |        |        |        |        |        |        |        |        |      |       |          |
-| WYZECP2   | GPIO52 | GPIO53 | GPIO57 | GPIO51 | GPIO59 | GPIO61 | GPIO62 | GPIO63 | 2540 | 720   | 900      |
-| WYZECPAN3 |        |        |        |        |        |        |        |        |      |       |          |
+| MODEL     | HST1   | HST2   | HST3   | HST4   | VST1   | VST2   | VST3   | VST4   | HMAX | VMAX  | MAX SPEED |
+|-----------|--------|--------|--------|--------|--------|--------|--------|--------|------|-------|-----------|
+| WYZECP1   |        |        |        |        |        |        |        |        |      |       |           |
+| WYZECP2   | GPIO52 | GPIO53 | GPIO57 | GPIO51 | GPIO59 | GPIO61 | GPIO62 | GPIO63 | 2540 | 720   | 900       |
+| WYZECPAN3 |        |        |        |        |        |        |        |        |      |       |           |
+| PERSONALCAM | GPIO49 | GPIO57 | GPIO54 | GPIO51 | GPIO60 | GPIO61 | GPIO62 | GPIO63 | 2130 | 1600  | 900       |
 
+---
 
 ## Wyze Cam Pan v3 cameras have hardware lock in secureboot and cannot be upgraded to OpenIPC!
+
+---
 
 ### OpenIPC installation
 
