@@ -179,7 +179,7 @@ Reboot the camera and try to interrupt its boot sequence in order to access
 bootloader console by pressing a key combination on your computer keyboard,
 between the time the bootloader starts and before Linux kernel kicks in.
 Key combinations differ from vendor to vendor but, in most cases, it is
-`Ctrl-C`, less commonly -- `Enter`, `Esc` or just any key. Carefully read text
+`Ctrl-C`, less commonly -- `Enter`, `Esc`, `*` or just any key. Carefully read text
 appearing on screen while booting, you might see a hint there. Some cameras
 require more exotic combinations not revealed in booting logs. You may try to
 look them up on the internet, or ask on [our Telegram channel][telegram].
