@@ -394,49 +394,48 @@ Our team has extensive experience in low latency media transmission (some projec
 
 ### YouTube videos from friends
 
-<details>
-<summary><b>From Mario</b></summary>
+#### Let's Drone Out
+
+- [LDO EP426 - w/ Special Guest MARIOFPV of OpenIPC](https://www.youtube.com/watch?v=af1LuUxZ5dY)
+
+
+#### From Mario
 
 - [Introducing OpenIPC, the cheapest digital long range FPV system in the world](https://youtu.be/Z_41Dko-Iok?si=cdGWDcFss9WrvPPN)
 - [OpenIPC Latency and Range Test with ExpressLRS and INAV 6.1](https://www.youtube.com/watch?v=4tlPJSQA6HA)
 - [Introducing OpenIPC VRX Ground Station, the cheapest digital long range FPV system in the world](https://www.youtube.com/watch?v=aXJQIoBKjVE)
 - [World’s Cheapest VRX with H265 compatible with all goggles! OpenIPC FPV with VENC/VDEC](https://www.youtube.com/watch?v=wZAHkWHfBF4)
-</details>
 
-<details>
-<summary><b>From TipoMan</b></summary>
+
+#### From TipoMan
 
 - [DIY FPV FullHD with OpenIPC, wfb-ng, qOpenHD](https://www.youtube.com/watch?v=MwcEvywzslA)
 - [25km with OpenIPC+wfb-ng, qOpenHD. goke7205v200+imx307,3.6mm. H265 7Mbit/s. ARWing900](https://www.youtube.com/watch?v=c7XtKujrzSg)
 - [Clouds with OpenIPC and Lidl Glider. 1366x768 video.](https://www.youtube.com/watch?v=1LavYm6jbL0)
 - [15 km flight with DIY FPV sytem, based on OpenIPC, wfb-ng, qOpenHD](https://www.youtube.com/watch?v=6__OMDvJ6o0)
 - [OpenIPC and wfb-ng in a windy day, imx335, mcs1, 7mbit/s, h265](https://www.youtube.com/watch?v=lUyhilWK1dE)
-</details>
 
-<details>
-<summary><b>Егор NiKO</b></summary>
+
+#### Егор NiKO
 
 - [Делаю FPV FullHD линк из китайской IP-камеры ДЕШЕВЫЙ АНАЛОГ OpenHD Digital FPV](https://www.youtube.com/watch?v=NOW99dwKbzI)
 - [Инструкция по прошивке камеры Goke7205v200](https://youtu.be/pA6xQ5fcZ6Q?si=UgeibWNonE4_Wj3o)
-</details>
 
-<details>
-<summary><b>TAI</b></summary>
+
+#### TAI
 
 - [Flashing GK7205V200+IMX307 to firmware from OpenIPC, memory chip replacement](https://www.youtube.com/watch?v=M69JiBtuqq8)
-</details>
 
-<details>
-<summary><b>HKR</b></summary>
+
+#### HKR
 
 - [OpenIPC - Prepare GroundStation: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
-</details>
 
-<details>
-<summary><b>Joshua Bardwell</b></summary>
+
+#### Joshua Bardwell
 
 - [OpenIPC - FPV DRONE NEWS AUG 29 2023](https://www.youtube.com/watch?v=MRxxOGuZUq8&t=2298s)
-</details>
+
 
 [youtube_burn]: https://youtube.com/playlist?list=PLh0sgk8j8CfsMPq9OraSt5dobTIe8NXmw
 [github_burn]: https://github.com/OpenIPC/burn
