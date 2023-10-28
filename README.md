@@ -36,9 +36,11 @@ OpenIPC Wiki
 - [ACMEv2](en/acme-v2.md)
 - [YouTube streaming](en/youtube-streaming.md)
 - [WiFi XM530](en/wifi-xm530.md)
-- [For FPV](en/fpv.md)
-- [GS on Ubuntu](en/fpv-gs-ubuntu.md)
 
+### FPV
+- [OpenIPC as FPV system](en/fpv.md)
+- [Sigmastar FPV devices](en/fpv-sigmastar.md)
+- [Ubuntu based groundstation](en/fpv-gs-ubuntu.md)
 
 ### Troubleshooting
 - [Network does not work](en/trouble-network.md)
@@ -113,7 +115,6 @@ OpenIPC Wiki
 ### Resources for recycling and integration
 - <https://github.com/OpenIPC/camerasrnd>
 - <https://openwrt.org/docs/techref/hardware/soc/soc.hisilicon.hi35xx>
-
 
 In Russian
 ----------
