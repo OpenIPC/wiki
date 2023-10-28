@@ -47,3 +47,7 @@ snander -w u-boot-ssc338q-nand.bin
 **I2C devices:**
 - 0x49 -> MStar ISP
 - 0x59 -> MStar Debug
+
+Alternatively, you could use a Rapsberry Pi and connect the SDL/SCL GPIO to the TX,RX and GND wires of the camera. 
+Then you can use it as a flasher.
+Here is a quick video tutorial that demostrates how to do it: https://youtu.be/88C8UvyKQlQ?si=4ufrtYs4lcCEJw3W
