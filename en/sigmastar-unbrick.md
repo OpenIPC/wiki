@@ -5,7 +5,7 @@ Sigmastar unbrick
 ---
 
 **Locate the Sigmastar UART output and connect it to the CH341A I2C:**
-- $\color{black}{\texttt{GND -> GND (PIN 1-4)}}$
+- $\color{dimgray}{\texttt{GND -> GND (PIN 1-4)}}$
 - $\color{deepskyblue}{\texttt{TX -> SDA I2C (PIN 5)}}$
 - $\color{orange}{\texttt{RX -> SCL I2C (PIN 6)}}$
 
@@ -36,6 +36,7 @@ snander -l 0x200000 -e
 <img src="../images/sigmastar-erase.webp">
 
 **Write the new uboot file:**
+- https://github.com/OpenIPC/firmware/releases/tag/latest
 ```
 snander -w u-boot-ssc338q-nand.bin
 ```
