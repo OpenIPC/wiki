@@ -41,6 +41,7 @@ OpenIPC Wiki
 - [OpenIPC as FPV system](en/fpv.md)
 - [Sigmastar FPV devices](en/fpv-sigmastar.md)
 - [Ubuntu based groundstation](en/fpv-gs-ubuntu.md)
+- [OrangePI 5 Ubuntu based groundstation](en/fpv-orange_pi5-ground.md)
 
 ### Troubleshooting
 - [Network does not work](en/trouble-network.md)
