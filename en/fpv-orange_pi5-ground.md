@@ -1,8 +1,10 @@
 # OpenIPC Wiki
+
 [Table of Content](../README.md)
 
-Quick Setup of Ground Station for OrangePi 5 Ubuntu 22.04
----------------------------------------------------------
+## Quick Setup of Ground Station for OrangePi 5 Ubuntu 22.04
+
+---
 
 <p align="center">
   <img src="https://github.com/OpenIPC/wiki/blob/master/images/pi5-plus.png?raw=true" alt="Logo"/>
@@ -20,12 +22,13 @@ sudo apt install dkms git python3-all-dev net-tools virtualenv fakeroot debhelpe
  libpcap-dev python3-pyroute2 python3-future python3-configparser python3-all libsodium-dev
 ```
 
-# Download and install the Linux kernel headers for rockchip rk3588
+### Download and install the Linux kernel headers for rockchip rk3588
 
 [https://drive.google.com/drive/folders/1R7VmAeo3_LpFDQvYSEG9ymAC-DvaLt47](https://drive.google.com/drive/folders/1R7VmAeo3_LpFDQvYSEG9ymAC-DvaLt47)
 
 sudo dpkg -i linux-headers-legacy-rockchip-rk3588_1.1.2_arm64.deb
 sudo dpkg -i linux-image-legacy-rockchip-rk3588_1.1.2_arm64.deb
+
 ### Libsodium
 
 ```
@@ -35,26 +38,29 @@ cd libsodium
 make && make check
 sudo make install
 ```
+
 ### Wifi card driver
 
 To disable add it to the blacklist:
 
 ```
-cat > /etc/modprobe.d/wfb.conf <<EOF
+sudo bash -c "cat > /etc/modprobe.d/wfb.conf <<EOF
 # blacklist stock module
 blacklist 88XXau
 blacklist 8812au
 blacklist rtl8812au
 blacklist rtl88x2bs
-EOF
+EOF"
 ```
-Compile the driver from source
+
+Compile the driver from source:
 
 ```
 git clone -b v5.2.20 https://github.com/svpcom/rtl8812au.git
 cd rtl8812au/
 sudo ./dkms-install.sh
 ```
+
 ### Installing WFB-NG
 
 Using the "nmcli" command, we find out the name of your wifi adapter and substitute $WLAN in the place
@@ -64,21 +70,25 @@ git clone -b stable https://github.com/svpcom/wfb-ng.git
 cd wfb-ng
 sudo ./scripts/install_gs.sh $WLAN
 ```
+
 Enable auto-upload
 
 ```
-systemctl enable wifibroadcast@gs
+sudo systemctl enable wifibroadcast@gs
 ```
+
 ### Channel configuration
 
 ```
-vi /etc/wifibroadcast.cfg
+sudo vi /etc/wifibroadcast.cfg
 ```
+
 ### Start WFB CLI
 
 ```
 wfb-cli gs
 ```
+
 ### Video decoding
 
 h265
@@ -86,11 +96,13 @@ h265
 ```
 gst-launch-1.0 udpsrc port=5600 caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H265' ! rtph265depay ! h265parse ! mppvideodec ! xvimagesink sync=false
 ```
+
 h264
 
 ```
 gst-launch-1.0 udpsrc port=5600 caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264' ! rtph264depay ! h264parse ! mppvideodec ! xvimagesink sync=false
 ```
+
 ###GS IS READY FOR USE###
 
 ### Start, stop, restart service
@@ -100,15 +112,18 @@ systemctl status wifibroadcast@gs
 systemctl stop wifibroadcast@gs
 systemctl start wifibroadcast@gs
 ```
+
 ### Qground control manual
 
 - https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html
 
 ### Get last logs from service
+
 ```
 journalctl -u wifibroadcast@gs -f
 journalctl -xu wifibroadcast@gs -n 100
 ```
+
 ### Useful commands
 
 ```
