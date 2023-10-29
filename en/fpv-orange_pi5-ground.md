@@ -7,7 +7,7 @@
 ---
 
 <p align="center">
-  <img src="https://github.com/OpenIPC/wiki/blob/master/images/pi5-plus.png?raw=true" alt="Logo"/>
+  <img src="https://github.com/OpenIPC/wiki/blob/master/images/pi5-plus.png?raw=true" alt="Logo"/> 
   <img src="https://github.com/OpenIPC/wiki/blob/master/images/pi-5.png?raw=true" alt="Logo"/>
 </p>
 
@@ -59,7 +59,7 @@ cd wfb-ng
 sudo ./scripts/install_gs.sh $WLAN
 ```
 
-Enable auto-upload
+and enable auto-upload
 
 ```
 sudo systemctl enable wifibroadcast@gs
@@ -69,6 +69,18 @@ sudo systemctl enable wifibroadcast@gs
 
 ```
 sudo vi /etc/wifibroadcast.cfg
+```
+
+### Copying the encryption key from an IP camera
+
+```
+sudo scp root@192.168.1.10:/etc/gs.key /etc/gs.key
+```
+
+and restarting wfb-ng:
+
+```
+sudo systemctl restart wifibroadcast@gs
 ```
 
 ### Start WFB CLI
@@ -100,10 +112,6 @@ systemctl status wifibroadcast@gs
 systemctl stop wifibroadcast@gs
 systemctl start wifibroadcast@gs
 ```
-
-### Qground control manual
-
-- https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html
 
 ### Get last logs from service
 
