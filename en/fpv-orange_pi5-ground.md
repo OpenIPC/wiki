@@ -15,28 +15,16 @@
 
 ```
 sudo apt update
-```
-
-```
-sudo apt install dkms git python3-all-dev net-tools virtualenv fakeroot debhelper python3-twisted
- libpcap-dev python3-pyroute2 python3-future python3-configparser python3-all libsodium-dev
+sudo apt upgrade
 ```
 
 ### Download and install the Linux kernel headers for rockchip rk3588
 
 [https://drive.google.com/drive/folders/1R7VmAeo3_LpFDQvYSEG9ymAC-DvaLt47](https://drive.google.com/drive/folders/1R7VmAeo3_LpFDQvYSEG9ymAC-DvaLt47)
 
+```
 sudo dpkg -i linux-headers-legacy-rockchip-rk3588_1.1.2_arm64.deb
 sudo dpkg -i linux-image-legacy-rockchip-rk3588_1.1.2_arm64.deb
-
-### Libsodium
-
-```
-git clone https://github.com/jedisct1/libsodium --branch stable
-cd libsodium
-./configure
-make && make check
-sudo make install
 ```
 
 ### Wifi card driver
