@@ -78,6 +78,7 @@ OpenIPC Wiki
 - [IPC boards manufacturers](en/hardware-board-manufacturers.md)
 
 ### Cameras
+- [Foscam X5](en/device-foscam-x5.md)
 - [Chacon IPCAM-RI01](en/device-chacon-ipcam-ri01.md)
 - [Smartwares CIP-37210](en/device-smartwares-cip-37210.md)
 - [Xiaomi Mi Camera 2K (MJSXJ03HL)](https://github.com/OpenIPC/device-mjsxj03hl/)
