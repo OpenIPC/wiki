@@ -23,6 +23,8 @@ Update your wireless credentials on autostart.sh:
 ---
 
 ### Camera disassembly
+<details>
+<summary>Expand pictures</summary>
 <img src="../images/device-foscam-01.webp" width=50% height=50%>
 <img src="../images/device-foscam-02.webp" width=50% height=50%>
 <img src="../images/device-foscam-03.webp" width=50% height=50%>
@@ -32,6 +34,7 @@ Update your wireless credentials on autostart.sh:
 <img src="../images/device-foscam-07.webp" width=50% height=50%>
 <img src="../images/device-foscam-08.webp" width=80% height=80%>
 <img src="../images/device-foscam-09.webp" width=80% height=80%>
+</details>
 
 ---
 
