@@ -4,8 +4,8 @@
 Foscam X5 / Acculenz R5 / Assark X3E
 ---
 
-### OpenIPC Firmware
-Copy the content of the following archive to an sdard:
+#### Preparation
+Format an sdcard to FAT32 and copy the content of the following archive to the card:
 - [foscam-openipc.zip][1]
 
 Update your wireless credentials on autostart.sh:
@@ -14,6 +14,12 @@ Update your wireless credentials on autostart.sh:
 +WLAN_SSID="Router"
 +WLAN_PASS="12345678"
 ```
+
+#### Flashing
+- Make sure the camera is powered off, put the prepared sdcard into the device.
+- Power the device on and wait for 2-3 minutes.
+- Shortly after an OpenIPC camera should appear on your wlan.
+
 ---
 
 ### Camera disassembly
