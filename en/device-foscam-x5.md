@@ -33,4 +33,10 @@ Update your wireless credentials on autostart.sh:
 <img src="../images/device-foscam-08.webp" width=80% height=80%>
 <img src="../images/device-foscam-09.webp" width=80% height=80%>
 
+---
+
+### Other
+- Labels: X3/R3/R5/X3E
+- https://fccid.io/ZDER3
+
 [1]: https://github.com/OpenIPC/wiki/files/13218168/foscam-openipc.zip
