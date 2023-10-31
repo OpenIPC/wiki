@@ -411,18 +411,28 @@ Our team has extensive experience in low latency media transmission (some projec
 - [OpenIPC and wfb-ng in a windy day, imx335, mcs1, 7mbit/s, h265](https://www.youtube.com/watch?v=lUyhilWK1dE)
 
 
-#### Егор NiKO
+#### From Egor NiKO
 
 - [Делаю FPV FullHD линк из китайской IP-камеры ДЕШЕВЫЙ АНАЛОГ OpenHD Digital FPV](https://www.youtube.com/watch?v=NOW99dwKbzI)
 - [Инструкция по прошивке камеры Goke7205v200](https://youtu.be/pA6xQ5fcZ6Q?si=UgeibWNonE4_Wj3o)
 
 
-#### TAI
+#### From TAI
 
 - [Flashing GK7205V200+IMX307 to firmware from OpenIPC, memory chip replacement](https://www.youtube.com/watch?v=M69JiBtuqq8)
 
 
-#### HKR
+#### From Antonio Silva
+
+- [Test with Openipc goke7205v200 and NVR](https://www.youtube.com/watch?v=7GKyCo6Ezmw)
+
+
+#### From Zipray
+
+- [OpenIPC with ez-wifibroadcast](https://www.youtube.com/watch?v=Rg2W8xQ3RTA)
+
+
+#### From HKR
 
 - [OpenIPC - Prepare GroundStation: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
 
