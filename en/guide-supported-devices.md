@@ -48,6 +48,7 @@ _If you have another supported device to add, please do it [here][2]._
 |            |                    |             |        |              |     |                |      |      |
 | Xiaomi     | [MJSXJ02HL][7]     | HI3518EV300 |        |              | No  |                |      | Yes  |
 | Xiaomi     | [MJSXJ03HL][6]     | T31N        | JXQ03 | QH128A-104HIP | No  | RTL8189FTV     | No   | Yes  |
+| Xiaomi     | [CMSXJ25A]         | SSC325      | GC2053 | QH128A-104HIP| Yes | MT7603UN      | No   | Yes  |
 |            |                    |             |        |              |     |                |      |      |
 | XM         | BLK18EV-0062-0035  | HI3518EV200 | JXH62  |              | Yes |                |      | Yes  |
 |            |                    |             |        |              |     |                |      |      |
