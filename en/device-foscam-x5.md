@@ -17,7 +17,7 @@ Update your wireless credentials on autostart.sh:
 
 #### Flashing
 - Make sure the camera is powered off, put the prepared sdcard into the device.
-- Power the device on and wait for 2-3 minutes.
+- Power the device on and wait at least 4 minutes.
 - Shortly after an OpenIPC camera should appear on your wlan.
 
 ---
