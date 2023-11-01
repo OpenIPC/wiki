@@ -42,4 +42,4 @@ Update your wireless credentials on autostart.sh:
 - Labels: X3/R3/R5/X3E
 - https://fccid.io/ZDER3
 
-[1]: https://github.com/OpenIPC/wiki/files/13218168/foscam-openipc.zip
+[1]: https://github.com/openipc/wiki/files/13222843/foscam-openipc.zip
