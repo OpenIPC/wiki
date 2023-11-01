@@ -155,6 +155,12 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 |-------------|--------|--------|---------|-------|-----------|-----------|------------------------|
 | T21         | 80     | 79     |  49     | 50    |    73     |     72    |   Wansview W5/W6       |
 
+### Xiaomi boards
+
+| Processor   | IRCUT1 | IRCUT2 | IR LEDs | DEVICE ID              |
+|-------------|--------|--------|---------|------------------------|
+| SSC325      | 78     | 79     |  52     | CMSXJ25A               |
+
 ### XiongMai, XM boards
 
 | Processor       | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | ALM_IN | ALM_OUT | ETH_ACT | ETH_STA | RESET | USB_ENA | AUDIO_POW | RS485_CTL |  NOTES |
