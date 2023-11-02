@@ -20,6 +20,15 @@ The long JPEG control parameter did not fit into the example on the site and we 
 
 `/image.jpg?width=640&height=360&qfactor=73&color2gray=1`
 
+### Changing parameters via cli
+
+At the moment it is possible to change parameters in the configuration file via the CLI utility. 
+This allows parameters to be changed with a single line in pseudo-dynamic mode on some platforms 
+simply by forcing a re-read of the configuration file.
+```
+cli -s .video0.codec h264 ; cli -s .video0.fps 10 ; killall -1 majestic 
+```
+
 ### Auto day/night detection
 
 The experiments continue...
