@@ -37,11 +37,11 @@ The experiments continue...
 ### Motion detection
 
 Motion detect is supported for Hisilion/Goke, Ingenic and Sigmastar, the script file needs to be located at:
-`/etc/motion_detect.sh`
+`/usr/share/openipc/motion_detect.sh`
 
 The following will be executed on a motion event:
 ```
-/etc/motion_detect.sh [object count] [x coordinate] [y coordinate] [region width] [region height]
+/usr/share/openipc/motion_detect.sh [object count] [x coordinate] [y coordinate] [region width] [region height]
 ```
 
 Example script:
@@ -54,7 +54,7 @@ Final result:
 ```
 20:37:02  <SED_IVE_DETCTOR> [  motion] motion_update@155             Motion detected: [1163x0] -> [690x475]
 20:37:02  <SED_IVE_DETCTOR> [   tools] motion_event@615              Execute motion script: /etc/motion_detect.sh
-[/etc/motion_detect.sh] [1] [1163] [0] [690] [475]
+[/usr/share/openipc/motion_detect.sh] [1] [1163] [0] [690] [475]
 ```
 
 More info:
