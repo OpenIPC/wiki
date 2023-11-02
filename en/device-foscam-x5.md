@@ -22,6 +22,13 @@ Update your wireless credentials on autostart.sh:
 
 ---
 
+### GPIO
+| IRLED | IRCUT |
+|-|-|
+| GPIO0 | GPIO3 |
+
+---
+
 ### Camera disassembly
 <details>
 <summary>Expand pictures</summary>
