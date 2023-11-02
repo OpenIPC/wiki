@@ -22,7 +22,8 @@ The long JPEG control parameter did not fit into the example on the site and we 
 
 ### Changing parameters via cli
 
-At the moment it is possible to change parameters in the configuration file via the CLI utility. 
+At the moment it is possible to change parameters in the configuration file via the CLI utility.
+
 This allows parameters to be changed with a single line in pseudo-dynamic mode on some platforms 
 simply by forcing a re-read of the configuration file.
 ```
