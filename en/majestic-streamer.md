@@ -55,6 +55,29 @@ More info:
 
 The experiments continue...
 
+### Broadcasts using RTMP
+
+To instantly launch a YouTube broadcast, run these commands in the console:
+```
+cli -s .video0.codec h264
+cli -s .audio.enabled true
+cli -s .outgoing.enabled true
+cli -s .outgoing.server rtmp://upload.rutube.ru/live_push/you-key-here
+reboot
+```
+
+Examples of other addresses for different services:
+- YouTube
+    - rtmp://a.rtmp.youtube.com/live2/---KEY---
+- Telegram
+    - rtmps://dc4-1.rtmp.t.me/s/---KEY---
+- RuTube
+    - rtmp://upload.rutube.ru/live_push/---KEY---
+- OK and VK
+    - rtmp://ovsu.mycdn.me/input/---KEY---
+
+We ask that you add information about other popular services here, thank you.
+
 ### How to convert YUV image to a more common image format
 
 Use `convert` command from ImageMagick software. Run it like this:
