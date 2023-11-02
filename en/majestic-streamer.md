@@ -20,6 +20,14 @@ The long JPEG control parameter did not fit into the example on the site and we 
 
 `/image.jpg?width=640&height=360&qfactor=73&color2gray=1`
 
+### Auto day/night detection
+
+To be continued...
+
+### Motion detection
+
+To be continued...
+
 ### How to convert YUV image to a more common image format
 
 Use `convert` command from ImageMagick software. Run it like this:
