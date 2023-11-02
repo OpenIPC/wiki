@@ -36,27 +36,25 @@ The experiments continue...
 
 ### Motion detection
 
-If motion detect is enabled (for Hisilion/Goke, Ingenic and Sigmastar), the first check is for an executable file:
-`/etc/majestic_motion.sh`
+Motion detect is supported for Hisilion/Goke, Ingenic and Sigmastar, the script file needs to be located at:
+`/etc/motion_detect.sh`
 
-Then the following will be called:
-`/etc/majestic_motion.sh 1163 0 400 275 &`
-
-The usage is:
-`/etc/majestic_motion.sh [x coordinate] [y coordinate] [region width] [region height]`
+The following will be executed on a motion event:
+```
+/etc/motion_detect.sh [object count] [x coordinate] [y coordinate] [region width] [region height]
+```
 
 Example script:
 ```
 #!/bin/sh
-
-echo 0:[$0] 1:[$1] 2:[$2] 3:[$3] 4:[$4]
+echo [$0] [$1] [$2] [$3] [$4] [$5]
 ```
 
-Final diagnosis:
+Final result:
 ```
 20:37:02  <SED_IVE_DETCTOR> [  motion] motion_update@155             Motion detected: [1163x0] -> [690x475]
-20:37:02  <SED_IVE_DETCTOR> [   tools] motion_event@615              Execute motion script: /etc/majestic_motion.sh
-0:[/etc/majestic_motion.sh] 1:[1163] 2:[0] 3:[690] 4:[475]
+20:37:02  <SED_IVE_DETCTOR> [   tools] motion_event@615              Execute motion script: /etc/motion_detect.sh
+[/etc/motion_detect.sh] [1] [1163] [0] [690] [475]
 ```
 
 More info:
