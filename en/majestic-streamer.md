@@ -22,11 +22,38 @@ The long JPEG control parameter did not fit into the example on the site and we 
 
 ### Auto day/night detection
 
-To be continued...
+The experiments continue...
 
 ### Motion detection
 
-To be continued...
+If motion detect is enabled (for Hisilion/Goke, Ingenic and Sigmastar), the first check is for an executable file:
+`/etc/majestic_motion.sh`
+
+Then the following will be called:
+`/etc/majestic_motion.sh 1163 0 400 275 &`
+
+The usage is:
+`/etc/majestic_motion.sh [x coordinate] [y coordinate] [region width] [region height]`
+
+Example script:
+```
+#!/bin/sh
+
+echo 0:[$0] 1:[$1] 2:[$2] 3:[$3] 4:[$4]
+```
+
+Final diagnosis:
+```
+20:37:02  <SED_IVE_DETCTOR> [  motion] motion_update@155             Motion detected: [1163x0] -> [690x475]
+20:37:02  <SED_IVE_DETCTOR> [   tools] motion_event@615              Execute motion script: /etc/majestic_motion.sh
+0:[/etc/majestic_motion.sh] 1:[1163] 2:[0] 3:[690] 4:[475]
+```
+
+More info:
+- https://github.com/OpenIPC/majestic/issues/28
+- https://github.com/OpenIPC/majestic/issues/117
+
+The experiments continue...
 
 ### How to convert YUV image to a more common image format
 
