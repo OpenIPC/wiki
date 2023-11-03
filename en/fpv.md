@@ -435,6 +435,7 @@ Our team has extensive experience in low latency media transmission (some projec
 #### From HKR
 
 - [OpenIPC - Prepare GroundStation: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
+- [OpenIPC FPV - connections](https://www.youtube.com/watch?v=LOD5xsAJu5o)
 
 
 #### Joshua Bardwell
