@@ -23,9 +23,9 @@ Update your wireless credentials on autostart.sh:
 ---
 
 ### GPIO
-| IRLED | IRCUT |
-|-|-|
-| GPIO0 | GPIO3 |
+IRLed | IRCut | Reset | IRSensor
+-|-|-|-
+GPIO0 | GPIO3 | GPIO66 | GPIO80
 
 ---
 
