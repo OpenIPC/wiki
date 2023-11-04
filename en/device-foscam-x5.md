@@ -52,6 +52,11 @@ cli -s .nightMode.backlightPin 0
 
 ---
 
+### Misc
+- Temperature on the default firmware can reach up to 85°C, everything below 80°C should be fine.
+
+---
+
 ### Other
 - Labels: X3/R3/R5/X3E
 - https://fccid.io/ZDER3
