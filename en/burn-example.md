@@ -22,9 +22,12 @@ python burn --chip hi3516ev200 --file=u-boot/gk7205v200.bin -p COM4 --break && p
 
 ```
 # Enter commands line by line! Do not copy and paste multiple lines at once!
-setenv ipaddr 192.168.0.10; setenv serverip 192.168.0.40; mw.b 0x42000000 0xff 0x800000
-tftpboot 0x42000000 openipc-gk7205v210-fpv-8mb.binsf probe 0; sf lock 0;
-sf erase 0x0 0x800000; sf write 0x42000000 0x0 0x800000reset
+setenv ipaddr 192.168.0.10; setenv serverip 192.168.0.40
+mw.b 0x42000000 0xff 0x800000
+tftpboot 0x42000000 openipc-gk7205v210-fpv-8mb.bin
+sf probe 0; sf lock 0;
+sf erase 0x0 0x800000; sf write 0x42000000 0x0 0x800000
+reset
 Ctrl + c quickly during booting
 # Enter commands line by line! Do not copy and paste multiple lines at once!run setnor8m
 ```
