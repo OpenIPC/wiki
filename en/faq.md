@@ -4,6 +4,17 @@
 Frequently Asked Questions
 ---------------------------
 
+### Differences between Lite and Ultimate
+
+- Amazon server support
+- QR code recognition support (basic)
+- iptables support (firewall)
+- ZeroTier tunnel support
+- MQTT (telemetry) support
+- WiFi support
+- lame (mp3) and libwebsockets support
+
+
 ### How to strip U-Boot Image wrapper header from a binary image
 
 Sometimes vendor's firmware consists of binary images intended
