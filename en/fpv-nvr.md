@@ -12,7 +12,7 @@ Selecting hardware to complete OpenIPC FPV kits
 ### Upgrade you HI3536 NVR to OpenIPC FPV firmware
 
 - download actual [firmware](https://github.com/OpenIPC/firmware/releases/download/latest/openipc.hi3536dv100-nor-fpv.tgz) from OpenIPC site
-- unpack firmware archive to you TFTP server
+- unpack firmware archive to your TFTP server
 - connect UART adapter to NVR board
 - go to u-boot (press Ctrl+C)
 - execute a set of commands each line separately, changing the ip address of the nvr board and the ip address of your tftp server
