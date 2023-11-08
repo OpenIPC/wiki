@@ -86,6 +86,20 @@ Examples of other addresses for different services:
 
 We ask that you add information about other popular services here, thank you.
 
+###  ROI
+
+Detection zones of two types:
+
+`motionDetect.roi: 1854x1304x216x606,1586x1540x482x622`
+
+`motionDetect.skipIn: 960x540x1920x1080`
+
+**roi** - region of interest, when we specify one or more regions whose movements we are interested in.
+
+**skipIn** - on the contrary, if we are interested in movements on the whole screen, except for some areas (for example, there is a tree in the frame, which is swaying in the wind).
+
+Coordinate format is the same as in osd.privacyMasks: x,y of the top left point, length and width in pixels.
+
 ### How to convert YUV image to a more common image format
 
 Use `convert` command from ImageMagick software. Run it like this:
