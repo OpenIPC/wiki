@@ -9,7 +9,7 @@ Selecting hardware to complete OpenIPC FPV kits
 </p>
 
 
-### Upgrade you HI3536 NVR to OpenIPC FPV firmware
+### Upgrade HI3536 NVR board to OpenIPC FPV firmware
 
 - download actual [firmware](https://github.com/OpenIPC/firmware/releases/download/latest/openipc.hi3536dv100-nor-fpv.tgz) from OpenIPC site
 - unpack firmware archive to your TFTP server
