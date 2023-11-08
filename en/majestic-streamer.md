@@ -50,9 +50,7 @@ To test the motion detection, create a simple script that echoes the parameters 
 
 ```
 mkdir -p /usr/share/openipc
-echo "#!/bin/sh
-echo [$0] [$1] [$2] [$3] [$4] [$5]
-" > /usr/share/openipc/motion_detect.sh
+echo -e "#!/bin/sh\n\necho [\$0] [\$1] [\$2] [\$3] [\$4] [\$5]\n" > /usr/share/openipc/motion_detect.sh
 ```
 
 Enable motion detection in `majestic` configuration:
