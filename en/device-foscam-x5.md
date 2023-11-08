@@ -54,13 +54,8 @@ cli -s .audio.speakerPinInvert true
 
 ---
 
-### Misc
-- Temperature on the default firmware can reach up to 85°C, everything below 80°C should be fine.
-
----
-
 ### Other
 - Labels: X3/R3/R5/X3E
 - https://fccid.io/ZDER3
 
-[1]: https://github.com/openipc/wiki/files/13222843/foscam-openipc.zip
+[1]: https://github.com/openipc/wiki/files/13301107/foscam-openipc.zip
