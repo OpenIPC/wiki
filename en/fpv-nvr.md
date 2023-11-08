@@ -53,7 +53,7 @@ Guideline flash Hi3536DV100 NVR board from original to OpenIPC FPV firmware
 # Сhanging the ip address of the NVR board and the ip address of your TFTP server
 setenv ipaddr 192.168.1.10; setenv serverip 192.168.1.254
 mw.b 0x82000000 0xff 0x1000000
-tftpboot 0x82000000 openipc-hi3536dv100-fpv-16mb.bin
+tftp 0x82000000 openipc-hi3536dv100-fpv-16mb.bin
 sf probe 0; sf lock 0;
 sf erase 0x0 0x1000000; sf write 0x82000000 0x0 0x1000000
 reset
