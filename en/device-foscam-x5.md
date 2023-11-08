@@ -23,15 +23,17 @@ Update your wireless credentials on autostart.sh:
 ---
 
 ### GPIO
-IRLed | IRCut | Reset | IRSensor
--|-|-|-
-GPIO0 | GPIO3 | GPIO66 | GPIO80
+IRLed | IRCut | Speaker | Reset | IRSensor
+-|-|-|-|-
+GPIO0 | GPIO3 | GPIO14 | GPIO66 | GPIO80
 
 ```
 cli -s .nightMode.irSensorPin 80
 cli -s .nightMode.irCutPin1 3
 cli -s .nightMode.irCutSingleInvert true
 cli -s .nightMode.backlightPin 0
+cli -s .audio.speakerPin 14
+cli -s .audio.speakerPinInvert true
 ```
 
 ---

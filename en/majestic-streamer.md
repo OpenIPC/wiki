@@ -34,34 +34,40 @@ cli -s .video0.codec h264 ; cli -s .video0.fps 10 ; killall -1 majestic
 
 The experiments continue...
 
+
 ### Motion detection
 
-Motion detect is supported for Hisilion/Goke, Ingenic and Sigmastar, the script file needs to be located at:
-`/usr/share/openipc/motion_detect.sh`
+Motion detect is supported for Hisilion/Goke, Ingenic and Sigmastar.
+When a motion event is detected, `majestic` invokes a predefined script 
+`/usr/share/openipc/motion_detect.sh` with parameters specifying the motion
+activity and zone:
 
-The following will be executed on a motion event:
 ```
 /usr/share/openipc/motion_detect.sh [object count] [x coordinate] [y coordinate] [region width] [region height]
 ```
 
-Example script:
+Enable motion detection in `majestic` configuration:
+
 ```
-#!/bin/sh
-echo [$0] [$1] [$2] [$3] [$4] [$5]
+cli -s .motionDetect.enabled true
+cli -s .motionDetect.visualize true
+cli -s .motionDetect.debug true
+cli -s .osd.enabled true
 ```
 
-Final result:
+Reboot the camera and restart `majestic` in the foreground:
+
+```
+killall majestic; sleep 3; majestic
+```
+
+You should see the script running after motion detection events:
+
 ```
 20:37:02  <SED_IVE_DETCTOR> [  motion] motion_update@155             Motion detected: [1163x0] -> [690x475]
 20:37:02  <SED_IVE_DETCTOR> [   tools] motion_event@615              Execute motion script: /usr/share/openipc/motion_detect.sh
 [/usr/share/openipc/motion_detect.sh] [1] [1163] [0] [690] [475]
 ```
-
-More info:
-- https://github.com/OpenIPC/majestic/issues/28
-- https://github.com/OpenIPC/majestic/issues/117
-
-The experiments continue...
 
 ### Broadcasts using RTMP
 
@@ -85,6 +91,20 @@ Examples of other addresses for different services:
     - rtmp://ovsu.mycdn.me/input/---KEY---
 
 We ask that you add information about other popular services here, thank you.
+
+###  ROI
+
+Detection zones of two types:
+
+`motionDetect.roi: 1854x1304x216x606,1586x1540x482x622`
+
+`motionDetect.skipIn: 960x540x1920x1080`
+
+**roi** - region of interest, when we specify one or more regions whose movements we are interested in.
+
+**skipIn** - on the contrary, if we are interested in movements on the whole screen, except for some areas (for example, there is a tree in the frame, which is swaying in the wind).
+
+Coordinate format is the same as in osd.privacyMasks: x,y of the top left point, length and width in pixels.
 
 ### How to convert YUV image to a more common image format
 
