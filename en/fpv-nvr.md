@@ -9,7 +9,7 @@ Selecting hardware to complete OpenIPC FPV kits
 </p>
 
 
-### Upgrade you NVR to OpenIPC FPV firmware
+### Upgrade you HI3536 NVR to OpenIPC FPV firmware
 
 - download actual [firmware](https://github.com/OpenIPC/firmware/releases/download/latest/openipc.hi3536dv100-nor-fpv.tgz) from OpenIPC site
 - unpack firmware archive to you TFTP server
@@ -28,7 +28,8 @@ setenv bootargs 'mem=192M console=ttyAMA0,115200 panic=20 root=/dev/mtdblock3 ro
 setenv osmem '192M'
 setenv totalmem '256M'
 setenv soc 'hi3536dv100'
-setenv da; setenv du; setenv dr; setenv dw; setenv dl; setenv dc; setenv up; setenv tk; setenv dd; setenv de; setenv jpeg_addr; setenv jpeg_size; setenv vobuf; setenv loadlogo; setenv appVideoStandard; setenv appSystemLanguage; setenv appCloudExAbility
+setenv da; setenv du; setenv dr; setenv dw; setenv dl; setenv dc; setenv up; setenv tk; setenv dd; setenv de; setenv jpeg_addr
+setenv jpeg_size; setenv vobuf; setenv loadlogo; setenv appVideoStandard; setenv appSystemLanguage; setenv appCloudExAbility
 saveenv
 
 run uk
