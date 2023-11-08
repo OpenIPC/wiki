@@ -37,3 +37,24 @@ run ur
 
 reset
 ```
+
+### Alternative variant not ready yet !
+
+Guideline flash Hi3536DV100 NVR board from original to OpenIPC FPV firmware
+
+- Install [PUTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) and [TFTP](https://pjo2.github.io/tftpd64/) server
+- Turn off NVR power, Connect USB com to your camera, specify which COM port on your PC
+- Go to U-Boot with quick press Ctrl+C at power on
+- Execute a set of commands each line separately
+
+```
+# Сhanging the ip address of the NVR board and the ip address of your TFTP server
+setenv ipaddr 192.168.1.10; setenv serverip 192.168.1.254
+mw.b 0x82000000 0xff 0x1000000
+tftpboot 0x82000000 openipc-hi3536dv100-fpv-16mb.bin
+sf probe 0; sf lock 0;
+sf erase 0x0 0x1000000; sf write 0x82000000 0x0 0x1000000
+reset
+```
+
+![](../images/fpv-nvr-hi3536dv100-openipc-ready-800x600.webp)
