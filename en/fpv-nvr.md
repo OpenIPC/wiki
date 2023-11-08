@@ -43,6 +43,8 @@ reset
 Guideline flash Hi3536DV100 NVR board from original to OpenIPC FPV firmware
 
 - Install [PUTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) and [TFTP](https://pjo2.github.io/tftpd64/) server
+- Download actual [image](https://openipc.org/cameras/vendors/hisilicon/socs/hi3536dv100/download_full_image?flash_size=16&flash_type=nor&fw_release=fpv) for NVR from OpenIPC site
+- Upload NVR image to your TFTP server
 - Turn off NVR power, Connect USB com to your camera, specify which COM port on your PC
 - Go to U-Boot with quick press Ctrl+C at power on
 - Execute a set of commands each line separately
