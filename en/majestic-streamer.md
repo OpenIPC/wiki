@@ -46,13 +46,6 @@ activity and zone:
 /usr/share/openipc/motion_detect.sh [object count] [x coordinate] [y coordinate] [region width] [region height]
 ```
 
-To test the motion detection, create a simple script that echoes the parameters to the output:
-
-```
-mkdir -p /usr/share/openipc
-echo -e "#!/bin/sh\n\necho [\$0] [\$1] [\$2] [\$3] [\$4] [\$5]\n" > /usr/share/openipc/motion_detect.sh
-```
-
 Enable motion detection in `majestic` configuration:
 
 ```
@@ -75,12 +68,6 @@ You should see the script running after motion detection events:
 20:37:02  <SED_IVE_DETCTOR> [   tools] motion_event@615              Execute motion script: /usr/share/openipc/motion_detect.sh
 [/usr/share/openipc/motion_detect.sh] [1] [1163] [0] [690] [475]
 ```
-
-More info:
-- https://github.com/OpenIPC/majestic/issues/28
-- https://github.com/OpenIPC/majestic/issues/117
-
-The experiments continue...
 
 ### Broadcasts using RTMP
 
