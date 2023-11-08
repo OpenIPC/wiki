@@ -34,23 +34,44 @@ cli -s .video0.codec h264 ; cli -s .video0.fps 10 ; killall -1 majestic
 
 The experiments continue...
 
+
 ### Motion detection
 
-Motion detect is supported for Hisilion/Goke, Ingenic and Sigmastar, the script file needs to be located at:
-`/usr/share/openipc/motion_detect.sh`
+Motion detect is supported for Hisilion/Goke, Ingenic and Sigmastar.
+When a motion event is detected, `majestic` invokes a predefined script 
+`/usr/share/openipc/motion_detect.sh` with parameters specifying the motion
+activity and zone:
 
-The following will be executed on a motion event:
 ```
 /usr/share/openipc/motion_detect.sh [object count] [x coordinate] [y coordinate] [region width] [region height]
 ```
 
-Example script:
+To test the motion detection, create a simple script that echoes the parameters to the output:
+
 ```
-#!/bin/sh
+mkdir -p /usr/share/openipc
+echo "#!/bin/sh
 echo [$0] [$1] [$2] [$3] [$4] [$5]
+" > /usr/share/openipc/motion_detect.sh
 ```
 
-Final result:
+Enable motion detection in `majestic` configuration:
+
+```
+cli -s .motionDetect.enabled true
+cli -s .motionDetect.visualize true
+cli -s .motionDetect.debug true
+cli -s .osd.enabled true
+```
+
+Reboot the camera and restart `majestic` in the foreground:
+
+```
+killall majestic; sleep 3; majestic
+```
+
+You should see the script running after motion detection events:
+
 ```
 20:37:02  <SED_IVE_DETCTOR> [  motion] motion_update@155             Motion detected: [1163x0] -> [690x475]
 20:37:02  <SED_IVE_DETCTOR> [   tools] motion_event@615              Execute motion script: /usr/share/openipc/motion_detect.sh
