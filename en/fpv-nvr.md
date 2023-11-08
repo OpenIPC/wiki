@@ -57,4 +57,4 @@ sf erase 0x0 0x1000000; sf write 0x82000000 0x0 0x1000000
 reset
 ```
 
-![](../images/fpv-nvr-hi3536dv100-openipc-ready-800x600.webp)
+![](../images/fpv-nvr-hi3536dv100-openipc-ready.webp)
