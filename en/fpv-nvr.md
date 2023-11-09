@@ -38,7 +38,7 @@ run ur
 reset
 ```
 
-### Alternative variant not ready yet !
+### Alternative variant
 
 Guideline flash Hi3536DV100 NVR board from original to OpenIPC FPV firmware
 
