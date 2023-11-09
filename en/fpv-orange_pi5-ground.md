@@ -7,8 +7,8 @@
 ---
 
 <p align="center">
-  <img src="https://github.com/OpenIPC/wiki/blob/master/images/pi5-plus.png?raw=true" alt="Logo"/> 
-  <img src="https://github.com/OpenIPC/wiki/blob/master/images/pi-5.png?raw=true" alt="Logo"/>
+  <img src="../images/pi5-plus.png?raw=true" alt="Logo" style="height:400px;"/> 
+  <img src="../images/pi-5.png?raw=true" alt="Logo" style="height:400px;"/>
 </p>
 
 ### Prepare
@@ -62,7 +62,7 @@ sudo ./scripts/install_gs.sh $WLAN
 and enable auto-upload
 
 ```
-sudo systemctl enable wifibroadcast@gs
+sudo systemctl enable wifibroadcast
 ```
 
 ### Channel configuration
@@ -133,6 +133,9 @@ iw
 
 # Displays the possible parameters of the wifi adapter
 iw list
+
+# Displays the current settings of the Wifi adapter
+iw dev
 
 # Outputs the current frequency and power parameters
 sudo iw reg get
