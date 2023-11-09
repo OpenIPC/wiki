@@ -23,7 +23,7 @@ setenv serverip 192.168.0.8
 setenv netmask 255.255.255.0
 setenv bootcmd 'sf probe 0; sf read 0x82000000 0x50000 0x300000; bootm 0x82000000'
 setenv uk 'mw.b 0x82000000 ff 1000000; tftp 0x82000000 uImage.${soc}; sf probe 0; sf erase 0x50000 0x300000; sf write 0x82000000 0x50000 ${filesize}'
-setenv ur 'mw.b 0x82000000 ff 1000000; tftp 0x82000000 rootfs.squashfs.${soc}; sf probe 0; sf erase 0x350000 0x800000; sf write 0x82000000 0x350000 ${filesize}'
+setenv ur 'mw.b 0x82000000 ff 1000000; tftp 0x82000000 rootfs.squashfs.${soc}; sf probe 0; sf erase 0x350000 0xa00000; sf write 0x82000000 0x350000 ${filesize}'
 setenv bootargs 'mem=192M console=ttyAMA0,115200 panic=20 root=/dev/mtdblock3 rootfstype=squashfs init=/init mtdparts=hi_sfc:256k(boot),64k(env),3072k(kernel),10240k(rootfs),-(rootfs_data)'
 setenv osmem '192M'
 setenv totalmem '256M'
