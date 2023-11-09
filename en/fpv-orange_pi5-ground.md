@@ -134,6 +134,9 @@ iw
 # Displays the possible parameters of the wifi adapter
 iw list
 
+# Displays the current settings of the Wifi adapter
+iw dev
+
 # Outputs the current frequency and power parameters
 sudo iw reg get
 
