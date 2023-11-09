@@ -38,6 +38,15 @@ cli -s .audio.speakerPinInvert true
 
 ---
 
+### Wireless
+```
+fw_setenv wlandev rtl8188fu-ssc337de-foscam
+fw_setenv wlanssid Router
+fw_setenv wlanpass 12345678
+```
+
+---
+
 ### Camera disassembly
 <details>
 <summary>Expand pictures</summary>
