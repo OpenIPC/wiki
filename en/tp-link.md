@@ -16,7 +16,7 @@ TP-Link
 | TP-Link Tapo C225       | SSC30KQ      |              | F50L1G41LB | RTL8188FTV  | 2AXJ4C225     |
 | TP-Link Tapo C225V2     | SSC337D      |              | 25Q128     | SV6355      | 2AXJ4C225V2   |
 | TP-Link Tapo C310       |              |              |            |             |               |
-| TP-Link Tapo C310V2     | SSC335       |              | 25Q?       | RTL8192EU   | 2AXJ4C310V2   |
+| TP-Link Tapo C310V2     | SSC335       | SC3338       | 25Q64      | RTL8192EU   | 2AXJ4C310V2   |
 | TP-Link Tapo C320WS     | SSC337       |              | 25Q?       | RTL8192EU   | 2AXJ4C320WS   |
 | TP-Link Tapo C320WSV2   | NT98562      |              | 25Q?       | RTL8192EU   | 2AXJ4C320WSV2 |
 | TP-Link Tapo C325WB     | NT98562      |              | 25Q128     | RTL8192EU   | 2AXJ4C325WB   |
