@@ -46,6 +46,7 @@ nandwrite /dev/mtd0 /mnt/mmcblk0p1/ssc338q-nand.bin
 
 #### Buying a device (CamHi vendor)
 - https://aliexpress.com/item/1005002879158570.html
+- https://aliexpress.com/item/1005005750013595.html
 
 ---
 
