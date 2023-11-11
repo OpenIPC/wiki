@@ -113,10 +113,14 @@ _Note: This list does not guarantee that your sensor will work. There are nuance
 ### SigmaStar
 
 - SSC325
+- SSC325DE
+- SSC333
 - SSC335
 - SSC335DE
 - SSC337
 - SSC337DE
+- SSC30KD
+- SSC30KQ
 - SSC338Q
 
 ### Xiongmai
