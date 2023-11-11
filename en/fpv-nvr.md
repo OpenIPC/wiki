@@ -27,3 +27,7 @@ reset
 #### The result
 
 ![](../images/fpv-nvr-hi3536dv100-openipc-ready.webp)
+
+#### Buy a device
+
+- [https://www.aliexpress.com/item/1005004023376532.html](https://www.aliexpress.com/item/1005004023376532.html)
