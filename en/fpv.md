@@ -395,6 +395,7 @@ Our team has extensive experience in low latency media transmission (some projec
 
 #### From Mario
 
+- [OpenIPC SSC338Q-IMX415, DVR in h265 with the World’s Cheapest 120fps Digital FPV System](https://www.youtube.com/watch?v=avXbcvqNKWM)
 - [Introducing OpenIPC SSC338Q-IMX415, the World’s Cheapest 120fps Digital FPV System](https://www.youtube.com/watch?v=tXwiZFD6-yc)
 - [Introducing OpenIPC, the cheapest digital long range FPV system in the world](https://youtu.be/Z_41Dko-Iok?si=cdGWDcFss9WrvPPN)
 - [OpenIPC Latency and Range Test with ExpressLRS and INAV 6.1](https://www.youtube.com/watch?v=4tlPJSQA6HA)
