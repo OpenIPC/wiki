@@ -106,13 +106,23 @@ gst-launch-1.0 udpsrc port=5600 caps='application/x-rtp, media=(string)video, cl
 ###GS IS READY FOR USE###
 
 ### DVR (Digital Video Recorder)
+
 Create a file **gst_start** with the following content and assign the rights to execute **chmod +x gst_start**.
+
 ```
-#!/bin/sh
-current_date=$(date +'%Y%d%m_%H%M')
+#!/bin/bash
+current_date=$(date +'%Y%d%m_%H%M%S')
 cd ~/Videos
-gst-launch-1.0 -e udpsrc port=5600 caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H265' ! rtph265depay ! h265parse ! tee name=t ! queue ! mppvideodec ! xvimagesink sync=false t. ! queue ! matroskamux ! filesink location=record_${current_date}.mkv
+
+if [[ $1 == "save" ]]
+then
+	gst-launch-1.0 -e udpsrc port=5600 caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H265' ! rtph265depay ! h265parse ! tee name=t ! queue ! mppvideodec ! xvimagesink sync=false t. ! queue ! matroskamux ! filesink location=record_${current_date}.mkv
+else
+	gst-launch-1.0 udpsrc port=5600 caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H265' ! rtph265depay ! h265parse ! mppvideodec ! xvimagesink sync=false
+fi
+
 ```
+
 When running with the **save** option, the video will be saved to the **/home/Video folder/**
 
 ### Start, stop, restart service
