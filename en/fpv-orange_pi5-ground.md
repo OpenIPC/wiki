@@ -74,7 +74,7 @@ sudo vi /etc/wifibroadcast.cfg
 ### Copying the encryption key from an IP camera
 
 ```
-sudo scp root@192.168.1.10:/etc/gs.key /etc/gs.key
+sudo scp root@192.168.1.10:/etc/drone.key /etc/gs.key
 ```
 
 and restarting wfb-ng:
@@ -105,15 +105,15 @@ gst-launch-1.0 udpsrc port=5600 caps='application/x-rtp, media=(string)video, cl
 
 ###GS IS READY FOR USE###
 
-### DVR(Digital Video Recorder) and playback
-Create a file **gst_start.sh** with the following content and assign the rights to execute **chmod +x gst_start.sh**
+### DVR (Digital Video Recorder)
+Create a file **gst_start** with the following content and assign the rights to execute **chmod +x gst_start**.
 ```
 #!/bin/sh
 current_date=$(date +'%Y%d%m_%H%M')
 cd ~/Videos
 gst-launch-1.0 -e udpsrc port=5600 caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H265' ! rtph265depay ! h265parse ! tee name=t ! queue ! mppvideodec ! xvimagesink sync=false t. ! queue ! matroskamux ! filesink location=record_${current_date}.mkv
 ```
-Each time you start, a new video file will be created in the **/home/Video/** folder.
+When running with the **save** option, the video will be saved to the **/home/Video folder/**
 
 ### Start, stop, restart service
 
