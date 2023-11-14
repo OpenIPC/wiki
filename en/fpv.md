@@ -415,7 +415,7 @@ Our team has extensive experience in low latency media transmission (some projec
 #### From Egor NiKO
 
 - [Делаю FPV FullHD линк из китайской IP-камеры ДЕШЕВЫЙ АНАЛОГ OpenHD Digital FPV](https://www.youtube.com/watch?v=NOW99dwKbzI)
-- [Инструкция по прошивке камеры Goke7205v200](https://youtu.be/pA6xQ5fcZ6Q?si=UgeibWNonE4_Wj3o)
+- [Инструкция по прошивке камеры Goke7205v200|v210](https://www.youtube.com/watch?v=pA6xQ5fcZ6Q)
 
 
 #### From TAI
