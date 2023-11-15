@@ -38,12 +38,10 @@ The experiments continue...
 ### Motion detection
 
 Motion detect is supported for Hisilion/Goke, Ingenic and Sigmastar.
-When a motion event is detected, `majestic` invokes a predefined script 
-`/usr/share/openipc/motion_detect.sh` with parameters specifying the motion
-activity and zone:
+When a motion event is detected, `majestic` invokes a predefined script `/usr/sbin/motion.sh` with a parameter specifying the object count:
 
 ```
-/usr/share/openipc/motion_detect.sh [object count] [x coordinate] [y coordinate] [region width] [region height]
+/usr/sbin/motion.sh [count]
 ```
 
 Enable motion detection in `majestic` configuration:
