@@ -12,36 +12,39 @@ Instructions for installing OpenIPC firmware on SigmaStar devices
 
 ### SSC338Q + IMX415 + NAND flash, board from CamHi vendor
 #### Quick note on experiments, will be revised and updated
-* [The files for this experiment are temporarily available here](https://github.com/OpenIPC/sandbox-fpv/tree/master/sigmastar)
 
-#### Explanations
+#### Summary
 The Sigmastar IPL (pre-bootloader) allows to boot a custom U-Boot from the sdcard.
-The provided UBOOT + uImage.ssc338q is a fully working openipc firmware, that you can connect to via SSH / WEB over the ethernet connection.
-
-With this temporary openipc firmware you can create a backup of the internal NAND and flash the permanent openipc firmware to the NAND.
+With this temporary OpenIPC firmware you can create a backup of the nand and flash the permanent firmware afterwards.
 
 #### Prepare
-Here is the sdcard firmware to install openipc to the nand flash.
-
-- Connect your SD card to your computer, create a 1 GB partition on it, format it as FAT32 / VFAT.
-- In Linux you just need to use the commands fdisk and mkfs.vfat
-- Mount disk and unpack ssc338q_initramfs.zip and copy both files to the root directory.
-- The UBOOT and uImage.ssc338q is used for the temporary sdcard system and to gain access to the NAND flash.
-- Reboot the device and let it start from the SD card
-- $\color{red}{\texttt{Do not stop the bootloader under any circumstances!}}$
+- Connect your sdcard to your computer, create a 1 GB partition and format it as FAT32 / VFAT.
+- [Download and unpack ssc338q-initramfs.zip][1]
+- Copy all files to the root directory of the sdcard, update your wireless credentials on autoconfig.sh:
+```diff
+#!/bin/sh
++WLAN_SSID="Router"
++WLAN_PASS="12345678"
+```
+- Put the sdcard into the camera module, start it and wait until it connects to your router.
+- Use ssh to connect to the camera:
+```
+ssh root@192.168.1.100
+root
+12345
+```
 
 #### Backup 
-- The /dev/mtd0 uses the complete partition size of the nand flash, so this can also be used for a backup.
-- But this might take some time, the backup to the sdcard is very slow.
+- /dev/mtd0 uses the complete partition size of the nand flash.
+- This might take some time, the backup to the sdcard is rather slow.
 ```
 nanddump -f /mnt/mmcblk0p1/backup-nand.bin /dev/mtd0
 ```
 
 #### Install
-The ssc338q-nand.bin includes the current distributor bootloader and nand ultimate firmware.
 ```
 flash_eraseall /dev/mtd0
-nandwrite /dev/mtd0 /mnt/mmcblk0p1/ssc338q-nand.bin
+nandwrite /dev/mtd0 /mnt/mmcblk0p1/ssc338q-fpv.bin
 ```
 
 #### Buying a device (CamHi vendor)
@@ -61,3 +64,5 @@ Information collection continues
 
 ### Other notes
 For testing please use the [MPV](https://mpv.io/) player, in which the Shift+I key combination can be used to get debugging information.
+
+[1]: https://github.com/OpenIPC/wiki/files/13379877/ssc338q-initramfs.zip
