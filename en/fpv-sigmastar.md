@@ -20,7 +20,7 @@ With this temporary OpenIPC firmware you can create a backup of the nand and fla
 #### Prepare
 - Connect your sdcard to your computer, create a 1 GB partition and format it as FAT32 / VFAT.
 - [Download ssc338q-initramfs.zip][1]
-- Copy all files to the root directory of the sdcard, update your wireless credentials on autoconfig.sh:
+- Copy all files to the root directory of the sdcard, update your wireless credentials on autostart.sh:
 ```diff
 #!/bin/sh
 +WLAN_SSID="Router"
@@ -43,7 +43,9 @@ nanddump -f /mnt/mmcblk0p1/backup-nand.bin /dev/mtd0
 #### Install
 ```
 flash_eraseall /dev/mtd0
-nandwrite /dev/mtd0 /mnt/mmcblk0p1/ssc338q-fpv.bin
+nandwrite -k /dev/mtd0 /mnt/mmcblk0p1/ssc338q-fpv.bin
+rm /mnt/mmcblk0p1/UBOOT
+reboot -f
 ```
 
 #### Buying a device (CamHi vendor)
@@ -64,4 +66,4 @@ Information collection continues
 ### Other notes
 For testing please use the [MPV](https://mpv.io/) player, in which the Shift+I key combination can be used to get debugging information.
 
-[1]: https://github.com/OpenIPC/wiki/files/13380069/ssc338q-initramfs.zip
+[1]: https://github.com/OpenIPC/wiki/files/13382282/ssc338q-initramfs.zip
