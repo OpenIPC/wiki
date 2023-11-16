@@ -19,7 +19,7 @@ With this temporary OpenIPC firmware you can create a backup of the nand and fla
 
 #### Prepare
 - Connect your sdcard to your computer, create a 1 GB partition and format it as FAT32 / VFAT.
-- [Download and unpack ssc338q-initramfs.zip][1]
+- [Download ssc338q-initramfs.zip][1]
 - Copy all files to the root directory of the sdcard, update your wireless credentials on autoconfig.sh:
 ```diff
 #!/bin/sh
@@ -30,7 +30,6 @@ With this temporary OpenIPC firmware you can create a backup of the nand and fla
 - Use ssh to connect to the camera:
 ```
 ssh root@192.168.1.100
-root
 12345
 ```
 
@@ -65,4 +64,4 @@ Information collection continues
 ### Other notes
 For testing please use the [MPV](https://mpv.io/) player, in which the Shift+I key combination can be used to get debugging information.
 
-[1]: https://github.com/OpenIPC/wiki/files/13379877/ssc338q-initramfs.zip
+[1]: https://github.com/OpenIPC/wiki/files/13380069/ssc338q-initramfs.zip
