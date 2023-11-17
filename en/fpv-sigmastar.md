@@ -40,6 +40,12 @@ ssh root@192.168.1.100
 nanddump -f /mnt/mmcblk0p1/backup-nand.bin /dev/mtd0
 ```
 
+- Alternatively the flash content can be uploaded via tftp.
+```
+cd /dev
+tftp 192.168.1.10 -pr mtd0
+```
+
 #### Install
 ```
 flash_eraseall /dev/mtd0
