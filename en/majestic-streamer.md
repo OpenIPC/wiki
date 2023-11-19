@@ -71,7 +71,7 @@ To instantly launch a YouTube broadcast, run these commands in the console:
 cli -s .video0.codec h264
 cli -s .audio.enabled true
 cli -s .outgoing.enabled true
-cli -s .outgoing.server rtmp://upload.rutube.ru/live_push/you-key-here
+cli -s .outgoing.server rtmp://a.rtmp.youtube.com/live2/you-key-here
 reboot
 ```
 
