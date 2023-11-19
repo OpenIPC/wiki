@@ -48,9 +48,7 @@ Enable motion detection in `majestic` configuration:
 
 ```
 cli -s .motionDetect.enabled true
-cli -s .motionDetect.visualize true
 cli -s .motionDetect.debug true
-cli -s .osd.enabled true
 ```
 
 Reboot the camera and restart `majestic` in the foreground:
@@ -64,7 +62,6 @@ You should see the script running after motion detection events:
 ```
 20:37:02  <SED_IVE_DETCTOR> [  motion] motion_update@155             Motion detected: [1163x0] -> [690x475]
 20:37:02  <SED_IVE_DETCTOR> [   tools] motion_event@615              Execute motion script: /usr/sbin/motion.sh
-[/usr/sbin/motion.sh] [1] [1163] [0] [690] [475]
 ```
 
 ### Broadcasts using RTMP
