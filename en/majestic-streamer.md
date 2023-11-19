@@ -63,8 +63,8 @@ You should see the script running after motion detection events:
 
 ```
 20:37:02  <SED_IVE_DETCTOR> [  motion] motion_update@155             Motion detected: [1163x0] -> [690x475]
-20:37:02  <SED_IVE_DETCTOR> [   tools] motion_event@615              Execute motion script: /usr/share/openipc/motion_detect.sh
-[/usr/share/openipc/motion_detect.sh] [1] [1163] [0] [690] [475]
+20:37:02  <SED_IVE_DETCTOR> [   tools] motion_event@615              Execute motion script: /usr/sbin/motion.sh
+[/usr/sbin/motion.sh] [1] [1163] [0] [690] [475]
 ```
 
 ### Broadcasts using RTMP
