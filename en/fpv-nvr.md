@@ -5,6 +5,13 @@ OpenIPC FPV ground station
 --------------------------
 
 
+#### News roundup
+
+- It is now possible to record video to a connected SSD or USB stick
+- Both HDMI and VGA outputs now work, there are no limitations in connected displays
+- A lot of different things ;)
+
+
 #### Upgrade from original HI3536DV100 NVR board firmware to OpenIPC FPV firmware
 
 - Install [PUTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) and [TFTP](https://pjo2.github.io/tftpd64/) server
