@@ -34,38 +34,12 @@ cli -s .video0.codec h264 ; cli -s .video0.fps 10 ; killall -1 majestic
 
 The experiments continue...
 
-
 ### Motion detection
+Motion detect is supported for Hisilion/Goke, Ingenic and Sigmastar. Enable motion detection on the webui:
+- `Majestic settings -> Alarm`
 
-Motion detect is supported for Hisilion/Goke, Ingenic and Sigmastar.
-When a motion event is detected, `majestic` invokes a predefined script `/usr/sbin/motion.sh` with a parameter specifying the object count:
-
-```
-/usr/sbin/motion.sh [count]
-```
-
-Enable motion detection in `majestic` configuration:
-
-```
-cli -s .motionDetect.enabled true
-cli -s .motionDetect.visualize true
-cli -s .motionDetect.debug true
-cli -s .osd.enabled true
-```
-
-Reboot the camera and restart `majestic` in the foreground:
-
-```
-killall majestic; sleep 3; majestic
-```
-
-You should see the script running after motion detection events:
-
-```
-20:37:02  <SED_IVE_DETCTOR> [  motion] motion_update@155             Motion detected: [1163x0] -> [690x475]
-20:37:02  <SED_IVE_DETCTOR> [   tools] motion_event@615              Execute motion script: /usr/share/openipc/motion_detect.sh
-[/usr/share/openipc/motion_detect.sh] [1] [1163] [0] [690] [475]
-```
+When a motion event is detected a predefined script with a parameter specifying the object count is invoked:
+- `/usr/sbin/motion.sh [count]`
 
 ### Broadcasts using RTMP
 
