@@ -4,7 +4,15 @@
 Notes on installing OpenIPC using Burn
 --------------------------------------
 
-Guideline flash GK7205V210 with locked bootloader
+### Guideline flash GK7205V210 with locked bootloader
+
+#### Preamble
+
+```
+My opinion is that - instructions for beginners should be written by beginners.
+As soon as a gentleman end flashing 2-3 boards, his skills increase to 50 level 
+and he does not want to remember the little things that are important for beginners.
+```
 
 Before starting work, watch the video on our [YouTube](https://www.youtube.com/@openipc/playlists) channel
 
