@@ -4,6 +4,20 @@
 Frequently Asked Questions
 ---------------------------
 
+### I have a camera which is not on the list of supported devices. Will you make it work for me?
+
+The short answer is no.
+
+If you have the skills and desire to make OpenIPC to work on the new hardware, we can share the knowledge we have.
+If not, get yourself a supported camera.
+
+### How can I tell what hardware is inside the camera before I buy it?
+
+Most of the time you can't. Especially if it is a cheap Chinese clone of a clone of a rebranded camera. 
+For reputable name brands that go through certification of the hardware, there is a chance to look at the 
+inside the camera in the certification documents. Look for the FCC ID on the camera's box or case
+and then look it up in the [FCC ID database](https://fccid.io/).
+
 ### Differences between Lite and Ultimate
 
 - Amazon server support
