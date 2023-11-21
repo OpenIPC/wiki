@@ -148,7 +148,7 @@ When working with a hot air soldering gun it is desirable to remove the lens and
 
 ### Installation on the camera (general finalization)
 
-* After booting the system, verify that it has obtained an IP address via Ethernet (it can be accessed via SSH via root@<IP address of the camera> without a password). Using a modern operating system and the name `openipc.local` you can find the camera within the local network without knowing its IP address. 
+* After booting the system, verify that it has obtained an IP address via Ethernet (it can be accessed via SSH via root@<IP address of the camera> without a password or password: 12345). Using a modern operating system and the name `openipc.local` you can find the camera within the local network without knowing its IP address. 
 * Solder GND, DP and DM to the USB pads (USB 5V power supply should not be connected to the board due to the high power consumption of the adapter), and separately 5V and GND to power the WiFi adapter (possibly via an additional DC-DC converter depending on your circuit). The USB wire that comes to the board should be secured with a cable tie to avoid breaking off the pins on the contact pad:
 
 <p align="center">
