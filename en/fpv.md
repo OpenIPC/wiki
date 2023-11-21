@@ -177,7 +177,9 @@ sudo iwconfig wlan0 channel 14
 sudo ip link set wlan0 up
 ```
 * Make sure that the same frequency is set on the camera and desktop WiFi adapters via `iwconfig` command, if necessary change the frequency by editing `/etc/wfb.conf` on the camera (`channel` parameter) or `sudo iwconfig <adapter name> channel <number>` on the desktop.
-* Compile from source [WFB-ng](https://github.com/svpcom/wifibroadcast), __must use brunch stable__, copy the `./etc/gs.key` from the IP camera to the desktop and run receive `sudo ./wfb_rx -p 0 -u 5600 -K gs.key -i 7669206 wlan0`.
+* Compile from source [WFB-ng](https://github.com/svpcom/wifibroadcast), __must use brunch stable__, copy the `./etc/gs.key` from the IP camera to the desktop;
+  This steps needs revision. Should be: copy the drone.key from desktop to IP camera.
+* Run receive `sudo ./wfb_rx -p 0 -u 5600 -K gs.key -i 7669206 wlan0`.
 * Check that the console output
 ```
 32168228	PKT	0:0:0:0:0:0
