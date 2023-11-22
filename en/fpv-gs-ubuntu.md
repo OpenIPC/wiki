@@ -1,7 +1,7 @@
 # OpenIPC Wiki
 [Table of Content](../README.md)
 
-Step by step commands to run GoundStation on Ubuntu 22.04
+Step by step commands to run GroundStation on Ubuntu 22.04
 ---------------------------------------------------------
 
 <p align="center">
