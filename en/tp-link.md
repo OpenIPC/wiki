@@ -13,7 +13,7 @@ TP-Link
 | TP-Link Tapo C200V2     | RTS3903N     |              | 25Q64      | RTL8188FTV  | 2AXJ4C200V2   |
 | TP-Link Tapo C210       | SSC335       |              | 25Q?       | SSW101B     | 2AXJ4C210     |
 | TP-Link Tapo C210P2     |              |              |            |             |               |
-| TP-Link Tapo C220       | SSC377       |              |            | RTL8188FTV  | 2BCGWC220     |
+| TP-Link Tapo C220       | SSC377       |              | 25Q128     | RTL8188FTV  | 2BCGWC220     |
 | TP-Link Tapo C225       | SSC30KQ      |              | F50L1G41LB | RTL8188FTV  | 2AXJ4C225     |
 | TP-Link Tapo C225V2     | SSC337D      |              | 25Q128     | SV6355      | 2AXJ4C225V2   |
 | TP-Link Tapo C310       |              |              |            |             |               |
