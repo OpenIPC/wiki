@@ -101,4 +101,65 @@ Where X = the MMC device you want to control  MSC0=0 MSC1=1
 
 ---
 
+### IMP-Control
+
+IMP-Control is a versatile tool designed for controlling and configuring a wide range of parameters in the Ingenic IMP library, within the Majestic streamer.  This tool allows for fine-tuning of both audio and video settings to achieve optimal performance in various environments.
+
+#### Key Features and Functionalities
+1. **Audio Adjustments:**
+   - `aihpf`: High Pass Filter toggle (on/off).
+   - `aiagc`: Auto Gain Control with adjustable gain levels and compensation.
+   - `ains`: Noise Suppression with intensity levels.
+   - `aiaec`: Echo Cancellation toggle.
+   - `aivol` and `aovol`: Adjusts audio input and output volume respectively.
+   - `aigain` and `aogain`: Sets audio input and output gain.
+   - `aialc`: Audio Input Automatic Level Control gain setting.
+
+2. **Video Enhancements:**
+   - `flip`: Manipulate image orientation.
+   - `contrast`, `brightness`, `saturation`, `sharpness`: Adjust basic image qualities.
+   - `sinter`, `temper`: Enhance image with sinter and temper strength adjustments.
+   - `aecomp`: Auto Exposure Compensation.
+   - `dpc`, `drc`: Control DPC and DRC strengths.
+   - `hilight`: Adjust highlight intensity.
+   - `again`, `dgain`: Set analog and digital gains.
+   - `hue`: Modify color hue.
+   - `ispmode`: Switch between day and night modes.
+   - `flicker`: Anti-flicker settings.
+
+3. **Advanced Controls:**
+   - `whitebalance`: Adjust white balance with modes, red and blue gains.
+   - `sensorfps`: Configure the sensor frames per second.
+   - `backlightcomp`: Backlight Compensation Strength.
+   - `defogstrength`: Control defog strength for clearer images.
+   - `framerate`, `gopattr`: Manage frame rates and Group of Pictures (GOP) attributes.
+   - `setbitrate`, `setgoplength`, `setqp`, `setqpbounds`, `setqpipdelta`: Detailed encoder settings.
+   - `rcmode`: Set or get the Rate Control Mode.
+   - `aemin`: Set Auto Exposure minimum parameters.
+   - `autozoom`, `frontcrop`: Adjust zoom and crop settings.
+   - `mask`: Set masking parameters for privacy or emphasis.
+
+4. **OSD and Analytics:**
+   - `getosdattr`, `getosdgrpattr`: Retrieve On-Screen Display (OSD) attributes.
+   - `getgamma`, `getevattr`, `getaeluma`, `getawbct`, `getafmetrics`, `gettotalgain`, `getaeattr`: Fetch various image processing metrics.
+
+5. **System Information:**
+   - `getimpversion`: Get the IMP version.
+   - `getcpuinfo`: Retrieve CPU information.
+
+6. **Demonstration and Testing:**
+   - `full_demo`: Runs a comprehensive demonstration of various functionalities.
+
+#### How to Use
+The general usage syntax is:
+```
+imp-control [command] [parameters]
+```
+Parameters vary based on the command, and in some cases, they are optional to retrieve current values.
+
+To get help and see the list of available commands, use:
+```
+imp-control help
+```
+---
 
