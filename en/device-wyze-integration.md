@@ -36,7 +36,7 @@ GPIO:
 | WYZECP1   |        |        |         |         |        |        |        |         |        |        |         |        |        |         |        |        |
 | WYZEC3    | GPIO53 | GPIO52 | GPIO47  | GPIO49  | GPIO59 | GPIO38 | GPIO39 | GPIO63  | GPIO50 | GPIO59 | GPIO48  |        | GPIO51 |         |        |        |
 | WYZEDBV1  | GPIO53 | GPIO52 | PWM2    |         | GPIO57 | GPIO38 | GPIO39 | GPIO58  |        |        | GPIO62  |        | GPIO06 | GPIO07  | GPIO61 |        |
-| WYZECP2   | GPIO53 | GPIO52 | GPIO60  |         | GPIO58 | GPIO38 | GPIO39 | GPIO07  | GPIO47 | GPIO48 | GPIO54  |        | GPIO06 |         |        |        |
+| WYZECP2   | GPIO49 | GPIO50 | GPIO60  |         | GPIO58 | GPIO38 | GPIO39 | GPIO07  | GPIO47 | GPIO48 | GPIO54  |        | GPIO06 |         |        |        |
 | WYZECPAN3 |        |        |         |         |        |        |        |         |        |        |         |        |        |         |        |        |
 | WYZEC3PRO | GPIO118| GPIO119| GPIO66  | GPIO67  | GPIO57 | GPIO105| GPIO106| GPIO63  | GPIO58 | GPIO70 | GPIO71  | GPIO121| GPIO107|         |        |        |
 | WVOD2     |        |        |         |         |        |        |        |         |        |        |         |        |        |         |        |        |
