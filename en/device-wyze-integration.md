@@ -11,7 +11,7 @@ This is where we'll be writing down our guide to flashing new devices and report
 |-----------|-----------|----------------|-----------------------------------|----------|-----------------------|------------|-----------|-----------------------------------------------------------|
 | WYZEC2    |           | 2ANJHWYZEC2    | 2019-06-38                        | T20X BGA | SDIO: Realtek 8189FTV | 2C:AA:8E   | YES       |                                                           |
 | WYZECP1   |           | 2ANJHHWYZECP1  |                                   | T20X BGA | SDIO: Realtek 8189ES  | 2C:AA:8E   | UNTESTED  |                                                           |
-| WYZEC3    | WYZEC3    | 2AUIUWYZEC3    | WYZEV3_T31GC2053 V1.4_20201010    |is T31ZX    | SDIO: Realtek 8189FTV | 7C:78:B2   | YES       | https://t.me/openipc/49957 https://youtu.be/t7Nzo-KXTH0   | 
+| WYZEC3    | WYZEC3    | 2AUIUWYZEC3    | WYZEV3_T31GC2053 V1.4_20201010    | T31ZX    | SDIO: Realtek 8189FTV | 7C:78:B2   | YES       | https://t.me/openipc/49957 https://youtu.be/t7Nzo-KXTH0   | 
 | WYZEC3    | WYZEC3A   | 2AUIUWYZEC3A   | WYZEV3_T31GC2053 V1.2_20200715    | T31X     | SDIO: Realtek 8189FTV | 7C:78:B2   | YES       | https://youtu.be/jm4wze_HY78                              |
 | WYZEC3    | WYZEC3A   | 2AUIUWYZEC3A   | WYZEV3_T31GC2053 V2.02_20210523   | T31ZX    | SDIO: AltoBeam 6031   | D0:3F:27   | YES       | https://t.me/openipc/49049 https://t.me/openipc/49050     |
 | WYZEC3    | WYZEC3A   | 2AUIUWYZEC3A   | WYZEV3_T31GC2053 V2.03_20211206   | T31X     | SDIO: AltoBeam 6031   | D0:3F:27   | YES       | https://t.me/openipc/45444 https://t.me/openipc/48942     |
