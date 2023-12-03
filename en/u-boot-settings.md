@@ -28,3 +28,10 @@ The type of sensor used on the device is set automatically in most cases
 ### upgrade
 Specify the full path to the archive with custom OpenIPC firmware in .tgz format
 
+### wlandev
+To be continued...
+
+### wlanmac
+To be continued...
+
+
