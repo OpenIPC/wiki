@@ -11,7 +11,7 @@ This is where we'll be writing down our guide to flashing new devices and report
 |-----------|-----------|----------------|-----------------------------------|----------|-----------------------|------------|-----------|-----------------------------------------------------------|
 | WYZEC2    |           | 2ANJHWYZEC2    | 2019-06-38                        | T20X BGA | SDIO: Realtek 8189FTV | 2C:AA:8E   | YES       |                                                           |
 | WYZECP1   |           | 2ANJHHWYZECP1  |                                   | T20X BGA | SDIO: Realtek 8189ES  | 2C:AA:8E   | UNTESTED  |                                                           |
-| WYZEC3    | WYZEC3    | 2AUIUWYZEC3    | WYZEV3_T31GC2053 V1.4_20201010    | T31ZX    | SDIO: Realtek 8189FTV | 7C:78:B2   | YES       | https://t.me/openipc/49957 https://youtu.be/t7Nzo-KXTH0   | 
+| WYZEC3    | WYZEC3    | 2AUIUWYZEC3    | WYZEV3_T31GC2053 V1.4_20201010    |is T31ZX    | SDIO: Realtek 8189FTV | 7C:78:B2   | YES       | https://t.me/openipc/49957 https://youtu.be/t7Nzo-KXTH0   | 
 | WYZEC3    | WYZEC3A   | 2AUIUWYZEC3A   | WYZEV3_T31GC2053 V1.2_20200715    | T31X     | SDIO: Realtek 8189FTV | 7C:78:B2   | YES       | https://youtu.be/jm4wze_HY78                              |
 | WYZEC3    | WYZEC3A   | 2AUIUWYZEC3A   | WYZEV3_T31GC2053 V2.02_20210523   | T31ZX    | SDIO: AltoBeam 6031   | D0:3F:27   | YES       | https://t.me/openipc/49049 https://t.me/openipc/49050     |
 | WYZEC3    | WYZEC3A   | 2AUIUWYZEC3A   | WYZEV3_T31GC2053 V2.03_20211206   | T31X     | SDIO: AltoBeam 6031   | D0:3F:27   | YES       | https://t.me/openipc/45444 https://t.me/openipc/48942     |
@@ -33,7 +33,7 @@ GPIO:
 | MODEL     | IRCUT1 | IRCUT2 | IR LED1 | IR LED2 | WIFI   | LED1   | LED2   | SPEAKER | TF_EN  | TF_CD  | SD_ABLE | SD_PWR |BUTTON1 | BUTTON2 | SUB1G  | USB    |
 |-----------|--------|--------|---------|---------|--------|--------|--------|---------|--------|--------|---------|--------|--------|---------|--------|--------|
 | WYZEC2    | GPIO26 | GPIO25 | GPIO49  |         | GPIO62 | GPIO38 | GPIO39 | GPIO63  | GPIO43 | GPIOXX | GPIO48  |        | GPIO46 |         |        | GPIO47 |
-| WYZECP1   |        |        |         |         |        |        |        |         |        |        |         |        |        |         |        |        |
+| WYZECP1   |        |        |         |         | GPIO62 | GPIO38 | GPIO39 | GPIO63  | GPIO43 | GPIOXX | GPIO48  |        | GPIO46 |         |        | GPIO47 |
 | WYZEC3    | GPIO53 | GPIO52 | GPIO47  | GPIO49  | GPIO59 | GPIO38 | GPIO39 | GPIO63  | GPIO50 | GPIO59 | GPIO48  |        | GPIO51 |         |        |        |
 | WYZEDBV1  | GPIO53 | GPIO52 | PWM2    |         | GPIO57 | GPIO38 | GPIO39 | GPIO58  |        |        | GPIO62  |        | GPIO06 | GPIO07  | GPIO61 |        |
 | WYZECP2   | GPIO49 | GPIO50 | GPIO60  |         | GPIO58 | GPIO38 | GPIO39 | GPIO07  | GPIO47 | GPIO48 | GPIO54  |        | GPIO06 |         |        |        |
@@ -47,7 +47,7 @@ GPIO:
 MOTORS: 
 | MODEL     | HST1   | HST2   | HST3   | HST4   | VST1   | VST2   | VST3   | VST4   | HMAX | VMAX  | MAX SPEED |
 |-----------|--------|--------|--------|--------|--------|--------|--------|--------|------|-------|-----------|
-| WYZECP1   |        |        |        |        |        |        |        |        |      |       |           |
+| WYZECP1   | GPIO54 | GPIO53 | GPIO52 | GPIO51 | GPIO75 | GPIO76 | GPIO79 | GPIO80 | 2590 | 720   | 900       |
 | WYZECP2   | GPIO52 | GPIO53 | GPIO57 | GPIO51 | GPIO59 | GPIO61 | GPIO62 | GPIO63 | 2540 | 720   | 900       |
 | WYZECPAN3 |        |        |        |        |        |        |        |        |      |       |           |
 | PERSONALCAM | GPIO49 | GPIO57 | GPIO54 | GPIO51 | GPIO60 | GPIO61 | GPIO62 | GPIO63 | 2130 | 1600  | 900       |
