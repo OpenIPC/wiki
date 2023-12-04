@@ -152,9 +152,9 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 
 ### Wansview
 
-| Processor   | IRCUT1 | IRCUT2 | IR LEDs | RESET | ETH_GREEN | ETH_ORANGE| DEVICE ID              |
-|-------------|--------|--------|---------|-------|-----------|-----------|------------------------|
-| T21         | 80     | 79     |  49     | 50    |    73     |     72    |   Wansview W5/W6       |
+| Processor   | IRCUT1 | IRCUT2 | IR LEDs | RESET | ETH_GR|BL | ETH_ORANGE| DEVICE ID                   |
+|-------------|--------|--------|---------|-------|-----------|-----------|-----------------------------|
+| T21         | 80     | 79     |  49     | 50    |    73     |     72    |   Wansview W5/W6 Q5(1080p)  |
 
 ### Xiaomi boards
 
