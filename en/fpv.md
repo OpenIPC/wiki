@@ -401,6 +401,8 @@ Our team has extensive experience in low latency media transmission (some projec
 - [OpenIPC Latency and Range Test with ExpressLRS and INAV 6.1](https://www.youtube.com/watch?v=4tlPJSQA6HA)
 - [Introducing OpenIPC VRX Ground Station, the cheapest digital long range FPV system in the world](https://www.youtube.com/watch?v=aXJQIoBKjVE)
 - [World’s Cheapest VRX with H265 compatible with all goggles! OpenIPC FPV with VENC/VDEC](https://www.youtube.com/watch?v=wZAHkWHfBF4)
+- [New OpenIPC hardware that is ideal for 3” or 2” micro quadcopters. Stay tuned for full video!](https://www.youtube.com/watch?v=ozZwKt6Z-UQ)
+- [OpenIPC Video Tutorial - How to setup OpenDHCP server and how to backup files](https://www.youtube.com/watch?v=aO_4LU8rnws)
 
 
 #### From TipoMan
@@ -412,11 +414,26 @@ Our team has extensive experience in low latency media transmission (some projec
 - [OpenIPC and wfb-ng in a windy day, imx335, mcs1, 7mbit/s, h265](https://www.youtube.com/watch?v=lUyhilWK1dE)
 
 
+#### From Petru Soroaga
+
+- [What's new in Ruby version 8.0: OpenIPC cameras](https://www.youtube.com/watch?v=XQCte-eTD9U)
+
+
 #### From Egor NiKO
 
 - [Девайс для ИЗМЕРЕНИЕ задержки FPV-СИСТЕМ и КАМЕР](https://www.youtube.com/watch?v=69uGeqPZ3CI)
 - [Делаю FPV FullHD линк из китайской IP-камеры ДЕШЕВЫЙ АНАЛОГ OpenHD Digital FPV](https://www.youtube.com/watch?v=NOW99dwKbzI)
 - [Инструкция по прошивке камеры Goke7205v200|v210](https://www.youtube.com/watch?v=pA6xQ5fcZ6Q)
+
+
+#### From CurryKitten
+
+- [The OpenIPC build part 1: What is OpenIPC, and what am I using to build it?](https://www.youtube.com/watch?v=1CDIukf8AJw)
+
+
+#### From Cinematic FPV - QD Channel
+
+- [Trải nghiệm hệ thống truyền dẫn video mới OpenIPC - Trải nghiệm không thể ngờ hihi - QD Channel](https://www.youtube.com/watch?v=dC32p0hxEAs)
 
 
 #### From TAI
@@ -427,6 +444,7 @@ Our team has extensive experience in low latency media transmission (some projec
 #### From Antonio Silva
 
 - [Test with Openipc goke7205v200 and NVR](https://www.youtube.com/watch?v=7GKyCo6Ezmw)
+- [OpenIPC my first test flight recorded with NVR](https://www.youtube.com/watch?v=Sj7UduKbtXs)
 
 
 #### From Zipray
