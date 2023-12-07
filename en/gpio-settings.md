@@ -115,9 +115,10 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 
 ### Netcam NVT boards
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRLED    |
-|-------------|--------|--------|----------|----------|
-| T10         | 25     | 26     | 81       | 80       |
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRLED    | RED_LED |
+|-------------|--------|--------|----------|----------|---------|
+| T10         | 25     | 26     |          | 19       | 20      |
+| T10         | 25     | 26     | 81       | 80       |         |
 
 ### Qihoo 360 Security cam D603
 
