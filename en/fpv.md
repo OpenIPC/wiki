@@ -403,6 +403,7 @@ Our team has extensive experience in low latency media transmission (some projec
 - [World’s Cheapest VRX with H265 compatible with all goggles! OpenIPC FPV with VENC/VDEC](https://www.youtube.com/watch?v=wZAHkWHfBF4)
 - [New OpenIPC hardware that is ideal for 3” or 2” micro quadcopters. Stay tuned for full video!](https://www.youtube.com/watch?v=ozZwKt6Z-UQ)
 - [OpenIPC Video Tutorial - How to setup OpenDHCP server and how to backup files](https://www.youtube.com/watch?v=aO_4LU8rnws)
+- [World's Smallest OpenIPC FPV Hardware that can fit in a 3" Micro Quadcopter with INAV 7 ExpressLRS](https://www.youtube.com/watch?v=_IPkt78QZwY)
 
 
 #### From TipoMan
@@ -429,6 +430,7 @@ Our team has extensive experience in low latency media transmission (some projec
 #### From CurryKitten
 
 - [The OpenIPC build part 1: What is OpenIPC, and what am I using to build it?](https://www.youtube.com/watch?v=1CDIukf8AJw)
+- [The OpenIPC build part 2: Flashing firmware and getting the video stream working](https://www.youtube.com/watch?v=libsusKy6zc)
 
 
 #### From Cinematic FPV - QD Channel
