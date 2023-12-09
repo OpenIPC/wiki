@@ -159,11 +159,11 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 
 ### Xiaomi boards
 
-| Processor   | IRCUT1 | IRCUT2 | IR LEDs | DEVICE ID              | ORANGE_LED | BLUE_LED | RESET |
-|-------------|--------|--------|---------|------------------------|------------|----------|-------|
-| SSC325      | 78     | 79     |  52     | CMSXJ25A               |            |          |       |
-| HI3518EV300 | 70     | 68     |  54     | MJSXJ02HL              |     52     |    53    |   0   |
-| T31N        | 49     | 50     |  60     | MJSXJ03HL              |     38     |    39    |       |
+| Processor   | IRCUT1 | IRCUT2 | IR LEDs | DEVICE ID     | ORANGE_LED | BLUE_LED | RESET | AUDIO_ENA |
+|-------------|--------|--------|---------|---------------|------------|----------|-------|-----------|
+| SSC325      | 78     | 79     |  52     | CMSXJ25A      |            |          |       |           |
+| Hi3518Ev300 | 70     | 68     |  54     | MJSXJ02HL     |     52     |    53    |   0   |    55     |
+| T31N        | 49     | 50     |  60     | MJSXJ03HL     |     38     |    39    |       |           |
 
 ### XiongMai, XM boards
 
