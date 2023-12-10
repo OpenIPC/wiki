@@ -422,6 +422,7 @@ Our team has extensive experience in low latency media transmission (some projec
 
 #### From Egor NiKO
 
+- [WFB-NG-OpenIPC Плохая связи, высокая задержка. Что такое MCS?](https://www.youtube.com/watch?v=JEqai5JKZws)
 - [Девайс для ИЗМЕРЕНИЕ задержки FPV-СИСТЕМ и КАМЕР](https://www.youtube.com/watch?v=69uGeqPZ3CI)
 - [Делаю FPV FullHD линк из китайской IP-камеры ДЕШЕВЫЙ АНАЛОГ OpenHD Digital FPV](https://www.youtube.com/watch?v=NOW99dwKbzI)
 - [Инструкция по прошивке камеры Goke7205v200|v210](https://www.youtube.com/watch?v=pA6xQ5fcZ6Q)
