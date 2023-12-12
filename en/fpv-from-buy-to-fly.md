@@ -1,7 +1,7 @@
 # OpenIPC Wiki
 [Table of Content](../README.md)
 
-Steps from buy to fly (for beginners)
+## Steps from buy to fly (for beginners)
 ---------------------------------------------------
 
 <p align="center">
@@ -9,15 +9,23 @@ Steps from buy to fly (for beginners)
 </p>
 
 ---------------------------------------------------
-## STEP 1
-## STEP 2
-## STEP 3
-## STEP 4
-## STEP 5
+### STEP 1
+### STEP 2
+### STEP 3
+### STEP 4
+### STEP 5
 - [OpenIPC FPV - NVR Ground Station](https://www.youtube.com/watch?v=vSJiUanWA9I)
 - [OpenIPC FPV - Prepare GroundStation: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
-## STEP 6
+### STEP 6
 - [OpenIPC FPV - connections](https://www.youtube.com/watch?v=LOD5xsAJu5o)
-## STEP 7
-## STEP 8
+### STEP 7
+### STEP 8
+
+## Examples
+<p align="center">
+  <img src="../images/fpv-newcomer-bundle.jpg" alt="NewComers"/>
+</p>
+<p align="center">
+  <img src="../images/fpv-cheapskate-bundle.jpg" alt="Cheapskate"/>
+</p>
 
