@@ -5,5 +5,5 @@ Steps from buy to fly (for beginners)
 ---------------------------------------------------
 
 <p align="center">
-  <img src="images/fpv-from-buy-to-fly.png" alt="Diagram"/>
+  <img src="../images/fpv-from-buy-to-fly.png" alt="Diagram"/>
 </p>
