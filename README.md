@@ -42,6 +42,7 @@ OpenIPC Wiki
 
 ### FPV
 
+- [Steps from buy to fly](en/fpv-from-buy-to-fly.md)
 - [OpenIPC as FPV system](en/fpv.md)
 - [Sigmastar FPV devices](en/fpv-sigmastar.md)
 - [Ubuntu based groundstation](en/fpv-gs-ubuntu.md)
