@@ -14,7 +14,8 @@ Steps from buy to fly (for beginners)
 ## STEP 3
 ## STEP 4
 ## STEP 5
-- [OpenIPC - Prepare GroundStation: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
+- [OpenIPC FPV - NVR Ground Station](https://www.youtube.com/watch?v=vSJiUanWA9I)
+- [OpenIPC FPV - Prepare GroundStation: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
 ## STEP 6
 - [OpenIPC FPV - connections](https://www.youtube.com/watch?v=LOD5xsAJu5o)
 ## STEP 7
