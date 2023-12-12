@@ -457,7 +457,8 @@ Our team has extensive experience in low latency media transmission (some projec
 
 #### From HKR
 
-- [OpenIPC - Prepare GroundStation: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
+- [OpenIPC FPV - Prepare GroundStation: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
+- [OpenIPC FPV - NVR Ground Station](https://www.youtube.com/watch?v=vSJiUanWA9I)
 - [OpenIPC FPV - Test Flight](https://www.youtube.com/watch?v=-4f7XHnu3mY)
 - [OpenIPC FPV - connections](https://www.youtube.com/watch?v=LOD5xsAJu5o)
 - [OpenIPC FPV - key configuration](https://m.youtube.com/watch?v=1_t_HDdHPho)
