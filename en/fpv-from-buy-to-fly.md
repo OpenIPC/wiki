@@ -15,6 +15,7 @@
 ### STEP 4
 ### STEP 5
 - [OpenIPC FPV - NVR Ground Station](https://www.youtube.com/watch?v=vSJiUanWA9I)
+- [Introducing OpenIPC VRX Ground Station, the cheapest digital long range FPV system in the world](https://www.youtube.com/watch?v=aXJQIoBKjVE)
 - [OpenIPC FPV - Prepare GroundStation: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
 ### STEP 6
 - [OpenIPC FPV - connections](https://www.youtube.com/watch?v=LOD5xsAJu5o)
