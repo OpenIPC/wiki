@@ -11,6 +11,14 @@ relation to camera/video surveillance functionality). Majestic is configurable
 via /etc/majestic.yaml file, and has many features/services enabled by default.
 Unneeded options can be switched off for better security and performance. See /etc/majestic.full for configuration options.
 
+### Control signals
+
+```
+-HUP restart Majestic (Except Ingenic T21).
+-SIGUSR1 fast reload (Sigmastar only).
+-SIGUSR2 SDK Shutdown (For all platforms).
+```
+
 ### Camera related URLs in firmware
 
 Majestic supports multiple audio, video and still image formats, and more.
