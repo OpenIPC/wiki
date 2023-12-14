@@ -1,11 +1,7 @@
 
 # Ingenic PTZ Configuration Guide
 
-Ensure your Buildroot configuration includes the Ingenic motors package. In your `defconfig`, verify the following line is present and enabled:
-
-```plaintext
-BR2_PACKAGE_INGENIC_MOTORS_T31=y
-```
+The motors module is included in the `openingenic` repo which is installed by default, as the `motor.ko` kernel module.
 
 ## Loading the Module
 
