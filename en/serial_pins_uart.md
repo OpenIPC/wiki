@@ -11,4 +11,4 @@ This is a quick test. Ground to ground, tx from the adapter is not connected, rx
 
 ![](../images/T31_rebranding_wyze_cam_pan_v3.jpeg)
 
-![](../images/T31_rebranding_wyze_cam_pan_v3_TOP.jpeg)
+![](../images/T31_rebranding_wyze_cam_pan_v3_TOP.png)
