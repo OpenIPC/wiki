@@ -21,7 +21,7 @@ To automate this process during boot, add the line `sample_motor hmaxstep=2540 v
 
 ## Controlling the Motors
 
-Use the `t31-kmotor` command-line utility for motor control.
+Use the `ingenic-motor` command-line utility for motor control.
 
 ## Note on GPIO Handling
 
