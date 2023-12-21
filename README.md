@@ -17,6 +17,7 @@ OpenIPC Wiki
 - [Detailed installation guide](en/installation.md)
 - [Installation on Goke](https://openipc.org/cameras/vendors/goke)
 - [Installation on HiSilicon](https://openipc.org/cameras/vendors/hisilicon)
+- [Installation on Ingenic](https://openipc.org/cameras/vendors/ingenic)
 - [Installation on Novatek](https://openipc.org/cameras/vendors/novatek)
 - [Installation on SigmaStar](https://openipc.org/cameras/vendors/sigmastar)
 - [Installation on XM510/XM530](https://openipc.org/cameras/vendors/xiongmai)
@@ -94,7 +95,7 @@ OpenIPC Wiki
 - [Foscam X5](en/device-foscam-x5.md)
 - [TP-Link Tapo C110](en/device-tapo-c110.md)
 - [Xiaomi Mi Camera 2K (MJSXJ03HL)](https://github.com/OpenIPC/device-mjsxj03hl/)
-- [Wyze V3](en/device-wyze-integration.md)
+- [ATOM Cam / Hualai / Wyze](en/device-wyze-integration.md)
 - [Digitus DN-16048 Optizoom](en/device-digitus-dn16048.md)
 - [XiongMai IPG-53H20AF](en/device-ipg-53h20af.md)
 
