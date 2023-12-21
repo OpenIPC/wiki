@@ -3,6 +3,14 @@
 Unbrick Ingenic T31 with SD Card
 ---
 
+#### NOTE: 
+```
+On certain devices, like many Wyze and Atom models, the SD Card is powered through a GPIO
+(General-Purpose Input/Output) connection.  This means you have to activate a particular GPIO either
+in U-Boot or in the Linux system in order to supply power to use the SD Card. If your device is set
+up this way, you cannot use this method without making physical changes to the hardware.
+```
+
 ### Ingenic T31 boot squence
 
 ![](../images/t31_boot_sequence.png)
