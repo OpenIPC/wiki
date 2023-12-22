@@ -1,7 +1,8 @@
-# Serial UATR pin description  
+# Serial UART pin description  
 
-## Quick test 
-Config seial port ->  8N1 Baud rate 115200
+## Quick test
+
+Config serial port ->  8N1 Baud rate 115200
 
 This is a quick test. Ground to ground, tx from the adapter is not connected, rx probes pads and you check output in the terminal app.
 
