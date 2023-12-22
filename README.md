@@ -40,6 +40,7 @@ OpenIPC Wiki
 - [ACMEv2](en/acme-v2.md)
 - [YouTube streaming](en/youtube-streaming.md)
 - [WiFi XM530](en/wifi-xm530.md)
+- [HomeKit integration](en/homekit-integration.md)
 
 ### FPV
 
