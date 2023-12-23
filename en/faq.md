@@ -94,13 +94,13 @@ sequence and enter the bootloader shell.
 For a camera with 8MB flash chip, run
 
 ```bash
-sf probe; sf erase 0x750000 0xb0000; reset
+sf probe 0; sf erase 0x750000 0xb0000; reset
 ```
 
 For a camera with 16MB flash chip, run
 
 ```bash
-sf probe; sf erase 0xd50000 0x2b0000; reset
+sf probe 0; sf erase 0xd50000 0x2b0000; reset
 ```
 
 ### How to find information about the camera hardware and software?
