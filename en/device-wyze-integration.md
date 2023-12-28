@@ -34,7 +34,7 @@ GPIO:
 |-----------|--------|--------|---------|---------|--------|--------|--------|---------|--------|--------|---------|--------|--------|---------|--------|--------|
 | WYZEC2    | GPIO26 | GPIO25 | GPIO49  |         | GPIO62 | GPIO38 | GPIO39 | GPIO63  | GPIO43 | GPIOXX | GPIO48  |        | GPIO46 |         |        | GPIO47 |
 | WYZECP1   | GPIO26 | GPIO25 | GPIO49  |         | GPIO62 | GPIO38 | GPIO39 | GPIO63  | GPIO43 | GPIOXX | GPIO48  |        | GPIO46 |         |        | GPIO47 |
-| WYZEC3    | GPIO53 | GPIO52 | GPIO47  | GPIO49  | GPIO59 | GPIO38 | GPIO39 | GPIO63  | GPIO50 | GPIO62 | GPIO48  |        | GPIO51 |         |        |        |
+| WYZEC3    | GPIO53 | GPIO52 | GPIO47  | GPIO49  | GPIO57 | GPIO38 | GPIO39 | GPIO63  | GPIO50 | GPIO62 | GPIO48  |        | GPIO51 |         |        |        |
 | WYZEDBV1  | GPIO53 | GPIO52 | PWM2    |         | GPIO57 | GPIO38 | GPIO39 | GPIO58  |        |        | GPIO62  |        | GPIO06 | GPIO07  | GPIO61 |        |
 | WYZECP2   | GPIO49 | GPIO50 | GPIO60  |         | GPIO58 | GPIO38 | GPIO39 | GPIO07  | GPIO47 | GPIO48 | GPIO54  |        | GPIO06 |         |        |        |
 | WYZECPAN3 |        |        |         |         |        |        |        |         |        |        |         |        |        |         |        |        |
