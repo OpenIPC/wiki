@@ -41,6 +41,7 @@ OpenIPC Wiki
 - [YouTube streaming](en/youtube-streaming.md)
 - [WiFi XM530](en/wifi-xm530.md)
 - [HomeKit integration](en/homekit-integration.md)
+- [Automatic night mode without light sensor](en/auto-night-mode-without-light-sensor.md)
 
 ### FPV
 
