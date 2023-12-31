@@ -18,7 +18,7 @@ For this step-by-step guide, I'm using specific hardware, and although the proce
 
 As a refereence for my camera I ordered an SSC338 based board with a Sony IMX415 sensor.  
 
-![Camera](https://raw.githubusercontent.com/CurryKitten/wiki/master/images/sbs-Camera.jpg)
+![Camera](../images/sbs-Camera.jpg)
 
 I ordered this with a 2.8mm lens (which seems a bit narrow for FPV, but it's the widest that was available) and with the 12V Lan cable.  This cable is very important for flashing the camera.  This camera was chosen as it could do a range of frame rates and resolutions, and also had a decent sensor. I bought this from AliExpress, the specific URL for the link is [here](https://www.aliexpress.com/item/1005004350557805.html)
 
