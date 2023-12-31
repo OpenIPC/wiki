@@ -50,6 +50,7 @@ OpenIPC Wiki
 - [Sigmastar FPV devices](en/fpv-sigmastar.md)
 - [Ubuntu based groundstation](en/fpv-gs-ubuntu.md)
 - [OrangePI 5 Ubuntu based groundstation](en/fpv-ground-orange_pi5.md)
+- [A Step-by-Step guide to configure an FPV camera and Groundstation](en/A-step-by-step-guide-for-an-FPV-setup.md)
 
 ### Troubleshooting
 
