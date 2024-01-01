@@ -48,7 +48,7 @@ The hardware and software setup is very identical to: [chacron ipcam](device-cha
 | 0x33 (51) | Red LED       |
 | 0x32 (50) | Blue LED      |
 | 0x0d (13) | wlan power    |
-| 0x0d (59) | Doorbell btn  |
+| 0x3B (59) | Doorbell btn  |
 
 ### [ipctool](https://github.com/OpenIPC/ipctool) output (8Mb flash):
 
@@ -141,6 +141,12 @@ echo 1 > /sys/class/gpio51/value
 echo 0 > /sys/class/gpio51/value
 ```
 
+### Homeassistant support
+
+A custom MQTT Client has been written to handle the doorbell event and send it to Home assistant using MQTT.
+Project can be found here: [lscdoorbellmqtt](https://github.com/berobloom/lscdoorbellmqtt)
+
 ## Sources:
 
 * https://github.com/OpenIPC/wiki/blob/master/en/device-chacon-ipcam-ri01.md
+* https://github.com/berobloom/lscdoorbellmqtt
