@@ -213,3 +213,10 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS     | DEVICE ID     |
 |-------------|--------|--------|--------------|---------------|
 | Hi3518Ev200 | 61     | 60     | 1 (inverted) | ZG2622MW      |
+
+
+### Other/Unknown
+
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | BOARD           |
+|-------------|--------|--------|----------|-------|-----------------|
+| T31L        | 58     | 57     |          |       | T31L_F37_V1.1   |
