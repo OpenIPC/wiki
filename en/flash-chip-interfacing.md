@@ -31,9 +31,20 @@ SOIC8 Clips
 SOIC8 clips are a convenient way to interface with SOIC8 chips. They are cheap and somewhat easy to use.
 Remember though, that the clip requires a programmer to act as interface between the clip and your computer.
 
+It can be confusing when looking at the ribbon cable of the clip, because the two rows of pins -- how does it map?
+Look at the following image of a ribbon cable, there is a red wire that indicates pin 1, and the pins are numbered
+relative to the cable key notch.   Don't be confused in thinking that red should be voltage, in this case it should
+map to pin one of the SOIC8 chip and pin-cable adapter.   This way you can visualize the pins of the adapter are identical
+to that of the SOIC8 flash chip specification.
+
+![](../images/ribbon-cable.jpg)
+
 Here is an example of a SOIC8 clip wired to a Raspberry Pi Pico:
 
 ![](../images/soic8-clip-programmer-example.png)
+
+**Warning:**  Often camera boards have other SOIC8 style chips besides the flash chip, 
+and you need to be sure to identify the correct chip before you begin your work.
 
 
 Picking a Programmer
