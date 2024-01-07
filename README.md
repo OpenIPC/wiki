@@ -64,6 +64,7 @@ OpenIPC Wiki
 
 - [Equipment for flashing](en/equipment-flashing.md)
 - [CH341A programmer voltage fix](en/hardware-programmer-ch341a-voltage-fix.md)
+- [Flash Chip Interfacing](en/flash-chip-interfacing.md)
 
 ### Development
 
