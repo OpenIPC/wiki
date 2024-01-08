@@ -419,7 +419,7 @@ We'll need a total of 4 BECs, both the camera and groundstation will need one at
 
 If we take another look at our wifi board picture, this time with some pinouts labeled up.  
 ![wifi module pinouts](../images/sbs-wifi-pinout.jpg)
-You will be able to see the wiring is fairly trivial and the soldering is pretty easy, we're attaching our 3.3v and GND from the BEC.  For wiring this to the camera, if you take a look at the camera pin-out in section 1.1 (specifically the one I call the "useful pins") you'll see at the bottom of the board we have a USB D+, USB D- and a GND.  These are the pins we have left over on the wifi board, so you'll need a jst connection to plug into the camera and then connect up USB D+ on the camera to USB D- on the wifi board, USB D- on the camera to USB D+ on the wifi board, and connect the 2 grounds together.
+You will be able to see the wiring is fairly trivial and the soldering is pretty easy, we're attaching our 3.3v and GND from the BEC.  For wiring this to the camera, if you take a look at the camera pin-out in section 1.1 (specifically the one I call the "useful pins") you'll see at the bottom of the board we have a USB D+, USB D- and a GND.  These are the pins we have left over on the wifi board, so you'll need a jst connection to plug into the camera and then connect up USB D+ on the camera to USB D+ on the wifi board, USB D- on the camera to USB D- on the wifi board, and connect the 2 grounds together.
 
 The following image shows my completed air side wired up with the wifi adapter (although as this is for testing on the bench, I'm using a temporary connection to an XT60 adapter)  You will see my 3.3v BEC connected to the wifi adapter, with the USB wiring connected to a JST connector ready to plug into the camera board.  Also, note that you must have antennas connected to the wifi board when you power it on.  Failure to do so can cause damage to the wifi board.  I've just found a few 5.8Ghz antennas with a UFL connector on.  In this picture, I've also added the 12V BEC to the power source which is connected to another jst connected ready to power the camera.
 
@@ -472,7 +472,7 @@ Detecting wifi card vendor...
 No usb wifi card detected.  Check wifi stick connection, usb power or possible bad soldering.
 ```
 
-Then something is wrong.  The usual culprit is not having D-/D+ crossed over, so if you are confident you have power to the wifi module, then switching over the wires would be the first thing to try.
+Then something is wrong.  The usual culprit is having D-/D+ crossed over, so if you are confident you have power to the wifi module, then switching over the wires would be the first thing to try.
 
 ### Step 3 Generating and installing the key pairing for WFB-NG
 
