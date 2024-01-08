@@ -1,6 +1,9 @@
 ### Ingenic Cloner Utility
 
-Description
+The ingenic cloner application is a PC side utility that interfaces with the "USB-Boot" mode built into Ingenic SOCs.  By placing the SOC into "USB-Boot" mode, you are able to use the ingenic clonger application to directly flash the firmware chip without physically removing, or interfacing to the flash chip.
+
+This guide is a work in progress.  
+
 
 #### Shorting pins on flash chip
 
