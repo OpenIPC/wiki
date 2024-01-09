@@ -85,4 +85,4 @@ When the build is complete, you will find the output in the `output/images/` dir
 ./uImage.hi3516ev200
 ```
 
-You can then use `rootfs.squashfs.* and uImage.*` with [sysupgrade](./sysupgrade.md).
+You can now use `rootfs.squashfs.*` and `uImage.*` with [sysupgrade](./sysupgrade.md).
