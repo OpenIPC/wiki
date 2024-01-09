@@ -75,3 +75,14 @@ Example: you want to build `ultimate` for `hi3516ev200`:
 
 `./building.sh hi3516ev200_ultimate`
 
+When the build is complete, you will find the output in the `output/images/` directory:
+
+```
+./rootfs.hi3516ev200.cpio
+./openipc.hi3516ev200-nor-ultimate.tgz
+./rootfs.squashfs.hi3516ev200
+./rootfs.hi3516ev200.tar
+./uImage.hi3516ev200
+```
+
+You can then use `rootfs.squashfs.* and uImage.*` with [sysupgrade](./sysupgrade.md).
