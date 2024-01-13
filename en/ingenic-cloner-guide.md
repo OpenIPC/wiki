@@ -32,4 +32,51 @@ by the embossed or drawn dot next to it.
 
 
 
+---
 
+**OpenIPC Cloner Application Guide**
+
+1. **Accessing Cloner**: 
+   - Navigate to the "cloner-2.5.xx-ubuntu_alpha" directory, with "xx" indicating your downloaded version of Cloner.
+
+2. **Preparing for Firmware**: 
+   - Create a new folder named `0_OpenIPC_Firmware` in this directory.
+
+3. **Launching Cloner**: 
+   - Open the `cloner` application. Ensure you are using version 2.5.43 or later for compatibility.
+
+4. **Initial Setup**: 
+   - Click "Load Image" and select the "openipc_cloner_bundle_xxx.zip" file.
+   - If the lock level is "2", change it to "0". Enter '!@#' (exclamation, at symbol, number sign, without any quotation marks) as the password. The 'Config' button should reappear.
+
+5. **Configuration Settings**: 
+   - Click the 'Config' button in the top-right corner.
+
+6. **Navigating Configuration**: 
+   - In the Config window, under the "Info" tab, access various configuration menus.
+
+7. **Device Specific Settings**: 
+   - Select 'Platform T'.
+   - Choose the appropriate SOC version for your device next to Platform 'T'.
+   - Under 'Board', select the relevant operation:
+     - `txxx_sfc_nor_reader_8MB.cfg` for 8MB flash chip devices.
+     - `txxx_sfc_nor_reader_16MB.cfg` for 16MB flash chip devices.
+     - `txxx_sfc_nor_writer.cfg` for writing individual partitions.
+     - `txxx_sfc_nor_writer_full.cfg` to flash the entire chip.
+   - Click "Save" to return to the main screen.
+
+8. **Starting the Program**: 
+   - With your desired profile loaded, click "Start" on the main screen.
+
+9. **Device Recognition Procedure**:
+   - Plug the USB cable into the device, leaving the other end unplugged.
+   - Short pins 5-6 as described earlier in this document.
+   - While maintaining the short, connect the USB cable to the computer. Wait 2 seconds, then release the short.
+   - It may take up to 30 seconds for Cloner to recognize the device. Progress bars on the main screen will indicate ongoing operations.
+
+10. **Completion**: 
+   - Once all progress bars turn green, the operations are complete.
+
+---
+
+Carefully follow these steps to ensure the Cloner application is set up correctly and operates as expected.
