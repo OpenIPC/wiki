@@ -23,3 +23,13 @@ by the embossed or drawn dot next to it.
 
 ![](../images/flash-pins.webp)
 ![](../images/flash-pins-2.webp)
+
+
+![image](https://github.com/OpenIPC/wiki/assets/12115272/632e5cb9-0b5d-406b-a268-7c4b65781828)
+![image](https://github.com/OpenIPC/wiki/assets/12115272/5b9fed70-031e-42ea-89b6-292cc2f34458)
+![image](https://github.com/OpenIPC/wiki/assets/12115272/27f0d101-059d-41a1-a444-43bd137cf1b9)
+![image](https://github.com/OpenIPC/wiki/assets/12115272/69c6f79d-1c88-45d9-b6a7-003345d72e56)
+
+
+
+
