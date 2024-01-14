@@ -31,7 +31,7 @@ OpenIPC Wiki
 - [Network perversions](en/network-perversions.md)
 - [System features](en/system-features.md)
 - [Majestic streamer](en/majestic-streamer.md)
-- [Microbe web interface](en/microbe-web.md)
+- [Web interface](en/web-interface.md)
 - [Upgrade firmware](en/sysupgrade.md)
 - [Image quality tuning](en/image-quality-tuning.md)
 - [Memory tuning](en/memory-tuning.md)
