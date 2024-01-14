@@ -1,7 +1,7 @@
 # OpenIPC Wiki
 [Table of Content](../README.md)
 
-Microbe web interface
+Web interface
 ---------------------
 
 Web Interface is available on port 85 as _http://camera-ip:85_.
