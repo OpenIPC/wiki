@@ -4,9 +4,10 @@
 Install Image Sensors
 -----------------------
 
-If your image sensor driver is not included in the firmware image, you can install it manually.
+If an image sensor driver is not included in the firmware image, you can install it manually.
+
 You need a sensor library and one sensor configuration file.
-You can find the files for your sensor following [this list](https://github.com/OpenIPC/wiki/blob/master/en/firmware-sensors.md).
+The files can be found following [this list](https://github.com/OpenIPC/wiki/blob/master/en/firmware-sensors.md).
 
 As an example the image sensor "sc223a" will be installed to a gk7205v210 board ( with openipc-gk7205v210-fpv-8mb.bin flashed).
 
