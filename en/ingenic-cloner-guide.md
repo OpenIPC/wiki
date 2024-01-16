@@ -72,7 +72,7 @@ by the embossed or drawn dot next to it.
 
 9. **Device Recognition Procedure**:
    - Plug the USB cable into the device, leaving the other end unplugged.
-   - Short pins 5-6 as described earlier in this document.
+   - Short pins 5-6 ON THE FLASH CHIP, not SoC or any other chip, use the photos as a reference, as described earlier in this document.
    - While maintaining the short, connect the USB cable to the computer. Wait 2 seconds, then release the short.
    - It may take up to 30 seconds for Cloner to recognize the device. Progress bars on the main screen will indicate ongoing operations.
 
