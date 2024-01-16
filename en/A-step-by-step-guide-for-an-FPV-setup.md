@@ -47,7 +47,7 @@ We're going to break this down into a few substeps and separate out the camera a
 
 First, let's examine the camera and all its various points of connection.
 
-![Camera Pin out](../images/sbs-Camera-Pinout.jpg)
+![Camera Pin out](../images/sbs-Camera-Pinout-v2.jpg)
 
 To flash OpenIPC we need to use the FTDI adapter to open up a console connection on the camera, and then break into the bootloader.  This sounds more complex than it is - all we have to do is solder up a few wires and press RETURN at the right point.
 
@@ -63,7 +63,7 @@ Ok, so whether you've soldered or used the tool, you now want to connect up to y
 
 If you are now thinking "Hang about, which ground pin?".  Let me show you my slightly refined pin-out diagram of the camera which I call the "useful pins"
 
-![Useful pins](../images/sbs-camera-userful-pins.jpg)
+![Useful pins](../images/sbs-camera-userful-pins-v2.jpg)
 
 What we have here are the pins that actually have some relevance to us when wiring up this camera.  We've already connected the TX/RX, so if you have an old 3 pins connector from an FPV camera it may be just the right size to put into the socket containing the GND on the left of the pictured board.  This is what I did at least.  If you don't have any JST connectors like this - get some. Where possible I like to avoid soldering around these tiny components as much as possible.
 
@@ -476,9 +476,13 @@ Then something is wrong.  The usual culprit is having D-/D+ crossed over, so if 
 
 ### Step 3 Generating and installing the key pairing for WFB-NG
 
-What is WFB-NG?  Well, WFB is wifibroadcast... you may remember that command from the previous step.  It was the project that really started off OpenSoure HD FPV.  WFB-NG is Wifibroadcast Next Generation - a new and improved version of wifibroadcast, then OpenIPC uses for FPV.  WFB-NG also uses encryption when sending/receiving data between the ground/air so it's necessary for us to generate some keys to use and then move them into the correct places for WFB-NG to work.  Login to your groundstation via ssh and run the command
+What is WFB-NG?  Well, WFB is wifibroadcast... you may remember that command from the previous step.  It was the project that really started off OpenSoure HD FPV.  WFB-NG is Wifibroadcast Next Generation - a new and improved version of wifibroadcast, then OpenIPC uses for FPV.  WFB-NG also uses encryption when sending/receiving data between the ground/air so it's necessary for us to generate some keys to use and then move them into the correct places for WFB-NG to work.
 
-`root@openipc# wfb__keygen`
+Default keys will be automatically installed after groundstation and camera was flashed, so video link will work without generating new key pair. Howewer defaut keys is not secure (it is ok to leave it for bench testing or if you dont care about encryption). If you want to setup individual true encryption follow next instruction.
+
+Login to your groundstation via ssh and run the command
+
+`root@openipc# wfb_keygen`
 
 Which should give you the output
 
@@ -511,6 +515,13 @@ and look for the drone.key on the camera and gs.key on the groundstation
 
 There's a bit more to the wifibroadcast configuration than just getting the keys correct.  There's a config file to edit on both the camera and the groundstation.  To do this it's necessary to use the text editor called vi.  This might be a bit new and strange for Windows users as it's not your typical editor and has a few commands for you to delete characters, insert, append things, and save the file.  There's a basic vi tutorial [here](https://www.guru99.com/the-vi-editor.html) that will hopefully help you new users through.  Luckily we don't have a huge amount of edits to make in this file.
 
+```
+You need this vi commands
+press i on keyboard to enter edit mode
+press esc on keyboard to exit edit mode after edited parameters
+press shift+zz to save file and exit vi
+```
+
 You'll open up the file for editing on both the camera and groundstation with the command
 
 `root@openipc# vi /etc/wfb.conf`
@@ -522,6 +533,14 @@ At this point I have to say that there are things I don't know about this file t
 Channel refers to the wifi channel that we will use.  Channel 14 is in the 2.4Ghz spectrum.  Whilst the wifi module I'm using as an example in this case does support both 2.4Ghz and 5.8Ghz, I want to use a 5.8 channel as I have antennas that support this.  The one I've chosen is channel 161, which is equivalent to the frequency 5805Mhz - which should be nicely tuned for the 5.8 antennas you may have lying around.  So in the case on both the groundstation and the camera, I changed this line to read 
 
 `channel=161`
+
+#### Configuring the TX power
+
+In the same wfb.conf file you will see 2 parameters with txpower setting. Availiable range for this paramaters is 20-58. Be carefull do not set maximum power when testing on bench as you can simply burn your wifi cards! Use fan for testing.
+
+txpower - for atheros wifi card
+
+tx_power_owerride - for 8812au card
 
 ### Step 5 Configuring vdec.conf on the groundstation
 
@@ -540,6 +559,7 @@ You'll also see some video modes to expect the incoming stream to be in.  We're 
 `mode=720p60`
 
 Ok, this file is done.  On to the next one.
+
 
 ### Step 6 Configuring the majestic.yaml file on the camera
 
@@ -634,11 +654,11 @@ I write this step-by-step guide after filming a YouTube tutorial which you can s
 This is the basic setup that gives you streaming video.  It's not ready for FPV yet - we need to connect our telemetry so the OSD gets populated and think about how to stuff that large camera in a model.  I'll be tackling this at a later date.
 
 
+### Powering camera by 5 volt
 
+To power your camera by 5 volts power supply, you should solder wire as shown on picture below.
 
-
-
-
+![5v power](../images/camera-5v.jpg)
 
 
 
