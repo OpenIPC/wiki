@@ -32,7 +32,7 @@ GPIO:
 
 | MODEL     | IRCUT1 | IRCUT2 | IR LED1 | IR LED2 | WIFI   | LED1   | LED2   | SPEAKER | TF_EN  | TF_CD  | SD_ABLE | SD_PWR |BUTTON1 | BUTTON2 | SUB1G  | USB    |
 |-----------|--------|--------|---------|---------|--------|--------|--------|---------|--------|--------|---------|--------|--------|---------|--------|--------|
-| WYZEC2    | GPIO26 | GPIO25 | GPIO49  |         | GPIO62 | GPIO38 | GPIO39 | GPIO63  | GPIO43 | GPIOXX | GPIO48  |        | GPIO46 |         |        | GPIO47 |
+| WYZEC2    | GPIO25 | GPIO26 | GPIO49  |         | GPIO62 | GPIO38 | GPIO39 | GPIO63  | GPIO43 | GPIOXX | GPIO48  |        | GPIO46 |         |        | GPIO47 |
 | WYZECP1   | GPIO26 | GPIO25 | GPIO49  |         | GPIO62 | GPIO38 | GPIO39 | GPIO63  | GPIO43 | GPIOXX | GPIO48  |        | GPIO46 |         |        | GPIO47 |
 | WYZEC3    | GPIO53 | GPIO52 | GPIO47  | GPIO49  | GPIO57 | GPIO38 | GPIO39 | GPIO63  | GPIO50 | GPIO62 | GPIO48  |        | GPIO51 |         |        |        |
 | WYZEDBV1  | GPIO53 | GPIO52 | PWM2    |         | GPIO57 | GPIO38 | GPIO39 | GPIO58  |        |        | GPIO62  |        | GPIO06 | GPIO07  | GPIO61 |        |
