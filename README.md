@@ -31,7 +31,7 @@ OpenIPC Wiki
 - [Network perversions](en/network-perversions.md)
 - [System features](en/system-features.md)
 - [Majestic streamer](en/majestic-streamer.md)
-- [Microbe web interface](en/microbe-web.md)
+- [Web interface](en/web-interface.md)
 - [Upgrade firmware](en/sysupgrade.md)
 - [Image quality tuning](en/image-quality-tuning.md)
 - [Memory tuning](en/memory-tuning.md)
@@ -45,11 +45,13 @@ OpenIPC Wiki
 
 ### FPV
 
+- [A Step-by-Step guide to configure an FPV camera and Groundstation](en/A-step-by-step-guide-for-an-FPV-setup.md)
 - [Steps from buy to fly](en/fpv-from-buy-to-fly.md)
 - [OpenIPC as FPV system](en/fpv.md)
 - [Sigmastar FPV devices](en/fpv-sigmastar.md)
 - [Ubuntu based groundstation](en/fpv-gs-ubuntu.md)
 - [OrangePI 5 Ubuntu based groundstation](en/fpv-ground-orange_pi5.md)
+- [A selection of OpenIPC videos on YouTube](en/fpv-youtube.md)
 
 ### Troubleshooting
 
@@ -62,6 +64,7 @@ OpenIPC Wiki
 
 - [Equipment for flashing](en/equipment-flashing.md)
 - [CH341A programmer voltage fix](en/hardware-programmer-ch341a-voltage-fix.md)
+- [Flash Chip Interfacing](en/flash-chip-interfacing.md)
 
 ### Development
 
@@ -100,6 +103,7 @@ OpenIPC Wiki
 - [ATOM Cam / Hualai / Wyze](en/device-wyze-integration.md)
 - [Digitus DN-16048 Optizoom](en/device-digitus-dn16048.md)
 - [XiongMai IPG-53H20AF](en/device-ipg-53h20af.md)
+- [LSC Smart Connect Video Doorbell (2021)](en/device-lsc-smart-connect-video-doorbell-2021.md)
 
 ### Software
 
