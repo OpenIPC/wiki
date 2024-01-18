@@ -27,6 +27,7 @@ OpenIPC Wiki
 ### Usage
 
 - [Network settings](en/network-settings.md)
+- [Adding a wifi driver to your firmware](en/adding-wifi-driver.md)
 - [Wireless settings](en/wireless-settings.md)
 - [Network perversions](en/network-perversions.md)
 - [System features](en/system-features.md)
