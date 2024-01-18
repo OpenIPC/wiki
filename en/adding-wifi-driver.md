@@ -89,4 +89,4 @@ You can now use `rootfs.squashfs.*` and `uImage.*` with [sysupgrade](./sysupgrad
 
 *For additional wifi configuration, see [wireless settings](./wireless-settings.md).*
 
-*For more information about building OpenIPC, see [building](./building.md).*
+*For more information about building OpenIPC from source, see [building](./building.md).*
