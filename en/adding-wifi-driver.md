@@ -3,11 +3,11 @@
 
 Adding a wifi driver to your firmware
 ---
-Since most cameras have very little flash memory, openipc images don't contain many wifi drivers, as they can easily be 1.5MB+ per driver.
+Since most cameras have very little flash memory, OpenIPC firmware images don't contain many wifi drivers, as they can easily be 1.5MB+ per driver.
 This means that in many cases, you will have to add the appropriate wifi driver to your firmware image.
 
 ### Step 1: preparing the build environment
-You will need a Linux environment. First download the openipc firmware repository:
+You will need a Linux environment. First download the OpenIPC firmware repository:
 
 ```
 git clone https://github.com/OpenIPC/firmware.git openipc-firmware
@@ -52,7 +52,7 @@ BR2_PACKAGE_RTL8812AU_OPENIPC
 Take note of the `BR2_PACKAGE` variable for the driver you need.
 
 ### Step 3: add BR2_PACKAGE variable to your firmware configuration
-The firmware configuration files are ordered per chipset in the `br-ext-chip-*`directories. Move into the directory for the chipset you are building for, then move into the `/configs/` directory.
+The firmware configuration files are ordered per chipset in the `br-ext-chip-*`directories. Navigate to the directory for the chipset you are building for, then navigate to the `/configs/` directory.
 
 Example: you have a hisilicon chipset:
 
@@ -85,4 +85,8 @@ When the build is complete, you will find the output in the `output/images/` dir
 ./uImage.hi3516ev200
 ```
 
-You can now use `rootfs.squashfs.*` and `uImage.*` with [sysupgrade](./sysupgrade.md).
+You can now use `rootfs.squashfs.*` and `uImage.*` with [sysupgrade](./sysupgrade.md) or your preferred update mechanism.
+
+*For additional wifi configuration, see [wireless settings](./wireless-settings.md).*
+
+*For more information about building OpenIPC, see [building](./building.md).*
