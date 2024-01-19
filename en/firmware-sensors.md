@@ -32,3 +32,8 @@ or even that it will be included with the final binary for that SoC. Some additi
 - [Sigmastar SSC335](https://github.com/OpenIPC/firmware/tree/master/general/package/sigmastar-osdrv-ssc335/files/sensor)
 - [Xiongmai XM510](https://github.com/OpenIPC/firmware/tree/master/general/package/xiongmai-osdrv-xm510/files/sensor)
 - [Xiongmai XM530](https://github.com/OpenIPC/firmware/tree/master/general/package/xiongmai-osdrv-xm530/files/sensor)
+
+Sensor Driver Installation Example
+----------------------------------
+
+- [Install sensor sc223a to soc gk7205v210](firmware-sensor-install-sc223a.md)
