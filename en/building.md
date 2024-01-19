@@ -92,6 +92,24 @@ total 35628
 -rw-r--r-- 1 paul paul  1597586 Nov 22 06:02 uImage.t10
 ```
 
+### Installing the firmware.
+
+After you build your custom firmware, you need to install it on the camera.
+You can do it in two ways:
+1. Use Advanced Install instructions as you did first time you flashed the camera: copy the build files to your TFTP server and then do the flashing procedure as explained in specific Advanced Instructions for your camera;
+2. Manual install: boot up your camera, connect it to your local network and then using scp copy the two files (rootfs and uImage) to your camera /tmp folder (/tmp folder is a temporary storage, as big as your camera free RAM).
+Then, run this commands:
+
+```sysupgrade --kernel=/tmp/uImage.... --rootfs=/tmp/rootfs.... -z
+```
+Replace uImage... and rootfs... with your actual filenames resulted from the build process.
+You can add -n key if you need to clean overlay after update (reset all settings to default).
+After the instalation is complete, the camera will reboot automatically.
+Connect again to the camera and run this command:
+
+```firstboot
+```
+
 Anatomy of the project
 ----------------------
 
