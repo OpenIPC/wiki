@@ -17,10 +17,11 @@ curl -s -L -o /usr/lib/sensors/libsns_sc223a.so https://github.com/OpenIPC/firmw
 curl -s -L -o /etc/sensors/sc223a_i2c_1080p.ini https://github.com/OpenIPC/firmware/raw/master/general/package/goke-osdrv-gk7205v200/files/sensor/config/sc223a_i2c_1080p.ini
 ```
 
-Adjust the fps value in /etc/majestic.yaml according to your sensor specs:
+Adjust the fps value in /etc/majestic.yaml according to your sensor specs. 
+Search for "Isp_FrameRate" in file [/etc/sensors/sc223a_i2c_1080p.ini](https://github.com/OpenIPC/firmware/raw/master/general/package/goke-osdrv-gk7205v200/files/sensor/config/sc223a_i2c_1080p.ini).
 
 ```sh
-cli -s .video0.fps 25
+cli -s .video0.fps 30
 ```
 
 Restart streamer:
