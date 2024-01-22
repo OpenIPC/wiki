@@ -100,14 +100,16 @@ You can do it in two ways:
 2. Manual install: boot up your camera, connect it to your local network and then using scp copy the two files (rootfs and uImage) to your camera /tmp folder (/tmp folder is a temporary storage, as big as your camera free RAM).
 Then, run this commands:
 
-```sysupgrade --kernel=/tmp/uImage.... --rootfs=/tmp/rootfs.... -z
+```
+sysupgrade --kernel=/tmp/uImage.... --rootfs=/tmp/rootfs.... -z
 ```
 Replace uImage... and rootfs... with your actual filenames resulted from the build process.
 You can add -n key if you need to clean overlay after update (reset all settings to default).
 After the instalation is complete, the camera will reboot automatically.
-Connect again to the camera and run this command:
+Connect again to the camera and run this command (same as -n in the previous command):
 
-```firstboot
+```
+firstboot
 ```
 
 Anatomy of the project
