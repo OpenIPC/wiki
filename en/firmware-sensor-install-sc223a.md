@@ -24,8 +24,9 @@ Search for "Isp_FrameRate" in file [/etc/sensors/sc223a_i2c_1080p.ini](https://g
 cli -s .video0.fps 30
 ```
 
-Restart streamer:
+(Re)start streamer:
 
 ```sh
-killall -1 majestic
+killall majestic
+majestic
 ```
