@@ -67,13 +67,13 @@ Example: you want to add the RTL8188EUS driver:
 
 ### Step 4: Build your firmware
 Return to the root directory of the openipc firmware directory `openipc-firmware/`.
-Run `./building.sh` and select the configuration you have edited in the previous step.
+Run `make` and select the configuration you have edited in the previous step.
 
-Alternatively, you can run `./building.sh <your_config>`, where `<your_config>` is the name of the config file you have just edited, minus the `_defconfig`
+Alternatively, you can run `make BOARD=<your_config>`, where `<your_config>` is the name of the config file you have just edited, minus the `_defconfig`
 
 Example: you want to build `ultimate` for `hi3516ev200`:
 
-`./building.sh hi3516ev200_ultimate`
+`make BOARD=hi3516ev200_ultimate`
 
 When the build is complete, you will find the output in the `output/images/` directory:
 
