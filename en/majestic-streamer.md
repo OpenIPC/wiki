@@ -35,8 +35,21 @@ At the moment it is possible to change parameters in the configuration file via 
 This allows parameters to be changed with a single line in pseudo-dynamic mode on some platforms 
 simply by forcing a re-read of the configuration file.
 ```
-cli -s .video0.codec h264 ; cli -s .video0.fps 10 ; killall -1 majestic 
+cli -s .video0.codec h264 ; cli -s .video0.fps 10 ; killall -HUP majestic 
 ```
+
+### Experimental Control Features (not yet described in endpoints)
+
+```
+/metrics/gain
+```
+```
+/night/ircut
+```
+```
+/night/light
+```
+
 
 ### Auto day/night detection
 
