@@ -32,6 +32,7 @@ IPC Glossary
 - ICR - Infrared Cutfilter Removal
 - IP - Internet Protocol
 - IPC - IP Camera
+- IQ - Image Quality
 - IR - Infrared
 - ISP - Image Signal Processor
 - JPEG - Joint Photographic Experts Group (file format)
