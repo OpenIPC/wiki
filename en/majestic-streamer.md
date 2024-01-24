@@ -53,6 +53,19 @@ cli -s .video0.codec h264 ; cli -s .video0.fps 10 ; killall -HUP majestic
 
 ### Auto day/night detection
 
+If the light sensor gpio is set, it will use the default mode.
+
+The settings work like this:
+```day < [minThreshold] | hysteresis | [maxThreshold] < night```
+
+If the sensor gain is 1024 on a bright day the minThreshold could be set to 2000,
+if the sensor gain is 32000 on a dark night the maxThreshold could be set to 10000.
+
+```
+cli -s .nightMode.minThreshold 10
+cli -s .nightMode.maxThreshold 50
+```
+
 The experiments continue...
 
 
