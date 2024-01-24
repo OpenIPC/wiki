@@ -35,10 +35,36 @@ At the moment it is possible to change parameters in the configuration file via 
 This allows parameters to be changed with a single line in pseudo-dynamic mode on some platforms 
 simply by forcing a re-read of the configuration file.
 ```
-cli -s .video0.codec h264 ; cli -s .video0.fps 10 ; killall -1 majestic 
+cli -s .video0.codec h264 ; cli -s .video0.fps 10 ; killall -HUP majestic 
 ```
 
+### Experimental Control Features (not yet described in endpoints)
+
+```
+/metrics/gain
+```
+```
+/night/ircut
+```
+```
+/night/light
+```
+
+
 ### Auto day/night detection
+
+If the light sensor gpio is set, it will use the default mode.
+
+The settings work like this:
+```day < [minThreshold] | hysteresis | [maxThreshold] < night```
+
+If the sensor gain is 1024 on a bright day the minThreshold could be set to 2000,
+if the sensor gain is 32000 on a dark night the maxThreshold could be set to 10000.
+
+```
+cli -s .nightMode.minThreshold 10
+cli -s .nightMode.maxThreshold 50
+```
 
 The experiments continue...
 
