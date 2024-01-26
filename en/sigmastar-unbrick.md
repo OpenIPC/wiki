@@ -16,7 +16,7 @@ Sigmastar unbrick
 ---
 
 **Download snander-mstar:**
-- https://github.com/viktorxda/snander-mstar/releases
+- https://github.com/openipc/snander-mstar/releases
 
 ---
 
@@ -36,7 +36,7 @@ snander -l 0x200000 -e
 <img src="../images/sigmastar-erase.webp">
 
 **Write the new uboot file:**
-- https://github.com/OpenIPC/firmware/releases/tag/latest
+- https://github.com/openipc/firmware/releases/tag/latest
 ```
 snander -w u-boot-ssc338q-nand.bin
 ```
