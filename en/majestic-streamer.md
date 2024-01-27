@@ -41,12 +41,12 @@ cli -s .video0.codec h264 ; cli -s .video0.fps 10 ; killall -HUP majestic
 ### Experimental Control Features (not yet described in endpoints)
 
 ```
-/metrics/gain
+/metrics/isp
+/metrics/venc
+/metrics/motion
 ```
 ```
 /night/ircut
-```
-```
 /night/light
 ```
 
