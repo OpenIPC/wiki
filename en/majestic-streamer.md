@@ -53,6 +53,8 @@ cli -s .video0.codec h264 ; cli -s .video0.fps 10 ; killall -HUP majestic
 
 ### Auto day/night detection
 
+If these variables are used, it is possible to replace the used sandbox scripts.
+Works only for simple day/night schemes with minimal configuration and in the absence of mentions of irSensorPin in the majestic.yaml configuration file.
 If the light sensor gpio is set, it will use the default mode.
 
 The settings work like this:
