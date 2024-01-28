@@ -13,3 +13,6 @@ nfsboot=tftp 0x42000000 uImage;setenv setargs setenv bootargs ${bootargsnfs};run
 
 run nfsboot
 ```
+
+How to boot OpenIPC with NFS and TFTP without replacing stock firmware (russian post):
+https://habr.com/ru/companies/ruvds/articles/774482/
