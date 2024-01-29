@@ -6,21 +6,21 @@ Board specific GPIO settings list
 
 ### Anjoy / Anjvision boards
 
-| Processor   | IRCUT1 | IRCUT2 | LIGHT | RESET | I/O | TESTED BOARDS    |
-|-------------|--------|--------|-------|-------|-----|------------------|
-| SSC30KQ     | 23     | 24     | 60    | 10    |     | MC-L12, MC-L12B  |
-| SSC335      | 78     | 79     | 61    | 66    | 52  | MS-J10, YM200J10 |
-| SSC337      | 78     | 79     | 61    | 66    | 52  | MC-F40, YM-J10D  |
-| SSC337DE    | 78     | 79     | 61    | 66    |     | MC500L8          |
-| SSC338Q     | 23     | 24     | 60    | 10    |     | MC800S-V3        |
+| Processor   | IRCUT1 | IRCUT2 | LIGHT | RESET | I/O | TESTED BOARDS    |  AUDIO OUTPUT  |
+|-------------|--------|--------|-------|-------|-----|------------------|                |
+| SSC30KQ     | 23     | 24     | 60    | 10    |     | MC-L12, MC-L12B  |                |
+| SSC335      | 78     | 79     | 61    | 66    | 52  | MS-J10, YM200J10 |                |
+| SSC337      | 78     | 79     | 61    | 66    | 52  | MC-F40, YM-J10D  |                |
+| SSC337DE    | 78     | 79     | 61    | 66    |     | MC500L8          |                | 
+| SSC338Q     | 23     | 24     | 60    | 10    |     | MC800S-V3        |    39          |
 
 ### CamHi / Xin boards
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA | UART2_RTS/RS485_DE | UART2_RXD/RS485_RO | UART2_TXD/RS485_DI | AUDIO_ENA | RESET | PWM | SD_VCC | BOARD    |
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA | UART2_RTS/RS485_DE | UART2_RXD/RS485_RO | UART2_TXD/RS485_DI | AUDIO_ENA | RESET | PWM | SD_VCC | BOARD    | 
 |-------------|--------|--------|----------|-------|---------|--------------------|--------------------|--------------------|-----------|-------|-----|--------|----------|
 | Gk7205v200  | 14     | 15     | 8        | 4     | 9i      | 54                 | 12                 | 13                 | 12        | 50    |     |        | 2M-M2103 |
 | Gk7205v200  | 13     | 15     | 8        | 4     | 9i      | 54                 | 12                 | 13                 | 12        | 50    |     |        | 2G-M3072 |
-| Gk7205v300  | 10     | 11     | 8        | 72    | 7i      |                    |                    |                    | 52        | 42    |
+| Gk7205v300  | 10     | 11     | 8        | 72    | 7i      |                    |                    |                    | 52        | 42    | 
 |             |        |        |          |       |         |
 | Hi3516Cv100 |        |        |          |       |         |
 | Hi3516Cv200 |        |        |          |       |         |
@@ -29,7 +29,7 @@ Board specific GPIO settings list
 | Hi3516Ev200 |        |        |          |       | 9i      |
 | Hi3516Ev300 | 10     | 11     |          |       | 7i      | 63                 |                    |                    |           | 42    |
 | Hi3518Ev100 | 43     |        | 74       |       |         |
-| Hi3518Ev200 | 1      | 2      | 48       |       |         |
+| Hi3518Ev200 | 1      | 2      | 48       |       |         | 
 | Hi3518Ev300 |        |        |          |       |         |
 |             |        |        |          |       |         |
 | T31         | 58     | 57     |          | 49    | 61i     | 53                 | 55                 | 56                 |           | 11    | 50  | 62     |
@@ -61,7 +61,7 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 ### GSA boards
 
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA |
-|-------------|--------|--------|----------|-------|---------|
+|-------------|--------|--------|----------|-------|---------| 
 | T31L        | 58     | 57     |          |       |         |
 
 
