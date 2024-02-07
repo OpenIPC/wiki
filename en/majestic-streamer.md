@@ -123,6 +123,16 @@ Examples of other addresses for different services:
 
 We ask that you add information about other popular services here, thank you.
 
+### ONVIF
+
+For basic ONVIF to work correctly, you need to enable it and add a user to the system as shown in the example:
+
+```
+cli -s .onvif.enabled true
+adduser viewer -s /bin/false -D -H
+echo viewer:123456 | chpasswd
+```
+
 ###  ROI
 
 Detection zones of two types:
