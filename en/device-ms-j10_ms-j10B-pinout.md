@@ -65,6 +65,10 @@ MS-J10    MS-J10B
 ||2|uart RX |ttyS0
 ||
 
+## Additional
+|desc|use|
+|---|---|
+cpu temp|  cat /sys/class/mstar/msys/TEMP_R|
 
 
 
