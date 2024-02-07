@@ -1,5 +1,5 @@
 MS-J10    MS-J10B
-![MS-J10_PCB_pinout](https://github.com/sansarus/wiki/assets/6712863/b409989c-2e96-42fa-9d09-d50adcf7ecd8)
+![MS-J10_PCB_pinout](/images/board-anjoy-j10b-pinout.jpg)
 
 ## Hardware
 
