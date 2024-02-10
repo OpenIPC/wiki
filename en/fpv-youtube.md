@@ -89,3 +89,10 @@ A selection of OpenIPC videos on YouTube
 ### Joshua Bardwell
 
 - [OpenIPC - FPV DRONE NEWS AUG 29 2023](https://www.youtube.com/watch?v=MRxxOGuZUq8&t=2298s)
+
+### Yuji Inoue
+- [OpenIPC FieldTest2](https://www.youtube.com/watch?v=fJDmGjyDB8I&t=8s)
+- [2K(2560x1440),60FPS ,OpenIPC](https://www.youtube.com/watch?v=F5DM_pRZzpM&t=75s)
+- [OpenIPC FieldTest3](https://www.youtube.com/watch?v=U0aIkhm9TdM)
+- [OpenIPC FieldTest4](https://www.youtube.com/watch?v=4iRVPW_Vqng)
+
