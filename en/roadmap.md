@@ -4,6 +4,11 @@
 Roadmap
 -------
 
+### Quick access to Git logs for popular repositories:
+
+- [firmware](https://github.com/OpenIPC/firmware/commits/master), [builder](https://github.com/OpenIPC/builder/commits/master), [coupler](https://github.com/OpenIPC/coupler/commits/main)
+- [ipctool](https://github.com/OpenIPC/ipctool/commits/master), [webui](https://github.com/OpenIPC/webui/commits/master), [webui-next](https://github.com/OpenIPC/webui-next/commits/master), [wiki](https://github.com/OpenIPC/wiki/commits/master)
+
 ### Planned changes:
 
 - Add webui-next as default interface.
@@ -15,6 +20,14 @@ Roadmap
 - Update buildroot to upcoming 2024 version.
 - Update wiki build commands.
 - Update wiki majestic commands.
+
+### 12.02.2024:
+- Added an enhancement that allows Majestic to run cgi scripts detached from the sdk.
+- Fixed an issue that prevented rebinding the rtsp port.
+- Fixed a problem with the Majestic webserver home directory.
+- Fixed an exception on the codec selection.
+- Improved stability if majestic.yaml is not available.
+- Reduced time frame for Majestic shutdown on Ingenic devices.
 
 ### 05.02.2024:
 - Added mjpeg preview to webui-next.
