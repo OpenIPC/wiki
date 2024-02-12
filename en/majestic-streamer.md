@@ -68,8 +68,6 @@ cli -s .nightMode.minThreshold 10
 cli -s .nightMode.maxThreshold 50
 ```
 
-The experiments continue...
-
 
 ### Motion detection
 
@@ -85,6 +83,12 @@ Enable motion detection in `majestic` configuration:
 ```
 cli -s .motionDetect.enabled true
 cli -s .motionDetect.debug true
+```
+
+Enable external plugin system:
+
+```
+cli -s .system.plugins true
 ```
 
 Reboot the camera and restart `majestic` in the foreground:
