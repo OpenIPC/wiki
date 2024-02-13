@@ -261,4 +261,48 @@ add:
 
 
 
+-------------------------------------------------------------------------------------------
 
+Pulling the DVR over IP -- a basic media server using nginx
+
+
+	sudo apt install nginx-light
+
+
+give permissions up the file tree to our video directory
+
+
+	sudo chmod o+x /home /home/ubuntu /home/ubuntu/Videos
+
+
+
+
+backup the default loading page and replace it with our own
+
+	sudo mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.old
+
+	sudo nano /etc/nginx/sites-available/default
+
+Add the following, but replace x.x.x.x with your system's network IP address:
+	
+
+
+	server {
+    	    listen 8080;
+    	    listen [::]:8080;
+
+     	   server_name x.x.x.x;
+
+     	   root /home/ubuntu/Videos;
+      	  autoindex on;
+
+	}
+
+
+restart nginx to initate the changes
+
+	sudo systemctl restart nginx
+
+
+
+Your DVR is now available for download at x.x.x.x:8080 in a browser
