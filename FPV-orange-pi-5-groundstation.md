@@ -60,7 +60,7 @@ enter the following line-by-line
 
 reboot device 
 
-TODO: or figure out how to load the driver without a full reboot
+TODO: or figure out how to load the driver without a full reboot. Try "modprobe rtl8812au"
 
 
 ----------------------------------------------------------------------
@@ -221,7 +221,20 @@ note: This script relies on a push button connected between pin 5 and GND. You w
         if [ $(gpio read $GPIO_PIN) -eq 0 ]; then
         if [ $RUNNING -eq 0 ]; then
                 current_date=$(date +'%m-%d-%Y_%H-%M-%S')
-                gst-launch-1.0 -e udpsrc port=5600 caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H265' ! rtph265depay ! h265parse ! tee name=t ! queue ! mppvideodec ! videoconvert ! autovideosink sync=false>
+		
+		gst-launch-1.0 -e \
+                udpsrc port=5600 caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H265' ! \
+                rtph265depay ! \
+                h265parse ! \
+                tee name=t ! \
+                queue ! \
+                mppvideodec ! \
+                videoconvert ! \
+                autovideosink sync=false t. ! \
+                queue ! \
+                matroskamux ! \
+                filesink location=record_${current_date}.mkv &
+		
                 RUNNING=$!
         else
                 kill $RUNNING
