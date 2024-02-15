@@ -661,5 +661,21 @@ To power your camera by 5 volts power supply, you should solder wire as shown on
 ![5v power](../images/camera-5v.jpg)
 
 
+### Utilizing 2nd UART for telemetry
 
+It is not so convenient to use those small pads for telemetry. Here is instruction how to enable 2nd UART port.
 
+1. edit /etc/init.d/S95majestic, insert next strings like on screenshot
+
+```
+devmem 0x1F207890 16 0x8
+stty -F /dev/ttyS2 115200 raw -echo -onlcr
+```
+   
+![first step](../images/uart2-1.png)
+
+2. edit /etc/telemetry.conf Change ttyS0 to ttyS2 (see the screenshot)
+   
+![second step](../images/uart2-2.png)
+
+Make sure you set mavlink telemetry with 115200 boudrate in your FC
