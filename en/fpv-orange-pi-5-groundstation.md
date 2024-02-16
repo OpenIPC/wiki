@@ -6,7 +6,7 @@ Download Ubuntu Server ISO and flash to device  -- https://github.com/Joshua-Rie
 
 Go ahead and pull some packages we will need, too.
 
-`sudo apt install dkms python3-all-dev fakeroot network-manager cmake meson`
+`sudo apt install --no-install-recommends dkms python3-all-dev fakeroot network-manager cmake meson`
 
 Set system local timezone - replace region and city with your usecase
 
@@ -24,7 +24,7 @@ Gsteamer setup with MPP
 
 Download and install gstreamer
 
-`sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5`
+`sudo apt --no-install-recommends install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5`
 
 
 
