@@ -6,7 +6,15 @@ Download Ubuntu Server ISO and flash to device  -- https://github.com/Joshua-Rie
 
 Go ahead and pull some packages we will need, too.
 
-`sudo apt install dkms python3-all-dev fakeroot network-manager`
+`sudo apt install --no-install-recommends dkms python3-all-dev fakeroot network-manager cmake meson`
+
+Set system local timezone - replace region and city with your usecase
+
+`ln -sf /usr/share/zoneinfo/<region>/<city> /etc/localtime`
+
+set hostname
+
+`sudo nano /etc/hostname`
 
 
 ***
@@ -16,7 +24,7 @@ Gsteamer setup with MPP
 
 Download and install gstreamer
 
-`sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5`
+`sudo apt --no-install-recommends install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5`
 
 
 
@@ -277,6 +285,19 @@ add:
 
 	sudo /home/ubuntu/dvr.sh &
 
+To display the video stream to the screen borderless we do the following.
+
+`sudo nano /etc/xdg/openbox/rc.xml`
+
+locate the line `<keepBorder>yes</keepBorder>` and replace it with `<keepBorder>no</keepBorder>`
+
+then at the end of the file add:
+
+	<applications>
+	     <application class="*">
+	         <decor>no</decor>
+	    </application>
+	</applications>
 
 
 ***
@@ -318,6 +339,128 @@ restart nginx to initate the changes
 
 `sudo systemctl restart nginx`
 
-
-
 Your DVR is now available for download at x.x.x.x:8080 in a browser
+
+***
+
+Automatic transcoding of the mkv DVR to hevc mp4
+
+If you wish to make an apple pie from scratch, you must first invent the universe -- Our gstreamer packages don't handle muxing of mp4 h265 video, and our apt-get ffmpeg package does not include rkmpp hardware acceleration.... so we're going to build ffmpeg with mpp support with the help of https://github.com/nyanmisaka/ffmpeg-rockchip
+
+We can do this with 3 simple installation scripts.
+
+First we build MPP from sources, as our current MPP package is older.
+
+Second we build RGA from sources for the same reason.
+
+Third we build ffmpeg with rkmpp and rkrga support.
+
+`sudo nano buildMPP.sh`
+
+	mkdir -p ~/MPP && cd ~/MPP
+	git clone -b jellyfin-mpp --depth=1 https://github.com/nyanmisaka/mpp.git rkmpp
+	pushd rkmpp
+	mkdir rkmpp_build
+	pushd rkmpp_build
+	cmake \
+	    -DCMAKE_INSTALL_PREFIX=/usr \
+	    -DCMAKE_BUILD_TYPE=Release \
+	    -DBUILD_SHARED_LIBS=ON \
+	    -DBUILD_TEST=OFF \
+	    ..
+	make -j $(nproc)
+	sudo make install
+ 
+
+`sudo nano buildRGA.sh`
+
+	mkdir -p ~/RGA && cd ~/RGA
+	git clone -b jellyfin-rga --depth=1 https://github.com/nyanmisaka/rk-mirrors.git rkrga
+	meson setup rkrga rkrga_build \
+	    --prefix=/usr \
+	    --libdir=lib \
+	    --buildtype=release \
+	    --default-library=shared \
+ 	   -Dcpp_args=-fpermissive \
+ 	   -Dlibdrm=false \
+ 	   -Dlibrga_demo=false
+	meson configure rkrga_build
+	sudo ninja -C rkrga_build install
+
+`sudo nano buildFFMPEG.sh`
+
+	mkdir -p ~/ffmpeg && cd ~/ffmpeg
+	git clone --depth=1 https://github.com/nyanmisaka/ffmpeg-rockchip.git ffmpeg
+	cd ffmpeg
+	./configure --prefix=/usr --enable-gpl --enable-version3 --enable-libdrm --enable-rkmpp --enable-rkrga
+	make -j $(nproc)
+
+	./ffmpeg -decoders | grep rkmpp
+	./ffmpeg -encoders | grep rkmpp
+	./ffmpeg -filters | grep rkrga
+
+	sudo make install
+
+
+Make the scripts executable 
+
+`sudo chmod +x buildMPP.sh buildRGA.sh buildFFMPEG.sh`
+
+And run them one at a time:
+
+`./buildMPP.sh`
+
+`./buildRGA.sh`
+
+`./buildFFMPEG.sh`
+
+Now we can use ffmpeg to hardware transcode the mkv video files to hevc mp4. We can have this automatically happen at the end of each recording by augmenting the dvr.sh script. Open the dvr.sh script in your /home/ubuntu directory, find the line `kill $RUNNING` and add the following two lines below it.
+
+	sleep 0.2
+ 	ffmpeg -hwaccel rkmpp -i record_${current_date}.mkv -c:v hevc_rkmpp record_${current_date}.mp4
+
+The full script should look like this:
+
+	#!/bin/bash
+
+	export DISPLAY=:0
+
+	xset s off -dpms
+
+	GPIO_PIN=5
+	RUNNING=0
+	gpio mode $GPIO_PIN up
+
+	cd /home/ubuntu/Videos
+
+	while true; do
+	if [ $(gpio read $GPIO_PIN) -eq 0 ]; then
+	if [ $RUNNING -eq 0 ]; then
+		current_date=$(date +'%m-%d-%Y_%H-%M-%S')
+		
+		gst-launch-1.0 -e \
+		udpsrc port=5600 caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H265' ! \
+		rtph265depay ! \
+		h265parse ! \
+		tee name=t ! \
+		queue ! \
+		mppvideodec ! \
+		videoconvert ! \
+		autovideosink sync=false t. ! \
+		queue ! \
+		matroskamux ! \
+		filesink location=record_${current_date}.mkv &
+	
+ 		RUNNING=$!
+	else
+		kill $RUNNING
+		RUNNING=0
+		sleep 0.2
+		ffmpeg -hwaccel rkmpp -i record_${current_date}.mkv -c:v hevc_rkmpp record_${current_date}.mp4
+	fi
+	sleep 0.2
+	fi
+	sleep 0.1
+	done
+
+ ***
