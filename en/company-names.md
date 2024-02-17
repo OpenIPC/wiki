@@ -19,3 +19,6 @@
 - Shenzhen Zhongwei Century Technology Co., Ltd.
 - Shenzhen Hichip Vision Technology Co., Ltd.
 - Chengdu Powerview Science and Technology Co., Ltd.
+- Nanjing Ajcloud Infotech Co., Ltd
+- Ajcloud International Inc.
+- Wansview Technology Co., Ltd.
