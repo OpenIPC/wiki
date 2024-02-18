@@ -80,10 +80,12 @@ A selection of OpenIPC videos on YouTube
 
 - [OpenIPC FPV - Prepare GroundStation: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
 - [OpenIPC FPV - NVR Ground Station](https://www.youtube.com/watch?v=vSJiUanWA9I)
+- [OpenIPC FPV - Camera flashing SSC338Q](https://www.youtube.com/watch?v=94QiUDmGFZI)
 - [OpenIPC FPV - Test Flight](https://www.youtube.com/watch?v=-4f7XHnu3mY)
+- [OpenIPC FPV - Old laptop screeen as Ground Station](https://www.youtube.com/watch?v=OwUh8RkmJ24)
 - [OpenIPC FPV - connections](https://www.youtube.com/watch?v=LOD5xsAJu5o)
-- [OpenIPC FPV - key configuration](https://m.youtube.com/watch?v=1_t_HDdHPho)
-- [OpenIPC FPV - upgrade firmware offline](https://youtu.be/JF5auLHaPiw)
+- [OpenIPC FPV - key configuration](https://www.youtube.com/watch?v=1_t_HDdHPho)
+- [OpenIPC FPV - upgrade firmware offline](https://www.youtube.com/watch?v=JF5auLHaPiw)
 
 
 ### Joshua Bardwell
