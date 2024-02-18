@@ -13,6 +13,7 @@
 ### STEP 2
 ### STEP 3
 ### STEP 4
+- [OpenIPC FPV - Camera flashing SSC338Q](https://www.youtube.com/watch?v=94QiUDmGFZI)
 ### STEP 5
 - [OpenIPC FPV - NVR Ground Station](https://www.youtube.com/watch?v=vSJiUanWA9I)
 - [Introducing OpenIPC VRX Ground Station, the cheapest digital long range FPV system in the world](https://www.youtube.com/watch?v=aXJQIoBKjVE)
