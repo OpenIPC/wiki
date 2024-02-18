@@ -49,7 +49,12 @@ BR2_PACKAGE_RTL8733BU_OPENIPC
 BR2_PACKAGE_RTL8812AU_OPENIPC
 ```
 
-Take note of the `BR2_PACKAGE` variable for the driver you need.
+Take note of the `BR2_PACKAGE` variable for the driver you need. It may
+be useful to observe the boot messages from the original firmware to
+determine the network device and interface type since it may not be
+obvious from looking at the board. Seeing `atbm603x_wifi_usb` in the
+boot messages suggests that this camera has an `atbm603x` wifi device
+connected internally over USB.
 
 ### Step 3: add BR2_PACKAGE variable to your firmware configuration
 The firmware configuration files are ordered per chipset in the `br-ext-chip-*`directories. Navigate to the directory for the chipset you are building for, then navigate to the `/configs/` directory.
