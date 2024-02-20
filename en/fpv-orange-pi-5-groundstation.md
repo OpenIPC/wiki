@@ -1,4 +1,9 @@
-Download Ubuntu Server ISO and flash to device  -- https://github.com/Joshua-Riek/ubuntu-rockchip
+
+<h3>* A preinstalled image is now available here -- https://github.com/JohnDGodwin/OpenIPC_Groundstations/releases/tag/OrangePi5Plus</h3>
+
+***
+
+Download Ubuntu Server ISO and flash to device  -- `https://github.com/Joshua-Riek/ubuntu-rockchip`
 
 `sudo apt update`
 
@@ -6,7 +11,7 @@ Download Ubuntu Server ISO and flash to device  -- https://github.com/Joshua-Rie
 
 Go ahead and pull some packages we will need, too.
 
-`sudo apt install --no-install-recommends dkms python3-all-dev fakeroot network-manager cmake meson`
+`sudo apt install dkms python3-all-dev fakeroot cmake meson`
 
 Set system local timezone - replace region and city with your usecase
 
@@ -24,7 +29,7 @@ Gsteamer setup with MPP
 
 Download and install gstreamer
 
-`sudo apt --no-install-recommends install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5`
+`sudo apt --no-install-recommends install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-gl`
 
 
 
@@ -148,9 +153,7 @@ Plug in the camera and watch the packets come in, xlost should stay near zero wh
 graphical environment for gstreamer playback
 
 
-`sudo apt install xorg`
-
-`sudo apt install --no-install-recommends lightdm-gtk-greeter lightdm openbox`
+`sudo apt install --no-install-recommends xorg lightdm-gtk-greeter lightdm openbox`
 
 Then edit	
 
@@ -178,7 +181,7 @@ At this point, reboot and you will have to login with a keyboard at least once, 
 let's set the desktop wallpaper and write some startup scripts
 
 	
-`sudo apt install libimlib2-dev libx11-dev libxinerama-dev pkg-config make`
+`sudo apt install --no-install-recommends libimlib2-dev libx11-dev libxinerama-dev pkg-config make`
 
 `git clone https://github.com/himdel/hsetroot.git`
 
@@ -192,26 +195,33 @@ let's set the desktop wallpaper and write some startup scripts
 
 Save your desired background image to /home/ubuntu/desktop.png
 
+Make a scripts directory:
+
+`mkdir /home/ubuntu/scripts`
 
 a script to set the display resolution to 1280x720
 
 
-`sudo nano /home/ubuntu/setdisplay.sh`
+`sudo nano /home/ubuntu/scripts/setdisplay.sh`
 
 
  insert:
 
+
 	#/bin/bash
 	export DISPLAY=:0
 
+	#set your desired screen resolution here
+	MODE=1280x720
+
+
 	if [[ $(xrandr | awk '/HDMI-1/ {print $2}') == "connected" ]]; then
- 	xrandr --output HDMI-1 --mode 1280x720
+	        xrandr --output HDMI-1 --mode $MODE
 	fi
 	if [[ $(xrandr | awk '/HDMI-2/ {print $2}') == "connected" ]]; then
- 	xrandr --output HDMI-2 --mode 1280x720
+	        xrandr --output HDMI-2 --mode $MODE
 	fi
- 	exit 0
-
+	exit 0
 
 
 
@@ -226,7 +236,7 @@ Make Videos directory
 
 Make the script
 
-`sudo nano /home/ubuntu/dvr.sh`
+`sudo nano /home/ubuntu/scripts/dvr.sh`
 
  insert:
 
@@ -273,17 +283,20 @@ Make the script
 
 Make the scripts executable with chmod +x.
 
+`sudo chmod +x /home/ubuntu/scripts/dvr.sh /home/ubuntu/scripts/setdisplay.sh`
+
+
 Finally:
 
 `sudo nano /etc/xdg/openbox/autostart`
  
 add:	
 
-	bash /home/ubuntu/setdisplay.sh
+	bash /home/ubuntu/scripts/setdisplay.sh
 
 	hsetroot -cover /home/ubuntu/desktop.png &
 
-	sudo /home/ubuntu/dvr.sh &
+	sudo /home/ubuntu/scripts/dvr.sh &
 
 To display the video stream to the screen borderless we do the following.
 
@@ -414,7 +427,7 @@ And run them one at a time:
 
 `./buildFFMPEG.sh`
 
-Now we can use ffmpeg to hardware transcode the mkv video files to hevc mp4. We can have this automatically happen at the end of each recording by augmenting the dvr.sh script. Open the dvr.sh script in your /home/ubuntu directory, find the line `kill $RUNNING` and add the following two lines below it.
+Now we can use ffmpeg to hardware transcode the mkv video files to hevc mp4. We can have this automatically happen at the end of each recording by augmenting the dvr.sh script. Open the dvr.sh script in your /home/ubuntu/scripts directory, find the line `kill $RUNNING` and add the following two lines below it.
 
 	sleep 0.2
  	ffmpeg -hwaccel rkmpp -i record_${current_date}.mkv -c:v hevc_rkmpp record_${current_date}.mp4
