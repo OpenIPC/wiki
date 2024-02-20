@@ -58,7 +58,8 @@ OpenIPC Wiki
 ### Troubleshooting
 
 - [Network does not work](en/trouble-network.md)
-- [Majestic does not work, camera reboots](en/trouble-majestic.md)
+- [Majestic does not show images, no reboot](en/trouble-majestic.md#troubleshooting-majestic-does-not-show-any-images-no-reboot)
+- [Majestic does not work, camera reboots](en/trouble-majestic.md#troubleshooting-majestic-does-not-work-camera-reboots)
 - [Sigmastar unbrick instructions](en/sigmastar-unbrick.md)
 - [Ingenic T31 unbrick with SD card](en/ingenic-t31-unbrick-with-sd-card.md)
 
