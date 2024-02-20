@@ -11,7 +11,7 @@ Download Ubuntu Server ISO and flash to device  -- `https://github.com/Joshua-Ri
 
 Go ahead and pull some packages we will need, too.
 
-`sudo apt install python3-all-dev fakeroot cmake meson`
+`sudo apt install dkms python3-all-dev fakeroot cmake meson`
 
 Set system local timezone - replace region and city with your usecase
 
