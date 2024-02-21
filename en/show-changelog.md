@@ -21,6 +21,9 @@ Roadmap
 - Update wiki build commands.
 - Update wiki majestic commands.
 
+### 19.02.2024:
+- [hisilicon/goke] Fix muxing unneeded GPIOs which were burning IRCUTs on XM boards
+
 ### 12.02.2024:
 - Added an enhancement that allows Majestic to run cgi scripts detached from the sdk.
 - Fixed an issue that prevented rebinding the rtsp port.
@@ -37,7 +40,8 @@ Roadmap
 - Fixed night mode controls on webui-next.
 - Fixed a problem with inverting single ircut.
 - Set Majestic as only webserver for webui-next.
-- Set webui-next as default for Sigmastar devices.
+- Set majestic-webui as default for Sigmastar devices.
+- Note: majestic-webui extensions are not available for now.
 
 ### 29.01.2024:
 - Added ipctool support for various new Sony sensors.
