@@ -48,10 +48,10 @@ source ~/.profile
 ### Build the firmware.
 
 Building of a binary firmware for your IP camera is fairly easy. Just clone
-source code from the repository and run a provided script.
+source code from the repository and run:
 
 ```bash
-./building.sh
+make
 ```
 
 You will be greeted with a list of available targets.
