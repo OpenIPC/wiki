@@ -193,6 +193,19 @@ place your patches to `global/package/all-patches/<pkg-name>/` directory.
 These patches will be added after Buildroot package is extracted and patches
 from Buildroot package applied.
   
+
+Adding new packages to a project
+------------------------------------
+
+If you want to add new packages to a particular project, these are the changes you need to do (let's take for example goke board, fpv type firmware; the steps can be applied to any project or all projects):
+  * Add your new package in [root]/general/package/ folder (where [root] is your local folder where you cloned the firmware repo);
+  * Add your new package Config.in file to the list of sources packages in this file: [root]/general/package/Config.in
+  * Modifiy your target project configuration (i.e. goke board, fpv firmware) to include and build your new package, add your package to this file: [root]/br-ext-chip-qoke/configs/gk7205v200_fpv_def_config
+  * Build the firmware.
+
+After the build completes, your package (if it did installed any files) should be part of the generated images and file systems.
+
+
 Building a custom version of the firmware
 -----------------------------------------
 Sometimes your need to add a driver or a package to the firmware. How can you
