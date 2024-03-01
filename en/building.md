@@ -112,6 +112,9 @@ Connect again to the camera and run this command (same as -n in the previous com
 firstboot
 ```
 
+Remember! The user and password will be reset to default in most cases (the default is usually root/12345)
+
+
 Anatomy of the project
 ----------------------
 
@@ -184,6 +187,8 @@ If re-creating the root filesystem in necessary, one should in addition run
 
 Run `make br-linux-rebuild br-all` to rebuild Linux kernel image,
 `make br-busybox-rebuild br-all` to rebuild busybox and pack it into a rootfs image.
+
+Remember! the name of the package in the two commands above is the folder name of your package, not the package name you set in Config.in file
 
 Making changes to Buildroot packages
 ------------------------------------
