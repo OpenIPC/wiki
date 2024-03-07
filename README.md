@@ -29,7 +29,6 @@ OpenIPC Wiki
 - [Network settings](en/network-settings.md)
 - [Adding a wifi driver to your firmware](en/adding-wifi-driver.md)
 - [Wireless settings](en/wireless-settings.md)
-- [Network perversions](en/network-perversions.md)
 - [System features](en/system-features.md)
 - [Majestic streamer](en/majestic-streamer.md)
 - [Web interface](en/web-interface.md)
@@ -57,7 +56,7 @@ OpenIPC Wiki
 
 ### Troubleshooting
 
-- [Network does not work](en/trouble-network.md)
+- [Network does not work on hi35xx](en/trouble-network-hi35xx.md)
 - [Majestic does not work, camera reboots](en/trouble-majestic.md)
 - [Sigmastar unbrick instructions](en/sigmastar-unbrick.md)
 - [Ingenic T31 unbrick with SD card](en/ingenic-t31-unbrick-with-sd-card.md)
