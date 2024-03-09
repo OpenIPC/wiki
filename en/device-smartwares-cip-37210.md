@@ -104,7 +104,7 @@ sudo kill 230002
 ```
 Power off the camera and also disconnect and reconnect your USB to TTL adapter. Now enter the following command and power on the camera:
 ```sh
-./burn --chip hi3518ev200 --file=./uboot/u-boot-hi3518ev200-universal.bin --break; screen -L /dev/ttyUSB0 115200
+./burn --chip hi3518ev200 --file=./u-boot/u-boot-hi3518ev200-universal.bin --break && screen -L /dev/ttyUSB0 115200
 ```
 Hit any key to stop autoboot and you are greeted by the OpenIPC u-boot shell!
 ```sh
@@ -145,7 +145,7 @@ It anything goes wrong here, don't power off the device and ask the mentioned [T
 ```sh
 run setnor16m
 ```
-Now it's time for another reboot, so enter `reset` again and you'll be greeted like this:
+Now remove the SD cards and reboot, by entering `reset` again and you'll be greeted like this:
 ```text
 Welcome to OpenIPC
 openipc-hi3518ev200 login: root
@@ -172,51 +172,81 @@ openipc-hi3518ev200 login: root
  Please visit https://openipc.org/sponsor/ to learn more. Thank you.
 ```
 
-There is no root password set, so don't forget to set it with `passwd` after the first login!
+The root password is `12345`. Don't forget to change it with `passwd` after the first login!
 
 If you are struggling with this tutorial and still want to try OpenIPC on a Smartwares CIP-37210, you can [buy it with OpenIPC v2.2 firmware pre-installed at open collective](https://opencollective.com/openipc/contribute/wifi-camera-showme-by-openipc-44355).
 
 ## Connecting to wifi
-Now it's time to connect the camera to your 2.4 GHz Wi-Fi network. First of all, make sure that the firmware environment variables are set correctly. This is necessary so that `udhcpc` gets a DNS lease (because it is requesting `$ipaddr`) and the gateway is set correctly.
+Now it's time to connect the camera to your 2.4 GHz Wi-Fi network. First of all, make sure that the firmware environment variables are set correctly.
+
+First set the network driver:
 
 ```sh
-fw_printenv ipaddr
-fw_printenv gatewayip
-fw_printenv netmask
+fw_setenv wlandev rtl8188fu-generic
 ```
-Set the correct values according to your needs, for example:
+
+Then the correct values according to your needs, for example:
 ```sh
-fw_setenv ipaddr 10.42.42.42
+fw_setenv wlanssid guest
+fw_setenv wlanpass guest-password
 ```
+
+You can check the settings as folows:
+```sh
+fw_printenv wlandev
+fw_printenv wlanssid
+fw_printenv wlanpass
+```
+
 The last step is to configure the wlan0 interface:
 ```sh
-vi /etc/network/interfaces
-```
-Delete or outcomment the eth0 block, the device doesn't have ethernet and the auto setting will slow down boot. Add the following lines to your interfaces file, alter your SSID and password accordingly.
-
-```text
+cat <<EOF > /etc/network/interfaces.d/wlan0
 auto wlan0
 iface wlan0 inet dhcp
     pre-up echo 3 > /sys/class/gpio/export
     pre-up echo out > /sys/class/gpio/gpio3/direction
-    pre-up echo 1 > /sys/class/gpio/gpio3/value
+    pre-up echo 1 > /sys/class/gpio/gpio3/value  # GPIO3 is the WIFI power
     pre-up modprobe mac80211
     pre-up sleep 1
-    pre-up insmod /lib/modules/4.9.37/extra/rtl8188fu.ko
+    pre-up modprobe 8188fu
     pre-up sleep 1
-    pre-up wpa_passphrase "YOUR_WIFI_SSID" "YOUR_PASSWORD" >/tmp/wpa_supplicant.conf
-    pre-up sed -i '2i \\tscan_ssid=1' /tmp/wpa_supplicant.conf
+    pre-up wpa_passphrase "\$(fw_printenv -n wlanssid)" "\$(fw_printenv -n wlanpass)" > /tmp/wpa_supplicant.conf
+    pre-up sed -i 's/#psk.*/scan_ssid=1/g' /tmp/wpa_supplicant.conf
     pre-up ifconfig wlan0 up
-    pre-up wpa_supplicant -B -Dnl80211 -iwlan0 -c/tmp/wpa_supplicant.conf
+    pre-up wpa_supplicant -B -i wlan0 -D nl80211,wext -c /tmp/wpa_supplicant.conf
     pre-up sleep 3
     post-down killall -q wpa_supplicant
     post-down echo 0 > /sys/class/gpio/gpio3/value
     post-down echo 3 > /sys/class/gpio/unexport
+EOF
 ```
 
-No it's time to check whether it's working:
+Now it's time to check whether it's working:
 ```sh
 ifup wlan0
 ip addr
 ```
 Check whether you can ping and ssh into the camera. Reboot and check, if the camera connects automatically to your wifi network. Reassamble the camera, now it's time so say goodbye to UART and use ssh and the web interface. (The credentials are root and the password you set earlier.)
+
+Finally, you should look at `/etc/majestic.yaml` and in particular set this sections as follows in order to have a correct GPIO mapping for nighmode and audio.
+
+```yaml
+audio:
+  enabled: true
+  volume: 70
+  srate: 8000
+  codec: alaw
+  outputEnabled: true
+  outputVolume: 30
+  speakerPin: 51
+  speakerPinInvert: true
+nightMode:
+  enabled: true
+  irSensorPin: 62
+  irSensorPinInvert: true
+  irCutPin1: 64
+  backlightPin: 63
+  dncDelay: 30
+  nightAPI: true
+  irCutSingleInvert: false
+```
