@@ -25,7 +25,8 @@ Before you start building your own firmware, it's essential to make a few change
 mkdir -p local/src
 cd local/src
 git clone https://github.com/OpenIPC/firmware.git openipc-firmware
-cd openipc-firmware```
+cd openipc-firmware
+```
 
 ### Install Required Packages
 
@@ -34,23 +35,27 @@ For Debian/Ubuntu, an example of installing the necessary packages and downloadi
 ```sudo apt-get update -y
 sudo apt-get install -y automake autotools-dev bc build-essential curl fzf git libtool rsync unzip
 git clone --depth=1 https://github.com/OpenIPC/firmware.git
-cd firmware```
+cd firmware
+```
 
 Alternatively, you can use the following command in the root of your OpenIPC firmware directory to install dependencies:
 
-```sudo make deps```
+```sudo make deps
+```
 
 ### Quick Build from Sources
 
 To build the desired version of the firmware for your processor, run the following command in the root of the project. The files will be available in the directory "output/images".
 
-```./building.sh hi3518ev300_ultimate```
+```./building.sh hi3518ev300_ultimate
+```
 
 Examples of rebuilding the Linux kernel, root filesystems, and individual packages in our project:
 
 ```BOARD=hi3518ev300_ultimate  make br-linux-{dirclean,rebuild}
 BOARD=hi3518ev300_ultimate  make br-rootfs-{squashfs,tar}
-BOARD=hi3518ev300_ultimate  make br-vtund-openipc-{dirclean,rebuild}```
+BOARD=hi3518ev300_ultimate  make br-vtund-openipc-{dirclean,rebuild}
+```
 
 ### Create a Permanent Storage for Downloaded Bundles
 
@@ -58,11 +63,13 @@ By default, Buildroot stores all downloaded files in the dl/ directory inside th
 
 ```BR2_DL_DIR="${HOME}/buildroot_dl"
 [ ! -d "$BR2_DL_DIR" ] && mkdir -p $BR2_DL_DIR
-export BR2_DL_DIR```
+export BR2_DL_DIR
+```
 
 Source the changes with:
 
-```source ~/.profile```
+```source ~/.profile
+```
 
 ## Installing the Firmware
 
