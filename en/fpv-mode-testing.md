@@ -17,7 +17,7 @@ It is necessary to supplement the table with other devices and sensors. includin
 | 1600x900  | 90  |           |
 | 1920x1080 | 60  |           |
 | 3200x1800 | 30  |           |
-| 3840x216  | 20  |           |
+| 3840x2160 | 20  |           |
 
 
 #### SSC30KQ + IMX335
