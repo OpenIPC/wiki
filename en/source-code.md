@@ -266,9 +266,6 @@ __Be aware that building firmware directly with buildroot will not rename the
 resulting image files adding a soc suffix to them. You either can to it
 yourself or adjust your firmware updating the commands accordingly.__
 
-## Statistical Data
-
-The Software might collect product usage data, including SoC and sensor model names, to gather statistics used in the QA process. We guarantee that the data is fully anonymized and does not contain any individual, sensitive, or confidential user data.
 
 [1]: https://buildroot.org/
 [2]: https://buildroot.org/docs.html
