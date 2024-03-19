@@ -47,7 +47,7 @@ Connectors type JST 1.25mm
 ![JST Connector](../images/device-IPC-RM1-BLK7202V3-M43A-WIFI_connectors.jpg)
 
 ## Front side
-| Connector | Description |
+| Connector | Type |
 |:-:|:-|
 | IRCUT | 2pin JST |
 | LED | 5pin JST |
@@ -57,7 +57,7 @@ Connectors type JST 1.25mm
 - Micro SD Card Socket
 - UART (unsoldered, to the left of SPK, pin1 RX, pin2 TX)
 
-| Connector | Description |
+| Connector | Type |
 |:-:|:-|
 | SPK | 2pin JST |
 | H | 5pin JST |
@@ -89,7 +89,7 @@ Connectors type JST 1.25mm
 \* - unconfirmed.
 
 ## Muxing
-If Majestic takes control over pins, no muxing required. Otherwise, muxing can be done using the following commands.
+No muxing required if Majestic takes control over pins. Otherwise, muxing can be done using the following commands.
 
 Muxing GPIO16 for taking control over IRLED pin:
 ```sh
@@ -97,14 +97,14 @@ devmem 0x120c0020 32 0x432      # GPIO2_0 (GPIO16)
 ```
 
 Also for motors.  
-Unmuxing GPIO12, GPIO14, GPIO15 (motors H connector):
+Muxing GPIO12, GPIO14, GPIO15 (motors H connector):
 ```sh
 devmem 0x120c0010 32 0x1e02     # GPIO1_4 (GPIO12)
 devmem 0x120c0018 32 0x1d02     # GPIO1_6 (GPIO14)
 devmem 0x120c001c 32 0x1402     # GPIO1_7 (GPIO15)
 ```
 
-By default GPIO13 is HI (one of motors coil constantly powered), so maybe nessesary turn it to LO:
+Shortly after **Loading of kernel modules...** GPIO13 turns to HI (one of motors coil constantly powered), so maybe nessesary turn it to LO:
 ```sh
 gpio clear 13
 gpio unexport 13
@@ -151,7 +151,7 @@ Stock firmware is pwd locked, LAN interface does not present, so I'm guessing fo
 - load full image thru stock web interface (untested)
 - Flash programmer
 
-# Symmary
+# Summary
 - [X] WiFi works
 - [X] Video tested/streamed
 - [X] Day/night works (IRCUT and IRLED)
