@@ -13,7 +13,9 @@
 - [TODO](#TODO)
 
 # Overview
-Board found in cheap indoor Cootli WiFi PTZ cam. Looks very similar to XM IPG-G4-WR-BL but PCB layout a bit different.
+Board found in cheap indoor Cootli WiFi PTZ cam. Board looks very similar to [XM IPG-G4-WR-BL](http://baike.xm030.cn:81/%E4%BA%A7%E5%93%81%E5%8F%82%E6%95%B0/English/IPG%E6%A8%A1%E7%BB%84/Parameters%20for%20IPG-G4-WR.pdf) but PCB layout a bit different.
+
+All tests are complete on [gk7202v300_lite_cootli_camv0103-nor](https://github.com/OpenIPC/builder/releases/download/latest/gk7202v300_lite_cootli_camv0103-nor.tgz) firmware (build Feb 8 2024).
 
 ## Device info
 | System | Description | Comments | 
@@ -41,12 +43,10 @@ PCB markings
 ![PCB markings](../images/device-IPC-RM1-BLK7202V3-M43A-WIFI_markings.jpg)
 
 # Connectors
-
 Connectors type JST 1.25mm
 ![JST Connector](../images/device-IPC-RM1-BLK7202V3-M43A-WIFI_connectors.jpg)
 
 ## Front side
-
 | Connector | Description |
 |:-:|:-|
 | IRCUT | 2pin JST |
@@ -54,7 +54,6 @@ Connectors type JST 1.25mm
 | MIC | 2pin JST |
 
 ## Back side
-
 - Micro SD Card Socket
 - UART (unsoldered, to the left of SPK, pin1 RX, pin2 TX)
 
@@ -67,7 +66,6 @@ Connectors type JST 1.25mm
 | RF | UF.L (IPX) |
 
 # GPIOs
-
 | GPIO | Connector | Description |
 |:-:|:-:|:-:|
 | 0* | - | Reset button |
@@ -91,13 +89,14 @@ Connectors type JST 1.25mm
 \* - unconfirmed.
 
 ## Muxing
-If Majestic takes control over pins, no unmuxing required. Otherwise, this can be done using the following commands.
+If Majestic takes control over pins, no muxing required. Otherwise, muxing can be done using the following commands.
 
-Unmuxing GPIO16 for enabling IRLED control:
+Muxing GPIO16 for taking control over IRLED pin:
 ```sh
 devmem 0x120c0020 32 0x432      # GPIO2_0 (GPIO16)
 ```
 
+Also for motors.  
 Unmuxing GPIO12, GPIO14, GPIO15 (motors H connector):
 ```sh
 devmem 0x120c0010 32 0x1e02     # GPIO1_4 (GPIO12)
@@ -133,9 +132,9 @@ mmc rescan
 ```
 
 ## Speaker
+Device supports playing PCM signed 16-bit little-endian, 8000 Hz, 1CH by sending data to http://192.168.0.10/play_audio endpoint.
 
-Device support playing PCM signed 16-bit little-endian, 8000 Hz, mono.
-Audio can be encoded like this:
+Audio file can be encoded like this:
 ```sh
 ffmpeg -i input.wav -f s16le -ar 8000 -ac 1 output.pcm
 ```
@@ -146,14 +145,13 @@ curl -v -u user:pass -H "Content-Type: application/json" -X POST --data-binary @
 ```
 
 # Flashing
-
-Stock firmware is pwd locked, LAN does not presend, so I'm guessing following methods are available to flash this board:
+Stock firmware is pwd locked, LAN interface does not present, so I'm guessing following methods are available to flash this board:
 - [burn](https://github.com/OpenIPC/burn)  + [u-boot-gk7202v300-universal.bin](https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-gk7202v300-universal.bin) and loading FW thru X/Y/ZMODEM (e.g. loady. Tip: use baud option for speed up)
 - load FW from SD card (need power ON, see above)
 - load full image thru stock web interface (untested)
+- Flash programmer
 
 # Symmary
-
 - [X] WiFi works
 - [X] Video tested/streamed
 - [X] Day/night works (IRCUT and IRLED)
