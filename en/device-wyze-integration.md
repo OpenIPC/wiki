@@ -9,7 +9,7 @@ This is where we'll be writing down our guide to flashing new devices and report
 
 | MODEL     | IC 25466- | FCC ID         | PCB VER                           | SoC      | WIFI                  | MAC PREFIX | SUPPORTED | NOTES                                                     |
 |-----------|-----------|----------------|-----------------------------------|----------|-----------------------|------------|-----------|-----------------------------------------------------------|
-| WYZEC2    |           | 2ANJHWYZEC2    | 2019-06-38                        | T20X BGA | SDIO: Realtek 8189FTV | 2C:AA:8E   | YES       |                                                           |
+| WYZEC2    |           | 2ANJHWYZEC2    | 2019-06-38                        | T20X BGA | SDIO: Realtek 8189FTV | 2C:AA:8E   | YES       | https://gist.github.com/csev1755/e60abe15d8708e0d2b0a592e808b2022  |
 | WYZECP1   |           | 2ANJHHWYZECP1  | DF3-IFPM01 V1.4                   | T20X BGA | SDIO: Realtek 8189ES  | 2C:AA:8E   | YES       |                                                           |
 | WYZEC3    | WYZEC3    | 2AUIUWYZEC3    | WYZEV3_T31GC2053 V1.4_20201010    | T31ZX    | SDIO: Realtek 8189FTV | 7C:78:B2   | YES       | https://t.me/openipc/49957 https://youtu.be/t7Nzo-KXTH0   | 
 | WYZEC3    | WYZEC3A   | 2AUIUWYZEC3A   | WYZEV3_T31GC2053 V1.2_20200715    | T31X     | SDIO: Realtek 8189FTV | 7C:78:B2   | YES       | https://youtu.be/jm4wze_HY78                              |
