@@ -9,6 +9,7 @@
   - [SD Card](#SD-Card)
   - [Speaker](#Speaker)
 - [Flashing](#Flashing)
+  - [Flash memory layout](#Flash-memory-layout)
 - [Summary](#Summary)
 - [TODO](#TODO)
 
@@ -84,7 +85,7 @@ Connectors type JST 1.25mm
 | 57* | LED pin 3 | IRSens |
 | 58 | IRCUT pin 2 | LO - IRCUT OFF |
 | 70 | - | SD PWR (LO - Power ON) |
-| 51 | - | AUDIO |
+| 51 | - | AUDIO AMP |
 
 \* - unconfirmed.
 
@@ -104,7 +105,7 @@ devmem 0x120c0018 32 0x1d02     # GPIO1_6 (GPIO14)
 devmem 0x120c001c 32 0x1402     # GPIO1_7 (GPIO15)
 ```
 
-Shortly after **Loading of kernel modules...** GPIO13 turns to HI (one of motors coil constantly powered), so maybe nessesary turn it to LO:
+Shortly after **Loading of kernel modules...** GPIO13 turns to HI (one of motors winding constantly powered), so maybe necesary turn it to LO:
 ```sh
 gpio clear 13
 gpio unexport 13
@@ -145,11 +146,20 @@ curl -v -u user:pass -H "Content-Type: application/json" -X POST --data-binary @
 ```
 
 # Flashing
-Stock firmware is pwd locked, LAN interface does not present, so I'm guessing following methods are available to flash this board:
-- [burn](https://github.com/OpenIPC/burn)  + [u-boot-gk7202v300-universal.bin](https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-gk7202v300-universal.bin) and loading FW thru X/Y/ZMODEM (e.g. loady. Tip: use baud option for speed up)
-- load FW from SD card (need power ON, see above)
+Stock firmware is pwd locked and LAN interface does not present, so I'm guessing following methods are available to flash this board:
+- [burn](https://github.com/OpenIPC/burn)  + [u-boot-gk7202v300-universal.bin](https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-gk7202v300-universal.bin) and then upload FW via X/Y/ZMODEM (e.g. **loady**. Tip: use **baud** option for speed up) or from SD card (power supply required, [see above](#SD-Card))
 - load full image thru stock web interface (untested)
-- Flash programmer
+- flash programmer
+- somehow get into stock bootloader
+
+## Flash memory layout
+| Offset | Size | Description | 
+|:-|:-|:-|
+| 0x00000000 | 0x00040000 (262144 bytes) | bootloader |
+| 0x00040000 | 0x00010000 (65536 bytes) | env |
+| 0x00050000 | 0x00200000 (2097152 bytes) | kernel |
+| 0x00250000 | 0x00500000 (5242880 bytes) | rootfs |
+| 0x00750000 | 0x000B0000 (720896 bytes) | rootfs_data |
 
 # Summary
 - [X] WiFi works
