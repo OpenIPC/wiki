@@ -156,7 +156,7 @@ Remember! The user and password will be reset to default in most cases (the defa
 
 ## Anatomy of the Project
 
-penIPC firmware v2 utilizes [Buildroot][1] to build its firmware binaries. So
+OpenIPC firmware v2 utilizes [Buildroot][1] to build its firmware binaries. So
 you should make yourself familiar with the [Buildroot documentation][2] if you
 want not only to compile provided source code but make your own modifications
 to the firmware.
