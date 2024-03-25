@@ -68,7 +68,6 @@ cli -s .nightMode.minThreshold 10
 cli -s .nightMode.maxThreshold 50
 ```
 
-
 ### Motion detection
 
 Motion detect is supported for Hisilion/Goke, Ingenic and Sigmastar.
@@ -180,9 +179,8 @@ sox speech.mp3 -t raw -r 8000 -e signed -b 16 -c 1 test.pcm
 ### How to play audio file on camera's speaker over network
 
 ```
-cat test.pcm | curl -v -u user:password -H "Content-Type: application/json" -X POST --data-binary @- http://192.168.1.10/play_audio
+curl -u root:12345 --data-binary @test.pcm http://192.168.1.10/play_audio
 ```
-
 
 [aac]: https://en.wikipedia.org/wiki/Advanced_Audio_Coding
 [alaw]: https://en.wikipedia.org/wiki/A-law_algorithm
