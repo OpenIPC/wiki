@@ -45,7 +45,7 @@ OpenIPC Wiki
 
 ### FPV
 
-- [A Step-by-Step guide to configure an FPV camera and Groundstation](en/A-step-by-step-guide-for-an-FPV-setup.md)
+- [Guide to configure an FPV camera and groundstation](en/fpv-step-by-step-guide.md)
 - [Steps from buy to fly](en/fpv-from-buy-to-fly.md)
 - [OpenIPC as FPV system](en/fpv.md)
 - [Sigmastar FPV devices](en/fpv-sigmastar.md)
