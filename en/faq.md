@@ -123,7 +123,7 @@ on the camera afterwards.
 If you need to know what is in the command, search for `ipctool` in the
 `/etc/profile` file.
 
-### How to replace the bootloader from Linux? A dangerous operation for dummies!
+### Replace the bootloader from Linux
 
 Commands are executed separately by each line with a wait for the end of execution.
 The full name of the replacement bootloader and its availability can be checked [here][3]
@@ -131,13 +131,23 @@ The full name of the replacement bootloader and its availability can be checked 
 Before running the commands, don't forget to enter the correct bootloader name!
 
 ```
-export LOADER=u-boot-SOC-TYPE.bin
-curl -k -L -o /tmp/${LOADER} https://github.com/OpenIPC/firmware/releases/download/latest/${LOADER}
-flashcp -v /tmp/${LOADER} /dev/mtd0
+FILE=u-boot-SOC-TYPE.bin
+curl -k -L https://github.com/OpenIPC/firmware/releases/download/latest/${FILE} -o /tmp/${FILE}
+flashcp -v /tmp/${FILE} /dev/mtd0
 flash_eraseall /dev/mtd1
 ```
 
-### How to update the ancient as shit OpenIPC firmware?
+Save wireless credentials:
+```
+FILE=/usr/share/openipc/wireless.sh
+echo "#!/bin/sh" > ${FILE}
+echo "fw_setenv wlandev $(fw_printenv -n wlandev)" >> ${FILE}
+echo "fw_setenv wlanssid $(fw_printenv -n wlanssid)" >> ${FILE}
+echo "fw_setenv wlanpass $(fw_printenv -n wlanpass)" >> ${FILE}
+chmod 755 ${FILE}
+```
+
+### How to update ancient OpenIPC firmware?
 
 Commands are executed separately by each line with a wait for the end of execution.
 The first command updates a utility whose algorithm was changed in February 2023. 
