@@ -10,6 +10,8 @@ OpenIPC AIO "UltraSight"
 
 ## What's in the box
 
+<img src="../images/fpv-openipc-aio-content.webp"></a>
+
 ## How to mount the heatsink
 
 The package comes with a heatsink and thermal pad. The thermal pad is covered in 3M double sided tape on both sides. Two screws are included with the set that can be used to mount the heatsink. The heatsinks purpose is to dissipate heat from the WiFi components on the PCB. The thermal pad and heatsink therefore need to be placed on the side that has the WiFi components on it (e.g. antenna connectors, WiFi chip and power amplifiers).
