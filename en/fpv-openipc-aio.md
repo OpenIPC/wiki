@@ -22,3 +22,11 @@ A Ethernet/Debug adapter is included. The flat-flex cable is used to connect it 
 
 ### Camera
 The MIPI connector can pe pushed into the corresponding socket on the AIO-PCB vertically. No great force is needed and there are no levers to move or clips to disengage. For removal, the connector has two little prongs on the sides to aid with gripping it.
+
+## First start
+
+* Connect the WiFi antennas and mount the heatsink
+* Connect the Debug PCB and connect a network cable
+* Ensure proper cooling, airflow will be necessary to protect the board from overheating
+* Power the board and either check your DHCP-Server (often your router) for a new device and it's IP address, the board will try to get an IP assigned throug DHCP
+* You can login to the web UI of OpenIPC using the username **admin** and the password **12345** to check for connectivity
