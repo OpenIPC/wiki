@@ -17,8 +17,7 @@ OpenIPC AIO "UltraSight"
 <a href="https://raw.githubusercontent.com/OpenIPC/wiki/master/images/fpv-openipc-aio-manual.webp"><img src="../images/fpv-openipc-aio-manual.webp" width="80%"></a>
 
 ### Power
-- The board needs a steady power supply of at least **3A at 5V DC**. This figure will be higher if higher RF power levels are selected.
-- Before powering on AIO board, the power pad must be soldered or connected to a reliable 5V power source or BEC.
+- Before powering on AIO board, the power pad must be soldered or connected to a reliable **3A at 5V DC** power source or BEC. This figure will be higher if higher RF power levels are selected.
 - When there is not enough load capacitance on the BEC, it is recommended to add a 470uF electrolytic capacitor (included in the set) between the BEC and AIO board to protect the AIO board from surge damage and provide decoupling. Install the capacitor as close to the AIO-PCB as possible. 
 
 ### Debug/Ethernet
