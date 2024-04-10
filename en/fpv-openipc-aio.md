@@ -6,7 +6,8 @@ OpenIPC AIO "UltraSight"
 <a href="https://store.openipc.org"><img src="../images/fpv-openipc-aio.webp"></a>
 
 ## What's in the box
-<img src="../images/fpv-openipc-aio-content.webp" width="80%">
+<a href="https://raw.githubusercontent.com/OpenIPC/wiki/master/images/fpv-openipc-aio-content-1.webp"><img src="../images/fpv-openipc-aio-content-1.webp" width="60%"></a>
+<a href="https://raw.githubusercontent.com/OpenIPC/wiki/master/images/fpv-openipc-aio-content-2.webp"><img src="../images/fpv-openipc-aio-content-2.webp" width="60%"></a>
 
 ## How to mount the heatsink
 The package comes with a heatsink and thermal pad. The thermal pad is covered in 3M double sided tape on both sides. Two screws are included with the set that can be used to mount the heatsink. The heatsinks purpose is to dissipate heat from the WiFi components on the PCB. The thermal pad and heatsink therefore need to be placed on the side that has the WiFi components on it (e.g. antenna connectors, WiFi chip and power amplifiers).
