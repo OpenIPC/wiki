@@ -2,6 +2,8 @@
 [Table of Content](../README.md)
 
 OpenIPC AIO
----------------------------------------------------
+---
 
-https://store.openipc.org/
+<img src="../images/fpv-openipc-aio.jpg">
+
+---
