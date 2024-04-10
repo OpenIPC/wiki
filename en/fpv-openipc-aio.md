@@ -32,3 +32,32 @@ OpenIPC AIO "UltraSight"
 
 ### Camera
 - The MIPI connector can pe pushed into the corresponding socket on the AIO-PCB vertically. No great force is needed and there are no levers to move or clips to disengage. For removal, the connector has two little prongs on the sides to aid with gripping it.
+
+## Software
+
+### Activate UART debug
+- Connect the debug board with USB-C.
+- Interrupt uboot with enter.
+```
+setenv fpv false
+saveenv
+```
+
+### Manual upgrade
+- Prepare a sdcard formatted in FAT32 with 1GB size.
+- Download and extract [this package](https://github.com/openipc/builder/releases/download/latest/ssc338q_fpv_openipc-urllc-aio-nor.tgz).
+- Copy uImage.ssc338q and rootfs.squashfs.ssc338q to the sdcard.
+- Interrupt uboot with enter.
+- Run the following commands:
+```
+run setsdcard
+run uknor
+run urnor
+```
+
+### Update bootloader
+```
+curl -L -o /tmp/uboot.bin https://github.com/openipc/firmware/releases/download/latest/u-boot-ssc338q-nor.bin
+flashcp -v /tmp/uboot.bin /dev/mtd0
+flash_eraseall /dev/mtd1
+```
