@@ -4,6 +4,6 @@
 OpenIPC AIO
 ---
 
-<img src="../images/fpv-openipc-aio.jpg">
+<a href="https://store.openipc.org"><img src="../images/fpv-openipc-aio.webp"></a>
 
 ---
