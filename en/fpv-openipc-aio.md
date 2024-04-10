@@ -14,8 +14,11 @@ The package comes with a heatsink and thermal pad. The thermal pad is covered in
 
 ## Connections
 
+<img src="../images/fpv-openipc-aio-pinout-1.png" width="60%"></a>
+<img src="../images/fpv-openipc-aio-pinout-2.png" width="60%"></a>
+
 ### Power
-The set comes with a capacitor to decouple the power rail from the rest of your copter. Install it as close to the AIO-PCB as possible.
+Before powering on AIO board, the power pad must be soldered or connected to a reliable 5V power source or BEC. When there is not enough load capacitance on the BEC, it is recommended to add a 470uF electrolytic capacitor (included in the set) between the BEC and AIO board to protect the AIO board from surge damage and provide decoupling. Install the capacitor as close to the AIO-PCB as possible. 
 
 ### Debug/Ethernet
 A Ethernet/Debug adapter is included. The flat-flex cable is used to connect it to the AIO-PCB. The connectors pins are located on the PCB side of the connector, pay attention to connect the flat flex cable with the exposed connections towards the PCB. The "handle" strips on the flat-flex cable will point towards the heatsink side on the AIO-PCB and away from the RJ45 connector on the Debugger PCB.
