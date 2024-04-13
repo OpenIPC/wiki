@@ -71,5 +71,4 @@ network restart
 ```
 curl -L -o /tmp/uboot.bin https://github.com/openipc/firmware/releases/download/latest/u-boot-ssc338q-nor.bin
 flashcp -v /tmp/uboot.bin /dev/mtd0
-flash_eraseall /dev/mtd1
 ```
