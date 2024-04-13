@@ -58,7 +58,7 @@ run urnor
 
 ### Connect to wireless router
 - Upgrade firmware to the newest version.
-- Log into the system (default credentials are root:12345).
+- Log into the system (root:12345).
 - Run the following commands:
 ```
 fw_setenv wlandev rtl8812au-generic
@@ -67,7 +67,22 @@ fw_setenv wlanpass Password
 network restart
 ```
 
+### Custom GPIO
+- Button input:
+```
+echo 107 > /sys/class/gpio/export
+echo in > /sys/class/gpio/gpio107/direction
+cat /sys/class/gpio/gpio107/value
+```
+- Led control:
+```
+gpio clear 108
+gpio set 108
+```
+
 ### Upgrade bootloader
+- Log into the system (root:12345).
+- Run the following commands:
 ```
 curl -L -o /tmp/uboot.bin https://github.com/openipc/firmware/releases/download/latest/u-boot-ssc338q-nor.bin
 flashcp -v /tmp/uboot.bin /dev/mtd0
