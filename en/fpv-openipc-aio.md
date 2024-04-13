@@ -44,7 +44,7 @@ setenv fpv false
 saveenv
 ```
 
-### Manual upgrade
+### Manual system upgrade
 - Prepare a sdcard formatted in FAT32 with 1GB size.
 - Download and extract [this package](https://github.com/openipc/builder/releases/download/latest/ssc338q_fpv_openipc-urllc-aio-nor.tgz).
 - Copy uImage.ssc338q and rootfs.squashfs.ssc338q to the sdcard.
@@ -56,7 +56,18 @@ run uknor
 run urnor
 ```
 
-### Update bootloader
+### Connect to wireless router
+- Upgrade firmware to the newest version.
+- Log into the system (default credentials are root:12345).
+- Run the following commands:
+```
+fw_setenv wlandev rtl8812au-generic
+fw_setenv wlanssid Router
+fw_setenv wlanpass Password
+network restart
+```
+
+### Upgrade bootloader
 ```
 curl -L -o /tmp/uboot.bin https://github.com/openipc/firmware/releases/download/latest/u-boot-ssc338q-nor.bin
 flashcp -v /tmp/uboot.bin /dev/mtd0
