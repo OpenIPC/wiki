@@ -87,3 +87,8 @@ gpio set 108
 curl -L -o /tmp/uboot.bin https://github.com/openipc/firmware/releases/download/latest/u-boot-ssc338q-nor.bin
 flashcp -v /tmp/uboot.bin /dev/mtd0
 ```
+
+### Using third party cables
+- DJI O3 MiPI cable - NOT suitable for OpenIPC AIO
+- RunCam Mipi cable - NOT suitable for OpenIPC AIO
+
