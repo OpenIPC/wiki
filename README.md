@@ -200,6 +200,6 @@ less familiar with nuts and bolts behind the scene. That is why we set up this
 wiki and let anyone having a GitHub account to make additions and improvements
 to the knowledgebase. Read [How to contribute.](en/contribute.md)
 
-[faq1]: https://github.com/OpenIPC/camerasrnd/blob/master/docs/XM-FAQ-ru.md
+[faq1]: https://github.com/OpenIPC/camerasrnd/blob/master/doc/XM-FAQ-ru.md
 [faq3]: https://alarmsystem-cctv.ru/openipc-%D0%BE%D1%82%D0%BA%D1%80%D1%8B%D1%82%D1%8B%D0%B9-%D0%BA%D0%BE%D0%BB%D0%BB%D0%B5%D0%BA%D1%82%D0%B8%D0%B2/
 [logo]: images/logo_openipc.png
