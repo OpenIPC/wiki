@@ -35,15 +35,6 @@ OpenIPC AIO "UltraSight"
 
 ## Software
 
-### Activate UART debug
-- Connect the debug board with a USB-C cable.
-- Interrupt uboot by holding the enter key.
-- Run the following commands:
-```
-setenv fpv false
-saveenv
-```
-
 ### Manual system upgrade
 - Prepare a sdcard formatted in FAT32 with 1GB size.
 - Download and extract [this package](https://github.com/openipc/builder/releases/download/latest/ssc338q_fpv_openipc-urllc-aio-nor.tgz).
@@ -91,4 +82,3 @@ flashcp -v /tmp/uboot.bin /dev/mtd0
 ### Using third party cables
 - DJI O3 MiPI cable - NOT suitable for OpenIPC AIO
 - RunCam Mipi cable - NOT suitable for OpenIPC AIO
-
