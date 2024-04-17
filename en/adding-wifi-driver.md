@@ -22,28 +22,43 @@ sudo make deps
 
 ### Step 2: determine the driver package
 Here are some of the most common wifi driver packages:
-```
-# AIC:
-BR2_PACKAGE_AIC8800_OPENIPC
 
-# Altobeam:
+#### AIC:
+```
+BR2_PACKAGE_AIC8800_OPENIPC
+```
+
+#### Altobeam:
+```
 BR2_PACKAGE_ATBM60XX
 BR2_PACKAGE_ATBM6441
+```
 
-# iComm:
-# SSV615X/SSV625X, USB ID 0x6000:
+#### iComm:
+*SSV615X/SSV625X, USB ID 0x6000:*
+
+```
 BR2_PACKAGE_SSV615X_OPENIPC
+```
 
-# SSV635X, USB ID 0x6011:
+*SSV635X, USB ID 0x6011:*
+
+```
 BR2_PACKAGE_SSV635X_OPENIPC
+```
 
-# MediaTek:
+#### MediaTek:
+```
 BR2_PACKAGE_MT7601U_OPENIPC
+```
 
-# SigmaStar:
+#### SigmaStar:
+```
 BR2_PACKAGE_SSW101B
+```
 
-# Realtek:
+#### Realtek:
+```
 BR2_PACKAGE_RTL8188EUS_OPENIPC
 BR2_PACKAGE_RTL8188FU_OPENIPC
 BR2_PACKAGE_RTL8189ES_OPENIPC
