@@ -185,6 +185,32 @@ iface wlan0 inet dhcp
     post-down echo 7 > /sys/class/gpio/unexport
 ```
 
+### WLAN0 | GK7205V300 + ATBM603X | Unknown
+
+```
+auto wlan0
+iface wlan0 inet dhcp
+    pre-up devmem 0x100C0080 32 0x530
+    pre-up echo 7 > /sys/class/gpio/export
+    pre-up echo out > /sys/class/gpio/gpio7/direction
+    pre-up echo 0 > /sys/class/gpio/gpio7/value
+    pre-up modprobe mt7601u
+    pre-up modprobe atbm603x_wifi_usb
+    pre-up wpa_passphrase "SSID" "password" >/tmp/wpa_supplicant.conf
+    pre-up sed -i '2i \\tscan_ssid=1' /tmp/wpa_supplicant.conf
+    pre-up sleep 3
+    pre-up wpa_supplicant -B -D nl80211 -i wlan0 -c/tmp/wpa_supplicant.conf
+    post-down killall -q wpa_supplicant
+    post-down echo 1 > /sys/class/gpio/gpio7/value
+    post-down echo 7 > /sys/class/gpio/unexport
+```
+
+Note: Enter commands in U-Boot console to enable the wifi device
+
+```
+fw_setenv wlandev atbm603x-generic-usb
+saveenv
+```
 
 ### WLAN0 | HI3518EV200 | CamHi/Xin
 
