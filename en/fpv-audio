@@ -1,0 +1,44 @@
+Audio on FPV (Experimental)
+
+Overview
+Cúrrently there is ~200msec delay on audio stream, encoding settings may improve this (smaller packets, opus supports 20msec intervals)
+
+Audio settings (majestic.yaml):
+cli -s .audio.enabled true
+cli -s .audio.srate 8000 (goes up to 48000 but consumes more bandwidth)
+Port can be set (default 5700) with:
+cli -s .outgoing.audioPort 6200
+
+
+Example wfb_ng setup:
+Drone:
+wfb_tx -p -u 5700 -K /etc/drone.key -k 8 -n 12 -i 7669207 -f data wlan0
+GS:
+wfb_rx -p 0 -c 127.0.0.1 -u 5700 -K /etc/gs.key -i 7669207 wlan1
+
+GST command:
+gst-launch-1.0 udpsrc port=5700 ! application/x-rtp, payload=98, encoding-name=OPUS ! rtpopusdepay ! opusdec ! audioconvert ! autoaudiosink sync=false
+
+ffplay command:
+ffplay.exe -fflags nobuffer -vn -flags low_delay -strict experimental -deadline realtime -framedrop -protocol_whitelist file,crypto,rtp,tcp,udp opus_audio.txt
+
+opus_audio.txt
+v=0
+o=StreamingServer 38990265062388 38990265062388 IN IP4 0.0.0.0
+s=RTSP Session
+c=IN IP4 0.0.0.0
+t=0 0
+a=range:npt=0-
+m=video 5600 RTP/AVP 97
+a=control:video
+a=rtpmap:97 H265/90000
+a=fmtp:97 profile-level-id=016000; packetization-mode=1; 
+a=framerate:90
+m=audio 5700 RTP/AVP 98
+a=control:audio
+a=rtpmap:98 opus/8000/1
+
+TODO:
+Update /usrt/bin/wifibroadcast script to look for "audioEnabled" in datalink.conf and setup the wfb_tx/rx connection on drone & gs. Platfoprm specific so up to each GS maintainer to do.
+
+
