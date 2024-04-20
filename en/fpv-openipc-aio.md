@@ -36,7 +36,8 @@ OpenIPC AIO "UltraSight"
 ## Software
 
 ### Automatic system upgrade
-- Connect your device to a network (via ethernet or wireless).
+- Connect your device to a network with the debug ethernet board.
+- Log into the system (root:12345).
 - Run the following commands:
 ```
 fw_setenv upgrade https://github.com/OpenIPC/builder/releases/download/latest/ssc338q_fpv_openipc-urllc-aio-nor.tgz
@@ -56,7 +57,7 @@ run urnor
 ```
 
 ### Connect to wireless router
-- Upgrade firmware to the newest version.
+- Upgrade the firmware to the newest version.
 - Log into the system (root:12345).
 - Run the following commands:
 ```
