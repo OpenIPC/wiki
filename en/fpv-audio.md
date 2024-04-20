@@ -12,8 +12,10 @@ Audio settings (majestic.yaml):
 cli -s .audio.enabled true
 cli -s .audio.srate 8000 (goes up to 48000 but consumes more bandwidth)
 ```
-Port can be set (default 5700) with:
-`cli -s .outgoing.audioPort 6200` (does it really work?)
+Audio port can be set (default 5700) with:
+```
+cli -s .outgoing.audioPort 6200
+```
 
 ### Quick wfb_ng setup
 Example wfb_ng setup:
@@ -32,7 +34,7 @@ GST command for opus 8000hz (sound only):
 gst-launch-1.0 udpsrc port=5700 ! application/x-rtp, payload=98, encoding-name=OPUS ! rtpopusdepay ! opusdec ! audioconvert ! autoaudiosink sync=false
 ```
 
-### Working sound, video & save!!!!
+### Working sound, video & save
 ```
 gst-launch-1.0 udpsrc port=5600 caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H265' ! rtpjitterbuffer ! rtph265depay ! tee name=videoTee ! queue ! ts. udpsrc port=5700 ! application/x-rtp, payload=98, encoding-name=OPUS ! rtpjitterbuffer ! rtpopusdepay ! tee name=audioTee ! queue ! ts. mpegtsmux name=ts ! filesink location=/run/media/deck/170a3e7f-325f-4567-8580-0e01dda76973/video/record-$(date +%y%m%d_%H%M%S).tsn sync=true -e videoTee. ! vaapih265dec ! fpsdisplaysink fps-update-interval=250 video-sink=autovideosink text-overlay=true sync=false audioTee. ! opusdec ! audioconvert ! pulsesink sync=false
 ```
@@ -75,4 +77,3 @@ add audio specific parameters like port, fec, ...
 
 ### /usr/bin/wifibroadcast
 add "if audio_enabled=true in datalink.conf then start wfb_tx ....."
-
