@@ -22,28 +22,63 @@ sudo make deps
 
 ### Step 2: determine the driver package
 Here are some of the most common wifi driver packages:
+
+#### AIC:
 ```
-# AIC:
 BR2_PACKAGE_AIC8800_OPENIPC
+```
 
-# Altobeam:
+#### Altobeam:
+*1. Select general ATBM driver:*
+```
 BR2_PACKAGE_ATBM60XX
-BR2_PACKAGE_ATBM6441
+```
+*2. Enable the driver for your specific card:*
+```
+BR2_PACKAGE_ATBM60XX_MODEL_601X
+BR2_PACKAGE_ATBM60XX_MODEL_602X
+BR2_PACKAGE_ATBM60XX_MODEL_603X
+BR2_PACKAGE_ATBM60XX_MODEL_6041
+```
 
-# iComm:
-# SSV615X/SSV625X, USB ID 0x6000:
+*3. Set usb or sdio:*
+```
+BR2_PACKAGE_ATBM60XX_INTERFACE_USB
+BR2_PACKAGE_ATBM60XX_INTERFACE_SDIO
+```
+
+*Example: to build atbm603x_wifi_usb:*
+```
+BR2_PACKAGE_ATBM60XX=y
+BR2_PACKAGE_ATBM60XX_MODEL_603X=y
+BR2_PACKAGE_ATBM60XX_INTERFACE_USB=y
+```
+
+#### iComm:
+*SSV615X/SSV625X, USB ID 0x6000:*
+
+```
 BR2_PACKAGE_SSV615X_OPENIPC
+```
 
-# SSV635X, USB ID 0x6011:
+*SSV635X, USB ID 0x6011:*
+
+```
 BR2_PACKAGE_SSV635X_OPENIPC
+```
 
-# MediaTek:
+#### MediaTek:
+```
 BR2_PACKAGE_MT7601U_OPENIPC
+```
 
-# SigmaStar:
+#### SigmaStar:
+```
 BR2_PACKAGE_SSW101B
+```
 
-# Realtek:
+#### Realtek:
+```
 BR2_PACKAGE_RTL8188EUS_OPENIPC
 BR2_PACKAGE_RTL8188FU_OPENIPC
 BR2_PACKAGE_RTL8189ES_OPENIPC
