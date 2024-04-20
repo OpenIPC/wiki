@@ -35,6 +35,14 @@ OpenIPC AIO "UltraSight"
 
 ## Software
 
+### Automatic system upgrade
+- Connect your device to a network (via ethernet or wireless).
+- Run the following commands:
+```
+fw_setenv upgrade https://github.com/OpenIPC/builder/releases/download/latest/ssc338q_fpv_openipc-urllc-aio-nor.tgz
+sysupgrade -k -r -n
+```
+
 ### Manual system upgrade
 - Prepare a sdcard formatted in FAT32 with 1GB size.
 - Download and extract [this package](https://github.com/openipc/builder/releases/download/latest/ssc338q_fpv_openipc-urllc-aio-nor.tgz).
@@ -58,6 +66,14 @@ fw_setenv wlanpass Password
 network restart
 ```
 
+### Upgrade bootloader
+- Log into the system (root:12345).
+- Run the following commands:
+```
+curl -L -o /tmp/uboot.bin https://github.com/openipc/firmware/releases/download/latest/u-boot-ssc338q-nor.bin
+flashcp -v /tmp/uboot.bin /dev/mtd0
+```
+
 ### Custom GPIO
 - Button input:
 ```
@@ -71,14 +87,6 @@ gpio clear 108
 gpio set 108
 ```
 
-### Upgrade bootloader
-- Log into the system (root:12345).
-- Run the following commands:
-```
-curl -L -o /tmp/uboot.bin https://github.com/openipc/firmware/releases/download/latest/u-boot-ssc338q-nor.bin
-flashcp -v /tmp/uboot.bin /dev/mtd0
-```
-
-### Using third party cables
-- DJI O3 MiPI cable - NOT suitable for OpenIPC AIO
-- RunCam Mipi cable - NOT suitable for OpenIPC AIO
+### Third party cables
+- DJI O3 mipi cable - NOT suitable for OpenIPC AIO
+- RunCam mipi cable - NOT suitable for OpenIPC AIO
