@@ -4,7 +4,7 @@ Package [ZeroTier One](https://www.zerotier.com) for ultimate builds.
 ### Start
 - To start the service, execute this command:
 ```
-/usr/sbin/zerotiner-one -d &
+/usr/sbin/zerotier-one -d &
 ```
 
 ### Setup
