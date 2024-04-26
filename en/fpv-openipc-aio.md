@@ -89,5 +89,6 @@ gpio set 108
 ```
 
 ### Third party cables
+- DJI Pocket2 cable - COMPATIBLE with OpenIPC AIO
 - DJI O3 mipi cable - NOT suitable for OpenIPC AIO
 - RunCam mipi cable - NOT suitable for OpenIPC AIO
