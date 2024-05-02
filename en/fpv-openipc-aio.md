@@ -9,7 +9,7 @@ OpenIPC AIO "UltraSight"
 <a href="https://raw.githubusercontent.com/OpenIPC/wiki/master/images/fpv-openipc-aio-content-1.webp"><img src="../images/fpv-openipc-aio-content-1.webp" width="60%"></a>
 <a href="https://raw.githubusercontent.com/OpenIPC/wiki/master/images/fpv-openipc-aio-content-2.webp"><img src="../images/fpv-openipc-aio-content-2.webp" width="60%"></a>
 
-## First start
+## First steps overview
 - Connect the Wireless antennas and install the heatsink (see Heatsink section).
 - Connect the Debug PCB and connect a network cable or USB-C cable.
 - Ensure proper cooling, airflow will be necessary to protect the board from overheating.
@@ -20,18 +20,21 @@ OpenIPC AIO "UltraSight"
 - The package comes with a heatsink and thermal pad. The thermal pad is covered in 3M double sided tape on both sides. Two screws are included with the set that can be used to mount the heatsink.
 - The heatsinks purpose is to dissipate heat from the Wireless components on the PCB. The thermal pad and heatsink therefore need to be placed on the side that has the Wireless chipset on it (e.g. antenna connectors, Realtek chip and power amplifiers).
 
-## Overview
+## PCB Overview
 <a href="https://raw.githubusercontent.com/OpenIPC/wiki/master/images/fpv-openipc-aio-manual.webp"><img src="../images/fpv-openipc-aio-manual.webp" width="80%"></a>
 
-### Power
-- Before powering on AIO board, the power pad must be soldered or connected to a reliable **3A at 5V DC** power source or BEC. This figure will be higher if higher RF power levels are selected.
-- When there is not enough load capacitance on the BEC, it is recommended to add a 470uF electrolytic capacitor (included in the set) between the BEC and AIO board to protect the AIO board from surge damage and provide decoupling. Install the capacitor as close to the AIO-PCB as possible. 
+### Powering up the board
+- Before powering on AIO board, the power pad must be soldered or connected to a reliable **3A at 5V DC** power source or BEC. This amperage figure will be higher if higher RF power levels are selected.
+- Make sure that cooling is adequate while the board is powered on. a fan is essential, a heatsink is also advised when possible. failure to provide enough cooling to the board will most likely cause damage to the board.
+- When there is not enough load capacitance on the BEC, it is recommended to add a 470uF electrolytic capacitor (included in the set) between the BEC and AIO board to protect the AIO board from surge damage and provide decoupling. Install the capacitor as close to the AIO-PCB as possible.
+- for added protection, we reccomend a Zener Diode with 1W capacityand maximum Voltage of 5.1V (ZMY5V1,BZX55C5V1,BZT52C5V1,1N5338B), soldered to the output of the BEC, before the capacitor. the following diagram shows how to solder the components:![zener_diode_diagram](https://github.com/OneManChop/OpenIPCwiki/assets/33513057/f0ad9f0b-6146-45af-81b2-4bc530880370)
+
 
 ### Debug/Ethernet
 - A Ethernet/Debug adapter is included. The flat-flex cable is used to connect it to the AIO-PCB. The connectors pins are located on the PCB side of the connector, pay attention to connect the flat flex cable with the exposed connections towards the PCB. The "handle" strips on the flat-flex cable will point towards the heatsink side on the AIO-PCB and away from the RJ45 connector on the Debugger PCB.
 
 ### Camera
-- The MIPI connector can pe pushed into the corresponding socket on the AIO-PCB vertically. No great force is needed and there are no levers to move or clips to disengage. For removal, the connector has two little prongs on the sides to aid with gripping it.
+- The MIPI connector can be pushed into the corresponding socket on the AIO-PCB vertically. No great force is needed and there are no levers to move or clips to disengage. For removal, the connector has two little prongs on the sides to aid with gripping it.
 
 ## Software
 
@@ -44,7 +47,7 @@ fw_setenv upgrade https://github.com/OpenIPC/builder/releases/download/latest/ss
 sysupgrade -k -r -n
 ```
 
-### Manual system upgrade
+### Manual system update
 - Prepare a sdcard formatted in FAT32 with 1GB size.
 - Download and extract [this package](https://github.com/openipc/builder/releases/download/latest/ssc338q_fpv_openipc-urllc-aio-nor.tgz).
 - Copy uImage.ssc338q and rootfs.squashfs.ssc338q to the sdcard.
@@ -59,7 +62,8 @@ run urnor
 ### Connect to wireless router
 - Upgrade the firmware to the newest version.
 - Log into the system (root:12345).
-- Run the following commands:
+- Run the following commands:![Uploading zener_diode_diagram.jpg…]()
+
 ```
 fw_setenv wlandev rtl8812au-generic
 fw_setenv wlanssid Router
@@ -67,7 +71,7 @@ fw_setenv wlanpass Password
 network restart
 ```
 
-### Upgrade bootloader
+### Update bootloader
 - Log into the system (root:12345).
 - Run the following commands:
 ```
@@ -88,7 +92,7 @@ gpio clear 108
 gpio set 108
 ```
 
-### Third party cables
+### Third party cables compatibility
 - DJI Pocket2 cable - COMPATIBLE with OpenIPC AIO
 - DJI O3 mipi cable - NOT suitable for OpenIPC AIO
 - RunCam mipi cable - NOT suitable for OpenIPC AIO
