@@ -14,12 +14,13 @@ Wireless settings
 	devmem 0x100C0080 32 0x530
 ```
 
+> [!IMPORTANT]  
+> Some drivers are not included in the premade OpenIPC firmware binaries, You may have to compile it yourself.
+
 - The variables [are listed here][1] and be can set with:
 ```shell
 fw_setenv wlandev mt7601u-hi3516ev300-camhi
 ```
-
----
 
 ### Enter wireless credentials
 
