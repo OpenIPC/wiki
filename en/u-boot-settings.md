@@ -5,7 +5,7 @@ U-Boot settings
 ---------------
 
 ### bootdelay
-To be continued...
+Use this to set the delay before we start the kernel, This is the time where you can get into the bootloader.
 
 ### bootnfs
 To be continued...
@@ -14,10 +14,10 @@ To be continued...
 Mandatory setting, available in all OpenIPC bootloaders
 
 ### gatewayip
-To be continued...
+This is the camera's gateway IP address, Mostly used for when you are flasing using TFTP in U-Boot.
 
 ### ipaddr
-To be continued...
+This is the camera's IP address, Mostly used for when you are flasing using TFTP in U-Boot.
 
 ### osmem
 Mandatory setting, available in all OpenIPC bootloaders
@@ -29,9 +29,9 @@ The type of sensor used on the device is set automatically in most cases
 Specify the full path to the archive with custom OpenIPC firmware in .tgz format
 
 ### wlandev
-To be continued...
+The Wi-Fi Driver to use for the Wi-Fi interface. ([Learn how to use it here](../en/wireless-settings.md))
 
 ### wlanmac
-To be continued...
+The MAC for the Wi-Fi Interface.
 
 
