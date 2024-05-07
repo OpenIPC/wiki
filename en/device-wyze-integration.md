@@ -60,6 +60,9 @@ MOTORS:
 
 ### OpenIPC installation
 
+> [!CAUTION]
+> The link below no longer works, Please replace the link with one that works or is updated.
+
 [Use these scripts](https://github.com/themactep/device-wyze-v3/blob/master/installation.md) to convert your Wyze Cam V3 to OpenIPC.
 
 ### Current issues
