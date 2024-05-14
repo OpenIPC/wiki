@@ -15,7 +15,6 @@ Unneeded options can be switched off for better security and performance. See /e
 
 ```
 -HUP restart Majestic (Except Ingenic T21).
--SIGUSR1 fast reload (Sigmastar only).
 -SIGUSR2 SDK Shutdown (For all platforms).
 ```
 
