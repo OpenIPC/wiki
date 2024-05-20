@@ -44,7 +44,8 @@ cd firmware
 
 Alternatively, you can use the following command in the root of your OpenIPC firmware directory to install dependencies:
 
-```sudo make deps
+```bash
+sudo make deps
 ```
 
 ### Quick Build from Sources
