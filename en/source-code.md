@@ -52,7 +52,8 @@ sudo make deps
 
 To build the desired version of the firmware for your processor, run the following command in the root of the project. The files will be available in the directory "output/images".
 
-```./building.sh hi3518ev300_ultimate
+```bash
+./building.sh hi3518ev300_ultimate
 ```
 
 Examples of rebuilding the Linux kernel, root filesystems, and individual packages in our project:
