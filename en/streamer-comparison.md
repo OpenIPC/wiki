@@ -14,7 +14,7 @@ Comparison of streamers
 | Development of the project in the active phase          | Yes      | Yes      | No       | No       |
 | Open source project                                     | Yes      | No       | Yes      | Yes      |
 | Sending telemetry to developers                         | No       | Yes      | No       | No       |
-| IR filter and backlight control                         | ?        | Yes      | Yes      | No       |
+| IR filter and backlight control                         | Yes      | Yes      | Yes      | No       |
 | Freeze detection and Watchdog support                   | Yes      | Yes      | No       | No       |
 | Record video to SD card in MP4 format                   | ?        | Yes      | Yes      | No       |
 | Getting a JPEG snapshot                                 | Yes      | Yes      | Yes      | No       |
