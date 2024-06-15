@@ -33,6 +33,6 @@ Comparison of streamers
 | WebRTC support                                          | No       | Yes      | No       | No       |
 | NetIP protocol support for DVRs                         | No       | Yes      | No       | No       |
 | Basic ONVIF support, resource search                    | No       | Yes      | No       | No       |
-|                                                         | No       | Yes      | No       | No       |
+| Support for custom plugins                              | No       | Yes      | No       | No       |
 |                                                         |          |          |          |          |
 | To be continued, material is being written              |          |          |          |          |
