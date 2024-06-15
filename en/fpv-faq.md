@@ -4,6 +4,10 @@
 Frequently Asked Questions for FPV
 ----------------------------------
 
+<p align="center">
+  <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-logo.jpg?raw=true" alt="Logo"/>
+</p>
+
 ### Why doesn't anyone write in this section ?
 
 This section has just been created and will be filled with information.
