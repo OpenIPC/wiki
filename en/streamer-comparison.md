@@ -15,12 +15,16 @@ Comparison of streamers
 | Open source project                                     | Yes      | No       | Yes      | Yes      |
 | Sending telemetry to developers                         | No       | Yes      | No       | No       |
 | IR filter and backlight control                         | ?        | Yes      | Yes      | No       |
-| Freeze detection and Watchdog support                   | Yes      | Yes      | ?        | No       |
-| Record video to SD card in MP4 format                   | ?        | Yes      | ?        | No       |
+| Freeze detection and Watchdog support                   | Yes      | Yes      | No       | No       |
+| Record video to SD card in MP4 format                   | ?        | Yes      | Yes      | No       |
 | Getting a JPEG snapshot                                 | Yes      | Yes      | Yes      | No       |
-| Basic OSD support                                       | Yes      | Yes      | ?        | No       | 
-|                                                         |          |          |          |          |
-| Two independent video streams                           | No       | Yes      | No       | No       |
+| Sending JPEG snapshots to a remote server               | ?        | No       | Yes      | No       |
+| Basic OSD support                                       | Yes      | Yes      | No       | No       |
+| Expanded OSD support and dynamic data                   | Yes      | No       | No       | No       |
+| MJPEG support                                           | Yes      | Yes      | Yes      | No       |
+| Basic RTSP support                                      | Yes      | Yes      | Yes      | No       |
+| Two independent RTSP video streams                      | No       | Yes      | No       | No       |
+| Audio support in all streams                            | No       | Yes      | No       | No       |
 | Support for sensor tuning profiles                      | No       | Yes      | No       | No       |
 | Motion detection and script launch                      | No       | Yes      | No       | No       |
 | Cloud video surveillance support [ipeye.ae](https://ipeye.ae) | No | Yes      | No       | No       |
