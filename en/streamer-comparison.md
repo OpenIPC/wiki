@@ -15,8 +15,20 @@ Comparison of streamers
 | Open source project                                     | Yes      | No       | Yes      | Yes      |
 | Sending telemetry to developers                         | No       | Yes      | No       | No       |
 | IR filter and backlight control                         | ?        | Yes      | Yes      | No       |
+| Freeze detection and Watchdog support                   | Yes      | Yes      | ?        | No       |
+| Record video to SD card in MP4 format                   | ?        | Yes      | ?        | No       |
+| Getting a JPEG snapshot                                 | Yes      | Yes      | Yes      | No       |
+| Basic OSD support                                       | Yes      | Yes      | ?        | No       | 
 |                                                         |          |          |          |          |
-| Cloud video surveillance support [ipeye.ae](https://ipeye.ae)               | No       | Yes      | No       | No       |
-| Sending steam to YouTube, Facebook, Telegram, etc.      | No       | Yes      | No       | No       |
+| Two independent video streams                           | No       | Yes      | No       | No       |
+| Support for sensor tuning profiles                      | No       | Yes      | No       | No       |
+| Motion detection and script launch                      | No       | Yes      | No       | No       |
+| Cloud video surveillance support [ipeye.ae](https://ipeye.ae) | No | Yes      | No       | No       |
+| Sending steam to YouTube, Facebook, Telegram, etc       | No       | Yes      | No       | No       |
+| HLS support                                             | No       | Yes      | No       | No       |
+| WebRTC support                                          | No       | Yes      | No       | No       |
+| NetIP protocol support for DVRs                         | No       | Yes      | No       | No       |
+| Basic ONVIF support, resource search                    | No       | Yes      | No       | No       |
+|                                                         | No       | Yes      | No       | No       |
 |                                                         |          |          |          |          |
 | To be continued, material is being written              |          |          |          |          |
