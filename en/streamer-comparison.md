@@ -16,7 +16,7 @@ Comparison of streamers
 | Sending telemetry to developers                         | No       | Yes      | No       | No       |
 | IR filter and backlight control                         | ?        | Yes      | Yes      | No       |
 |                                                         |          |          |          |          |
-| Cloud video surveillance support ipeye.ae               | No       | Yes      | No       | No       |
+| Cloud video surveillance support [ipeye.ae](https://ipeye.ae)               | No       | Yes      | No       | No       |
 | Sending steam to YouTube, Facebook, Telegram, etc.      | No       | Yes      | No       | No       |
 |                                                         |          |          |          |          |
 | To be continued, material is being written              |          |          |          |          |
