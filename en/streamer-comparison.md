@@ -37,6 +37,8 @@ Comparison of streamers
 | Basic ONVIF support, resource search                    | No       | Yes      | No       | No       |
 | Support for custom plugins                              | No       | Yes      | No       | No       |
 | Setup via WebUI                                         | No       | Yes      | No       | No       |
+| Custom ISP settings, a large number of                  | No       | Yes      | No       | No       |
+| Custom RTP stream, via UDP post or socket               | No       | Yes      | No       | No       |
 | Sending telemetry to developers                         | No       | Yes      | No       | No       |
 |                                                         |          |          |          |          |
 | To be continued, material is being written              |          |          |          |          |
