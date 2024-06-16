@@ -22,7 +22,8 @@ Comparison of streamers
 | Basic OSD support                                       | Yes      | Yes      | No       | No       |
 | Expanded OSD support and dynamic data                   | Yes      | No       | No       | No       |
 | MJPEG support                                           | Yes      | Yes      | Yes      | No       |
-| Basic RTSP support                                      | Yes      | Yes      | Yes      | No       |
+| Basic RTSP support, H264 UDP                            | Yes      | Yes      | Yes      | No       |
+| Expanded RTSP support, H264/H265 and TCP/UDP            | No       | Yes      | No       | No       |
 | Two independent RTSP video streams                      | No       | Yes      | No       | No       |
 | Audio support in all streams                            | No       | Yes      | No       | No       |
 | Support for sensor tuning profiles                      | No       | Yes      | No       | No       |
@@ -34,5 +35,6 @@ Comparison of streamers
 | NetIP protocol support for DVRs                         | No       | Yes      | No       | No       |
 | Basic ONVIF support, resource search                    | No       | Yes      | No       | No       |
 | Support for custom plugins                              | No       | Yes      | No       | No       |
+| Setup via WebUI                                         | No       | Yes      | No       | No       |
 |                                                         |          |          |          |          |
 | To be continued, material is being written              |          |          |          |          |
