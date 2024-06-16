@@ -21,7 +21,7 @@ Sigmastar unbrick
 ---
 
 **Install the driver**
-<img src="../images/installing-device-driver.webp">
+<img src="../images/sigmastar-driver.webp">
 
 ---
 
