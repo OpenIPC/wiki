@@ -20,6 +20,13 @@ Sigmastar unbrick
 
 ---
 
+**Install the driver**
+- https://github.com/openipc/snander-mstar/releases
+
+---
+
+
+
 **Check the device flash with snander:**
 - Power cycling might help if the device can not be detected.
 ```
