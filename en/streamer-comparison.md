@@ -4,10 +4,16 @@
 Comparison of streamers
 -----------------------
 
+
+### Main types of streamers and their presence
+
 - [Divinus](https://github.com/OpenIPC/divinus) - new, open and actively developing streamer with support for multiple platforms
 - [Majestic](https://github.com/OpenIPC/majestic) - the undisputed leader in functionality and support for various platforms
 - [Mini](https://github.com/OpenIPC/mini) - the oldest streamer, the great-grandfather of all others
 - [Venc](https://github.com/OpenIPC/silicon_research/tree/master/venc) - miniature streamer for FPV/URLLC for two platforms
+
+
+### Table of streamer functionality
 
 | Features and capabilities                               | Divinus  | Majestic | Mini     | Venc     |
 |:--------------------------------------------------------|:--------:|:--------:|:--------:|:--------:|
@@ -38,7 +44,22 @@ Comparison of streamers
 | Support for custom plugins                              | No       | Yes      | No       | No       |
 | Setup via WebUI                                         | No       | Yes      | No       | No       |
 | Custom ISP settings, a large number of                  | No       | Yes      | No       | No       |
-| Custom RTP stream, via UDP post or socket               | No       | Yes      | No       | No       |
+| Custom RTP stream, via UDP post or socket               | No       | Yes      | No       | Yes      |
 | Sending telemetry to developers                         | No       | Yes      | No       | No       |
+|                                                         |          |          |          |          |
+| To be continued, material is being written              |          |          |          |          |
+
+
+### Table of supported platforms and groups
+
+| Features and capabilities                               | Divinus  | Majestic | Mini     | Venc     |
+|:--------------------------------------------------------|:--------:|:--------:|:--------:|:--------:|
+| HiSilicon HS3516AV100 group                             | No       | Yes      | No       | No       |
+| HiSilicon HS3516CV100 group                             | ?        | Yes      | Part     | No       |
+| HiSilicon HS3516CV200 group                             | ?        | Yes      | Yes      | No       |
+| HiSilicon HS3516CV300 group                             | Yes      | Yes      | Yes      | No       |
+| HiSilicon HS3516CV500 group                             | ?        | Yes      | No       | No       |
+| HiSilicon HS3516EV200 group                             | Yes      | Yes      | No       | Yes      |
+| HiSilicon HS3519V101 group                              | No       | Yes      | No       | No       |
 |                                                         |          |          |          |          |
 | To be continued, material is being written              |          |          |          |          |
