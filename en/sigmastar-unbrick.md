@@ -28,6 +28,7 @@ Sigmastar unbrick
 
 
 **Check the device flash with snander:**
+- Use the CMD and navigate to the downloaded file
 - The device must be powered when connected to the programmer.
 - Power cycling might help if the device can not be detected.
 ```
@@ -45,6 +46,7 @@ snander -l 0x200000 -e
 
 **Write the new uboot file:**
 - https://github.com/openipc/firmware/releases/tag/latest
+- drop the file into the same folder as the program
 ```
 snander -w u-boot-ssc338q-nand.bin
 ```
