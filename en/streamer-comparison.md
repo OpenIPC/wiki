@@ -13,7 +13,7 @@ Comparison of streamers
 |:--------------------------------------------------------|:--------:|:--------:|:--------:|:--------:|
 | Development of the project in the active phase          | Yes      | Yes      | No       | No       |
 | Open source project                                     | Yes      | No       | Yes      | Yes      |
-| Sending telemetry to developers                         | No       | Yes      | No       | No       |
+| Limited number of platforms supported                   | No       | No       | Yes      | Yes      |
 | IR filter and backlight control                         | Yes      | Yes      | Yes      | No       |
 | Freeze detection and Watchdog support                   | Yes      | Yes      | No       | No       |
 | Record video to SD card in MP4 format                   | ?        | Yes      | Yes      | No       |
@@ -36,5 +36,6 @@ Comparison of streamers
 | Basic ONVIF support, resource search                    | No       | Yes      | No       | No       |
 | Support for custom plugins                              | No       | Yes      | No       | No       |
 | Setup via WebUI                                         | No       | Yes      | No       | No       |
+| Sending telemetry to developers                         | No       | Yes      | No       | No       |
 |                                                         |          |          |          |          |
 | To be continued, material is being written              |          |          |          |          |
