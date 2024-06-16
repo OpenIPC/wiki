@@ -23,8 +23,9 @@ Comparison of streamers
 | Expanded OSD support and dynamic data                   | Yes      | No       | No       | No       |
 | MJPEG support                                           | Yes      | Yes      | Yes      | No       |
 | Basic RTSP support, H264 UDP                            | Yes      | Yes      | Yes      | No       |
-| Expanded RTSP support, H264/H265 and TCP/UDP            | No       | Yes      | No       | No       |
+| Expanded RTSP support, H264/H265 and TCP/UDP            | ?        | Yes      | No       | No       |
 | Two independent RTSP video streams                      | No       | Yes      | No       | No       |
+| RTMP H264/H265 support                                  | No       | Yes      | No       | No       |
 | Audio support in all streams                            | No       | Yes      | No       | No       |
 | Support for sensor tuning profiles                      | No       | Yes      | No       | No       |
 | Motion detection and script launch                      | No       | Yes      | No       | No       |
