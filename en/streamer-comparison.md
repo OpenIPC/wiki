@@ -4,6 +4,12 @@
 Comparison of streamers
 -----------------------
 
+### Table of contents
+
+- [Main types of streamers and their presence](/en/streamer-comparison.md#main-types-of-streamers-and-their-presence)
+- [Table of streamer functionality](/en/streamer-comparison.md#table-of-streamer-functionality)
+- [Table of supported platforms and groups](/en/streamer-comparison.md#table-of-supported-platforms-and-groups)
+
 
 ### Main types of streamers and their presence
 
