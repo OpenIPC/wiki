@@ -18,17 +18,14 @@ Sigmastar unbrick
 **Download snander-mstar:**
 - https://github.com/openipc/snander-mstar/releases
 
----
-
-**Install the driver**
+<details>
+<summary>Install Windows driver</summary>
 <img src="../images/sigmastar-driver.webp">
+</details>
 
 ---
-
-
 
 **Check the device flash with snander:**
-- Use the CMD and navigate to the downloaded file
 - The device must be powered when connected to the programmer.
 - Power cycling might help if the device can not be detected.
 ```
