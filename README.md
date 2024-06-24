@@ -76,6 +76,7 @@ OpenIPC Wiki
 - [FFMPEG usage](en/dev-ffmpeg-usage.md)
 - [Kernel configuration for adding new platforms](en/integration-kernel.md)
 - [List of supported sensors](en/firmware-sensors.md)
+- [Visual sensor identification](en/visual_sensor_identification.md)
 - [List of OpenIPC Buildroot packages](en/dev-buildroot-packages.md)
 - [Source code](en/source-code.md)
 - [Bug reports](https://github.com/OpenIPC/firmware/issues)
