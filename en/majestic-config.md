@@ -112,7 +112,7 @@ outgoing:
   enabled: false
   #server: udp://192.168.1.10:5600
   #naluSize: 1200
-  #- udp://IP:port
+  #- udp://IP:port                                        # Multiple data sending is configured only in the /etc/majestic.yaml file and is not available for control from the WebUI
   #- unix:/tmp/rtpstream.sock
   #- rtmps://dc4-1.rtmp.t.me/s/mykey
 
@@ -129,7 +129,7 @@ onvif:
 ipeye:
   enabled: false
 
-youtube:
+youtube:                                                  # This function only works with the external daemon plugin for Majestic
   enabled: false
   #key: xxxx-xxxx-xxxx-xxxx-xxxx
 
