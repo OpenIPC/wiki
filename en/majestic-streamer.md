@@ -125,6 +125,15 @@ Examples of other addresses for different services:
 
 We ask that you add information about other popular services here, thank you.
 
+RTMP reconnection and timeout logic works as follows:
+
+```
+    0-200 tries = 10 seconds timeout
+  200-500 tries = 60 seconds timeout
+ 500-1000 tries = 300 seconds timeout
+    1000+ tries = 600 seconds timeout
+```
+
 ### ONVIF
 
 For basic ONVIF to work correctly, you need to enable it and add a user to the system as shown in the example:
