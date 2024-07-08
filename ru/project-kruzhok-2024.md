@@ -8,7 +8,7 @@ Qtech QVC-IPC-136W & Switcam HS-303-V3
 
 <h1 align="left">
   <br>
-  <a href="https://foss.kruzhok.org/"><img src="https://raw.githubusercontent.com/OpenIPC/wiki/master/images/project-kruzhok-2024/foss_kruzhok-logo.png" alt="FOSS Kruzhok" width="500"></a>
+  <a href="https://foss.kruzhok.org/"><img src="https://raw.githubusercontent.com/TheDayG0ne/wiki/master/images/project-kruzhok-2024/foss_kruzhok-logo.png" alt="FOSS Kruzhok" width="500"></a>
 </h1>
 
 Проект предназначен для школьников и студентов. Программа разделена на акселератор и конкурсную часть. Эксперты из ведущих IT компаний оценивают проекты на Github/Gitlab.\
@@ -25,12 +25,25 @@ Qtech QVC-IPC-136W & Switcam HS-303-V3
 
 ### Кратко о подключении устройства
 
-Для подключения камеры к WiFi точке доступа сгенерируйте QR код (можно использовать генератор [на сайте OpenIPC](https://openipc.org/tools/qr-code-generator), либо же любым другим [генератором QR кодов](https://www.google.com/search?q=QR+code+generator)) с параметрами, указанными ниже и покажите 
-его камере на расстоянии 15-50 см. в первые полторы минуты после включения, пока горит индикатор на передней панели.
-```
-wlanssid=HitSpotName
-wlanpass=mypassword
-```
+Для подключения камеры к WiFi точке доступа:
+1. Сгенерируйте QR код со следующими параметрами:
+    ```
+    wlanssid=HitSpotName
+    wlanpass=mypassword
+    ```
+*(для генерации кода можно использовать генератор [на сайте OpenIPC](https://openipc.org/tools/qr-code-generator), либо же любой другой [генератор QR кодов](https://www.google.com/search?q=QR+code+generator))* 
+2. Подключите камеру к сети
+3. В течении 1,5 минуты после включения покажите камере сгенерированный ранее QR код на расстоянии 15-30 см
+4. Дождитесь голосового оповещения "The device is ready", после чего дождитесь перезагрузки камеры
+
+**Готово! Камера подключена к сети**
+
+IP адрес камеры можно посмотреть в настройках Вашего роутера
+<h1 align="left">
+  <br>
+  <a><img src="https://raw.githubusercontent.com/TheDayG0ne/wiki/master/images/project-kruzhok-2024/cam-ip-router.png" alt="Просмотр IP адреса камеры в настройках роутера" width="500"></a>
+</h1>
+
 
 Для входа на камеру по SSH и WEB используйте логин `root` и пароль `123456`
 
