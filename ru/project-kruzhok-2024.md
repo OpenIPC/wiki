@@ -8,6 +8,8 @@ Qtech QVC-IPC-136W & Switcam HS-303-V3
 
 ...
 
+* https://talent.kruzhok.org/
+
 ### Цели и задачи привлечения в проект
 
 ...
