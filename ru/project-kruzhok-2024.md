@@ -30,7 +30,7 @@ Qtech QVC-IPC-136W & Switcam HS-303-V3
     wlanssid=HitSpotName
     wlanpass=mypassword
     ```
-*(для генерации кода можно использовать генератор [на сайте OpenIPC](https://openipc.org/tools/qr-code-generator), либо же любой другой [генератор QR кодов](https://www.google.com/search?q=QR+code+generator))* 
+    *(для генерации кода можно использовать генератор [на сайте OpenIPC](https://openipc.org/tools/qr-code-generator), либо же любой другой [генератор QR кодов](https://www.google.com/search?q=QR+code+generator))* 
 2. Подключите камеру к сети
 3. В течении 1,5 минуты после включения покажите камере сгенерированный ранее QR код на расстоянии 15-30 см
 4. Дождитесь голосового оповещения "The device is ready", после чего дождитесь перезагрузки камеры
