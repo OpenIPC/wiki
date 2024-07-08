@@ -7,7 +7,6 @@ Qtech QVC-IPC-136W & Switcam HS-303-V3
 ### О конкурсе, справка, участники, призы
 
 <h1 align="left">
-  <br>
   <a href="https://foss.kruzhok.org/"><img src="https://raw.githubusercontent.com/TheDayG0ne/wiki/master/images/project-kruzhok-2024/foss_kruzhok-logo.png" alt="FOSS Kruzhok" width="500"></a>
 </h1>
 
@@ -40,8 +39,7 @@ Qtech QVC-IPC-136W & Switcam HS-303-V3
 
 IP адрес камеры можно посмотреть в настройках Вашего роутера
 <h1 align="left">
-  <br>
-  <a><img src="https://raw.githubusercontent.com/TheDayG0ne/wiki/master/images/project-kruzhok-2024/cam-ip-router.png" alt="Просмотр IP адреса камеры в настройках роутера" width="500"></a>
+  <a><img src="https://raw.githubusercontent.com/TheDayG0ne/wiki/master/images/project-kruzhok-2024/cam-ip-router.png" alt="Просмотр IP адреса камеры в настройках роутера" width="800"></a>
 </h1>
 
 
