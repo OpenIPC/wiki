@@ -19,6 +19,9 @@ This is the camera's gateway IP address, Mostly used for when you are flasing us
 ### ipaddr
 This is the camera's IP address, Mostly used for when you are flasing using TFTP in U-Boot.
 
+### netaddr_fallback
+Sets the fallback address on the Ethernet interface if WiFi is enabled
+
 ### osmem
 Mandatory setting, available in all OpenIPC bootloaders
 
