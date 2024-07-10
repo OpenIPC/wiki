@@ -8,7 +8,7 @@ Board specific GPIO settings list
 
 | Processor   | IRCUT1 | IRCUT2 | LIGHT | RESET | I/O | USB_ENA | TESTED BOARDS    |  AUDIO OUTPUT   |
 |-------------|--------|--------|-------|-------|-----|---------|------------------|-----------------|
-| SSC30KQ     | 23     | 24     | 60    | 10    |     |         | MC-L12, MC-L12B  |      9          |
+| SSC30KQ     | 23     | 24     | 60/59 | 10    |     |         | MC-L12, MC-L12B  |      9          |
 | SSC335      | 78     | 79     | 61/53 | 66    | 52  |         | MS-J10, YM200J10 |      80         |
 | SSC337      | 78     | 79     | 61    | 66    | 52  |         | MC-F40, YM-J10D  |                 |
 | SSC337DE    | 78     | 79     | 61    | 66    |     |         | MC500L8          |                 |
