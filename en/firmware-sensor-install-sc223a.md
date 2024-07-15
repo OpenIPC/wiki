@@ -9,7 +9,8 @@ If an image sensor driver is not included in the firmware image, you can install
 As an example the image sensor "sc223a" will be installed to a gk7205v210 board (with openipc-gk7205v210-fpv-8mb.bin flashed).
 
 You need a [sensor library](https://github.com/OpenIPC/firmware/raw/master/general/package/goke-osdrv-gk7205v200/files/sensor/libsns_sc223a.so) and one [sensor configuration file](https://github.com/OpenIPC/firmware/raw/master/general/package/goke-osdrv-gk7205v200/files/sensor/config/sc223a_i2c_1080p.ini).
-The files for your sensor can be found following [this list](firmware-sensors.md).
+
+The needed files for other sensors can be found following [this list](firmware-sensors.md).
 
 Install the files by downloading them directly from github to your device:
 ```sh
@@ -30,3 +31,5 @@ cli -s .video0.fps 30
 killall majestic
 majestic
 ```
+
+[more info about sensor `sc223a`](https://github.com/RoboSchmied/Documentation/blob/main/sc223a.md)
