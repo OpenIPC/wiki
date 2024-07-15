@@ -40,7 +40,7 @@ _Note: This list does not guarantee that your sensor will work. There are nuance
 - GK7205V200
   - ar0237, bt656, f23, f37, gc2053, gc4653, imx290, imx307, imx327, imx335, os05a, ov2718, sc200ai, sc2231, sc2232h, sc2235, sc2239, sc223a, sc2335, sc3235, sc3335, sc4236, sc500ai
 - GK7205V210
-  - imx307, imx327, imx335, os05a, ov2718, sc200ai, sc2231, sc2232h, sc2235, sc2239, sc223a(sold as sc5239s), sc2335, sc3235, sc3335, sc4236, sc500ai
+  - imx307, imx327, imx335, os05a, ov2718, sc200ai, sc2231, sc2232h, sc2235, sc2239, [sc223a(sold as sc5239s)](https://github.com/RoboSchmied/Documentation/blob/main/sc223a.md), sc2335, sc3235, sc3335, sc4236, sc500ai
 - GK7205V300
 - GK7605V100
 
