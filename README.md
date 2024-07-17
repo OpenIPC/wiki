@@ -135,7 +135,7 @@ OpenIPC Wiki
 ### Roadmap
 
 - [ToDo](en/todo-all.md)
-- [Developers](en/developers.md)
+- [Developers](en/contribute.md)
 - [Notes from old sources](en/notes-for-resorting.md)
 
 ### Reference Book
