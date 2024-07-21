@@ -28,9 +28,19 @@ Heat Sink with 20mmx20mm mount holes.
 
 
 **Power Section**
+
+Power input:
+
 2S-6S
 
+The on board dualway BEC Capacity:
+
+RF BEC on board is up to 3A 5V output
+
+MSIC BEC on board is up to 2A 5V output
+
 enter uboot use  uart device connect to top of AIO board(R0,T0)pad.
+
 
 **connect usb debug port:**
 
