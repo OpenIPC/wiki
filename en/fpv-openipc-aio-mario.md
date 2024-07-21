@@ -6,6 +6,27 @@ OpenIPC AIO "Mario"
 
 https://store.openipc.org/OpenIPC-AIO-Mario-v1-0-p633320808
 
+![image](https://github.com/user-attachments/assets/ad675599-61ce-4cec-a9bf-5933d907c53a)
+
+
+**LED function**
+Red glimmering	Power on with Battery
+
+Red 	Wired linked
+
+Blue flash	RF transmitter
+
+Green	TBD
+
+Board Size 30*32mm with 4*M2 mount holes.
+
+Heat Sink with 20mmx20mm mount holes.
+
+![image](https://github.com/user-attachments/assets/1c7e34c1-76a9-45ee-9caf-ffd33261e154)
+
+
+
+
 **Power Section**
 2S-6S
 
@@ -13,7 +34,7 @@ enter uboot use  uart device connect to top of AIO board(R0,T0)pad.
 
 **connect usb debug port:**
 
-power on AIO with Battery connector, after the blue LED flashing, plug in usb cable and connect to PC
+power on AIO with Battery connector(GH1.25* 6 pin), after the blue LED flashing, plug in usb cable and connect to PC
 
 in windows:
 
