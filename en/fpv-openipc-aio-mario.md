@@ -65,3 +65,9 @@ Reconmand RF setting
   
   Video biterate:4096 /12688(mcs 3+)
   
+**SD solt for Air camera record**
+
+on bench test or debug is disable the record function defaultly
+
+To enable the recording function set (record value)true in majestic.yaml
+
