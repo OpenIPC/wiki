@@ -81,3 +81,12 @@ on bench test or debug is disable the record function defaultly
 
 To enable the recording function set (record value)true in majestic.yaml
 
+Todo
+On board heat sink and cooling fan:
+
+USB only for debug mode
+
+Power limited 5W input.
+
+Extend connector
+
