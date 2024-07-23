@@ -73,7 +73,9 @@ Reconmand RF setting
   
   stbc=1,ldpc=1
   
-  Video biterate:4096 /12688(mcs 3+)
+  Video biterate:4096 /8192/12688(mcs 3+)
+
+  Keep RF poweroff or power=1 when on bench test(when only usb connect)
   
 **SD solt for Air camera record**
 
