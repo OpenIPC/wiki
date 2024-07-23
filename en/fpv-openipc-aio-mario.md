@@ -83,10 +83,16 @@ on bench test or debug is disable the record function defaultly
 
 To enable the recording function set (record value)true in majestic.yaml
 
-**Todo**
+
 
 On board heat sink and cooling fan:
 
+cooling fan out put power up to 500mA max
+
+all heat sink mount holes are M2 screws thread.
+
+
+**Todo**
 USB only for debug mode
 
 Power limited 5W input.
