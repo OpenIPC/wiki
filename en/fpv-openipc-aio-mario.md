@@ -18,7 +18,7 @@ Blue flash	RF transmitter
 
 Green	TBD
 
-Board Size 30*32mm with 4*M2 mount holes.
+Board Size 30mmx32mm with 4*M2 mount holes.
 
 Heat Sink with 20mmx20mm mount holes.
 
@@ -93,6 +93,7 @@ all heat sink mount holes are M2 screws thread.
 
 
 **Todo**
+
 USB only for debug mode
 
 Power limited 5W input.
