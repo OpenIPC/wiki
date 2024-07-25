@@ -20,7 +20,9 @@ Side mount holes are M2 x2 screw thread.
 
 Install atennas for AIO.
 
-![Uploading image.png…]()
+![image](https://github.com/user-attachments/assets/e10e6671-553f-4840-aacd-16816be0813b)
+
+
 
 
 
