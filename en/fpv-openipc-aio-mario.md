@@ -8,6 +8,23 @@ https://store.openipc.org/OpenIPC-AIO-Mario-v1-0-p633320808
 
 ![image](https://github.com/user-attachments/assets/ad675599-61ce-4cec-a9bf-5933d907c53a)
 
+Remove the lens cover film befor use
+
+![image](https://github.com/user-attachments/assets/9ead08a6-f4eb-45a0-bc63-19d3abd3ec1e)
+
+
+
+The Mario camera case with 4x M1.2 screws.
+
+Side mount holes are M2 x2 screw thread.
+
+Install atennas for AIO.
+
+![image](https://github.com/user-attachments/assets/e10e6671-553f-4840-aacd-16816be0813b)
+
+
+
+
 
 **LED function**
 Red glimmering	Power on with Battery
@@ -18,7 +35,7 @@ Blue flash	RF transmitter
 
 Green	TBD
 
-Board Size 30*32mm with 4*M2 mount holes.
+Board Size 30mmx32mm with 4*M2 mount holes.
 
 Heat Sink with 20mmx20mm mount holes.
 
@@ -73,7 +90,9 @@ Reconmand RF setting
   
   stbc=1,ldpc=1
   
-  Video biterate:4096 /12688(mcs 3+)
+  Video biterate:4096 /8192/12688(mcs 3+)
+
+  Keep RF poweroff or power=1 when on bench test(when only usb connect)
   
 **SD solt for Air camera record**
 
@@ -81,9 +100,16 @@ on bench test or debug is disable the record function defaultly
 
 To enable the recording function set (record value)true in majestic.yaml
 
-**Todo**
+
 
 On board heat sink and cooling fan:
+
+cooling fan out put power up to 500mA max
+
+all heat sink mount holes are M2 screws thread.
+
+
+**Todo**
 
 USB only for debug mode
 
