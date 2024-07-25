@@ -138,6 +138,10 @@ adduser viewer -s /bin/false -D -H
 echo viewer:123456 | chpasswd
 ```
 
+### JPEG and MJPEG
+
+For the purpose of unification and standardization for all platforms, as well as to increase the stability of the streamer, the image size will always be equal to the size on the Video0 channel and a separate setting is not provided.
+
 ###  ROI
 
 Detection zones of two types:
