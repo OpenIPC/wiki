@@ -9,10 +9,9 @@ https://store.openipc.org/OpenIPC-AIO-Mario-v1-0-p633320808
 ![image](https://github.com/user-attachments/assets/ad675599-61ce-4cec-a9bf-5933d907c53a)
 
 Remove the lens cover film befor use
-![Uploading image.png…]()
 
+![image](https://github.com/user-attachments/assets/9ead08a6-f4eb-45a0-bc63-19d3abd3ec1e)
 
-![image](https://github.com/user-attachments/assets/5d4738e8-8774-466b-b9d3-555f13417c49)
 
 
 The Mario camera case with 4x M1.2 screws.
@@ -20,6 +19,9 @@ The Mario camera case with 4x M1.2 screws.
 Side mount holes are M2 x2 screw thread.
 
 Install atennas for AIO.
+
+![Uploading image.png…]()
+
 
 
 **LED function**
