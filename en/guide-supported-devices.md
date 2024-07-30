@@ -26,6 +26,9 @@ be held liable for any damage to the camera, yourself, your house, your pets,
 or anything else. If you don't feel comfortable around hardware, this project
 may not be right for you.
 
+You can also view the list of adapted devices in a special Builder project -
+https://github.com/OpenIPC/builder
+
 _If you have another supported device to add, please do it [here][2]._
 
 | Brand      | Model              | Processor   | Sensor | Flash Memory | LAN | WLAN           | USB  | Card |
