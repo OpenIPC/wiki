@@ -32,11 +32,9 @@ busybox tftp -r uImage.${soc} -g ${serverip}
 for 8MB image
 
 ```bash
-mw.b ${baseaddr} 0xff 0x200000
 tftp ${baseaddr} uImage.${soc}
 sf probe 0; sf erase 0x50000 0x200000; sf write ${baseaddr} 0x50000 ${filesize}
 
-mw.b ${baseaddr} 0xff 0x500000
 tftp ${baseaddr} rootfs.squashfs.${soc}
 sf probe 0; sf erase 0x250000 0x500000; sf write ${baseaddr} 0x250000 ${filesize}
 ```
@@ -44,13 +42,11 @@ sf probe 0; sf erase 0x250000 0x500000; sf write ${baseaddr} 0x250000 ${filesize
 for 16MB image
 
 ```bash
-mw.b ${baseaddr} 0xff 0x300000
 tftp ${baseaddr} uImage.${soc}
-sf probe 0; sf erase 0x50000 0x300000; sf write ${baseaddr} 0x50000 ${filesize}
+sf probe 0; sf erase 0x50000 0x200000; sf write ${baseaddr} 0x50000 ${filesize}
 
-mw.b ${baseaddr} 0xff 0x500000
 tftp ${baseaddr} rootfs.squashfs.${soc}
-sf probe 0; sf erase 0x350000 0xa00000; sf write ${baseaddr} 0x350000 ${filesize}
+sf probe 0; sf erase 0x250000 0xA00000; sf write ${baseaddr} 0x250000 ${filesize}
 ```
 
 ### Upgrading from local files
