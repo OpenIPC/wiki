@@ -80,11 +80,18 @@ user:root password:12345
 
 **RF section**
 
+RF antenna characteristics
+
+![image](https://github.com/user-attachments/assets/d54050b4-2769-4942-95d7-8aad3b5e2e21)
+
+![image](https://github.com/user-attachments/assets/0a709f70-ac8b-4880-93f5-49e1d958eb1b)
+
+
 Default Antenna is ANT1 for 1T1R, ANT0+ANT1 is 2T2R
 
 Reconmand RF setting 
   
-  RF Power 1~30dbm
+  RF Power 1~30
   
   MCS index 1,3(0-7 is 1T1R, 8+ is 2T2R)
   
