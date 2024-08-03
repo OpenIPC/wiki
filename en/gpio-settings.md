@@ -79,6 +79,15 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 | Hi3516Ev200 | 12     | 13     |          | 4     |
 | Hi3516Av300 | 5      | 6      |
 
+
+### Huishi / Vatilon boards
+
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS |
+|-------------|--------|--------|----------|
+| SSC377      | 80     | 81     |          |
+| SSC378DE    | 80     | 81     |          |
+
+
 ### Jabsco boards
 
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS |
