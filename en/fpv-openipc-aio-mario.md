@@ -91,7 +91,7 @@ Default Antenna is ANT1 for 1T1R, ANT0+ANT1 is 2T2R
 
 Reconmand RF setting 
   
-  RF Power 1~30
+  RF Power max 18dbm for onbard PA
   
   MCS index 1,3(0-7 is 1T1R, 8+ is 2T2R)
   
