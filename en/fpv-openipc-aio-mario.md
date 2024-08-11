@@ -91,7 +91,7 @@ Default Antenna is ANT1 for 1T1R, ANT0+ANT1 is 2T2R
 
 Reconmand RF setting 
   
-  RF Power 1~30
+  RF Power max 18dbm for onbard PA. 0~-25dbm setting
   
   MCS index 1,3(0-7 is 1T1R, 8+ is 2T2R)
   
@@ -116,11 +116,16 @@ cooling fan out put power up to 500mA max
 all heat sink mount holes are M2 screws thread.
 
 
+
+
+**Extend connector**
+
+![image](https://github.com/user-attachments/assets/af8124e3-539f-42c6-a757-a560eb93e3fe)
+
 **Todo**
 
 USB only for debug mode
 
 Power limited 5W input.
 
-Extend connector
 
