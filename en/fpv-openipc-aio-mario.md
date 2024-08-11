@@ -116,11 +116,16 @@ cooling fan out put power up to 500mA max
 all heat sink mount holes are M2 screws thread.
 
 
+
+
+**Extend connector**
+
+![image](https://github.com/user-attachments/assets/af8124e3-539f-42c6-a757-a560eb93e3fe)
+
 **Todo**
 
 USB only for debug mode
 
 Power limited 5W input.
 
-Extend connector
 
