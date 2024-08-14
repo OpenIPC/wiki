@@ -24,9 +24,8 @@ Install atennas for AIO.
 
 
 
+### LED function
 
-
-**LED function**
 Red glimmering	Power on with Battery
 
 Red 	Wired linked
@@ -44,7 +43,7 @@ Heat Sink with 20mmx20mm mount holes.
 
 
 
-**Power Section**
+### Power Section
 
 Power input:
 
@@ -59,9 +58,9 @@ MSIC BEC on board is up to 2A 5V output
 enter uboot use  uart device connect to top of AIO board(R0,T0)pad.
 
 
-**connect usb debug port:**
+### Connect usb debug port
 
-power on AIO with Battery connector(GH1.25* 6 pin), after the blue LED flashing, plug in usb cable and connect to PC
+Power on AIO with Battery connector(GH1.25* 6 pin), after the blue LED flashing, plug in usb cable and connect to PC
 
 in windows:
 
@@ -78,7 +77,15 @@ then open ssh to connect AIO address:192.168.1.10
 user:root password:12345
 
 
-**RF section**
+### Upgrade furmware
+
+Update firmware possible via SD card or just use win scp drug the rootfs and kernel files to /tmp
+
+```
+sysupgrade -n -z --kernel=/tmp/uImage.ssc378de --rootfs=/tmp/rootfs.squashfs.ssc378de
+```
+
+### RF section
 
 RF antenna characteristics
 
@@ -100,13 +107,13 @@ Reconmand RF setting
   Video biterate:4096 /8192/12688(mcs 3+)
 
   Keep RF poweroff or power=1 when on bench test(when only usb connect)
-  
-**SD solt for Air camera record**
+
+
+### SD solt for Air camera record
 
 on bench test or debug is disable the record function defaultly
 
 To enable the recording function set (record value)true in majestic.yaml
-
 
 
 On board heat sink and cooling fan:
@@ -116,13 +123,12 @@ cooling fan out put power up to 500mA max
 all heat sink mount holes are M2 screws thread.
 
 
-
-
-**Extend connector**
+### Extend connector**
 
 ![image](https://github.com/user-attachments/assets/af8124e3-539f-42c6-a757-a560eb93e3fe)
 
-**Todo**
+
+### Todo
 
 USB only for debug mode
 
