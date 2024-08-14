@@ -85,6 +85,9 @@ Update firmware possible via SD card or just use win scp drug the rootfs and ker
 sysupgrade -n -z --kernel=/tmp/uImage.ssc378de --rootfs=/tmp/rootfs.squashfs.ssc378de
 ```
 
+Or just use the configurator - https://github.com/OpenIPC/configurator
+
+
 ### RF section
 
 RF antenna characteristics
