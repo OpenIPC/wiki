@@ -128,6 +128,19 @@ RTMP reconnection and timeout logic works as follows:
     1000+ tries = 600 seconds timeout
 ```
 
+### Other outgoing options
+
+```
+outgoing:
+  enabled: true
+  server: udp://192.168.1.10:5600
+  naluSize: 1200
+  - udp://IP-1:port
+  - udp://IP-2:port
+  - unix:/tmp/rtpstream.sock
+  - rtmps://dc4-1.rtmp.t.me/s/mykey
+```
+
 ### ONVIF
 
 For basic ONVIF to work correctly, you need to enable it and add a user to the system as shown in the example:
