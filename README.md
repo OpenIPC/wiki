@@ -53,6 +53,7 @@ OpenIPC Wiki
 - [Steps from buy to fly](en/fpv-from-buy-to-fly.md)
 - [OpenIPC as FPV system](en/fpv.md)
 - [Sigmastar FPV devices](en/fpv-sigmastar.md)
+- [OpenIPC Alliance for FPV](en/fpv-openipc-alliance.md)
 - [Ubuntu based groundstation](en/fpv-gs-ubuntu.md)
 - [OrangePI 5 Ubuntu based groundstation](en/fpv-ground-orange_pi5.md)
 - [An Orange Pi 5 minimal VRX for Goggles](en/fpv-orange-pi-5-groundstation.md)
