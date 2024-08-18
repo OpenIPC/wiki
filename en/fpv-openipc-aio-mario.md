@@ -85,7 +85,7 @@ Update firmware possible via SD card or just use win scp drug the rootfs and ker
 sysupgrade -n -z --kernel=/tmp/uImage.ssc378de --rootfs=/tmp/rootfs.squashfs.ssc378de
 ```
 
-You can [download](https://github.com/OpenIPC/wiki/blob/master/en/fpv-openipc-aio-ultrasight.md#software) via the link that is used for online updates.
+You can [download](https://github.com/OpenIPC/wiki/blob/master/en/fpv-openipc-aio-ultrasight.md#software) firmware via the link that is used for online updates.
 
 
 Or just use the configurator - https://github.com/OpenIPC/configurator
