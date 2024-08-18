@@ -79,7 +79,7 @@ There is _12345_ password by default.
 
 ### How to sign in into camera Web UI?
 
-Open http://<camera_ip_address>:85/ and sign in using default username _root_
+Open http://<camera_ip_address> and sign in using default username _root_
 and default password _12345_. You will be asked to change the password after
 successful login.
 

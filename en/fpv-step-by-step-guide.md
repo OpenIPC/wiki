@@ -317,7 +317,7 @@ You'll be prompted for the root password when ssh'ing to the camera, it's 12345 
 
 ![ssh login](../images/sbs-ssh-openipc.jpg)
 
-The first thing you need to do here is change the root password.  You can do it on the command like entering the command passwd  This will prompt for the current root password, and then ask you to type the new one in and confirm it.  Alternatively, you can use the web interface.  To do this go to a browser on your PC and type the IP address of the camera with :85 at the end, so in the case of the address I've got for my camera 192.168.0.50:85.  You will be prompted for the user name (root) and the password (12345 if you haven't changed it)
+The first thing you need to do here is change the root password.  You can do it on the command like entering the command passwd  This will prompt for the current root password, and then ask you to type the new one in and confirm it.  Alternatively, you can use the web interface.  To do this go to a browser on your PC and type the IP address of the camera, so in the case of the address I've got for my camera 192.168.0.50:85.  You will be prompted for the user name (root) and the password (12345 if you haven't changed it)
 
 If you haven't yet changed the password, then it will ask you to do so - just type your new password in the Save Changes
 
