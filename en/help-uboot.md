@@ -352,7 +352,7 @@ by the embossed or drawn dot next to it.
 ![](../images/flash-pins.webp)
 ![](../images/flash-pins-2.webp)
 
-[This hack in details](https://cybercx.co.nz/bypassing-bios-password/)
+[This hack in details](https://cybercx.co.nz/bypassing-bios-password/) or [archived](https://github.com/OpenIPC/wiki/blob/master/en/help-uboot.md#bypassing-password-protected-bootloader) version of the article
 
 #### Downgrading stock firmware.
 
