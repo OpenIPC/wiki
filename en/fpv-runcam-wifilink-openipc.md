@@ -4,10 +4,10 @@
 RunCam WiFiLink based on OpenIPC
 --------------------------------
 
-### Q&A
+### Q&A with RunCam Dev
 
-- What changes have you made to RunCam compared to the original OpenIPC firmware ?
-    - We at RunCam optimized the IQ sensor and added the /etc/user_config.sh script to implement the WiFi card configuration function.
+- What changes have you made compared to the original OpenIPC firmware ?
+    - We optimized the IQ sensor and added the /etc/user_config.sh script to implement the WiFi card configuration function.
 
 
 ### Links
