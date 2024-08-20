@@ -27,8 +27,8 @@ OpenIPC AIO "UltraSight"
 - Before powering on AIO board, the power pad must be soldered or connected to a reliable **3A at 5V DC** power source or BEC. This amperage figure will be higher if higher RF power levels are selected.
 - Make sure that cooling is adequate while the board is powered on. a fan is essential, a heatsink is also advised when possible. failure to provide enough cooling to the board will most likely cause damage to the board.
 - When there is not enough load capacitance on the BEC, it is recommended to add a 470uF electrolytic capacitor (included in the set) between the BEC and AIO board to protect the AIO board from surge damage and provide decoupling. Install the capacitor as close to the AIO-PCB as possible.
-- for added protection, we reccomend a Zener Diode with 1W capacityand maximum Voltage of 5.1V (ZMY5V1,BZX55C5V1,BZT52C5V1,1N5338B), soldered to the output of the BEC, before the capacitor. the following diagram shows how to solder the components:![zener_diode_diagram](https://github.com/OneManChop/OpenIPCwiki/assets/33513057/f0ad9f0b-6146-45af-81b2-4bc530880370)
-
+- For additional protection a Zener Diode with 1W capacity and a maximum Voltage of 5.1V (ZMY5V1, BZX55C5V1, BZT52C5V1, 1N5338B) can be soldered to the output of the BEC before the capacitor, the following diagram shows how to solder the components:
+![zener_diode_diagram](https://github.com/OneManChop/OpenIPCwiki/assets/33513057/f0ad9f0b-6146-45af-81b2-4bc530880370)
 
 ### Debug/Ethernet
 - A Ethernet/Debug adapter is included. The flat-flex cable is used to connect it to the AIO-PCB. The connectors pins are located on the PCB side of the connector, pay attention to connect the flat flex cable with the exposed connections towards the PCB. The "handle" strips on the flat-flex cable will point towards the heatsink side on the AIO-PCB and away from the RJ45 connector on the Debugger PCB.
@@ -62,7 +62,7 @@ run urnor
 ### Connect to wireless router
 - Upgrade the firmware to the newest version.
 - Log into the system (root:12345).
-- Run the following commands:![Uploading zener_diode_diagram.jpg…]()
+- Run the following commands:
 
 ```
 fw_setenv wlandev rtl8812au-generic
