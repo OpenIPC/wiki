@@ -1,9 +1,9 @@
-# OpenIPC Wiki
-[Table of Content](../README.md)
+# Wiki OpenIPC
+[Bảng nội dung](../README.md)
 
-## Supported sensors per SoC
+## Các cảm biến được hỗ trợ theo SoC
 
-_Note: This list does not guarantee that your sensor will work. There are nuances such as different ways of connecting sensors, relabeling of sensors, mismatch between the installed sensor and the declared sensor, etc. This is just a list of the drivers found in the SDK for the particular processor. Please take this into account._
+_Lưu ý: Danh sách này không đảm bảo rằng cảm biến của bạn sẽ hoạt động. Có những nét tinh tế như các cách kết nối cảm biến khác nhau, việc đổi tên cảm biến, không khớp giữa cảm biến đã cài đặt và cảm biến đã khai báo, v.v. Đây chỉ là danh sách các trình điều khiển được tìm thấy trong SDK cho vi xử lý cụ thể. Xin hãy xem xét điều này._
 
 ### Ambarella
 
