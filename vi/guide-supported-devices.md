@@ -1,37 +1,37 @@
-# OpenIPC Wiki
-[Table of Content](../README.md)
+# Wiki OpenIPC
+[Bảng nội dung](../README.md)
 
-Supported devices
+Thiết bị được hỗ trợ
 -----------------
 
-Unfortunately, we cannot provide you a long list of devices that are undoubtedly
-compatible with our firmware. Camera manufacturers tend to change hardware
-design and swap components even within the same model line, without any notice.
+Rất tiếc, chúng tôi không thể cung cấp cho bạn một danh sách dài các thiết bị mà không còn nghi ngờ
+tương thích với firmware của chúng tôi. Các nhà sản xuất camera thường thay đổi thiết kế phần cứng
+và thay thế các thành phần ngay cả trong cùng một dòng mô hình, mà không báo trước.
 
-Below, we listed some of the cameras we had in our possession, but again, there
-is no guarantee that if you'll buy one of those cameras today you won't end up
-with an unsupported hardware on your hands.
+Dưới đây, chúng tôi đã liệt kê một số camera mà chúng tôi đã có trong tay, nhưng một lần nữa, không có
+bảo đảm rằng nếu bạn mua một trong những camera này hôm nay, bạn sẽ không kết thúc
+với phần cứng không được hỗ trợ trong tay bạn.
 
-Somewhat working method to determine if your camera is supported by the recent
-version of our firmware is to open[^1] the camera case and take a look at the
-chip markings. Then look up your chip in the [list of supported hardware][1]
-and check its development status.
+Phương pháp hoạt động tương đối để xác định xem camera của bạn có được hỗ trợ bởi phiên bản gần đây
+của firmware của chúng tôi là mở[^1] vỏ camera và xem xét các dấu hiệu trên chip.
+Sau đó, tra cứu chip của bạn trong [danh sách phần cứng được hỗ trợ][1]
+và kiểm tra trạng thái phát triển của nó.
 
-If you still have your doubts, take hi-res pictures of the hardware close-ups
-and ask for help in one of our Telegram groups.
+Nếu bạn vẫn còn nghi ngờ, chụp hình ảnh độ phân giải cao của các bức ảnh gần phần cứng
+và yêu cầu giúp đỡ trong một trong các nhóm Telegram của chúng tôi.
 
-[^1]: Attention! Doing so, you are taking full responsibility for your actions.
-Most likely, opening the case will void the warranty of the device. We cannot
-be held liable for any damage to the camera, yourself, your house, your pets,
-or anything else. If you don't feel comfortable around hardware, this project
-may not be right for you.
+[^1]: Chú ý! Khi thực hiện việc này, bạn chịu trách nhiệm hoàn toàn cho hành động của mình.
+Có khả năng rất cao, việc mở vỏ sẽ làm mất bảo hành của thiết bị. Chúng tôi không thể
+chịu trách nhiệm cho bất kỳ thiệt hại nào đối với camera, bạn, nhà của bạn, thú cưng của bạn,
+hoặc bất cứ thứ gì khác. Nếu bạn không cảm thấy thoải mái với phần cứng, dự án này
+có thể không phù hợp với bạn.
 
-You can also view the list of adapted devices in a special Builder project -
+Bạn cũng có thể xem danh sách các thiết bị đã được điều chỉnh trong một dự án Builder đặc biệt -
 https://github.com/OpenIPC/builder
 
-_If you have another supported device to add, please do it [here][2]._
+_Nếu bạn có một thiết bị hỗ trợ khác để thêm vào, hãy thực hiện [ở đây][2]._
 
-| Brand      | Model              | Processor   | Sensor | Flash Memory | LAN | WLAN           | USB  | Card |
+| Thương hiệu | Mô hình            | Bộ xử lý    | Cảm biến | Bộ nhớ Flash | LAN | WLAN           | USB  | Thẻ |
 |------------|--------------------|-------------|--------|--------------|-----|----------------|------|------|
 |            |                    |             |        |              |     |                |      |      |
 | Anjoy      | MS-J10             | SSC335      | IMX307 |              | Yes | No             | Yes  | No   |
@@ -68,8 +68,7 @@ _If you have another supported device to add, please do it [here][2]._
 | MEGVII     | SmartEye-D1A-24A-P | T31X        | JXK04  | FM25Q128A    | Yes | No             | No   | Yes  |
 | Uniview    | IPC-D122-PF28      | SSC335      | SC2335 | XM25QH64C    | Yes | No             | No   | No   |
 
-
-| Processor   | Sensor           | Vendor     | SKU          | Board identification            |
+| Bộ xử lý   | Cảm biến           | Nhà cung cấp     | SKU          | Nhận dạng bo mạch            |
 |-------------|------------------|------------|--------------|---------------------------------|
 | Hi3516Cv100 | IMX222_spi_dc    | XM         |              | [BLK18C-0222-38X38_S-V1.03][1]  |
 | Hi3516Cv100 | OV2710_i2c_dc    | Jovision   |              | IPG5020A-H-V1.0                 |
@@ -122,4 +121,4 @@ _If you have another supported device to add, please do it [here][2]._
 [7]: https://github.com/OpenIPC/device-mjsxj02hl
 
 
-[^2]: WiFi can be enabled with 8MB flash using a custom build, or by upgrading to a 16MB flash and using Ultimate firmware.
+[^2]: WiFi có thể được kích hoạt với bộ nhớ flash 8MB bằng cách sử dụng bản build tùy chỉnh, hoặc bằng cách nâng cấp lên bộ nhớ flash 16MB và sử dụng firmware Ultimate.
