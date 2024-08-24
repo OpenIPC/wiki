@@ -29,7 +29,7 @@ Installing components and dependencies for Debian/Ubuntu
 apt install -y bison bridge-utils build-essential curl flex
 ```
 
-Automatic compilation script
+### Automatic compilation script
 
 ```
 #!/bin/bash
@@ -64,7 +64,7 @@ install() {
 prepare && compile && install
 ```
 
-### Example of /etc/natwork/interfaces.d/br.openipc for server
+### Example of /etc/network/interfaces.d/br-openipc for server
 
 ```
 # Bridge OpenIPC
