@@ -64,8 +64,29 @@ install() {
 prepare && compile && install
 ```
 
+### Example of /etc/natwork/interfaces.d/br.openipc for server
 
-### Example of vtun config for server
+```
+# Bridge OpenIPC
+#
+auto br-openipc
+iface br-openipc inet static
+    address 192.168.11.1
+    netmask 255.255.255.0
+    bridge_ports zero
+    up mkdir -p /var/lock/vtund /var/log/vtund
+    up iptables -A FORWARD -j ACCEPT -i br-openipc -o br-openipc
+    #up iptables -A FORWARD -t mangle -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+    #up iptables -A POSTROUTING -t mangle -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+    #up iptables -A POSTROUTING -t nat -s 192.168.11.0/24 -j MASQUERADE
+    #up iptables -A FORWARD -j ACCEPT -i ens2 -o br-openipc -d 192.168.11.0/24
+    #up iptables -A FORWARD -j ACCEPT -o ens2 -i br-openipc -s 192.168.11.0/24
+    #up iptables -A PREROUTING -t nat -j DNAT -p TCP -i ens2 --dport 10180 --to-destination 192.168.11.101:80
+    #up iptables -A POSTROUTING -t nat -j SNAT -p TCP -o br-openipc -d 192.168.11.101 --to-source 192.168.11.1
+
+```
+
+### Example of /etc/vtund.conf  for server
 
 ```
 options {
