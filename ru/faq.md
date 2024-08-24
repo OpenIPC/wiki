@@ -221,3 +221,71 @@ CPU: XM530
 
 Такое поведение может быть связано с заменой флэшки на другую модель. У меня такое появилось после того, как я заменил Winbond 25Q64JVSIQ на 25Q64BVSIQ/25Q64FVSIQ. У них отличаются характеристики. Как только вернул флэшку той-же модели, что были на камере с завода, камеры прекрасно заработали как и до поломки.
 
+### Настройка WireGuard для работы с OpenIPC
+
+#### Настройка сервера в Linux
+
+Воспользуйтесь [этим руководством](https://ruvds.com/ru/helpcenter/nastroyka-vpn-s-ispolzovaniem-wireguard/) ([архивная копия](https://web.archive.org/web/20240804111853/https://ruvds.com/ru/helpcenter/nastroyka-vpn-s-ispolzovaniem-wireguard/)).
+
+#### Настройка клиента в OpenIPC
+
+1) В файле `/etc/network/interfaces.d/wg0` добавьте в начало строку `auto wg0`, в `address` укажите желаемый адрес клиента внутри сети VPN, в `netmask` — маску сети VPN. Пример окончательного вида файла:
+```shell
+auto wg0iface wg0 inet static
+    address 10.10.10.2
+    netmask 255.255.255.0
+    pre-up modprobe wireguard
+    pre-up ip link add dev wg0 type wireguard
+    pre-up wg setconf wg0 /etc/wireguard.conf
+    post-down ip link del dev wg0
+```
+2) Отредактируйте файл `/etc/wireguard.conf`, принимая во внимание, что не поддерживаются ключевые слова `Address` (адрес мы установили на предыдущем шаге) и `DNS`. Пример окончательного вида файла:
+```
+[Interface]
+PrivateKey = MO3+yxTyFnnOgeOk9NKFSKHqgFfW6cBhctUO4YeiwV0=
+
+[Peer]
+AllowedIPs = 10.10.10.0/24
+Endpoint = 192.168.0.2:51820
+PersistentKeepalive = 25
+PublicKey = M2/axcXbD+eg/c4vfEQTiIpV6LU+kzgJCGqDpzIpHS4=
+```
+
+3) В файлу `/etc/rc.local` добавьте строку `ifup wg0` перед строкой `exit 0`. Пример окончательного вида файла:
+
+```shell
+#!/bin/sh
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+ifup wg0
+exit 0
+```
+
+4) Перезагрузите OpenIPC.
+
+5) Проверка: на сервере и на клиенте запустите команду `wg show`. Вот её примерный вывод в случае успешной работы:
+
+```
+root@openipc-t31:~# wg show
+interface: wg0
+  public key: /RL2MdZqOdLsT2Be1KXnJWQGJP2oP8sVMlZ/f3GK1BA=
+  private key: (hidden)
+  listening port: 34161
+
+peer: M2/axcXbD+eg/c4vfEQTiIpV6LU+kzgJCGqDpzIpHS4=
+  endpoint: 192.168.0.2:51820
+  allowed ips: 10.10.10.0/24
+  latest handshake: 1 minute, 7 seconds ago
+  transfer: 185.22 KiB received, 182.02 KiB sent
+  persistent keepalive: every 25 seconds
+```
