@@ -26,7 +26,7 @@ To connect to the server, go to the extensions tab, specify the IP address or do
 Installing components and dependencies for Debian/Ubuntu
 
 ```
-apt install -y bison build-essential curl flex
+apt install -y bison bridge-utils build-essential curl flex
 ```
 
 Automatic compilation script
