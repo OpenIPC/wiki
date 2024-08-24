@@ -23,6 +23,14 @@ To connect to the server, go to the extensions tab, specify the IP address or do
 
 ### Example of vtun compilation for server
 
+Installing components and dependencies for Debian/Ubuntu
+
+```
+apt-get install -y bison build-essential curl flex
+```
+
+Automatic compilation script
+
 ```
 #!/bin/bash
 #
