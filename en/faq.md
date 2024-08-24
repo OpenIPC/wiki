@@ -296,9 +296,9 @@ In this case, add `-O` option to the command:
 scp -O ~/myfile root@192.168.1.65:/tmp/
 ```
 
-### Configuring WireGuard to work with OpenIPC
+### Configuring WireGuard to work with OpenIPC (VPN implementation)
 
-#### Configuring a server in Linux
+#### Configuring the server in Linux
 
 Use [this guide](https://ruvds.com/ru/helpcenter/nastroyka-vpn-s-ispolzovaniem-wireguard/) ([archived copy](https://web.archive.org/web/20240804111853/https://ruvds.com/ru/helpcenter/nastroyka-vpn-s-ispolzovaniem-wireguard/)).
 
