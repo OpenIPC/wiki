@@ -4,6 +4,23 @@
 Package Vtun
 ------------
 
+### Introduction
+
+This package is designed to organize a Vtun-based L2 tunnel between IP cameras and a server. 
+In order to reduce the space occupied on the NOR flash, reduce RAM consumption, and increase the tunnel throughput, encryption and compression are completely disabled.
+
+### Client part
+
+The client part is always present in all official OpenIPC firmware.
+To connect to the server, go to the extensions tab, specify the IP address or domain of the server and save the settings
+
+### Server part
+
+- create a bridge interface, for example br-openipc
+- in the vtund.conf config add all camera connections to the bridge
+- raise any DHCP server on the br-openipc interface
+- bind the IP addresses of the connecting devices by MAC
+
 ### Example of vtun compilation for server
 
 ```
