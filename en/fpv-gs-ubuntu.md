@@ -18,15 +18,6 @@ sudo apt update
 sudo apt install dkms git python3-all-dev net-tools virtualenv fakeroot debhelper python3-twisted libpcap-dev python3-pyroute2 python3-future python3-all libsodium-dev
 ```
 
-### Libsodium
-```
-git clone https://github.com/jedisct1/libsodium --branch stable
-cd libsodium
-./configure
-make && make check
-sudo make install
-```
-
 ### Wifi card driver
 ```
 git clone -b v5.2.20 https://github.com/svpcom/rtl8812au.git
