@@ -52,7 +52,7 @@ systemctl start wifibroadcast@gs
 
 ### Qground control manual
 
-- https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html
+- https://docs.qgroundcontrol.com/master/en/qgc-user-guide/getting_started/download_and_install.html
 
 ### Get last logs from service
 ```
