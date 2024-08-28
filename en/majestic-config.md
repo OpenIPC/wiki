@@ -22,6 +22,9 @@ isp:
   #iqProfile: <path/to/file>
   #lowDelay: false
   #awbMode: auto
+  #memMode: reduction
+  #slowShutter: disabled
+  #dis: false
 
 image:
   mirror: false
@@ -39,7 +42,7 @@ video0:
   fps: 20
   bitrate: 4096
   rcMode: vbr
-  gopSize: 1
+  gopSize: 1.0
   #gopMode: normal
   #crop: 0x0x960x540
   #sliceUnits: 4
@@ -56,12 +59,8 @@ jpeg:
   enabled: true
   qfactor: 50
   fps: 5
-  #size: 1920x1080
-
-#mjpeg:
-  #size: 1280x720
-  #fps: 5
-  #bitrate: 1024
+  #size: 160x120
+  rtsp: false
 
 osd:
   enabled: false
@@ -86,7 +85,7 @@ rtsp:
   port: 554
 
 nightMode:
-  enabled: false
+  lightMonitor: true
   #irCutPin1: 1
   #irCutPin2: 2
   irCutSingleInvert: false
@@ -95,8 +94,8 @@ nightMode:
   #overrideDrc: 300
   #minThreshold: 2000
   #maxThreshold: 5000
-  #irSensorPin: 62
-  irSensorPinInvert: false
+  #lightSensorPin: 62
+  lightSensorPinInvert: false
   #dncDelay: 30
 
 motionDetect:
