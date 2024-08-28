@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](../README.md
+[Table of Content](../README.md)
 
 Majestic example config
 -----------------------
