@@ -1,3 +1,8 @@
+# OpenIPC Wiki
+[Table of Content](../README.md
+
+Majestic example config
+-----------------------
 ```
 system:
   webPort: 80
