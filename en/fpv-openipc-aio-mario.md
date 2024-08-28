@@ -77,7 +77,7 @@ then open ssh to connect AIO address:192.168.1.10
 user:root password:12345
 
 
-### Upgrade furmware
+### Upgrade firmware
 
 Update firmware possible via SD card or just use win scp drug the rootfs and kernel files to /tmp
 
@@ -87,6 +87,10 @@ sysupgrade -n -z --kernel=/tmp/uImage.ssc338q --rootfs=/tmp/rootfs.squashfs.ssc3
 
 You can [download](https://github.com/OpenIPC/wiki/blob/master/en/fpv-openipc-aio-ultrasight.md#software) firmware via the link that is used for online updates.
 
+You can also read the current discussions and suggestions here:
+
+- https://t.me/c/1809358416/98818/103632
+- https://t.me/c/1809358416/98818/108052
 
 Or just use the configurator - https://github.com/OpenIPC/configurator
 
