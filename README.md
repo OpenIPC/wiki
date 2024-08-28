@@ -31,6 +31,7 @@ OpenIPC Wiki
 - [Wireless settings](en/wireless-settings.md)
 - [System features](en/system-features.md)
 - [Majestic streamer](en/majestic-streamer.md)
+- [Majestic Usage Research](en/majestic-research.md)
 - [Web interface](en/web-interface.md)
 - [Upgrade firmware](en/sysupgrade.md)
 - [Image quality tuning](en/image-quality-tuning.md)
