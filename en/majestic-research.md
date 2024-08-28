@@ -4,7 +4,7 @@
 Majestic Usage Research
 -----------------------
 
-# RTMP testing
+### RTMP testing
 
 - [go2rtc](https://github.com/AlexxIT/go2rtc)
 - [libnginx-mod-rtmp](https://github.com/arut/nginx-rtmp-module)
