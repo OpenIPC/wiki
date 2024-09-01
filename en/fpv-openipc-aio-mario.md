@@ -60,7 +60,7 @@ enter uboot use  uart device connect to top of AIO board(R0,T0)pad.
 
 ### Connect usb debug port
 
-Power on AIO with Battery connector(GH1.25* 6 pin), after the blue LED flashing, plug in usb cable and connect to PC
+Power on AIO with Battery connector(GH1.25* 6 pin), after the blue LED flashing, plug in usb cable to pc first then connect to DC power, or usb power only
 
 in windows:
 
@@ -138,10 +138,10 @@ all heat sink mount holes are M2 screws thread.
 ![image](https://github.com/user-attachments/assets/af8124e3-539f-42c6-a757-a560eb93e3fe)
 
 
-### Todo
+**Note:**
 
-USB only for debug mode
+USB only for debug mode, when DC power only mode the CDC ethernet will work in sleep mode to save energy.
 
-Power limited 5W input.
+USB only mode the power limited 5W input.
 
 
