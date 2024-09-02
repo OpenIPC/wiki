@@ -60,7 +60,10 @@ enter uboot use  uart device connect to top of AIO board(R0,T0)pad.
 
 ### Connect usb debug port
 
-Power on AIO with Battery connector(GH1.25* 6 pin), after the blue LED flashing, plug in usb cable and connect to PC
+Plug USB cable to connect AIO and PC first, then power on DC, or usb power only.
+
+If there are unknown USB devices in the computer, the following drivers need to be installed.
+[corechip-sr9900-usb20-to-fast-ethernet-adapter-1750095.zip](https://github.com/user-attachments/files/16829005/corechip-sr9900-usb20-to-fast-ethernet-adapter-1750095.zip)
 
 in windows:
 
@@ -138,10 +141,10 @@ all heat sink mount holes are M2 screws thread.
 ![image](https://github.com/user-attachments/assets/af8124e3-539f-42c6-a757-a560eb93e3fe)
 
 
-### Todo
+**NOTE**
 
-USB only for debug mode
+USB only for debug mode, when DC power only, the cdc ethernet works in sleep mode to save energy.
 
-Power limited 5W input.
+USB power only mode Power limited 5W input.
 
 
