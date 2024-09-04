@@ -306,7 +306,8 @@ Use [this guide](https://ruvds.com/ru/helpcenter/nastroyka-vpn-s-ispolzovaniem-w
 
 1) In the `/etc/network/interfaces.d/wg0` file, add the `auto wg0` line to the beginning, in `address` specify the desired client address within the VPN network, and in `netmask` specify the VPN network mask. An example of the resulting file:
 ```shell
-auto wg0iface wg0 inet static
+auto wg0
+iface wg0 inet static
     address 10.10.10.10.2
     netmask 255.255.255.255.0
     pre-up modprobe wireguard
