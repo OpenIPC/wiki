@@ -58,11 +58,12 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 
 > _Yes, it's amazing but it really matches on two Goke processors_
 
-### GSA boards
+
+### GSA / EnZhi boards
 
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA |
 |-------------|--------|--------|----------|-------|---------|
-| T31L        | 58     | 57     |          |       |         |
+| T31L        | 58     | 57     |          | 49    |         |
 
 
 ### Herospeed/Longse/Cantonk boards
