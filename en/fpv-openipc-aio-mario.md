@@ -147,4 +147,20 @@ USB only for debug mode, when DC power only, the cdc ethernet works in sleep mod
 
 USB power only mode Power limited 5W input.
 
+**Upgrade Firmware to Ruby FPV**
+
+plug usb cable and setting cdc ethernet ipv4: 192.168.1.11 255.255.255.0
+
+use winscp drag unzip files to /tmp 
+
+use ssh login and copy following command:
+
+sysupgrade --kernel=/tmp/uImage.ssc338q --rootfs=/tmp/rootfs.squashfs.ssc338q -z -n
+
+after update and reboot
+
+use ssh login and set command: 
+
+fw_setenv sensor imx335 && fw_setenv upgrade https://github.com/OpenIPC/firmware/releases/download/latest/openipc.ssc338q-nor-rubyfpv.tgz && reboot
+
 
