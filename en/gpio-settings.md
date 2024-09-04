@@ -82,10 +82,10 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 
 ### Huishi / Vatilon boards
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS |
-|-------------|--------|--------|----------|
-| SSC377      | 80     | 81     |          |
-| SSC378DE    | 80     | 81     |          |
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRLED |
+|-------------|--------|--------|----------|-------|
+| SSC377      | 80     | 81     |          |       |
+| SSC378DE    | 80     | 81     |          | 13    |
 
 
 ### Jabsco boards
