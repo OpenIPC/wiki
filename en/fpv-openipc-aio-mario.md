@@ -110,16 +110,18 @@ RF antenna characteristics
 Default Antenna is ANT1 for 1T1R, ANT0+ANT1 is 2T2R
 
 Reconmand RF setting 
-  
-  RF Power max 18dbm for onbard PA. For 1T1R rf setting range: 1-63 firmware update to latest!
+
+RF Power max 18dbm for onbard PA input. 
+ For 1T1R rf setting range: 1-63 firmware update to latest! 
+ stbc=0,ldpc=0 Recommand RF power value < 45
   
   MCS index 1,3(0-7 is 1T1R, 8+ is 2T2R)
-
-  stbc=1,ldpc=1
   
-  Video biterate:4096 /8192/12688(mcs 3+)
+  Video bitrate:4096 /8192/12688(mcs 3+)
 
-  Keep RF poweroff or power=1 when on bench test(when only usb connect)
+  when use stbc=1,ldpc=1 recommand rf power setting for MCS3 from 8-15 for test.
+
+  Keep RF power < = 15 when on bench test(when only usb connect)
 
 
 ### SD solt for Air camera record
