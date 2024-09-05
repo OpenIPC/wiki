@@ -163,7 +163,7 @@ Remember! The user and password will be reset to default in most cases (the defa
 
 OpenIPC firmware v2 utilizes [Buildroot][1] to build its firmware binaries. So
 you should make yourself familiar with the [Buildroot documentation][2] if you
-want not only to compile provided source code but make your own modifications
+want not only to compile the source code but make your own modifications
 to the firmware.
 
 You can add drivers or software not included in the our official releases, you
@@ -174,13 +174,16 @@ Just don't forget to contribute your changes back to the upstream repo so that
 everyone can benefit from it.
 
 Please note that OpenIPC uses a slightly outdated version of Buildroot. As of
-today, it is Buildroot [2021.02.12][3], so you might need to check out the
+today, it is Buildroot 2024.02.1 so you might need to check out the
 documentation for that particular version, as later versions may have
 incompatible changes.
 
 OpenIPC firmware sources are organized in directories by IP camera SoC vendors
-as Buildroot external trees, namely `br-ext-chip-<vendor name>`. Each of such
-directories has a number of subdirectories: `board/`, `configs/`, `linux/` and
+as Buildroot external trees, namely `br-ext-chip-<vendor name>`.
+
+![image](https://github.com/user-attachments/assets/bd060676-7008-41ae-9ec6-f0ed18f6f48e)
+
+Each of directories has a number of subdirectories: `board/`, `configs/`, `linux/` and
 `packages/`, and a few config files, all related to different boards bearing
 chips from that particular vendor.
 
@@ -207,7 +210,6 @@ provided packages.
 `external.mk` is a makefile referring to makefiles from all provided packages.
 
 `external.desc` is a file with the description of the external tree.
-
 
 ### Making Changes and Adding Packages
 
