@@ -11,16 +11,16 @@
 
 ## Introduction
 
-This document serves as a comprehensive guide for developers looking to contribute to the OpenIPC firmware, including how to build from sources, understand the project's structure, modify, and add new packages, as well as instructions for installing the firmware on devices. If you are simply looking for a pre-built binary, for one of the listed supported devices, then please goto here instead. *** need to update with actual link ****
+This document serves as a comprehensive guide for developers looking to contribute to the OpenIPC firmware, including how to build from sources, understand the project's structure, modify, and add new packages, as well as instructions for installing the firmware on devices.
 
-We are continuously working towards creating a high-quality source code repository. Your patience is appreciated as we strive to deliver a fully polished and ready-to-use project and welcome your thoughts and feedback through the OpenIPC telegram channel **make that a hyperlink ***  https://t.me/openipc/117235.
+We are continuously working towards creating a high-quality source code repository. Your patience is appreciated as we strive to deliver a fully polished and ready-to-use project and welcome your thoughts and feedback through the [OpenIPC telegram channel](https://t.me/openipc/117235)
 
 ## Building from Sources
 
 Before you start building your own firmware, it's essential to make a few changes to your system and understand the general process.
 
 ### Clone OpenIPC Firmware Git Repository
-First step is to make a local copy of the  OpenIPC firmware source code in your preferred location. We are using 'mylocalOpenIPC/src' in the script below but you can change this to whatever location you prefer e.g. ~/myprojects/myOpenIPC 
+First step is to make a local copy of the OpenIPC firmware source code. We are using 'mylocalOpenIPC/src' in the script below but you can change this to whatever location you prefer e.g. ~/myprojects/myOpenIPC 
 
 ```cd
 mkdir -p mylocalOpenIPC/src
@@ -31,7 +31,7 @@ cd openipc-firmware
 We now have a clone of the firmware repository source code.
 
 ### Install Required Packages
-To ensure your system has the required dependencies for a succesful build you can either use the pre-built **make deps** command which is in the root of the openipc-firmware directory you have just created or enter the commands manually in a terminal window.
+To ensure your system has the required dependencies for a successful  build you can either use the pre-built **make deps** command which is in the root of the openipc-firmware directory you have just created or enter the commands manually in a terminal window.
 
 To run the make script (recommended way as this will be maintained within the source code git repository itself) do this
 ```bash
@@ -45,9 +45,9 @@ sudo apt-get install -y automake autotools-dev bc build-essential cpio \
 ```
 
 ### Create a Permanent Storage for Downloaded Bundles
-Buildroot https://buildroot.org/ is the Linux distribution used for OpenIPC. It is used in many embedded systems as it has a very small footprint and can easily be customized to include or exclude specific functionality (see this article on what is included in the OpenIPC build).  dev-buildrootpackages.md
+[Buildroot](https://buildroot.org/) is the Linux distribution used for OpenIPC. It is used in many embedded systems as it has a very small footprint and can easily be customized to include or exclude specific functionality (see [this article](https://github.com/OpenIPC/wiki/blob/master/en/dev-buildroot-packages.md) on what is included in the OpenIPC build).  
 
-By default every time you build the firmware the OpenIPC build script creates a fresh buildroot source file tree which results in unnecessary downloads or copying of files. To avoid this you can create a permanent location and set the BR2_DL_DIR environment variable to tell the build script of the fixed location. 
+By default, every time you build the firmware the OpenIPC build script creates a fresh buildroot source file tree which results in unnecessary downloads or copying of files. To avoid this, you can create a permanent location and set the BR2_DL_DIR environment variable to tell the build script to use this each time. 
 
 Add the following piece of code to the `.profile` file in your home directory using your favourite text editor e.g. nano ~/.profile
 ```bash
@@ -77,7 +77,7 @@ make
 
 You will be greeted with a list of available targets.
 
-![](../images/firmware-building-whiptail.webp)
+![image](https://github.com/user-attachments/assets/4e3c87e7-560a-45bb-89e5-2259282e8f2a)
 
 Each target's name consists of a name of vendor, SoC model (System-on-Chip,
 the heart of an IP camera, central processor with extra features) and flavor
@@ -87,7 +87,9 @@ with 16MB+ ROM, **FPV**, a release crafted specifically for use in drones,
 or **Mini**, a fully liberated version of the firmware with an alternative
 open-source streamer.
 
-Select the desired target and hit enter. Building will start. (If you get an error 'tar: This does not look like a tar archive' see the Note at the bottom of this section)
+Select the desired target and hit enter. Building will start.
+
+_If you get an error 'tar: This does not look like a tar archive' see the Note at the bottom of this section_
 
 The process of building the firmware binary takes from 15-20 minutes to several hours
 depending on your computer performance and selected target. If you want to
@@ -101,26 +103,28 @@ The very first run is the longest as the script will download every source
 bundle required for successful compilation. Consequent runs will take a little
 less time.
 
-After the compilation is done, you'll find the final binary kernel 'uImage' and `rootfs`
-image in the `output/images/` directory.
+After the compilation is done, you'll find the final binary kernel **uImage** and **rootfs**
+images in the `output/images/` directory.
 
 ```
-paul@r610:~/local/src/openipc-firmware$ ls -l output/images/
-total 35628
--rw-r--r-- 1 paul paul  4816896 Nov 22 06:06 rootfs.squashfs.t10
--rw-r--r-- 1 paul paul 14520320 Nov 22 06:06 rootfs.t10.cpio
--rw-r--r-- 1 paul paul 15544320 Nov 22 06:06 rootfs.t10.tar
--rw-r--r-- 1 paul paul  1597586 Nov 22 06:02 uImage.t10
+~/mylocalOpenIPC/src/openipc-firmware/output/images$ ls -la
+total 39352
+-rw-rw-r-- 1 chrisdev chrisdev  6515434 Sep  5 14:52 openipc.v83x-nor-lite.tgz
+-rw-r--r-- 1 chrisdev chrisdev 12971008 Sep  5 14:52 rootfs.cpio
+-rw-r--r-- 1 chrisdev chrisdev  4464640 Sep  5 14:52 rootfs.squashfs.v83x
+-rw-r--r-- 1 chrisdev chrisdev 14274560 Sep  5 14:52 rootfs.v83x.tar
+-rw-r--r-- 1 chrisdev chrisdev  2058032 Sep  5 14:50 uImage.v83x
 ```
 
-**Note:**If you are using Ubuntu you may come across an issue when using wget in the make scripts which causes the build to fail and is reported to the console with the message 'tar: This does not look like a tar archive
-'. This is because the wget command used in the script is failing to authenticate properly and so the result is an empty file. 
+
+** **Note: 'tar: This does not look like a tar archive' error** \
+If you are using Ubuntu you may come across an issue when using wget in the make scripts which causes the build to fail and is reported to the console with the message 'tar: This does not look like a tar archive'. This is because the wget command used in the script is failing to authenticate properly and so the result is an empty file. 
 
 The workaround for this is to ensure the Makefile in the firmware directory is updated with the addition of  '--ca-directory=/etc/ssl/certs' so the prepare section will now read  
 ```
 prepare:
 	@if test ! -e $(TARGET)/buildroot-$(BR_VER); then \
-		wget -c -q **--ca-directory=/etc/ssl/certs** $(BR_LINK)/$(BR_VER).tar.gz -O $(BR_FILE); \
+		wget -c -q --ca-directory=/etc/ssl/certs $(BR_LINK)/$(BR_VER).tar.gz -O $(BR_FILE); \
 		mkdir -p $(TARGET); tar -xf $(BR_FILE) -C $(TARGET); fi
 ```
 and the general/external.mk file is also updated to include:
@@ -131,10 +135,14 @@ export WGET := wget --ca-directory=/etc/ssl/certs --show-progress --passive-ftp 
 
 ## Installing the Firmware
 
-After you build your custom firmware, you need to install it on the camera.
-You can do it in two ways:
-1. Use Advanced Install instructions as you did first time you flashed the camera: copy the build files to your TFTP server and then do the flashing procedure as explained in specific Advanced Instructions for your camera;
-2. Manual install: boot up your camera, connect it to your local network and then using scp copy the two files (rootfs and uImage) to your camera /tmp folder (/tmp folder is a temporary storage, as big as your camera free RAM).
+After you have built your firmware, you need to install it on the camera.
+
+You can do it in multiple ways:
+1) If you have a fully supported camera board then after copying the new uImage and rootfs.squashfs files from your output/images directory to your tftp server use the Advanced Install instructions that were part of the generated guide you would have initially used. If you don't have this available then [simply generate it again](https://openipc.org/supported-hardware/featured). 
+
+2) Follow the wiki document on [upgrading firmware](https://github.com/OpenIPC/wiki/blob/master/en/sysupgrade.md) using your own generated files obviously.
+   
+3) Manual install: boot up your camera, connect it to your local network and then using scp copy the two files (rootfs and uImage) to your camera /tmp folder (/tmp folder is a temporary storage, as big as your camera free RAM).
 Then, run this commands:
 
 ```
@@ -142,7 +150,7 @@ sysupgrade --kernel=/tmp/uImage.... --rootfs=/tmp/rootfs.... -z
 ```
 Replace uImage... and rootfs... with your actual filenames resulted from the build process.
 You can add -n key if you need to clean overlay after update (reset all settings to default).
-After the instalation is complete, the camera will reboot automatically.
+After the installation is complete, the camera will reboot automatically.
 Connect again to the camera and run this command (same as -n in the previous command):
 
 ```
