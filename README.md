@@ -84,7 +84,7 @@ OpenIPC Wiki
 - [List of supported sensors](en/firmware-sensors.md)
 - [Visual sensor identification](en/visual_sensor_identification.md)
 - [List of OpenIPC Buildroot packages](en/dev-buildroot-packages.md)
-- [Source code](en/source-code.md)
+- [Firmware development guide](en/source-code.md)
 - [Bug reports](https://github.com/OpenIPC/firmware/issues)
 - [Buildroot User Manual](https://buildroot.org/docs.html)
 - [U-Boot Documentation](https://u-boot.readthedocs.io/)
