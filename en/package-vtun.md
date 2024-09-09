@@ -26,7 +26,7 @@ To connect to the server, go to the extensions tab, specify the IP address or do
 Installing components and dependencies for Debian/Ubuntu
 
 ```
-apt install -y bison bridge-utils build-essential curl flex
+apt install -y bison bridge-utils build-essential curl flex bridge-utils
 ```
 
 ### Automatic compilation script
@@ -34,7 +34,7 @@ apt install -y bison bridge-utils build-essential curl flex
 ```
 #!/bin/bash
 #
-# OpenIPC.org | v.20240824
+# OpenIPC.org | v.20240908
 #
 
 LANG=C
@@ -55,8 +55,8 @@ compile() {
 }
 
 install() {
-    mkdir -p ../_binary
-    mv -v vtund ../_binary/vtund_i386
+    mkdir -p /usr/local/sbin
+    mv -v vtund /usr/local/sbin/vtund
     cd -
     rm -rf vtun-${vtun_version}
 }
