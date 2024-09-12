@@ -6,10 +6,10 @@ MS-J10    MS-J10B
 
 | Name | pins |Description| GPIO | Usage |
 | --- | --- | --- |---|---|
-|**c1** |1| ICR|
-||2|ICR |
+|**c1** |1| ICR| gpio78
+||2|ICR | gpio79
 ||
-|**c2** |1| CDS IN|
+|**c2** |1| CDS IN| gpio61
 ||2|GND |
 ||3|12V out |
 ||4|GND |
@@ -69,6 +69,7 @@ MS-J10    MS-J10B
 |desc|use|
 |---|---|
 cpu temp|  cat /sys/class/mstar/msys/TEMP_R|
+
 
 
 
