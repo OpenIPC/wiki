@@ -10,45 +10,45 @@
 
 * FEC_K and FEC_N
 
-    FEC_K and FEC_N are parameters used in Forward Error Correction (FEC) to define the structure and efficiency of error correction codes.
+        FEC_K and FEC_N are parameters used in Forward Error Correction (FEC) to define the structure and efficiency of error correction codes.
 
-    #### FEC_K
+        #### FEC_K
 
-    K refers to the number of information (or data) bits in a block before error correction encoding is applied.
-    This is the actual data that needs to be transmitted without any redundancy added for error correction.
+        K refers to the number of information (or data) bits in a block before error correction encoding is applied.
+        This is the actual data that needs to be transmitted without any redundancy added for error correction.
 
-    #### FEC_N
+        #### FEC_N
 
-    N refers to the total number of bits after error correction encoding has been applied.
+        N refers to the total number of bits after error correction encoding has been applied.
 
-    This includes both the original data bits (K) and the redundant bits that are added for error detection and correction.
-    Relationship Between FEC_K and FEC_N
+        This includes both the original data bits (K) and the redundant bits that are added for error detection and correction.
+        Relationship Between FEC_K and FEC_N
 
-    The difference between N and K represents the redundancy added by the error correction code. In other words, the redundant bits are used to detect and correct errors in the transmitted data.
+        The difference between N and K represents the redundancy added by the error correction code. In other words, the redundant bits are used to detect and correct errors in the transmitted data.
 
-    ```mathematica
-    N = K + Number of Redundant Bits
-    ```
+        ```mathematica
+        N = K + Number of Redundant Bits
+        ```
 
-    Example
+        Example
 
-    If FEC_K = 1000 and FEC_N = 1200, this means 200 redundant bits were added to the original 1000 data bits, creating a total of 1200 transmitted bits.
+        If FEC_K = 1000 and FEC_N = 1200, this means 200 redundant bits were added to the original 1000 data bits, creating a total of 1200 transmitted bits.
 
-    Code Rate
+        Code Rate
 
-    The ratio of information bits (K) to the total bits (N) is called the code rate:
+        The ratio of information bits (K) to the total bits (N) is called the code rate:
 
-    ```mathematica
-    Code Rate = K / N
-    ```
+        ```mathematica
+        Code Rate = K / N
+        ```
 
-    For example, if K = 1000 and N = 1200, the code rate would be:
+        For example, if K = 1000 and N = 1200, the code rate would be:
 
-    ```yaml
+        ```yaml
 
-    Code Rate = 1000 / 1200 = 0.833
-    ```
-    This means that 83.3% of the transmitted bits are actual data, and 16.7% are used for error correction.
+        Code Rate = 1000 / 1200 = 0.833
+        ```
+        This means that 83.3% of the transmitted bits are actual data, and 16.7% are used for error correction.
 
 
     #### Usage in Communication Systems
