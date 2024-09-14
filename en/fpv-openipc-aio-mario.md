@@ -60,7 +60,10 @@ enter uboot use  uart device connect to top of AIO board(R0,T0)pad.
 
 ### Connect usb debug port
 
-Power on AIO with Battery connector(GH1.25* 6 pin), after the blue LED flashing, plug in usb cable and connect to PC
+Plug USB cable to connect AIO and PC first, then power on DC, or usb power only.
+
+If there are unknown USB devices in the computer, the following drivers need to be installed.
+[corechip-sr9900-usb20-to-fast-ethernet-adapter-1750095.zip](https://github.com/user-attachments/files/16829005/corechip-sr9900-usb20-to-fast-ethernet-adapter-1750095.zip)
 
 in windows:
 
@@ -77,7 +80,7 @@ then open ssh to connect AIO address:192.168.1.10
 user:root password:12345
 
 
-### Upgrade furmware
+### Upgrade firmware
 
 Update firmware possible via SD card or just use win scp drug the rootfs and kernel files to /tmp
 
@@ -87,6 +90,10 @@ sysupgrade -n -z --kernel=/tmp/uImage.ssc338q --rootfs=/tmp/rootfs.squashfs.ssc3
 
 You can [download](https://github.com/OpenIPC/wiki/blob/master/en/fpv-openipc-aio-ultrasight.md#software) firmware via the link that is used for online updates.
 
+You can also read the current discussions and suggestions here:
+
+- https://t.me/c/1809358416/98818/103632
+- https://t.me/c/1809358416/98818/108052
 
 Or just use the configurator - https://github.com/OpenIPC/configurator
 
@@ -103,16 +110,18 @@ RF antenna characteristics
 Default Antenna is ANT1 for 1T1R, ANT0+ANT1 is 2T2R
 
 Reconmand RF setting 
-  
-  RF Power max 18dbm for onbard PA. 0~-25dbm setting
+
+RF Power max 18dbm for onbard PA input. 
+ For 1T1R rf setting range: 1-63 firmware update to latest! 
+ stbc=0,ldpc=0 Recommand RF power value < 45
   
   MCS index 1,3(0-7 is 1T1R, 8+ is 2T2R)
   
-  stbc=1,ldpc=1
-  
-  Video biterate:4096 /8192/12688(mcs 3+)
+  Video bitrate:4096 /8192/12688(mcs 3+)
 
-  Keep RF poweroff or power=1 when on bench test(when only usb connect)
+  when use stbc=1,ldpc=1 recommand rf power setting for MCS3 from 8-15 for test.
+
+  Keep RF power < = 15 when on bench test(when only usb connect)
 
 
 ### SD solt for Air camera record
@@ -134,10 +143,26 @@ all heat sink mount holes are M2 screws thread.
 ![image](https://github.com/user-attachments/assets/af8124e3-539f-42c6-a757-a560eb93e3fe)
 
 
-### Todo
+**NOTE**
 
-USB only for debug mode
+USB only for debug mode, when DC power only, the cdc ethernet works in sleep mode to save energy.
 
-Power limited 5W input.
+USB power only mode Power limited 5W input.
+
+**Upgrade Firmware to Ruby FPV**
+
+plug usb cable and setting cdc ethernet ipv4: 192.168.1.11 255.255.255.0
+
+use winscp drag unzip files to /tmp 
+
+use ssh login and copy following command:
+
+sysupgrade --kernel=/tmp/uImage.ssc338q --rootfs=/tmp/rootfs.squashfs.ssc338q -z -n
+
+after update and reboot
+
+use ssh login and set command: 
+
+fw_setenv sensor imx335 && fw_setenv upgrade https://github.com/OpenIPC/firmware/releases/download/latest/openipc.ssc338q-nor-rubyfpv.tgz && reboot
 
 

@@ -15,17 +15,7 @@ Video version: - [OpenIPC - Prepare GroundStation: Ubuntu + QGroundControl](http
 sudo apt update
 ```
 ```
-sudo apt install dkms git python3-all-dev net-tools virtualenv fakeroot debhelper python3-twisted
- libpcap-dev python3-pyroute2 python3-future python3-configparser python3-all libsodium-dev
-```
-
-### Libsodium
-```
-git clone https://github.com/jedisct1/libsodium --branch stable
-cd libsodium
-./configure
-make && make check
-sudo make install
+sudo apt install dkms git python3-all-dev net-tools virtualenv fakeroot debhelper python3-twisted libpcap-dev python3-pyroute2 python3-future python3-all libsodium-dev
 ```
 
 ### Wifi card driver
@@ -62,7 +52,7 @@ systemctl start wifibroadcast@gs
 
 ### Qground control manual
 
-- https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html
+- https://docs.qgroundcontrol.com/master/en/qgc-user-guide/getting_started/download_and_install.html
 
 ### Get last logs from service
 ```
