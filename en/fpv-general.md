@@ -1,13 +1,11 @@
 # Acronyms and Definitions
 
 
-### Channel
+Channel - A Wi-Fi channel is a specific range of frequencies used for communication between wireless devices. Wi-Fi networks typically divide these frequencies into 14 channels in the 2.4 GHz band, 34 channels in the 5 GHz band, and up to 59 channels in the 6 GHz band.
 
-A Wi-Fi channel is a specific range of frequencies used for communication between wireless devices. Wi-Fi networks typically divide these frequencies into 14 channels in the 2.4 GHz band, 34 channels in the 5 GHz band, and up to 59 channels in the 6 GHz band.
+[Configurator](https://github.com/OpenIPC/configurator) OpenIPC controller for setting up FPV and URLLC devices
 
-### Datalink
-
-Datalink is oncerned with managing data communication links and ensuring reliable data transfer between the device and external systems.
+Datalink - Datalink is oncerned with managing data communication links and ensuring reliable data transfer between the device and external systems.
 
 ### FEC_K and FEC_N
 
@@ -58,13 +56,20 @@ FEC_K and FEC_N are commonly used to describe how data is handled in wireless co
 
 The values of K and N determine how much error correction is added to the data, impacting both the transmission reliability and bandwidth efficiency.
 
+
 Frequency - Wi-Fi transmits data between your device and a router using radio waves over specific frequencies. Depending on the amount of data being transferred, it can use one of two frequencies: 2.4 gigahertz or 5 gigahertz.
 
 LDPC - LDPC stands for Low-Density Parity-Check code, which is an advanced error-correcting code used in digital communication systems to improve the reliability of data transmission over noisy channels. LDPC codes are designed to detect and correct errors that occur during data transmission, allowing for more efficient and robust communication.
 
-Majestic - managing and configuring various aspects of the system. Specifically, it is a command-line tool associated with Majestic, which is a component of OpenIPC
+[Majestic](https://github.com/OpenIPC/majestic-webui) - Provides web interface for OpenIPC Firmware, and is available on port 80 of your camera. It used for managing and configuring various aspects of the system. It is also a command-line tool.
 
 MCS Index - The Modulation Coding Scheme (MCS) index is a standard industry metric that reflects various factors in a Wi-Fi connection between a client device and a wireless access point, such as data rate, channel width, and the number of antennas or spatial streams in the device.
+
+[MSPOSD](https://github.com/OpenIPC/msposd) - OpenIPC implementation of MSP Displayport OSD for INAV/Betaflight/ArduPilot
+
+[PixelPilot](https://github.com/OpenIPC/PixelPilot) - PixelPilot is an Android app packaging multiple pieces together to decode an H264/H265 video feed broadcast by wfb-ng over the air.
+
+[PixelPilot_rk](https://github.com/OpenIPC/PixelPilot_rk) - Application that decodes an RTP Video Stream and displays it on screen, for Rockchip devices (aka Radxa).
 
 STBC - STBC stands for Space-Time Block Coding, which is a technique used in wireless communication systems to improve signal reliability and data transmission performance, particularly in environments with interference or signal fading.
 
