@@ -1,3 +1,8 @@
+# OpenIPC Wiki
+[Table of Content](../README.md)
+
+Be sure to use the [FAQ](../en/fpv-faq.md) as well.
+
 # Acronyms and Definitions
 
 * BEC - BEC stands for Battery Eliminator Circuit. It is used to provide a stable voltage supply to components in a device, often in place of a battery. 
