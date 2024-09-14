@@ -26,7 +26,7 @@ To connect to the server, go to the extensions tab, specify the IP address or do
 Installing components and dependencies for Debian/Ubuntu
 
 ```
-apt install -y bison bridge-utils build-essential curl flex
+apt install -y bison bridge-utils build-essential curl flex bridge-utils
 ```
 
 ### Automatic compilation script
@@ -34,7 +34,7 @@ apt install -y bison bridge-utils build-essential curl flex
 ```
 #!/bin/bash
 #
-# OpenIPC.org | v.20240824
+# OpenIPC.org | v.20240908
 #
 
 LANG=C
@@ -55,8 +55,8 @@ compile() {
 }
 
 install() {
-    mkdir -p ../_binary
-    mv -v vtund ../_binary/vtund_i386
+    mkdir -p /usr/local/sbin
+    mv -v vtund /usr/local/sbin/vtund
     cd -
     rm -rf vtun-${vtun_version}
 }
@@ -140,4 +140,20 @@ E60BFB000001 {
   };
 }
 #
+```
+
+### Alternative
+
+```
+#!/bin/sh -x
+
+curl -L -o vtun_3.0.4.orig.tar.gz http://archive.ubuntu.com/ubuntu/pool/universe/v/vtun/vtun_3.0.4.orig.tar.gz
+tar xvfz vtun_3.0.4.orig.tar.gz
+curl -L -o vtun_3.0.4-2build1.debian.tar.xz http://archive.ubuntu.com/ubuntu/pool/universe/v/vtun/vtun_3.0.4-2build1.debian.tar.xz
+tar xvfJ vtun_3.0.4-2build1.debian.tar.xz
+cd vtun-3.0.4
+cat ../debian/patches/*.patch | patch -p 1
+./configure --build=x86_64-linux-gnu --disable-lzo --disable-zlib --disable-ssl --prefix=''
+make && strip vtund && cp vtund ../ && cd -
+rm -rf vtun_3.0.4.orig.tar.gz vtun_3.0.4-2build1.debian.tar.xz debian vtun-3.0.4
 ```

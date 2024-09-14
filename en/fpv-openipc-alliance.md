@@ -20,3 +20,5 @@ We draw your attention to the fact that other modules of the other companies are
 <p align="left">
   <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-openipc-alliance/openipc-alliance-fpv-sensor-pinout.jpg?raw=true"/>
 </p>
+
+Connector type - **DF56L-26P-0.3SD**
