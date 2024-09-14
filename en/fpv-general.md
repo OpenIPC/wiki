@@ -1,5 +1,6 @@
 # Acronyms and Definitions
 
+BEC - BEC stands for Battery Eliminator Circuit. It is used to provide a stable voltage supply to components in a device, often in place of a battery. 
 
 Channel - A Wi-Fi channel is a specific range of frequencies used for communication between wireless devices. Wi-Fi networks typically divide these frequencies into 14 channels in the 2.4 GHz band, 34 channels in the 5 GHz band, and up to 59 channels in the 6 GHz band.
 
@@ -56,6 +57,7 @@ FEC_K and FEC_N are commonly used to describe how data is handled in wireless co
 
 The values of K and N determine how much error correction is added to the data, impacting both the transmission reliability and bandwidth efficiency.
 
+FPV - FPV stands for First-Person View, a technology that allows users to experience a live video feed from a camera mounted on a drone or other remote-controlled device as if they were in the pilot's seat. FPV provides a real-time, immersive perspective, enhancing control and situational awareness during flight or remote operation.
 
 Frequency - Wi-Fi transmits data between your device and a router using radio waves over specific frequencies. Depending on the amount of data being transferred, it can use one of two frequencies: 2.4 gigahertz or 5 gigahertz.
 
@@ -95,6 +97,7 @@ WFB - Wireless Framebuffer (WFB) is a component that enables remote display and 
 | `/etc/init.d/S95majestic` | Startup script used to manage the initialization and execution of the Majestic service during system boot.      |
 | `/etc/init.d/S98datalink` |  Startup script used to manage the initialization of the Datalink service during system boot.|
 | Apps                                                                      |
+| `/usr/bin/wfb-cli` | used to interact with or configure the Wireless Framebuffer (WFB) service specifically in the context of a ground station. i.e `wfb-cli gs` |
 | `/usr/bin/msposd` | MSPOSD binary|
 | `/usr/bin/font_hd.png` | font file for msposd |
 | `/usr/bin/font.png` | font file for msposd |
