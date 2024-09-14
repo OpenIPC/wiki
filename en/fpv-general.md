@@ -5,6 +5,9 @@
 
 A Wi-Fi channel is a specific range of frequencies used for communication between wireless devices. Wi-Fi networks typically divide these frequencies into 14 channels in the 2.4 GHz band, 34 channels in the 5 GHz band, and up to 59 channels in the 6 GHz band.
 
+### Datalink
+
+Datalink is oncerned with managing data communication links and ensuring reliable data transfer between the device and external systems.
 
 ### FEC_K and FEC_N
 
@@ -59,11 +62,13 @@ Frequency - Wi-Fi transmits data between your device and a router using radio wa
 
 LDPC - LDPC stands for Low-Density Parity-Check code, which is an advanced error-correcting code used in digital communication systems to improve the reliability of data transmission over noisy channels. LDPC codes are designed to detect and correct errors that occur during data transmission, allowing for more efficient and robust communication.
 
+Majestic - managing and configuring various aspects of the system. Specifically, it is a command-line tool associated with Majestic, which is a component of OpenIPC
+
 MCS Index - The Modulation Coding Scheme (MCS) index is a standard industry metric that reflects various factors in a Wi-Fi connection between a client device and a wireless access point, such as data rate, channel width, and the number of antennas or spatial streams in the device.
 
 STBC - STBC stands for Space-Time Block Coding, which is a technique used in wireless communication systems to improve signal reliability and data transmission performance, particularly in environments with interference or signal fading.
 
-
+WFB - Wireless Framebuffer (WFB) is a component that enables remote display and control of a device’s graphical interface over a wireless network. 
 
 ## Filesystem
 
@@ -73,26 +78,23 @@ STBC - STBC stands for Space-Time Block Coding, which is a technique used in wir
 | File Path            | Description                                          |
 |----------------------|------------------------------------------------------|
 | Config                                                                     |
-| `/etc/wfb.conf`      | Sets up Settings                                    |
-| `/etc/drone.key`     | Secret key that is exchanged with Groundstation     |
-| `/etc/datalink.conf` | |
+| `/etc/wfb.conf`      | Configure settings for the Wireless Framebuffer (WFB). WFB is a component that allows remote display and control of the device's graphical interface over a wireless network.                                    |
+| `/etc/drone.key`     | Used to store a secret key that is exchanged with a Groundstation. This key plays a crucial role in securing communications between the drone and the Groundstation.     |
+| `/etc/datalink.conf` | Used to configure settings related to data link communication. This file plays a role in defining how data is managed and transmitted between various components within the system.|
 | `/etc/majestic.yaml` | Majestic Settings                                   |
 | `/etc/mavlink`       | Mavlink Settings                                    |
 | `/etc/openipc_banner`| |
 | `/etc/openipc_donors`| |
-| `/etc/telemetry.conf`| |
+| `/etc/telemetry.conf`| Used to configure settings related to telemetry. Telemetry involves the collection and transmission of data from the device to an external system for monitoring and analysis.|
 | Startup Files                                                             |
-| `/etc/init.d/S95majestic` |       |
-| `/etc/init.d/S98datalink` ||
-| `/etc/init.d/S98datalink` ||
-| `/etc/init.d/S98datalink` ||
-| `/etc/init.d/S98datalink` ||
+| `/etc/init.d/S95majestic` | Startup script used to manage the initialization and execution of the Majestic service during system boot.      |
+| `/etc/init.d/S98datalink` |  Startup script used to manage the initialization of the Datalink service during system boot.|
 | Apps                                                                      |
-| `/usr/bin/msposd` ||
+| `/usr/bin/msposd` | MSPOSD binary|
 | `/usr/bin/font_hd.png` | font file for msposd |
 | `/usr/bin/font.png` | font file for msposd |
-| `/usr/bin/telemetry` |  |
-| `/usr/bin/majestic` |  |
+| `/usr/bin/telemetry` | Telemetry script |
+| `/usr/bin/majestic` | Majestic binary |
 
 
 ### Ground Station
@@ -107,7 +109,7 @@ STBC - STBC stands for Space-Time Block Coding, which is a technique used in wir
 | `/etc/systemd/system/openipc.service` | Main process Start at boot
 | Apps |
 | `/home/radxa/wfb_keygen` |  Generates shared key|
-| `/home/radxa/resizefs.sh` | |
+| `/home/radxa/resizefs.sh` | Resize root filesystem |
 | `/home/radxa/scripts/screen-mode` | Setup resolution |
 | `/home/radxa/scripts/stream.sh` | Starts main process |
 | `/home/radxa/scripts/wifi-connect.sh` | Script to setup local wifi connection to home router|
