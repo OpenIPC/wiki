@@ -61,13 +61,20 @@
 
 * Frequency - Wi-Fi transmits data between your device and a router using radio waves over specific frequencies. Depending on the amount of data being transferred, it can use one of two frequencies: 2.4 gigahertz or 5 gigahertz.
 
+* H265/H264 - Video compression standards used to encode and decode video streams.
+
+    * H.265 (HEVC): Provides improved compression efficiency compared to H.264, allowing for higher video quality at lower bit rates, which is ideal for 4K and high-definition video streaming.
+    * H.264 (AVC): A widely used video compression standard that offers good compression and video quality, commonly used for streaming, recording, and video conferencing.
+
 * LDPC - LDPC stands for Low-Density Parity-Check code, which is an advanced error-correcting code used in digital communication systems to improve the reliability of data transmission over noisy channels. LDPC codes are designed to detect and correct errors that occur during data transmission, allowing for more efficient and robust communication.
 
 * [Majestic](https://github.com/OpenIPC/majestic-webui) - Provides web interface for OpenIPC Firmware, and is available on port 80 of your camera. It used for managing and configuring various aspects of the system. It is also a command-line tool.
 
 * MCS Index - The Modulation Coding Scheme (MCS) index is a standard industry metric that reflects various factors in a Wi-Fi connection between a client device and a wireless access point, such as data rate, channel width, and the number of antennas or spatial streams in the device.
 
-* [MSPOSD](https://github.com/OpenIPC/msposd) - OpenIPC implementation of MSP Displayport OSD for INAV/Betaflight/ArduPilot
+* [MSPOSD](https://github.com/OpenIPC/msposd) - OpenIPC implementation of MSP Displayport OSD for INAV/Betaflight/ArduPilot.
+
+* OpenIPC - is a firmware project focused on enhancing and customizing the functionality of IP cameras. IPC acronym means IP Camera.
 
 * [PixelPilot](https://github.com/OpenIPC/PixelPilot) - PixelPilot is an Android app packaging multiple pieces together to decode an H264/H265 video feed broadcast by wfb-ng over the air.
 
