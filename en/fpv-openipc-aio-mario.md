@@ -63,9 +63,18 @@ enter uboot use  uart device connect to top of AIO board(R0,T0)pad.
 Plug USB cable to connect AIO and PC first, then power on DC, or usb power only.
 
 If there are unknown USB devices in the computer, the following drivers need to be installed.
-[corechip-sr9900-usb20-to-fast-ethernet-adapter-1750095.zip](https://github.com/user-attachments/files/16829005/corechip-sr9900-usb20-to-fast-ethernet-adapter-1750095.zip)
+[corechip-sr9900-usb20-to-fast-ethernet-adapter-1750095.zip]
+
+(https://github.com/user-attachments/files/16829005/corechip-sr9900-usb20-to-fast-ethernet-adapter-1750095.zip)
 
 in windows:
+Save attached and unzip file ( Auto_set_Mario_CDX.bat )and  run as administrator.
+
+[Auto_Set_Mario_CDC.zip](https://github.com/user-attachments/files/17010487/Auto_Set_Mario_CDC.zip)
+
+
+
+or setting manually as follows:
 
 go to control panel- internet -network:
 
@@ -74,6 +83,7 @@ find a usb2.0 to fast Ethernet Adapter
 set this card ipv4 address to 192.168.1.11 mask:255.255.255.0
 
 apply
+
 
 then open ssh to connect AIO address:192.168.1.10
 
