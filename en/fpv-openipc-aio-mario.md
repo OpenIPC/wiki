@@ -63,9 +63,44 @@ enter uboot use  uart device connect to top of AIO board(R0,T0)pad.
 Plug USB cable to connect AIO and PC first, then power on DC, or usb power only.
 
 If there are unknown USB devices in the computer, the following drivers need to be installed.
-[corechip-sr9900-usb20-to-fast-ethernet-adapter-1750095.zip](https://github.com/user-attachments/files/16829005/corechip-sr9900-usb20-to-fast-ethernet-adapter-1750095.zip)
+[corechip-sr9900-usb20-to-fast-ethernet-adapter-1750095.zip]
+
+(https://github.com/user-attachments/files/16829005/corechip-sr9900-usb20-to-fast-ethernet-adapter-1750095.zip)
 
 in windows:
+Save attached Auto_set_Mario_CDX.bat and run as administrator.
+[Uploading Auto_Set_Mario_CDC.bat@echo off
+setlocal
+
+echo Detecting Ethernet adapter with description containing "Searching OpenIPC Mario AIO device CDC net adapter"...
+
+:: Query network adapters and find the one with "Corechip SR9900" in the description
+for /f "tokens=2 delims==" %%A in ('wmic nic where "Description like '%%Corechip SR9900%%' and NetConnectionID is not null" get NetConnectionID /value 2^>nul') do (
+    set "EthernetName=%%A"
+)
+
+:: Check if the EthernetName variable was set
+if defined EthernetName (
+    echo Ethernet adapter found: "%EthernetName%"
+    echo Configuring IPv4 address...
+
+    :: Set the static IPv4 address and subnet mask
+    netsh interface ip set address name="%EthernetName%" static 192.168.1.11 255.255.255.0
+    if %errorlevel% equ 0 (
+        echo Successfully set the IP address to 192.168.1.11 and subnet mask to 255.255.255.0
+    ) else (
+        echo Failed to set the IP address. Please check permissions or install Driver for it.
+    )
+) else (
+    echo No Ethernet adapter with "Mario AIO device" found.
+)
+
+endlocal
+pause
+…]()
+
+
+or setting manually as follows:
 
 go to control panel- internet -network:
 
@@ -74,6 +109,7 @@ find a usb2.0 to fast Ethernet Adapter
 set this card ipv4 address to 192.168.1.11 mask:255.255.255.0
 
 apply
+
 
 then open ssh to connect AIO address:192.168.1.10
 
