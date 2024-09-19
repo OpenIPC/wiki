@@ -49,6 +49,7 @@ OpenIPC Wiki
 ### FPV
 
 - [Frequently Asked Question (FAQ) for FPV](en/fpv-faq.md)
+- [General Info](en/fpv-general.md)
 - [OpenIPC AIO "Mario"](en/fpv-openipc-aio-mario.md)
 - [OpenIPC AIO "UltraSight"](en/fpv-openipc-aio-ultrasight.md)
 - [Guide to configure an FPV camera and groundstation](en/fpv-step-by-step-guide.md)
