@@ -31,6 +31,8 @@ OpenIPC Wiki
 - [Wireless settings](en/wireless-settings.md)
 - [System features](en/system-features.md)
 - [Majestic streamer](en/majestic-streamer.md)
+- [Majestic example config](en/majestic-config.md)
+- [Majestic usage research](en/majestic-research.md)
 - [Web interface](en/web-interface.md)
 - [Upgrade firmware](en/sysupgrade.md)
 - [Image quality tuning](en/image-quality-tuning.md)
@@ -47,6 +49,7 @@ OpenIPC Wiki
 ### FPV
 
 - [Frequently Asked Question (FAQ) for FPV](en/fpv-faq.md)
+- [General Info](en/fpv-general.md)
 - [OpenIPC AIO "Mario"](en/fpv-openipc-aio-mario.md)
 - [OpenIPC AIO "UltraSight"](en/fpv-openipc-aio-ultrasight.md)
 - [Guide to configure an FPV camera and groundstation](en/fpv-step-by-step-guide.md)
@@ -82,7 +85,7 @@ OpenIPC Wiki
 - [List of supported sensors](en/firmware-sensors.md)
 - [Visual sensor identification](en/visual_sensor_identification.md)
 - [List of OpenIPC Buildroot packages](en/dev-buildroot-packages.md)
-- [Source code](en/source-code.md)
+- [Firmware development guide](en/source-code.md)
 - [Bug reports](https://github.com/OpenIPC/firmware/issues)
 - [Buildroot User Manual](https://buildroot.org/docs.html)
 - [U-Boot Documentation](https://u-boot.readthedocs.io/)

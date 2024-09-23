@@ -6,13 +6,14 @@ Board specific GPIO settings list
 
 ### Anjoy / Anjvision boards
 
-| Processor   | IRCUT1 | IRCUT2 | LIGHT | RESET | I/O | USB_ENA | TESTED BOARDS    |  AUDIO OUTPUT   |
-|-------------|--------|--------|-------|-------|-----|---------|------------------|-----------------|
-| SSC30KQ     | 23     | 24     | 60/59 | 10    |     |         | MC-L12, MC-L12B  |      9          |
-| SSC335      | 78     | 79     | 61/53 | 66    | 52  |         | MS-J10, YM200J10 |      80         |
-| SSC337      | 78     | 79     | 61    | 66    | 52  |         | MC-F40, YM-J10D  |                 |
-| SSC337DE    | 78     | 79     | 61    | 66    |     |         | MC500L8          |                 |
-| SSC338Q     | 23     | 24     | 60    | 10    |     |    8    | MC800S-V3        |      39         |
+| Processor   | IRCUT1 | IRCUT2 | LIGHT IR | LIGHT WHITE | RESET | I/O | USB_ENA | TESTED BOARDS    |  AUDIO OUTPUT   |
+|-------------|--------|--------|----------|-------------|-------|-----|---------|------------------|-----------------|
+| SSC30KQ     | 23     | 24     | 60/59    |             | 10    |     |         | MC-L12, MC-L12B  |      9          |
+| SSC335      | 78     | 79     | 61/53    |             | 66    | 52  |         | MS-J10, YM200J10 |      80         |
+| SSC337      | 78     | 79     | 61       |             | 66    | 52  |         | MC-F40, YM-J10D  |                 |
+| SSC337DE    | 78     | 79     | 61       |             | 66    |     |         | MC500L8          |                 |
+| SSC338Q     | 23     | 24     | 60       | 59          | 10    |     |    8    | MC800S-V3        |      39         |
+| SSC377      | 11     | 80     | 9        | 13          |       |     |         | MC-A42P-V1.1     |      12         |
 
 ### CamHi / Xin boards
 
@@ -58,11 +59,12 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 
 > _Yes, it's amazing but it really matches on two Goke processors_
 
-### GSA boards
+
+### GSA / EnZhi boards
 
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA |
 |-------------|--------|--------|----------|-------|---------|
-| T31L        | 58     | 57     |          |       |         |
+| T31L        | 58     | 57     |          | 49    |         |
 
 
 ### Herospeed/Longse/Cantonk boards
@@ -82,10 +84,10 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 
 ### Huishi / Vatilon boards
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS |
-|-------------|--------|--------|----------|
-| SSC377      | 80     | 81     |          |
-| SSC378DE    | 80     | 81     |          |
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRLED |
+|-------------|--------|--------|----------|-------|
+| SSC377      | 80     | 81     |          |       |
+| SSC378DE    | 80     | 81     |          | 13    |
 
 
 ### Jabsco boards

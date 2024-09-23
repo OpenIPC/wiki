@@ -27,7 +27,9 @@ and then look it up in the [FCC ID database](https://fccid.io/).
 - MQTT (telemetry) support
 - WiFi support
 - lame (mp3) and libwebsockets support
+- experimental WebRTC support (only recent Hisi/Goke)
 
+$\color{red}{\text{We always recommend using only Lite firmware}}$
 
 ### How to strip U-Boot Image wrapper header from a binary image
 
