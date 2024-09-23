@@ -1,7 +1,7 @@
-# OpenIPC Wiki
-[Table of Contents](../README.md)
+## Wiki OpenIPC
+[Mục lục](../README.md)
 
-Hardware: SoC Manufacturers
+Phần cứng: Các nhà sản xuất SoC
 ---------------------------
 - [Ambarella](https://www.ambarella.com/)
 - [Anyka](http://www.anyka.com/)
@@ -16,3 +16,10 @@ Hardware: SoC Manufacturers
 - [Novatek](http://www.novatek.com.tw/)
 - [SigmaStar](http://www.sigmastarsemi.com/)
 - [XiongmaiTech](https://www.xiongmaitech.com/)
+
+
+**Giải thích thuật ngữ:**
+
+* **SoC (System on a Chip):** Hệ thống trên một chip, là một mạch tích hợp chứa tất cả các thành phần cần thiết của một hệ thống máy tính, bao gồm CPU, GPU, bộ nhớ và các thiết bị ngoại vi khác.
+
+

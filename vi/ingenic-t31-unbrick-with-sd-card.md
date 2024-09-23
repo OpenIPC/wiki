@@ -1,23 +1,22 @@
-[Table of Content](../README.md)
+## Wiki OpenIPC
+[Mục lục](../README.md)
 
-Unbrick Ingenic T31 with SD Card
+Phục hồi Ingenic T31 bằng thẻ SD
 ---
 
-#### NOTE: 
+#### LƯU Ý:
 ```
-On certain devices, like many Wyze and Atom models, the SD Card is powered through a GPIO
-(General-Purpose Input/Output) connection.  This means you have to activate a particular GPIO either
-in U-Boot or in the Linux system in order to supply power to use the SD Card. If your device is set
-up this way, you cannot use this method without making physical changes to the hardware.
+Trên một số thiết bị, như nhiều model Wyze và Atom, thẻ SD được cấp nguồn thông qua kết nối GPIO
+(Đầu vào/Đầu ra đa năng). Điều này có nghĩa là bạn phải kích hoạt một GPIO cụ thể trong U-Boot hoặc trong hệ thống Linux để cấp nguồn sử dụng thẻ SD. Nếu thiết bị của bạn được thiết lập theo cách này, bạn không thể sử dụng phương pháp này mà không thực hiện thay đổi vật lý đối với phần cứng.
 ```
 
-### Ingenic T31 boot squence
+### Trình tự khởi động Ingenic T31
 
 ![](../images/t31_boot_sequence.png)
 
-If failed to boot from uboot on flash memory, T31 will then try to boot from SD card, no matter what bootsel pin is set. So if the uboot on flash chip is somehow broken, we can burn uboot to a SD card and boot from it. The uboot file should be specially compiled for SD card boot, you can't use the one for normal flash boot.
+Nếu không khởi động được từ uboot trên bộ nhớ flash, T31 sẽ thử khởi động từ thẻ SD, bất kể chân bootsel được đặt là gì. Vì vậy, nếu uboot trên chip flash bị hỏng, chúng ta có thể ghi uboot vào thẻ SD và khởi động từ đó. Tệp uboot phải được biên dịch đặc biệt để khởi động thẻ SD, bạn không thể sử dụng tệp dành cho khởi động flash thông thường.
 
-### Compile uboot for SD card boot
+### Biên dịch uboot để khởi động thẻ SD
 
 ```
 mkdir /opt/openipc
@@ -28,50 +27,50 @@ export PATH="$PATH:/opt/openipc/mips-gcc472-glibc216-64bit/bin"
 cd u-boot-ingenic
 make distclean
 ```
-Now choose the final `make` command according to your T31 chip type
+Bây giờ hãy chọn lệnh `make` cuối cùng theo loại chip T31 của bạn
 
-SoC  | Command
+SoC | Lệnh
 ---- | ---------------------------
 T31N | make isvp_t31_msc0 
 T31L | make isvp_t31_msc0_lite
 T31X | make isvp_t31_msc0_ddr128M
 T31A | make isvp_t31a_msc0_ddr128M
 
-Now you will get the compiled uboot file `u-boot-with-spl.bin`
+Bây giờ bạn sẽ nhận được tệp uboot đã biên dịch `u-boot-with-spl.bin`
 
-### Burn uboot to SD card
+### Ghi uboot vào thẻ SD
 
-Insert SD card to your PC, run `fdisk -l` to check, you should see the device like in my case `Disk /dev/sdb: 29.72 GiB, 31914983424 bytes, 62333952 sectors`.
+Lắp thẻ SD vào PC của bạn, chạy `fdisk -l` để kiểm tra, bạn sẽ thấy thiết bị giống như trong trường hợp của tôi là `Disk /dev/sdb: 29.72 GiB, 31914983424 bytes, 62333952 sectors`.
 
-**CAUTION!** double check the `/dev` device name is actually your SD card, or you may lose data on other drives
+**THẬN TRỌNG!** kiểm tra kỹ tên thiết bị `/dev` có thực sự là thẻ SD của bạn hay không, nếu không bạn có thể mất dữ liệu trên các ổ đĩa khác
 
 ```
 dd if=./u-boot-with-spl.bin of=/dev/sdb bs=512 seek=34
 ```
-This will burn the uboot file to SD card at 17KBytes offset from 0x0
+Điều này sẽ ghi tệp uboot vào thẻ SD ở vị trí bù 17KBytes từ 0x0
 
-### Boot from SD card
+### Khởi động từ thẻ SD
 
-If the original uboot on flash chip is broken or empty, it will choose to boot from SD card automatically, but if you just want to sideload your own uboot when there's working uboot on flash chip and camera PCB board's `bootsel` pin is set to 1, it will still boot from uboot on flash chip. To force booting from SD card, you can short circut pin 5 and 6 of the SOIC8 flash chip when powering up camera to block reading of the flash memory, details [here](https://github.com/gitgayhub/wiki/blob/master/en/help-uboot.md#shorting-pins-on-flash-chip).
+Nếu uboot gốc trên chip flash bị hỏng hoặc trống, nó sẽ tự động chọn khởi động từ thẻ SD, nhưng nếu bạn chỉ muốn tải uboot của riêng mình khi có uboot đang hoạt động trên chip flash và chân `bootsel` của bảng mạch PCB camera được đặt thành 1, nó sẽ vẫn khởi động từ uboot trên chip flash. Để buộc khởi động từ thẻ SD, bạn có thể ngắn mạch chân 5 và 6 của chip flash SOIC8 khi bật nguồn camera để chặn việc đọc bộ nhớ flash, chi tiết [tại đây](https://github.com/gitgayhub/wiki/blob/master/en/help-uboot.md#shorting-pins-on-flash-chip).
 
-#### OpenIPC uboot auto reset issue
+#### Vấn đề tự động đặt lại uboot của OpenIPC
 
-OpenIPC's uboot will auto reset if failed to load kernel from default address, if you are trying to sideload uboot from SD card when there's a valid one on flash chip, this will result in camera booted to the original uboot again. To disable the auto reset function, edit `include/configs/isvp_common.h`, delete `; reset` from the ending of the `bootcmd` line
+Uboot của OpenIPC sẽ tự động đặt lại nếu không tải được kernel từ địa chỉ mặc định, nếu bạn đang cố gắng tải uboot từ thẻ SD khi có một uboot hợp lệ trên chip flash, điều này sẽ dẫn đến việc camera khởi động lại uboot ban đầu. Để tắt chức năng tự động đặt lại, hãy chỉnh sửa `include/configs/isvp_common.h`, xóa `; reset` khỏi phần cuối của dòng `bootcmd`
 
-### uboot for other Ingenic SoC T10 T20 T21 & T30
+### uboot cho các SoC Ingenic khác T10 T20 T21 & T30
 
-uboot can be built for SD card boot for these SoCs, but not verified on real device
+Uboot có thể được xây dựng để khởi động thẻ SD cho các SoC này, nhưng chưa được xác minh trên thiết bị thực
 
 #### T10 & T20
 
-SoC | Command
+SoC | Lệnh
 --- | --------------------
-T10	| `make isvp_t10_msc0`
-T20	| `make isvp_t20_msc0`
+T10 | `make isvp_t10_msc0`
+T20 | `make isvp_t20_msc0`
 
 #### T21 & T30
 
-Edit `/opt/openipc/u-boot-ingenic/boards.cfg` add the following lines
+Chỉnh sửa `/opt/openipc/u-boot-ingenic/boards.cfg` thêm các dòng sau
 
 ```
 isvp_t21_msc0                mips        xburst      isvp_t21            ingenic        t21         isvp_t21:SPL_MMC_SUPPORT,ENV_IS_IN_MMC,JZ_MMC_MSC0,SFC_COMMOND
@@ -81,33 +80,33 @@ isvp_t30_msc0_ddr128M        mips        xburst      isvp_t30            ingenic
 isvp_t30a_msc0_ddr128M       mips        xburst      isvp_t30            ingenic        t30        isvp_t30:SPL_MMC_SUPPORT,ENV_IS_IN_MMC,GPT_CREATOR,JZ_MMC_MSC0,SFC_COMMOND,DDR2_128M,T30A
 ```
 
-Choose  `make` command according to your chip type
+Chọn lệnh `make` theo loại chip của bạn
 
-SoC  | Command
+SoC | Lệnh
 -----| -----------------------------
-T21  | `make isvp_t21_msc0`
+T21 | `make isvp_t21_msc0`
 T30N | `make isvp_t30_msc0`
 T30L | `make isvp_t30_msc0_lite`
 T30X | `make isvp_t30_msc0_ddr128M`
 T30A | `make isvp_t30a_msc0_ddr128M`
 
-### Install OpenIPC from SD card in uboot
+### Cài đặt OpenIPC từ thẻ SD trong uboot
 
-Use T31ZX with 16MB NOR flash for example, download the [16MB full size image](https://openipc.org/cameras/vendors/ingenic/socs/t31x/download_full_image?flash_size=16&flash_type=nor&fw_release=ultimate)
+Sử dụng T31ZX với flash NOR 16MB làm ví dụ, tải xuống [ảnh full size 16MB](https://openipc.org/cameras/vendors/ingenic/socs/t31x/download_full_image?flash_size=16&flash_type=nor&fw_release=ultimate)
 
-#### Method 1
+#### Phương pháp 1
 
-Used if there's `mmc` but no `fatload` command in uboot, we can burn firmware to SD card without any filesystem
+Được sử dụng nếu có `mmc` nhưng không có lệnh `fatload` trong uboot, chúng ta có thể ghi firmware vào thẻ SD mà không cần bất kỳ hệ thống tệp nào
 
-**CAUTION! ** double check the `/dev` device name is actually your SD card, or you may lose data on other drives
+**THẬN TRỌNG!** kiểm tra kỹ tên thiết bị `/dev` có thực sự là thẻ SD của bạn hay không, nếu không bạn có thể mất dữ liệu trên các ổ đĩa khác
 
 ```bash
-dd if=./openipc-t31x-ultimate-16mb.bin of=/dev/[sd-card-device] seek=20480
+dd if=./openipc-t31x-ultimate-16mb.bin of=/dev/[thiết-bị-thẻ-sd] seek=20480
 ```
 
-This will burn OpenIPC image to SD card at 10MB offset, when card block size is 512 bytes
+Điều này sẽ ghi hình ảnh OpenIPC vào thẻ SD ở vị trí bù 10MB, khi kích thước khối thẻ là 512 byte
 
-In uboot, run
+Trong uboot, chạy
 
 ```
 mw.b 0x80600000 0xff 0x1000000
@@ -117,11 +116,11 @@ sf erase 0x0 0x1000000
 sf write 0x80600000 0x0 0x1000000
 ```
 
-#### Method 2
+#### Phương pháp 2
 
-Used if there's `fatload` command in uboot to directly load file from FAT filesystem
+Được sử dụng nếu có lệnh `fatload` trong uboot để tải trực tiếp tệp từ hệ thống tệp FAT
 
-Mount SD card's FAT filesystem to your PC, copy OpenIPC firmware image into it. In uboot, run `fatls mmc 0` to list files in the SD card, then
+Gắn kết hệ thống tệp FAT của thẻ SD vào PC của bạn, sao chép hình ảnh firmware OpenIPC vào đó. Trong uboot, chạy `fatls mmc 0` để liệt kê các tệp trong thẻ SD, sau đó
 
 ```
 mw.b 0x80600000 0xff 0x1000000
@@ -130,3 +129,27 @@ sf probe 0
 sf erase 0x0 0x1000000
 sf write 0x80600000 0x0 0x1000000
 ```
+
+**Giải thích thuật ngữ:**
+
+* **Unbrick:** Phục hồi, là quá trình khôi phục một thiết bị bị brick (không hoạt động).
+* **Ingenic T31:** Là một loại SoC được sử dụng trong các camera IP.
+* **SD card:** Thẻ nhớ SD, là một loại thẻ nhớ được sử dụng để lưu trữ dữ liệu.
+* **U-Boot:** Là một bootloader phổ biến được sử dụng trong các hệ thống nhúng.
+* **Bootloader:** Là một chương trình nhỏ được thực thi khi thiết bị khởi động, chịu trách nhiệm tải hệ điều hành.
+* **Flash chip:** Chip flash, là một loại bộ nhớ không bay hơi được sử dụng để lưu trữ firmware.
+* **Bootsel pin:** Chân bootsel, là một chân trên bảng mạch được sử dụng để chọn chế độ khởi động.
+* **SOIC8:** Small Outline Integrated Circuit 8, là một loại gói chip.
+* **Offset:** Vị trí bù, là khoảng cách từ đầu của một vùng dữ liệu.
+* **Filesystem:** Hệ thống tệp, là một phương pháp để tổ chức và lưu trữ dữ liệu trên thiết bị lưu trữ.
+* **FAT (File Allocation Table):** Là một hệ thống tệp phổ biến được sử dụng trong thẻ nhớ SD.
+* **mmc:** Là một lệnh trong uboot được sử dụng để truy cập vào thẻ SD.
+* **fatload:** Là một lệnh trong uboot được sử dụng để tải tệp từ hệ thống tệp FAT.
+* **sf probe:** Là một lệnh trong uboot được sử dụng để dò tìm chip flash.
+* **sf erase:** Là một lệnh trong uboot được sử dụng để xóa chip flash.
+* **sf write:** Là một lệnh trong uboot được sử dụng để ghi vào chip flash.
+
+
+
+
+

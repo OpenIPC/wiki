@@ -1,84 +1,100 @@
-### Ingenic Cloner Utility
+### Tiện ích sao chép Ingenic
 
-The ingenic cloner application is a PC side utility that interfaces with the "USB-Boot" mode built into Ingenic SOCs.  By placing the SOC into "USB-Boot" mode, you are able to use the ingenic clonger application to directly flash the firmware chip without physically removing, or interfacing to the flash chip.
+Ứng dụng sao chép Ingenic là một tiện ích bên máy tính giao tiếp với chế độ "USB-Boot" được tích hợp trong các SoC Ingenic. Bằng cách đặt SoC vào chế độ "USB-Boot", bạn có thể sử dụng ứng dụng sao chép Ingenic để flash trực tiếp chip firmware mà không cần phải tháo rời hoặc giao tiếp với chip flash.
 
-This guide is a work in progress.  
+Hướng dẫn này là một công việc đang tiến hành.
 
 
-#### Shorting pins on flash chip
+#### Chập các chân trên chip flash
 
-The first thing to do is locate the flash memory chip on the camera circuit
-board. Typically this is a square chip with 8 pins labeled 25Q64 or 25Q128,
-rarely 25L64 or 25L128. If you have trouble locating the chip, try taking
-some pictures of your board from both sides. Then ask for help
-[in our Telegram channel](https://t.me/openipc).
-__Do not try to short-circuit any random chip! It will most likely burn your camera circuit.__
+Điều đầu tiên cần làm là xác định vị trí chip bộ nhớ flash trên bảng mạch camera. Thông thường đây là một chip vuông có 8 chân được dán nhãn 25Q64 hoặc 25Q128, hiếm khi là 25L64 hoặc 25L128. Nếu bạn gặp sự cố khi xác định vị trí chip, hãy thử chụp một số ảnh bảng của bạn từ cả hai phía. Sau đó, hãy yêu cầu trợ giúp [trong kênh Telegram của chúng tôi](https://t.me/openipc).
+**Không cố gắng làm đoản mạch bất kỳ chip ngẫu nhiên nào! Nó rất có thể sẽ làm cháy mạch camera của bạn.**
 
-Short-circuit pins 5 and 6 of the flash chip with a small metal object,
-a screwdriver or tweezers, right after the bootloader starts but before it
-calls up the Linux kernel.
+Làm đoản mạch các chân 5 và 6 của chip flash bằng một vật kim loại nhỏ, tua vít hoặc nhíp, ngay sau khi bootloader khởi động nhưng trước khi nó gọi kernel Linux.
 
-Pins 5 and 6 of the SOIC8 chip are on the opposite corner of pin 1, indicated
-by the embossed or drawn dot next to it.
+Các chân 5 và 6 của chip SOIC8 nằm ở góc đối diện với chân 1, được biểu thị bằng dấu chấm nổi hoặc vẽ bên cạnh nó.
 
 ![](../images/flash-pins.webp)
 ![](../images/flash-pins-2.webp)
 
 
-![image](https://github.com/OpenIPC/wiki/assets/12115272/632e5cb9-0b5d-406b-a268-7c4b65781828)
-![image](https://github.com/OpenIPC/wiki/assets/12115272/5b9fed70-031e-42ea-89b6-292cc2f34458)
-![image](https://github.com/OpenIPC/wiki/assets/12115272/27f0d101-059d-41a1-a444-43bd137cf1b9)
-![image](https://github.com/OpenIPC/wiki/assets/12115272/69c6f79d-1c88-45d9-b6a7-003345d72e56)
+![hình ảnh](https://github.com/OpenIPC/wiki/assets/12115272/632e5cb9-0b5d-406b-a268-7c4b65781828)
+![hình ảnh](https://github.com/OpenIPC/wiki/assets/12115272/5b9fed70-031e-42ea-89b6-292cc2f34458)
+![hình ảnh](https://github.com/OpenIPC/wiki/assets/12115272/27f0d101-059d-41a1-a444-43bd137cf1b9)
+![hình ảnh](https://github.com/OpenIPC/wiki/assets/12115272/69c6f79d-1c88-45d9-b6a7-003345d72e56)
 
 ---
 
-# Download Cloner: [OpenIPC Utilities](https://openipc.org/utilities)
+# Tải xuống Cloner: [Tiện ích OpenIPC](https://openipc.org/utilities)
 
 ---
 
-**OpenIPC Cloner Application Guide**
+**Hướng dẫn sử dụng ứng dụng OpenIPC Cloner**
 
-1. **Accessing Cloner**: 
-   - Navigate to the "cloner-2.5.xx-ubuntu_alpha" directory, with "xx" indicating your downloaded version of Cloner.
+1. **Truy cập Cloner**: 
+   - Điều hướng đến thư mục "cloner-2.5.xx-ubuntu_alpha", với "xx" cho biết phiên bản Cloner bạn đã tải xuống.
 
-2. **Preparing for Firmware**: 
-   - Create a new folder named `0_OpenIPC_Firmware` in this directory.
+2. **Chuẩn bị cho Firmware**: 
+   - Tạo một thư mục mới có tên `0_OpenIPC_Firmware` trong thư mục này.
 
-3. **Launching Cloner**: 
-   - Open the `cloner` application. Ensure you are using version 2.5.43 or later for compatibility.
+3. **Khởi chạy Cloner**: 
+   - Mở ứng dụng `cloner`. Đảm bảo bạn đang sử dụng phiên bản 2.5.43 trở lên để tương thích.
 
-4. **Initial Setup**: 
-   - Click "Load Image" and select the "openipc_cloner_bundle_xxx.zip" file.
-   - If the lock level is "2", change it to "0". Enter '!@#' (exclamation, at symbol, number sign, without any quotation marks) as the password. The 'Config' button should reappear.
+4. **Thiết lập ban đầu**: 
+   - Nhấp vào "Load Image" và chọn tệp "openipc_cloner_bundle_xxx.zip".
+   - Nếu mức khóa là "2", hãy thay đổi thành "0". Nhập '!@#' (dấu chấm than, ký hiệu @, dấu thăng, không có dấu ngoặc kép) làm mật khẩu. Nút 'Config' sẽ xuất hiện lại.
 
-5. **Configuration Settings**: 
-   - Click the 'Config' button in the top-right corner.
+5. **Cài đặt cấu hình**: 
+   - Nhấp vào nút 'Config' ở góc trên cùng bên phải.
 
-6. **Navigating Configuration**: 
-   - In the Config window, under the "Info" tab, access various configuration menus.
+6. **Điều hướng cấu hình**: 
+   - Trong cửa sổ Cấu hình, trong tab "Info", hãy truy cập các menu cấu hình khác nhau.
 
-7. **Device Specific Settings**: 
-   - Select 'Platform T'.
-   - Choose the appropriate SOC version for your device next to Platform 'T'.
-   - Under 'Board', select the relevant operation:
-     - `txxx_sfc_nor_reader_8MB.cfg` for 8MB flash chip devices.
-     - `txxx_sfc_nor_reader_16MB.cfg` for 16MB flash chip devices.
-     - `txxx_sfc_nor_writer.cfg` for writing individual partitions.
-     - `txxx_sfc_nor_writer_full.cfg` to flash the entire chip.
-   - Click "Save" to return to the main screen.
+7. **Cài đặt dành riêng cho thiết bị**: 
+   - Chọn 'Platform T'.
+   - Chọn phiên bản SOC phù hợp cho thiết bị của bạn bên cạnh Platform 'T'.
+   - Trong 'Board', chọn thao tác liên quan:
+     - `txxx_sfc_nor_reader_8MB.cfg` cho thiết bị có chip flash 8MB.
+     - `txxx_sfc_nor_reader_16MB.cfg` cho thiết bị có chip flash 16MB.
+     - `txxx_sfc_nor_writer.cfg` để ghi các phân vùng riêng lẻ.
+     - `txxx_sfc_nor_writer_full.cfg` để flash toàn bộ chip.
+   - Nhấp vào "Save" để quay lại màn hình chính.
 
-8. **Starting the Program**: 
-   - With your desired profile loaded, click "Start" on the main screen.
+8. **Bắt đầu chương trình**: 
+   - Với cấu hình mong muốn đã được tải, hãy nhấp vào "Start" trên màn hình chính.
 
-9. **Device Recognition Procedure**:
-   - Plug the USB cable into the device, leaving the other end unplugged.
-   - Short pins 5-6 ON THE FLASH CHIP, not SoC or any other chip, use the photos as a reference, as described earlier in this document.
-   - While maintaining the short, connect the USB cable to the computer. Wait 2 seconds, then release the short.
-   - It may take up to 30 seconds for Cloner to recognize the device. Progress bars on the main screen will indicate ongoing operations.
+9. **Quy trình nhận dạng thiết bị**:
+   - Cắm cáp USB vào thiết bị, để đầu kia không được cắm.
+   - Chập các chân 5-6 TRÊN CHIP FLASH, không phải SoC hoặc bất kỳ chip nào khác, hãy sử dụng ảnh làm tài liệu tham khảo, như đã mô tả trước đó trong tài liệu này.
+   - Trong khi duy trì chập, hãy kết nối cáp USB với máy tính. Chờ 2 giây, sau đó thả chập.
+   - Có thể mất tối đa 30 giây để Cloner nhận dạng thiết bị. Thanh tiến trình trên màn hình chính sẽ cho biết các thao tác đang diễn ra.
 
-10. **Completion**: 
-   - Once all progress bars turn green, the operations are complete.
+10. **Hoàn thành**: 
+   - Sau khi tất cả các thanh tiến trình chuyển sang màu xanh lục, các thao tác đã hoàn tất.
 
 ---
 
-Carefully follow these steps to ensure the Cloner application is set up correctly and operates as expected.
+Hãy cẩn thận làm theo các bước này để đảm bảo ứng dụng Cloner được thiết lập chính xác và hoạt động như mong đợi.
+
+
+**Giải thích thuật ngữ:**
+
+* **Ingenic Cloner Utility:** Tiện ích sao chép Ingenic, là một công cụ được sử dụng để flash firmware lên các thiết bị sử dụng SoC Ingenic.
+* **SoC (System on a Chip):** Hệ thống trên một vi mạch, là một mạch tích hợp chứa tất cả các thành phần cần thiết của một hệ thống máy tính.
+* **USB-Boot:** Là một chế độ cho phép bạn flash firmware lên thiết bị thông qua cổng USB.
+* **Firmware:** Phần mềm được nhúng vào bộ nhớ ROM của thiết bị phần cứng.
+* **Flash chip:** Chip flash, là một loại bộ nhớ không bay hơi được sử dụng để lưu trữ firmware.
+* **Bootloader:** Là một chương trình nhỏ được thực thi khi thiết bị khởi động, chịu trách nhiệm tải hệ điều hành.
+* **Kernel:** Là phần cốt lõi của hệ điều hành.
+* **SOIC8:** Small Outline Integrated Circuit 8, là một loại gói chip.
+* **OpenIPC:** Là một dự án phần mềm mã nguồn mở cung cấp firmware thay thế cho các camera IP.
+* **Telegram:** Là một ứng dụng nhắn tin tập trung vào tốc độ và bảo mật.
+* **Profile:** Cấu hình, là một tập hợp các cài đặt được sử dụng cho một tác vụ cụ thể.
+* **Progress bar:** Thanh tiến trình, là một chỉ báo trực quan cho biết tiến trình của một tác vụ.
+
+
+
+
+
+
+

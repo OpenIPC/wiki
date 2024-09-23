@@ -1,14 +1,14 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-Supported Sensors
+Các Cảm biến được Hỗ trợ
 -----------------
 
-Sensors are supported on per SoC family (per SDK) basis.
-To look up the list of supported sensors for your SoC you first need to detemine your SoC family, then check out the corresponding package.
+Cảm biến được hỗ trợ trên cơ sở mỗi họ SoC (trên mỗi SDK).
+Để tra cứu danh sách các cảm biến được hỗ trợ cho SoC của bạn, trước tiên bạn cần xác định họ SoC của mình, sau đó kiểm tra gói tương ứng.
 
-__Please note, that even if you see the driver that matches your sensor, it does not guarantee that the driver works as intended, 
-or even that it will be included with the final binary for that SoC. Some additional testing and tweaking may be needed.__
+__Xin lưu ý rằng ngay cả khi bạn thấy trình điều khiển phù hợp với cảm biến của mình, điều đó không đảm bảo rằng trình điều khiển hoạt động như dự định,
+hoặc thậm chí nó sẽ được bao gồm trong tệp nhị phân cuối cùng cho SoC đó. Một số thử nghiệm và tinh chỉnh bổ sung có thể là cần thiết.__
 
 - [Ambarella S3L](https://github.com/OpenIPC/firmware/tree/master/general/package/ambarella-osdrv-s3l/files/sensor)
 - [Fullhan FH8852V100](https://github.com/OpenIPC/firmware/tree/master/general/package/fullhan-osdrv-fh8852v100/files/sensor)
@@ -33,7 +33,8 @@ or even that it will be included with the final binary for that SoC. Some additi
 - [Xiongmai XM510](https://github.com/OpenIPC/firmware/tree/master/general/package/xiongmai-osdrv-xm510/files/sensor)
 - [Xiongmai XM530](https://github.com/OpenIPC/firmware/tree/master/general/package/xiongmai-osdrv-xm530/files/sensor)
 
-Sensor Driver Installation Example
+Ví dụ về Cài đặt Trình điều khiển Cảm biến
 ----------------------------------
 
-- [Install sensor sc223a to soc gk7205v210](firmware-sensor-install-sc223a.md)
+- [Cài đặt cảm biến sc223a cho soc gk7205v210](firmware-sensor-install-sc223a.md)
+

@@ -1,57 +1,50 @@
-# OpenIPC Wiki
-[Table of Content](../README.md)
+## Wiki OpenIPC
+[Mục lục](../README.md)
 
-CH341A Programmer
+Bộ lập trình CH341A
 -----------------
 
-### Fixing high voltage bug
+### Khắc phục lỗi điện áp cao
 
-Early versions, prior ver. 1.7, of the cheap and popular CH341A Mini Programmer
-have a nasty bug where voltage levels on data lines remain at 5V despite the
-programmer being set to 3.3V with the jumper.
+Các phiên bản đầu tiên, trước phiên bản 1.7, của Bộ lập trình Mini CH341A phổ biến và giá rẻ có một lỗi khó chịu là mức điện áp trên các đường dữ liệu vẫn ở mức 5V mặc dù bộ lập trình được đặt thành 3.3V bằng jumper.
 
-@ddemos1963 came out with an interesting hack to fix the issue in an efficient
-and artsy way.
+@ddemos1963 đã đưa ra một giải pháp hack thú vị để khắc phục sự cố một cách hiệu quả và khéo léo.
 
 ![](../images/hardware-ch341a-hack-1.webp)
 ![](../images/hardware-ch341a-hack-2.webp)
 
-Here's what you do.
+Đây là những gì bạn cần làm.
 
 ![](../images/hardware-ch341a-hack-6.png)
 
-Sever the connection between between 5V power line and the CH341A chip.
-With a sharp utility knife, cut the trace on the back of the programmer board.
+Ngắt kết nối giữa đường dây nguồn 5V và chip CH341A. Dùng dao tiện ích sắc bén, cắt đường mạch ở mặt sau của bảng mạch lập trình.
 
 ![](../images/hardware-ch341a-hack-3.webp)
 
-Connect 3.3v output leg of the voltage regulator to pin 9 of CH341A IC bridging
-it to a corresponding trace at a nearby capacitor.
+Kết nối chân đầu ra 3.3v của bộ điều chỉnh điện áp với chân 9 của IC CH341A, bắc cầu nó với đường mạch tương ứng tại một tụ điện gần đó.
 
 ![](../images/hardware-ch341a-hack-4.webp)
 
-Restore power to the chip re-routing 3.3V voltage from 3v3 pin to pin 28
-of CH341A IC through 5V pin connector on the header.
+Khôi phục nguồn điện cho chip bằng cách định tuyến lại điện áp 3.3V từ chân 3v3 đến chân 28 của IC CH341A thông qua đầu nối chân 5V trên đầu nối.
 
 ![](../images/hardware-ch341a-hack-5.webp)
 
-### Troubleshooting
+### Khắc phục sự cố
 
 ```console
 libusb: error [get_usbfs_fd] libusb couldn't open USB device /dev/bus/usb/001/003, errno=13
 libusb: error [get_usbfs_fd] libusb requires write access to USB device nodes
 ```
 
-If you get an error message like this running a programming software, you need to adjust
-permissions on the USB port for that device.
+Nếu bạn nhận được thông báo lỗi như thế này khi chạy phần mềm lập trình, bạn cần điều chỉnh quyền trên cổng USB cho thiết bị đó.
 
-Create a udev rule file
+Tạo một tệp quy tắc udev
 
 ```bash
 sudo vi /etc/udev/rules.d/99-ch341a-prog.rules
 ```
 
-add the following content in the file:
+thêm nội dung sau vào tệp:
 
 ```bash
 # udev rule that sets permissions for CH341A programmer in Linux.
@@ -59,20 +52,32 @@ add the following content in the file:
 SUBSYSTEM=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="5512", MODE="0666"
 ```
 
-save the file, reload udev
+lưu tệp, tải lại udev
 
 ```bash
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 ```
 
-then unplug the programmer and plug it back in a USB port.
+sau đó rút bộ lập trình và cắm lại vào cổng USB.
 
-### Software
+### Phần mềm
 
-- [SNANDer](https://github.com/McMCCRU/SNANDer) or [this fork](https://github.com/Droid-MAX/SNANDer)
-- [microsnander](https://github.com/OpenIPC/microsnander) from OpenIPC
+- [SNANDer](https://github.com/McMCCRU/SNANDer) hoặc [bản fork này](https://github.com/Droid-MAX/SNANDer)
+- [microsnander](https://github.com/OpenIPC/microsnander) từ OpenIPC
 - [ch341prog](https://github.com/setarcos/ch341prog/)
 - [flashrom](https://www.flashrom.org/Flashrom)
-- [DIY BCQ CH341A forum](http://www.diybcq.com/thread-144131-1-1.html) (Chinese, use Chrome automatic translation)
-- [CH341A Programmer](https://4pda.to/forum/index.php?showtopic=884713) (Russian, use Chrome automatic translation)
+- [Diễn đàn DIY BCQ CH341A](http://www.diybcq.com/thread-144131-1-1.html) (Tiếng Trung, sử dụng tính năng dịch tự động của Chrome)
+- [Bộ lập trình CH341A](https://4pda.to/forum/index.php?showtopic=884713) (Tiếng Nga, sử dụng tính năng dịch tự động của Chrome)
+
+
+**Giải thích thuật ngữ:**
+
+* **Jumper:** Cầu nối, là một miếng nhựa nhỏ có thể được sử dụng để kết nối hoặc ngắt kết nối các mạch điện trên bảng mạch.
+* **Trace:** Đường mạch, là một đường dẫn dẫn điện trên bảng mạch.
+* **IC (Integrated Circuit):** Mạch tích hợp, là một mạch điện tử được chế tạo trên một miếng silicon nhỏ.
+* **Header:** Đầu nối, là một bộ phận được sử dụng để kết nối các dây hoặc cáp với bảng mạch.
+* **Udev:** Là một trình quản lý thiết bị cho nhân Linux, nó quản lý các tệp thiết bị trong `/dev`.
+* **Fork:** Bản sao chép của một dự án phần mềm, được tạo ra để phát triển độc lập với dự án gốc.
+
+

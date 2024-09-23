@@ -1,69 +1,70 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-IPC Glossary
+Bảng thuật ngữ IPC
 ------------
 
-- 3D-DNR - 3D Digital Noise Reduction
-- AE - Automatic Exposure
-- AF - Automafic Focus
-- AHD - Analog High Definition
-- AI - Artificial Intellect
-- AWB - Automatic White Balance
-- B&W - Black and White
-- BLC - Back Light Compensation
-- CCTV - Closed-circuit Television
-- CMOS - Complementary Metal–Oxide Semiconductor
-- DC - Direct Current
-- DDNS - Dynamic Domain Name Service
-- DHCP - Dynamic Host Configuration Protocol
-- DNR - Digital Noise Reduction
-- DNS - Domain Name Service
-- DRC - Dynamic Range Compression
-- DVR - Digital Video Recorder
-- FTP - File Transfer Protocol
-- HDR - High Dynamic Range
-- HLS - HTTP Live Streaming (protocol)
-- LED - Light-Emitting Diode
-- NVR - Network Video Recorder
-- HD - High Definition
-- HTTP - Hypertext Transfer Protocol
-- IC - Integrated Circuit
-- ICR - Infrared Cutfilter Removal
-- IP - Internet Protocol
-- IPC - IP Camera
-- IQ - Image Quality
-- IR - Infrared
-- ISP - Image Signal Processor
-- JPEG - Joint Photographic Experts Group (file format)
-- MJPEG - Motion JPEG (video format)
-- NTP - Network Time Protocol
-- ONVIF - Open Network Video Interface Forum (standard)
-- PCB - Printed Circuit Board
-- PiP - Picture-in-Picture
-- PIR - Passive infrared (sensor)
-- PoE - Power over Ethernet
-- PPPoE - Point-to-Point Protocol over Ethernet
-- PTZ - Pan–Tilt–Zoom
-- ROI - Region of Interest
-- RTCP - Real-Time Transport Control Protocol
-- RTP - Real-time Transport Protocol
-- RTMP - Real-Time Messaging Protocol
-- RTSP - Real Time Streaming Protocol
-- SMD - Surface-mount Device
-- SMT - Surface-mount Technology
-- SMTP - Simple Mail Transfer Protocol
-- SoC - System on a Chip
-- TCP - Transmission Control Protocol
-- TFTP - Trivial File Transfer Protocol
-- UART - Universal Asynchronous Receiver-Transmitter
-- UPnP - Universal Plug and Play
-- USB - Universal Serial Bus
-- WDR - Wide Dynamic Range
+- 3D-DNR - Giảm nhiễu kỹ thuật số 3D
+- AE - Tự động phơi sáng
+- AF - Tự động lấy nét
+- AHD - Độ nét cao tương tự
+- AI - Trí tuệ nhân tạo
+- AWB - Tự động cân bằng trắng
+- B&W - Đen trắng
+- BLC - Bù sáng ngược
+- CCTV - Truyền hình mạch kín
+- CMOS - Bán dẫn oxit kim loại bổ sung
+- DC - Dòng điện một chiều
+- DDNS - Dịch vụ tên miền động
+- DHCP - Giao thức cấu hình máy chủ động
+- DNR - Giảm nhiễu kỹ thuật số
+- DNS - Dịch vụ tên miền
+- DRC - Nén dải động
+- DVR - Máy ghi video kỹ thuật số
+- FTP - Giao thức truyền tệp
+- HDR - Dải động cao
+- HLS - Phát trực tuyến HTTP trực tiếp (giao thức)
+- LED - Điốt phát sáng
+- NVR - Máy ghi video mạng
+- HD - Độ nét cao
+- HTTP - Giao thức truyền siêu văn bản
+- IC - Mạch tích hợp
+- ICR - Loại bỏ bộ lọc cắt hồng ngoại
+- IP - Giao thức Internet
+- IPC - Camera IP
+- IQ - Chất lượng hình ảnh
+- IR - Hồng ngoại
+- ISP - Bộ xử lý tín hiệu hình ảnh
+- JPEG - Nhóm chuyên gia nhiếp ảnh chung (định dạng tệp)
+- MJPEG - Motion JPEG (định dạng video)
+- NTP - Giao thức thời gian mạng
+- ONVIF - Diễn đàn giao diện video mạng mở (tiêu chuẩn)
+- PCB - Bảng mạch in
+- PiP - Hình trong hình
+- PIR - Hồng ngoại thụ động (cảm biến)
+- PoE - Nguồn qua Ethernet
+- PPPoE - Giao thức điểm-điểm qua Ethernet
+- PTZ - Xoay-Nghiêng-Thu phóng
+- ROI - Vùng quan tâm
+- RTCP - Giao thức điều khiển truyền tải thời gian thực
+- RTP - Giao thức truyền tải thời gian thực
+- RTMP - Giao thức nhắn tin thời gian thực
+- RTSP - Giao thức phát trực tuyến thời gian thực
+- SMD - Thiết bị gắn trên bề mặt
+- SMT - Công nghệ gắn trên bề mặt
+- SMTP - Giao thức truyền thư đơn giản
+- SoC - Hệ thống trên chip
+- TCP - Giao thức điều khiển truyền tải
+- TFTP - Giao thức truyền tệp tầm thường
+- UART - Bộ thu phát không đồng bộ đa năng
+- UPnP - Cắm và chạy đa năng
+- USB - Bus nối tiếp đa năng
+- WDR - Dải động rộng
 
 ### ffmpeg/ffplay
 
-- PTS - Presentation Time Stamp
-- fps - Average frame rate in frames per second (`AVStream.avg_frame_rate`)
-- tbr - Real base framerate of the stream (`AVStream.r_frame_rate`)
-- tbn - Timescale in ticks per second (`AVStream.time_base`)
+- PTS - Dấu thời gian trình bày
+- fps - Tốc độ khung hình trung bình theo khung hình mỗi giây (`AVStream.avg_frame_rate`)
+- tbr - Tốc độ khung hình cơ sở thực của luồng (`AVStream.r_frame_rate`)
+- tbn - Thang thời gian tính bằng tích tắc mỗi giây (`AVStream.time_base`)
+

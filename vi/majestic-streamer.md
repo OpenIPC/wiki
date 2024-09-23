@@ -1,43 +1,40 @@
-# OpenIPC Wiki
-[Table of Content](../README.md)
+# Wiki OpenIPC
+[Mục lục](../README.md)
 
-Majestic Streamer
+Trình phát trực tiếp Majestic
 -----------------
 
-### Preamble
+### Lời mở đầu
 
-Majestic is a video streaming application, the heart of our firmware (in
-relation to camera/video surveillance functionality). Majestic is configurable
-via /etc/majestic.yaml file, and has many features/services enabled by default.
-Unneeded options can be switched off for better security and performance. See /etc/majestic.full for configuration options.
+Majestic là một ứng dụng phát trực tiếp video, trái tim của firmware của chúng tôi (liên quan đến chức năng camera / giám sát video). Majestic có thể cấu hình thông qua tệp /etc/majestic.yaml và có nhiều tính năng / dịch vụ được bật theo mặc định. Các tùy chọn không cần thiết có thể được tắt để bảo mật và hiệu suất tốt hơn. Xem /etc/majestic.full để biết các tùy chọn cấu hình.
 
-### Control signals
+### Tín hiệu điều khiển
 
 ```
--HUP restart Majestic (Except Ingenic T21).
--SIGUSR2 SDK Shutdown (For all platforms).
+-HUP khởi động lại Majestic (Ngoại trừ Ingenic T21).
+-SIGUSR2 Tắt SDK (Cho tất cả các nền tảng).
 ```
 
-### Camera related URLs in firmware
+### URL liên quan đến camera trong firmware
 
-Majestic supports multiple audio, video and still image formats, and more.
-You can find the full list of available endpoints on [this page](https://openipc.org/majestic-endpoints).
+Majestic hỗ trợ nhiều định dạng âm thanh, video và hình ảnh tĩnh, v.v.
+Bạn có thể tìm thấy danh sách đầy đủ các điểm cuối khả dụng trên [trang này](https://openipc.org/majestic-endpoints).
 
-The long JPEG control parameter did not fit into the example on the site and we publish it here:
+Tham số điều khiển JPEG dài không phù hợp với ví dụ trên trang web và chúng tôi xuất bản nó tại đây:
 
 `/image.jpg?width=640&height=360&qfactor=73&color2gray=1`
 
-### Changing parameters via cli
+### Thay đổi tham số thông qua cli
 
-At the moment it is possible to change parameters in the configuration file via the CLI utility.
+Hiện tại, có thể thay đổi các tham số trong tệp cấu hình thông qua tiện ích CLI.
 
-This allows parameters to be changed with a single line in pseudo-dynamic mode on some platforms 
-simply by forcing a re-read of the configuration file.
+Điều này cho phép các tham số được thay đổi bằng một dòng duy nhất ở chế độ giả động trên một số nền tảng
+đơn giản bằng cách buộc đọc lại tệp cấu hình.
 ```
 cli -s .video0.codec h264 ; cli -s .video0.fps 10 ; killall -HUP majestic 
 ```
 
-### Experimental Control Features (not yet described in endpoints)
+### Tính năng điều khiển thử nghiệm (chưa được mô tả trong các điểm cuối)
 
 ```
 /metrics/isp
@@ -50,55 +47,55 @@ cli -s .video0.codec h264 ; cli -s .video0.fps 10 ; killall -HUP majestic
 ```
 
 
-### Auto day/night detection
+### Tự động phát hiện ngày / đêm
 
-If these variables are used, it is possible to replace the used sandbox scripts.
-Works only for simple day/night schemes with minimal configuration and in the absence of mentions of irSensorPin in the majestic.yaml configuration file.
-If the light sensor gpio is set, it will use the default mode.
+Nếu các biến này được sử dụng, có thể thay thế các tập lệnh sandbox đã sử dụng.
+Chỉ hoạt động cho các lược đồ ngày / đêm đơn giản với cấu hình tối thiểu và trong trường hợp không có đề cập đến irSensorPin trong tệp cấu hình majestic.yaml.
+Nếu gpio cảm biến ánh sáng được đặt, nó sẽ sử dụng chế độ mặc định.
 
-The settings work like this:
-```day < [minThreshold] | hysteresis | [maxThreshold] < night```
+Cài đặt hoạt động như sau:
+```ngày < [minThreshold] | hysteresis | [maxThreshold] < đêm```
 
-If the sensor gain is 1024 on a bright day the minThreshold could be set to 2000,
-if the sensor gain is 32000 on a dark night the maxThreshold could be set to 10000.
+Nếu mức khuếch đại của cảm biến là 1024 vào một ngày sáng, minThreshold có thể được đặt thành 2000,
+nếu mức khuếch đại của cảm biến là 32000 vào đêm tối, maxThreshold có thể được đặt thành 10000.
 
 ```
 cli -s .nightMode.minThreshold 10
 cli -s .nightMode.maxThreshold 50
 ```
 
-### Motion detection
+### Phát hiện chuyển động
 
-Motion detect is supported for Hisilion/Goke, Ingenic and Sigmastar.
-When a motion event is detected, `majestic` invokes a predefined script `/usr/sbin/motion.sh` with a parameter specifying the object count:
+Phát hiện chuyển động được hỗ trợ cho Hisilion/Goke, Ingenic và Sigmastar.
+Khi phát hiện sự kiện chuyển động, `majestic` sẽ gọi một tập lệnh được xác định trước `/usr/sbin/motion.sh` với một tham số chỉ định số lượng đối tượng:
 
 ```
 /usr/sbin/motion.sh [count]
 ```
 
-Enable motion detection in `majestic` configuration:
+Bật phát hiện chuyển động trong cấu hình `majestic`:
 
 ```
 cli -s .motionDetect.enabled true
 cli -s .motionDetect.debug true
 ```
 
-Reboot the camera and restart `majestic` in the foreground:
+Khởi động lại camera và khởi động lại `majestic` ở nền trước:
 
 ```
 killall majestic; sleep 3; majestic
 ```
 
-You should see the script running after motion detection events:
+Bạn sẽ thấy tập lệnh chạy sau các sự kiện phát hiện chuyển động:
 
 ```
-20:37:02  <SED_IVE_DETCTOR> [  motion] motion_update@155             Motion detected: [1163x0] -> [690x475]
-20:37:02  <SED_IVE_DETCTOR> [   tools] motion_event@615              Execute motion script: /usr/sbin/motion.sh
+20:37:02  <SED_IVE_DETCTOR> [  motion] motion_update@155             Phát hiện chuyển động: [1163x0] -> [690x475]
+20:37:02  <SED_IVE_DETCTOR> [   tools] motion_event@615              Thực thi tập lệnh chuyển động: /usr/sbin/motion.sh
 ```
 
-### Broadcasts using RTMP
+### Phát sóng bằng RTMP
 
-To instantly launch a YouTube broadcast, run these commands in the console:
+Để khởi chạy phát sóng YouTube ngay lập tức, hãy chạy các lệnh sau trong bảng điều khiển:
 ```
 cli -s .video0.codec h264
 cli -s .audio.enabled true
@@ -107,43 +104,43 @@ cli -s .outgoing.server rtmp://a.rtmp.youtube.com/live2/you-key-here
 reboot
 ```
 
-Examples of other addresses for different services:
+Ví dụ về các địa chỉ khác cho các dịch vụ khác nhau:
 - YouTube
     - rtmp://a.rtmp.youtube.com/live2/---KEY---
 - Telegram
     - rtmps://dc4-1.rtmp.t.me/s/---KEY---
 - RuTube
     - rtmp://upload.rutube.ru/live_push/---KEY---
-- OK and VK
+- OK và VK
     - rtmp://ovsu.mycdn.me/input/---KEY---
 
-We ask that you add information about other popular services here, thank you.
+Chúng tôi yêu cầu bạn thêm thông tin về các dịch vụ phổ biến khác tại đây, xin cảm ơn.
 
-RTMP reconnection and timeout logic works as follows:
+Logic kết nối lại và hết thời gian của RTMP hoạt động như sau:
 
 ```
-    0-200 tries = 10 seconds timeout
-  200-500 tries = 60 seconds timeout
- 500-1000 tries = 300 seconds timeout
-    1000+ tries = 600 seconds timeout
+    0-200 lần thử = hết thời gian 10 giây
+  200-500 lần thử = hết thời gian 60 giây
+ 500-1000 lần thử = hết thời gian 300 giây
+    1000+ lần thử = hết thời gian 600 giây
 ```
 
-### Other outgoing options
+### Các tùy chọn đầu ra khác
 
 ```
 outgoing:
   enabled: true
   server: udp://192.168.1.10:5600
   naluSize: 1200
-  - udp://IP-1:port
-  - udp://IP-2:port
+  - udp://IP-1:cổng
+  - udp://IP-2:cổng
   - unix:/tmp/rtpstream.sock
   - rtmps://dc4-1.rtmp.t.me/s/mykey
 ```
 
 ### ONVIF
 
-For basic ONVIF to work correctly, you need to enable it and add a user to the system as shown in the example:
+Để ONVIF cơ bản hoạt động chính xác, bạn cần bật nó và thêm người dùng vào hệ thống như trong ví dụ:
 
 ```
 cli -s .onvif.enabled true
@@ -151,36 +148,35 @@ adduser viewer -s /bin/false -D -H
 echo viewer:123456 | chpasswd
 ```
 
-### JPEG and MJPEG
+### JPEG và MJPEG
 
-For the purpose of unification and standardization for all platforms, as well as to increase the stability of the streamer, the image size will always be equal to the size on the Video0 channel and a separate setting is not provided.
+Nhằm mục đích thống nhất và tiêu chuẩn hóa cho tất cả các nền tảng, cũng như tăng tính ổn định của trình phát trực tiếp, kích thước hình ảnh sẽ luôn bằng kích thước trên kênh Video0 và không có cài đặt riêng biệt.
 
-###  ROI
+### ROI
 
-Detection zones of two types:
+Vùng phát hiện có hai loại:
 
 `motionDetect.roi: 1854x1304x216x606,1586x1540x482x622`
 
 `motionDetect.skipIn: 960x540x1920x1080`
 
-**roi** - region of interest, when we specify one or more regions whose movements we are interested in.
+**roi** - vùng quan tâm, khi chúng ta chỉ định một hoặc nhiều vùng mà chúng ta quan tâm đến chuyển động của chúng.
 
-**skipIn** - on the contrary, if we are interested in movements on the whole screen, except for some areas (for example, there is a tree in the frame, which is swaying in the wind).
+**skipIn** - ngược lại, nếu chúng ta quan tâm đến chuyển động trên toàn bộ màn hình, ngoại trừ một số khu vực (ví dụ: có một cái cây trong khung hình đang lắc lư trong gió).
 
-Coordinate format is the same as in osd.privacyMasks: x,y of the top left point, length and width in pixels.
+Định dạng tọa độ giống như trong osd.privacyMasks: x, y của điểm trên cùng bên trái, chiều dài và chiều rộng tính bằng pixel.
 
-### How to convert YUV image to a more common image format
+### Cách chuyển đổi hình ảnh YUV sang định dạng hình ảnh phổ biến hơn
 
-Use `convert` command from ImageMagick software. Run it like this:
+Sử dụng lệnh `convert` từ phần mềm ImageMagick. Chạy nó như thế này:
 ```
 convert -verbose -sampling-factor 4:2:0 -size 1920x1080 -depth 8 image.yuv image.png
 ```
-where `1920x1080` is the picture resolution of video0, and `.png` is the target
-image format.
+trong đó `1920x1080` là độ phân giải hình ảnh của video0 và `.png` là định dạng hình ảnh đích.
 
-### How to play audio stream
+### Cách phát luồng âm thanh
 
-Use [ffplay][ffplay] utility from [ffmpeg][ffmpeg] package.
+Sử dụng tiện ích [ffplay][ffplay] từ gói [ffmpeg][ffmpeg].
 ```
 ffplay -ar 48000 -ac 1 -f s16le http://192.168.1.10/audio.pcm
 ffplay -ar 48000 -ac 1 -f alaw http://192.168.1.10/audio.alaw
@@ -188,14 +184,14 @@ ffplay -ar 48000 -ac 1 -f mulaw http://192.168.1.10/audio.ulaw
 ffplay -ar 8000 -ac 1 -f alaw http://192.168.1.10/audio.g711a
 ```
 
-### How to create an audio file to play on camera's speaker over network
+### Cách tạo tệp âm thanh để phát trên loa của camera qua mạng
 
-Using [sox][sox] program convert any source audio file to [PCM][pcm] 8kbps audio:
+Sử dụng chương trình [sox][sox] chuyển đổi bất kỳ tệp âm thanh nguồn nào thành âm thanh [PCM][pcm] 8kbps:
 ```
 sox speech.mp3 -t raw -r 8000 -e signed -b 16 -c 1 test.pcm
 ```
 
-### How to play audio file on camera's speaker over network
+### Cách phát tệp âm thanh trên loa của camera qua mạng
 
 ```
 curl -u root:12345 --data-binary @test.pcm http://192.168.1.10/play_audio
@@ -220,3 +216,4 @@ curl -u root:12345 --data-binary @test.pcm http://192.168.1.10/play_audio
 [ffplay]: https://ffmpeg.org/ffplay.html
 [ffmpeg]: https://ffmpeg.org/
 [sox]: https://en.wikipedia.org/wiki/SoX
+

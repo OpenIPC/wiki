@@ -1,21 +1,21 @@
-## Audio on FPV
+## Âm thanh trên FPV
 
-### Overview
-Everything has been tested using steamdeck (PC x86) and ssc338q-imx415 Anjoy board and choice of decoders and similar may reflect this.
-Currently there is ~50-100ms latency, much imprroved from first trials ~200msec. The improvement comes mainy from using "pipewiresink" on client side, but it requires you to have a working pipewire audio backend on your GS. It could also be possible to use jack audio backend for similar or better result.
-There was also an update to use a mixed RTP video/audio stream on the output port (standard 5600) which neccesitates a different approach for the gst pipeline (see below). The pipelines need to be disconnected in order to not block each other.
-A small warning; if enabling audio and not adapting your pipeline to sort out payload=97 (H265) the RTP payload=98 will cause visual artifacts in your video. rtpjitterbuffer will help to manage out of order packets (will not work without it).
-Video using OPUS 16000 OPUS samplerate: https://youtu.be/Z0KxSS24j7o
+### Tổng quan
+Mọi thứ đã được kiểm tra bằng steamdeck (PC x86) và bảng ssc338q-imx415 Anjoy và lựa chọn bộ giải mã và các thứ tương tự có thể phản ánh điều này.
+Hiện tại có độ trễ ~50-100ms, được cải thiện nhiều so với các thử nghiệm đầu tiên ~200msec. Sự cải thiện chủ yếu đến từ việc sử dụng "pipewiresink" ở phía máy khách, nhưng nó yêu cầu bạn phải có phần phụ trợ âm thanh pipewire đang hoạt động trên GS của mình. Cũng có thể sử dụng phần phụ trợ âm thanh jack để có kết quả tương tự hoặc tốt hơn.
+Cũng có một bản cập nhật để sử dụng luồng video/âm thanh RTP hỗn hợp trên cổng đầu ra (tiêu chuẩn 5600) đòi hỏi cách tiếp cận khác cho đường ống gst (xem bên dưới). Các đường ống cần được ngắt kết nối để không chặn lẫn nhau.
+Một cảnh báo nhỏ; nếu bật âm thanh và không điều chỉnh đường ống của bạn để sắp xếp tải trọng=97 (H265) thì tải trọng RTP=98 sẽ gây ra hiện tượng hình ảnh trong video của bạn. rtpjitterbuffer sẽ giúp quản lý các gói không theo thứ tự (sẽ không hoạt động nếu không có nó).
+Video sử dụng tốc độ lấy mẫu OPUS 16000 OPUS: https://youtu.be/Z0KxSS24j7o
 
-### Majestic and general settings
-Audio settings (majestic.yaml):
+### Majestic và cài đặt chung
+Cài đặt âm thanh (majestic.yaml):
 ```
 cli -s .audio.enabled true
-cli -s .audio.srate 8000 (8000 pretty crap, 16000 usable and 48000 really good)
+cli -s .audio.srate 8000 (8000 khá tệ, 16000 có thể sử dụng và 48000 thực sự tốt)
 ```
 
-### Working sound, video & save to file
+### Âm thanh, video hoạt động và lưu vào tệp
 ```
 gst-launch-1.0 udpsrc port=5600 ! tee name=videoTee ! queue ! tee name=t t. ! queue ! application/x-rtp,payload=97, clock-rate=90000, encoding-name=H265 ! rtpjitterbuffer latency=20 ! rtph265depay ! mpegtsmux name=ts ! filesink location=/run/media/deck/170a3e7f-325f-4567-8580-0e01dda76973/video/record-$(date +%y%m%d_%H%M%S).tsn sync=false t. ! queue leaky=1 ! tee name=audioTee ! queue ! application/x-rtp, payload=98, encoding-name=OPUS ! rtpjitterbuffer latency=22 do-lost=true drop-on-latency=true ! rtpopusdepay ! ts. audioTee. ! queue leaky=1 ! application/x-rtp, payload=98, encoding-name=OPUS ! rtpjitterbuffer latency=22 ! rtpopusdepay ! opusdec ! audioconvert ! audioresample ! pipewiresink blocksize=128 mode=render processing-deadline=0 sync=false async=false videoTee. ! queue ! application/x-rtp,payload=97, clock-rate=90000, encoding-name=H265 ! rtpjitterbuffer latency=20 ! rtph265depay ! vaapih265dec ! fpsdisplaysink fps-update-interval=200 video-sink=xvimagesink sync=false
 ```
-Nothing more to do, it just works :-)
+Không cần làm gì thêm, nó chỉ hoạt động :-)

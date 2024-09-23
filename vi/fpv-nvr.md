@@ -1,28 +1,28 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-OpenIPC FPV ground station
+Trạm mặt đất OpenIPC FPV
 --------------------------
 
 
-#### News roundup
+#### Bản tin tổng hợp
 
-- It is now possible to record video to a connected SSD or USB stick
-- Both HDMI and VGA outputs now work, there are no limitations in connected displays
-- A lot of different things ;)
+- Hiện đã có thể quay video vào SSD hoặc USB được kết nối
+- Cả đầu ra HDMI và VGA hiện đều hoạt động, không có giới hạn trong màn hình được kết nối
+- Rất nhiều thứ khác nhau ;)
 
 
-#### Upgrade from original HI3536DV100 NVR board firmware to OpenIPC FPV firmware
+#### Nâng cấp từ firmware gốc của bảng HI3536DV100 NVR lên firmware OpenIPC FPV
 
-- Install [PUTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) and [TFTP](https://pjo2.github.io/tftpd64/) server
-- Download actual [image](https://openipc.org/cameras/vendors/hisilicon/socs/hi3536dv100/download_full_image?flash_size=16&flash_type=nor&fw_release=fpv) for NVR from OpenIPC site
-- Upload this image to your TFTP server
-- Turn off NVR power, connect USB adapter to your NVR UART, specify which COM port on your PC
-- Go to U-Boot with quick press Ctrl+C at power on
-- Execute a set of commands each line separately
+- Cài đặt máy chủ [PUTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) và [TFTP](https://pjo2.github.io/tftpd64/)
+- Tải xuống [hình ảnh](https://openipc.org/cameras/vendors/hisilicon/socs/hi3536dv100/download_full_image?flash_size=16&flash_type=nor&fw_release=fpv) thực tế cho NVR từ trang web OpenIPC
+- Tải hình ảnh này lên máy chủ TFTP của bạn
+- Tắt nguồn NVR, kết nối bộ chuyển đổi USB với UART của NVR, chỉ định cổng COM nào trên PC của bạn
+- Vào U-Boot bằng cách nhấn nhanh Ctrl+C khi bật nguồn
+- Thực thi một tập hợp các lệnh, mỗi dòng riêng biệt
 
 ```
-# Сhanging the ip address of the NVR board and the ip address of your TFTP server
+# Thay đổi địa chỉ ip của bảng NVR và địa chỉ ip của máy chủ TFTP của bạn
 setenv ipaddr 192.168.1.10; setenv serverip 192.168.1.254
 mw.b 0x82000000 0xff 0x1000000
 tftp 0x82000000 openipc-hi3536dv100-fpv-16mb.bin
@@ -31,11 +31,12 @@ sf erase 0x0 0x1000000; sf write 0x82000000 0x0 0x1000000
 reset
 ```
 
-#### The result
+#### Kết quả
 
 ![](../images/fpv-nvr-hi3536dv100-openipc-ready.webp)
 
-#### Buy a device
+#### Mua thiết bị
 
 - [https://www.aliexpress.com/item/1005004023376532.html](https://www.aliexpress.com/item/1005004023376532.html)
 - [https://www.aliexpress.com/item/1005002358182146.html](https://www.aliexpress.com/item/1005002358182146.html)
+

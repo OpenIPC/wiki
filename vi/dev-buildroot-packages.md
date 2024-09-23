@@ -1,9 +1,9 @@
-# OpenIPC Wiki
-[Table of Content](../README.md)
+## OpenIPC Wiki
+[Mục lục](../README.md)
 
-## OpenIPC Buildroot packages
+## Các gói OpenIPC Buildroot
 
-List of OpenIPC Buildroot packages and shadowed original Buildroot packages per releases.
+Danh sách các gói OpenIPC Buildroot và các gói Buildroot gốc bị thay thế theo từng phiên bản.
 
 | OpenIPC                             | Buildroot 2020.02.12    | Buildroot 2021.02       | Buildroot 2022.08       | Buildroot HEAD          |
 |-------------------------------------|-------------------------|-------------------------|-------------------------|-------------------------|
@@ -99,3 +99,5 @@ List of OpenIPC Buildroot packages and shadowed original Buildroot packages per 
 | xmdp                                |                         |                         |                         |                         |
 | yaml-cli (git)                      |                         |                         |                         |                         |
 | zerotier-one (git)                  |                         |                         |                         |                         |
+
+

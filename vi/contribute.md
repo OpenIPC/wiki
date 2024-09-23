@@ -1,42 +1,32 @@
-# OpenIPC Wiki
-[Table of Content](../README.md)
+## OpenIPC Wiki
+[Mục lục](../README.md)
 
-> "Improving the world, one patch at a time."
+> "Cải thiện thế giới, từng bản vá một."
 
-Guidelines
+Hướng dẫn
 ---
 
-### This is an open project, so you can help, too.
+### Đây là một dự án mở, vì vậy bạn cũng có thể giúp đỡ.
 
-We try to collect, organize and share as much information regarding different
-aspects of the project as we can. But sometimes we overlook things that seem
-obvious to us, developers, but are not so obvious to end-users, people who are
-less familiar with nuts and bolts behind the scene. That is why we set up this
-wiki and let anyone having a GitHub account to make additions and improvements
-to the knowledge base.
+Chúng tôi cố gắng thu thập, tổ chức và chia sẻ càng nhiều thông tin liên quan đến các khía cạnh khác nhau của dự án càng tốt. Nhưng đôi khi chúng tôi bỏ sót những điều có vẻ hiển nhiên đối với chúng tôi, những nhà phát triển, nhưng lại không quá rõ ràng đối với người dùng cuối, những người ít quen thuộc với các chi tiết kỹ thuật đằng sau hậu trường. Đó là lý do tại sao chúng tôi thiết lập wiki này và cho phép bất kỳ ai có tài khoản GitHub thực hiện các bổ sung và cải tiến cho cơ sở kiến thức.
 
-### How to contribute.
+### Cách đóng góp.
 
-Sign in into your GitHub account, or [get yourself one][gh-signup] if you don't
-have it yet. It's free.
+Đăng nhập vào tài khoản GitHub của bạn hoặc [tạo một tài khoản][gh-signup] nếu bạn chưa có. Nó hoàn toàn miễn phí.
 
-Go to [the wiki repository](https://github.com/openIPC/wiki/) and fork it.
+Truy cập [kho lưu trữ wiki](https://github.com/openIPC/wiki/) và fork nó.
 
 ![GitHub Fork](../images/gh-fork.webp)
 
-Make changes (correct a typo, add another record into a table, or write a new
-article) and commit them to your own fork of the repository.
+Thực hiện các thay đổi (sửa lỗi chính tả, thêm một bản ghi khác vào bảng hoặc viết một bài viết mới) và commit chúng vào fork kho lưu trữ của riêng bạn.
 
-From your repository, create a pull request, so we could review and incorporate
-your changes into our version of the wiki.
+Từ kho lưu trữ của bạn, hãy tạo một pull request để chúng tôi có thể xem xét và kết hợp các thay đổi của bạn vào phiên bản wiki của chúng tôi.
 
 ![GitHub Contribute](../images/gh-contribute.webp)
 
-### Small corrections, typos.
+### Sửa lỗi nhỏ, lỗi chính tả.
 
-It is even easier to deal with small corrections while using GitHub. Spotted a
-typo? Have an idea of a better wording? Noticed a broken link? Just hit this
-pencil-looking button and make corrections.
+Việc xử lý các chỉnh sửa nhỏ khi sử dụng GitHub thậm chí còn dễ dàng hơn. Phát hiện lỗi chính tả? Có ý tưởng về cách diễn đạt tốt hơn? Nhận thấy một liên kết bị hỏng? Chỉ cần nhấn nút hình bút chì này và thực hiện các chỉnh sửa.
 
 ![GutHub Correction](../images/gh-correction.webp)
 

@@ -1,143 +1,143 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-Using OpenIPC as a budget video link for FPV system
+Sử dụng OpenIPC làm liên kết video giá rẻ cho hệ thống FPV
 ---------------------------------------------------
 
 <p align="center">
   <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-logo.jpg?raw=true" alt="Logo"/>
 </p>
 
-In 2015, German enthusiast Befi [pitched the idea of an OpenSource drone](https://befinitiv.wordpress.com/wifibroadcast-analog-like-transmission-of-live-video-data/), where he proposed to use ordinary WiFi adapters, the number of which has already reached several billion pieces worldwide, and the price has dropped so much that they have become the most affordable types of digital transceivers.
+Năm 2015, người đam mê Befi người Đức đã [đưa ra ý tưởng về một máy bay không người lái Nguồn mở](https://befinitiv.wordpress.com/wifibroadcast-analog-like-transmission-of-live-video-data/), nơi anh ấy đề xuất sử dụng bộ điều hợp WiFi thông thường, số lượng đã đạt đến con số vài tỷ chiếc trên toàn thế giới và giá đã giảm đến mức chúng đã trở thành loại máy thu phát kỹ thuật số có giá cả phải chăng nhất.
 
-The key idea was not the WiFi adapters themselves, but an unconventional method of using them: refusing to establish a network connection and switching to broadcast mode, when one adapter acts as a transmitter of a digital signal, while the second one is a receiver.
+Ý tưởng chính không phải là bản thân bộ điều hợp WiFi, mà là một phương pháp sử dụng chúng độc đáo: từ chối thiết lập kết nối mạng và chuyển sang chế độ phát sóng, khi một bộ điều hợp đóng vai trò là bộ phát tín hiệu kỹ thuật số, trong khi bộ điều hợp thứ hai là bộ thu.
 
-It was suggested to take a budget SBC Raspberry Pi, connect a camera to it via MIPI interface and a USB WiFi dongle from among the recommended ones, and on the other side on the receiver - a similar WiFi module with HDMI monitor. In this case, instead of the traditional UDP protocol for low-latency video transmission, a lower-level protocol was used for flexible data management: bandwidth control, transmitter power, and the ability to recover data if the packet was [partially corrupted](https://en.wikipedia.org/wiki/Error_detection_and_correction) during transmission. One of the technical problems is that not every WiFi adapter is able to work in this low-level mode, moreover: you almost always have to install special drivers that exist only for Linux.
+Người ta đã đề xuất lấy một SBC Raspberry Pi giá rẻ, kết nối camera với nó thông qua giao diện MIPI và một khóa USB WiFi trong số những khóa được đề xuất và ở phía bên kia trên bộ thu - một mô-đun WiFi tương tự với màn hình HDMI. Trong trường hợp này, thay vì giao thức UDP truyền thống để truyền video có độ trễ thấp, một giao thức cấp thấp hơn đã được sử dụng để quản lý dữ liệu linh hoạt: kiểm soát băng thông, công suất bộ phát và khả năng khôi phục dữ liệu nếu gói bị [hỏng một phần](https://en.wikipedia.org/wiki/Error_detection_and_correction) trong quá trình truyền. Một trong những vấn đề kỹ thuật là không phải mọi bộ điều hợp WiFi đều có thể hoạt động ở chế độ cấp thấp này, hơn nữa: bạn gần như luôn phải cài đặt các trình điều khiển đặc biệt chỉ tồn tại cho Linux.
 
-The receiver in this mode operates in the so-called `monitor mode`, where it receives and transmits to the operating system each packet of a given WiFi channel, where it decides whether to decode or discard it. The WiFi transmitter adapter must operate in `injection mode`, where the operating system kernel does not actually participate in the network packet generation prescribed by the ISO network model. Some adapters support both modes, some support only some one, so may only stand on the transmitter or receiver side.
+Bộ thu ở chế độ này hoạt động ở cái gọi là `chế độ giám sát`, nơi nó nhận và truyền đến hệ điều hành mỗi gói của một kênh WiFi nhất định, nơi nó quyết định nên giải mã hay loại bỏ nó. Bộ điều hợp bộ phát WiFi phải hoạt động ở `chế độ tiêm`, nơi kernel của hệ điều hành không thực sự tham gia vào việc tạo gói mạng theo quy định của mô hình mạng ISO. Một số bộ điều hợp hỗ trợ cả hai chế độ, một số chỉ hỗ trợ một số, do đó có thể chỉ đứng ở phía bộ phát hoặc bộ thu.
 
 <p align="center">
-  <img src="https://befinitiv.files.wordpress.com/2015/04/dscf11161.jpg" alt="The first ever drone controlled by Wifibroadcast" />
+  <img src="https://befinitiv.files.wordpress.com/2015/04/dscf11161.jpg" alt="Máy bay không người lái đầu tiên được điều khiển bởi Wifibroadcast" />
 </p>
 
 
-## Advice for newcomers
+## Lời khuyên dành cho người mới
 <span style="color:red;">
-OpenIPC FPV is still under development. Linux skills are required for installing and using/testing it.
-If there are no such skills available or a person who does not want to learn, then it is better for the person to buy and use professional FPV Equipment which works out of the box.
+OpenIPC FPV vẫn đang được phát triển. Yêu cầu kỹ năng Linux để cài đặt và sử dụng/kiểm tra nó.
+Nếu không có kỹ năng như vậy hoặc một người không muốn học hỏi, thì tốt hơn là người đó nên mua và sử dụng Thiết bị FPV chuyên nghiệp hoạt động ngay lập tức.
 </span>
 
-You should have the following skills:
-* Connect to the IPcamera / NVR with SSH (Secure Shell)
-* Exchage files over SCP (Secure Copy)
-* Using [VIM Editor](https://github.com/vim/vim)
-* View the contents of a file using the CAT command
-* Skills in adapting or creating a bash script
+Bạn nên có những kỹ năng sau:
+* Kết nối với IPcamera / NVR bằng SSH (Secure Shell)
+* Trao đổi tệp qua SCP (Sao chép an toàn)
+* Sử dụng [Trình chỉnh sửa VIM](https://github.com/vim/vim)
+* Xem nội dung của tệp bằng lệnh CAT
+* Kỹ năng trong việc điều chỉnh hoặc tạo tập lệnh bash
 
 
-There are good books, websites and videos available which can be used to learn.
+Có nhiều sách, trang web và video hay có sẵn có thể được sử dụng để học hỏi.
 
-* [Linux Basics Course](https://github.com/kodekloudhub/linux-basics-course)
-* [Video: Introduction to Linux – Full Course for Beginners](https://www.youtube.com/watch?v=sWbUDq4S6Y8)
+* [Khóa học cơ bản về Linux](https://github.com/kodekloudhub/linux-basics-course)
+* [Video: Giới thiệu về Linux – Khóa học đầy đủ dành cho người mới bắt đầu](https://www.youtube.com/watch?v=sWbUDq4S6Y8)
 
 
 
-## Revolution from OpenIPC
+## Cuộc cách mạng từ OpenIPC
 
-The classic set-up in the [OpenHD](https://openhdfpv.org/) project (and other similar projects) consists of a MIPI or USB camera connected to a Raspberry Pi, which act as a video encoder and router for the airborne system and in turn are connected to a WiFi adapter via USB and to the flight controller via UART. The ground station usually consists of the same WiFi adapter, a second Raspberry Pi or an x86 linux laptop and a high-contrast monitor or goggles.
+Thiết lập cổ điển trong dự án [OpenHD](https://openhdfpv.org/) (và các dự án tương tự khác) bao gồm camera MIPI hoặc USB được kết nối với Raspberry Pi, đóng vai trò là bộ mã hóa video và bộ định tuyến cho hệ thống trên không và lần lượt được kết nối với bộ điều hợp WiFi qua USB và với bộ điều khiển bay qua UART. Trạm mặt đất thường bao gồm bộ điều hợp WiFi tương tự, Raspberry Pi thứ hai hoặc máy tính xách tay Linux x86 và màn hình hoặc kính bảo hộ có độ tương phản cao.
 
-Sometimes a MIPI or USB camera is swapped for an IP camera, which is both more powerful (has its own hardware encoder) and cheaper with similar characteristics. Most modern video cameras are typical devices with Linux on board (but much more modest in RAM and flash memory size compared to the Raspberry Pi), which allows you to recompile and run almost any portable software on them.
+Đôi khi, camera MIPI hoặc USB được hoán đổi cho camera IP, vừa mạnh hơn (có bộ mã hóa phần cứng riêng) vừa rẻ hơn với các đặc điểm tương tự. Hầu hết các camera video hiện đại đều là những thiết bị điển hình có Linux trên bo mạch (nhưng kích thước RAM và bộ nhớ flash khiêm tốn hơn nhiều so với Raspberry Pi), cho phép bạn biên dịch lại và chạy hầu hết mọi phần mềm di động trên chúng.
 
-While working with this technology, the idea of simplifying the flight system and porting all the necessary software directly to the IP camera came up. Technically FPV firmware of OpenIPC project is a special assembly with two types of drivers of popular WiFi adapters, Majestic streamer (which performs the role of GStreamer in the classical scheme on the transmitter system) and [WFB-ng](https://github.com/svpcom/wifibroadcast).
+Trong khi làm việc với công nghệ này, ý tưởng đơn giản hóa hệ thống bay và chuyển tất cả phần mềm cần thiết trực tiếp sang camera IP đã xuất hiện. Về mặt kỹ thuật, firmware FPV của dự án OpenIPC là một bản lắp ráp đặc biệt với hai loại trình điều khiển của bộ điều hợp WiFi phổ biến, trình phát trực tuyến Majestic (thực hiện vai trò của GStreamer trong sơ đồ cổ điển trên hệ thống bộ phát) và [WFB-ng](https://github.com/svpcom/wifibroadcast).
 
-### Benefits
+### Lợi ích
 
-* Reduces system cost (H.265 IP camera vs. H.264 MIPI camera with Raspberry Pi)
-* Reduces overall consumption and increases system reliability by simplifying the circuitry
-* Reduces video latency: in our Glass-to-Glass tests, we got about 80ms latency for 1080p@60 (on mid-budget cameras), and about 60 ms for 720p@60 and about 100 ms for 1080p@30 (for the most budget cameras).
-* There is a possibility of tuning hardware encoder, for example, more frequent formation of I frame (the specifics depend on the vendor of IP camera)
-* The community has accumulated a lot of experience in [repairing IP cameras](https://t.me/ExIPCam), which makes it possible to further reduce the cost of operation of the system.
+* Giảm chi phí hệ thống (camera IP H.265 so với camera MIPI H.264 với Raspberry Pi)
+* Giảm mức tiêu thụ tổng thể và tăng độ tin cậy của hệ thống bằng cách đơn giản hóa mạch
+* Giảm độ trễ video: trong các thử nghiệm Glass-to-Glass của chúng tôi, chúng tôi nhận được độ trễ khoảng 80ms đối với 1080p@60 (trên camera tầm trung) và khoảng 60 ms đối với 720p@60 và khoảng 100 ms đối với 1080p@30 (đối với camera giá rẻ nhất).
+* Có khả năng điều chỉnh bộ mã hóa phần cứng, ví dụ, hình thành khung I thường xuyên hơn (chi tiết cụ thể phụ thuộc vào nhà cung cấp camera IP)
+* Cộng đồng đã tích lũy được nhiều kinh nghiệm trong việc [sửa chữa camera IP](https://t.me/ExIPCam), điều này giúp giảm chi phí vận hành hệ thống hơn nữa.
 
-### Disadvantages
+### Nhược điểm
 
-* Due to limited resources (installed RAM and permanent memory), most of the trendy programming languages (such as Java, Python, NodeJS) will not be supported by the camera. If you like to write in these languages (or want to port software written in these languages to the camera), you will have to use additionally a NanoPi and use the OpenIPC camera as a regular IP camera connected to the NanoPi(https://www.aliexpress.com/item/1005004679805441.html).
-Replacing flash memory with a larger one is another option:
-* You'll have to do some soldering to replace the onboard memory, but I'm sure nobody in the FPV world will be intimidated by this
-* In most systems the Linux kernel version is limited by the IP camera vendor due to the fact that some modules are shipped in binary form. Developing kernel drivers for new WiFi adapters or specific peripherals can be time-consuming.
-* On budget cameras (for which FPV firmware was primarily developed) there are very limited resources, so at the time of writing this text there are no possibilities to run neural networks. The situation should change in the near future.
+* Do tài nguyên hạn chế (RAM đã cài đặt và bộ nhớ vĩnh viễn), hầu hết các ngôn ngữ lập trình thịnh hành (như Java, Python, NodeJS) sẽ không được camera hỗ trợ. Nếu bạn thích viết bằng các ngôn ngữ này (hoặc muốn chuyển phần mềm được viết bằng các ngôn ngữ này sang camera), bạn sẽ phải sử dụng thêm NanoPi và sử dụng camera OpenIPC như một camera IP thông thường được kết nối với NanoPi(https://www.aliexpress.com/item/1005004679805441.html).
+Thay thế bộ nhớ flash bằng bộ nhớ lớn hơn là một lựa chọn khác:
+* Bạn sẽ phải thực hiện một số hàn để thay thế bộ nhớ trên bo mạch, nhưng tôi chắc chắn rằng không ai trong thế giới FPV sẽ bị điều này làm nản lòng
+* Trong hầu hết các hệ thống, phiên bản kernel Linux bị giới hạn bởi nhà cung cấp camera IP do thực tế là một số mô-đun được cung cấp ở dạng nhị phân. Việc phát triển trình điều khiển kernel cho bộ điều hợp WiFi mới hoặc thiết bị ngoại vi cụ thể có thể tốn nhiều thời gian.
+* Trên các camera giá rẻ (mà firmware FPV được phát triển chủ yếu), tài nguyên rất hạn chế, vì vậy tại thời điểm viết bài viết này, không có khả năng chạy mạng nơ-ron. Tình hình sẽ thay đổi trong tương lai gần.
 
-### Ingredients
+### Thành phần
 
-* IP Camera. Considering the popularity among FPV community of [VEYE 307](http://www.veye.cc/en/product/cs-mipi-imx307/) model, we recommend you to buy the board IVG-G2S IP camera manufactured by XiongMai company with exactly the same sensor IMX307, but [at a more pleasant price](https://aliexpress.com/item/1005003386137528.html) (or even [more pleasant](https://item.taobao.com/item.htm?id=660122799616), if there is a possibility to buy on Taobao, for example, [through an intermediary](https://www.youcanbuy.ru/)). When ordering the board, specify the focal length of the lens that the seller will set for your order (more focal length - more magnification, but less angle of view).
-In the future, the lens can be changed to another with the same thread, or immediately buy several models to choose from (the standard in the world of video surveillance is considered 3.6mm).
-IP-camera board is powered from 12V (actually 5V is enough, if you do not use it as a video camera with backlight) and for initial tests it is desirable to take a combined power-Ethernet cable, which is of two types: 12V with [power supply via jack](https://aliexpress.com/item/32961238897.html) and active PoE 48V (choose depending on the capabilities of your network switch).
+* Camera IP. Xét đến mức độ phổ biến của model [VEYE 307](http://www.veye.cc/en/product/cs-mipi-imx307/) trong cộng đồng FPV, chúng tôi khuyên bạn nên mua bảng camera IP IVG-G2S do công ty XiongMai sản xuất với chính xác cảm biến IMX307, nhưng [với mức giá dễ chịu hơn](https://aliexpress.com/item/1005003386137528.html) (hoặc thậm chí [dễ chịu hơn nữa](https://item.taobao.com/item.htm?id=660122799616), nếu có khả năng mua trên Taobao, ví dụ: [thông qua trung gian](https://www.youcanbuy.ru/)). Khi đặt hàng bo mạch, hãy chỉ định tiêu cự của ống kính mà người bán sẽ đặt cho đơn hàng của bạn (tiêu cự lớn hơn - độ phóng đại lớn hơn, nhưng góc nhìn nhỏ hơn).
+Trong tương lai, ống kính có thể được thay đổi sang ống kính khác có cùng ren, hoặc mua ngay một số model để lựa chọn (tiêu chuẩn trong thế giới giám sát video được coi là 3,6mm).
+Bảng camera IP được cấp nguồn từ 12V (thực tế là 5V là đủ, nếu bạn không sử dụng nó như một camera video có đèn nền) và đối với các thử nghiệm ban đầu, nên sử dụng cáp nguồn-Ethernet kết hợp, có hai loại: 12V với [cấp nguồn qua jack cắm](https://aliexpress.com/item/32961238897.html) và PoE 48V chủ động (chọn tùy thuộc vào khả năng của bộ chuyển mạch mạng của bạn).
 
-* WiFi adapter. At the moment FPV firmware supports two types of drivers for RT8812au and AR9271 chips (but in principle nobody prevents to add other adapters). It is highly recommended to use the same adapters on both sides of the link (moreover, take them from the same batch in pairs) and use only 5GHz frequencies due to the complete overload of 2.4GHz. The firmware is tested with two adapters on [RT8812au](https://aliexpress.ru/item/32664378094.html) and [AR9271](https://aliexpress.co/item/32884675724.html) (the last mentioned chip works only on 2.4GHz frequency).
+* Bộ chuyển đổi WiFi. Hiện tại, firmware FPV hỗ trợ hai loại trình điều khiển cho chip RT8812au và AR9271 (nhưng về nguyên tắc không ai ngăn cản việc thêm các bộ điều hợp khác). Nên sử dụng các bộ điều hợp giống nhau ở cả hai phía của liên kết (hơn nữa, lấy chúng từ cùng một lô theo cặp) và chỉ sử dụng tần số 5GHz do quá tải hoàn toàn 2,4GHz. Firmware được thử nghiệm với hai bộ điều hợp trên [RT8812au](https://aliexpress.ru/item/32664378094.html) và [AR9271](https://aliexpress.co/item/32884675724.html) (chip được đề cập cuối cùng chỉ hoạt động trên tần số 2,4GHz).
 
-* [UART-USB adapter](https://aliexpress.com/item/1005001625391776.html) at 3.3V. Note that using a 5V adapter can burn your camera. Do not buy/use adapters based on [PL2303](https://aliexpress.com/item/704553060.html), although they are cheaper, they will not work with this SoC. The programmer mentioned in the previous paragraph can work with UART adapter, so if you have one, you don't need to buy a separate one.
+* [Bộ chuyển đổi UART-USB](https://aliexpress.com/item/1005001625391776.html) ở 3.3V. Lưu ý rằng việc sử dụng bộ chuyển đổi 5V có thể làm hỏng camera của bạn. Không mua/sử dụng bộ chuyển đổi dựa trên [PL2303](https://aliexpress.com/item/704553060.html), mặc dù chúng rẻ hơn, nhưng chúng sẽ không hoạt động với SoC này. Bộ lập trình được đề cập trong đoạn trước có thể hoạt động với bộ chuyển đổi UART, vì vậy nếu bạn có, bạn không cần phải mua một bộ chuyển đổi riêng.
 
-* [Connectors with JST 1.25 type connectors](https://aliexpress.com/item/32863841787.html) in `3 Pin` and `8 Pin` configuration to connect to the UART port of the camera and replace the standard power-Ethernet cable in the flight version.
+* [Đầu nối với đầu nối loại JST 1.25](https://aliexpress.com/item/32863841787.html) trong cấu hình `3 chân` và `8 chân` để kết nối với cổng UART của camera và thay thế cáp nguồn-Ethernet tiêu chuẩn trong phiên bản bay.
 
-Optional:
+Tùy chọn:
 
-* SPI NOR flash memory chip of 16 megabytes or more to replace the standard 8 megabyte one. We recommend [W25Q128FVIQ](https://www.aliexpress.com/item/1005003093500630.html) or [any other](https://www.winbond.com/hq/product/code-storage-flash-memory/serial-nor-flash/?__locale=en&selected=128Mb#Density) compatible with the firmware (new modules can also be added to the project by chip ID). Please note that there are a lot of Winbond knockoffs on the market and you should choose your seller carefully.
+* Chip bộ nhớ flash SPI NOR 16 megabyte trở lên để thay thế chip 8 megabyte tiêu chuẩn. Chúng tôi khuyên dùng [W25Q128FVIQ](https://www.aliexpress.com/item/1005003093500630.html) hoặc [bất kỳ chip nào khác](https://www.winbond.com/hq/product/code-storage-flash-memory/serial-nor-flash/?__locale=en&selected=128Mb#Density) tương thích với firmware (mô-đun mới cũng có thể được thêm vào dự án bằng ID chip). Xin lưu ý rằng có rất nhiều hàng nhái Winbond trên thị trường và bạn nên lựa chọn người bán cẩn thận.
 
-* [SPI NOR programmer for flash memory](https://aliexpress.com/item/32902635911.html). In principle you can do without it by using of the project [burn][github_burn], which allows you to flash the system file into an empty/killed flash (see the section [Fill image to empty/killed flash](https://github.com/OpenIPC/burn). section [Flashing image to empty flash with burn](#pour-the-image-onto-an-empty-flash-using-burn-if-you-dont-have-a-programmer)). Note that although many programmers have a "clothespin" in the kit, it is absolutely impossible to dump/program flash memory directly on the board, because of the fact that the programmer besides the chip will also power the rest of the board (there is a way to overcome this problem by cutting the VCC leg).
+* [Bộ lập trình SPI NOR cho bộ nhớ flash](https://aliexpress.com/item/32902635911.html). Về nguyên tắc, bạn có thể làm mà không cần nó bằng cách sử dụng dự án [burn][github_burn], cho phép bạn flash tệp hệ thống vào flash trống/bị hỏng (xem phần [Điền hình ảnh vào flash trống/bị hỏng](https://github.com/OpenIPC/burn). phần [Flash hình ảnh vào flash trống bằng burn](#đổ-hình-ảnh-vào-flash-trống-bằng-cách-sử-dụng-burn-nếu-bạn-không-có-bộ-lập-trình)). Lưu ý rằng mặc dù nhiều bộ lập trình có "kẹp quần áo" trong bộ dụng cụ, nhưng hoàn toàn không thể dump/lập trình bộ nhớ flash trực tiếp trên bảng, do thực tế là bộ lập trình bên cạnh chip cũng sẽ cấp nguồn cho phần còn lại của bảng (có cách để khắc phục vấn đề này bằng cách cắt chân VCC).
 
-* [SoC radiators](https://aliexpress.com/item/32859349038.html) are welcome (as usual not installed by the manufacturer due to cheapening).
+* [Bộ tản nhiệt SoC](https://aliexpress.com/item/32859349038.html) được chào đón (như thường lệ không được nhà sản xuất cài đặt do giá rẻ).
 
-* [F0.95 fast lens](https://aliexpress.com/item/32876034491.html) (other options are [one](https://aliexpress.com/item/32957334039.html) and [two](https://aliexpress.com/item/4000142214594.html)) to fully utilize the Sony IMX307 sensor and enjoy flying at night.
+* [Ống kính nhanh F0.95](https://aliexpress.com/item/32876034491.html) (các tùy chọn khác là [một](https://aliexpress.com/item/32957334039.html) và [hai](https://aliexpress.com/item/4000142214594.html)) để tận dụng tối đa cảm biến Sony IMX307 và tận hưởng chuyến bay vào ban đêm.
 
-* [Zoom Lens 2.8-12mm](https://aliexpress.com/item/32809397197.html). Please note that the kit comes with an outdated HiSilicon 3516EV100 based IP camera board, which can also be reflashed to OpenIPC. Since the board controlling the motors communicates with the main board via UART, you will have to creatively solve the issue with multiplexing the two UART ports or outputting unsoldered pins.
+* [Ống kính zoom 2.8-12mm](https://aliexpress.com/item/32809397197.html). Xin lưu ý rằng bộ dụng cụ đi kèm với bảng camera IP dựa trên HiSilicon 3516EV100 lỗi thời, cũng có thể được flash lại thành OpenIPC. Vì bo mạch điều khiển động cơ giao tiếp với bo mạch chính thông qua UART, bạn sẽ phải giải quyết một cách sáng tạo vấn đề ghép kênh hai cổng UART hoặc xuất ra các chân chưa hàn.
 
-* [16 pin FPC connector](https://aliexpress.com/item/33013766973.html) for better soldering of connection to USB adapter and corresponding [cable](https://aliexpress.com/item/32958943450.html).
+* [Đầu nối FPC 16 chân](https://aliexpress.com/item/33013766973.html) để hàn kết nối với bộ chuyển đổi USB tốt hơn và [cáp](https://aliexpress.com/item/32958943450.html) tương ứng.
 
-There are two variants of using OpenIPC firmware on the board under consideration: with replacement of flash memory with a higher capacity one (for installing your own programs) and without replacement (it is easier, but in this case further expansion possibilities of the new system will be very limited). Both of these options will be discussed step by step below:
+Có hai biến thể sử dụng firmware OpenIPC trên bảng đang xem xét: với việc thay thế bộ nhớ flash bằng bộ nhớ dung lượng cao hơn (để cài đặt các chương trình của riêng bạn) và không cần thay thế (dễ dàng hơn, nhưng trong trường hợp này, khả năng mở rộng hơn nữa của hệ thống mới sẽ rất hạn chế). Cả hai tùy chọn này sẽ được thảo luận từng bước bên dưới:
 
-### Installation on the camera (common start)
+### Cài đặt trên camera (bắt đầu chung)
 
-* Connect the cable to the camera and check that it works (default IP address is 192.168.1.10, link for VLC `"rtsp://192.168.1.10/user=admin&password=&channel=0&stream=0"`).
-* Solder the three-wire UART connector to the free pads on the camera board
+* Kết nối cáp với camera và kiểm tra xem nó có hoạt động không (địa chỉ IP mặc định là 192.168.1.10, liên kết cho VLC `"rtsp://192.168.1.10/user=admin&password=&channel=0&stream=0"`).
+* Hàn đầu nối UART ba dây vào các miếng đệm trống trên bảng camera
 
 <p align="center">
 <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-imx307-uart.jpg?raw=true" alt="Logo"/>
 </p>
 
-* Connect the UART-USB adapter to the computer (port speed 115200N1, flow control disabled, adapter should be set to 3.3V, not 5V) and check that when the camera is turned on, data is being output and you can abort the download via `Ctrl-C` (both RX and TX lines are working).
+* Kết nối bộ chuyển đổi UART-USB với máy tính (tốc độ cổng 115200N1, điều khiển luồng bị vô hiệu hóa, bộ chuyển đổi nên được đặt thành 3,3V, không phải 5V) và kiểm tra xem khi camera được bật, dữ liệu đang được xuất ra và bạn có thể hủy bỏ tải xuống qua `Ctrl-C` (cả hai dòng RX và TX đều hoạt động).
 
-### Installation using IP Cam DMS (no flash soldering)
+### Cài đặt bằng IP Cam DMS (không hàn flash)
 
-* Download, unzip the archive and run the [IP Cam DMS](https://team.openipc.org/ipcam_dms/IPCam_DMS_20201121_EN.zip) program, which allows you to control the camera using the camera manufacturer's protocol.
-* Download the [special archive](https://github.com/OpenIPC/coupler/releases/download/latest/000659A7_fpv_IPC_GK7205V200_50H20AI_S38.bin) and perform a firmware upgrade, which will effectively make a seamless transition from the original firmware to OpenIPC.
+* Tải xuống, giải nén kho lưu trữ và chạy chương trình [IP Cam DMS](https://team.openipc.org/ipcam_dms/IPCam_DMS_20201121_EN.zip), cho phép bạn điều khiển camera bằng giao thức của nhà sản xuất camera.
+* Tải xuống [kho lưu trữ đặc biệt](https://github.com/OpenIPC/coupler/releases/download/latest/000659A7_fpv_IPC_GK7205V200_50H20AI_S38.bin) và thực hiện nâng cấp firmware, điều này sẽ giúp chuyển đổi liền mạch từ firmware gốc sang OpenIPC.
 
-> Note! Despite the fact it is the easiest way to flash firmware it has few disadvantages:
-> * It won't backup a stock firmware. There are chances you need the backup to extract some important parameters from the stock firmware. So even if you are 100% sure you don't need the stock firmware it's still a good idea to have a backup.
-> * In fact there is a prebuild fpv version only for IPC_GK7205V200_50H20AI_S38 board. For other boards you need to find and flash the lite version first. So that makes no sense using this installation type for other than IPC_GK7205V200_50H20AI_S38 boards.
+> Lưu ý! Mặc dù đây là cách dễ nhất để flash firmware, nhưng nó có một số nhược điểm:
+> * Nó sẽ không sao lưu firmware gốc. Có khả năng bạn cần bản sao lưu để trích xuất một số thông số quan trọng từ firmware gốc. Vì vậy, ngay cả khi bạn chắc chắn 100% rằng bạn không cần firmware gốc, thì việc có bản sao lưu vẫn là một ý kiến ​​hay.
+> * Trên thực tế, chỉ có phiên bản fpv dựng sẵn cho bảng IPC_GK7205V200_50H20AI_S38. Đối với các bảng khác, bạn cần tìm và flash phiên bản lite trước. Vì vậy, việc sử dụng loại cài đặt này cho các bảng khác ngoài IPC_GK7205V200_50H20AI_S38 là vô nghĩa.
 
-### Installation using burn (no flash soldering)
+### Cài đặt bằng burn (không hàn flash)
 
-This will work even in case you have locked bootloader or flashed wrong bootloader to the SPI flash.
-* On the workstation, install a TFTP server
-* Find your SoC on [openIPC][supported_hardware] and Generate `Installation Guide` (note: select NOR 8M memory chip even if you have 16M or 32M chip since there is no fpv versions for those configurations. Don't worry after the first boot the overlay fs will be expanded.)
-* There is a video tutorial for the [burn][github_burn] utility: [OpenIPC BURN Utility Playlist][youtube_burn] . Just select the video for your OS and follow the guide.
-* At the end of the video tutorial you will be at the terminal with unlocked bootloader. Don't close it, you will need it further.
-* Make sure the TFTP server is run and you downloaded OpenIPC firmware from the `Installation Guide` to the proper place
-* Follow the `Installation Guide` from the second step to:
-  - Save the original firmware
-  - Flash full OpenIPC Firmware image
+Điều này sẽ hoạt động ngay cả khi bạn đã khóa bootloader hoặc flash sai bootloader vào flash SPI.
+* Trên máy trạm, cài đặt máy chủ TFTP
+* Tìm SoC của bạn trên [openIPC][supported_hardware] và Tạo `Hướng dẫn Cài đặt` (lưu ý: chọn chip nhớ NOR 8M ngay cả khi bạn có chip 16M hoặc 32M vì không có phiên bản fpv cho những cấu hình đó. Đừng lo lắng sau lần khởi động đầu tiên, hệ thống tệp lớp phủ sẽ được mở rộng.)
+* Có một video hướng dẫn cho tiện ích [burn][github_burn]: [Danh sách phát Tiện ích OpenIPC BURN][youtube_burn]. Chỉ cần chọn video cho hệ điều hành của bạn và làm theo hướng dẫn.
+* Ở cuối video hướng dẫn, bạn sẽ ở thiết bị đầu cuối với bootloader đã được mở khóa. Đừng đóng nó, bạn sẽ cần nó sau.
+* Đảm bảo máy chủ TFTP đang chạy và bạn đã tải xuống firmware OpenIPC từ `Hướng dẫn Cài đặt` vào đúng vị trí
+* Làm theo `Hướng dẫn Cài đặt` từ bước thứ hai đến:
+  - Lưu firmware gốc
+  - Flash hình ảnh Firmware OpenIPC đầy đủ
 
-### Installation on camera (flash replacement)
+### Cài đặt trên camera (thay thế flash)
 
-* Turn off the camera, unsolder the original 8 megabyte SPI NOR flash chip and dump it with a programmer just in case. It is desirable to unsolder the chip with [hot air soldering gun](https://aliexpress.com/item/32980690787.html), but if you really want you can use a regular soldering iron [as Alexey Tolstov suggests](https://www.youtube.com/watch?v=M69JiBtuqq8) or [like this](https://www.youtube.com/watch?v=dspjVDv7hck). After unsoldering of the chip, the pads should be well cleaned from solder residue with a piece of copper cable.
-When working with a hot air soldering gun it is desirable to remove the lens and insulate the other components, especially the plastic connectors with [kapton tape](https://aliexpress.com/item/1005003563721341.html) (in extreme case with chocolate bar foil). Never [use Rose alloy](https://habr.com/ru/post/437778/). If you're not very good with a finger, it's easier to go to the nearest cell phone repair service and show the master a part of this manual.
+* Tắt camera, tháo chip flash SPI NOR 8 megabyte ban đầu và dump nó bằng bộ lập trình để phòng trường hợp. Nên tháo chip bằng [súng hàn khí nóng](https://aliexpress.com/item/32980690787.html), nhưng nếu bạn thực sự muốn, bạn có thể sử dụng mỏ hàn thông thường [như Alexey Tolstov đề xuất](https://www.youtube.com/watch?v=M69JiBtuqq8) hoặc [như thế này](https://www.youtube.com/watch?v=dspjVDv7hck). Sau khi tháo chip, các miếng đệm phải được làm sạch cặn hàn bằng một đoạn cáp đồng.
+Khi làm việc với súng hàn khí nóng, bạn nên tháo ống kính và cách ly các thành phần khác, đặc biệt là các đầu nối bằng nhựa bằng [băng keo kapton](https://aliexpress.com/item/1005003563721341.html) (trong trường hợp cực đoan, bằng giấy bạc thanh sô cô la). Không bao giờ [sử dụng hợp kim Rose](https://habr.com/ru/post/437778/). Nếu bạn không giỏi sử dụng ngón tay, cách dễ nhất là đến dịch vụ sửa chữa điện thoại di động gần nhất và cho thợ xem một phần của hướng dẫn này.
 
 <p align="center">
 <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-imx307-spinor.jpg?raw=true" alt="Logo"/>
 </p>
 
-* Fill [U-Boot](https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-gk7205v200-universal.bin) into a new 16 megabyte flash (at the beginning of the memory) and solder it to the board. Verify that U-Boot starts and you get to the prompt.
-* On the workstation, install a TFTP server, download and unzip to the [archive](https://github.com/OpenIPC/firmware/releases/download/latest/openipc.gk7205v200-nor-fpv.tgz) directory with the FPV firmware
-* Give commands in U-Boot (where `192.168.1.17` is your TFTP server and `192.168.1.33` is the temporarily assigned address to the camera):
+* Điền [U-Boot](https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-gk7205v200-universal.bin) vào flash 16 megabyte mới (ở đầu bộ nhớ) và hàn nó vào bo mạch. Xác minh rằng U-Boot khởi động và bạn đến được dấu nhắc.
+* Trên máy trạm, cài đặt máy chủ TFTP, tải xuống và giải nén vào [kho lưu trữ](https://github.com/OpenIPC/firmware/releases/download/latest/openipc.gk7205v200-nor-fpv.tgz) thư mục với firmware FPV
+* Cung cấp các lệnh trong U-Boot (trong đó `192.168.1.17` là máy chủ TFTP của bạn và `192.168.1.33` là địa chỉ được gán tạm thời cho camera):
 
 ```
   setenv ipaddr 192.168.1.33; setenv serverip 192.168.1.17; saveenv
@@ -146,18 +146,18 @@ When working with a hot air soldering gun it is desirable to remove the lens and
   run uknor16m; run urnor16m
 ```
 
-### Installation on the camera (general finalization)
+### Cài đặt trên camera (hoàn thiện chung)
 
-* After booting the system, verify that it has obtained an IP address via Ethernet (it can be accessed via SSH via root@<IP address of the camera> without a password or password: 12345). Using a modern operating system and the name `openipc.local` you can find the camera within the local network without knowing its IP address. 
-* Solder GND, DP and DM to the USB pads (USB 5V power supply should not be connected to the board due to the high power consumption of the adapter), and separately 5V and GND to power the WiFi adapter (possibly via an additional DC-DC converter depending on your circuit). The USB wire that comes to the board should be secured with a cable tie to avoid breaking off the pins on the contact pad:
+* Sau khi khởi động hệ thống, hãy xác minh rằng nó đã nhận được địa chỉ IP qua Ethernet (có thể truy cập qua SSH qua root@<địa chỉ IP của camera> mà không cần mật khẩu hoặc mật khẩu: 12345). Sử dụng hệ điều hành hiện đại và tên `openipc.local`, bạn có thể tìm thấy camera trong mạng cục bộ mà không cần biết địa chỉ IP của nó.
+* Hàn GND, DP và DM vào các miếng đệm USB (nguồn điện USB 5V không nên được kết nối với bo mạch do mức tiêu thụ điện năng cao của bộ chuyển đổi) và riêng biệt 5V và GND để cấp nguồn cho bộ chuyển đổi WiFi (có thể thông qua bộ chuyển đổi DC-DC bổ sung tùy thuộc vào mạch của bạn). Dây USB đi đến bo mạch phải được cố định bằng dây buộc cáp để tránh làm gãy các chân trên miếng đệm tiếp xúc:
 
 <p align="center">
 <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-pinout.jpg?raw=true" width="50%/">  
 <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-usb-colors.jpg?raw=true" width="50%/">
 </p>
 
-* Check that a new device has appeared after booting via `lsusb` command
-* Check that the `free -m` command gives __at least__ 34 megabytes of system RAM (the rest is video memory), otherwise you may get an OOM killer on the fly (fixable via `fw_printenv bootargs / fw_setenv` with osmem=40M correction):
+* Kiểm tra xem một thiết bị mới đã xuất hiện sau khi khởi động qua lệnh `lsusb`
+* Kiểm tra xem lệnh `free -m` cung cấp __ít nhất__ 34 megabyte RAM hệ thống (phần còn lại là bộ nhớ video), nếu không, bạn có thể nhận được trình diệt OOM khi đang bay (có thể khắc phục qua `fw_printenv bootargs / fw_setenv` với hiệu chỉnh osmem=40M):
 
 ```
 root@openipc-gk7205v200:~# free -m
@@ -166,19 +166,19 @@ Mem:             34          21           2           0           9           9
 Swap:             0           0           0
 ```
 
-### Check the ground station operation (on the desktop)
+### Kiểm tra hoạt động của trạm mặt đất (trên máy tính để bàn)
 
-* Connect the second adapter to the desktop and compile a driver that works in monitoring mode (see the relevant project documentation) and load it via `insmod` if necessary.
-* Activate the interface (in this example `wlan0` and specify [channel](https://en.wikipedia.org/wiki/List_of_WLAN_channels)) (in this example `14`):
+* Kết nối bộ chuyển đổi thứ hai với máy tính để bàn và biên dịch trình điều khiển hoạt động ở chế độ giám sát (xem tài liệu dự án có liên quan) và tải nó qua `insmod` nếu cần thiết.
+* Kích hoạt giao diện (trong ví dụ này là `wlan0` và chỉ định [kênh](https://en.wikipedia.org/wiki/List_of_WLAN_channels)) (trong ví dụ này là `14`):
 ```
 sudo ip link set wlan0 down
 sudo iw wlan0 set monitor control
 sudo iwconfig wlan0 channel 14
 sudo ip link set wlan0 up
 ```
-* Make sure that the same frequency is set on the camera and desktop WiFi adapters via `iwconfig` command, if necessary change the frequency by editing `/etc/wfb.conf` on the camera (`channel` parameter) or `sudo iwconfig <adapter name> channel <number>` on the desktop.
-* Compile from source [WFB-ng](https://github.com/svpcom/wifibroadcast), __must use brunch stable__, copy the `./etc/gs.key` from the IP camera to the desktop and run receive `sudo ./wfb_rx -p 0 -u 5600 -K gs.key -i 7669206 wlan0`.
-* Check that the console output
+* Đảm bảo rằng cùng một tần số được đặt trên các bộ điều hợp WiFi của camera và máy tính để bàn thông qua lệnh `iwconfig`, nếu cần, hãy thay đổi tần số bằng cách chỉnh sửa `/etc/wfb.conf` trên camera (tham số `channel`) hoặc `sudo iwconfig <tên bộ chuyển đổi> channel <số>` trên máy tính để bàn.
+* Biên dịch từ nguồn [WFB-ng](https://github.com/svpcom/wifibroadcast), __phải sử dụng nhánh stable__, sao chép `./etc/gs.key` từ camera IP sang máy tính để bàn và chạy nhận `sudo ./wfb_rx -p 0 -u 5600 -K gs.key -i 7669206 wlan0`.
+* Kiểm tra xem đầu ra của bảng điều khiển
 ```
 32168228	PKT	0:0:0:0:0:0
 32169229	PKT	0:0:0:0:0:0
@@ -187,7 +187,7 @@ sudo ip link set wlan0 up
 32172232	PKT	0:0:0:0:0:0
 32173233	PKT	0:0:0:0:0:0
 ```
-change to
+thay đổi thành
 ```
 32178236	ANT	1	282:-54:-52:-50
 32178236	ANT	0	282:-48:-46:-44
@@ -198,61 +198,61 @@ change to
 32180236	ANT	1	250:-54:-52:-50
 32180236	ANT	0	250:-48:-45:-44
 ```
-* Run Gstreamer `gst-launch-1.0 -vvvv udpsrc port=5600 ! application/x-rtp,encoding-name=H264,payload=96 ! rtph264depay ! h264parse ! queue ! avdec_h264 ! autovideosink sync=false -e` and check the image quality
+* Chạy Gstreamer `gst-launch-1.0 -vvvv udpsrc port=5600 ! application/x-rtp,encoding-name=H264,payload=96 ! rtph264depay ! h264parse ! queue ! avdec_h264 ! autovideosink sync=false -e` và kiểm tra chất lượng hình ảnh
 
-### Ground station development, telemetry
+### Phát triển trạm mặt đất, đo từ xa
 
-It is assumed that the Linux machine has wfb-ng installed according to the instructions from [quick-start-using-ubuntu](https://github.com/svpcom/wfb-ng#quick-start-using-ubuntu-ground-station). The following examples use Hubuntu 18.04 LTS and wfb-ng 22.09.
+Giả sử rằng máy Linux đã cài đặt wfb-ng theo hướng dẫn từ [bắt đầu nhanh bằng ubuntu](https://github.com/svpcom/wfb-ng#quick-start-using-ubuntu-ground-station). Các ví dụ sau sử dụng Hubuntu 18.04 LTS và wfb-ng 22.09.
 
-* Run wfb-ng, start the wfb-cli console:
+* Chạy wfb-ng, khởi động bảng điều khiển wfb-cli:
 ```
 sudo systemctl restart wifibroadcast@gs
 wfb-cli gs
 ```
-* Make sure that video packets are streaming. Here you can also see the RSSI values of the WiFi adapter antennas:
+* Đảm bảo rằng các gói video đang phát trực tuyến. Tại đây bạn cũng có thể thấy các giá trị RSSI của ăng-ten bộ chuyển đổi WiFi:
 
 ![wfb-cli-video](../images/wfb-cli_video_only.png)
 
-If the recv value remains zero and the d_err value increases, the camera and ground station keys probably do not match. Make sure that /etc/gs.key is copied to the ground station. If no packages are present - make sure that `channel=xx` in /etc/wfb.conf on the camera and `wifi_channel=xx` in /etc/wifibroadcast.cfg on the ground have the same values. For the 5.8 GHz range of the RTL8812AU adapter, channels 60 and above are recommended.
+Nếu giá trị recv vẫn bằng 0 và giá trị d_err tăng lên, thì các khóa camera và trạm mặt đất có thể không khớp. Đảm bảo rằng /etc/gs.key được sao chép vào trạm mặt đất. Nếu không có gói nào hiện diện - hãy đảm bảo rằng `channel=xx` trong /etc/wfb.conf trên camera và `wifi_channel=xx` trong /etc/wifibroadcast.cfg trên mặt đất có cùng giá trị. Đối với dải tần 5,8 GHz của bộ chuyển đổi RTL8812AU, nên sử dụng các kênh từ 60 trở lên.
 
-* Configure the flight controller under ArduPilot to output telemetry in mavlink1 format at speed 115200 on e.g. port Serial1. In case of one-way telemetry (downlink only), make sure that the FC outputs the required telemetry stream by default, without connection to the ground station. This is accomplished through setting the SR1_xxx parameters, see [mavlink SR_ parameters]. [mavlink SR_ parameters](https://ardupilot.org/dev/docs/mavlink-requesting-data.html).
-* Connect Serial1 of the FC to the UART of the camera, rx to tx, tx to rx. In case of modern FCs on STM32F4/7 the voltage levels are the same (3.3V), in case of 5V APM a level conversion will be required. The subtlety is the camera U-Boot boot loader stops on boot after receiving any bytes on the UART input. The PC should start outputting telemetry c delayed by a few seconds, through setting the TELEM_DELAY parameter. On the table it is easier to provide a break in the line from the FC to the camera.
-* On the camera in /etc/datalink.conf file set the `telemetry=true` parameter, in /etc/telemetry.conf file set the `one_way=true` parameter for one-way or `one_way=false` for two-line telemetry respectively. The simplest way to edit files on the camera is Shell Link in Midnight Commander:
+* Cấu hình bộ điều khiển bay trong ArduPilot để xuất dữ liệu đo từ xa ở định dạng mavlink1 ở tốc độ 115200 trên ví dụ: cổng Serial1. Trong trường hợp đo từ xa một chiều (chỉ liên kết xuống), hãy đảm bảo rằng FC xuất ra luồng dữ liệu đo từ xa cần thiết theo mặc định, mà không cần kết nối với trạm mặt đất. Điều này được thực hiện thông qua việc đặt các tham số SR1_xxx, hãy xem [các tham số mavlink SR_]. [các tham số mavlink SR_](https://ardupilot.org/dev/docs/mavlink-requesting-data.html).
+* Kết nối Serial1 của FC với UART của camera, rx với tx, tx với rx. Trong trường hợp FC hiện đại trên STM32F4/7, mức điện áp giống nhau (3,3V), trong trường hợp APM 5V, sẽ cần chuyển đổi mức. Điểm tinh tế là trình nạp khởi động U-Boot của camera sẽ dừng khi khởi động sau khi nhận được bất kỳ byte nào trên đầu vào UART. PC nên bắt đầu xuất ra dữ liệu đo từ xa c bị trì hoãn vài giây, thông qua việc đặt tham số TELEM_DELAY. Trên bảng, dễ dàng hơn để cung cấp một khoảng trống trong dòng từ FC đến camera.
+* Trên camera trong tệp /etc/datalink.conf đặt tham số `telemetry=true`, trong tệp /etc/telemetry.conf đặt tham số `one_way=true` cho đo từ xa một chiều hoặc `one_way=false` cho đo từ xa hai dòng tương ứng. Cách đơn giản nhất để chỉnh sửa tệp trên camera là Shell Link trong Midnight Commander:
 * 
 ![mc_shell_link](../images/MC_shell_link.png)
-* Restart the camera and the wfb-ng service. The second data stream - telemetry - should appear in wfb-cli:
+* Khởi động lại camera và dịch vụ wfb-ng. Luồng dữ liệu thứ hai - đo từ xa - sẽ xuất hiện trong wfb-cli:
 
 ![wfb-cli-video-telem](../images/wfb-cli_video_telem.png)
 
-* Install QGroundControl. Version 4.0.11 is used here because the latest versions do not work properly with video in 18.04 LTS. No new Comm Links need to be created. QGC should see the PC connection and display the telemetry input stream:
+* Cài đặt QGroundControl. Phiên bản 4.0.11 được sử dụng ở đây vì các phiên bản mới nhất không hoạt động bình thường với video trong 18.04 LTS. Không cần tạo Comm Links mới. QGC sẽ thấy kết nối PC và hiển thị luồng đầu vào dữ liệu đo từ xa:
 
 
 ![QGC-map](../images/QGC_telem.png)
 
 ![QGC-mavlink](../images/QGC_mavlink.png)
 
-In the case of two-way telemetry, the QGC should download parameters, allow them to be changed, allow flight modes to be switched, and missions to be loaded and unloaded:
+Trong trường hợp đo từ xa hai chiều, QGC sẽ tải xuống các tham số, cho phép thay đổi chúng, cho phép chuyển đổi chế độ bay và tải và dỡ tải nhiệm vụ:
 
 ![QGC-params](../images/QGC_params.png)
 
 ![QGC-mission](../images/QGC_mission.png)
 
-You can see that QGS is also already displaying video. The delay in 4.0.11 is quite significant due to purely software stream processing, it is wise to try modern versions under Ubuntu 20.04 and newer.
+Bạn có thể thấy rằng QGS cũng đã hiển thị video. Độ trễ trong 4.0.11 là khá đáng kể do xử lý luồng hoàn toàn bằng phần mềm, bạn nên thử các phiên bản hiện đại trong Ubuntu 20.04 trở lên.
 
-### Troubleshooting
+### Xử lý sự cố
 
-* Via the command `sudo tcpdump -i wlan0` on the desktop without running WFG-ng, you can verify that the transmitter is actually sending packets over the air:
+* Thông qua lệnh `sudo tcpdump -i wlan0` trên máy tính để bàn mà không cần chạy WFG-ng, bạn có thể xác minh rằng bộ phát thực sự đang gửi các gói qua mạng không dây:
 
 ![Tcpdump](../images/fpv-tcpdump.jpg)
 
-### Pour the image onto an empty flash using burn (if you don't have a programmer)
+### Đổ hình ảnh vào flash trống bằng cách sử dụng burn (nếu bạn không có bộ lập trình)
 
-Run [burn](https://github.com/OpenIPC/burn) with the board turned off:
+Chạy [burn](https://github.com/OpenIPC/burn) với bảng đã tắt:
 ```
 ./burn --chip gk7205v200 --file=u-boot-gk7205v200-universal.bin -d ; screen -L /dev/ttyUSB0 115200
 ```
 
-turn on the board power and wait for U-Boot to be filled and the command line to appear. Then we execute the following commands, where `192.168.0.8` is the TFTP server address and `192.168.0.200` is the temporary IP address of the camera.
+bật nguồn bảng và đợi U-Boot được lấp đầy và dòng lệnh xuất hiện. Sau đó, chúng ta thực thi các lệnh sau, trong đó `192.168.0.8` là địa chỉ máy chủ TFTP và `192.168.0.200` là địa chỉ IP tạm thời của camera.
 
 ```
 setenv ipaddr 192.168.0.200
@@ -274,118 +274,14 @@ saveenv
 reset
 ```
 
-### Further refinements
+### Tinh chỉnh thêm
 
-#### Development of the adapter board
+#### Phát triển bảng bộ chuyển đổi
 
-Taking into account that according to the text above we finalized the board from an ordinary budget video surveillance camera and the installation of USB connector was made without factory connectors, it is suggested to make an additional special board (similar to [board with built-in WiFi adapter](https://aliexpress.com/item/1005002369013873.html), which will have connectors for USB (possibly with an additional hub) and SD card. This would allow video to be broadcast with minimal latency in 720p, while simultaneously recording the original in 1080p for later publication on YouTube). If you have the ability to design such a board and share the circuit with the community, it would be greatly appreciated.
+Có tính đến việc theo văn bản ở trên, chúng tôi đã hoàn thiện bảng từ một camera giám sát video giá rẻ thông thường và việc lắp đặt đầu nối USB được thực hiện mà không có đầu nối của nhà máy, người ta đề xuất tạo một bảng đặc biệt bổ sung (tương tự như [bảng có bộ chuyển đổi WiFi tích hợp sẵn](https://aliexpress.com/item/1005002369013873.html), sẽ có đầu nối cho USB (có thể có trung tâm bổ sung) và thẻ SD. Điều này sẽ cho phép phát sóng video với độ trễ tối thiểu ở 720p, đồng thời ghi lại bản gốc ở 1080p để xuất bản sau trên YouTube). Nếu bạn có khả năng thiết kế một bảng như vậy và chia sẻ mạch với cộng đồng, chúng tôi sẽ rất biết ơn.
 
-### FAQ
+### Câu hỏi thường gặp
 
-#### How much does the camera consume during its operation?
+#### Camera tiêu thụ bao nhiêu trong quá trình hoạt động?
 
-Consumption depends on whether the sensor is turned on (which is itself one of the big consumers) and according to our measurements is 1.7W in active mode and y 1.1W when the sensor is turned off (but the main system is running). From this we can conclude that if necessary, we can programmatically turn off/on the streamer to further reduce the system consumption at times when it is necessary.
-
-Additionally worth considering:
-* The ability to programmatically shut down the Ethernet adapter N minutes after system startup (composing the operation immediately after startup to allow for configuration changes and debugging)
-* Put all unused GPIOs into input mode
-* [Check the datasheet](https://drive.google.com/file/d/1zGBJ_SIazFqJ8d8bguURVVwIvF4ybFs1/view) and disable all unused functional blocks of the chip using registers.
-
-#### Is WDR supported?
-
-For WDR to work properly on IP cameras, both the main chip and the sensor must support the same WDR standard (there are several types). In this case, usually the sensor starts working at double frequency (for example, 60FPS instead of 30FPS), making one frame with a long shutter speed, the second - with a short shutter speed. Then ISP (Image Signal Processor) hardware produces a gluing of two frames of one, taking dark areas from the frame with a long shutter speed and light - with a short shutter speed, forming an image with an extended color range.
-Unfortunately, to get a WDR image the whole system must work at least twice as fast (or to put it another way have more transistors, doing twice as much work at a moment in time), so the Goke V200 processor does not have this mode. If WDR support is fundamental to you, consider the next in the line of V300 processors, which is also supported by the project.
-
-#### Can I use an LTE adapter instead of WiFi?
-
-Yes, but firmware modification will be required. We recommend that you ask questions about adapting specific hardware [in the official group](https://t.me/openipc_modding).
-
-#### Can I connect SD card for video recording?
-
-Yes, you can. Photo from a subscriber:
-
-<p align="center">
-<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-sd-card.jpg?raw=true" width="50%"/>
-</p>
-
-Pinout table for the auxiliary connector:
-
-<p align="center">
-<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-usb-sd.jpg?raw=true" width="50%"/>
-</p>
-
-#### What additional peripherals can be connected?
-
-Based on the pinout of the unsoldered FC connector shown above, you can see that it is used for additional expansion cards with WiFi (via USB) and SD card. Unused pins can be reassigned as follows:
-
-|Function|Additional|
-|---|---|
-|SD_CLK|GPIO32|
-|SD_CMD|GPIO33|
-|SD_DATA0|GPIO34|
-|SD_DATA1|GPIO35|
-|SD_DATA2|GPIO36|
-|SD_DATA3|GPIO37|
-|ALARM2_GPIO82||
-|KEY_SET||
-|BAT||
-|ALARM_OUT||
-
-D/N (day/night) can only be used as an input GPIO15 (due to the transistor installed). To the left of it on the same connector is GND and GPIO16 (which can be used as a GPIO in bi-directional mode or a PWM port).
-
-There are two GPIOs on the power-network connector (ETH_STA - GPIO14, ETH_ACT - GPIO12), which are typically used to indicate active Ethernet physical connectivity and data transfer activity. They can also be used for normal two-way GPIOs, with GPIO12 being able to be set to UART2_RXD mode and realize an additional one-way UART port (for data reception only). This board has 330ohm resistors on these pins, but this should not affect UART operation.
-
-Taking into account that the SoC case is made in QFN88 format, it is possible to solder a thin wire to almost any leg of the chip and use additional ports. The chip pinout and a photo of the real board without the chip are presented below:
-
-<p align="center">
-<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-v200-pinout.png?raw=true" width="50%"/>
-</p>
-
-<p align="center">
-<img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-pcb-part.jpg?raw=true" width="50%"/>
-</p>
-
-Note that this solution is far from industrial (ideally you should make your own board) and if it cannot be avoided, sawing off the chip body for a more secure contact is recommended.
-
-#### Can I use another IP camera?
-
-If you have skills of an advanced Linux user, you can join our project and adapt FPV firmware to any processor [supported by OpenIPC](https://openipc.org/supported-hardware). In most cases, no programming skills are required (or you will get them naturally as you get to know and learn the system).
-
-#### How can I reduce video latency even more?
-
-To get the lowest possible latency, our firmware uses the low latency mode available in HiSilicon/Goke processors. Specific values depend on the SoC model, sensor, its resolution, current frame exposure and even chip heating during operation. The main contributor to the delay is the FPS of the system (60FPS without any tuning will be better than 30FPS with the maximum settings), so if you need low latency pay attention to more expensive hardware. To get even lower latency it is possible to disable intermediate blocks at the expense of deteriorating picture quality or switch to more modern chipsets.
-
-Our team has extensive experience in low latency media transmission (some projects have achieved latency figures of 45ms). If you are interested in commercial services (consulting, hardware and software development, reverse engineering) [contact us](mailto:d.ilyin@openipc.org).
-
-### Quick insertion of some links
-
-**Please use the translator, there is a lot of interesting stuff on FPV here:**
-
-- https://github.com/openipc/sandbox-fpv
-- https://github.com/OpenIPC/silicon_research
-- [OpenIPC for building FPV systems, chat in telegram messenger](https://t.me/+BMyMoolVOpkzNWUy)
-- [WFB-ng Data Transport Standard (Draft)](https://github.com/svpcom/wfb-ng/blob/master/doc/wfb-ng-std-draft.md)
-
-**And our general resources:**
-
-- https://OpenIPC.org
-- https://github.com/OpenIPC
-
-### Usefull links
-
-#### From Krzysztof Kuczek
-
-- [Building OpenIPC FVP Gears](https://qczek.beyondrc.com/building-openipc-fvp-gears/)
-- [Goke Gk7205V200 camera FPV case by qczek](https://www.printables.com/model/579791-goke-gk7205v200-camera-fpv-case)
-
-  
-#### Example board of SigmaStar equipment from TaoBao
-
-- [Anjoy MC800S, SSC338Q+IM415, ~24$](https://demo.otcommerce.com/item?id=655383131557#0)
-- [Anjoy MCL12, SSC30KQ+IMX335, ~11$](https://demo.otcommerce.com/item?id=600618143992)
-- [Anjoy MC-A35, SSC337+?, ~4$](https://demo.otcommerce.com/item?id=708324402303#0)
-
-
-[youtube_burn]: https://youtube.com/playlist?list=PLh0sgk8j8CfsMPq9OraSt5dobTIe8NXmw
-[github_burn]: https://github.com/OpenIPC/burn
-[supported_hardware]: https://openipc.org/supported-hardware/featured
+Mức tiêu thụ phụ thuộc vào việc cảm biến có được bật hay không (bản thân nó là một trong những người tiêu dùng lớn) và theo các phép đo của chúng tôi là 1,7W ở chế độ hoạt động và 1,1W khi cảm biến bị tắt (nhưng hệ thống chính đang chạy). Từ đó chúng ta có thể kết luận rằng nếu cần thiết, chúng ta có thể tắt/bật trình phát trực tuyến theo chương trình để

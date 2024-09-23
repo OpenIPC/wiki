@@ -1,37 +1,39 @@
 # OpenIPC Wiki
-[Table of contents](../README.md)
+[Mục lục](../README.md)
 
-Development of 38x38 expansion board for FPV systems
+Phát triển bảng mở rộng 38x38 cho hệ thống FPV
 --------------------------------
 
-Colleagues !
+Các đồng nghiệp!
 
-Who flies and who held in his hands boards of standard 38x38 video cameras, send your wishes, based on real experience, on the expansion module for FPV. 
-Examples of homemade boards, that- to realize what we are talking about, you can see at the very bottom of the page (for other areas of OpenIPC use).
+Ai bay và ai đã từng cầm trên tay bảng mạch của camera video tiêu chuẩn 38x38, hãy gửi mong muốn của bạn, dựa trên kinh nghiệm thực tế, về mô-đun mở rộng cho FPV.
+Ví dụ về các bảng mạch tự chế, để nhận ra những gì chúng ta đang nói đến, bạn có thể xem ở cuối trang (dành cho các lĩnh vực sử dụng OpenIPC khác).
 
 
-### Formalization of requirements
+### Hình thức hóa các yêu cầu
 
-- dimensions and materials
-    - standard 38x38 expansion board used in video surveillance ("sandwich")
-    - double-sided glass-textolite, thickness (?)
-- interfaces
-    - pitch of all connectors 1.25, board mounting through metallized hole (NOT SMD!)
-    - connector type, jst-gh 1.25 or df13 1.25 or something else, optionally installed
-    - connector pins are duplicated with metallized holes for soldering wires
-- components
-    - external power supply for wifi whistle ~2-3A
-    - connectors (heels) for soldering under UART (flight controller)
-    - heels (connectors) for whistle connection
-    - additional heels (5-12) for suspension power supply
-    - indication of voltage presence by LEDs (?)
+- kích thước và vật liệu
+    - bảng mở rộng tiêu chuẩn 38x38 được sử dụng trong giám sát video ("sandwich")
+    - thủy tinh hai mặt, độ dày (?)
+- giao diện
+    - khoảng cách của tất cả các đầu nối 1,25, gắn bảng thông qua lỗ kim loại (KHÔNG PHẢI SMD!)
+    - loại đầu nối, jst-gh 1.25 hoặc df13 1.25 hoặc thứ gì đó khác, được cài đặt tùy chọn
+    - chân đầu nối được nhân đôi với các lỗ kim loại để hàn dây
+- linh kiện
+    - nguồn điện bên ngoài cho còi wifi ~2-3A
+    - đầu nối (gót) để hàn dưới UART (bộ điều khiển bay)
+    - gót (đầu nối) để kết nối còi
+    - gót bổ sung (5-12) cho nguồn cung cấp hệ thống treo
+    - chỉ báo sự hiện diện của điện áp bằng đèn LED (?)
 
-### A selection of photos
+### Tuyển chọn ảnh
 
 <p align="center">
 <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-extension-old.jpg?raw=true" alt="Logo"/>
 </p>
 
-### References on the topic
+### Tài liệu tham khảo về chủ đề
 
 * https://oshwhub.com/libc0607/xm-ext-board-fpv
+
+

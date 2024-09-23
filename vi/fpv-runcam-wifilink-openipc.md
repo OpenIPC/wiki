@@ -1,16 +1,16 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-RunCam WiFiLink based on OpenIPC
+RunCam WiFiLink dựa trên OpenIPC
 --------------------------------
 
-### Q&A with RunCam Dev
+### Hỏi & Đáp với RunCam Dev
 
-- What changes have you made compared to the original OpenIPC firmware ?
-    - We optimized the IQ sensor and added the /etc/user_config.sh script to implement the WiFi card configuration function.
+- Bạn đã thực hiện những thay đổi nào so với firmware OpenIPC gốc?
+    - Chúng tôi đã tối ưu hóa cảm biến IQ và thêm tập lệnh /etc/user_config.sh để triển khai chức năng cấu hình thẻ WiFi.
 
 
-### Links
+### Liên kết
 
 - https://shop.runcam.com/runcam-wifilink-based-on-openipc/
 - https://store-m8o52p.mybigcommerce.com/product_images/img_runcma_wifilink/runcma-wifilink-manual-en.pdf
@@ -19,3 +19,4 @@ RunCam WiFiLink based on OpenIPC
 - https://runcam.world.taobao.com
 - https://item.taobao.com/item.htm?id=823103143737&skuId=5704904774133
 - https://fr.aliexpress.com/item/1005007532941097.html?gatewayAdapt=glo2fra
+

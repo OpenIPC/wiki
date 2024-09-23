@@ -1,8 +1,8 @@
-# OpenIPC Wiki
+## Wiki OpenIPC
 
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-Hardware: IPC Board Manufacturers
+Phần cứng: Các nhà sản xuất bảng mạch IPC
 ---------------------------------
 
 * [ACTi](https://www.acti.com/)
@@ -23,7 +23,7 @@ Hardware: IPC Board Manufacturers
 * [Hichip](http://hichip.net/en/)
 * [TT Int'l, HTW Tech Limited](http://www.cctv-camera.cc/)
 * [Huatu](http://huatudigital.com/)
-* [Huishi](https://web.archive.org/web/20220209053811/http://hscctvcn.com/ProductInfoCategory?categoryId=400431,400432,400433,400434,400435,400436&PageInfoId=0) and [Huishi](https://www.vatilon.cn/)
+* [Huishi](https://web.archive.org/web/20220209053811/http://hscctvcn.com/ProductInfoCategory?categoryId=400431,400432,400433,400434,400435,400436&PageInfoId=0) và [Huishi](https://www.vatilon.cn/)
 * [Hupuu](https://hupuu.com/category/camera-board)
 * [IPCAM](http://www.ipcam.xin/)
 * [Jovision](http://www.jovision.com/)
@@ -55,4 +55,13 @@ Hardware: IPC Board Manufacturers
 * [Zenotech](http://www.videopark.com.cn)
 * [ZOSI](https://www.zositech.com/)
 
-> _th? -- possibly a trading house_
+> _th? -- có thể là một công ty thương mại_
+
+
+**Giải thích thuật ngữ:**
+
+* **IPC (Internet Protocol Camera):** Camera IP, là một loại camera kỹ thuật số có thể gửi và nhận dữ liệu qua mạng IP.
+* **Board:** Bảng mạch.
+* **Trading house:** Công ty thương mại.
+
+

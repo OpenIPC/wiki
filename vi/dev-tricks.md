@@ -1,21 +1,20 @@
-# OpenIPC Wiki
-[Table of Content](../README.md)
+## OpenIPC Wiki
+[Mục lục](../README.md)
 
-Interesting tricks
+Các thủ thuật thú vị
 ------------------
 
-### Sharing output of a command via web
+### Chia sẻ kết quả của lệnh qua web
 
 ```bash
-<command> | nc seashells.io 1337
+<lệnh> | nc seashells.io 1337
 ```
 
-### Adapting syslogd to work with time zones other than GMT
+### Điều chỉnh syslogd để hoạt động với các múi giờ khác GMT
 
-Some `syslog()` implementations like musl's always send timestamps in UTC.
-The following code adds a new option to `syslogd`, `-Z`, to assume incoming
-timestamps are always UTC, and to adjust them to the local timezone
-(of the syslogd) before logging.
+Một số triển khai `syslog()` như musl's luôn gửi dấu thời gian theo UTC.
+Mã sau đây thêm một tùy chọn mới vào `syslogd`, `-Z`, để giả định dấu thời gian đến luôn là UTC và điều chỉnh chúng theo múi giờ địa phương
+(của syslogd) trước khi ghi nhật ký.
 
 ```diff
 Signed-off-by: Shiz <hi at shiz.me>
@@ -35,7 +34,7 @@ index d64ff27..159336e 100644
  //usage:	IF_FEATURE_REMOTE_LOG(
  //usage:     "\n	-R HOST[:PORT]	Log to HOST:PORT (default PORT:514)"
  //usage:     "\n	-L		Log locally and via network (default is network only if -R)"
-@@ -233,6 +234,8 @@ typedef struct logRule_t {
+@@ -234,6 +235,8 @@ typedef struct logRule_t {
  	/*int markInterval;*/                   \
  	/* level of messages to be logged */    \
  	int logLevel;                           \
@@ -110,4 +109,4 @@ index d64ff27..159336e 100644
 -- 
 ```
 
-_from [sysklogd: add -Z option to adjust message timezones](http://lists.busybox.net/pipermail/busybox/2017-May/085437.html)_
+_từ [sysklogd: thêm tùy chọn -Z để điều chỉnh múi giờ của thư](http://lists.busybox.net/pipermail/busybox/2017-May/085437.html)_

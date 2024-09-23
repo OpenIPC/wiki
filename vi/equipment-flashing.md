@@ -1,46 +1,45 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-Equipment for flashing
+Thiết bị để flash
 ----------------------
 
-### A rework station with accessories.
+### Trạm làm việc lại với các phụ kiện.
 
-While some hardened technicians would insist on getting things done
-with a grandfather's kilowatt soldering iron, we suggest you to buy
-a modern [soldering station with a hot air](https://www.aliexpress.com/premium/soldering-station-hot-air.html)
-and temperature control. You don't need to be fancy, an entry level
-soldering station like YIHUA 882D, or JCD 8898, or YOUYUE 8586 would
-do, and it won't break the bank with its price tag of $50-70, more 
-or less.
+Mặc dù một số kỹ thuật viên dày dạn kinh nghiệm sẽ khăng khăng đòi hoàn thành công việc
+với một mỏ hàn kilowatt của ông nội, chúng tôi khuyên bạn nên mua
+một [trạm hàn hiện đại với luồng khí nóng](https://www.aliexpress.com/premium/soldering-station-hot-air.html)
+và kiểm soát nhiệt độ. Bạn không cần phải cầu kỳ, một trạm hàn cấp nhập cảnh
+như YIHUA 882D, hoặc JCD 8898, hoặc YOUYUE 8586 cũng
+làm được, và nó sẽ không quá tốn kém với mức giá khoảng 50-70 đô la, nhiều hơn
+hoặc ít hơn.
 
 ![](../images/equipment-jcd8898.webp)
 ![](../images/equipment-yihua882d.webp)
 ![](../images/equipment-youyue8586.webp)
 
-Throw in a silicone mat, a tube of no-clean flux, a can of solder paste,
-de-soldering copper wick, ceramic tweezers, nonwoven swabs and a bottle
-of isopropyl alcohol. Many of these things can be already included as
-perks with the soldering station.
+Thêm vào đó một tấm silicon, một tuýp thông không cần làm sạch, một hộp thiếc hàn,
+bấc đồng khử hàn, nhíp gốm, tăm bông không dệt và một chai
+cồn isopropyl. Nhiều thứ trong số này đã có thể được bao gồm
+như là đặc quyền với trạm hàn.
 
-### A programmer for flashing memory chips.
+### Bộ lập trình để flash chip nhớ.
 
-Again, some would say that you need a multi-thousand dollar branded
-programmer but in real life the [cheapest CH341A USB programmer](https://www.aliexpress.com/w/wholesale-ch341a-programmer.html)
-works like a charm, especially after you [fix the voltage bug][1].
+Một lần nữa, một số người sẽ nói rằng bạn cần một bộ lập trình có thương hiệu trị giá hàng nghìn đô la nhưng trong đời thực, [bộ lập trình USB CH341A rẻ nhất](https://www.aliexpress.com/w/wholesale-ch341a-programmer.html)
+hoạt động rất tốt, đặc biệt là sau khi bạn [khắc phục lỗi điện áp][1].
 
 ![](../images/equipment-ch341a.webp)
 
-Or you can buy an improved model, version 1.7 and higher, where that
-problem has already been fixed in design.
+Hoặc bạn có thể mua một mô hình cải tiến, phiên bản 1.7 trở lên, trong đó
+vấn đề đó đã được khắc phục trong thiết kế.
 
 ![](../images/equipment-ch341a-v17.webp)
 
-Add a [SOP8 208mil to DIP8 socket adapter](https://www.aliexpress.com/w/wholesale-SOP8-208mil-to-DIP8-socket-adapter.html).
+Thêm [bộ chuyển đổi ổ cắm SOP8 208mil sang DIP8](https://www.aliexpress.com/w/wholesale-SOP8-208mil-to-DIP8-socket-adapter.html).
 
 ![](../images/equipment-sop8-200mil.webp)
 
-Also, it's a good idea to have a bunch of spare [flash memory chips](https://www.aliexpress.com/w/wholesale-25Q128-SOP8.html).
+Ngoài ra, thật là một ý tưởng hay khi có một loạt [chip nhớ flash dự phòng](https://www.aliexpress.com/w/wholesale-25Q128-SOP8.html).
 
 ![](../images/hardware-w25q64fwsig.webp)
 ![](../images/hardware-w25q128jvsq.webp)

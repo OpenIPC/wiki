@@ -1,29 +1,29 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-Frequently Asked Questions for FPV
+Câu hỏi thường gặp cho FPV
 ----------------------------------
 
 <p align="center">
   <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-logo.jpg?raw=true" alt="Logo"/>
 </p>
 
-### Why doesn't anyone write in this section ?
+### Tại sao không ai viết trong phần này?
 
-This section has just been created and will be filled with information.
+Phần này vừa được tạo và sẽ được điền thông tin.
 
-### Who will be the first publicist of information ?
+### Ai sẽ là người đầu tiên công bố thông tin?
 
-Of course it will be our friend Mario from Foggy Albion.
+Tất nhiên đó sẽ là người bạn Mario của chúng ta đến từ Foggy Albion.
 
-### What’s the lowest possible latency ?
+### Độ trễ thấp nhất có thể là bao nhiêu?
 
-Reply...
+Trả lời...
 
-### What’s the maximum achievable range ?
+### Phạm vi tối đa có thể đạt được là bao nhiêu?
 
-Reply...
+Trả lời...
 
-### How much does it weigh ?
+### Nó nặng bao nhiêu?
 
-Reply...
+Trả lời...

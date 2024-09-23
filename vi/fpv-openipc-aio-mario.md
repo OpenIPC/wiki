@@ -1,5 +1,5 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
 OpenIPC AIO "Mario"
 -------------------
@@ -8,136 +8,138 @@ https://store.openipc.org/OpenIPC-AIO-Mario-v1-0-p633320808
 
 ![image](https://github.com/user-attachments/assets/ad675599-61ce-4cec-a9bf-5933d907c53a)
 
-Remove the lens cover film befor use
+Gỡ bỏ lớp phim bảo vệ ống kính trước khi sử dụng
 
 ![image](https://github.com/user-attachments/assets/9ead08a6-f4eb-45a0-bc63-19d3abd3ec1e)
 
 
 
-The Mario camera case with 4x M1.2 screws.
+Vỏ camera Mario với 4 vít M1.2.
 
-Side mount holes are M2 x2 screw thread.
+Các lỗ gắn bên là ren vít M2 x2.
 
-Install atennas for AIO.
+Cài đặt ăng-ten cho AIO.
 
 ![image](https://github.com/user-attachments/assets/e10e6671-553f-4840-aacd-16816be0813b)
 
 
 
-### LED function
+### Chức năng LED
 
-Red glimmering	Power on with Battery
+Đỏ nhấp nháy	Bật nguồn với Pin
 
-Red 	Wired linked
+Đỏ 	Liên kết có dây
 
-Blue flash	RF transmitter
+Xanh lam nhấp nháy	Máy phát RF
 
-Green	TBD
+Xanh lá	TBD
 
-Board Size 30mmx32mm with 4*M2 mount holes.
+Kích thước bo mạch 30mmx32mm với 4 lỗ gắn *M2.
 
-Heat Sink with 20mmx20mm mount holes.
+Tản nhiệt với lỗ gắn 20mmx20mm.
 
 ![image](https://github.com/user-attachments/assets/1c7e34c1-76a9-45ee-9caf-ffd33261e154)
 
 
 
 
-### Power Section
+### Phần nguồn
 
-Power input:
+Nguồn vào:
 
 2S-6S
 
-The on board dualway BEC Capacity:
+Dung lượng BEC hai chiều trên bo mạch:
 
-RF BEC on board is up to 3A 5V output
+BEC RF trên bo mạch có đầu ra lên đến 3A 5V
 
-MSIC BEC on board is up to 2A 5V output
+BEC MSIC trên bo mạch có đầu ra lên đến 2A 5V
 
-enter uboot use  uart device connect to top of AIO board(R0,T0)pad.
-
-
-### Connect usb debug port
-
-Power on AIO with Battery connector(GH1.25* 6 pin), after the blue LED flashing, plug in usb cable and connect to PC
-
-in windows:
-
-go to control panel- internet -network:
-
-find a usb2.0 to fast Ethernet Adapter
-
-set this card ipv4 address to 192.168.1.11 mask:255.255.255.0
-
-apply
-
-then open ssh to connect AIO address:192.168.1.10
-
-user:root password:12345
+nhập uboot sử dụng thiết bị uart kết nối với đầu bảng AIO (R0,T0) pad.
 
 
-### Upgrade furmware
+### Kết nối cổng gỡ lỗi usb
 
-Update firmware possible via SD card or just use win scp drug the rootfs and kernel files to /tmp
+Bật nguồn AIO bằng đầu nối Pin (GH1.25* 6 chân), sau khi đèn LED xanh lam nhấp nháy, cắm cáp usb và kết nối với PC
+
+trong Windows:
+
+đi tới bảng điều khiển- internet -mạng:
+
+tìm Bộ chuyển đổi USB 2.0 sang Ethernet nhanh
+
+đặt địa chỉ ipv4 của thẻ này thành 192.168.1.11 mặt nạ: 255.255.255.0
+
+áp dụng
+
+sau đó mở ssh để kết nối địa chỉ AIO: 192.168.1.10
+
+người dùng: root mật khẩu: 12345
+
+
+### Nâng cấp firmware
+
+Có thể cập nhật firmware qua thẻ SD hoặc chỉ cần sử dụng win scp kéo các tệp rootfs và kernel vào /tmp
 
 ```
 sysupgrade -n -z --kernel=/tmp/uImage.ssc338q --rootfs=/tmp/rootfs.squashfs.ssc338q
 ```
 
-You can [download](https://github.com/OpenIPC/wiki/blob/master/en/fpv-openipc-aio-ultrasight.md#software) firmware via the link that is used for online updates.
+Bạn có thể [tải xuống](https://github.com/OpenIPC/wiki/blob/master/en/fpv-openipc-aio-ultrasight.md#software) firmware qua liên kết được sử dụng cho các bản cập nhật trực tuyến.
 
 
-Or just use the configurator - https://github.com/OpenIPC/configurator
+Hoặc chỉ cần sử dụng trình cấu hình - https://github.com/OpenIPC/configurator
 
 
-### RF section
+### Phần RF
 
-RF antenna characteristics
+Đặc điểm ăng-ten RF
 
 ![image](https://github.com/user-attachments/assets/d54050b4-2769-4942-95d7-8aad3b5e2e21)
 
 ![image](https://github.com/user-attachments/assets/0a709f70-ac8b-4880-93f5-49e1d958eb1b)
 
 
-Default Antenna is ANT1 for 1T1R, ANT0+ANT1 is 2T2R
+Ăng-ten mặc định là ANT1 cho 1T1R, ANT0+ANT1 là 2T2R
 
-Reconmand RF setting 
+Cài đặt RF được khuyến nghị
   
-  RF Power max 18dbm for onbard PA. 0~-25dbm setting
+  Công suất RF tối đa 18dbm cho PA trên bo mạch. Cài đặt 0~-25dbm
   
-  MCS index 1,3(0-7 is 1T1R, 8+ is 2T2R)
+  Chỉ số MCS 1,3 (0-7 là 1T1R, 8+ là 2T2R)
   
   stbc=1,ldpc=1
   
-  Video biterate:4096 /8192/12688(mcs 3+)
+  Tốc độ bit video: 4096 /8192/12688 (mcs 3+)
 
-  Keep RF poweroff or power=1 when on bench test(when only usb connect)
-
-
-### SD solt for Air camera record
-
-on bench test or debug is disable the record function defaultly
-
-To enable the recording function set (record value)true in majestic.yaml
+  Giữ RF tắt nguồn hoặc power=1 khi kiểm tra trên bàn (khi chỉ kết nối usb)
 
 
-On board heat sink and cooling fan:
+### Khe cắm SD để ghi camera trên không
 
-cooling fan out put power up to 500mA max
+trên thử nghiệm băng ghế dự bị hoặc gỡ lỗi là vô hiệu hóa chức năng ghi theo mặc định
 
-all heat sink mount holes are M2 screws thread.
+Để bật chức năng ghi, hãy đặt (giá trị ghi) thành true trong majestic.yaml
 
 
-### Extend connector**
+Tản nhiệt và quạt làm mát trên bo mạch:
+
+công suất đầu ra của quạt làm mát lên đến 500mA tối đa
+
+tất cả các lỗ gắn tản nhiệt đều là ren vít M2.
+
+
+### Đầu nối mở rộng**
 
 ![image](https://github.com/user-attachments/assets/af8124e3-539f-42c6-a757-a560eb93e3fe)
 
 
-### Todo
+### Cần làm
 
-USB only for debug mode
+USB chỉ dành cho chế độ gỡ lỗi
 
-Power limited 5W input.
+Nguồn vào giới hạn 5W.
+
+
 
 

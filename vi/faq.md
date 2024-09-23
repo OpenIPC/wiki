@@ -1,143 +1,142 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-Frequently Asked Questions
+Câu hỏi thường gặp
 ---------------------------
 
-### I have a camera which is not on the list of supported devices. Will you make it work for me?
+### Tôi có một camera không có trong danh sách thiết bị được hỗ trợ. Bạn có thể làm cho nó hoạt động cho tôi không?
 
-The short answer is no.
+Câu trả lời ngắn gọn là không.
 
-If you have the skills and desire to make OpenIPC to work on the new hardware, we can share the knowledge we have.
-If not, get yourself a supported camera.
+Nếu bạn có kỹ năng và mong muốn làm cho OpenIPC hoạt động trên phần cứng mới, chúng tôi có thể chia sẻ kiến thức mà chúng tôi có.
+Nếu không, hãy tự mua một chiếc camera được hỗ trợ.
 
-### How can I tell what hardware is inside the camera before I buy it?
+### Làm cách nào để biết phần cứng nào nằm bên trong camera trước khi mua?
 
-Most of the time you can't. Especially if it is a cheap Chinese clone of a clone of a rebranded camera. 
-For reputable name brands that go through certification of the hardware, there is a chance to look at the 
-inside the camera in the certification documents. Look for the FCC ID on the camera's box or case
-and then look it up in the [FCC ID database](https://fccid.io/).
+Hầu hết thời gian bạn không thể. Đặc biệt nếu đó là một bản sao giá rẻ của Trung Quốc của một bản sao của một chiếc camera được đổi thương hiệu.
+Đối với các thương hiệu tên tuổi uy tín đã trải qua chứng nhận phần cứng, có cơ hội xem xét bên trong camera trong các tài liệu chứng nhận. Tìm ID FCC trên hộp hoặc vỏ của camera
+và sau đó tra cứu nó trong [cơ sở dữ liệu ID FCC](https://fccid.io/).
 
-### Differences between Lite and Ultimate
+### Sự khác biệt giữa Lite và Ultimate
 
-- Amazon server support
-- QR code recognition support (basic)
-- iptables support (firewall)
-- ZeroTier tunnel support
-- MQTT (telemetry) support
-- WiFi support
-- lame (mp3) and libwebsockets support
+- Hỗ trợ máy chủ Amazon
+- Hỗ trợ nhận dạng mã QR (cơ bản)
+- Hỗ trợ iptables (tường lửa)
+- Hỗ trợ đường hầm ZeroTier
+- Hỗ trợ MQTT (đo từ xa)
+- Hỗ trợ WiFi
+- Hỗ trợ lame (mp3) và libwebsockets
 
 
-### How to strip U-Boot Image wrapper header from a binary image
+### Cách loại bỏ tiêu đề trình bao bọc hình ảnh U-Boot khỏi hình ảnh nhị phân
 
-Sometimes vendor's firmware consists of binary images intended
-for use with U-Boot image loader and prepended with headers in
-[U-Boot Image wrapper format](https://formats.kaitai.io/uimage/).
-The header should be stripped off before you can use such an image
-as a raw binary file. Here's how you can strip the first 64 bytes
-from a file:
-
-```bash
-dd if=inputfile.img of=outputfile.bin bs=64 skip=1
-```
-
-alternatively
+Đôi khi firmware của nhà cung cấp bao gồm các hình ảnh nhị phân dành cho
+sử dụng với trình tải hình ảnh U-Boot và được thêm trước bằng tiêu đề ở
+[định dạng trình bao bọc hình ảnh U-Boot](https://formats.kaitai.io/uimage/).
+Tiêu đề nên được gỡ bỏ trước khi bạn có thể sử dụng một hình ảnh như vậy
+như một tệp nhị phân thô. Đây là cách bạn có thể loại bỏ 64 byte đầu tiên
+khỏi một tệp:
 
 ```bash
-tail -c +65 inputfile.img > outputfile.bin
+dd if=tệp_đầu_vào.img of=tệp_đầu_ra.bin bs=64 skip=1
 ```
 
-### How to get into bootloader shell?
+hoặc cách khác
 
-[There is a handful of ways to get access to a locked bootloader shell](help-uboot.md#bypassing-password-protected-bootloader)
+```bash
+tail -c +65 tệp_đầu_vào.img > tệp_đầu_ra.bin
+```
 
-### How to reset camera settings from U-Boot
+### Làm cách nào để vào shell của bootloader?
 
-Sometimes improper settings make the camera unstable to the point where it is
-impossible to log in or not enough time before rebooting to fix the settings.
-Here's how to completely erase the overlay partition in the OpenIPC firmware,
-right from the bootloader shell, to bring the camera back to its pristine state:
+[Có một số cách để truy cập shell của bootloader bị khóa](help-uboot.md#bypassing-password-protected-bootloader)
 
-> __only for 8MB flash partitioning__
+### Làm cách nào để đặt lại cài đặt camera từ U-Boot
+
+Đôi khi cài đặt không đúng khiến camera không ổn định đến mức
+không thể đăng nhập hoặc không đủ thời gian trước khi khởi động lại để sửa cài đặt.
+Đây là cách xóa hoàn toàn phân vùng lớp phủ trong firmware OpenIPC,
+ngay từ shell của bootloader, để đưa camera về trạng thái nguyên sơ:
+
+> __chỉ dành cho phân vùng flash 8MB__
 
 ```
 sf probe 0; sf erase 0x750000 0xb0000; reset
 ```
 
-> __only for 16MB flash partitioning__
+> __chỉ dành cho phân vùng flash 16MB__
 
 ```
 sf probe 0; sf erase 0xd50000 0x2b0000; reset
 ```
 
-### How to sign in into camera via SSH?
+### Làm cách nào để đăng nhập vào camera qua SSH?
 
-`ssh root@<camera_ip_address>`
+`ssh root@<địa_chỉ_ip_camera>`
 
-There is _12345_ password by default.
+Mật khẩu mặc định là _12345_.
 
-### How to sign in into camera Web UI?
+### Làm cách nào để đăng nhập vào giao diện người dùng Web của camera?
 
-Open http://<camera_ip_address> and sign in using default username _root_
-and default password _12345_. You will be asked to change the password after
-successful login.
+Mở http://<địa_chỉ_ip_camera> và đăng nhập bằng tên người dùng mặc định _root_
+và mật khẩu mặc định _12345_. Bạn sẽ được yêu cầu thay đổi mật khẩu sau
+khi đăng nhập thành công.
 
-__Please note, it will also change your ssh root password!__
+__Xin lưu ý, nó cũng sẽ thay đổi mật khẩu root ssh của bạn!__
 
-### How to reset password for SSH/Web UI?
+### Làm cách nào để đặt lại mật khẩu cho SSH/Giao diện người dùng Web?
 
-Create a serial connection to the camera using a UART adapter and a terminal
-program. After turning on the camera, press Ctrl-C to interrupt the boot
-sequence and enter the bootloader shell.
+Tạo kết nối nối tiếp với camera bằng bộ chuyển đổi UART và chương trình
+thiết bị đầu cuối. Sau khi bật camera, nhấn Ctrl-C để ngắt quá trình khởi động
+và vào shell của bootloader.
 
-For a camera with 8MB flash chip, run
+Đối với camera có chip flash 8MB, hãy chạy
 
 ```bash
 sf probe 0; sf erase 0x750000 0xb0000; reset
 ```
 
-For a camera with 16MB flash chip, run
+Đối với camera có chip flash 16MB, hãy chạy
 
 ```bash
 sf probe 0; sf erase 0xd50000 0x2b0000; reset
 ```
 
-### How to find information about the camera hardware and software?
+### Làm cách nào để tìm thông tin về phần cứng và phần mềm của camera?
 
-Sign in on camera via `ssh` and run `ipctool`.
+Đăng nhập vào camera qua `ssh` và chạy `ipctool`.
 
-### I don't see ipctool on camera. Why?
+### Tôi không thấy ipctool trên camera. Tại sao?
 
-You don't see it because initially it is not there, but there is a shell
-command of the same name.
+Bạn không thấy nó bởi vì ban đầu nó không có ở đó, nhưng có một lệnh shell
+cùng tên.
 
-_(Since it's a shell command, it won't work from Web Console in web UI.
-Sign in to the camera via SSH and run the command in there.)_
+_(Vì nó là một lệnh shell, nó sẽ không hoạt động từ Bảng điều khiển Web trong giao diện người dùng Web.
+Đăng nhập vào camera qua SSH và chạy lệnh ở đó.)_
 
-When you run this command, the latest available version of `ipctool` utility
-gets downloaded into `/tmp/` directory and runs from there. Since the utility
-resides in `/tmp/`, it won't survive a reboot, thus won't take any useful space
-on the camera afterwards.
+Khi bạn chạy lệnh này, phiên bản mới nhất của tiện ích `ipctool` khả dụng
+sẽ được tải xuống thư mục `/tmp/` và chạy từ đó. Vì tiện ích
+nằm trong `/tmp/`, nó sẽ không tồn tại sau khi khởi động lại, do đó sẽ không chiếm bất kỳ dung lượng hữu ích nào
+trên camera sau đó.
 
-If you need to know what is in the command, search for `ipctool` in the
-`/etc/profile` file.
+Nếu bạn cần biết có gì trong lệnh, hãy tìm kiếm `ipctool` trong
+tệp `/etc/profile`.
 
-### Replace the bootloader from Linux
+### Thay thế bootloader từ Linux
 
-Commands are executed separately by each line with a wait for the end of execution.
-The full name of the replacement bootloader and its availability can be checked [here][3]
+Các lệnh được thực thi riêng biệt bởi mỗi dòng với thời gian chờ kết thúc thực thi.
+Tên đầy đủ của bootloader thay thế và tính khả dụng của nó có thể được kiểm tra [tại đây][3]
 
-Before running the commands, don't forget to enter the correct bootloader name!
+Trước khi chạy các lệnh, đừng quên nhập tên bootloader chính xác!
 
 ```
-FILE=u-boot-SOC-TYPE.bin
+FILE=u-boot-SOC-LOẠI.bin
 curl -k -L https://github.com/OpenIPC/firmware/releases/download/latest/${FILE} -o /tmp/${FILE}
 flashcp -v /tmp/${FILE} /dev/mtd0
 flash_eraseall /dev/mtd1
 ```
 
-Save wireless credentials:
+Lưu thông tin đăng nhập không dây:
 ```
 FILE=/usr/share/openipc/wireless.sh
 echo "#!/bin/sh" > ${FILE}
@@ -147,21 +146,21 @@ echo "fw_setenv wlanpass $(fw_printenv -n wlanpass)" >> ${FILE}
 chmod 755 ${FILE}
 ```
 
-### How to update ancient OpenIPC firmware?
+### Làm cách nào để cập nhật firmware OpenIPC cũ?
 
-Commands are executed separately by each line with a wait for the end of execution.
-The first command updates a utility whose algorithm was changed in February 2023. 
-If you need to update the utility on T31 processors, please add the -mips suffix to the URL of the downloaded utility.
-The second command updates the firmware components themselves. 
+Các lệnh được thực thi riêng biệt bởi mỗi dòng với thời gian chờ kết thúc thực thi.
+Lệnh đầu tiên cập nhật một tiện ích có thuật toán đã được thay đổi vào tháng 2 năm 2023.
+Nếu bạn cần cập nhật tiện ích trên bộ xử lý T31, vui lòng thêm hậu tố -mips vào URL của tiện ích đã tải xuống.
+Lệnh thứ hai cập nhật chính các thành phần firmware.
 
 ```
 curl -L -o /tmp/ipcinfo https://github.com/OpenIPC/ipctool/releases/download/latest/ipcinfo && chmod +x /tmp/ipcinfo; /tmp/ipcinfo -csF
 curl -s https://raw.githubusercontent.com/OpenIPC/firmware/master/general/overlay/usr/sbin/sysupgrade | sh -s -- -k -r -n
 ```
 
-### Is it possible to switch from “lite” to “ultimate” via “Over the Air”?
+### Có thể chuyển đổi từ “lite” sang “ultimate” qua “Over the Air” không?
 
-On Ingenic and Sigmastar it is possible to split the ultimate rootfs.squashfs and flash it to the rootfs (mtd3) and overlay (mtd4) partition.
+Trên Ingenic và Sigmastar, có thể tách rootfs.squashfs cuối cùng và flash nó vào phân vùng rootfs (mtd3) và lớp phủ (mtd4).
 
 ```
 dd if=rootfs.squashfs of=mtd3.bin bs=1k count=5120
@@ -170,10 +169,10 @@ flashcp mtd3.bin /dev/mtd3 -v
 flashcp mtd4.bin /dev/mtd4 -v
 ```
 
-### How to dump full firmware to an NFS share
+### Làm cách nào để dump toàn bộ firmware vào chia sẻ NFS
 
-This could work if you are lucky, you gained access into Linux shell on stock
-firmware, and it does support NFS mounting:
+Điều này có thể hoạt động nếu bạn may mắn, bạn đã truy cập vào shell Linux trên firmware gốc
+và nó hỗ trợ gắn kết NFS:
 
 ```bash
 fw=$(mktemp -t)
@@ -184,39 +183,39 @@ cat /dev/mtdblock? > $fw
 mv $fw ${nfs}/firmware_full.bin
 ```
 
-Make sure to use your own IP address and path to the NFS share!
+Hãy chắc chắn sử dụng địa chỉ IP và đường dẫn của riêng bạn đến chia sẻ NFS!
 
-### How to find original MAC address in a firmware dump
+### Làm cách nào để tìm địa chỉ MAC gốc trong dump firmware
 
 ```bash
 strings dumpfile.bin | grep ^ethaddr
 ```
 
-### How to configure ssh session authorization by key
+### Làm cách nào để cấu hình ủy quyền phiên ssh bằng khóa
 
-__On the camera__: Sign in into web UI on port 85 of your camera.
+__Trên camera__: Đăng nhập vào giao diện người dùng web trên cổng 85 của camera của bạn.
 
 ```bash
 passwd
 ```
 
-__On the desktop__: Copy the public key to the camera by logging in with the
-password created above.
+__Trên máy tính để bàn__: Sao chép khóa chung vào camera bằng cách đăng nhập bằng
+mật khẩu đã tạo ở trên.
 
 ```bash
 ssh-copy-id root@192.168.1.66
 ```
 
-__On the camera__: Create a `.ssh` folder in the root user's home directory
-and copy the file with the authorized keystore into it.
+__Trên camera__: Tạo một thư mục `.ssh` trong thư mục chính của người dùng root
+và sao chép tệp có kho khóa được ủy quyền vào đó.
 
 ```bash
 mkdir ~/.ssh
 cp /etc/dropbear/authorized_keys ~/.ssh/
 ```
 
-__On the desktop__: Open a new session to verify that the authorization is
-passed using the public key not requesting a password.
+__Trên máy tính để bàn__: Mở một phiên mới để xác minh rằng ủy quyền được
+chuyển bằng cách sử dụng khóa chung mà không yêu cầu mật khẩu.
 
 ```bash
 ssh root@192.168.1.66
@@ -224,24 +223,24 @@ ssh root@192.168.1.66
 
 ### Majestic
 
-#### How to get a memory dump for debugging?
+#### Làm cách nào để lấy dump bộ nhớ để gỡ lỗi?
 
-Enable and configure Core Dump in the menu **Majestic** > **Majestic Debugging**.
+Bật và cấu hình Core Dump trong menu **Majestic** > **Majestic Debugging**.
 
-#### Camera image has a pink tint
+#### Hình ảnh camera có màu hồng
 
-You need to specify GPIO pins to control the infrared filter.
-Settings for some cameras can be found in [this table][1].
-If your camera is not in the table then you need to use [ipctool utility][2].
+Bạn cần chỉ định chân GPIO để điều khiển bộ lọc hồng ngoại.
+Cài đặt cho một số camera có thể được tìm thấy trong [bảng này][1].
+Nếu camera của bạn không có trong bảng thì bạn cần sử dụng [tiện ích ipctool][2].
 
-The OpenIPC firmware will automatically download the latest version of the
-utility to the /tmp directory when `ipctool` is invoked first time.
+Firmware OpenIPC sẽ tự động tải xuống phiên bản mới nhất của
+tiện ích vào thư mục /tmp khi `ipctool` được gọi lần đầu tiên.
 
-On stock firmware, you will need to download the utility to the camera yourself
-using any tools available in the system: wget, curl, tftp etc.
+Trên firmware gốc, bạn sẽ cần tự tải xuống tiện ích vào camera
+bằng cách sử dụng bất kỳ công cụ nào có sẵn trong hệ thống: wget, curl, tftp, v.v.
 
-For example, download the ipctool utility to TFTP server on the local network,
-then download it to the camera:
+Ví dụ: tải xuống tiện ích ipctool vào máy chủ TFTP trên mạng cục bộ,
+sau đó tải xuống camera:
 
 ```bash
 tftp -g -r ipctool -l /tmp/ipctool 192.168.1.1
@@ -249,8 +248,8 @@ chmod +x /tmp/ipctool
 /tmp/ipctool
 ```
 
-If the camera has access to the internet, you can try to mount a public NFS
-sharing and run the utility from it, without downloading to the camera:
+Nếu camera có quyền truy cập internet, bạn có thể thử gắn kết chia sẻ NFS công cộng
+và chạy tiện ích từ đó, mà không cần tải xuống camera:
 
 ```bash
 mkdir -p /tmp/utils
@@ -258,45 +257,49 @@ mount -o nolock 95.217.179.189:/srv/ro /tmp/utils/
 /tmp/utils/ipctool
 ```
 
-After the utility is downloaded to the camera, run the `ipctool gpio scan`
-command in the terminal and open-close the camera lens a couple of times with
-your palm.
+Sau khi tiện ích được tải xuống camera, hãy chạy lệnh `ipctool gpio scan`
+trong thiết bị đầu cuối và mở-đóng ống kính camera vài lần bằng
+lòng bàn tay của bạn.
 
-Watch the output of ipctool to determine the pins responsible for controlling
-the IR filter curtain.
+Xem đầu ra của ipctool để xác định các chân chịu trách nhiệm điều khiển
+màn che bộ lọc IR.
 
-Enter the values obtained in the settings for the night mode Majestic. If the
-pink tint still persists, you may need to enable sensor signal inversion.
+Nhập các giá trị thu được trong cài đặt cho chế độ ban đêm Majestic. Nếu
+màu hồng vẫn còn, bạn có thể cần bật đảo ngược tín hiệu cảm biến.
 
-Don't forget to add the camera model and found GPIO values to the table!
+Đừng quên thêm model camera và giá trị GPIO đã tìm thấy vào bảng!
 
-#### Is it possible to display the data for setting the auto focus of lenses
-instead of the current sample_af in the standard /metrics?
+#### Có thể hiển thị dữ liệu để đặt tự động lấy nét của ống kính
+thay vì sample_af hiện tại trong /metrics tiêu chuẩn không?
 
-No, this is a difficult algorithm, it does not have a sense to run it this way.
+Không, đây là một thuật toán khó, nó không có ý nghĩa để chạy theo cách này.
 
-#### Copy files from Linux system to camera
+#### Sao chép tệp từ hệ thống Linux sang camera
 
-Sometimes you need to transfer files to the camera. In addition to the above
-method using NFS (Network File System) you can use the standard Linux `scp`
-command to copy files over an SSH connection:
+Đôi khi bạn cần chuyển tệp sang camera. Ngoài phương pháp trên
+sử dụng NFS (Hệ thống tệp mạng), bạn có thể sử dụng lệnh `scp` tiêu chuẩn của Linux
+để sao chép tệp qua kết nối SSH:
 ```bash
-scp ~/myfile root@192.168.1.65:/tmp/
+scp ~/tệp_của_tôi root@192.168.1.65:/tmp/
 ```
-This command will copy `myfile` from the home directory to the `/tmp/`
-directory on the camera.
+Lệnh này sẽ sao chép `tệp_của_tôi` từ thư mục chính sang thư mục `/tmp/`
+trên camera.
 
-On recent Linux systems the following error may occur:
+Trên các hệ thống Linux gần đây, lỗi sau có thể xảy ra:
 ```console
-sh: /usr/libexec/sftp-server: not found
-scp: Connection closed
+sh: /usr/libexec/sftp-server: không tìm thấy
+scp: Kết nối đã đóng
 ```
-In this case, add `-O` option to the command:
+Trong trường hợp này, hãy thêm tùy chọn `-O` vào lệnh:
 ```bash
-scp -O ~/myfile root@192.168.1.65:/tmp/
+scp -O ~/tệp_của_tôi root@192.168.1.65:/tmp/
 ```
 
 
 [1]: https://openipc.org/wiki/en/gpio-settings.html
 [2]: https://github.com/OpenIPC/ipctool/releases/download/latest/ipctool
 [3]: https://github.com/OpenIPC/firmware/releases/tag/latest
+
+
+
+

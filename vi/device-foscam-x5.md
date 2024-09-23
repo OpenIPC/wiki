@@ -1,29 +1,29 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
 Foscam X5 / Acculenz R5 / Assark X3E
 ---
 
-#### Preparation
-Format an sdcard to FAT32 and copy the content of the following archive to the card:
+#### Chuẩn bị
+Định dạng thẻ nhớ SD sang FAT32 và sao chép nội dung của kho lưu trữ sau vào thẻ:
 - [foscam-openipc.zip][1]
 
-Update your wireless credentials on autostart.sh:
+Cập nhật thông tin đăng nhập mạng không dây của bạn trên autostart.sh:
 ```diff
 #!/bin/sh
 +WLAN_SSID="Router"
 +WLAN_PASS="12345678"
 ```
 
-#### Flashing
-- Make sure the camera is powered off, put the prepared sdcard into the device.
-- Power the device on and wait at least 4 minutes.
-- Shortly after an OpenIPC camera should appear on your wlan.
+#### Cài đặt
+- Đảm bảo camera đã tắt nguồn, đặt thẻ nhớ SD đã chuẩn bị vào thiết bị.
+- Bật nguồn thiết bị và đợi ít nhất 4 phút.
+- Ngay sau đó, một camera OpenIPC sẽ xuất hiện trên mạng wlan của bạn.
 
 ---
 
 ### GPIO
-IRLed | IRCut | Speaker | Reset | IRSensor
+IRLed | IRCut | Loa | Đặt lại | Cảm biến IR
 -|-|-|-|-
 GPIO0 | GPIO3 | GPIO14 | GPIO66 | GPIO80
 
@@ -38,7 +38,7 @@ cli -s .audio.speakerPinInvert true
 
 ---
 
-### Wireless
+### Không dây
 ```
 fw_setenv wlandev rtl8188fu-ssc337de-foscam
 fw_setenv wlanssid Router
@@ -47,9 +47,9 @@ fw_setenv wlanpass 12345678
 
 ---
 
-### Camera disassembly
+### Tháo rời camera
 <details>
-<summary>Expand pictures</summary>
+<summary>Mở rộng hình ảnh</summary>
 <img src="../images/device-foscam-01.webp" width=50% height=50%>
 <img src="../images/device-foscam-02.webp" width=50% height=50%>
 <img src="../images/device-foscam-03.webp" width=50% height=50%>
@@ -63,8 +63,8 @@ fw_setenv wlanpass 12345678
 
 ---
 
-### Other
-- Labels: X3/R3/R5/X3E
+### Khác
+- Nhãn: X3/R3/R5/X3E
 - https://fccid.io/ZDER3
 
 [1]: https://github.com/openipc/wiki/files/13301107/foscam-openipc.zip

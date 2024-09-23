@@ -1,151 +1,151 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
 Smartwares CIP-37210
 --------------------
 
-### Device info
+### Thông tin thiết bị
 
-| System | Description                          |
+| Hệ thống | Mô tả                          |
 |--------|--------------------------------------|
 | SoC    | HI3518EV200                          |
-| Sensor | OmniVision OV9732                    |
+| Cảm biến | OmniVision OV9732                    |
 | Flash  | 16Mb (Winbond 25Q128JVSQ)            |
 | WiFi   | RTL8188FU                            |
 
-### Step-by-step flashing guide
+### Hướng dẫn flashing từng bước
 
-Beside the camera you'll need the following tools:
-- PH0 screwdriver or bit
-- Small blade screwdriver, e.g. 0.6 × 3.5 mm
-- A USB to TTL adapter for UART communication. (I used a CP2102 based device, but there are [many other good options](https://github.com/OpenIPC/wiki/blob/master/en/equipment-flashing.md))
-- A microSD card (I used an old 2 GB one)
-- Some jumper wires
-- A multimeter
-- A computer running GNU/Linux
+Bên cạnh camera, bạn sẽ cần các công cụ sau:
+- Tuốc nơ vít hoặc đầu vít PH0
+- Tuốc nơ vít lưỡi nhỏ, ví dụ: 0,6 × 3,5 mm
+- Bộ chuyển đổi USB sang TTL để giao tiếp UART. (Tôi đã sử dụng thiết bị dựa trên CP2102, nhưng có [nhiều lựa chọn tốt khác](https://github.com/OpenIPC/wiki/blob/master/en/equipment-flashing.md))
+- Thẻ nhớ microSD (Tôi đã sử dụng thẻ 2 GB cũ)
+- Một số dây nhảy
+- Đồng hồ vạn năng
+- Máy tính chạy GNU/Linux
 
-The preferred method to flash an OpenIPC camera is via tftp, but the CIP-37210 does not have an ethernet port. Another problem is that the stock u-boot is password protected and fatload (reading access to a FAT filesystem) does not work.
+Phương pháp ưa thích để flash camera OpenIPC là thông qua tftp, nhưng CIP-37210 không có cổng ethernet. Một vấn đề khác là u-boot gốc được bảo vệ bằng mật khẩu và fatload (quyền truy cập đọc vào hệ thống tệp FAT) không hoạt động.
 
-Because of that we will need to combine two methods deviating from the standard procedure to flash the Smartwares CIP-37210: [The burn utility](https://github.com/OpenIPC/burn) to directly boot into a u-boot bootloader compiled by the OpenIPC project to be able to flash from a microSD card and of course the [flashing from a microSD card](https://paulphilippov.com/articles/flashing-ip-camera-with-full-openipc-binary-firmware-from-sd-card).
+Do đó, chúng ta sẽ cần kết hợp hai phương pháp lệch khỏi quy trình tiêu chuẩn để flash Smartwares CIP-37210: [Tiện ích burn](https://github.com/OpenIPC/burn) để khởi động trực tiếp vào bộ nạp khởi động u-boot được biên dịch bởi dự án OpenIPC có thể flash từ thẻ nhớ microSD và tất nhiên là [flash từ thẻ nhớ microSD](https://paulphilippov.com/articles/flashing-ip-camera-with-full-openipc-binary-firmware-from-sd-card).
 
-#### Opening the device
+#### Mở thiết bị
 
-Unscrew the visbile phillips screw on the back of the camera's stand with the PH0 screwdriver.
-![unscrew](/images/cip-37210_open_001.jpg "Unscrewing the phillips screw")
+Tháo vít phillips có thể nhìn thấy ở mặt sau của đế camera bằng tuốc nơ vít PH0.
+![unscrew](/images/cip-37210_open_001.jpg "Tháo vít phillips")
 
-Use the blade screwdriver to pry open the camera's case, where the stand was attached:
-![pry_open](/images/cip-37210_open_002.jpg "Pry open the camera")
+Sử dụng tuốc nơ vít lưỡi nhỏ để cạy mở vỏ camera, nơi gắn đế:
+![pry_open](/images/cip-37210_open_002.jpg "Cạy mở camera")
 
-#### Establishing the UART connection
+#### Thiết lập kết nối UART
 
-After opening the device, it's time to establish the UART connection. Power on the open camera with the included micro USB power supply. Now it's time to check the suspicious 4 pin holes on top of the pcb: Measure the voltage of the pin holes with your multimeter, by connecting them to GND (I used one of the pads around the screws in the middle).
+Sau khi mở thiết bị, đã đến lúc thiết lập kết nối UART. Bật nguồn cho camera đang mở bằng bộ nguồn micro USB đi kèm. Bây giờ là lúc kiểm tra 4 lỗ chân có vẻ khả nghi trên đầu pcb: Đo điện áp của các lỗ chân bằng đồng hồ vạn năng của bạn, bằng cách kết nối chúng với GND (Tôi đã sử dụng một trong các miếng đệm xung quanh các vít ở giữa).
 
-I found two pin holes with 3.3 V, one pin hole with slightly less than 3.3 V and one pin hole with 0 V. Now it's time to watch the 3.3 V pins during boot – the one with oscillating voltage is the TX pin and the stable 3.3 V pin is the Vcc.
+Tôi tìm thấy hai lỗ chân có 3,3 V, một lỗ chân có điện áp hơi thấp hơn 3,3 V và một lỗ chân có 0 V. Bây giờ là lúc theo dõi các chân 3,3 V trong quá trình khởi động - chân có điện áp dao động là chân TX và chân 3,3 V ổn định là Vcc.
 
-**In summary:** The pin hole closest to the black screw is RX, the one next to it is TX, the one next to it is GND. Connect GND to GND, TX to RX and RX to TX.
+**Tóm lại:** Lỗ chân gần vít đen nhất là RX, lỗ chân bên cạnh là TX, lỗ chân bên cạnh là GND. Kết nối GND với GND, TX với RX và RX với TX.
 
-![uart_cip-37210](/images/uart_cip-37210_cropped.jpg "Marked UART pin holes on the CIP-37210 PCB")
+![uart_cip-37210](/images/uart_cip-37210_cropped.jpg "Các lỗ chân UART được đánh dấu trên PCB CIP-37210")
 
-I used simple male-to-female DuPont jumper wires to connect to the pin holes. There are of course better solutions like soldering a connector onto the pin holes or using test hooks, but as long the jumper wires don't touch, it will work fine.
+Tôi đã sử dụng dây nhảy DuPont male-to-female đơn giản để kết nối với các lỗ chân. Tất nhiên có những giải pháp tốt hơn như hàn đầu nối vào các lỗ chân hoặc sử dụng móc thử nghiệm, nhưng miễn là dây nhảy không chạm vào nhau, nó sẽ hoạt động tốt.
 
-![uart_cip-37210_action](/images/uart_cip-37210_action.jpg "Established UART connection.")
+![uart_cip-37210_action](/images/uart_cip-37210_action.jpg "Kết nối UART đã được thiết lập.")
 
-#### Saving the stock firmware
+#### Lưu firmware gốc
 
-Before flashing OpenIPC it might be clever to save the stock firmware, in case you don't like OpenIPC and want to roll back or brick something. Since tftp is not possible we will save the contents of the flash to a microSD card. Since the device runs Linux you don't need to worry about formatting the microSD card now. Boot the camera while connected to your USB to TTL adapter and start screen:
+Trước khi flash OpenIPC, có thể nên lưu firmware gốc, trong trường hợp bạn không thích OpenIPC và muốn khôi phục hoặc brick một cái gì đó. Vì tftp là không thể nên chúng ta sẽ lưu nội dung của flash vào thẻ nhớ microSD. Vì thiết bị chạy Linux nên bạn không cần phải lo lắng về việc định dạng thẻ nhớ microSD bây giờ. Khởi động camera trong khi kết nối với bộ chuyển đổi USB sang TTL của bạn và khởi động màn hình:
 
 ```sh
 sudo screen -L /dev/ttyUSB0 115200
 ```
 
-Now it's time to login as root with the password `I81ou812` I found [on the internet](https://gist.github.com/gabonator/74cdd6ab4f733ff047356198c781f27d). The microSD card got mounted automatically to the mount point `/mnt/sd/`, so lets make a new directory on the sd card and dump the contents of the flash:
+Bây giờ là lúc đăng nhập với tư cách root với mật khẩu `I81ou812` mà tôi tìm thấy [trên internet](https://gist.github.com/gabonator/74cdd6ab4f733ff047356198c781f27d). Thẻ nhớ microSD đã được gắn tự động vào điểm gắn kết `/mnt/sd/`, vì vậy hãy tạo một thư mục mới trên thẻ SD và đổ nội dung của flash:
 
 ```sh
 mkdir /mnt/sd/image
 for mtd in $(ls /dev/mtdblock*); do dd if=${mtd} of=/mnt/sd/image/${mtd##/*/}.bin; done
 ```
-You may want to repeat this step with another folder and compare the md5 checksums of the binary files to assure that the dump was successful. Exit screen with `C-a` followed by `d`, insert the microSD card back into your computer and backup the binaries.
+Bạn có thể muốn lặp lại bước này với một thư mục khác và so sánh tổng kiểm tra md5 của các tệp nhị phân để đảm bảo rằng việc dump đã thành công. Thoát khỏi màn hình bằng `C-a` theo sau là `d`, lắp thẻ nhớ microSD trở lại máy tính của bạn và sao lưu các tệp nhị phân.
 
-#### Flashing OpenIPC
+#### Flash OpenIPC
 
-Time to format the microSD card, so u-boot will be able to fatload the image. Those steps may vary depending on your Linux distribution. [There is already a script which works on Debian Sid](https://gist.github.com/themactep/d0b72f4c5d5f246e2551622e95bc9987), but sadly not on my machine. (Different fdisk version and different naming of the device and partitions). Those are the commands I ran:
+Đã đến lúc định dạng thẻ nhớ microSD, vì vậy u-boot sẽ có thể tải fatload hình ảnh. Những bước này có thể thay đổi tùy thuộc vào bản phân phối Linux của bạn. [Đã có một tập lệnh hoạt động trên Debian Sid](https://gist.github.com/themactep/d0b72f4c5d5f246e2551622e95bc9987), nhưng thật đáng buồn là nó không hoạt động trên máy của tôi. (Phiên bản fdisk khác nhau và cách đặt tên khác nhau của thiết bị và phân vùng). Đây là những lệnh tôi đã chạy:
 
 ```sh
-# create the partition table
+# tạo bảng phân vùng
 sudo parted /dev/mmcblk0 mklabel msdos
-# create first partition
+# tạo phân vùng đầu tiên
 sudo parted /dev/mmcblk0 mkpart primary fat32 1MB 64MB
 sudo mkfs.vfat -F32 /dev/mmcblk0p1
-# create second partition
+# tạo phân vùng thứ hai
 sudo parted /dev/mmcblk0 mkpart primary fat32 64MB 128MB
 sudo mkfs.vfat -F32 /dev/mmcblk0p2
 ```
 
-Now it's time to mount the first partition and [download the correct firmware](https://openipc.org/cameras/vendors/hisilicon/socs/hi3518ev200/download_full_image?flash_size=16&flash_type=nor&fw_release=ultimate) and copy it on the mounted partition. Umount the partition and insert the microSD card into the camera.
+Bây giờ là lúc gắn kết phân vùng đầu tiên và [tải xuống firmware chính xác](https://openipc.org/cameras/vendors/hisilicon/socs/hi3518ev200/download_full_image?flash_size=16&flash_type=nor&fw_release=ultimate) và sao chép nó vào phân vùng đã gắn kết. Hủy gắn kết phân vùng và lắp thẻ nhớ microSD vào camera.
 
-Next, the burn utility needs to be set up:
+Tiếp theo, cần thiết lập tiện ích burn:
 ```sh
 git clone https://github.com/OpenIPC/burn
 cd burn
 sudo pip install -r requirements.txt
 ```
-Now we need to download the correct uboot-binary
+Bây giờ chúng ta cần tải xuống tệp nhị phân uboot chính xác
 ```sh
 wget -P ./u-boot/ https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-hi3518ev200-universal.bin
 ```
 
-Make sure, that no process is blocking your USB to TTL adapter:
+Hãy chắc chắn rằng không có tiến trình nào đang chặn bộ chuyển đổi USB sang TTL của bạn:
 ```sh
 sudo lsof /dev/ttyUSB0
 ```
-Kill the process if necessary:
+Kết thúc tiến trình nếu cần thiết:
 ```sh
 sudo kill 230002
 ```
-Power off the camera and also disconnect and reconnect your USB to TTL adapter. Now enter the following command and power on the camera:
+Tắt nguồn camera và cũng ngắt kết nối và kết nối lại bộ chuyển đổi USB sang TTL của bạn. Bây giờ hãy nhập lệnh sau và bật nguồn camera:
 ```sh
 ./burn --chip hi3518ev200 --file=./u-boot/u-boot-hi3518ev200-universal.bin --break && screen -L /dev/ttyUSB0 115200
 ```
-Hit any key to stop autoboot and you are greeted by the OpenIPC u-boot shell!
+Nhấn bất kỳ phím nào để dừng tự động khởi động và bạn sẽ được chào đón bởi shell OpenIPC u-boot!
 ```sh
 OpenIPC #
 ```
-First we need to check, if our microSD card is ready to use:
+Đầu tiên, chúng ta cần kiểm tra xem thẻ nhớ microSD của chúng ta đã sẵn sàng để sử dụng chưa:
 ```sh
 fatls mmc 0
 ```
-The following output is expected:
+Đầu ra sau đây được mong đợi:
 ```text
  16777216   openipc-hi3518ev200-ultimate-16mb.bin
 
 1 file(s), 0 dir(s)
 ```
-Nice! Now it's time to load the binary into the memory. The variables are environment variables the OpenIPC u-boot knows to resolve, so you just need to copy and paste:
+Tốt! Bây giờ là lúc tải tệp nhị phân vào bộ nhớ. Các biến là biến môi trường mà OpenIPC u-boot biết để phân giải, vì vậy bạn chỉ cần sao chép và dán:
 ```sh
 mw.b ${baseaddr} 0xff 0x1000000; fatload mmc 0:1 ${baseaddr} openipc-${soc}-ultimate-16mb.bin
 ```
-This should result in the following output:
+Điều này sẽ dẫn đến đầu ra sau:
 ```text
 reading openipc-hi3518ev200-ultimate-16mb.bin
 
 16777216 bytes read
 ```
-Now it's time to write and keep your fingers crossed:
+Bây giờ là lúc để viết và cầu nguyện:
 ```sh
 sf probe 0; sf erase 0x0 0x1000000; sf write ${baseaddr} 0x0 ${filesize}
 ```
-The expected output looks like this:
+Đầu ra mong đợi trông như thế này:
 ```text
 16384 KiB hi_fmc at 0:0 is now current device
 Erasing at 0x1000000 -- 100% complete.
 Writing at 0x1000000 -- 100% complete.
 ```
 
-It anything goes wrong here, don't power off the device and ask the mentioned [Telegram group](https://t.me/openipc) for help! Otherwise enter `reset` and get into the freshly flashed u-boot by hitting any key to stop autoboot. Run the following command and you are done:
+Nếu có bất cứ điều gì sai sót ở đây, đừng tắt nguồn thiết bị và hãy yêu cầu [nhóm Telegram](https://t.me/openipc) trợ giúp! Nếu không, hãy nhập `reset` và vào u-boot mới được flash bằng cách nhấn bất kỳ phím nào để dừng tự động khởi động. Chạy lệnh sau và bạn đã hoàn tất:
 ```sh
 run setnor16m
 ```
-Now remove the SD cards and reboot, by entering `reset` again and you'll be greeted like this:
+Bây giờ hãy tháo thẻ SD và khởi động lại bằng cách nhập `reset` một lần nữa và bạn sẽ được chào đón như thế này:
 ```text
 Welcome to OpenIPC
 openipc-hi3518ev200 login: root
@@ -172,40 +172,40 @@ openipc-hi3518ev200 login: root
  Please visit https://openipc.org/sponsor/ to learn more. Thank you.
 ```
 
-The root password is `12345`. Don't forget to change it with `passwd` after the first login!
+Mật khẩu root là `12345`. Đừng quên thay đổi nó bằng `passwd` sau lần đăng nhập đầu tiên!
 
-If you are struggling with this tutorial and still want to try OpenIPC on a Smartwares CIP-37210, you can [buy it with OpenIPC v2.2 firmware pre-installed at open collective](https://opencollective.com/openipc/contribute/wifi-camera-showme-by-openipc-44355).
+Nếu bạn đang gặp khó khăn với hướng dẫn này và vẫn muốn thử OpenIPC trên Smartwares CIP-37210, bạn có thể [mua nó với firmware OpenIPC v2.2 được cài đặt sẵn tại open collective](https://opencollective.com/openipc/contribute/wifi-camera-showme-by-openipc-44355).
 
-## Connecting to wifi
-Now it's time to connect the camera to your 2.4 GHz Wi-Fi network. First of all, make sure that the firmware environment variables are set correctly.
+## Kết nối với wifi
+Bây giờ là lúc để kết nối camera với mạng Wi-Fi 2,4 GHz của bạn. Trước hết, hãy đảm bảo rằng các biến môi trường firmware được đặt chính xác.
 
-First set the network driver:
+Đầu tiên đặt trình điều khiển mạng:
 
 ```sh
 fw_setenv wlandev rtl8188fu-generic
 ```
 
-Then the correct values according to your needs, for example:
+Sau đó, các giá trị chính xác theo nhu cầu của bạn, ví dụ:
 ```sh
 fw_setenv wlanssid guest
 fw_setenv wlanpass guest-password
 ```
 
-You can check the settings as folows:
+Bạn có thể kiểm tra cài đặt như sau:
 ```sh
 fw_printenv wlandev
 fw_printenv wlanssid
 fw_printenv wlanpass
 ```
 
-The last step is to configure the wlan0 interface:
+Bước cuối cùng là cấu hình giao diện wlan0:
 ```sh
 cat <<EOF > /etc/network/interfaces.d/wlan0
 auto wlan0
 iface wlan0 inet dhcp
     pre-up echo 3 > /sys/class/gpio/export
     pre-up echo out > /sys/class/gpio/gpio3/direction
-    pre-up echo 1 > /sys/class/gpio/gpio3/value  # GPIO3 is the WIFI power
+    pre-up echo 1 > /sys/class/gpio/gpio3/value  # GPIO3 là nguồn WIFI
     pre-up modprobe mac80211
     pre-up sleep 1
     pre-up modprobe 8188fu
@@ -221,14 +221,14 @@ iface wlan0 inet dhcp
 EOF
 ```
 
-Now it's time to check whether it's working:
+Bây giờ là lúc để kiểm tra xem nó có hoạt động không:
 ```sh
 ifup wlan0
 ip addr
 ```
-Check whether you can ping and ssh into the camera. Reboot and check, if the camera connects automatically to your wifi network. Reassamble the camera, now it's time so say goodbye to UART and use ssh and the web interface. (The credentials are root and the password you set earlier.)
+Kiểm tra xem bạn có thể ping và ssh vào camera không. Khởi động lại và kiểm tra xem camera có tự động kết nối với mạng wifi của bạn không. Lắp ráp lại camera, bây giờ là lúc tạm biệt UART và sử dụng ssh và giao diện web. (Thông tin đăng nhập là root và mật khẩu bạn đã đặt trước đó.)
 
-Finally, you should look at `/etc/majestic.yaml` and in particular set this sections as follows in order to have a correct GPIO mapping for nighmode and audio.
+Cuối cùng, bạn nên xem `/etc/majestic.yaml` và đặc biệt đặt các phần này như sau để có ánh xạ GPIO chính xác cho chế độ ban đêm và âm thanh.
 
 ```yaml
 audio:

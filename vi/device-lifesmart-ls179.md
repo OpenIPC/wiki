@@ -1,46 +1,46 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-For LifeSmart cameras: LS179
+Dành cho camera LifeSmart: LS179
 
 ## BOM
 
 SoC: HI3518EV200  
 Flash: ENQH127A (16MB NOR)  
-Sensor: soif23 (???)
+Cảm biến: soif23 (???)
 
-## Installation
+## Cài đặt
 
-Follow the [instructions](help-uboot.md#bypassing-password-protected-bootloader) to get access to U-boot.
+Làm theo [hướng dẫn](help-uboot.md#bypassing-password-protected-bootloader) để truy cập vào U-boot.
 
-Back up the flash and install OpenIPC according to the [instructions](https://openipc.org/cameras/vendors/hisilicon/socs/hi3518ev200).
+Sao lưu flash và cài đặt OpenIPC theo [hướng dẫn](https://openipc.org/cameras/vendors/hisilicon/socs/hi3518ev200).
 
-Select a 16MB NOR flash, and use the Ultimate firmware if you want to use WiFi.
+Chọn flash NOR 16MB và sử dụng firmware Ultimate nếu bạn muốn sử dụng WiFi.
 
 ## WiFi
 
-In order to connect to WiFi, you need to configure the [wireless device](wireless-settings.md#initial-configuration) with `rtl8188fu-hi3518ev200-lifesmart`
+Để kết nối với WiFi, bạn cần cấu hình [thiết bị không dây](wireless-settings.md#initial-configuration) với `rtl8188fu-hi3518ev200-lifesmart`
 
 ```
 fw_setenv wlandev rtl8188fu-hi3518ev200-lifesmart
-# also configure your WiFi
+# cũng cấu hình WiFi của bạn
 fw_setenv wlanssid "MySSID"
 fw_setenv wlanpass "password"
-# and then...
+# và sau đó...
 reboot
 ```
 
-This will power up the USB WiFi module (GPO #54), and load the appropriate Kernel driver (`8188fu`).
+Thao tác này sẽ cấp nguồn cho mô-đun WiFi USB (GPO #54) và tải trình điều khiển Kernel thích hợp (`8188fu`).
 
-## LEDs
+## Đèn LED
 
-The LEDs are controlled by the GPO #2.
+Các đèn LED được điều khiển bởi GPO #2.
 
 ```bash
-# turn on
+# bật
 gpio set 2
 
-# turn off
+# tắt
 gpio clear 2
 ```
 

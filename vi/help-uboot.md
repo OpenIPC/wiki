@@ -1,52 +1,47 @@
-# OpenIPC Wiki
-[Table of Content](../README.md)
+## Wiki OpenIPC
+[Mục lục](../README.md)
 
-Help: U-Boot
+Trợ giúp: U-Boot
 ------------
 
-### Prepare the environment
-In booloader shell, check if `baseaddr` variable is already defined.
+### Chuẩn bị môi trường
+Trong shell bootloader, kiểm tra xem biến `baseaddr` đã được định nghĩa chưa.
 
 ```bash
 printenv baseaddr
 ```
 
-If it is not there, set it yourself.
+Nếu nó không có ở đó, hãy tự thiết lập nó.
 
 ```bash
-# Look up address for your SoC at https://openipc.org/supported-hardware/
+# Tra cứu địa chỉ cho SoC của bạn tại https://openipc.org/supported-hardware/
 setenv baseaddr 0x80600000
 ```
 
-Assign the hex size of your flash chip to a variable called `flashsize`.
+Gán kích thước hex của chip flash của bạn cho một biến có tên là `flashsize`.
 
 ```bash
-# Use 0x800000 for an 8MB flash chip, 0x1000000 for 16MB.
+# Sử dụng 0x800000 cho chip flash 8MB, 0x1000000 cho 16MB.
 setenv flashsize 0x800000
 ```
 
-Save these values into the environment afterwards.
+Lưu các giá trị này vào môi trường sau đó.
 
 ```bash
 saveenv
 ```
 
-### Saving original firmware without using TFTP.
+### Lưu firmware gốc mà không cần sử dụng TFTP.
 
-Before you start, [prepare the environment](#prepare-the-environment).
+Trước khi bạn bắt đầu, [chuẩn bị môi trường](#prepare-the-environment).
 
-In the terminal program that you use to connect to the UART port, enable saving
-log file of the session. I like to use `screen` for this and my command for
-connect to the UART adapter with logging the active session to a file would look
-like this:
+Trong chương trình terminal mà bạn sử dụng để kết nối với cổng UART, hãy bật tính năng lưu tệp nhật ký của phiên. Tôi thích sử dụng `screen` cho việc này và lệnh của tôi để kết nối với bộ chuyển đổi UART với việc ghi nhật ký phiên hoạt động vào một tệp sẽ trông như thế này:
 
 ```bash
 screen -L -Logfile fulldump.log /dev/ttyUSB0 115200
 ```
 
-After connecting to the bootloader console, run a set of commands for reading
-whole amount of data from flash memory chip into RAM, and then dumping it as
-hexadecimal values into terminal window.
+Sau khi kết nối với bảng điều khiển bootloader, hãy chạy một tập hợp các lệnh để đọc toàn bộ dữ liệu từ chip bộ nhớ flash vào RAM, sau đó xuất nó dưới dạng các giá trị thập lục phân vào cửa sổ terminal.
 
 ```shell
 mw.b ${baseaddr} 0xff ${flashsize}
@@ -55,72 +50,48 @@ sf read ${baseaddr} 0x0 ${flashsize}
 md.b ${baseaddr} ${flashsize}
 ```
 
-Since the process of reading is going to take a considerable amount of time
-(literally hours), you might want to disconnect from the terminal session to
-avoid accidental keystrokes contaminating the output. Press `Ctrl-a` followed
-by `d` to detach the session from active terminal. Run `screen -r` when you
-need to reconnect it later, after the size of the log file will stop growing.
-Reading of an 8 MB flash memory should result in a ~40 MB log file, and for a
-16 MB chip the file should be twice that size.
+Vì quá trình đọc sẽ mất một khoảng thời gian đáng kể (theo đúng nghĩa đen là hàng giờ), bạn có thể muốn ngắt kết nối khỏi phiên terminal để tránh các lần nhấn phím vô tình làm nhiễm bẩn đầu ra. Nhấn `Ctrl-a` theo sau là `d` để tách phiên khỏi terminal đang hoạt động. Chạy `screen -r` khi bạn cần kết nối lại sau, sau khi kích thước của tệp nhật ký ngừng tăng. Việc đọc bộ nhớ flash 8 MB sẽ tạo ra tệp nhật ký ~ 40 MB và đối với chip 16 MB, tệp sẽ có kích thước gấp đôi.
 
-Convert the hex dump into a binary firmware file and use it for further research
-or restoring camera to its pristine state.
+Chuyển đổi kết xuất hex thành tệp firmware nhị phân và sử dụng nó để nghiên cứu thêm hoặc khôi phục camera về trạng thái ban đầu.
 
 ```bash
 cat fulldump.log | sed -E "s/^[0-9a-f]{8}\b: //i" | sed -E "s/ {4}.{16}\r?$//" > fulldump.hex
 xxd -revert -plain fulldump.hex fulldump.bin
 ```
 
-Use [binwalk](https://github.com/ReFirmLabs/binwalk) to unpack the binary file.
+Sử dụng [binwalk](https://github.com/ReFirmLabs/binwalk) để giải nén tệp nhị phân.
 
-### Saving firmware via SD card.
+### Lưu firmware qua thẻ SD.
 
-Before you start, [prepare the environment](#prepare-the-environment).
+Trước khi bạn bắt đầu, [chuẩn bị môi trường](#prepare-the-environment).
 
-Sometimes your camera only has a wireless connection, which does not work
-directly from the bootloader. Very often such cameras have a microSD card slot.
-In this case you can try to save a copy of the original firmware using an
-SD card as an intermediary medium.
+Đôi khi camera của bạn chỉ có kết nối không dây, không hoạt động trực tiếp từ bootloader. Rất thường xuyên những camera như vậy có khe cắm thẻ nhớ microSD. Trong trường hợp này, bạn có thể thử lưu một bản sao của firmware gốc bằng cách sử dụng thẻ SD làm phương tiện trung gian.
 
-Since you're going to save firmware in its binary form, the amount of data will
-be either 8 MB or 16 MB, depending on the size of camera's flash memory chip.
-So any SD card will do, even the smallest one.
+Vì bạn sẽ lưu firmware ở dạng nhị phân, nên lượng dữ liệu sẽ là 8 MB hoặc 16 MB, tùy thuộc vào kích thước của chip bộ nhớ flash của camera. Vì vậy, bất kỳ thẻ SD nào cũng được, kể cả thẻ nhỏ nhất.
 
-Insert the card into the card slot on the camera, connect the serial adapter to
-the UART port, supply power to the camera and stop the boot process to get into
-the bootloader console.
+Lắp thẻ vào khe cắm thẻ trên camera, kết nối bộ chuyển đổi nối tiếp với cổng UART, cấp nguồn cho camera và dừng quá trình khởi động để vào bảng điều khiển bootloader.
 
-Initialize access to the card, and clear some space to save firmware on.
-Data is written onto card in blocks of 512 bytes. You need to erase 16384 blocks
-to clear 8 MB, 32768 blocks for 16 MB, which are 0x4000 and 0x8000 hexadecimal,
-respectively.
+Khởi tạo quyền truy cập vào thẻ và xóa một số dung lượng để lưu firmware. Dữ liệu được ghi lên thẻ theo khối 512 byte. Bạn cần xóa 16384 khối để xóa 8 MB, 32768 khối cho 16 MB, tương ứng là 0x4000 và 0x8000 thập lục phân.
 
-Note that we are going to write directly to the card registers, bypassing the
-partition table. To avoid conflicts when accessing card data later from your PC,
-offset 8 kilobytes from the beginning of the card (8 * 1024 = 8192 bytes or 16
-blocks of 512 bytes, or 0x10 blocks in hexadecimal representation).
+Lưu ý rằng chúng ta sẽ ghi trực tiếp vào các thanh ghi thẻ, bỏ qua bảng phân vùng. Để tránh xung đột khi truy cập dữ liệu thẻ sau này từ PC của bạn, hãy bù 8 kilobyte từ đầu thẻ (8 * 1024 = 8192 byte hoặc 16 khối 512 byte, hoặc 0x10 khối ở dạng thập lục phân).
 
-Example for 8MB:
+Ví dụ cho 8MB:
 
 ```shell
 mmc dev 0
 mmc erase 0x10 0x4000
 ```
 
-Example for a 16MB:
+Ví dụ cho 16MB:
 
 ```shell
 mmc dev 0
 mmc erase 0x10 0x8000
 ```
 
-Now you need to copy the contents of the firmware from the flash memory chip to
-the RAM of the camera. To do that, clear a section of RAM (0x800000 bytes for a
-8MB chip or 0x1000000 bytes for a 16MB chip), read the flash memory and copy
-the entire contents to the prepared space in RAM. Then export the copied data
-from RAM to the card.
+Bây giờ bạn cần sao chép nội dung của firmware từ chip bộ nhớ flash sang RAM của camera. Để làm điều đó, hãy xóa một phần RAM (0x800000 byte cho chip 8MB hoặc 0x1000000 byte cho chip 16MB), đọc bộ nhớ flash và sao chép toàn bộ nội dung vào không gian đã chuẩn bị trong RAM. Sau đó xuất dữ liệu đã sao chép từ RAM sang thẻ.
 
-Example for 8MB:
+Ví dụ cho 8MB:
 
 ```shell
 mw.b ${baseaddr} ff ${flashsize}
@@ -130,7 +101,7 @@ sf read ${baseaddr} 0x0 ${flashsize}
 mmc write ${baseaddr} 0x10 0x4000
 ```
 
-Another example, for 16MB:
+Một ví dụ khác, cho 16MB:
 
 ```shell
 mw.b ${baseaddr} ff ${flashsize}
@@ -140,85 +111,68 @@ sf read ${baseaddr} 0x0 ${flashsize}
 mmc write ${baseaddr} 0x10 0x8000
 ```
 
-Remove the card from the camera and insert it into a computer running Linux.
-Use `dd` command to copy data from the card to a binary file on the computer.
+Tháo thẻ ra khỏi camera và lắp vào máy tính chạy Linux. Sử dụng lệnh `dd` để sao chép dữ liệu từ thẻ sang tệp nhị phân trên máy tính.
 
-Example for 8MB:
+Ví dụ cho 8MB:
 
 ```bash
 sudo dd bs=512 skip=16 count=16384 if=/dev/sdc of=./fulldump.bin
 ```
 
-Example for 16MB:
+Ví dụ cho 16MB:
 
 ```bash
 sudo dd bs=512 skip=16 count=32768 if=/dev/sdc of=./fulldump.bin
 ```
 
-### Uploading binary image via serial connection.
+### Tải lên hình ảnh nhị phân qua kết nối nối tiếp.
 
-There are cameras that only have wireless connection unavailable directly from
-bootloader. Most of such cameras also have SD card slot but some don't, or it
-does not work for some reason, or you don't have a card, or something. Anyway,
-you still can upload a binary image onto camera and either run it, or save it
-into the flash memory. Here's how.
+Có những camera chỉ có kết nối không dây không khả dụng trực tiếp từ bootloader. Hầu hết các camera như vậy cũng có khe cắm thẻ SD nhưng một số thì không, hoặc nó không hoạt động vì lý do nào đó, hoặc bạn không có thẻ, hoặc đại loại như vậy. Dù sao, bạn vẫn có thể tải lên hình ảnh nhị phân lên camera và chạy nó hoặc lưu nó vào bộ nhớ flash. Đây là cách thực hiện.
 
-First of all, you'll need to install `lrzsz` package on your desktop computer.
-I presume it runs Linux and preferrably of a Debian family, that'll be easier
-on examples. So, run this command to satisfy prerequisites:
+Trước hết, bạn sẽ cần cài đặt gói `lrzsz` trên máy tính để bàn của mình. Tôi đoán nó chạy Linux và tốt nhất là thuộc họ Debian, điều đó sẽ dễ dàng hơn trên các ví dụ. Vì vậy, hãy chạy lệnh này để đáp ứng các điều kiện tiên quyết:
 
 ```bash
 apt install lrzsz
 ```
 
-Now you are ready.
+Bây giờ bạn đã sẵn sàng.
 
-Place the binary file you are going to upload into the same directory where you
-will be starting a `screen` session to your camera from. Start the session and
-boot into the bootloader console interrupting booting routine with a key combo.
+Đặt tệp nhị phân mà bạn định tải lên vào cùng thư mục mà bạn sẽ bắt đầu phiên `screen` đến camera của mình. Bắt đầu phiên và khởi động vào bảng điều khiển bootloader bằng cách ngắt quy trình khởi động bằng tổ hợp phím.
 
-Now you can run `help` and check what data transfer protocols are supported by
-your version of bootloader. If you see `loady` in the list of commands, then
-you can use ymodem protocol. Run `loady` on you camera, then press `Ctrl-a`
-followed by `:` (semi-colon). It will switch you into command line at the very
-bottom of the screen.
+Bây giờ bạn có thể chạy `help` và kiểm tra xem các giao thức truyền dữ liệu nào được hỗ trợ bởi phiên bản bootloader của bạn. Nếu bạn thấy `loady` trong danh sách các lệnh, thì bạn có thể sử dụng giao thức ymodem. Chạy `loady` trên camera của bạn, sau đó nhấn `Ctrl-a` theo sau là `:` (dấu chấm phẩy). Nó sẽ chuyển bạn vào dòng lệnh ở dưới cùng của màn hình.
 
-Enter `exec !! sz --ymodem filename.bin` where _filename.bin_ and see your file
-uploading via serial connection. At 115200 bps. Slow, very slow.
+Nhập `exec !! sz --ymodem filename.bin` trong đó _filename.bin_ và xem tệp của bạn được tải lên qua kết nối nối tiếp. Ở tốc độ 115200 bps. Chậm, rất chậm.
 
-After the file is uploaded, you can do the usual magic. Either boot from the
-memory image right away using `bootm`, or write it into the flash memory.
+Sau khi tệp được tải lên, bạn có thể thực hiện phép thuật thông thường. Hoặc khởi động từ hình ảnh bộ nhớ ngay lập tức bằng cách sử dụng `bootm`, hoặc ghi nó vào bộ nhớ flash.
 
-### Flashing full image via serial connection
+### Flash toàn bộ hình ảnh qua kết nối nối tiếp
 
-Before you start, [prepare the environment](#prepare-the-environment).
+Trước khi bạn bắt đầu, [chuẩn bị môi trường](#prepare-the-environment).
 
-Download the full firmware binary for your SoC and flash chip from
-[OpenIPC web site](https://openipc.org/supported-hardware/) after submitting the
-settings form and clicking the link hidden under "Alternative method" button.
+Tải xuống firmware nhị phân đầy đủ cho SoC và chip flash của bạn từ [trang web OpenIPC](https://openipc.org/supported-hardware/) sau khi gửi biểu mẫu cài đặt và nhấp vào liên kết ẩn dưới nút "Phương pháp thay thế".
 
 ![](../images/firmware-full-binary-link.webp)
 
-Open `screen` and connect to UART port.
+Mở `screen` và kết nối với cổng UART.
 
 ```bash
 screen /dev/ttyUSB0 115200
 ```
 
-Sign in into bootloader shell and run:
+Đăng nhập vào shell bootloader và chạy:
 
 ```shell
 mw.b ${baseaddr} 0xff ${flashsize}
 loady ${baseaddr}
 ```
 
-press "Ctrl-a" followed by ":", then type
+nhấn "Ctrl-a" theo sau là ":", sau đó nhập
 
 ```bash
 exec !! sz --ymodem fullimage.bin
 ```
 
-after the image is loaded, continue
+sau khi hình ảnh được tải, tiếp tục
 
 ```shell
 sf probe 0
@@ -226,16 +180,13 @@ sf erase 0x0 ${flashsize}
 sf write ${baseaddr} 0x0 ${filesize}
 ```
 
-### Flashing full image from TFTP
+### Flash toàn bộ hình ảnh từ TFTP
 
-Before you start, [prepare the environment](#prepare-the-environment).
+Trước khi bạn bắt đầu, [chuẩn bị môi trường](#prepare-the-environment).
 
-Download [full image binary for your SoC](https://openipc.org/supported-hardware/)
-and place it in the root directory of your local TFTP server.
+Tải xuống [firmware nhị phân đầy đủ cho SoC của bạn](https://openipc.org/supported-hardware/) và đặt nó vào thư mục gốc của máy chủ TFTP cục bộ của bạn.
 
-Start the session and boot into the bootloader console interrupting booting
-routine with a key combo. When in the console, set up parameters of your local
-network, if needed.
+Bắt đầu phiên và khởi động vào bảng điều khiển bootloader bằng cách ngắt quy trình khởi động bằng tổ hợp phím. Khi ở trong bảng điều khiển, hãy thiết lập các tham số của mạng cục bộ của bạn, nếu cần.
 
 ```bash
 setenv ipaddr 192.168.1.10
@@ -244,9 +195,9 @@ setenv gatewayip 192.168.1.1
 setenv serverip 192.168.1.254
 ```
 
-Use the following commands to re-flash your camera with the full image:
+Sử dụng các lệnh sau để flash lại camera của bạn bằng hình ảnh đầy đủ:
 
-Example for 8MB:
+Ví dụ cho 8MB:
 
 ```shell
 mw.b ${baseaddr} 0xff ${flashsize}
@@ -255,7 +206,7 @@ sf probe 0; sf erase 0x0 ${flashsize}; sf write ${baseaddr} 0x0 ${filesize}
 reset
 ```
 
-Example for 16MB:
+Ví dụ cho 16MB:
 
 ```shell
 mw.b ${baseaddr} 0xff ${flashsize}
@@ -264,32 +215,25 @@ sf probe 0; sf erase 0x0 ${flashsize}; sf write ${baseaddr} 0x0 ${filesize}
 reset
 ```
 
-At the first boot, sign in into the bootloader shell once again and remap
-partitioning running `run setnor16m` command.
+Ở lần khởi động đầu tiên, hãy đăng nhập vào shell bootloader một lần nữa và ánh xạ lại phân vùng bằng cách chạy lệnh `run setnor16m`.
 
-### Reading binary image from SD card.
+### Đọc hình ảnh nhị phân từ thẻ SD.
 
-Before you start, [prepare the environment](#prepare-the-environment).
+Trước khi bạn bắt đầu, [chuẩn bị môi trường](#prepare-the-environment).
 
-If your camera supports SD card and you have `fatload` command in bootloader,
-then you can read firmware binary files from an SD card.
+Nếu camera của bạn hỗ trợ thẻ SD và bạn có lệnh `fatload` trong bootloader, thì bạn có thể đọc các tệp nhị phân firmware từ thẻ SD.
 
-First, prepare the card: format it into FAT filesystem and place bootloader,
-kernel, and rootfs binary files there. Insert the card into camera and boot
-into bootloader console.
+Đầu tiên, chuẩn bị thẻ: định dạng nó thành hệ thống tệp FAT và đặt các tệp nhị phân bootloader, kernel và rootfs ở đó. Lắp thẻ vào camera và khởi động vào bảng điều khiển bootloader.
 
-Check that you have access to the card.
+Kiểm tra xem bạn có quyền truy cập vào thẻ hay không.
 
 ```bash
 mmc rescan
 ```
 
-Then unlock access to flash memory and start writing content of the files from
-the card into the flash memory.
+Sau đó, mở khóa quyền truy cập vào bộ nhớ flash và bắt đầu ghi nội dung của các tệp từ thẻ vào bộ nhớ flash.
 
-NB! Please note that load address and names of files used in this example not
-necessarily match those for your particular camera. Consult documentation, or
-seek help on [our Telegram channel][telegram].
+Lưu ý! Xin lưu ý rằng địa chỉ tải và tên của các tệp được sử dụng trong ví dụ này không nhất thiết phải khớp với địa chỉ tải và tên của các tệp cho camera cụ thể của bạn. Tham khảo tài liệu hoặc tìm kiếm sự trợ giúp trên [kênh Telegram của chúng tôi][telegram].
 
 Flash bootloader.
 
@@ -311,7 +255,7 @@ fatload mmc 0:1 ${baseaddr} uImage.${soc}
 sf write ${baseaddr} 0x50000 ${filesize}
 ```
 
-Flash root filesystem.
+Flash hệ thống tệp gốc.
 
 ```shell
 mw.b ${baseaddr} 0xff 0x500000
@@ -321,73 +265,47 @@ fatload mmc 0:1 ${baseaddr} rootfs.squashfs.${soc}
 sf write ${baseaddr} 0x250000 ${filesize}
 ```
 
-### Bypassing password-protected bootloader.
+### Vượt qua bootloader được bảo vệ bằng mật khẩu.
 
-Changing the bootloader is a risky operation. There's a high probability of
-turning your camera into a paperweight if something goes wrong. So before you
-flash a new bootloader you have to weigh up all the risks and benefits. In most
-cases the original bootloader plus new kernel and new operating system should
-work just fine. But there are exceptions.
+Thay đổi bootloader là một thao tác rủi ro. Có khả năng cao là biến camera của bạn thành cục chặn giấy nếu có sự cố xảy ra. Vì vậy, trước khi bạn flash một bootloader mới, bạn phải cân nhắc tất cả các rủi ro và lợi ích. Trong hầu hết các trường hợp, bootloader gốc cộng với kernel mới và hệ điều hành mới sẽ hoạt động tốt. Nhưng có những trường hợp ngoại lệ.
 
-#### Shorting pins on flash chip
+#### Chập các chân trên chip flash
 
-If you can't interrupt the boot sequence with a key combination, or if your
-camera requires a bootloader password that you don't know, you can still make
-it stop the Linux kernel booting and throw you into the shell.
+Nếu bạn không thể ngắt trình tự khởi động bằng tổ hợp phím hoặc nếu camera của bạn yêu cầu mật khẩu bootloader mà bạn không biết, bạn vẫn có thể khiến nó dừng khởi động kernel Linux và đưa bạn vào shell.
 
-The first thing to do is locate the flash memory chip on the camera circuit
-board. Typically this is a square chip with 8 pins labeled 25Q64 or 25Q128,
-rarely 25L64 or 25L128. If you have trouble locating the chip, try taking
-some pictures of your board from both sides. Then ask for help
-[in our Telegram channel](https://t.me/openipc).
-__Do not try to short-circuit any random chip! It will most likely burn your camera circuit.__
+Điều đầu tiên cần làm là xác định vị trí chip bộ nhớ flash trên bảng mạch camera. Thông thường đây là một chip vuông có 8 chân được dán nhãn 25Q64 hoặc 25Q128, hiếm khi là 25L64 hoặc 25L128. Nếu bạn gặp sự cố khi xác định vị trí chip, hãy thử chụp một số ảnh bảng của bạn từ cả hai phía. Sau đó, hãy yêu cầu trợ giúp [trong kênh Telegram của chúng tôi](https://t.me/openipc).
+__Không cố gắng làm đoản mạch bất kỳ chip ngẫu nhiên nào! Nó rất có thể sẽ làm cháy mạch camera của bạn.__
 
-Short-circuit pins 5 and 6 of the flash chip with a small metal object,
-a screwdriver or tweezers, right after the bootloader starts but before it
-calls up the Linux kernel.
+Làm đoản mạch các chân 5 và 6 của chip flash bằng một vật kim loại nhỏ, tua vít hoặc nhíp, ngay sau khi bootloader khởi động nhưng trước khi nó gọi kernel Linux.
 
-Pins 5 and 6 of the SOIC8 chip are on the opposite corner of pin 1, indicated
-by the embossed or drawn dot next to it.
+Các chân 5 và 6 của chip SOIC8 nằm ở góc đối diện với chân 1, được biểu thị bằng dấu chấm nổi hoặc vẽ bên cạnh nó.
 
 ![](../images/flash-pins.webp)
 ![](../images/flash-pins-2.webp)
 
-[This hack in details](https://cybercx.co.nz/bypassing-bios-password/) or [archived](https://github.com/OpenIPC/wiki/blob/master/en/help-uboot.md#bypassing-password-protected-bootloader) version of the article
+[Hack này chi tiết](https://cybercx.co.nz/bypassing-bios-password/) hoặc phiên bản [đã lưu trữ](https://github.com/OpenIPC/wiki/blob/master/en/help-uboot.md#bypassing-password-protected-bootloader) của bài viết
 
-#### Downgrading stock firmware.
+#### Hạ cấp firmware gốc.
 
-Today, we see more and more cameras where access to bootloader console is
-protected with a password. Thus, even if you connect to the camera's UART port,
-all you will see after interrupting the standard boot cycle is a prompt for
-password. In that case, a relatively safe solution is to downgrade the firmware
-to a version where the password protection was not yet implemented. For example,
-for Xiongmai cameras the bootloader password protection started popping up
-somewhere around July 2021, hence you need a firmware for your camera from an
-earlier date. After you successfully downgrade your camera to a password-free
-bootloader, you could install the OpenIPC firmware in a regular way.
+Ngày nay, chúng ta thấy ngày càng nhiều camera có quyền truy cập vào bảng điều khiển bootloader được bảo vệ bằng mật khẩu. Do đó, ngay cả khi bạn kết nối với cổng UART của camera, tất cả những gì bạn sẽ thấy sau khi ngắt chu kỳ khởi động tiêu chuẩn là lời nhắc nhập mật khẩu. Trong trường hợp đó, một giải pháp tương đối an toàn là hạ cấp firmware xuống phiên bản mà tính năng bảo vệ bằng mật khẩu chưa được triển khai. Ví dụ: đối với camera Xiongmai, tính năng bảo vệ bằng mật khẩu bootloader bắt đầu xuất hiện ở đâu đó vào khoảng tháng 7 năm 2021, do đó bạn cần có firmware cho camera của mình từ ngày trước đó. Sau khi bạn hạ cấp thành công camera của mình xuống bootloader không có mật khẩu, bạn có thể cài đặt firmware OpenIPC theo cách thông thường.
 
-#### Side-loading unlocked bootloader.
+#### Tải phụ bootloader đã mở khóa.
 
-Many modern cameras utilize fastboot protocol that allows camera to load a
-bootloader binary code directly into memory and then run it from there.
-Check if our [burn utility][burn] supports your camera's SoC.
+Nhiều camera hiện đại sử dụng giao thức fastboot cho phép camera tải mã nhị phân bootloader trực tiếp vào bộ nhớ và sau đó chạy nó từ đó. Kiểm tra xem [tiện ích ghi][burn] của chúng tôi có hỗ trợ SoC của camera của bạn hay không.
 
-#### Modifying stock firmware.
+#### Sửa đổi firmware gốc.
 
-One way to bypass the bootloader protection is to dump original firmware and
-replace bootloader there with an unlocked alternative. Or you could flash the
-entire OpenIPC firmware since you have the chip in the programmer, anyway.
+Một cách để vượt qua bảo vệ bootloader là xuất firmware gốc và thay thế bootloader ở đó bằng một bản thay thế đã mở khóa. Hoặc bạn có thể flash toàn bộ firmware OpenIPC vì dù sao bạn cũng có chip trong bộ lập trình.
 
-__DO NOT FORGET TO MAKE A BACKUP OF YOUR ORIGINAL FIRMWARE!__
+__ĐỪNG QUÊN SAO LƯU FIRMWARE GỐC CỦA BẠN!__
 
-## Troubleshooting
+## Khắc phục sự cố
 
-Before you start, [prepare the environment](#prepare-the-environment).
+Trước khi bạn bắt đầu, [chuẩn bị môi trường](#prepare-the-environment).
 
-If you get `Too many args` error while trying to set an environment variable,
-try to do that from within Linux using `fw_setenv` instead of `setenv` in U-boot.
+Nếu bạn nhận được lỗi `Too many args` trong khi cố gắng đặt biến môi trường, hãy thử làm điều đó từ trong Linux bằng cách sử dụng `fw_setenv` thay vì `setenv` trong U-boot.
 
-__U-boot console:__
+__Bảng điều khiển U-boot:__
 
 ```shell
 hisilicon # setenv uk 'mw.b ${baseaddr} 0xff ${flashsize}; tftp ${baseaddr} uImage.${soc}; sf probe 0; sf erase 0x50000 0x200000; sf write ${baseaddr} 0x50000 ${filesize}'
@@ -402,3 +320,40 @@ root@openipc-hi3518ev100:~# fw_setenv uk 'mw.b ${baseaddr} 0xff ${flashsize}; tf
 
 [burn]: https://github.com/OpenIPC/burn
 [telegram]: https://t.me/OpenIPC
+
+
+**Giải thích thuật ngữ:**
+
+* **U-Boot:** Là một bootloader phổ biến được sử dụng trong các hệ thống nhúng.
+* **Bootloader:** Là một chương trình nhỏ được thực thi khi thiết bị khởi động, chịu trách nhiệm tải hệ điều hành.
+* **Shell:** Là một giao diện dòng lệnh cho phép người dùng tương tác với hệ thống.
+* **UART:** Là một giao diện truyền thông nối tiếp.
+* **RAM:** Bộ nhớ truy cập ngẫu nhiên.
+* **Hexadecimal:** Hệ thập lục phân.
+* **Binary:** Nhị phân.
+* **TFTP:** Là một giao thức truyền tệp đơn giản.
+* **SD card:** Thẻ nhớ SD.
+* **MicroSD:** Thẻ nhớ microSD.
+* **Partition table:** Bảng phân vùng.
+* **Kernel:** Là phần cốt lõi của hệ điều hành.
+* **Rootfs:** Hệ thống tệp gốc.
+* **Squashfs:** Là một hệ thống tệp nén chỉ đọc.
+* **Fastboot:** Là một giao thức được sử dụng để flash phân vùng trên thiết bị Android.
+* **SoC:** Hệ thống trên một chip.
+* **fw_setenv:** Là một lệnh được sử dụng để đặt biến môi trường trong firmware.
+* **tftpboot:** Là một lệnh được sử dụng để tải tệp qua TFTP.
+* **sf probe:** Là một lệnh được sử dụng để dò tìm chip flash.
+* **sf erase:** Là một lệnh được sử dụng để xóa chip flash.
+* **sf write:** Là một lệnh được sử dụng để ghi vào chip flash.
+* **reset:** Là một lệnh được sử dụng để khởi động lại thiết bị.
+* **run setnor16m:** Là một lệnh được sử dụng để ánh xạ lại phân vùng cho chip flash 16MB.
+* **fatload:** Là một lệnh được sử dụng để tải tệp từ hệ thống tệp FAT.
+* **mmc rescan:** Là một lệnh được sử dụng để quét lại thẻ SD.
+* **u-boot-with-spl.bin:** Là tệp bootloader.
+* **uImage.${soc}:** Là tệp kernel.
+* **rootfs.squashfs.${soc}:** Là tệp hệ thống tệp gốc.
+
+
+
+
+

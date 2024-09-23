@@ -1,48 +1,48 @@
-# OpenIPC Wiki
-[Table of Content](../README.md)
+## Wiki OpenIPC
+[Mục lục](../README.md)
 
 
-## HomeAsistant Generic camera 
-#### Option 1
-Go to Setings ->  Device and service -> Add integrations -->  Generic camera 
+## Camera chung Home Assistant
+#### Lựa chọn 1
+Vào Cài đặt -> Thiết bị và dịch vụ -> Thêm tích hợp --> Camera chung
 
-#### Option 2
-[HomeAssistan_Generic](https://my.home-assistant.io/redirect/config_flow_start/?domain=generic)
+#### Lựa chọn 2
+[HomeAssistan_Chung](https://my.home-assistant.io/redirect/config_flow_start/?domain=generic)
 
-#### Option 3
+#### Lựa chọn 3
 <"IP-HomeAsisstantServer">/config/integrations/dashboard
 
-Add integrations --> Generic camera 
+Thêm tích hợp --> Camera chung
 
-### Config parameter 
+### Tham số cấu hình
 
 <div style="display: flex;">
   <div style="max-width: 80%; overflow-x: auto;">
-    <img src="../images/howto-streaming-homeassistant.png" alt="Example configuration generic camera home assitant (IP_Camera 192.168.1.29)" width="300"/>
+    <img src="../images/howto-streaming-homeassistant.png" alt="Ví dụ cấu hình camera chung home assistant (IP_Camera 192.168.1.29)" width="300"/>
   </div> 
   <div style="max-width: 80%; overflow-x: auto;">
     <pre>
       <code>
-Still Image URL -> http://<"IP-OIPC_Camera">/image.jpg
-Stream Source URL  -> rtsp://<"User">:<"PASS">@<"IP-OIPC_Camera">:554/stream=0
-RTSP transport protocol -> TCP
-Authentication -> basic
-Username -> <"User">
-Password -> <"PASS">
-Frame Rate -> 15
-Verify SSL certificate -> empty
-Limit refetch to url change ->empty
+URL hình ảnh tĩnh -> http://<"IP-OIPC_Camera">/image.jpg
+URL nguồn luồng -> rtsp://<"User">:<"PASS">@<"IP-OIPC_Camera">:554/stream=0
+Giao thức vận chuyển RTSP -> TCP
+Xác thực -> cơ bản
+Tên người dùng -> <"User">
+Mật khẩu -> <"PASS">
+Tốc độ khung hình -> 15
+Xác minh chứng chỉ SSL -> trống
+Giới hạn tải lại khi thay đổi url -> trống
       </code>
     </pre>
   </div>
 </div>
 
-**Note:** Default User and PASS OpenIPC -> ("root" & ¨12345¨)
+**Lưu ý:** Người dùng và Mật khẩu mặc định OpenIPC -> ("root" & ¨12345¨)
 
-**Note:** Be carful with frame rate (Currently home assistant does not support more than 20 having flicker problems)
+**Lưu ý:** Cẩn thận với tốc độ khung hình (Hiện tại, home assistant không hỗ trợ quá 20 khung hình/giây, nếu vượt quá sẽ gặp vấn đề nhấp nháy)
 
-## Lovelace example 
-Add this extract in a new card manually (yaml format)
+## Ví dụ Lovelace
+Thêm đoạn trích này vào một thẻ mới theo cách thủ công (định dạng yaml)
 ```
 camera_view: live
 type: picture-glance
@@ -53,13 +53,31 @@ view_layout:
   position: main
 camera_image: camera.192_168_1_29
 ```
-**OTHERNote:**
-## Camera Configuration 
+**Lưu ý KHÁC:**
+## Cấu hình Camera
 ![](../images/HA_CameraConfig.png)
 
-## Router settings
-Remember to set a fixed IP address for your camera from your router, otherwise it could change when it reboots.
+## Cài đặt Router
+Hãy nhớ đặt địa chỉ IP cố định cho camera của bạn từ router, nếu không, nó có thể thay đổi khi khởi động lại.
 
 
-# Enjoy the stream.
+# Tận hưởng luồng.
+
+
+**Giải thích thuật ngữ:**
+
+* **Home Assistant:** Là một nền tảng tự động hóa nhà mã nguồn mở.
+* **Generic camera:** Camera chung, là một loại tích hợp trong Home Assistant cho phép bạn thêm bất kỳ camera IP nào hỗ trợ RTSP.
+* **RTSP:** Real Time Streaming Protocol, là một giao thức mạng được sử dụng để truyền phát video và âm thanh trực tiếp.
+* **TCP:** Transmission Control Protocol, là một giao thức mạng đáng tin cậy được sử dụng để truyền dữ liệu.
+* **Authentication:** Xác thực, là quá trình xác minh danh tính của người dùng.
+* **SSL:** Secure Sockets Layer, là một giao thức bảo mật được sử dụng để mã hóa dữ liệu được truyền qua mạng.
+* **Lovelace:** Là giao diện người dùng dựa trên web cho Home Assistant.
+* **YAML:** Là một ngôn ngữ đánh dấu dữ liệu được sử dụng trong các tệp cấu hình.
+* **Picture-glance card:** Là một loại thẻ trong Lovelace cho phép bạn hiển thị hình ảnh từ camera.
+* **Router:** Bộ định tuyến, là một thiết bị mạng được sử dụng để kết nối các mạng với nhau.
+* **Fixed IP address:** Địa chỉ IP cố định, là một địa chỉ IP không thay đổi.
+
+
+
 

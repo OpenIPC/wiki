@@ -1,4 +1,4 @@
-# LSC Smart Connect Video Doorbell (2021 edition)
+# LSC Smart Connect Chuông Cửa Có Hình (phiên bản 2021)
 
 ![device_lsc_doorbell1](../images/device-lsc-smart-connect-doorbell1.jpg)
 
@@ -6,28 +6,28 @@
 
 ![device_lsc_doorbell4](../images/device-lsc-smart-connect-doorbell4.jpg)
 
-The hardware and software setup is very identical to: [chacron ipcam](device-chacon-ipcam-ri01.md)
+Thiết lập phần cứng và phần mềm rất giống với: [chacron ipcam](device-chacon-ipcam-ri01.md)
 
-## Hardware
+## Phần cứng
 
-| System | Description                          |
+| Hệ thống | Mô tả                          |
 |--------|--------------------------------------|
 | SoC    | HI3518EV300                          |
-| Sensor | JXF23                                |
+| Cảm biến | JXF23                                |
 | Flash  | 8Mb (XM25QH64A)                      |
 | WiFi   | RTL8188FU                            |
 
-### OpenIPC status
+### Trạng thái OpenIPC
 
-| Component     | Status                                                   |
+| Thành phần     | Trạng thái                                                   |
 |---------------|----------------------------------------------------------|
-| WiFi          | [Working]                                                |
-| Red/Blue LEDs | [Working](#leds)                                         |
-| IR LED        | Working                                                  |
-| IR Cut        | Working                                                  |
+| WiFi          | [Hoạt động]                                                |
+| Đèn LED đỏ/xanh | [Hoạt động](#đèn-led)                                         |
+| Đèn LED IR        | Hoạt động                                                  |
+| Cắt IR        | Hoạt động                                                  |
 
 
-### Serial connection
+### Kết nối nối tiếp
 
 ![device_lsc_doorbell3](../images/device-lsc-smart-connect-doorbell3.jpg)
 
@@ -40,17 +40,17 @@ The hardware and software setup is very identical to: [chacron ipcam](device-cha
 
 ### GPIOs
 
-| nr        | Description   |
+| nr        | Mô tả   |
 |-----------|---------------|
 | 0x0f (15) | irCut_1       |
 | 0x0c (12) | irCut_2       |
-| 0x28 (40) | IR LED        |
-| 0x33 (51) | Red LED       |
-| 0x32 (50) | Blue LED      |
-| 0x0d (13) | wlan power    |
-| 0x3B (59) | Doorbell btn  |
+| 0x28 (40) | Đèn LED IR        |
+| 0x33 (51) | Đèn LED đỏ       |
+| 0x32 (50) | Đèn LED xanh      |
+| 0x0d (13) | nguồn wlan    |
+| 0x3B (59) | Nút chuông cửa  |
 
-### [ipctool](https://github.com/OpenIPC/ipctool) output (8Mb flash):
+### Đầu ra [ipctool](https://github.com/OpenIPC/ipctool) (flash 8Mb):
 
 ```
 ---
@@ -115,38 +115,38 @@ sensors:
   clock: 27MHz
 ```
 
-## Flashing OpenIPC
+## Cài đặt OpenIPC
 
-Flashed using a CH341A programmer
+Đã flash bằng bộ lập trình CH341A
 
-### LEDs
+### Đèn LED
 
-The camera has a dual color LED (red/blue) connected to GPIO's 50 and 51.
-To control those LEDs you can use the /sys api:
+Camera có đèn LED hai màu (đỏ/xanh) được kết nối với GPIO 50 và 51.
+Để điều khiển các đèn LED đó, bạn có thể sử dụng API /sys:
 ```
-# make the GPIOs accessible
+# làm cho GPIO có thể truy cập được
 echo 50 > /sys/class/gpio/export
-# and set direction (only need to do once)
+# và đặt hướng (chỉ cần thực hiện một lần)
 echo out > /sys/class/gpio50/direction
 echo out > /sys/class/gpio51/direction
 
-# turn on blue LED
+# bật đèn LED xanh
 echo 1 > /sys/class/gpio50/value
-# turn off blue LED
+# tắt đèn LED xanh
 echo 0 > /sys/class/gpio50/value
 
-# turn on red LED
+# bật đèn LED đỏ
 echo 1 > /sys/class/gpio51/value
-# turn off red LED
+# tắt đèn LED đỏ
 echo 0 > /sys/class/gpio51/value
 ```
 
-### Homeassistant support
+### Hỗ trợ Homeassistant
 
-A custom MQTT Client has been written to handle the doorbell event and send it to Home assistant using MQTT.
-Project can be found here: [lscdoorbellmqtt](https://github.com/berobloom/lscdoorbellmqtt)
+Một MQTT Client tùy chỉnh đã được viết để xử lý sự kiện chuông cửa và gửi nó đến Home assistant bằng MQTT.
+Dự án có thể được tìm thấy ở đây: [lscdoorbellmqtt](https://github.com/berobloom/lscdoorbellmqtt)
 
-## Sources:
+## Nguồn:
 
 * https://github.com/OpenIPC/wiki/blob/master/en/device-chacon-ipcam-ri01.md
 * https://github.com/berobloom/lscdoorbellmqtt

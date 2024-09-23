@@ -1,74 +1,69 @@
-# Wiki OpenIPC
-[Bảng nội dung](../README.md)
+# OpenIPC Wiki
+[Mục lục](../README.md)
 
 Thiết bị được hỗ trợ
 -----------------
 
-Rất tiếc, chúng tôi không thể cung cấp cho bạn một danh sách dài các thiết bị mà không còn nghi ngờ
-tương thích với firmware của chúng tôi. Các nhà sản xuất camera thường thay đổi thiết kế phần cứng
-và thay thế các thành phần ngay cả trong cùng một dòng mô hình, mà không báo trước.
+Rất tiếc, chúng tôi không thể cung cấp cho bạn một danh sách dài các thiết bị chắc chắn tương thích với firmware của chúng tôi. Các nhà sản xuất camera có xu hướng thay đổi thiết kế phần cứng và hoán đổi các thành phần ngay cả trong cùng một dòng model mà không cần thông báo trước.
 
-Dưới đây, chúng tôi đã liệt kê một số camera mà chúng tôi đã có trong tay, nhưng một lần nữa, không có
-bảo đảm rằng nếu bạn mua một trong những camera này hôm nay, bạn sẽ không kết thúc
-với phần cứng không được hỗ trợ trong tay bạn.
+Dưới đây, chúng tôi đã liệt kê một số camera mà chúng tôi đã sở hữu, nhưng một lần nữa, không có gì đảm bảo rằng nếu bạn mua một trong những camera đó ngày hôm nay, bạn sẽ không nhận được phần cứng không được hỗ trợ.
 
-Phương pháp hoạt động tương đối để xác định xem camera của bạn có được hỗ trợ bởi phiên bản gần đây
-của firmware của chúng tôi là mở[^1] vỏ camera và xem xét các dấu hiệu trên chip.
-Sau đó, tra cứu chip của bạn trong [danh sách phần cứng được hỗ trợ][1]
+Phương pháp hoạt động phần nào để xác định xem camera của bạn có được hỗ trợ bởi phiên bản firmware gần đây của chúng tôi hay không là mở[^1] vỏ camera và xem các dấu hiệu trên chip. Sau đó, tra cứu chip của bạn trong [danh sách phần cứng được hỗ trợ][1]
 và kiểm tra trạng thái phát triển của nó.
 
-Nếu bạn vẫn còn nghi ngờ, chụp hình ảnh độ phân giải cao của các bức ảnh gần phần cứng
-và yêu cầu giúp đỡ trong một trong các nhóm Telegram của chúng tôi.
+Nếu bạn vẫn còn nghi ngờ, hãy chụp ảnh cận cảnh phần cứng với độ phân giải cao
+và yêu cầu trợ giúp trong một trong các nhóm Telegram của chúng tôi.
 
-[^1]: Chú ý! Khi thực hiện việc này, bạn chịu trách nhiệm hoàn toàn cho hành động của mình.
-Có khả năng rất cao, việc mở vỏ sẽ làm mất bảo hành của thiết bị. Chúng tôi không thể
-chịu trách nhiệm cho bất kỳ thiệt hại nào đối với camera, bạn, nhà của bạn, thú cưng của bạn,
+[^1]: Chú ý! Khi làm như vậy, bạn tự chịu trách nhiệm hoàn toàn về hành động của mình.
+Nhiều khả năng, việc mở vỏ máy sẽ làm mất hiệu lực bảo hành của thiết bị. Chúng tôi không thể
+chịu trách nhiệm cho bất kỳ thiệt hại nào đối với camera, bản thân bạn, ngôi nhà của bạn, thú cưng của bạn
 hoặc bất cứ thứ gì khác. Nếu bạn không cảm thấy thoải mái với phần cứng, dự án này
 có thể không phù hợp với bạn.
 
-Bạn cũng có thể xem danh sách các thiết bị đã được điều chỉnh trong một dự án Builder đặc biệt -
+Bạn cũng có thể xem danh sách các thiết bị được điều chỉnh trong một dự án Trình tạo đặc biệt -
 https://github.com/OpenIPC/builder
 
-_Nếu bạn có một thiết bị hỗ trợ khác để thêm vào, hãy thực hiện [ở đây][2]._
+_Nếu bạn có một thiết bị được hỗ trợ khác để thêm, vui lòng thực hiện [tại đây][2]._
 
-| Thương hiệu | Mô hình            | Bộ xử lý    | Cảm biến | Bộ nhớ Flash | LAN | WLAN           | USB  | Thẻ |
+| Thương hiệu | Model              | Bộ xử lý   | Cảm biến | Bộ nhớ Flash | LAN | WLAN           | USB  | Thẻ |
 |------------|--------------------|-------------|--------|--------------|-----|----------------|------|------|
 |            |                    |             |        |              |     |                |      |      |
-| Anjoy      | MS-J10             | SSC335      | IMX307 |              | Yes | No             | Yes  | No   |
-| Anjoy      | YM-J10D            | SSC337      | IMX307 |              | Yes | No             | Yes  | No   |
-| Amorvue    | NC1080AW           | HI3518EV200 | SC2135 | MX25L6405D   | Yes | RTL8188EUS[^2] | No   | No   |
-| Chacon     | [IPCAM-RI01][3]    | HI3518EV300 | JXF23  | XM25QH128A   | No  | RTL8188FTV     | WiFi | Yes  |
+| Anjoy      | MS-J10             | SSC335      | IMX307 |              | Có  | Không           | Có   | Không |
+| Anjoy      | YM-J10D            | SSC337      | IMX307 |              | Có  | Không           | Có   | Không |
+| Amorvue    | NC1080AW           | HI3518EV200 | SC2135 | MX25L6405D   | Có  | RTL8188EUS[^2] | Không | Không |
+| Chacon     | [IPCAM-RI01][3]    | HI3518EV300 | JXF23  | XM25QH128A   | Không | RTL8188FTV     | WiFi | Có   |
 |            |                    |             |        |              |     |                |      |      |
-| LTV        | CNE-724 48         | HI3516EV200 |        |              | Yes | No             | No   | Yes  |
+| LTV        | CNE-724 48         | HI3516EV200 |        |              | Có  | Không           | Không | Có   |
 |            |                    |             |        |              |     |                |      |      |
-| Rotek      | Switcam HS303 (v1) | HI3518EV200 |        |              | No  | RTL8188FU      | WiFi | Yes  |
-| Rotek      | Switcam HS303 (v2) | HI3518EV200 | OV9732 | GD25Q128CSIG | No  | RTL8188EU      | WiFi | Yes  |
-| Rotek      | Switcam HS303 (v3) | HI3518EV200 |        |              | No  | RTL8188EU      | WiFi | Yes  |
+| Rotek      | Switcam HS303 (v1) | HI3518EV200 |        |              | Không | RTL8188FU      | WiFi | Có   |
+| Rotek      | Switcam HS303 (v2) | HI3518EV200 | OV9732 | GD25Q128CSIG | Không | RTL8188EU      | WiFi | Có   |
+| Rotek      | Switcam HS303 (v3) | HI3518EV200 |        |              | Không | RTL8188EU      | WiFi | Có   |
 |            |                    |             |        |              |     |                |      |      |
-| Smartwares | [CIP-37210][4]     | HI3518EV200 |        |              | No  | RTL8188FU      | WiFi | Yes  |
+| Smartwares | [CIP-37210][4]     | HI3518EV200 |        |              | Không | RTL8188FU      | WiFi | Có   |
 |            |                    |             |        |              |     |                |      |      |
-| TOP        | TOP-201/MCO-720P Mini Camera  | HI3518EV100 | OV9712 |   | Yes | No             | No   | No   |
+| TOP        | TOP-201/MCO-720P Mini Camera  | HI3518EV100 | OV9712 |   | Có  | Không           | Không | Không |
 |            |                    |             |        |              |     |                |      |      |
-| Xiaomi     | [MJSXJ02HL][7]     | HI3518EV300 |        |              | No  |                |      | Yes  |
-| Xiaomi     | [MJSXJ03HL][6]     | T31N        | JXQ03 | QH128A-104HIP | No  | RTL8189FTV     | No   | Yes  |
-| Xiaomi     | [CMSXJ25A]         | SSC325      | GC2053 | QH128A-104HIP| Yes | MT7603UN      | No   | Yes  |
+| Xiaomi     | [MJSXJ02HL][7]     | HI3518EV300 |        |              | Không |                |      | Có   |
+| Xiaomi     | [MJSXJ03HL][6]     | T31N        | JXQ03 | QH128A-104HIP | Không | RTL8189FTV     | Không | Có   |
+| Xiaomi     | [CMSXJ25A]         | SSC325      | GC2053 | QH128A-104HIP| Có  | MT7603UN      | Không | Có   |
 |            |                    |             |        |              |     |                |      |      |
-| XM         | BLK18EV-0062-0035  | HI3518EV200 | JXH62  |              | Yes |                |      | Yes  |
+| XM         | BLK18EV-0062-0035  | HI3518EV200 | JXH62  |              | Có  |                |      | Có   |
 |            |                    |             |        |              |     |                |      |      |
-| Zenotech   | HI3516D_MB_V13_RA  | HI3516DV100 | OV9689 | GD25Q128CSIG | Yes | No             |      | No   |
-| Tungson    | DS-YTJ5301         | SSC30KD     | GC2053 |              | Yes | RTL8188FTV     | No   | No   |
-| Haier      | HCC-18B30-U1       | T31ZX       | SC3335 | NM25Q128EVB  | No  | SSV6X5X        | No   | Yes  |
-| iFlytek    | XFP301-M           | T31ZX       | JXQ03  | XM25QH128C   | No  | RTL8188FU      | No   | Yes  |
-| Qihoo 360  | AP6PCM03           | T31ZX       | GC4653 | EN25QH256A   | Yes | ATBM6031       | No   | Yes  |
-| Goke       | [MJ-C232V5-0SW1][5]| GK7205V200  | GC2305 | XM25QH128CHIQ| Yes | RTL8188FU      | No   | No   |
-| Uniview    | CMCC-IPC-A35       | Hi3516EV300 | SP2305 | W25N01GV     | Yes |                | No   | No   |
-| E-Life     | EF3113             | T31L        | GC2053 | ZB25VQ128    | Yes | SV6155P        | No   | Yes  |
-| E-Life     | ET-N3431H-DW       | T31X        | OS03B10| ZB25VQ128    | Yes | SV6155P        | No   | Yes  |
-| H3C        | C2041              | T31X        | JXK04  | XM25QH128C   | Yes | RTL8188FTV     | No   | Yes  |
-| MEGVII     | SmartEye-D1A-24A-P | T31X        | JXK04  | FM25Q128A    | Yes | No             | No   | Yes  |
-| Uniview    | IPC-D122-PF28      | SSC335      | SC2335 | XM25QH64C    | Yes | No             | No   | No   |
+| Zenotech   | HI3516D_MB_V13_RA  | HI3516DV100 | OV9689 | GD25Q128CSIG | Có  | Không           |      | Không |
+| Tungson    | DS-YTJ5301         | SSC30KD     | GC2053 |              | Có  | RTL8188FTV     | Không | Không |
+| Haier      | HCC-18B30-U1       | T31ZX       | SC3335 | NM25Q128EVB  | Không | SSV6X5X        | Không | Có   |
+| iFlytek    | XFP301-M           | T31ZX       | JXQ03  | XM25QH128C   | Không | RTL8188FU      | Không | Có   |
+| Qihoo 360  | AP6PCM03           | T31ZX       | GC4653 | EN25QH256A   | Có  | ATBM6031       | Không | Có   |
+| Goke       | [MJ-C232V5-0SW1][5]| GK7205V200  | GC2305 | XM25QH128CHIQ| Có  | RTL8188FU      | Không | Không |
+| Uniview    | CMCC-IPC-A35       | Hi3516EV300 | SP2305 | W25N01GV     | Có  |                | Không | Không |
+| E-Life     | EF3113             | T31L        | GC2053 | ZB25VQ128    | Có  | SV6155P        | Không | Có   |
+| E-Life     | ET-N3431H-DW       | T31X        | OS03B10| ZB25VQ128    | Có  | SV6155P        | Không | Có   |
+| H3C        | C2041              | T31X        | JXK04  | XM25QH128C   | Có  | RTL8188FTV     | Không | Có   |
+| MEGVII     | SmartEye-D1A-24A-P | T31X        | JXK04  | FM25Q128A    | Có  | Không           | Không | Có   |
+| Uniview    | IPC-D122-PF28      | SSC335      | SC2335 | XM25QH64C    | Có  | Không           | Không | Không |
 
-| Bộ xử lý   | Cảm biến           | Nhà cung cấp     | SKU          | Nhận dạng bo mạch            |
+
+| Bộ xử lý | Cảm biến           | Nhà cung cấp | SKU          | Nhận dạng bảng              |
 |-------------|------------------|------------|--------------|---------------------------------|
 | Hi3516Cv100 | IMX222_spi_dc    | XM         |              | [BLK18C-0222-38X38_S-V1.03][1]  |
 | Hi3516Cv100 | OV2710_i2c_dc    | Jovision   |              | IPG5020A-H-V1.0                 |
@@ -121,4 +116,6 @@ _Nếu bạn có một thiết bị hỗ trợ khác để thêm vào, hãy th�
 [7]: https://github.com/OpenIPC/device-mjsxj02hl
 
 
-[^2]: WiFi có thể được kích hoạt với bộ nhớ flash 8MB bằng cách sử dụng bản build tùy chỉnh, hoặc bằng cách nâng cấp lên bộ nhớ flash 16MB và sử dụng firmware Ultimate.
+[^2]: WiFi có thể được bật với flash 8MB bằng cách sử dụng bản dựng tùy chỉnh hoặc bằng cách nâng cấp lên flash 16MB và sử dụng firmware Ultimate.
+
+

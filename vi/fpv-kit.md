@@ -1,7 +1,7 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-Selecting hardware to complete OpenIPC FPV kits
+Chọn phần cứng để hoàn thành bộ dụng cụ OpenIPC FPV
 -----------------------------------------------
 
 <p align="center">
@@ -9,22 +9,26 @@ Selecting hardware to complete OpenIPC FPV kits
 </p>
 
 
-### FPV kit 1
+### Bộ dụng cụ FPV 1
 
-- IPCam board GK7205V200 + IMX307
-- RTL8812AU x 2 (the board is debatable, maybe need an antenna connector, not a bare module) | [var.1](https://aliexpress.com/item/32830016946.html), [var.2](https://aliexpress.com/item/1005005262601564.html)
+- Bảng IPCam GK7205V200 + IMX307
+- RTL8812AU x 2 (bảng mạch còn đang tranh luận, có thể cần đầu nối ăng-ten, không phải mô-đun trần) | [biến thể 1](https://aliexpress.com/item/32830016946.html), [biến thể 2](https://aliexpress.com/item/1005005262601564.html)
 - DC-DC Mini560 5V
-- lens, IR filter, mounting stands and screws and other accessories
+- ống kính, bộ lọc IR, giá đỡ và ốc vít và các phụ kiện khác
 
 
-### FPV kit 2
+### Bộ dụng cụ FPV 2
 
-- IPCam board GK7205V300 + IMX307
+- Bảng IPCam GK7205V300 + IMX307
 - ....
 
-### Q&A
+### Hỏi & Đáp
 
-- Will it be possible to have the product in warehouses in Europe and North America ?
-    - Yes, in the future it is planned to ship from the Netherlands, Italy, Canada, Hong Kong.
-- Will it be possible to order expedited shipment by courier service ?
-    - Yes, in the future such an opportunity will be provided
+- Có thể có sản phẩm trong kho ở Châu Âu và Bắc Mỹ không?
+    - Có, trong tương lai, dự kiến ​​sẽ vận chuyển từ Hà Lan, Ý, Canada, Hồng Kông.
+- Có thể đặt hàng vận chuyển nhanh bằng dịch vụ chuyển phát nhanh không?
+    - Có, trong tương lai, cơ hội như vậy sẽ được cung cấp
+
+
+
+

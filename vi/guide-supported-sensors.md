@@ -1,9 +1,9 @@
-# Wiki OpenIPC
-[Bảng nội dung](../README.md)
+## Wiki OpenIPC
+[Mục lục](../README.md)
 
 ## Các cảm biến được hỗ trợ theo SoC
 
-_Lưu ý: Danh sách này không đảm bảo rằng cảm biến của bạn sẽ hoạt động. Có những nét tinh tế như các cách kết nối cảm biến khác nhau, việc đổi tên cảm biến, không khớp giữa cảm biến đã cài đặt và cảm biến đã khai báo, v.v. Đây chỉ là danh sách các trình điều khiển được tìm thấy trong SDK cho vi xử lý cụ thể. Xin hãy xem xét điều này._
+_Lưu ý: Danh sách này không đảm bảo rằng cảm biến của bạn sẽ hoạt động. Có những điểm khác biệt như các cách kết nối cảm biến khác nhau, việc đổi tên cảm biến, sự không khớp giữa cảm biến được cài đặt và cảm biến được khai báo, v.v. Đây chỉ là danh sách các trình điều khiển được tìm thấy trong SDK cho bộ xử lý cụ thể. Vui lòng lưu ý điều này._
 
 ### Ambarella
 
@@ -40,7 +40,7 @@ _Lưu ý: Danh sách này không đảm bảo rằng cảm biến của bạn s�
 - GK7205V200
   - ar0237, bt656, f23, f37, gc2053, gc4653, imx290, imx307, imx327, imx335, os05a, ov2718, sc200ai, sc2231, sc2232h, sc2235, sc2239, sc223a, sc2335, sc3235, sc3335, sc4236, sc500ai
 - GK7205V210
-  - imx307, imx327, imx335, os05a, ov2718, sc200ai, sc2231, sc2232h, sc2235, sc2239, [sc223a(sold as sc5239s)](https://github.com/RoboSchmied/Documentation/blob/main/sc223a.md), sc2335, sc3235, sc3335, sc4236, sc500ai
+  - imx307, imx327, imx335, os05a, ov2718, sc200ai, sc2231, sc2232h, sc2235, sc2239, [sc223a(được bán dưới dạng sc5239s)](https://github.com/RoboSchmied/Documentation/blob/main/sc223a.md), sc2335, sc3235, sc3335, sc4236, sc500ai
 - GK7205V300
 - GK7605V100
 
@@ -71,7 +71,7 @@ _Lưu ý: Danh sách này không đảm bảo rằng cảm biến của bạn s�
   - f23, f37, gc2053, imx307, imx335, sc2231, sc2232h, sc2239, sc2315e, sc3235, sc4236, sp2305
 - HI3516EV300
 - HI3518CV100
-- HI3518EV100
+- HI3518EV100 
   - 9m034, ar0130, ar0130, ar0140, ar0330, himax1375, icx692, imx104, imx122, imx138, imx222, imx225, imx236, mn34031, mt9p006, ov2710, ov9712, ov9732, po3100k, sc1035, soih22, soih42
 - HI3518EV200
   - ar0130, gc1034, gc2023, imx122, imx222, imx291, imx323, jxf22, jxf23, jxh62, jxh65, mn34222, ov2718, ov2735, ov9712, ov9732, ov9750, ov9752, sc1135, sc1145, sc1235, sc2035, sc2135, sc2235
@@ -83,6 +83,7 @@ _Lưu ý: Danh sách này không đảm bảo rằng cảm biến của bạn s�
 - HI3520DV200
 - HI3536CV100
 - HI3536DV100
+
 
 ### Ingenic
 
@@ -130,3 +131,10 @@ _Lưu ý: Danh sách này không đảm bảo rằng cảm biến của bạn s�
 - XM510
 - XM530
 - XM550
+
+
+**Giải thích thuật ngữ:**
+
+* **SoC (System on a Chip):** Hệ thống trên một chip, là một mạch tích hợp chứa tất cả các thành phần cần thiết của một hệ thống máy tính, bao gồm CPU, GPU, bộ nhớ và các thiết bị ngoại vi khác.
+* **SDK (Software Development Kit):** Bộ công cụ phát triển phần mềm, là một bộ sưu tập các công cụ, thư viện và tài liệu mà các nhà phát triển sử dụng để tạo ra phần mềm cho một nền tảng hoặc hệ thống cụ thể.
+

@@ -1,36 +1,38 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-## Steps from buy to fly (for beginners)
+## Các bước từ mua đến bay (dành cho người mới bắt đầu)
 ---------------------------------------------------
 
 <p align="center">
-  <img src="../images/fpv-from-buy-to-fly.png" alt="Diagram"/>
+  <img src="../images/fpv-from-buy-to-fly.png" alt="Sơ đồ"/>
 </p>
 
 ---------------------------------------------------
-### STEP 1
-### STEP 2
-### STEP 3
-### STEP 4
-- [OpenIPC FPV - Camera flashing SSC338Q](https://www.youtube.com/watch?v=94QiUDmGFZI)
-### STEP 5
-- [OpenIPC FPV - NVR Ground Station](https://www.youtube.com/watch?v=vSJiUanWA9I)
-- [Introducing OpenIPC VRX Ground Station, the cheapest digital long range FPV system in the world](https://www.youtube.com/watch?v=aXJQIoBKjVE)
-- [OpenIPC FPV - Prepare GroundStation: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
-### STEP 6
-- [OpenIPC FPV - connections](https://www.youtube.com/watch?v=LOD5xsAJu5o)
-### STEP 7
-### STEP 8
-- [OpenIPC SSC338Q-IMX415, DVR in h265 with the World’s Cheapest 120fps Digital FPV System](https://www.youtube.com/watch?v=avXbcvqNKWM)
-- [25km in a windy and cloudy day with OpenIPC.](https://www.youtube.com/watch?v=-AeKldKGVhg)
-- [OpenIPC FPV - Test Flight](https://www.youtube.com/watch?v=-4f7XHnu3mY)
+### BƯỚC 1
+### BƯỚC 2
+### BƯỚC 3
+### BƯỚC 4
+- [OpenIPC FPV - Cài đặt camera SSC338Q](https://www.youtube.com/watch?v=94QiUDmGFZI)
+### BƯỚC 5
+- [OpenIPC FPV - Trạm mặt đất NVR](https://www.youtube.com/watch?v=vSJiUanWA9I)
+- [Giới thiệu Trạm mặt đất OpenIPC VRX, hệ thống FPV tầm xa kỹ thuật số rẻ nhất thế giới](https://www.youtube.com/watch?v=aXJQIoBKjVE)
+- [OpenIPC FPV - Chuẩn bị Trạm mặt đất: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
+### BƯỚC 6
+- [OpenIPC FPV - kết nối](https://www.youtube.com/watch?v=LOD5xsAJu5o)
+### BƯỚC 7
+### BƯỚC 8
+- [OpenIPC SSC338Q-IMX415, DVR ở h265 với Hệ thống FPV kỹ thuật số 120fps rẻ nhất thế giới](https://www.youtube.com/watch?v=avXbcvqNKWM)
+- [25km trong một ngày nhiều gió và nhiều mây với OpenIPC.](https://www.youtube.com/watch?v=-AeKldKGVhg)
+- [OpenIPC FPV - Chuyến bay thử nghiệm](https://www.youtube.com/watch?v=-4f7XHnu3mY)
 
-## Examples
+## Ví dụ
 <p align="center">
-  <img src="../images/fpv-newcomer-bundle.jpg" alt="NewComers"/>
+  <img src="../images/fpv-newcomer-bundle.jpg" alt="Người mới"/>
 </p>
 <p align="center">
-  <img src="../images/fpv-cheapskate-bundle.jpg" alt="Cheapskate"/>
+  <img src="../images/fpv-cheapskate-bundle.jpg" alt="Tiết kiệm"/>
 </p>
+
+
 

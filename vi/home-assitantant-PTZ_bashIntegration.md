@@ -1,51 +1,51 @@
-# OpenIPC Wiki
-[Table of Content](../README.md)
+## Wiki OpenIPC
+[Mục lục](../README.md)
 
-## HomeAsistant PTZ INTEGRATION 
+## Tích hợp PTZ với Home Assistant
 
-This integration is based on the ssh command to the open ipc firmware to integrate ptz controls, for cameras that do not have onvif support
+Tích hợp này dựa trên lệnh ssh tới firmware OpenIPC để tích hợp các điều khiển PTZ, dành cho các camera không hỗ trợ ONVIF.
 
-## Camera configuration 
-Load the modules with parameters (you may need to experiment with the hmaxstep and vmaxstep values for your specific camera)
+## Cấu hình Camera
+Tải các mô-đun với các tham số (bạn có thể cần thử nghiệm với các giá trị hmaxstep và vmaxstep cho camera cụ thể của mình).
 
-Copy motor_sample.ko ---> internal memory (ssh copy)
+Sao chép motor_sample.ko ---> bộ nhớ trong (sao chép ssh)
 ```
 scp "C:\Users\Downloads\sample_motor.ko" root@192.168.1.29:/sample_motor.ko
 ```
-Edit new autostart script on your camera 
+Chỉnh sửa tập lệnh tự động khởi động mới trên camera của bạn
 ```
   $ vi /etc/rc.local
 ```
-Add these lines
+Thêm các dòng này
 ```
 # addmod
 insmod /sample_motor.ko vstep_offset=0 hmaxstep=2130 vmaxstep=1600
 # go to 0 position 
 t31-kmotor -d   h -r
 ```
-Change file mod (add execute permissions )
+Thay đổi chế độ tệp (thêm quyền thực thi)
 ```
  $ chmod +x /etc/rc.local
 ```
 
-## Home Assistant configuration 
+## Cấu hình Home Assistant
 ```
  docker ps
  docker exec -it <"ID_HA_container"> /bin/bash
 ```
-install sshpass
+cài đặt sshpass
 ```
 apk add sshpass
 ```
 
-**Note:** You can test sshpass with
+**Lưu ý:** Bạn có thể kiểm tra sshpass bằng
 
 ```
 sshpass -p '123456' ssh root@192.168.1.29
 ```
 
 
-Add those lines to configuration.yaml
+Thêm các dòng đó vào configuration.yaml
 ```
 shell_command:
   c101_x_down: /bin/bash c101_x_down.sh
@@ -54,7 +54,7 @@ shell_command:
   c101_y_up: /bin/bash c101_y_up.sh
   c101_r: /bin/bash c101_r.sh
 ```
-Add those lines to scripts.yaml
+Thêm các dòng đó vào scripts.yaml
 ```
 c101_x_down:
   alias: c101_x_down
@@ -88,81 +88,81 @@ c101_r:
   mode: single
 ```
 
-**SCRIPT**
-This script is found in this repo 
+**TẬP LỆNH**
+Tập lệnh này được tìm thấy trong kho lưu trữ này
 https://github.com/OpenIPC/motors/tree/4c7dc45e5e877f38c076343f361159844374920a/t31-kmotor
 
-Create this script in the /config directory
+Tạo tập lệnh này trong thư mục /config
 
 ```
 vi camara_scrip.sh
 ```
-Paste this file 
+Dán tệp này
 ```
 #!/bin/bash
 
-echo "Enter the camera user:"
+echo "Nhập tên người dùng camera:"
 read user
-echo "Enter the camera password:"
+echo "Nhập mật khẩu camera:"
 read password
-echo "Enter the camera IP:"
+echo "Nhập IP camera:"
 read ip
-echo "Camera_Name_"
+echo "Tên_Camera_"
 read name
 
 echo "#!/bin/bash
-# Conctate al servidor remoto utilizando sshpass y la contraseÃ±a
+# Kết nối với máy chủ từ xa bằng sshpass và mật khẩu
 sshpass -p '"$password"'  ssh -o StrictHostKeyChecking=accept-new  "$user"@"$ip" <<EOF
-# Dentro del servidor remoto, ejecuta el comando t31-kmotor con los argumentos
+# Bên trong máy chủ từ xa, thực thi lệnh t31-kmotor với các đối số
 t31-kmotor -d   h -r
 EOF 
 "> "$name"_r.sh
 echo "#!/bin/bash
-# Conctate al servidor 
+# Kết nối với máy chủ 
 sshpass -p '"$password"'  ssh -o StrictHostKeyChecking=accept-new  "$user"@"$ip" <<EOF
-# Dentro del servidor remoto, ejecuta el comando t31-kmotor
+# Bên trong máy chủ từ xa, thực thi lệnh t31-kmotor
 t31-kmotor -d g -x -300 -y 0
 EOF 
 "> "$name"_x_down.sh
 echo "#!/bin/bash
-# Conctate al servidor 
+# Kết nối với máy chủ 
 sshpass -p '"$password"'  ssh -o StrictHostKeyChecking=accept-new "$user"@"$ip" <<EOF
-# Dentro del servidor remoto, ejecuta el comando t31-kmotor
+# Bên trong máy chủ từ xa, thực thi lệnh t31-kmotor
 t31-kmotor -d g -x 300 -y 0
 EOF 
 "> "$name"_x_up.sh
 echo "#!/bin/bash
-# Conctate al servidor 
+# Kết nối với máy chủ 
 sshpass -p '"$password"'  ssh -o StrictHostKeyChecking=accept-new  "$user"@"$ip" <<EOF
-# Dentro del servidor remoto, ejecuta el comando t31-kmotor
+# Bên trong máy chủ từ xa, thực thi lệnh t31-kmotor
 t31-kmotor -d g -x 0 -y -300
 EOF 
 "> "$name"_y_down.sh
 echo "#!/bin/bash
-# Conctate al servidor 
+# Kết nối với máy chủ 
 sshpass -p '"$password"'  ssh -o StrictHostKeyChecking=accept-new  "$user"@"$ip" <<EOF
-# Dentro del servidor remoto, ejecuta el comando t31-kmotor
+# Bên trong máy chủ từ xa, thực thi lệnh t31-kmotor
 t31-kmotor -d g -x 0 -y 300
 EOF 
 "> "$name"_y_up.sh
 
-# Change mod 
+# Thay đổi chế độ 
 chmod +x "$name"_r.sh "$name"_x_down.sh "$name"_x_up.sh "$name"_y_down.sh "$name"_y_up.sh
 
 ```
-Execute the following lines
+Thực thi các dòng sau
 ```
 chmod +x camara_scrip.sh
 ./camara_scrip.sh
 ```
-Enter your camera data (name of before example c101)
+Nhập dữ liệu camera của bạn (tên trước ví dụ c101)
 
-**Note:**  need to make a script for the other files (configuration.yml and scrips.yml)
+**Lưu ý:** cần tạo tập lệnh cho các tệp khác (configuration.yml và scrips.yml)
 
 
 
-## Lovelace example 
-Add this extract in a new card manually (yaml format)
+## Ví dụ Lovelace
+Thêm đoạn trích này vào một thẻ mới theo cách thủ công (định dạng yaml)
 ```
 camera_view: live
 type: picture-elements
@@ -233,7 +233,28 @@ elements:
 
 ```
 
-Example of view
+Ví dụ về chế độ xem
 
-![GUI_Interface](../images/GUI_Interface.png)
-# Enjoy the stream.
+![Giao diện GUI](../images/GUI_Interface.png)
+# Tận hưởng luồng.
+
+
+**Giải thích thuật ngữ:**
+
+* **PTZ:** Pan-Tilt-Zoom, là khả năng điều khiển camera xoay ngang, dọc và phóng to/thu nhỏ.
+* **Home Assistant:** Là một nền tảng tự động hóa nhà mã nguồn mở.
+* **ONVIF:** Là một tiêu chuẩn mở cho các thiết bị giám sát IP.
+* **SSH:** Secure Shell, là một giao thức kết nối an toàn đến máy chủ từ xa.
+* **Module:** Mô-đun, là một phần mềm có thể được tải vào kernel Linux.
+* **Autostart script:** Tập lệnh tự động khởi động, là một tập lệnh được thực thi khi hệ thống khởi động.
+* **Docker:** Là một nền tảng ảo hóa container.
+* **sshpass:** Là một công cụ cho phép bạn cung cấp mật khẩu cho SSH thông qua dòng lệnh.
+* **configuration.yaml:** Là tệp cấu hình chính cho Home Assistant.
+* **scripts.yaml:** Là tệp cấu hình cho các tập lệnh trong Home Assistant.
+* **Lovelace:** Là giao diện người dùng dựa trên web cho Home Assistant.
+* **YAML:** Là một ngôn ngữ đánh dấu dữ liệu được sử dụng trong các tệp cấu hình.
+* **Picture-elements card:** Là một loại thẻ trong Lovelace cho phép bạn tùy chỉnh giao diện của camera.
+
+
+
+

@@ -1,68 +1,44 @@
 # Wiki OpenIPC
 
-[Bảng nội dung](../README.md)
+[Mục lục](../README.md)
 
-Phương pháp cài đặt hiện có
+Các phương pháp cài đặt có sẵn
 ==============================
 
-Rất tiếc, các nhà sản xuất camera IP **chưa** giao hàng với
-OpenIPC được cài đặt sẵn, vì vậy để cài đặt OpenIPC lên một chiếc camera vẫn đang sử dụng
-hình ảnh firmware gốc, một trong những phương pháp sau đây phải được sử dụng:
+Rất tiếc, các nhà sản xuất camera IP **chưa** cung cấp phần cứng được cài đặt sẵn OpenIPC, vì vậy để cài đặt OpenIPC lên camera vẫn đang sử dụng hình ảnh firmware gốc, bạn phải sử dụng một trong các phương pháp sau:
 
-* Dự án [Coupler](https://github.com/openipc/coupler/) cung cấp
-  hình ảnh firmware có thể được cài đặt bằng cách sử dụng cơ chế nâng cấp firmware
-  được tích hợp sẵn vào firmware gốc của nhiều camera.
+* Dự án [Coupler](https://github.com/openipc/coupler/) cung cấp hình ảnh firmware có thể được cài đặt bằng cách sử dụng các cơ chế nâng cấp firmware được tích hợp trong firmware gốc của nhiều camera.
 
-* Ghi firmware OpenIPC sử dụng 
-  bootloader [*U Boot*](https://en.wikipedia.org/wiki/Das_U-Boot) được bao gồm trong
-  firmware của nhà cung cấp. Phương pháp này ngắt quá trình khởi động bình thường của firmware
-  của nhà cung cấp, và thay vào đó hướng dẫn U-Boot tải firmware OpenIPC
-  qua mạng, và ghi nó vào bộ nhớ flash (thay thế phần chính
-  của firmware của nhà cung cấp). **Phương pháp này yêu cầu vỏ camera phải
-  được mở** để kết nối một [**bộ chuyển đổi UART**][FTDI] với cổng "console" nội bộ
-  /cổng debug của camera.
+* Flash firmware OpenIPC bằng cách sử dụng bootloader [*U-Boot*](https://en.wikipedia.org/wiki/Das_U-Boot) được bao gồm trong firmware của nhà cung cấp. Phương pháp này làm gián đoạn quá trình khởi động bình thường của firmware nhà cung cấp và thay vào đó hướng dẫn U-Boot tải firmware OpenIPC qua mạng và ghi nó vào bộ nhớ flash (thay thế phần chính của firmware nhà cung cấp). **Phương pháp này yêu cầu mở vỏ camera** để kết nối [**bộ chuyển đổi UART**][FTDI] với cổng nối tiếp/gỡ lỗi "bảng điều khiển" bên trong của camera.
 
 
-Cài đặt firmware OpenIPC sử dụng Coupler.
+Cài đặt firmware OpenIPC bằng Coupler.
 --------------------------------------------
-Hướng dẫn sử dụng [Coupler](https://github.com/openipc/coupler/) có thể được
-tìm thấy trong [tài liệu của dự án](https://github.com/openipc/coupler/).
 
-Cài đặt firmware OpenIPC qua TFTP và UART, từng bước một.
+Hướng dẫn sử dụng [Coupler](https://github.com/openipc/coupler/) có thể được tìm thấy trong [tài liệu của dự án](https://github.com/openipc/coupler/).
+
+Cài đặt firmware OpenIPC qua TFTP và UART, từng bước.
 --------------------------------------------------------------
 
 ### Bước 1. Xác định Hệ thống trên Chip.
 
-Hệ thống trên Chip (SoC) bao gồm lõi CPU của camera, cũng như tất cả các phụ kiện
-cần thiết như giao diện camera và mạng. Vì nhiều lý do
-(bao gồm không gian lưu trữ onboard hạn chế trên hầu hết các Camera IP), dự án OpenIPC
-hiện tại xây dựng các tệp nhị phân firmware riêng biệt cho mỗi mô hình SoC. **Bạn
-phải xác định SoC mà camera của bạn sử dụng**, để bạn có thể sử dụng đúng
-tệp nhị phân firmware. Điều này có thể được thực hiện bằng cách đọc các dấu hiệu trên gói IC SoC
-trên PCB chính của camera (xem hình ảnh mẫu dưới đây), hoặc bằng cách sử dụng
-phần mềm như [ipctool](https://github.com/openipc/ipctool/) để xác định
-mô hình SoC từ firmware của nhà cung cấp.
+SoC bao gồm lõi CPU của camera, cũng như tất cả các thiết bị ngoại vi cần thiết như giao diện camera và mạng. Vì nhiều lý do khác nhau (bao gồm không gian lưu trữ hạn chế trên hầu hết các Camera IP), dự án OpenIPC hiện đang xây dựng các tệp nhị phân firmware riêng biệt cho mỗi model SoC. **Bạn phải xác định SoC mà camera của bạn sử dụng**, để bạn có thể sử dụng đúng tệp nhị phân firmware. Điều này có thể được thực hiện bằng cách đọc các dấu hiệu trên gói IC SoC trên PCB chính của camera (xem ảnh ví dụ bên dưới) hoặc bằng cách sử dụng phần mềm như [ipctool](https://github.com/openipc/ipctool/) để xác định model SoC từ firmware của nhà cung cấp.
 
-![Dấu hiệu SoC](../images/soc-hisilicon.webp)
-![Dấu hiệu SoC](../images/soc-ingenic-t20.webp)
-![Dấu hiệu SoC](../images/soc-ingenic-t31.webp)
-![Dấu hiệu SoC](../images/soc-ingenic-t40.webp)
+![Đánh dấu SoC](../images/soc-hisilicon.webp)
+![Đánh dấu SoC](../images/soc-ingenic-t20.webp)
+![Đánh dấu SoC](../images/soc-ingenic-t31.webp)
+![Đánh dấu SoC](../images/soc-ingenic-t40.webp)
 
-_Dấu hiệu SoC Hisilicon Hi3518EV100, Ingenic T20, T31 và T40.
-Các biểu tượng liên quan được đánh dấu bằng màu vàng._
+_Đánh dấu SoC Hisilicon Hi3518EV100, Ingenic T20, T31 và T40.
+Các ký hiệu liên quan được đánh dấu bằng màu vàng._
 
-### Bước 2. Cài đặt và thiết lập một máy chủ TFTP.
+### Bước 2. Cài đặt và thiết lập máy chủ TFTP.
 
-TFTP là viết tắt của _Trivial File Transfer Protocol_. Như tên gọi, đây là một
-giao thức rất đơn giản dành cho việc chuyển tệp qua mạng máy tính cục bộ. TFTP không hỗ trợ xác thực. Mã của nó rất nhỏ gọn và đơn giản
-đến nỗi các khách hàng TFTP được sử dụng rộng rãi trong các thin-client và hệ thống nhúng để
-lấy các hình ảnh khởi động từ một máy chủ khởi động được chỉ định trên mạng cục bộ.
+TFTP là viết tắt của _Trivial File Transfer Protocol_. Đúng như tên gọi của nó, đây là một giao thức rất đơn giản, nhằm mục đích truyền tệp qua mạng máy tính cục bộ. TFTP không hỗ trợ xác thực. Mã của nó rất nhỏ và đơn giản nên các máy khách TFTP được sử dụng rộng rãi trong các máy khách mỏng và hệ thống nhúng để truy xuất hình ảnh có thể khởi động từ máy chủ khởi động được chỉ định trên mạng cục bộ.
 
-#### Nếu bạn đang sử dụng Linux...
+#### Nếu bạn có Linux ...
 
-...thì việc này rất dễ dàng. Có thể đã có gói nhị phân đã được biên dịch và sẵn sàng sử dụng cho hệ điều hành của bạn
-trong kho lưu trữ của hệ điều hành, và bạn chỉ cần cài đặt nó và
-thiết lập.
+... thì rất dễ dàng. Gói nhị phân được biên dịch trước và sẵn sàng sử dụng cho bản phân phối của bạn rất có thể đã tồn tại trong kho lưu trữ của bản phân phối và bạn chỉ cần cài đặt và thiết lập nó.
 
 ```bash
 sudo apt install tftpd-hpa
@@ -70,150 +46,112 @@ sudo sed -i '/^TFTP_OPTIONS/s/"$/ --create"/' /etc/default/tftpd-hpa
 sudo systemctl restart tftpd-hpa.service
 ```
 
-> **Lưu ý**: Một số người dùng đã báo cáo vấn đề (thời gian chờ kết nối) khi sử dụng
-`tftpd-hpa` với các phiên bản gần đây của Ubuntu. Trong trường hợp đó, bạn có thể thử với một
-[máy chủ TFTP thay thế](https://askubuntu.com/a/457105/1074320).
-### Bước 3. Kết nối với cổng UART của camera của bạn.
+> **Lưu ý**: một số người dùng đã báo cáo sự cố (hết thời gian kết nối) khi sử dụng `tftpd-hpa` với các phiên bản Ubuntu gần đây. Trong trường hợp đó, bạn có thể thử với [máy chủ TFTP thay thế](https://askubuntu.com/a/457105/1074320).
 
-Để kết nối với cổng UART, bạn sẽ cần một
-[bộ chuyển đổi cổng nối tiếp][FTDI] cho máy tính của bạn.
+### Bước 3. Kết nối với cổng UART của camera.
+
+Để kết nối với cổng UART, bạn sẽ cần [bộ chuyển đổi cổng nối tiếp][FTDI] cho PC của mình.
 
 ![Mô-đun UART](../images/uart-module.webp)
 
-__Trước khi bạn kết nối bộ chuyển đổi này với camera của bạn, hãy đảm bảo rằng
-điện áp hoạt động của nó được đặt ở 3.3 volt!__
-Đôi khi, bạn chỉ cần lật một jumper để đạt được điều đó. Nhưng trong một số trường hợp, bạn
-có thể cần hàn một dây, một điện trở không Ohm, hoặc tạo một kết nối giữa
-hai tiếp xúc với một khối hàn. Một số bộ chuyển đổi chỉ hỗ trợ 5 volt. Trong trường hợp đó, bạn sẽ cần thêm một [bộ chuyển đổi mức logic][TLLC] kết nối
-giữa bộ chuyển đổi và cổng UART trên camera của bạn.
+__Trước khi kết nối bộ chuyển đổi đó với camera của bạn, hãy đảm bảo rằng điện áp hoạt động của nó được đặt thành 3,3 volt!__ Đôi khi, bạn chỉ cần lật một jumper để đạt được điều đó. Nhưng trong một số trường hợp, bạn có thể cần phải hàn dây, điện trở zero Ohm hoặc tạo kết nối giữa hai tiếp điểm bằng một giọt hàn. Một số bộ chuyển đổi chỉ hỗ trợ 5 volt. Trong trường hợp đó, bạn sẽ cần thêm [bộ chuyển đổi mức logic][TLLC] được kết nối giữa bộ chuyển đổi và cổng UART trên camera của bạn.
 
-Một trong những tiếp xúc mà bạn cần kết nối bộ chuyển đổi của mình là GND (mặt đất).
-Nó dễ dàng khám phá bằng cách sử dụng đồng hồ đo điện tử ở chế độ liên tục. Đặt một trong các
-dẫn vào các tiếp xúc mặt đất đã biết. Thông thường, đây là các khu vực tiếp xúc đồng lớn mở xung quanh lỗ ốc vít gắn kết, vỏ cổng USB, tường kim loại của khe cắm thẻ SD. Sử dụng dẫn khác để chạm nhẹ vào các tiếp xúc kiểm soát cho đến khi bạn thấy hoặc
-nghe một thông báo từ đồng hồ đo điện tử của bạn rằng mạch đã đóng. Điều đó có nghĩa là,
-bạn đã tìm thấy mặt đất. Bây giờ, bạn cần tìm thêm hai: `RX` và `TX`, cả hai đều được
-sử dụng để nhận và truyền dữ liệu, tương ứng. Bắt đầu với `TX`. Nó truyền
-chuỗi các ký tự và rất dễ nhận biết.
+Một trong những miếng tiếp xúc mà bạn sẽ cần kết nối bộ chuyển đổi của mình là GND (đất). Rất dễ dàng để khám phá bằng cách sử dụng đồng hồ vạn năng ở chế độ liên tục. Đặt một trong các dây dẫn lên miếng tiếp xúc đất lộ ra đã biết. Thông thường, đây là những khu vực tiếp xúc bằng đồng mở rộng lớn xung quanh các lỗ vít gắn, vỏ cổng USB, thành kim loại của khe cắm thẻ SD. Sử dụng dây dẫn khác để chạm nhẹ vào các miếng tiếp xúc điều khiển cho đến khi bạn nhìn thấy hoặc nghe thấy thông báo từ đồng hồ vạn năng rằng mạch đã được đóng. Điều đó có nghĩa là bạn đã tìm thấy mặt đất. Bây giờ, bạn cần tìm thêm hai điểm nữa: `RX` và `TX`, cả hai được sử dụng để nhận và truyền dữ liệu tương ứng. Bắt đầu với `TX`. Nó truyền một loạt các ký tự và khá dễ phát hiện.
 
-Hãy nhận biết rằng bạn đang tìm kiếm một tiếp xúc với tiềm năng 3.3v giữa nó và
-mặt đất. Kiểm tra các điểm kết nối có thể với đồng hồ đo điện tử và đánh dấu những
-hiển thị 3.3 volt. Bằng cách này, bạn sẽ không phải kiểm tra tất cả mọi thứ, và bạn tiết kiệm
-bản thân khỏi việc đánh vào ví dụ một kết nối 12 volt dành cho mảng LED hồng ngoại
-hoặc gì đó.
-Kết nối chân `GND` trên camera của bạn với pad `GND` của bộ chuyển đổi, kết nối cổng USB của bộ chuyển đổi với cổng USB trên máy tính của bạn, khởi động một ứng dụng giả lập terminal và kết nối với bộ chuyển đổi của bạn. Đặt cài đặt terminal của bạn thành 115200 bps baudrate, 8 bit, không chẵn lẻ, 1 stopbit, không kiểm soát luồng.
+Lưu ý rằng bạn đang tìm kiếm một tiếp điểm có điện thế 3,3v giữa nó và mặt đất. Kiểm tra các điểm kết nối có thể có bằng đồng hồ vạn năng và đánh dấu những điểm hiển thị 3,3 volt. Bằng cách này, bạn sẽ không phải kiểm tra mọi thứ và bạn tự cứu mình khỏi việc đánh vào, chẳng hạn như đầu nối 12 volt dành cho dãy đèn LED hồng ngoại hoặc những thứ khác.
 
-Dưới đây là một số dòng lệnh cho các chương trình terminal khác nhau với ghi nhận phiên. Chọn phương pháp bạn thích.
+Kết nối chân `GND` trên camera của bạn với miếng `GND` của bộ chuyển đổi, kết nối đầu nối USB của bộ chuyển đổi với cổng USB trên PC của bạn, khởi động ứng dụng giả lập terminal và kết nối với bộ chuyển đổi của bạn. Đặt cài đặt terminal của bạn thành tốc độ baud 115200 bps, 8 bit, không có parity, 1 stopbit, không kiểm soát luồng.
+
+Dưới đây là một số dòng lệnh cho các chương trình terminal khác nhau với tính năng ghi nhật ký phiên. Chọn cái bạn thích.
 
 #### screen
 
-Bắt đầu một phiên với
+Bắt đầu phiên với
 
 ```bash
 screen -L -Logfile ipcam-$(date +%s).log /dev/ttyUSB0 115200
 ```
 
-Sử dụng `Ctrl-a` theo sau là `\` để thoát khỏi phiên
+Sử dụng `Ctrl-a` theo sau là `\` để thoát khỏi phiên.
 
 #### `minicom`
 
-Bắt đầu một phiên với
+Bắt đầu phiên với
 
 ```bash
 minicom -b 115200 -8 --capturefile=ipcam-$(date +%s).log --color=on -D /dev/ttyUSB0
 ```
 
-Sử dụng `Ctrl-a` theo sau là `x` để kết thúc phiên.
+Sử dụng `Ctrl-a` theo sau là `x` để thoát khỏi phiên.
 
 #### `picocom`
 
-Bắt đầu một phiên với
+Bắt đầu phiên với
 
 ```bash
 picocom -b 115200 --databits 8 --parity n --stopbits 1 --flow n --logfile=ipcam-$(date +%s).log /dev/ttyUSB0
 ```
 
-Sử dụng `Ctrl-a` theo sau là `x` để kết thúc phiên.
+Sử dụng `Ctrl-a` theo sau là `Ctrl-x` để thoát khỏi phiên.
 
 #### PuTTY
 
-Nếu bạn chọn một terminal GUI, cụ thể là [PuTTY](https://www.putty.org/), đây là cách nó nên trông như thế nào:
+Nếu bạn chọn terminal GUI, cụ thể là [PuTTY](https://www.putty.org/), thì đây là giao diện của nó:
 
 ![Màn hình cài đặt PuTTY](https://user-images.githubusercontent.com/29582865/207894192-c6f66401-7715-4aa6-bee2-8343aae6c0a9.png)
 ![Màn hình kết nối PuTTY](https://user-images.githubusercontent.com/29582865/209340268-e34a010c-d455-4343-ae83-0866f0f0af15.png)
 
-Sau đó, kết nối chân `RX` trên bộ chuyển đổi với một liên hệ `TX` có thể có của cổng UART trên camera của bạn. Cung cấp điện cho camera bằng bộ chuyển đổi nguồn tiêu chuẩn của nó. Nếu bạn đoán may mắn thì bạn sẽ bắt đầu thấy nhật ký khởi động trong cửa sổ terminal của bạn. Trong một số trường hợp, nếu bạn thấy văn bản bị xáo trộn trên màn hình của bạn thay vì kernel đang khởi động, bạn có thể cần thay đổi tốc độ kết nối thành 57600 bps và thử lại.
+Sau đó, kết nối chân `RX` trên bộ chuyển đổi với tiếp điểm `TX` có thể có của cổng UART trên camera của bạn. Cấp nguồn cho camera bằng bộ chuyển đổi nguồn OEM của nó. Nếu bạn đoán may mắn thì bạn sẽ bắt đầu thấy nhật ký khởi động trong cửa sổ terminal của mình. Trong một số trường hợp, nếu bạn thấy văn bản bị lỗi trên màn hình thay vì kernel khởi động, bạn có thể cần thay đổi tốc độ kết nối thành 57600 bps và thử lại.
 
-Nếu màn hình của bạn vẫn trống, hãy thử một liên hệ UART khác, và sau đó là một liên hệ khác, cho đến khi bạn tìm thấy cái phù hợp.
+Nếu màn hình của bạn vẫn trống, hãy thử tiếp điểm UART khác, rồi tiếp điểm khác, cho đến khi bạn nhấn đúng điểm.
 
-Sau khi bạn tìm thấy pad `TX`, kết nối nó với chân `RX` trên bộ chuyển đổi của bạn. Đúng vậy, đó là một kết nối chéo. Bất cứ thứ gì truyền đi sẽ vào một bộ thu và ngược lại. Bây giờ, đặt một vật nặng - một đai ốc đường sắt, một hàn thiếc cổ điển, một ly vodka (đầy) - trên bất kỳ phím chữ nào của bàn phím máy tính của bạn và bắt đầu kết nối chân `TX` còn lại của bộ chuyển đổi của bạn với các pad khác nhau trên camera cho đến khi bạn thấy nó phản hồi lại terminal. Khi điều đó xảy ra, bạn đã hoàn thành thành công một kết nối UART với camera của bạn. Bây giờ bạn có thể uống vodka.
+Sau khi bạn tìm thấy miếng `TX`, hãy kết nối nó với chân `RX` trên bộ chuyển đổi của bạn. Đúng vậy, đó là một kết nối chéo. Bất cứ thứ gì truyền đi sẽ đi vào bộ thu và ngược lại. Bây giờ, hãy đặt một vật nặng - một đai ốc đường sắt, một hộp thiếc hàn cổ, một ly vodka (đầy) - lên bất kỳ phím chữ nào trên bàn phím máy tính của bạn và bắt đầu kết nối chân `TX` còn lại của bộ chuyển đổi của bạn với các miếng khác nhau trên camera cho đến khi bạn thấy nó phản hồi lại terminal. Khi điều đó xảy ra, bạn đã kết nối UART thành công với camera của mình. Bây giờ bạn có thể uống vodka.
 
-Lưu ý! Thông thường, có một liên hệ thứ tư trên một kết nối UART được đánh dấu là `VCC`. Nó được sử dụng để cung cấp điện cho camera trong quá trình lập trình ban đầu của nhà sản xuất. Chúng tôi khuyên bạn không nên cung cấp điện cho camera của bạn qua chân này, nhưng sử dụng cổng nguồn OEM cho mục đích này.
-### Bước 4. Truy cập vào bootloader.
+Lưu ý! Thông thường, có một tiếp điểm thứ tư trên đầu nối UART được đánh dấu `VCC`. Nó được sử dụng để cấp nguồn cho camera trong quá trình lập trình ban đầu bởi nhà sản xuất. Chúng tôi khuyên bạn không nên cấp nguồn cho camera của mình thông qua chân đó mà hãy sử dụng đầu nối nguồn OEM cho mục đích này.
 
-Khởi động lại camera và cố gắng ngắt chuỗi khởi động của nó để truy cập
-vào console bootloader bằng cách nhấn một tổ hợp phím trên bàn phím máy tính của bạn,
-từ thời điểm bootloader bắt đầu và trước khi Linux kernel hoạt động.
-Tổ hợp phím khác nhau từ nhà cung cấp này sang nhà cung cấp khác nhưng, trong hầu hết các trường hợp, đó là
-`Ctrl-C`, ít phổ biến hơn -- `Enter`, `Esc`, `*` hoặc chỉ là bất kỳ phím nào. Đọc kỹ văn bản
-xuất hiện trên màn hình trong khi khởi động, bạn có thể thấy một gợi ý ở đó. Một số camera
-yêu cầu các tổ hợp phím khác biệt hơn không được tiết lộ trong nhật ký khởi động. Bạn có thể thử
-tìm chúng trên internet, hoặc hỏi trên [kênh Telegram của chúng tôi][telegram].
-Có khả năng, chúng tôi đã từng đối phó với loại camera như vậy và biết tổ hợp phím.
+### Bước 4. Truy cập bootloader.
 
-Nếu bạn thành công và nhận được dấu nhắc lệnh thì chúc mừng, bạn đã truy cập được vào
-bootloader của camera.
+Khởi động lại camera và thử làm gián đoạn trình tự khởi động của nó để truy cập bảng điều khiển bootloader bằng cách nhấn tổ hợp phím trên bàn phím máy tính của bạn, giữa thời điểm bootloader khởi động và trước khi kernel Linux khởi động. Các tổ hợp phím khác nhau tùy theo nhà cung cấp nhưng trong hầu hết các trường hợp, đó là `Ctrl-C`, ít phổ biến hơn là `Enter`, `Esc`, `*` hoặc bất kỳ phím nào. Đọc kỹ văn bản xuất hiện trên màn hình trong khi khởi động, bạn có thể thấy gợi ý ở đó. Một số camera yêu cầu các tổ hợp kỳ lạ hơn không được tiết lộ trong nhật ký khởi động. Bạn có thể thử tra cứu chúng trên internet hoặc hỏi trên [kênh Telegram của chúng tôi][telegram]. Rất có thể, chúng tôi đã xử lý một chiếc camera như vậy và biết tổ hợp đó.
 
-Từ thời điểm này trở đi, chúng tôi khuyên bạn nên ghi lại mọi thứ bạn làm.
-Kích hoạt ghi nhật ký phiên trong terminal của bạn. Thậm chí tốt hơn, tạo một tệp văn bản trên máy tính của bạn
-và ghi lại tất cả các lệnh bạn chạy và cách hệ thống phản hồi với chúng.
-### Bước 5. Xác định kích thước bộ nhớ flash.
+Nếu bạn thành công và nhận được dấu nhắc lệnh thì xin chúc mừng, bạn đã có quyền truy cập vào bootloader của camera.
 
-Hầu hết các camera IP ngày nay được trang bị bộ nhớ flash NOR hoặc NAND 8 hoặc 16 MB.
-Bạn có thể kiểm tra loại và kích thước của chip được cài đặt trên camera của bạn trong
-đầu ra nhật ký bootloader. Bạn sẽ thấy một cái gì đó như thế này:
+Từ thời điểm này trở đi, chúng tôi khuyên bạn nên ghi lại mọi thứ bạn làm. Bật ghi nhật ký phiên trong terminal của bạn. Tốt hơn nữa, hãy tạo một tệp văn bản trên máy tính của bạn và ghi lại tất cả các lệnh bạn chạy và cách hệ thống phản hồi với chúng.
+
+### Bước 5. Xác định dung lượng bộ nhớ flash.
+
+Hầu hết các camera IP ngày nay đều được trang bị bộ nhớ flash NOR hoặc NAND 8 hoặc 16 MB. Bạn có thể kiểm tra loại và dung lượng của chip được cài đặt trên camera của mình trong đầu ra nhật ký bootloader. Bạn sẽ thấy một cái gì đó như thế này:
 
 ```console
-U-Boot 2010.06-svn (Oct 21 2016 - 11:21:29)
+U-Boot 2010.06-svn (21 tháng 10 năm 2016 - 11:21:29)
 
-Check Flash Memory Controller v100 ... Found
+Kiểm tra Bộ điều khiển bộ nhớ Flash v100 ... Đã tìm thấy
 SPI Nor(cs 0) ID: 0xс2 0x20 0x18
-spi_general_qe_enable(294): Error: Disable Quad failed! reg: 0x2
-Block:64KB Chip:16MB Name:"MX25L128XX"
-SPI Nor total size: 16MB
+spi_general_qe_enable(294): Lỗi: Tắt Quad không thành công! reg: 0x2
+Khối: 64KB Chip: 16MB Tên: "MX25L128XX"
+Tổng kích thước SPI Nor: 16MB
 ```
 
-Ví dụ khác:
+Một ví dụ khác:
 
 ```console
-U-Boot 2013.07 (Feb 27 2019 - 02:05:08)
+U-Boot 2013.07 (27 tháng 2 năm 2019 - 02:05:08)
 
 DRAM:  64 MiB
 MMC:   msc: 0
-SF: Detected EN25QH64
+SF: Đã phát hiện EN25QH64
 ```
 
-Điều này cho thấy mô hình bộ nhớ flash (`EN25QH64`) mà bạn có thể tra cứu trực tuyến để
-tìm bảng dữ liệu. Ngoài ra, `64` trong số mô hình gợi ý cho một bộ nhớ 64 Megabit,
-tương đương với 8MB. Tương tự, `128` sẽ tương đương với 16MB.
+Điều này cho thấy model bộ nhớ flash (`EN25QH64`) mà bạn có thể tra cứu trực tuyến để tìm bảng dữ liệu. Ngoài ra, `64` trong số model gợi ý cho bộ nhớ 64 Megabit, tương đương với 8MB. Tương tự, `128` sẽ tương đương với 16MB.
 
-Bạn cũng nên có thể xác định mô hình của bộ nhớ flash bằng cách nhìn lên
-tại bo mạch, nhưng đây thường là một nhiệm vụ khó khăn vì các chip rất
-nhỏ và có thể không đi kèm với các dấu hiệu rõ ràng.
+Bạn cũng có thể xác định model của bộ nhớ flash bằng cách tra cứu trên bảng mạch, nhưng đây thường là một nhiệm vụ khó khăn vì các chip rất nhỏ và có thể không đi kèm với các dấu hiệu rõ ràng.
 
 ### Bước 6. Lưu firmware gốc.
 
-Sau khi bạn truy cập vào console bootloader, chạy `help` để nhận danh sách
-các lệnh có sẵn. Kiểm tra xem bạn có `tftp` trong số đó không. Nếu có, thì việc lưu
-firmware gốc sẽ rất dễ dàng. Bạn chỉ cần thiết lập quyền truy cập vào máy chủ TFTP của bạn từ bước 2.
+Sau khi bạn truy cập vào bảng điều khiển bootloader, hãy chạy `help` để nhận danh sách các lệnh khả dụng. Kiểm tra xem bạn có `tftp` trong số đó hay không. Nếu có, thì việc lưu firmware gốc sẽ rất dễ dàng. Bạn chỉ cần thiết lập quyền truy cập vào máy chủ TFTP của mình từ bước 2.
 
-Lưu ý! Nếu bootloader của bạn không có `tftp`, bạn vẫn có thể tạo một bản sao của
-firmware gốc. [Đọc thêm tại đây](help-uboot.md).
+Lưu ý! Nếu bootloader của bạn không có `tftp`, bạn vẫn có thể tạo bản sao của firmware gốc. [Đọc thêm tại đây](help-uboot.md).
 
-Kiểm tra môi trường hệ thống bằng lệnh `printenv`. Tìm kiếm các tham số `ipaddr`,
-`netmask`, `gatewayip` và `serverip`. Ba tham số đầu tiên thiết lập địa chỉ IP,
-netmask của camera của bạn, và địa chỉ IP của cổng mạng để truy cập
-mạng cục bộ. Tham số thứ tư là địa chỉ IP của máy chủ TFTP của bạn. Gán
-các giá trị bằng lệnh `setenv` (sử dụng địa chỉ IP và netmask tương ứng với mạng cục bộ của bạn), sau đó lưu các giá trị mới vào môi trường với lệnh `saveenv`.
+Kiểm tra môi trường hệ thống bằng lệnh `printenv`. Tìm kiếm các tham số `ipaddr`, `netmask`, `gatewayip` và `serverip`. Ba tham số đầu tiên đặt địa chỉ IP, netmask của camera và địa chỉ IP của cổng mạng để truy cập mạng cục bộ. Tham số thứ tư là địa chỉ IP của máy chủ TFTP của bạn. Gán các giá trị bằng lệnh `setenv` (sử dụng địa chỉ IP và netmask tương ứng với mạng cục bộ của bạn), sau đó lưu các giá trị mới vào môi trường bằng lệnh `saveenv`.
 
 ```bash
 setenv ipaddr 192.168.1.253
@@ -222,92 +160,52 @@ setenv gatewayip 192.168.1.1
 setenv serverip 192.168.1.254
 saveenv
 ```
-Để sao lưu firmware gốc, bạn cần lưu nội dung của bộ nhớ flash của camera vào một tệp. Để làm điều đó, bạn phải đầu tiên tải nội dung vào RAM. Dưới đây là cách bạn thực hiện. Khởi tạo bộ nhớ Flash. Dọn dẹp một vùng RAM đủ lớn để chứa toàn bộ nội dung của chip bộ nhớ flash. Đọc nội dung của flash từ vùng đó, sau đó xuất nó ra một tệp trên máy chủ TFTP.
 
-Xin lưu ý, loại flash, kích thước và địa chỉ bắt đầu khác nhau cho các loại camera khác nhau!
-Để biết các lệnh chính xác, vui lòng sử dụng [hướng dẫn tự động tạo](https://openipc.org/supported-hardware/)
-cho phần cứng của bạn, tham khảo bảng dữ liệu, hoặc tìm kiếm sự giúp đỡ trên [kênh Telegram của chúng tôi][telegram].
+Để dump firmware gốc, bạn cần lưu nội dung bộ nhớ flash của camera vào một tệp. Đối với điều đó, trước tiên bạn phải tải nội dung vào RAM. Đây là cách bạn thực hiện điều đó. Khởi tạo bộ nhớ Flash. Làm sạch một vùng RAM đủ lớn để chứa toàn bộ nội dung của chip bộ nhớ flash. Đọc nội dung của flash vào vùng đó, sau đó xuất nó sang một tệp trên máy chủ TFTP.
+
+Xin lưu ý rằng loại flash, kích thước và địa chỉ bắt đầu khác nhau đối với các camera khác nhau! Để biết các lệnh chính xác, vui lòng sử dụng [hướng dẫn được tạo tự động](https://openipc.org/supported-hardware/) cho phần cứng của bạn, tham khảo bảng dữ liệu hoặc tìm kiếm trợ giúp trên [kênh Telegram của chúng tôi][telegram].
 
 ### Bước 7. Cài đặt firmware OpenIPC.
 
-#### Lời mở đầu.
+#### Mở đầu.
 
-Không có hai mô hình camera nào giống nhau. Các mô hình camera khác nhau bao gồm các
-bộ phận khác nhau. Hai trong số quan trọng nhất, bộ xử lý trung tâm và cảm biến hình ảnh,
-ảnh hưởng trực tiếp đến chất lượng hình ảnh và phạm vi chức năng
-đặc trưng cho một camera cụ thể. Khác với CPU máy tính để bàn, bộ xử lý của camera
-xử lý nhiều chức năng đến mức nó có một tên cụ thể -- Hệ thống-trên-Chip hoặc SoC,
-viết tắt.
+Không có hai model camera nào giống nhau. Các model camera khác nhau bao gồm các bộ phận khác nhau. Quan trọng nhất trong số đó, bộ xử lý trung tâm và cảm biến hình ảnh, ảnh hưởng trực tiếp đến chất lượng hình ảnh và phạm vi chức năng vốn có của một camera cụ thể. Không giống như CPU máy tính để bàn, bộ xử lý của camera xử lý rất nhiều chức năng nên nó có một tên cụ thể -- Hệ thống trên Chip hoặc SoC, viết tắt.
 
-Nhưng ngay cả những thành phần ít quan trọng hơn cũng có thể đặt giới hạn cho camera
-và khả năng firmware của nó. Ví dụ, các camera khác nhau có thể có các chip bộ nhớ flash khác nhau
-được cài đặt. Một số camera có thể có 8MB bộ nhớ flash, trong khi
-những cái khác có thể có 16MB hoặc nhiều hơn. Nhiều bộ nhớ flash hơn có thể chứa nhiều mã phần mềm hơn và
-cho phép camera chạy các dịch vụ bổ sung không có sẵn trên các camera
-với ít bộ nhớ flash hơn. Vì vậy, chúng tôi quyết định xây dựng hai phiên bản firmware của chúng tôi:
-phiên bản cơ bản (_Lite_) cho các camera có 8 MB bộ nhớ flash và phiên bản
-nâng cao (_Ultimate_) với các tính năng bổ sung cho các camera có 16 MB
-bộ nhớ flash.
+Nhưng ngay cả các thành phần dường như ít quan trọng hơn cũng có thể đặt ra giới hạn cho camera và khả năng của firmware. Ví dụ: các camera khác nhau có thể có các chip bộ nhớ flash khác nhau được cài đặt. Một số camera có thể có 8MB bộ nhớ flash, trong khi những camera khác có thể có 16MB trở lên. Nhiều bộ nhớ flash có thể chứa nhiều mã phần mềm hơn và cho phép camera chạy các dịch vụ bổ sung không có sẵn trên camera có ít bộ nhớ flash hơn. Vì vậy, chúng tôi quyết định xây dựng hai phiên bản firmware của mình: phiên bản cơ bản (_Lite_) cho camera có bộ nhớ flash 8 MB và phiên bản nâng cao (_Ultimate_) với các tính năng bổ sung cho camera có bộ nhớ flash 16 MB.
 
-Như đã nói trước, quy trình cài đặt firmware khác nhau cho các camera khác nhau.
-Có các địa chỉ bộ nhớ khác nhau và các tham số môi trường khác nhau,
-vì vậy trước khi tiếp tục, xác định loại SoC nào trong camera của bạn, cảm biến nào,
-chip bộ nhớ flash nào và bao nhiêu bộ nhớ nó có.
+Như đã nói trước đây, quy trình cài đặt firmware khác nhau đối với các camera khác nhau. Có các địa chỉ bộ nhớ khác nhau và các tham số môi trường khác nhau, vì vậy trước khi tiếp tục, hãy xác định loại SoC nào có trong camera của bạn, cảm biến nào, chip bộ nhớ flash nào và dung lượng bộ nhớ của nó.
 
-Dưới đây, chúng tôi mô tả quy trình cài đặt firmware OpenIPC Lite trên một
-camera có 8 MB bộ nhớ flash, như một ví dụ. Ngay cả khi camera của bạn có bộ nhớ flash lớn hơn,
-đừng bỏ qua văn bản này. Đọc nó cẩn thận để hiểu
-nguyên tắc và trình tự các hoạt động. Chúng tôi sẽ cung cấp các lệnh cụ thể
-cho các camera khác nhau trong phần thứ hai của phần này.
+Dưới đây, chúng tôi mô tả quy trình cài đặt firmware OpenIPC Lite trên camera có bộ nhớ flash 8 MB, làm ví dụ. Ngay cả khi camera của bạn có bộ nhớ flash lớn hơn, đừng bỏ qua phần văn bản này. Đọc kỹ để hiểu nguyên tắc và trình tự các thao tác. Chúng tôi sẽ cung cấp các lệnh cụ thể cho các camera khác nhau trong phần thứ hai của phần này.
 
 #### Chuẩn bị firmware và máy chủ TFTP.
 
-Hãy truy cập <https://openipc.org/supported-hardware>, tìm SoC của bạn trong bảng
-phần cứng được hỗ trợ. Đảm bảo rằng có một tệp nhị phân có thể tải xuống cho SoC đó.
-Hy vọng rằng có một tệp firmware đã được biên dịch sẵn cho bộ xử lý của bạn --
-hãy tải nó về máy tính của bạn.
+Truy cập <https://openipc.org/supported-hardware>, tìm SoC của bạn trong bảng phần cứng được hỗ trợ. Đảm bảo rằng có tệp nhị phân có thể tải xuống cho SoC đó. Hy vọng rằng có một tệp firmware được biên dịch trước cho bộ xử lý của bạn -- hãy tải xuống PC của bạn.
 
-Nếu bạn đã thực hiện bước 2, bạn đã có máy chủ TFTP của riêng bạn phục vụ các tệp từ
-thư mục `/srv/tftp`. Giải nén các tệp từ gói bạn vừa tải xuống vào
-thư mục đó.
+Nếu bạn đã làm theo bước 2, bạn đã có máy chủ TFTP của riêng mình phục vụ các tệp từ thư mục `/srv/tftp`. Giải nén các tệp từ gói bạn vừa tải xuống vào thư mục đó.
 
 ```bash
 sudo tar -C /srv/tftp/ -xvf openipc.*.tgz
 ```
+
 #### Chuẩn bị camera để flash.
 
-Vậy, chúng ta có một con chuột bạch, một camera với SoC hi3518ev100, được trang bị cảm biến OV9712,
-64 MB RAM và bộ nhớ flash NOR 8MB.
+Vì vậy, chúng ta có một con chuột lang, một chiếc camera có SoC hi3518ev100, được trang bị cảm biến OV9712, RAM 64 MB và bộ nhớ flash NOR 8MB.
 
-Kết nối với camera qua cổng UART và truy cập vào console bootloader.
-Đặt các tham số thành phần cho các biến môi trường phù hợp. Đặt
-biến môi trường để tải hệ điều hành Linux và hệ thống tệp gốc
-của firmware mới. Đặt các biến môi trường để camera truy cập mạng cục bộ,
-nơi `ethaddr` là địa chỉ MAC gốc của camera, `ipaddr` là địa chỉ IP của camera
-trên mạng, `gatewayip` là địa chỉ IP của router để truy cập mạng,
-`netmask` là mặt nạ mạng con, và `serverip` là địa chỉ IP của máy chủ TFTP
-từ bước 3. Lưu các giá trị đã cập nhật vào bộ nhớ flash.
+Kết nối với camera qua cổng UART và truy cập bảng điều khiển bootloader. Đặt các tham số thành phần cho các biến môi trường thích hợp. Đặt các biến môi trường để tải kernel Linux và hệ thống tệp gốc của firmware mới. Đặt các biến môi trường để camera truy cập mạng cục bộ, trong đó `ethaddr` là địa chỉ MAC gốc của camera, `ipaddr` là địa chỉ IP của camera trên mạng, `gatewayip` là địa chỉ IP của bộ định tuyến để truy cập mạng, `netmask` là mặt nạ mạng con và `serverip` là địa chỉ IP của máy chủ TFTP từ bước 3. Lưu các giá trị đã cập nhật vào bộ nhớ flash.
 
-Để biết các lệnh chính xác, vui lòng sử dụng [hướng dẫn tự động tạo](https://openipc.org/supported-hardware/)
-cho phần cứng của bạn, tham khảo bảng dữ liệu, hoặc tìm kiếm sự giúp đỡ trên [kênh Telegram của chúng tôi][telegram].
+Để biết các lệnh chính xác, vui lòng sử dụng [hướng dẫn được tạo tự động](https://openipc.org/supported-hardware/) cho phần cứng của bạn, tham khảo bảng dữ liệu hoặc tìm kiếm trợ giúp trên [kênh Telegram của chúng tôi][telegram].
 
 #### Cài đặt.
 
-Để biết các lệnh chính xác, vui lòng sử dụng [hướng dẫn tự động tạo](https://openipc.org/supported-hardware/)
-cho phần cứng của bạn, tham khảo bảng dữ liệu, hoặc tìm kiếm sự giúp đỡ trên [kênh Telegram của chúng tôi][telegram].
+Để biết các lệnh chính xác, vui lòng sử dụng [hướng dẫn được tạo tự động](https://openipc.org/supported-hardware/) cho phần cứng của bạn, tham khảo bảng dữ liệu hoặc tìm kiếm trợ giúp trên [kênh Telegram của chúng tôi][telegram].
 
-NB! Hãy chú ý đến các thông báo trên màn hình terminal! Nếu bất kỳ lệnh nào
-gây ra lỗi, tìm hiểu xem đã xảy ra lỗi gì. Có thể bạn đã gõ sai? Trong mọi trường hợp,
-đừng tiếp tục thủ tục cho đến khi tất cả các lệnh trước đó thành công. Nếu không,
-bạn có thể kết thúc với một camera bị hỏng!
+Lưu ý! Hãy chú ý đến các thông báo trên màn hình terminal! Nếu bất kỳ lệnh nào gây ra lỗi, hãy tìm hiểu xem điều gì đã xảy ra. Có thể bạn đã gõ sai chính tả? Trong mọi trường hợp, không tiếp tục quy trình cho đến khi tất cả các lệnh trước đó thành công. Nếu không, bạn có thể sẽ kết thúc với một chiếc camera bị brick!
 
 ### Bước 8. Khởi động lần đầu.
 
-Nếu tất cả các bước trước đây được thực hiện đúng, camera của bạn nên khởi động với
-firmware mới. Chào mừng đến với OpenIPC!
+Nếu tất cả các bước trước đó được thực hiện chính xác, camera của bạn sẽ khởi động với firmware mới. Chào mừng bạn đến với OpenIPC!
 
-Sau lần khởi động đầu tiên với firmware mới, bạn cần dọn dẹp
-phân vùng overlay. Chạy điều này trong cửa sổ terminal của bạn:
+Sau khi khởi động lần đầu với firmware mới, bạn cần dọn dẹp phân vùng lớp phủ. Chạy lệnh này trong cửa sổ terminal của bạn:
 
 ```bash
 firstboot

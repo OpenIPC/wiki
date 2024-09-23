@@ -1,71 +1,68 @@
-# OpenIPC Wiki
-[Table of Content](../README.md)
+## Hướng dẫn cài đặt chứng chỉ HTTPS trên camera OpenIPC
 
-How to install HTTPS certificates on your camera
-------------------------------------------------
+[Mục lục](../README.md)
 
-Make sure your camera is accessible from the Internet on both port 80 (HTTP)
-and port 443 (HTTPS). You might need to set up port forwarding on your router
-for that.
+### Cách cài đặt chứng chỉ HTTPS trên camera của bạn
 
-### Create an ACME account:
+Đảm bảo rằng camera của bạn có thể truy cập từ Internet trên cả cổng 80 (HTTP) và cổng 443 (HTTPS). Bạn có thể cần phải thiết lập chuyển tiếp cổng trên bộ định tuyến của mình cho việc này.
 
-__on camera:__
+### Tạo tài khoản ACME:
+
+__trên camera:__
 
 ```bash
 uacme -y -v new
 ```
 
-### Give your camera a FQDN
+### Đặt FQDN cho camera của bạn
 
-Secure HTTP (Hypertext Transfer Protocol Secure, HTTPS) cannot be issued to a bare IP address,
-you need a Fully Qualified Domain Name (FQDN) for your camera. That is how your camera will
-be accessed over HTTPS.
+Giao thức HTTP bảo mật (HTTPS) không thể được cấp cho địa chỉ IP trần, bạn cần một Tên miền đầy đủ (FQDN) cho camera của mình. Đó là cách camera của bạn sẽ được truy cập qua HTTPS.
 
-Create an account with any Domain Name Register and register a domain name, e.g. _mysuperduperdomain.com_.
+Tạo một tài khoản với bất kỳ Nhà đăng ký tên miền nào và đăng ký một tên miền, ví dụ: _mysuperduperdomain.com_.
 
-Set up a DNS zone for that domain name and create a record for your camera in that domain zone.
+Thiết lập vùng DNS cho tên miền đó và tạo một bản ghi cho camera của bạn trong vùng miền đó.
 
 ```console
-DNS Records
+Bản ghi DNS
 mysuperduperdomain.com
 ---------------------------------------
-Type    Host       IP Address       TTL
+Loại    Host       Địa chỉ IP       TTL
 A       ipc-001    75.123.45.555    600
 ```
 
-where `75.123.45.555` is your public IP address.
+trong đó `75.123.45.555` là địa chỉ IP công cộng của bạn.
 
-### Set up port forwarding if your camera is behind NAT.
+### Thiết lập chuyển tiếp cổng nếu camera của bạn nằm sau NAT.
 
-Add port forwarding from port 80 of WAN interface to port 80 of your camera's local IP address.
+Thêm chuyển tiếp cổng từ cổng 80 của giao diện WAN đến cổng 80 của địa chỉ IP cục bộ của camera.
 
 ```console
 75.123.45.555:80 => 192.168.1.10:80
 ```
 
-If you have several devices on your network serving public HTTP requests then add your
-camera domain name to HTTP proxy.
+Nếu bạn có một số thiết bị trên mạng của mình phục vụ các yêu cầu HTTP công khai, thì hãy thêm tên miền camera của bạn vào proxy HTTP.
 
-### Issue a certificate for your domain:
 
-__on camera__:
+### Cấp chứng chỉ cho miền của bạn:
+
+__trên camera__:
 
 ```bash
 uacme -y -v -h /usr/share/uacme/uacme.sh -t EC issue ipc-001.mysuperduperdomain.com
 ```
 
-### Set up a local DNS record override
+### Thiết lập ghi đè bản ghi DNS cục bộ
 
-You can add an override record to `/etc/hosts` file on your machine
+Bạn có thể thêm bản ghi ghi đè vào tệp `/etc/hosts` trên máy của mình
 
 ```bash
 echo "192.168.1.10  ipc-001.mysuperduperdomain.com" >> /etc/hosts
 ```
 
-or you could create a record on your local DNS server like [pi.hole](https://pi-hole.net/)
-so that anyone using that DNS server could have secure access to the camera, too.
+hoặc bạn có thể tạo một bản ghi trên máy chủ DNS cục bộ của mình như [pi.hole](https://pi-hole.net/) để bất kỳ ai sử dụng máy chủ DNS đó cũng có thể truy cập an toàn vào camera.
 
-### Restart majestic and test access
+### Khởi động lại majestic và kiểm tra truy cập
 
-Open your favorite web browser and go to <https://ipc-001.mysuperduperdomain.com/>
+Mở trình duyệt web yêu thích của bạn và truy cập <https://ipc-001.mysuperduperdomain.com/>
+
+

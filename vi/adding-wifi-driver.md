@@ -1,27 +1,27 @@
-# OpenIPC Wiki
-[Table of Content](../README.md)
+## OpenIPC Wiki
+[Mục lục](../README.md)
 
-Adding a wifi driver to your firmware
+Thêm driver wifi vào firmware của bạn
 ---
-Since most cameras have very little flash memory, OpenIPC firmware images don't contain many wifi drivers, as they can easily be 1.5MB+ per driver.
-This means that in many cases, you will have to add the appropriate wifi driver to your firmware image.
+Vì hầu hết các camera đều có bộ nhớ flash rất nhỏ, nên các image firmware OpenIPC không chứa nhiều driver wifi, vì chúng có thể dễ dàng chiếm hơn 1.5MB cho mỗi driver.
+Điều này có nghĩa là trong nhiều trường hợp, bạn sẽ phải thêm driver wifi thích hợp vào image firmware của mình.
 
-### Step 1: preparing the build environment
-You will need a Linux environment. First download the OpenIPC firmware repository:
+### Bước 1: Chuẩn bị môi trường build
+Bạn sẽ cần một môi trường Linux. Đầu tiên, hãy tải xuống kho lưu trữ firmware OpenIPC:
 
 ```
 git clone https://github.com/OpenIPC/firmware.git openipc-firmware
 cd openipc-firmware
 ```
 
-Install packages required for building:
+Cài đặt các gói cần thiết để build:
 
 ```
 sudo make deps
 ```
 
-### Step 2: determine the driver package
-Here are some of the most common wifi driver packages:
+### Bước 2: Xác định gói driver
+Dưới đây là một số gói driver wifi phổ biến nhất:
 
 #### AIC:
 ```
@@ -29,11 +29,11 @@ BR2_PACKAGE_AIC8800_OPENIPC
 ```
 
 #### Altobeam:
-*1. Select general ATBM driver:*
+*1. Chọn driver ATBM chung:*
 ```
 BR2_PACKAGE_ATBM60XX
 ```
-*2. Enable the driver for your specific card:*
+*2. Kích hoạt driver cho card cụ thể của bạn:*
 ```
 BR2_PACKAGE_ATBM60XX_MODEL_601X
 BR2_PACKAGE_ATBM60XX_MODEL_602X
@@ -41,13 +41,13 @@ BR2_PACKAGE_ATBM60XX_MODEL_603X
 BR2_PACKAGE_ATBM60XX_MODEL_6041
 ```
 
-*3. Set usb or sdio:*
+*3. Đặt usb hoặc sdio:*
 ```
 BR2_PACKAGE_ATBM60XX_INTERFACE_USB
 BR2_PACKAGE_ATBM60XX_INTERFACE_SDIO
 ```
 
-*Example: to build atbm603x_wifi_usb:*
+*Ví dụ: để build atbm603x_wifi_usb:*
 ```
 BR2_PACKAGE_ATBM60XX=y
 BR2_PACKAGE_ATBM60XX_MODEL_603X=y
@@ -88,38 +88,33 @@ BR2_PACKAGE_RTL8733BU_OPENIPC
 BR2_PACKAGE_RTL8812AU_OPENIPC
 ```
 
-Take note of the `BR2_PACKAGE` variable for the driver you need. It may
-be useful to observe the boot messages from the original firmware to
-determine the network device and interface type since it may not be
-obvious from looking at the board. Seeing `atbm603x_wifi_usb` in the
-boot messages suggests that this camera has an `atbm603x` wifi device
-connected internally over USB.
+Hãy ghi nhớ biến `BR2_PACKAGE` cho driver bạn cần. Việc quan sát các thông báo khởi động từ firmware gốc để xác định thiết bị mạng và loại giao diện có thể hữu ích vì có thể không rõ ràng khi nhìn vào bảng mạch. Việc nhìn thấy `atbm603x_wifi_usb` trong các thông báo khởi động cho thấy camera này có thiết bị wifi `atbm603x` được kết nối nội bộ qua USB.
 
-### Step 3: add BR2_PACKAGE variable to your firmware configuration
-The firmware configuration files are ordered per chipset in the `br-ext-chip-*`directories. Navigate to the directory for the chipset you are building for, then navigate to the `/configs/` directory.
+### Bước 3: Thêm biến BR2_PACKAGE vào cấu hình firmware của bạn
+Các tệp cấu hình firmware được sắp xếp theo chipset trong các thư mục `br-ext-chip-*`. Điều hướng đến thư mục cho chipset bạn đang build, sau đó điều hướng đến thư mục `/configs/`.
 
-Example: you have a hisilicon chipset:
+Ví dụ: bạn có chipset hisilicon:
 
 `cd br-ext-chip-hisilicon/configs/`
 
-Inside you will see a number of `_defconfig` files. Open the file for your desired chip and firmware flavor in a text editor.
-Add the appropriate `BR2_PACKAGE` variable to this file, adding `=y` to the end of the variable. 
+Bên trong, bạn sẽ thấy một số tệp `_defconfig`. Mở tệp cho chip và loại firmware mong muốn của bạn trong trình soạn thảo văn bản.
+Thêm biến `BR2_PACKAGE` thích hợp vào tệp này, thêm `=y` vào cuối biến. 
 
-Example: you want to add the RTL8188EUS driver:
+Ví dụ: bạn muốn thêm driver RTL8188EUS:
 
 `BR2_PACKAGE_RTL8188EUS_OPENIPC=y`
 
-### Step 4: Build your firmware
-Return to the root directory of the openipc firmware directory `openipc-firmware/`.
-Run `make` and select the configuration you have edited in the previous step.
+### Bước 4: Build firmware của bạn
+Quay trở lại thư mục gốc của thư mục firmware openipc `openipc-firmware/`.
+Chạy `make` và chọn cấu hình bạn đã chỉnh sửa trong bước trước.
 
-Alternatively, you can run `make BOARD=<your_config>`, where `<your_config>` is the name of the config file you have just edited, minus the `_defconfig`
+Ngoài ra, bạn có thể chạy `make BOARD=<your_config>`, trong đó `<your_config>` là tên của tệp cấu hình bạn vừa chỉnh sửa, trừ `_defconfig`
 
-Example: you want to build `ultimate` for `hi3516ev200`:
+Ví dụ: bạn muốn build `ultimate` cho `hi3516ev200`:
 
 `make BOARD=hi3516ev200_ultimate`
 
-When the build is complete, you will find the output in the `output/images/` directory:
+Khi quá trình build hoàn tất, bạn sẽ tìm thấy đầu ra trong thư mục `output/images/`:
 
 ```
 ./rootfs.hi3516ev200.cpio
@@ -129,8 +124,8 @@ When the build is complete, you will find the output in the `output/images/` dir
 ./uImage.hi3516ev200
 ```
 
-You can now use `rootfs.squashfs.*` and `uImage.*` with [sysupgrade](./sysupgrade.md) or your preferred update mechanism.
+Bây giờ bạn có thể sử dụng `rootfs.squashfs.*` và `uImage.*` với [sysupgrade](./sysupgrade.md) hoặc cơ chế cập nhật ưa thích của bạn.
 
-*For additional wifi configuration, see [wireless settings](./wireless-settings.md).*
+*Để biết thêm cấu hình wifi, hãy xem [cài đặt không dây](./wireless-settings.md).*
 
-*For more information about building OpenIPC from source, see [Source code](./source-code.md).*
+*Để biết thêm thông tin về việc build OpenIPC từ mã nguồn, hãy xem [Mã nguồn](./source-code.md).*

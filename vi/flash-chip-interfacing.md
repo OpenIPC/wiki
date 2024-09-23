@@ -1,182 +1,183 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-Flash Chip Interfacing
+Giao tiếp Chip Flash
 --------------------
 
-This is an advanced topic regarding identifying, reading, writing, verifying and 
-erasing flash chips by interfacing directly with the flash chip using a programmer.
-This is not the preferred method of flashing the firmware, but it certainly can be useful
-when other methods fail.
+Đây là một chủ đề nâng cao liên quan đến việc xác định, đọc, ghi, xác minh và
+xóa chip flash bằng cách giao tiếp trực tiếp với chip flash bằng bộ lập trình.
+Đây không phải là phương pháp ưa thích để flash firmware, nhưng nó chắc chắn có thể hữu ích
+khi các phương pháp khác thất bại.
 
-If you are just getting started, you are probably in the wrong place: check out
-[Installation](installation.md) and [Burn Example](burn-example.md) for better starting points.
+Nếu bạn mới bắt đầu, có lẽ bạn đang ở sai chỗ: hãy xem
+[Cài đặt](installation.md) và [Ví dụ về Burn](burn-example.md) để có điểm bắt đầu tốt hơn.
 
 
-SOIC8 Chips
+Chip SOIC8
 --------------------
-SOIC8 is a common package for flash chips. It is a small package with 8 pins, and
-the pins are spaced 1.27mm apart. The pins are numbered counter-clockwise starting
-from the top left corner with the dot marking. The top left pin is pin 1, the top right pin is pin 2,
+SOIC8 là một gói phổ biến cho chip flash. Nó là một gói nhỏ với 8 chân, và
+các chân cách nhau 1,27mm. Các chân được đánh số ngược chiều kim đồng hồ bắt đầu
+từ góc trên cùng bên trái với dấu chấm. Chân trên cùng bên trái là chân 1, chân trên cùng bên phải là chân 2,
 
-As mentioned in [Help: U-Boot](help-uboot.md) the SOIC8 flash chip can sometimes be tricked 
-into going straight to u-boot mode, and the following diagram is shown:
+Như đã đề cập trong [Trợ giúp: U-Boot](help-uboot.md), chip flash SOIC8 đôi khi có thể bị lừa
+để chuyển thẳng sang chế độ u-boot và sơ đồ sau được hiển thị:
 ![](../images/flash-pins.webp)
 ![](../images/flash-pins-2.webp)
 
 
-SOIC8 Clips
+Kẹp SOIC8
 --------------------
 
-SOIC8 clips are a convenient way to interface with SOIC8 chips. They are cheap and somewhat easy to use.
-Remember though, that the clip requires a programmer to act as interface between the clip and your computer.
+Kẹp SOIC8 là một cách thuận tiện để giao tiếp với chip SOIC8. Chúng rẻ và phần nào dễ sử dụng.
+Tuy nhiên, hãy nhớ rằng kẹp yêu cầu bộ lập trình hoạt động như giao diện giữa kẹp và máy tính của bạn.
 
-It can be confusing when looking at the ribbon cable of the clip, because the two rows of pins -- how does it map?
-Look at the following image of a ribbon cable, there is a red wire that indicates pin 1, and the pins are numbered
-relative to the cable key notch.   Don't be confused in thinking that red should be voltage, in this case it should
-map to pin one of the SOIC8 chip and pin-cable adapter.   This way you can visualize the pins of the adapter are identical
-to that of the SOIC8 flash chip specification.
+Có thể gây nhầm lẫn khi nhìn vào cáp ruy băng của kẹp, bởi vì hai hàng chân - nó được ánh xạ như thế nào?
+Nhìn vào hình ảnh sau của một cáp ruy băng, có một dây màu đỏ cho biết chân 1 và các chân được đánh số
+so với rãnh khóa cáp. Đừng nhầm lẫn khi nghĩ rằng màu đỏ phải là điện áp, trong trường hợp này, nó phải
+ánh xạ tới chân một của chip SOIC8 và bộ chuyển đổi chân-cáp. Bằng cách này, bạn có thể hình dung các chân của bộ chuyển đổi giống hệt
+với thông số kỹ thuật của chip flash SOIC8.
 
 ![](../images/ribbon-cable.jpg)
 
-Here is an example of a SOIC8 clip wired to a Raspberry Pi Pico:
+Đây là một ví dụ về kẹp SOIC8 được nối dây với Raspberry Pi Pico:
 
 ![](../images/soic8-clip-programmer-example.png)
 
-**Warning:**  Often camera boards have other SOIC8 style chips besides the flash chip, 
-and you need to be sure to identify the correct chip before you begin your work.
+**Cảnh báo:** Thường thì bo mạch camera có các chip kiểu SOIC8 khác ngoài chip flash,
+và bạn cần chắc chắn xác định đúng chip trước khi bắt đầu công việc của mình.
 
 
-Picking a Programmer
+Chọn bộ lập trình
 --------------------
 
 
 ### CH341A
-There are many programmers available, and they all have their pros and cons.  The most popular
-programmers are boards leveraging the CH341A, which is a cheap and easy to use chipset.  For more details about the CH341A, 
-see [CH341A Hardware Programmer](hardware-programmer.md).
+Có nhiều bộ lập trình có sẵn và tất cả chúng đều có ưu và nhược điểm riêng. Phổ biến nhất
+bộ lập trình là bo mạch tận dụng CH341A, là một chipset rẻ và dễ sử dụng. Để biết thêm chi tiết về CH341A,
+xem [Bộ lập trình phần cứng CH341A](hardware-programmer.md).
 
 
 ### Raspberry Pi Pico
-The Raspberry Pi Pico is a microcontroller board with a USB port and a several GPIO pins.  It is also cheap and easy to use,
-and maybe you already have one lying around.   Doesn't matter if it is a wireless version or not, they both work the same.
-In order to use the Pico as a programmer, you will need to put the pico into bootloader mode by holding down the BOOTSEL button
-while plugging it into your computer.  The Pico will show up as a USB drive, and you can drag and drop the uf2 file onto the drive.
-Currently, the best pico-serprog library to use is a fork of [pico-serprog](https://github.com/opensensor/pico-serprog) 
-which fixed a number of issues encountered with the original.
+Raspberry Pi Pico là một bo mạch vi điều khiển có cổng USB và một số chân GPIO. Nó cũng rẻ và dễ sử dụng,
+và có thể bạn đã có một cái nằm xung quanh. Không thành vấn đề nếu đó là phiên bản không dây hay không, cả hai đều hoạt động như nhau.
+Để sử dụng Pico làm bộ lập trình, bạn sẽ cần đưa pico vào chế độ bootloader bằng cách giữ nút BOOTSEL
+trong khi cắm nó vào máy tính của bạn. Pico sẽ hiển thị dưới dạng ổ USB và bạn có thể kéo và thả tệp uf2 vào ổ.
+Hiện tại, thư viện pico-serprog tốt nhất để sử dụng là một nhánh của [pico-serprog](https://github.com/opensensor/pico-serprog)
+đã khắc phục một số vấn đề gặp phải với bản gốc.
 
-There are more instructions the pico-serprog Github, however pico-serprog firmware will grant you 
-an extra USB COM port that maps to the following GPIOs.
+Có nhiều hướng dẫn hơn trên Github pico-serprog, tuy nhiên firmware pico-serprog sẽ cấp cho bạn
+một cổng USB COM bổ sung ánh xạ tới các GPIO sau.
 
-| Pin | Function |
+| Chân | Chức năng |
 |-----|----------|
 | 7   | CS       |
 | 6   | MISO     |
 | 5   | MOSI     |
 | 4   | SCK      |
 
-Since most SOIC8 flash chips are 3.3v, you will need to connect to the 3.3 V rail of the PICO which is pin 36, 
-and remember to connect the GND pin as well, there are many GND pins on the pico, such as pin 38.
-* Note: if for some reason your chip needs 5V, you can use VSYS which is pin 40 instead of 3.3V, but make sure you read the specification of your specific flash chip.
+Vì hầu hết các chip flash SOIC8 là 3,3v, bạn sẽ cần kết nối với đường ray 3,3 V của PICO là chân 36,
+và nhớ kết nối cả chân GND, có nhiều chân GND trên pico, chẳng hạn như chân 38.
+* Lưu ý: nếu vì lý do nào đó chip của bạn cần 5V, bạn có thể sử dụng VSYS là chân 40 thay vì 3,3V, nhưng hãy đảm bảo bạn đọc thông số kỹ thuật của chip flash cụ thể của mình.
 
 
 
-Flashrom program
+Chương trình Flashrom
 --------------------
-Flashrom is a program that can be used to read, write, erase, and verify flash chips.  It is available for Linux, Windows, and Mac.
-Generally these days, you need to compile it for the platform that you intend to use it on.  It is a command line program, and
-there are many options available.  The following are some examples of how to use flashrom.
+Flashrom là một chương trình có thể được sử dụng để đọc, ghi, xóa và xác minh chip flash. Nó có sẵn cho Linux, Windows và Mac.
+Nói chung ngày nay, bạn cần biên dịch nó cho nền tảng mà bạn định sử dụng nó. Nó là một chương trình dòng lệnh, và
+có nhiều tùy chọn có sẵn. Sau đây là một số ví dụ về cách sử dụng flashrom.
 
-This guide focusing on using flashrom and does not currently explain building flashrom, but you can find instructions on the [flashrom website](https://flashrom.org/).
+Hướng dẫn này tập trung vào việc sử dụng flashrom và hiện không giải thích việc xây dựng flashrom, nhưng bạn có thể tìm thấy hướng dẫn trên [trang web flashrom](https://flashrom.org/).
 
-### Determine your COM port
+### Xác định cổng COM của bạn
 
-For windows, you can use the device manager to determine the COM port that your programmer is connected to.
+Đối với windows, bạn có thể sử dụng trình quản lý thiết bị để xác định cổng COM mà bộ lập trình của bạn được kết nối.
 
-For Linux, you can use the `dmesg` command to determine the COM port that your programmer is connected to.
+Đối với Linux, bạn có thể sử dụng lệnh `dmesg` để xác định cổng COM mà bộ lập trình của bạn được kết nối.
 
-### Reading a flash chip
+### Đọc chip flash
 
-To read a flash chip, you sometimes need to know the type of flash chip that you are reading.
+Để đọc chip flash, đôi khi bạn cần biết loại chip flash mà bạn đang đọc.
 
-Try running simple probe to verify you get connectivity with the programmer.   pico-serprog is a serprog (or serial programmer) and that needs to be specified to flashrom.
-In this example, the programmer is connected to COM23, and the baud rate is 2000000 which is known to work well and can read a 16MB flash chip in 2-3 minutes.
+Hãy thử chạy thăm dò đơn giản để xác minh bạn có kết nối với bộ lập trình hay không. pico-serprog là một serprog (hoặc bộ lập trình nối tiếp) và điều đó cần được chỉ định cho flashrom.
+Trong ví dụ này, bộ lập trình được kết nối với COM23 và tốc độ baud là 2000000, được biết là hoạt động tốt và có thể đọc chip flash 16MB trong 2-3 phút.
 ```bash
 ./flashrom.exe -p serprog:dev=COM23:2000000 -V
 ```
 
-Here is an example of reading a flash chip.   In this example, flashrom had told us we had to pick between three different chips, and we picked the "GD25B128B/GD25Q128B".
+Đây là một ví dụ về việc đọc chip flash. Trong ví dụ này, flashrom đã cho chúng tôi biết chúng tôi phải chọn giữa ba chip khác nhau và chúng tôi đã chọn "GD25B128B/GD25Q128B".
 ```bash
 # ./flashrom.exe -p serprog:dev=COM23:2000000 -c "GD25B128B/GD25Q128B" -r gokev300-camera-12242023.bin -VV --force
-flashrom 1.4.0-devel (git:v1.2-1386-g5106287e) on Windows 10.0 (x86_64)
-flashrom is free software, get the source code at https://flashrom.org
+flashrom 1.4.0-devel (git:v1.2-1386-g5106287e) trên Windows 10.0 (x86_64)
+flashrom là phần mềm miễn phí, hãy tải mã nguồn tại https://flashrom.org
 
-Using clock_gettime for delay loops (clk_id: 1, resolution: 100ns).
-flashrom was built with GCC 13.2.0, little endian
-Command line (8 args): C:\msys64\home\matte\flashrom\flashrom.exe -p serprog:dev=COM23:2000000 -c GD25B128B/GD25Q128B -r gokev300-camera-12242023.bin -VV --force
-Initializing serprog programmer
-Baud rate is 2000000.
-serprog: connected - attempting to synchronize
+Sử dụng clock_gettime cho vòng lặp trễ (clk_id: 1, độ phân giải: 100ns).
+flashrom được xây dựng với GCC 13.2.0, little endian
+Dòng lệnh (8 args): C:\msys64\home\matte\flashrom\flashrom.exe -p serprog:dev=COM23:2000000 -c GD25B128B/GD25Q128B -r gokev300-camera-12242023.bin -VV --force
+Khởi tạo bộ lập trình serprog
+Tốc độ baud là 2000000.
+serprog: đã kết nối - đang cố gắng đồng bộ hóa
 .
-serprog: Synchronized
-serprog: Interface version ok.
-serprog: Bus support: parallel=off, LPC=off, FWH=off, SPI=on
-serprog: Maximum write-n length is 32
-serprog: Maximum read-n length is 32
-serprog: Programmer name is "pico-serprog"
-serprog: Serial buffer size is 64
-Warning: Automatic command availability check failed for cmd 0x07 - won't execute cmd
-Warning: NAK to query operation buffer size
-serprog: operation buffer size is 300
-serprog: Warning: Programmer does not support toggling its output drivers
-The following protocols are supported: SPI.
-Probing for GigaDevice GD25B128B/GD25Q128B, 16384 kB: compare_id: id1 0xc8, id2 0x4018
-Added layout entry 00000000 - 00ffffff named complete flash
-Found GigaDevice flash chip "GD25B128B/GD25Q128B" (16384 kB, SPI) on serprog.
-Chip status register is 0x00.
-Chip status register: Status Register Write Disable (SRWD, SRP, ...) is not set
-Chip status register: Block Protect 4 (BP4) is not set
-Chip status register: Block Protect 3 (BP3) is not set
-Chip status register: Block Protect 2 (BP2) is not set
-Chip status register: Block Protect 1 (BP1) is not set
-Chip status register: Block Protect 0 (BP0) is not set
-Chip status register: Write Enable Latch (WEL) is not set
-Chip status register: Write In Progress (WIP/BUSY) is not set
-This chip may contain one-time programmable memory. flashrom cannot read
-and may never be able to write it, hence it may not be able to completely
-clone the contents of this chip (see man page for details).
+serprog: Đã đồng bộ hóa
+serprog: Phiên bản giao diện ok.
+serprog: Hỗ trợ bus: parallel=off, LPC=off, FWH=off, SPI=on
+serprog: Độ dài ghi-n tối đa là 32
+serprog: Độ dài đọc-n tối đa là 32
+serprog: Tên bộ lập trình là "pico-serprog"
+serprog: Kích thước bộ đệm nối tiếp là 64
+Cảnh báo: Kiểm tra tự động khả dụng lệnh không thành công cho cmd 0x07 - sẽ không thực thi cmd
+Cảnh báo: NAK để truy vấn kích thước bộ đệm hoạt động
+serprog: kích thước bộ đệm hoạt động là 300
+serprog: Cảnh báo: Bộ lập trình không hỗ trợ bật tắt trình điều khiển đầu ra của nó
+Các giao thức sau được hỗ trợ: SPI.
+Dò tìm GigaDevice GD25B128B/GD25Q128B, 16384 kB: compare_id: id1 0xc8, id2 0x4018
+Đã thêm mục bố cục 00000000 - 00ffffff có tên flash hoàn chỉnh
+Đã tìm thấy chip flash GigaDevice "GD25B128B/GD25Q128B" (16384 kB, SPI) trên serprog.
+Thanh ghi trạng thái chip là 0x00.
+Thanh ghi trạng thái chip: Tắt ghi thanh ghi trạng thái (SRWD, SRP, ...) không được đặt
+Thanh ghi trạng thái chip: Bảo vệ khối 4 (BP4) không được đặt
+Thanh ghi trạng thái chip: Bảo vệ khối 3 (BP3) không được đặt
+Thanh ghi trạng thái chip: Bảo vệ khối 2 (BP2) không được đặt
+Thanh ghi trạng thái chip: Bảo vệ khối 1 (BP1) không được đặt
+Thanh ghi trạng thái chip: Bảo vệ khối 0 (BP0) không được đặt
+Thanh ghi trạng thái chip: Chốt cho phép ghi (WEL) không được đặt
+Thanh ghi trạng thái chip: Ghi đang tiến hành (WIP/BUSY) không được đặt
+Chip này có thể chứa bộ nhớ lập trình một lần. flashrom không thể đọc
+và có thể không bao giờ có thể ghi vào nó, do đó nó có thể không thể hoàn toàn
+nhân bản nội dung của chip này (xem trang man để biết chi tiết).
 ===
-This flash part has status UNTESTED for operations: WP
-The test status of this chip may have been updated in the latest development
-version of flashrom. If you are running the latest development version,
-please email a report to flashrom@flashrom.org if any of the above operations
-work correctly for you with this flash chip. Please include the flashrom log
-file for all operations you tested (see the man page for details), and mention
-which mainboard or programmer you tested in the subject line.
-Thanks for your help!
-serprog_delay used, but programmer doesn't support delays natively - emulating
-Block protection is disabled.
-Reading flash... read_flash:  region (00000000..0xffffff) is readable, reading range (00000000..0xffffff).
-done.
+Phần flash này có trạng thái CHƯA THỬ NGHIỆM cho các hoạt động: WP
+Trạng thái thử nghiệm của chip này có thể đã được cập nhật trong bản phát triển mới nhất
+phiên bản của flashrom. Nếu bạn đang chạy phiên bản phát triển mới nhất,
+vui lòng gửi email báo cáo đến flashrom@flashrom.org nếu bất kỳ hoạt động nào ở trên
+hoạt động chính xác cho bạn với chip flash này. Vui lòng bao gồm tệp nhật ký flashrom
+cho tất cả các hoạt động bạn đã thử nghiệm (xem trang man để biết chi tiết) và đề cập
+bo mạch chủ hoặc bộ lập trình nào bạn đã thử nghiệm trong dòng chủ đề.
+Cảm ơn bạn đã giúp đỡ!
+serprog_delay đã được sử dụng, nhưng bộ lập trình không hỗ trợ độ trễ nguyên bản - đang mô phỏng
+Bảo vệ khối bị vô hiệu hóa.
+Đọc flash... read_flash: vùng (00000000..0xffffff) có thể đọc được, đang đọc phạm vi (00000000..0xffffff).
+hoàn thành.
 ```
 
-### Writing a flash chip
+### Ghi chip flash
 
-Writing a flash chip is quite similar to reading it.  You need to specify the COM port, the baud rate, and possibly the chip type.
-Simply change your arguments to flashrom to include the -w option and the file that you want to write to the flash chip.
+Ghi chip flash khá giống với đọc nó. Bạn cần chỉ định cổng COM, tốc độ baud và có thể là loại chip.
+Đơn giản chỉ cần thay đổi các đối số của bạn thành flashrom để bao gồm tùy chọn -w và tệp mà bạn muốn ghi vào chip flash.
 
 ```bash
 ./flashrom.exe -p serprog:dev=COM23:2000000 -c "GD25B128B/GD25Q128B" -w openipc-hi3516ev300-ultimate-16mb.bin -VV --force
 ```
 
-During a write operation, flashrom will first read the entire chip, then erase and write the chip, and then re-read it to verify.
-Always make sure you successfully back up and complete a read cycle before attempting to write to a chip.
+Trong quá trình ghi, flashrom sẽ đọc toàn bộ chip trước, sau đó xóa và ghi chip, rồi đọc lại để xác minh.
+Luôn đảm bảo bạn sao lưu thành công và hoàn thành chu kỳ đọc trước khi thử ghi vào chip.
 
 
-### Conclusion
-This guide is not meant to be a complete guide to using flashrom, but rather a starting point for those who are interested in using it,
-and also inspiration for those who have raspberry picos lying around and want to use them for something useful.
+### Phần kết luận
+Hướng dẫn này không có nghĩa là một hướng dẫn đầy đủ về cách sử dụng flashrom, mà là điểm khởi đầu cho những ai quan tâm đến việc sử dụng nó,
+và cũng là nguồn cảm hứng cho những ai có raspberry pico nằm xung quanh và muốn sử dụng chúng cho một cái gì đó hữu ích.
 
-If you liked the pico-serprog example, you probably will also really like the [pico-uart-bridge](https://github.com/Noltari/pico-uart-bridge)
-which gives multiple COM ports over a single USB connection, for the purpose of connecting UART terminals.
+Nếu bạn thích ví dụ pico-serprog, có lẽ bạn cũng sẽ thực sự thích [pico-uart-bridge](https://github.com/Noltari/pico-uart-bridge)
+cung cấp nhiều cổng COM qua một kết nối USB duy nhất, cho mục đích kết nối các thiết bị đầu cuối UART.
+
 

@@ -1,8 +1,8 @@
 # OpenIPC Wiki
 
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-## Quick Setup of Ground Station for OrangePi 5 Ubuntu 22.04
+## Hướng dẫn Cài đặt Nhanh Trạm Mặt đất cho OrangePi 5 Ubuntu 22.04
 
 ---
 
@@ -11,14 +11,14 @@
   <img src="../images/pi-5.png?raw=true" alt="Logo" style="height:400px;"/>
 </p>
 
-### Prepare
+### Chuẩn bị
 
 ```
 sudo apt update
 sudo apt upgrade
 ```
 
-### Download and install the Linux kernel headers for rockchip rk3588
+### Tải xuống và cài đặt tiêu đề kernel Linux cho rockchip rk3588
 
 [https://drive.google.com/drive/folders/1R7VmAeo3_LpFDQvYSEG9ymAC-DvaLt47](https://drive.google.com/drive/folders/1R7VmAeo3_LpFDQvYSEG9ymAC-DvaLt47)
 
@@ -27,13 +27,13 @@ sudo dpkg -i linux-headers-legacy-rockchip-rk3588_1.1.2_arm64.deb
 sudo dpkg -i linux-image-legacy-rockchip-rk3588_1.1.2_arm64.deb
 ```
 
-### Wifi card driver
+### Trình điều khiển card Wifi
 
-To disable add it to the blacklist:
+Để vô hiệu hóa, hãy thêm nó vào danh sách đen:
 
 ```
 sudo bash -c "cat > /etc/modprobe.d/wfb.conf <<EOF
-# blacklist stock module
+# Danh sách đen mô-đun gốc
 blacklist 88XXau
 blacklist 8812au
 blacklist rtl8812au
@@ -41,7 +41,7 @@ blacklist rtl88x2bs
 EOF"
 ```
 
-Compile the driver from source:
+Biên dịch trình điều khiển từ mã nguồn:
 
 ```
 git clone -b v5.2.20 https://github.com/svpcom/rtl8812au.git
@@ -49,9 +49,9 @@ cd rtl8812au/
 sudo ./dkms-install.sh
 ```
 
-### Installing WFB-NG
+### Cài đặt WFB-NG
 
-Using the "nmcli" command, we find out the name of your wifi adapter and substitute $WLAN in the place
+Sử dụng lệnh "nmcli", chúng ta tìm ra tên của bộ chuyển đổi wifi của bạn và thay thế $WLAN vào vị trí
 
 ```
 git clone -b stable https://github.com/svpcom/wfb-ng.git
@@ -59,37 +59,37 @@ cd wfb-ng
 sudo ./scripts/install_gs.sh $WLAN
 ```
 
-and enable auto-upload
+và bật tự động tải lên
 
 ```
 sudo systemctl enable wifibroadcast
 ```
 
-### Channel configuration
+### Cấu hình kênh
 
 ```
 sudo vi /etc/wifibroadcast.cfg
 ```
 
-### Copying the encryption key from an IP camera
+### Sao chép khóa mã hóa từ camera IP
 
 ```
 sudo scp root@192.168.1.10:/etc/drone.key /etc/gs.key
 ```
 
-and restarting wfb-ng:
+và khởi động lại wfb-ng:
 
 ```
 sudo systemctl restart wifibroadcast@gs
 ```
 
-### Start WFB CLI
+### Khởi động WFB CLI
 
 ```
 wfb-cli gs
 ```
 
-### Video decoding
+### Giải mã video
 
 h265
 
@@ -103,11 +103,11 @@ h264
 gst-launch-1.0 udpsrc port=5600 caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264' ! rtph264depay ! h264parse ! mppvideodec ! xvimagesink sync=false
 ```
 
-###GS IS READY FOR USE###
+###TRẠM MẶT ĐẤT ĐÃ SẴN SÀNG SỬ DỤNG###
 
-### DVR (Digital Video Recorder)
+### DVR (Máy ghi hình kỹ thuật số)
 
-Create a file **gst_start** with the following content and assign the rights to execute **chmod +x gst_start**.
+Tạo một tệp **gst_start** với nội dung sau và gán quyền thực thi **chmod +x gst_start**.
 
 ```
 #!/bin/bash
@@ -123,9 +123,9 @@ fi
 
 ```
 
-When running with the **save** option, the video will be saved to the **/home/Video folder/**
+Khi chạy với tùy chọn **save**, video sẽ được lưu vào **/thư mục home/Video/**
 
-### Start, stop, restart service
+### Khởi động, dừng, khởi động lại dịch vụ
 
 ```
 systemctl status wifibroadcast@gs
@@ -133,51 +133,55 @@ systemctl stop wifibroadcast@gs
 systemctl start wifibroadcast@gs
 ```
 
-### Get last logs from service
+### Lấy nhật ký mới nhất từ ​​dịch vụ
 
 ```
 journalctl -u wifibroadcast@gs -f
 journalctl -xu wifibroadcast@gs -n 100
 ```
 
-### Useful commands
+### Lệnh hữu ích
 
 ```
-# Checking the operation of the wfb-ng
+# Kiểm tra hoạt động của wfb-ng
 /usr/bin/wfb_rx -p 0 -c 127.0.0.1 -u 5600 -K /etc/gs.key -i 7669206 $WLAN
 
-# Find out the name of the wifi adapter
+# Tìm ra tên của bộ chuyển đổi wifi
 nmcli
 ifconfig
 iw
 
-# Displays the possible parameters of the wifi adapter
+# Hiển thị các tham số có thể có của bộ chuyển đổi wifi
 iw list
 
-# Displays the current settings of the Wifi adapter
+# Hiển thị cài đặt hiện tại của bộ chuyển đổi Wifi
 iw dev
 
-# Outputs the current frequency and power parameters
+# Xuất ra các tham số tần số và công suất hiện tại
 sudo iw reg get
 
-# Set a new region
+# Đặt khu vực mới
 sudo iw reg set RU
-https://hackware.ru/?p=17978 - Solves the problem of channel selection
+https://hackware.ru/?p=17978 - Giải quyết vấn đề lựa chọn kênh
 
-# Viewing running wfb-ng processes
+# Xem các quy trình wfb-ng đang chạy
 ps -aux | grep wfb
 
-# Set the power
+# Đặt công suất
 sudo ip link set $WLAN down
 sudo iw dev $WLAN set txpower fixed 30mBm
 sudo ip link set $WLAN up
 
-# View available plugins for decoding
+# Xem các plugin có sẵn để giải mã
 gst-inspect-1.0 | grep 265
 
-# Shows a list of downloaded drivers/modules
+# Hiển thị danh sách các trình điều khiển/mô-đun đã tải xuống
 lsmod
 
-# Displays a list of connected USB devices and related drivers
+# Hiển thị danh sách các thiết bị USB được kết nối và các trình điều khiển liên quan
 usb-devices
 ```
+
+
+
+

@@ -1,12 +1,12 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-Board specific GPIO settings list
+Danh sách cài đặt GPIO dành riêng cho bo mạch
 ---------------------------------
 
-### Anjoy / Anjvision boards
+### Bo mạch Anjoy / Anjvision
 
-| Processor   | IRCUT1 | IRCUT2 | LIGHT | RESET | I/O | USB_ENA | TESTED BOARDS    |  AUDIO OUTPUT   |
+| Bộ xử lý | IRCUT1 | IRCUT2 | ÁNH SÁNG | RESET | I/O | USB_ENA | BO MẠCH ĐƯỢC KIỂM TRA | ĐẦU RA ÂM THANH |
 |-------------|--------|--------|-------|-------|-----|---------|------------------|-----------------|
 | SSC30KQ     | 23     | 24     | 60/59 | 10    |     |         | MC-L12, MC-L12B  |      9          |
 | SSC335      | 78     | 79     | 61/53 | 66    | 52  |         | MS-J10, YM200J10 |      80         |
@@ -14,13 +14,13 @@ Board specific GPIO settings list
 | SSC337DE    | 78     | 79     | 61    | 66    |     |         | MC500L8          |                 |
 | SSC338Q     | 23     | 24     | 60    | 10    |     |    8    | MC800S-V3        |      39         |
 
-### CamHi / Xin boards
+### Bo mạch CamHi / Xin
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA | UART2_RTS/RS485_DE | UART2_RXD/RS485_RO | UART2_TXD/RS485_DI | AUDIO_ENA | RESET | PWM | SD_VCC | BOARD    |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA | UART2_RTS/RS485_DE | UART2_RXD/RS485_RO | UART2_TXD/RS485_DI | AUDIO_ENA | RESET | PWM | SD_VCC | BO MẠCH |
 |-------------|--------|--------|----------|-------|---------|--------------------|--------------------|--------------------|-----------|-------|-----|--------|----------|
 | Gk7205v200  | 14     | 15     | 8        | 4     | 9i      | 54                 | 12                 | 13                 | 12        | 50    |     |        | 2M-M2103 |
 | Gk7205v200  | 13     | 15     | 8        | 4     | 9i      | 54                 | 12                 | 13                 | 12        | 50    |     |        | 2G-M3072 |
-| Gk7205v300  | 10     | 11     | 8        | 72    | 7i      |                    |                    |                    | 52        | 42    |
+| Gk7205v300  | 10     | 11     | 8        | 72    | 7i      |                    |                    |                    | 52        | 42    |     |        |          |
 |             |        |        |          |       |         |
 | Hi3516Cv100 |        |        |          |       |         |
 | Hi3516Cv200 |        |        |          |       |         |
@@ -34,40 +34,40 @@ Board specific GPIO settings list
 |             |        |        |          |       |         |
 | T31         | 58     | 57     |          | 49    | 61i     | 53                 | 55                 | 56                 | 63          | 11    | 50  | 62     |
 
-> _i - inverted value_
+> _i - giá trị đảo ngược_
 
 ```
-Tested on GK7205V200 for /dev/ttyАМА1:
+Đã thử nghiệm trên GK7205V200 cho /dev/ttyАМА1:
   mux 12->UART2_RXD/RS485_RO: devmem 0x112c0070 32 2 
   mux 13->UART2_TXD/RS485_DI: devmem 0x112c0074 32 2
 ```
 ```
-Tested on GK7205V300 for /dev/ttyАМА1:
+Đã thử nghiệm trên GK7205V300 cho /dev/ttyАМА1:
   mux 72->UART1_TXD: devmem 0x112c0078 32 1 
   mux 73->UART1_RXD: devmem 0x112c007c 32 1
 ```
 
 
-### CCDCAM / Hankvision boards
+### Bo mạch CCDCAM / Hankvision
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA | Description |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA | Mô tả |
 |-------------|--------|--------|----------|-------|---------|-------------|
-| GK7205V200  | 68     | 70     |  9       |       |         |             |
-| GK7205V200  | 50     | 51     |          |       |         | Old plastic domophone |
-| GK7205V300  | 68     | 70     |  9       |       |         |             |
+| GK7205V200 | 68     | 70     | 9        |       |         |             |
+| GK7205V200 | 50     | 51     |          |       |         | Domophone nhựa cũ |
+| GK7205V300 | 68     | 70     | 9        |       |         |             |
 
-> _Yes, it's amazing but it really matches on two Goke processors_
+> _Vâng, thật ngạc nhiên nhưng nó thực sự phù hợp với hai bộ xử lý Goke_
 
-### GSA boards
+### Bo mạch GSA
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA |
 |-------------|--------|--------|----------|-------|---------|
-| T31L        | 58     | 57     |          |       |         |
+| T31L       | 58     | 57     |          |       |         |
 
 
-### Herospeed/Longse/Cantonk boards
+### Bo mạch Herospeed/Longse/Cantonk
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | ALM_IN | ALM_OUT | USB_ENA |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | ALM_IN | ALM_OUT | USB_ENA |
 |-------------|--------|--------|----------|-------|--------|---------|---------|
 | Gk7205v200  | 12     | 13     |          | 4     | 15     | 14      |         |
 |             |        |        |          |       |        |         |         |
@@ -80,36 +80,36 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 | Hi3516Av300 | 5      | 6      |
 
 
-### Huishi / Vatilon boards
+### Bo mạch Huishi / Vatilon
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS |
 |-------------|--------|--------|----------|
 | SSC377      | 80     | 81     |          |
 | SSC378DE    | 80     | 81     |          |
 
 
-### Jabsco boards
+### Bo mạch Jabsco
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS |
 |-------------|--------|--------|----------|
 | Hi3516Ev200 | 52     | 53     | 9        |
 
-### Jovision boards
+### Bo mạch Jovision
 
-| Processor   | IRCUT1 | IRCUT2 | LIGHT |  TESTED BOARDS                     |
+| Bộ xử lý | IRCUT1 | IRCUT2 | ÁNH SÁNG | BO MẠCH ĐƯỢC KIỂM TRA                 |
 |-------------|--------|--------|-------|------------------------------------|
 | Hi3516Ev200 | 53     | 52     | 4     |                                    |
 | Hi3516Cv100 | 42     | 43     | 6     | IPG5020A-H-V1.0, 5013A-CF/5020A-FF |
 
-### JUAN boards (Sannce)
+### Bo mạch JUAN (Sannce)
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS      | TESTED BOARDS | DEVICE ID |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS      | BO MẠCH ĐƯỢC KIỂM TRA | ID THIẾT BỊ |
 |-------------|--------|--------|---------------|---------------|-----------|
-| Hi3518Ev200 | 65     | 64     | 62 (inverted) | 18EV200_V205P | N18EV2W   |
+| Hi3518Ev200 | 65     | 64     | 62 (đảo ngược) | 18EV200_V205P | N18EV2W   |
 
-### JVT boards
+### Bo mạch JVT
 
-| Processor   | IRCUT1 | IRCUT2 | LIGHT |
+| Bộ xử lý | IRCUT1 | IRCUT2 | ÁNH SÁNG |
 |-------------|--------|--------|-------|
 | Hi3516Cv100 |
 | Hi3516Cv200 | 64     | 65     | 62    |
@@ -117,55 +117,55 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 | Hi3516Ev200 |
 | Hi3518Ev200 | 64     | 65     | 47    |
 
-### iSNATCH (HeySmart) mini "cube" camera
+### Camera mini "khối lập phương" iSNATCH (HeySmart)
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRLED    | RESET  |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS | IRLED    | RESET  |
 |-------------|--------|--------|----------|----------|---------
 | T10         | 25     | 26     | -        | 19       |  60i   |
 
-### Netcam NVT boards
+### Bo mạch Netcam NVT
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRLED    | RED_LED | BOARD           |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS | IRLED    | ĐÈN LED ĐỎ | BO MẠCH           |
 |-------------|--------|--------|----------|----------|---------|-----------------|
 | T10         | 25     | 26     |          | 19       | 20      | |
 | T10         | 25     | 26     | 81       | 80       |         | |
 | T31L        | 58     | 57     |          |          |         | T31L_F37_V1.1   |
 
-### Qihoo 360 Security cam D603
+### Camera an ninh Qihoo 360 D603
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRLED    | WIFI  |  LED  |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS | IRLED    | WIFI  |  LED  |
 |-------------|--------|--------|----------|----------|-------|-------|
 | T20         | 25     |   26   | -        | 61       |  62   |   82  |
 
 ### Rostelecom IPC2122SR3-RU04
 
-| Processor   | IRCUT1 | IRCUT2 |
+| Bộ xử lý | IRCUT1 | IRCUT2 |
 |-------------|--------|--------|
 | Hi3516Cv300 | 58     | 59     |
 
-### Rotek Switcam E200/T200 JXF23 sensor
+### Cảm biến Rotek Switcam E200/T200 JXF23
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS |
 |-------------|--------|--------|----------|
 | Hi3518Ev200 | 63     | 64     | 65       |
 
-### SJG boards
+### Bo mạch SJG
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS      | BOARD                     |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS      | BO MẠCH ĐƯỢC KIỂM TRA |
 |-------------|--------|--------|---------------|---------------------------|
-| Hi3518Ev200 | 64     |        | 62 (inverted) | SJG_HI38_GW2M02_V1.3      |
+| Hi3518Ev200 | 64     |        | 62 (đảo ngược) | SJG_HI38_GW2M02_V1.3      |
 
-> For the `SC2135` sensor on the `SJG_HI38_GW2M02_V1.3` board, it was necessary to change the `ComMsk0` mask from `fff0000` to `3ff0000` in the sensor configuration (`/etc/sensors/sc2135_i2c_1080p.ini`) to eliminate the pink tint of the picture in daytime mode.
+> Đối với cảm biến `SC2135` trên bo mạch `SJG_HI38_GW2M02_V1.3`, cần phải thay đổi mặt nạ `ComMsk0` từ `fff0000` thành `3ff0000` trong cấu hình cảm biến (`/etc/sensors/sc2135_i2c_1080p.ini`) để loại bỏ màu hồng của hình ảnh ở chế độ ban ngày.
 
-### Tiandy boards
+### Bo mạch Tiandy
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | RESET |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | RESET |
 |-------------|--------|--------|----------|-------|-------|
 | SSC335      | 78     | 79     | ---      | 37    |       |
 
-### Uniview boards
+### Bo mạch Uniview
 
-| Processor   | IRCUT1 | IRCUT2 | RESET | IRCTL | IRLED | WiFi | DEVICE ID                             |
+| Bộ xử lý | IRCUT1 | IRCUT2 | RESET | IRCTL | IRLED | WiFi | ID THIẾT BỊ                             |
 |-------------|--------|--------|-------|-------|-------|------|---------------------------------------|
 | Hi3516Ev300 | 63     | 67     | 64    |       |  72   |  7   | Rostelecom IPC8232SWC-WE, C1L-2WN-G   |
 | SSC335DE    | 61     | 79     |       |   4   |       |      | Rostelecom IPC8232SWC-WE-B            |
@@ -173,55 +173,55 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 
 ### Wansview
 
-| Processor   | IRCUT1 | IRCUT2 | IR LEDs | RESET | ETH_GR_BL | ETH_ORANGE| DEVICE ID                   |
+| Bộ xử lý | IRCUT1 | IRCUT2 | Đèn LED IR | RESET | ETH_GR_BL | ETH_ORANGE| ID THIẾT BỊ                    |
 |-------------|--------|--------|---------|-------|-----------|-----------|-----------------------------|
 | T21         | 80     | 79     |  49     | 50    |    73     |     72    |   Wansview W5/W6/Q5(1080p)  |
 
-### Xiaomi boards
+### Bo mạch Xiaomi
 
-| Processor   | IRCUT1 | IRCUT2 | IR LEDs | DEVICE ID     | ORANGE_LED | BLUE_LED | RESET | AUDIO_ENA |
+| Bộ xử lý | IRCUT1 | IRCUT2 | Đèn LED IR | ID THIẾT BỊ     | ORANGE_LED | BLUE_LED | RESET | AUDIO_ENA |
 |-------------|--------|--------|---------|---------------|------------|----------|-------|-----------|
 | SSC325      | 78     | 79     |  52     | CMSXJ25A      |            |          |       |           |
 | Hi3518Ev300 | 70     | 68     |  54     | MJSXJ02HL     |     52     |    53    |   0   |    55     |
 | T31N        | 49     | 50     |  60     | MJSXJ03HL     |     38     |    39    |       |           |
 
-### XiongMai, XM boards
+### XiongMai, bảng XM
 
-| Processor       | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | ALM_IN | ALM_OUT | ETH_ACT | ETH_STA | RESET | USB_ENA | AUDIO_POW | RS485_CTL | W_LED | NOTES |
+| Bộ xử lý       | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | ALM_IN | ALM_OUT | ETH_ACT | ETH_STA | RESET | USB_ENA | AUDIO_POW | RS485_CTL | W_LED | GHI CHÚ |
 |-----------------|--------|--------|----------|-------|--------|---------|---------|---------|-------|---------|-----------|-----------|-------|-------|
-| GK7205V200      | 8      | 9      | 15       | 16    | 4, 53  | 55      | 14      | 12      | 0     |         | 40        |
-| GK7205V210      | 8      | 9      | 15       | 16    | 4, 53  | 55      | 14      | 12      | 0     |         | 40/53     |
-| GK7205V300      | 11     | 10     | 66       | 52    | 4      |         | 30      | 31      | 0     |         | 60        | 24        |
+| GK7205V200      | 8      | 9      | 15       | 16    | 4, 53  | 55      | 14      | 12      | 0     |         | 40        |           |       |       |
+| GK7205V210      | 8      | 9      | 15       | 16    | 4, 53  | 55      | 14      | 12      | 0     |         | 40/53     |           |       |       |
+| GK7205V300      | 11     | 10     | 66       | 52    | 4      |         | 30      | 31      | 0     |         | 60        | 24        |       |       |
 | GK7205V300[^4]  | 11     | 10     | 65       | 52    |        |         | 30      | 31      | 67    |         | 64/65     | 24        | 4     |       |
-| GK7605V100      | 10     | 11     | 66       | 52    | 4      |         | 30      | 31      | 0     |         | 60        | 24        |
+| GK7605V100      | 10     | 11     | 66       | 52    | 4      |         | 30      | 31      | 0     |         | 60        | 24        |       |       |
 |                 |        |        |          |       |        |         |         |         |       |         |
-| Hi3516Cv100     | 38     | 39     | 24       |       | 49     | 26      |         |         |       |         |
-| Hi3516Dv100[^1] | 14     | 15     |  3       |       |        |         |         |         |       |         |
-| Hi3516Dv100[^2] | 121    | 120    |  3       |       |        |         |         |         |       |         |
-| Hi3516Cv200     |        |        |          |       |        |         |         |         |       |         |
-| Hi3516Cv300     | 53     | 54     | 64       | 66    | 55     | 1       |         |         | 2     | 63      |
-| Hi3516Ev100     | 53     | 54     | 64       |       |        |         |         |         |       |         |
-| Hi3516Ev200     | 8      | 9      | 15       | 16    | 4, 53  | 55      | 14      | 12      | 0     |         |
-| Hi3516Ev300     | 11     | 10     | 66       | 52    | 4, 67  | 65      | 30      | 31      | 0     |         |
-| Hi3518Ev100     | 39     | 38     | 24       |       | 49     | 26      |         |         |       |         |
-| Hi3518Ev200     | 33     | 34     | 24       |       | 61     | 35      |         |         |       |         | 3       |              | IPG-50HV20PET-S |
-| Hi3518Ev300[^3] | 8      |        |  55      |       | 13     |         |         |         | 15    |         | 3       |
+| Hi3516Cv100     | 38     | 39     | 24       |       | 49     | 26      |         |         |       |         |           |           |       |       |
+| Hi3516Dv100[^1] | 14     | 15     |  3       |       |        |         |         |         |       |         |           |           |       |       |
+| Hi3516Dv100[^2] | 121    | 120    |  3       |       |        |         |         |         |       |         |           |           |       |       |
+| Hi3516Cv200     |        |        |          |       |        |         |         |         |       |         |           |           |       |       |
+| Hi3516Cv300     | 53     | 54     | 64       | 66    | 55     | 1       |         |         | 2     | 63      |           |           |       |       |
+| Hi3516Ev100     | 53     | 54     | 64       |       |        |         |         |         |       |         |           |           |       |       |
+| Hi3516Ev200     | 8      | 9      | 15       | 16    | 4, 53  | 55      | 14      | 12      | 0     |         |           |           |       |       |
+| Hi3516Ev300     | 11     | 10     | 66       | 52    | 4, 67  | 65      | 30      | 31      | 0     |         |           |           |       |       |
+| Hi3518Ev100     | 39     | 38     | 24       |       | 49     | 26      |         |         |       |         |           |           |       |       |
+| Hi3518Ev200     | 33     | 34     | 24       |       | 61     | 35      |         |         |       |         | 3       |              |       | IPG-50HV20PET-S |
+| Hi3518Ev300[^3] | 8      |        |  55      |       | 13     |         |         |         | 15    |         | 3       |           |       |       |
 
-> There is a map between table's columns and parameters in `nightMode` section in `majestic.yaml`<br>
-> IRCUT1 is an irCutPin1<br>
-> IRCUT2 is an irCutPin1<br>
-> IRCTL is a backlightPin<br>
-> IRSTATUS is an irSensorPin
+> Có một bản đồ giữa các cột của bảng và các tham số trong phần `nightMode` trong `majestic.yaml`<br>
+> IRCUT1 là irCutPin1<br>
+> IRCUT2 là irCutPin1<br>
+> IRCTL là backlightPin<br>
+> IRSTATUS là irSensorPin
 
-[^1]: HI3516D_N81820, 00014914 firmware
-[^2]: Hi3516Dv100 for IPC_HI3516D_83H20 00014911
-[^3]: Hi3518EV300 for 50H20L
-[^4]: IPC_GK7205V300_G6S (000699Q3 firmware)
+[^1]: HI3516D_N81820, firmware 00014914
+[^2]: Hi3516Dv100 cho IPC_HI3516D_83H20 00014911
+[^3]: Hi3518EV300 cho 50H20L
+[^4]: IPC_GK7205V300_G6S (firmware 000699Q3)
 
 
 ### Zenotech/Videopark
 
-| Processor   | IRCUT1 | IRCUT2 | IRLED | DEVICE ID                |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRLED | ID THIẾT BỊ                |
 |-------------|--------|--------|-------|--------------------------|
 | GK7205V200  | 58     | 59     | 8     | ZN-CM-GK200S1L-P         |
 |             |        |        |       |                          |
@@ -231,6 +231,6 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 
 ### Zosi
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS     | DEVICE ID     |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS     | ID THIẾT BỊ     |
 |-------------|--------|--------|--------------|---------------|
-| Hi3518Ev200 | 61     | 60     | 1 (inverted) | ZG2622MW      |
+| Hi3518Ev200 | 61     | 60     | 1 (đảo ngược) | ZG2622MW      |

@@ -1,21 +1,21 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-OpenIPC Alliance for FPV
+Liên minh OpenIPC cho FPV
 ------------------------
 
-### Introduction
+### Giới thiệu
 
-The OpenIPC team has decided to create an Alliance to promote and implement certain open circuit design standards for FPV system components.
+Nhóm OpenIPC đã quyết định thành lập Liên minh để quảng bá và triển khai các tiêu chuẩn thiết kế mạch mở nhất định cho các thành phần hệ thống FPV.
 
-On this page we will inform everyone about all members of the Alliance and report on changes and supplement links to projects.
+Trên trang này, chúng tôi sẽ thông báo cho mọi người về tất cả các thành viên của Liên minh và báo cáo về những thay đổi và bổ sung liên kết đến các dự án.
 
 
-### Interface connector for the sensor
+### Đầu nối giao diện cho cảm biến
 
-The first component to be standardized will be the connector between the any OpenIPC AIO main board ("UltraSight", "Thinker", "Mario") and the any OpenIPC sensor module (IMX307, IMX335, IMX347, IMX415).
+Thành phần đầu tiên được tiêu chuẩn hóa sẽ là đầu nối giữa bất kỳ bảng chính OpenIPC AIO ("UltraSight", "Thinker", "Mario") và bất kỳ mô-đun cảm biến OpenIPC nào (IMX307, IMX335, IMX347, IMX415).
 
-We draw your attention to the fact that other modules of the other companies are **INCOMPATIBLE** and will definitely cause damage to your devices.
+Chúng tôi lưu ý bạn rằng các mô-đun khác của các công ty khác là **KHÔNG TƯƠNG THÍCH** và chắc chắn sẽ gây hư hỏng cho thiết bị của bạn.
 
 <p align="left">
   <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-openipc-alliance/openipc-alliance-fpv-sensor-pinout.jpg?raw=true"/>

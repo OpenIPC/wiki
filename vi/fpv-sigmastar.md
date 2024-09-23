@@ -1,7 +1,7 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-Instructions for installing OpenIPC firmware on SigmaStar devices
+Hướng dẫn cài đặt firmware OpenIPC trên thiết bị SigmaStar
 ---
 
 <p align="center">
@@ -10,43 +10,43 @@ Instructions for installing OpenIPC firmware on SigmaStar devices
 
 ---
 
-### SSC338Q + IMX415 + NAND flash, board from CamHi vendor
-#### Quick note on experiments, will be revised and updated
+### SSC338Q + IMX415 + flash NAND, bo mạch từ nhà cung cấp CamHi
+#### Lưu ý nhanh về các thử nghiệm, sẽ được sửa đổi và cập nhật
 
-#### Summary
-The Sigmastar IPL (pre-bootloader) allows to boot a custom U-Boot from the sdcard.
-With this temporary OpenIPC firmware you can create a backup of the nand and flash the permanent firmware afterwards.
+#### Tóm tắt
+Sigmastar IPL (trình nạp khởi động trước) cho phép khởi động U-Boot tùy chỉnh từ thẻ nhớ SD.
+Với firmware OpenIPC tạm thời này, bạn có thể tạo bản sao lưu của nand và flash firmware vĩnh viễn sau đó.
 
-#### Prepare
-- Connect your sdcard to your computer, create a 1 GB partition and format it as FAT32 / VFAT.
-- [Download ssc338q-initramfs.zip][1]
-- Copy all files to the root directory of the sdcard, update your wireless credentials on autostart.sh:
+#### Chuẩn bị
+- Kết nối thẻ nhớ SD của bạn với máy tính, tạo một phân vùng 1 GB và định dạng nó là FAT32 / VFAT.
+- [Tải xuống ssc338q-initramfs.zip][1]
+- Sao chép tất cả các tệp vào thư mục gốc của thẻ nhớ SD, cập nhật thông tin đăng nhập không dây của bạn trên autostart.sh:
 ```diff
 #!/bin/sh
 +WLAN_SSID="Router"
 +WLAN_PASS="12345678"
 ```
-- Put the sdcard into the camera module, start it and wait until it connects to your router.
-- Use ssh to connect to the camera:
+- Đặt thẻ nhớ SD vào mô-đun camera, khởi động nó và đợi cho đến khi nó kết nối với bộ định tuyến của bạn.
+- Sử dụng ssh để kết nối với camera:
 ```
 ssh root@192.168.1.100
 12345
 ```
 
-#### Backup 
-- /dev/mtd0 uses the complete partition size of the nand flash.
-- This might take some time, the backup to the sdcard is rather slow.
+#### Sao lưu
+- /dev/mtd0 sử dụng toàn bộ kích thước phân vùng của flash nand.
+- Điều này có thể mất một thời gian, việc sao lưu vào thẻ nhớ SD khá chậm.
 ```
 nanddump -f /mnt/mmcblk0p1/backup-nand.bin /dev/mtd0
 ```
 
-- Alternatively the flash content can be uploaded via tftp.
+- Ngoài ra, nội dung flash có thể được tải lên qua tftp.
 ```
 cd /dev
 tftp 192.168.1.10 -pr mtd0
 ```
 
-#### Install
+#### Cài đặt
 ```
 flash_eraseall /dev/mtd0
 nandwrite -k /dev/mtd0 /mnt/mmcblk0p1/ssc338q-fpv.bin
@@ -54,22 +54,22 @@ rm /mnt/mmcblk0p1/UBOOT
 reboot -f
 ```
 
-#### Buying a device (CamHi vendor)
+#### Mua thiết bị (nhà cung cấp CamHi)
 - https://aliexpress.com/item/1005002879158570.html
 - https://aliexpress.com/item/1005005750013595.html
 
 ---
 
-### SSC338Q + IMX415 + NOR flash, board from Anjoy vendor
-#### Information collection continues
-Information collection continues
+### SSC338Q + IMX415 + flash NOR, bo mạch từ nhà cung cấp Anjoy
+#### Việc thu thập thông tin vẫn tiếp tục
+Việc thu thập thông tin vẫn tiếp tục
 
-#### Buying a device (Anjoy vendor)
+#### Mua thiết bị (nhà cung cấp Anjoy)
 - https://aliexpress.com/item/1005003738087454.html
 
 ---
 
-### Other notes
-For testing please use the [MPV](https://mpv.io/) player, in which the Shift+I key combination can be used to get debugging information.
+### Ghi chú khác
+Để kiểm tra, vui lòng sử dụng trình phát [MPV](https://mpv.io/), trong đó có thể sử dụng tổ hợp phím Shift+I để lấy thông tin gỡ lỗi.
 
 [1]: https://github.com/OpenIPC/wiki/files/13382282/ssc338q-initramfs.zip

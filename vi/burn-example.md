@@ -1,42 +1,42 @@
-# OpenIPC Wiki
-[Table of Content](../README.md)
+## OpenIPC Wiki
+[Mục lục](../README.md)
 
-Notes on installing OpenIPC using Burn
+Ghi chú về việc cài đặt OpenIPC bằng Burn
 --------------------------------------
 
-### Guideline flash GK7205V210 with locked bootloader
+### Hướng dẫn flash GK7205V210 với bootloader bị khóa
 
-#### Preamble
+#### Lời mở đầu
 
 ```
-My opinion is that - instructions for beginners should be written by beginners.
-As soon as a gentleman end flashing 2-3 boards, his skills increase to 50 level 
-and he does not want to remember the little things that are important for beginners.
+Quan điểm của tôi là - hướng dẫn dành cho người mới bắt đầu nên được viết bởi người mới bắt đầu.
+Ngay khi một người hoàn thành việc flash 2-3 bảng mạch, kỹ năng của anh ta sẽ tăng lên cấp độ 50 
+và anh ta không muốn nhớ những điều nhỏ nhặt quan trọng đối với người mới bắt đầu.
 ```
 
-Before starting work, watch the video on our [YouTube](https://www.youtube.com/@openipc/playlists) channel
+Trước khi bắt đầu làm việc, hãy xem video trên kênh [YouTube](https://www.youtube.com/@openipc/playlists) của chúng tôi
 
-- Download [Burn](https://github.com/OpenIPC/burn)
-- Install [PUTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) and [TFTP](https://pjo2.github.io/tftpd64/) server
-- Turn off camera power, Connect USB com FTDI to your camera, specify which COM port on your PC
-- Enter burn folder and run the following cmd (Focus only serial port, in my case it is COM4, other params dont care, it worked with my GK7205V210):
-- Use U-Boot loader from the Burn repository **only** !
+- Tải xuống [Burn](https://github.com/OpenIPC/burn)
+- Cài đặt máy chủ [PUTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) và [TFTP](https://pjo2.github.io/tftpd64/)
+- Tắt nguồn camera, Kết nối USB com FTDI với camera của bạn, chỉ rõ cổng COM nào trên PC của bạn
+- Nhập thư mục burn và chạy lệnh cmd sau (Chỉ tập trung vào cổng nối tiếp, trong trường hợp của tôi là COM4, các tham số khác không quan trọng, nó hoạt động với GK7205V210 của tôi):
+- Chỉ sử dụng bộ nạp khởi động U-Boot từ kho lưu trữ Burn!
 ```
 python burn --chip hi3516ev200 --file=u-boot/gk7205v200.bin -p COM4 --break && putty.exe -serial COM4 -sercfg 115200,8,n,1,N
 ```
-- Power on your camera with power supply, and wait putty throw out with console
-- Press enter, then you will see "goke" in the console
-- Run TFTP server, specify bin file's path
-- Now follow up as generated instruction which from OpenIPC site:
+- Bật nguồn camera bằng bộ nguồn và đợi putty hiển thị bảng điều khiển
+- Nhấn enter, sau đó bạn sẽ thấy "goke" trong bảng điều khiển
+- Chạy máy chủ TFTP, chỉ định đường dẫn của tệp bin
+- Bây giờ hãy làm theo hướng dẫn được tạo từ trang web OpenIPC:
 
 ```
-# Enter commands line by line! Do not copy and paste multiple lines at once!
+# Nhập các dòng lệnh từng dòng một! Không sao chép và dán nhiều dòng cùng một lúc!
 setenv ipaddr 192.168.0.10; setenv serverip 192.168.0.40
 mw.b 0x42000000 0xff 0x800000
 tftpboot 0x42000000 openipc-FULL-FIRMWARE-IMAGE.bin
 sf probe 0; sf lock 0;
 sf erase 0x0 0x800000; sf write 0x42000000 0x0 0x800000
 reset
-Ctrl + c quickly during booting
-# Enter commands line by line! Do not copy and paste multiple lines at once!run setnor8m
+Ctrl + c nhanh chóng trong khi khởi động
+# Nhập các dòng lệnh từng dòng một! Không sao chép và dán nhiều dòng cùng một lúc!run setnor8m
 ```

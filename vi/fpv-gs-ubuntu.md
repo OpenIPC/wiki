@@ -1,16 +1,16 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Mục lục](../README.md)
 
-Step by step commands to run GroundStation on Ubuntu 22.04
+Các lệnh từng bước để chạy Trạm Mặt đất trên Ubuntu 22.04
 ---------------------------------------------------------
 
 <p align="center">
   <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-logo.jpg?raw=true" alt="Logo"/>
 </p>
 
-Video version: - [OpenIPC - Prepare GroundStation: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
+Phiên bản video: - [OpenIPC - Chuẩn bị Trạm Mặt đất: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
 
-### Prepare
+### Chuẩn bị
 ```
 sudo apt update
 ```
@@ -28,7 +28,7 @@ make && make check
 sudo make install
 ```
 
-### Wifi card driver
+### Trình điều khiển card Wifi
 ```
 git clone -b v5.2.20 https://github.com/svpcom/rtl8812au.git
 cd rtl8812au/
@@ -42,34 +42,34 @@ cd wfb-ng
 sudo ./scripts/install_gs.sh wlan0
 ```
 
-### Channel configuration
+### Cấu hình kênh
 ```
 vi /etc/wifibroadcast.cfg
 ```
 
-### Start WFB CLI
+### Khởi động WFB CLI
 ```
 wfb-cli gs
 ```
-###GS IS READY FOR USE###
+###TRẠM MẶT ĐẤT ĐÃ SẴN SÀNG SỬ DỤNG###
 
-### Start, stop, restart service
+### Khởi động, dừng, khởi động lại dịch vụ
 ```
 systemctl status wifibroadcast@gs
 systemctl stop wifibroadcast@gs
 systemctl start wifibroadcast@gs
 ```
 
-### Qground control manual
+### Hướng dẫn sử dụng Qground control
 
 - https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html
 
-### Get last logs from service
+### Lấy nhật ký cuối cùng từ dịch vụ
 ```
 journalctl -xu wifibroadcast@gs -n 100
 ```
 
-### Useful commands
+### Các lệnh hữu ích
 ```
 nmcli
 ifconfig
