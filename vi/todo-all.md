@@ -11,12 +11,12 @@ Việc cần làm
 
 ## Cải tiến và Tính năng
 
-* Thêm khẩn cấp hỗ trợ cho bộ xử lý Goke
+* Thêm hỗ trợ cho bộ xử lý Goke (ưu tiên cao)
 * Thực hiện kiểm tra sự hiện diện của các thành phần nhị phân trong majestic, mini_snmpd, telnetd và các tập lệnh khác
 * Xây dựng gói [motors-openipc](https://github.com/OpenIPC/motors/tree/master/XM) mới
 * Tích hợp phiên bản mới của [libjson](https://github.com/json-c/json-c/tree/json-c-0.15) theo tiêu chuẩn OpenIPC và loại bỏ các liên kết tượng trưng cũ
 * Tạo bản dựng Initramfs và cpio cho tất cả các nền tảng
-* Tối ưu hóa các applet Busybox và tắt tất cả những cái không cần thiết
+* Tối ưu hóa các applet Busybox và vô hiệu hóa tất cả những applet không cần thiết
 * Thêm khởi chạy daemon Crond
 * Thêm tập lệnh bot Telegram từ dự án OpenIPC cũ
 * Tối ưu hóa tập lệnh show_modules để hiển thị bộ nhớ được sử dụng động
@@ -30,12 +30,12 @@ Việc cần làm
 ## Giám sát và Quản lý
 
 * Tải lên kho lưu trữ các ví dụ về làm việc với Ansible
-* Cài đặt máy chủ prometheus cục bộ
+* Cài đặt máy chủ Prometheus cục bộ
 * Đạt được phản hồi đo từ xa ổn định từ các thiết bị của ZFT Lab.
 
 
 ## Tài liệu
 
-* Tạo trang Wiki để nhập dữ liệu của các bảng có động cơ và thông số kỹ thuật giao thức
+* Tạo trang Wiki để nhập dữ liệu của các bo mạch có động cơ và thông số kỹ thuật giao thức
 
 

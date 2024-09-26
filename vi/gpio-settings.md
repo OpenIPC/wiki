@@ -6,13 +6,14 @@ Danh sách cài đặt GPIO dành riêng cho bo mạch
 
 ### Bo mạch Anjoy / Anjvision
 
-| Bộ xử lý | IRCUT1 | IRCUT2 | ÁNH SÁNG | RESET | I/O | USB_ENA | BO MẠCH ĐƯỢC KIỂM TRA | ĐẦU RA ÂM THANH |
-|-------------|--------|--------|-------|-------|-----|---------|------------------|-----------------|
-| SSC30KQ     | 23     | 24     | 60/59 | 10    |     |         | MC-L12, MC-L12B  |      9          |
-| SSC335      | 78     | 79     | 61/53 | 66    | 52  |         | MS-J10, YM200J10 |      80         |
-| SSC337      | 78     | 79     | 61    | 66    | 52  |         | MC-F40, YM-J10D  |                 |
-| SSC337DE    | 78     | 79     | 61    | 66    |     |         | MC500L8          |                 |
-| SSC338Q     | 23     | 24     | 60    | 10    |     |    8    | MC800S-V3        |      39         |
+| Bộ xử lý | IRCUT1 | IRCUT2 | Đèn hồng ngoại | Đèn trắng | RESET | I/O | USB_ENA | BO MẠCH ĐÃ KIỂM TRA | ĐẦU RA ÂM THANH |
+|-------------|--------|--------|----------|-------------|-------|-----|---------|------------------|-----------------|
+| SSC30KQ     | 23     | 24     | 60/59    |             | 10    |     |         | MC-L12, MC-L12B  |      9          |
+| SSC335      | 78     | 79     | 61/53    |             | 66    | 52  |         | MS-J10, YM200J10 |      80         |
+| SSC337      | 78     | 79     | 61       |             | 66    | 52  |         | MC-F40, YM-J10D  |                 |
+| SSC337DE    | 78     | 79     | 61       |             | 66    |     |         | MC500L8          |                 |
+| SSC338Q     | 23     | 24     | 60       | 59          | 10    |     |    8    | MC800S-V3        |      39         |
+| SSC377      | 11     | 80     | 9        | 13          |       |     |         | MC-A42P-V1.1     |      12         |
 
 ### Bo mạch CamHi / Xin
 
@@ -34,7 +35,7 @@ Danh sách cài đặt GPIO dành riêng cho bo mạch
 |             |        |        |          |       |         |
 | T31         | 58     | 57     |          | 49    | 61i     | 53                 | 55                 | 56                 | 63          | 11    | 50  | 62     |
 
-> _i - giá trị đảo ngược_
+> _i - đảo ngược_
 
 ```
 Đã thử nghiệm trên GK7205V200 cho /dev/ttyАМА1:
@@ -53,16 +54,16 @@ Danh sách cài đặt GPIO dành riêng cho bo mạch
 | Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA | Mô tả |
 |-------------|--------|--------|----------|-------|---------|-------------|
 | GK7205V200 | 68     | 70     | 9        |       |         |             |
-| GK7205V200 | 50     | 51     |          |       |         | Domophone nhựa cũ |
+| GK7205V200 | 50     | 51     |          |       |         | Chuông cửa màn hình nhựa cũ |
 | GK7205V300 | 68     | 70     | 9        |       |         |             |
 
-> _Vâng, thật ngạc nhiên nhưng nó thực sự phù hợp với hai bộ xử lý Goke_
+> _Đúng vậy, thật ngạc nhiên nhưng nó thực sự khớp với hai bộ xử lý Goke_
 
-### Bo mạch GSA
+### Bo mạch GSA / EnZhi
 
 | Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA |
 |-------------|--------|--------|----------|-------|---------|
-| T31L       | 58     | 57     |          |       |         |
+| T31L       | 58     | 57     |          | 49     |         |
 
 
 ### Bo mạch Herospeed/Longse/Cantonk
@@ -71,21 +72,21 @@ Danh sách cài đặt GPIO dành riêng cho bo mạch
 |-------------|--------|--------|----------|-------|--------|---------|---------|
 | Gk7205v200  | 12     | 13     |          | 4     | 15     | 14      |         |
 |             |        |        |          |       |        |         |         |
-| Hi3516Cv100 | 18     | 19     |
-| Hi3516Cv200 |
-| Hi3516Dv100 | 3      | 4      | 85       |
-| Hi3516Cv300 | 1      |  2     | 24       |
-| Hi3518Ev200 | 65     | 64     | 63       |
-| Hi3516Ev200 | 12     | 13     |          | 4     |
-| Hi3516Av300 | 5      | 6      |
+| Hi3516Cv100 | 18     | 19     |          |       |        |         |         |
+| Hi3516Cv200 |        |        |          |       |        |         |         |
+| Hi3516Dv100 | 3      | 4      | 85       |       |        |         |         |
+| Hi3516Cv300 | 1      |  2     | 24       |       |        |         |         |
+| Hi3518Ev200 | 65     | 64     | 63       |       |        |         |         |
+| Hi3516Ev200 | 12     | 13     |          | 4     |        |         |         |
+| Hi3516Av300 | 5      | 6      |          |       |        |         |         |
 
 
 ### Bo mạch Huishi / Vatilon
 
-| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS |
-|-------------|--------|--------|----------|
-| SSC377      | 80     | 81     |          |
-| SSC378DE    | 80     | 81     |          |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS | IRLED |
+|-------------|--------|--------|----------|-------|
+| SSC377      | 80     | 81     |          |       |
+| SSC378DE    | 80     | 81     |          | 13    |
 
 
 ### Bo mạch Jabsco
@@ -96,39 +97,39 @@ Danh sách cài đặt GPIO dành riêng cho bo mạch
 
 ### Bo mạch Jovision
 
-| Bộ xử lý | IRCUT1 | IRCUT2 | ÁNH SÁNG | BO MẠCH ĐƯỢC KIỂM TRA                 |
+| Bộ xử lý | IRCUT1 | IRCUT2 | Đèn | BO MẠCH ĐÃ KIỂM TRA                 |
 |-------------|--------|--------|-------|------------------------------------|
 | Hi3516Ev200 | 53     | 52     | 4     |                                    |
 | Hi3516Cv100 | 42     | 43     | 6     | IPG5020A-H-V1.0, 5013A-CF/5020A-FF |
 
 ### Bo mạch JUAN (Sannce)
 
-| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS      | BO MẠCH ĐƯỢC KIỂM TRA | ID THIẾT BỊ |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS      | BO MẠCH ĐÃ KIỂM TRA | ID THIẾT BỊ |
 |-------------|--------|--------|---------------|---------------|-----------|
 | Hi3518Ev200 | 65     | 64     | 62 (đảo ngược) | 18EV200_V205P | N18EV2W   |
 
 ### Bo mạch JVT
 
-| Bộ xử lý | IRCUT1 | IRCUT2 | ÁNH SÁNG |
+| Bộ xử lý | IRCUT1 | IRCUT2 | Đèn |
 |-------------|--------|--------|-------|
-| Hi3516Cv100 |
+| Hi3516Cv100 |        |        |       |
 | Hi3516Cv200 | 64     | 65     | 62    |
-| Hi3516Cv300 |
-| Hi3516Ev200 |
+| Hi3516Cv300 |        |        |       |
+| Hi3516Ev200 |        |        |       |
 | Hi3518Ev200 | 64     | 65     | 47    |
 
 ### Camera mini "khối lập phương" iSNATCH (HeySmart)
 
 | Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS | IRLED    | RESET  |
-|-------------|--------|--------|----------|----------|---------
+|-------------|--------|--------|----------|----------|---------|
 | T10         | 25     | 26     | -        | 19       |  60i   |
 
 ### Bo mạch Netcam NVT
 
-| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS | IRLED    | ĐÈN LED ĐỎ | BO MẠCH           |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS | IRLED    | Đèn LED đỏ | BO MẠCH           |
 |-------------|--------|--------|----------|----------|---------|-----------------|
-| T10         | 25     | 26     |          | 19       | 20      | |
-| T10         | 25     | 26     | 81       | 80       |         | |
+| T10         | 25     | 26     |          | 19       | 20      |                    |
+| T10         | 25     | 26     | 81       | 80       |         |                    |
 | T31L        | 58     | 57     |          |          |         | T31L_F37_V1.1   |
 
 ### Camera an ninh Qihoo 360 D603
@@ -151,11 +152,11 @@ Danh sách cài đặt GPIO dành riêng cho bo mạch
 
 ### Bo mạch SJG
 
-| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS      | BO MẠCH ĐƯỢC KIỂM TRA |
+| Bộ xử lý | IRCUT1 | IRCUT2 | IRSTATUS      | BO MẠCH                     |
 |-------------|--------|--------|---------------|---------------------------|
 | Hi3518Ev200 | 64     |        | 62 (đảo ngược) | SJG_HI38_GW2M02_V1.3      |
 
-> Đối với cảm biến `SC2135` trên bo mạch `SJG_HI38_GW2M02_V1.3`, cần phải thay đổi mặt nạ `ComMsk0` từ `fff0000` thành `3ff0000` trong cấu hình cảm biến (`/etc/sensors/sc2135_i2c_1080p.ini`) để loại bỏ màu hồng của hình ảnh ở chế độ ban ngày.
+> Đối với cảm biến `SC2135` trên bo mạch `SJG_HI38_GW2M02_V1.3`, cần phải thay đổi mặt nạ `ComMsk0` từ `fff0000` thành `3ff0000` trong cấu hình cảm biến (`/etc/sensors/sc2135_i2c_1080p.ini`) để loại bỏ hiện tượng ám hồng của hình ảnh ở chế độ ban ngày.
 
 ### Bo mạch Tiandy
 
@@ -175,7 +176,7 @@ Danh sách cài đặt GPIO dành riêng cho bo mạch
 
 | Bộ xử lý | IRCUT1 | IRCUT2 | Đèn LED IR | RESET | ETH_GR_BL | ETH_ORANGE| ID THIẾT BỊ                    |
 |-------------|--------|--------|---------|-------|-----------|-----------|-----------------------------|
-| T21         | 80     | 79     |  49     | 50    |    73     |     72    |   Wansview W5/W6/Q5(1080p)  |
+| T21         | 80     | 79     |  49     | 50    |    73     |     72    |   Wansview W5/W6/Q5 (1080p) |
 
 ### Bo mạch Xiaomi
 
@@ -185,7 +186,7 @@ Danh sách cài đặt GPIO dành riêng cho bo mạch
 | Hi3518Ev300 | 70     | 68     |  54     | MJSXJ02HL     |     52     |    53    |   0   |    55     |
 | T31N        | 49     | 50     |  60     | MJSXJ03HL     |     38     |    39    |       |           |
 
-### XiongMai, bảng XM
+### XiongMai, bo mạch XM
 
 | Bộ xử lý       | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | ALM_IN | ALM_OUT | ETH_ACT | ETH_STA | RESET | USB_ENA | AUDIO_POW | RS485_CTL | W_LED | GHI CHÚ |
 |-----------------|--------|--------|----------|-------|--------|---------|---------|---------|-------|---------|-----------|-----------|-------|-------|
@@ -204,12 +205,12 @@ Danh sách cài đặt GPIO dành riêng cho bo mạch
 | Hi3516Ev200     | 8      | 9      | 15       | 16    | 4, 53  | 55      | 14      | 12      | 0     |         |           |           |       |       |
 | Hi3516Ev300     | 11     | 10     | 66       | 52    | 4, 67  | 65      | 30      | 31      | 0     |         |           |           |       |       |
 | Hi3518Ev100     | 39     | 38     | 24       |       | 49     | 26      |         |         |       |         |           |           |       |       |
-| Hi3518Ev200     | 33     | 34     | 24       |       | 61     | 35      |         |         |       |         | 3       |              |       | IPG-50HV20PET-S |
+| Hi3518Ev200     | 33     | 34     | 24       |       | 61     | 35      |         |         |       |         | 3       |           |       | IPG-50HV20PET-S |
 | Hi3518Ev300[^3] | 8      |        |  55      |       | 13     |         |         |         | 15    |         | 3       |           |       |       |
 
 > Có một bản đồ giữa các cột của bảng và các tham số trong phần `nightMode` trong `majestic.yaml`<br>
 > IRCUT1 là irCutPin1<br>
-> IRCUT2 là irCutPin1<br>
+> IRCUT2 là irCutPin2<br>
 > IRCTL là backlightPin<br>
 > IRSTATUS là irSensorPin
 

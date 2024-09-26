@@ -12,9 +12,9 @@ Bộ sưu tập các cài đặt mạng thực tế
 auto eth0
 iface eth0 inet dhcp
     hwaddress ether $(fw_printenv -n ethaddr || echo 00:24:B8:FF:FF:FF)
-    #udhcpc_opts -O search -O ntpsrv -O hostname                                                                                                                                        <= đề xuất
-    #pre-up echo -e "nameserver 77.88.8.8\nnameserver 8.8.4.4\n" >/tmp/resolv.conf                                                                                                      <= động
-    #pre-up echo -e "server 0.time.openipc.org iburst\nserver 1.time.openipc.org iburst\nserver 2.time.openipc.org iburst\nserver 3.time.openipc.org iburst" >/tmp/ntp.conf             <= đề xuất
+    #udhcpc_opts -O search -O ntpsrv -O hostname                                                                                                                                       <= đề xuất
+    #pre-up echo -e "nameserver 77.88.8.8\nnameserver 8.8.4.4\n" >/tmp/resolv.conf                                                                                                     <= động
+    #pre-up echo -e "server 0.time.openipc.org iburst\nserver 1.time.openipc.org iburst\nserver 2.time.openipc.org iburst\nserver 3.time.openipc.org iburst" >/tmp/ntp.conf            <= đề xuất
 ```
 
 
@@ -27,13 +27,13 @@ iface eth0 inet static
     netmask 255.255.255.0
     gateway 192.168.1.1
     hwaddress ether $(fw_printenv -n ethaddr || echo 00:24:B8:FF:FF:FF)
-    pre-up echo -e "nameserver 77.88.8.8\nnameserver 8.8.4.4\n" >/tmp/resolv.conf                                                                                                       <= hoạt động
-    pre-up echo -e "server 0.time.openipc.org iburst\nserver 1.time.openipc.org iburst\nserver 2.time.openipc.org iburst\nserver 3.time.openipc.org iburst" >/tmp/ntp.conf              <= đề xuất
+    pre-up echo -e "nameserver 77.88.8.8\nnameserver 8.8.4.4\n" >/tmp/resolv.conf                                                                                                      <= hoạt động
+    pre-up echo -e "server 0.time.openipc.org iburst\nserver 1.time.openipc.org iburst\nserver 2.time.openipc.org iburst\nserver 3.time.openipc.org iburst" >/tmp/ntp.conf             <= đề xuất
     up /usr/sbin/ntpd -N -q
 ```
 
 
-### ETH0:1 | Ví dụ về Alias
+### ETH0:1 | Ví dụ Alias
 
 ```
 auto eth0
@@ -205,7 +205,7 @@ iface wlan0 inet dhcp
     post-down echo 7 > /sys/class/gpio/unexport
 ```
 
-Lưu ý: Nhập các lệnh trong bảng điều khiển U-Boot để bật thiết bị wifi
+Lưu ý: Nhập các lệnh sau trong bảng điều khiển U-Boot để kích hoạt thiết bị wifi
 
 ```
 fw_setenv wlandev atbm603x-generic-usb
@@ -395,8 +395,8 @@ iface wlan0 inet dhcp
 
 ```
 fw_setenv wlandevice mt7601u-t31-camhi
-fw_setenv wlanssid MySSID
-fw_setenv wlanpass MyPassword
+fw_setenv wlanssid Tên-SSID-Của-Bạn
+fw_setenv wlanpass Mật-khẩu-Của-Bạn
 ```
 
 
@@ -446,3 +446,4 @@ iface wlan0 inet dhcp
     post-up wpa_supplicant -B -i wlan0 -D nl80211,wext -c /tmp/wpa_supplicant.conf
     post-down killall -q wpa_supplicant
 ```
+

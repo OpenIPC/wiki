@@ -6,26 +6,26 @@ Gói Vtun
 
 ### Giới thiệu
 
-Gói này được thiết kế để tổ chức một đường hầm L2 dựa trên Vtun giữa các camera IP và máy chủ. Để giảm dung lượng chiếm dụng trên bộ nhớ flash NOR, giảm mức tiêu thụ RAM và tăng thông lượng đường hầm, tính năng mã hóa và nén bị vô hiệu hóa hoàn toàn.
+Gói này được thiết kế để tổ chức một đường hầm L2 dựa trên Vtun giữa các camera IP và máy chủ. Để giảm không gian chiếm dụng trên bộ nhớ flash NOR, giảm mức tiêu thụ RAM và tăng thông lượng đường hầm, mã hóa và nén được vô hiệu hóa hoàn toàn.
 
 ### Phần máy khách
 
 Phần máy khách luôn có mặt trong tất cả các firmware OpenIPC chính thức.
-Để kết nối với máy chủ, hãy chuyển đến tab phần mở rộng, chỉ định địa chỉ IP hoặc tên miền của máy chủ và lưu cài đặt
+Để kết nối với máy chủ, hãy đi tới tab tiện ích mở rộng, chỉ định địa chỉ IP hoặc tên miền của máy chủ và lưu cài đặt.
 
 ### Phần máy chủ
 
 - tạo một giao diện cầu nối, ví dụ: br-openipc
-- trong cấu hình vtund.conf, hãy thêm tất cả các kết nối camera vào cầu nối
-- nâng bất kỳ máy chủ DHCP nào trên giao diện br-openipc
+- trong cấu hình vtund.conf, thêm tất cả các kết nối camera vào cầu nối
+- khởi động bất kỳ máy chủ DHCP nào trên giao diện br-openipc
 - liên kết địa chỉ IP của các thiết bị kết nối theo MAC
 
 ### Ví dụ về biên dịch vtun cho máy chủ
 
-Cài đặt các thành phần và phụ thuộc cho Debian/Ubuntu
+Cài đặt các thành phần và phần phụ thuộc cho Debian/Ubuntu
 
 ```
-apt install -y bison bridge-utils build-essential curl flex
+apt install -y bison bridge-utils build-essential curl flex bridge-utils
 ```
 
 ### Tập lệnh biên dịch tự động
@@ -33,7 +33,7 @@ apt install -y bison bridge-utils build-essential curl flex
 ```
 #!/bin/bash
 #
-# OpenIPC.org | v.20240824
+# OpenIPC.org | v.20240908
 #
 
 LANG=C
@@ -54,8 +54,8 @@ compile() {
 }
 
 install() {
-    mkdir -p ../_binary
-    mv -v vtund ../_binary/vtund_i386
+    mkdir -p /usr/local/sbin
+    mv -v vtund /usr/local/sbin/vtund
     cd -
     rm -rf vtun-${vtun_version}
 }
@@ -85,7 +85,7 @@ iface br-openipc inet static
 
 ```
 
-### Ví dụ về /etc/vtund.conf  cho máy chủ
+### Ví dụ về /etc/vtund.conf cho máy chủ
 
 ```
 options {
@@ -141,3 +141,18 @@ E60BFB000001 {
 #
 ```
 
+### Thay thế
+
+```
+#!/bin/sh -x
+
+curl -L -o vtun_3.0.4.orig.tar.gz http://archive.ubuntu.com/ubuntu/pool/universe/v/vtun/vtun_3.0.4.orig.tar.gz
+tar xvfz vtun_3.0.4.orig.tar.gz
+curl -L -o vtun_3.0.4-2build1.debian.tar.xz http://archive.ubuntu.com/ubuntu/pool/universe/v/vtun/vtun_3.0.4-2build1.debian.tar.xz
+tar xvfJ vtun_3.0.4-2build1.debian.tar.xz
+cd vtun-3.0.4
+cat ../debian/patches/*.patch | patch -p 1
+./configure --build=x86_64-linux-gnu --disable-lzo --disable-zlib --disable-ssl --prefix=''
+make && strip vtund && cp vtund ../ && cd -
+rm -rf vtun_3.0.4.orig.tar.gz vtun_3.0.4-2build1.debian.tar.xz debian vtun-3.0.4
+```

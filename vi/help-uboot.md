@@ -1,17 +1,17 @@
-## Wiki OpenIPC
+# Wiki OpenIPC
 [Mục lục](../README.md)
 
 Trợ giúp: U-Boot
 ------------
 
 ### Chuẩn bị môi trường
-Trong shell bootloader, kiểm tra xem biến `baseaddr` đã được định nghĩa chưa.
+Trong shell của bootloader, kiểm tra xem biến `baseaddr` đã được định nghĩa chưa.
 
 ```bash
 printenv baseaddr
 ```
 
-Nếu nó không có ở đó, hãy tự thiết lập nó.
+Nếu nó không có ở đó, hãy tự thiết lập.
 
 ```bash
 # Tra cứu địa chỉ cho SoC của bạn tại https://openipc.org/supported-hardware/
@@ -35,7 +35,7 @@ saveenv
 
 Trước khi bạn bắt đầu, [chuẩn bị môi trường](#prepare-the-environment).
 
-Trong chương trình terminal mà bạn sử dụng để kết nối với cổng UART, hãy bật tính năng lưu tệp nhật ký của phiên. Tôi thích sử dụng `screen` cho việc này và lệnh của tôi để kết nối với bộ chuyển đổi UART với việc ghi nhật ký phiên hoạt động vào một tệp sẽ trông như thế này:
+Trong chương trình terminal mà bạn sử dụng để kết nối với cổng UART, hãy bật tính năng lưu tệp nhật ký của phiên làm việc. Tôi thích sử dụng `screen` cho việc này và lệnh của tôi để kết nối với bộ chuyển đổi UART với việc ghi nhật ký phiên làm việc vào một tệp sẽ trông như thế này:
 
 ```bash
 screen -L -Logfile fulldump.log /dev/ttyUSB0 115200
@@ -50,7 +50,7 @@ sf read ${baseaddr} 0x0 ${flashsize}
 md.b ${baseaddr} ${flashsize}
 ```
 
-Vì quá trình đọc sẽ mất một khoảng thời gian đáng kể (theo đúng nghĩa đen là hàng giờ), bạn có thể muốn ngắt kết nối khỏi phiên terminal để tránh các lần nhấn phím vô tình làm nhiễm bẩn đầu ra. Nhấn `Ctrl-a` theo sau là `d` để tách phiên khỏi terminal đang hoạt động. Chạy `screen -r` khi bạn cần kết nối lại sau, sau khi kích thước của tệp nhật ký ngừng tăng. Việc đọc bộ nhớ flash 8 MB sẽ tạo ra tệp nhật ký ~ 40 MB và đối với chip 16 MB, tệp sẽ có kích thước gấp đôi.
+Vì quá trình đọc sẽ mất một khoảng thời gian đáng kể (theo đúng nghĩa đen là hàng giờ), bạn có thể muốn ngắt kết nối khỏi phiên làm việc terminal để tránh các lần nhấn phím vô tình làm nhiễm bẩn đầu ra. Nhấn `Ctrl-a` theo sau là `d` để tách phiên làm việc khỏi terminal đang hoạt động. Chạy `screen -r` khi bạn cần kết nối lại sau, sau khi kích thước của tệp nhật ký ngừng tăng. Việc đọc bộ nhớ flash 8 MB sẽ tạo ra tệp nhật ký ~ 40 MB và đối với chip 16 MB, tệp sẽ có kích thước gấp đôi.
 
 Chuyển đổi kết xuất hex thành tệp firmware nhị phân và sử dụng nó để nghiên cứu thêm hoặc khôi phục camera về trạng thái ban đầu.
 
@@ -73,7 +73,7 @@ Lắp thẻ vào khe cắm thẻ trên camera, kết nối bộ chuyển đổi 
 
 Khởi tạo quyền truy cập vào thẻ và xóa một số dung lượng để lưu firmware. Dữ liệu được ghi lên thẻ theo khối 512 byte. Bạn cần xóa 16384 khối để xóa 8 MB, 32768 khối cho 16 MB, tương ứng là 0x4000 và 0x8000 thập lục phân.
 
-Lưu ý rằng chúng ta sẽ ghi trực tiếp vào các thanh ghi thẻ, bỏ qua bảng phân vùng. Để tránh xung đột khi truy cập dữ liệu thẻ sau này từ PC của bạn, hãy bù 8 kilobyte từ đầu thẻ (8 * 1024 = 8192 byte hoặc 16 khối 512 byte, hoặc 0x10 khối ở dạng thập lục phân).
+Lưu ý rằng chúng ta sẽ ghi trực tiếp vào các thanh ghi thẻ, bỏ qua bảng phân vùng. Để tránh xung đột khi truy cập dữ liệu thẻ sau này từ PC của bạn, hãy offset 8 kilobyte từ đầu thẻ (8 * 1024 = 8192 byte hoặc 16 khối 512 byte, hoặc 0x10 khối ở dạng thập lục phân).
 
 Ví dụ cho 8MB:
 
@@ -125,9 +125,9 @@ Ví dụ cho 16MB:
 sudo dd bs=512 skip=16 count=32768 if=/dev/sdc of=./fulldump.bin
 ```
 
-### Tải lên hình ảnh nhị phân qua kết nối nối tiếp.
+### Tải lên ảnh nhị phân qua kết nối nối tiếp.
 
-Có những camera chỉ có kết nối không dây không khả dụng trực tiếp từ bootloader. Hầu hết các camera như vậy cũng có khe cắm thẻ SD nhưng một số thì không, hoặc nó không hoạt động vì lý do nào đó, hoặc bạn không có thẻ, hoặc đại loại như vậy. Dù sao, bạn vẫn có thể tải lên hình ảnh nhị phân lên camera và chạy nó hoặc lưu nó vào bộ nhớ flash. Đây là cách thực hiện.
+Có những camera chỉ có kết nối không dây không khả dụng trực tiếp từ bootloader. Hầu hết các camera như vậy cũng có khe cắm thẻ SD nhưng một số thì không, hoặc nó không hoạt động vì lý do nào đó, hoặc bạn không có thẻ, hoặc đại loại như vậy. Dù sao, bạn vẫn có thể tải lên ảnh nhị phân lên camera và chạy nó hoặc lưu nó vào bộ nhớ flash. Đây là cách thực hiện.
 
 Trước hết, bạn sẽ cần cài đặt gói `lrzsz` trên máy tính để bàn của mình. Tôi đoán nó chạy Linux và tốt nhất là thuộc họ Debian, điều đó sẽ dễ dàng hơn trên các ví dụ. Vì vậy, hãy chạy lệnh này để đáp ứng các điều kiện tiên quyết:
 
@@ -139,13 +139,13 @@ Bây giờ bạn đã sẵn sàng.
 
 Đặt tệp nhị phân mà bạn định tải lên vào cùng thư mục mà bạn sẽ bắt đầu phiên `screen` đến camera của mình. Bắt đầu phiên và khởi động vào bảng điều khiển bootloader bằng cách ngắt quy trình khởi động bằng tổ hợp phím.
 
-Bây giờ bạn có thể chạy `help` và kiểm tra xem các giao thức truyền dữ liệu nào được hỗ trợ bởi phiên bản bootloader của bạn. Nếu bạn thấy `loady` trong danh sách các lệnh, thì bạn có thể sử dụng giao thức ymodem. Chạy `loady` trên camera của bạn, sau đó nhấn `Ctrl-a` theo sau là `:` (dấu chấm phẩy). Nó sẽ chuyển bạn vào dòng lệnh ở dưới cùng của màn hình.
+Bây giờ bạn có thể chạy `help` và kiểm tra xem các giao thức truyền dữ liệu nào được hỗ trợ bởi phiên bản bootloader của bạn. Nếu bạn thấy `loady` trong danh sách các lệnh, thì bạn có thể sử dụng giao thức ymodem. Chạy `loady` trên camera của bạn, sau đó nhấn `Ctrl-a` theo sau là `:` (dấu hai chấm). Nó sẽ chuyển bạn vào dòng lệnh ở dưới cùng của màn hình.
 
-Nhập `exec !! sz --ymodem filename.bin` trong đó _filename.bin_ và xem tệp của bạn được tải lên qua kết nối nối tiếp. Ở tốc độ 115200 bps. Chậm, rất chậm.
+Nhập `exec !! sz --ymodem filename.bin` trong đó _filename.bin_ là tên tệp của bạn và xem tệp của bạn được tải lên qua kết nối nối tiếp. Ở tốc độ 115200 bps. Chậm, rất chậm.
 
-Sau khi tệp được tải lên, bạn có thể thực hiện phép thuật thông thường. Hoặc khởi động từ hình ảnh bộ nhớ ngay lập tức bằng cách sử dụng `bootm`, hoặc ghi nó vào bộ nhớ flash.
+Sau khi tệp được tải lên, bạn có thể thực hiện phép thuật thông thường. Hoặc khởi động từ ảnh bộ nhớ ngay lập tức bằng cách sử dụng `bootm`, hoặc ghi nó vào bộ nhớ flash.
 
-### Flash toàn bộ hình ảnh qua kết nối nối tiếp
+### Flash toàn bộ ảnh qua kết nối nối tiếp
 
 Trước khi bạn bắt đầu, [chuẩn bị môi trường](#prepare-the-environment).
 
@@ -172,7 +172,7 @@ nhấn "Ctrl-a" theo sau là ":", sau đó nhập
 exec !! sz --ymodem fullimage.bin
 ```
 
-sau khi hình ảnh được tải, tiếp tục
+sau khi ảnh được tải, tiếp tục
 
 ```shell
 sf probe 0
@@ -180,7 +180,7 @@ sf erase 0x0 ${flashsize}
 sf write ${baseaddr} 0x0 ${filesize}
 ```
 
-### Flash toàn bộ hình ảnh từ TFTP
+### Flash toàn bộ ảnh từ TFTP
 
 Trước khi bạn bắt đầu, [chuẩn bị môi trường](#prepare-the-environment).
 
@@ -217,13 +217,13 @@ reset
 
 Ở lần khởi động đầu tiên, hãy đăng nhập vào shell bootloader một lần nữa và ánh xạ lại phân vùng bằng cách chạy lệnh `run setnor16m`.
 
-### Đọc hình ảnh nhị phân từ thẻ SD.
+### Đọc ảnh nhị phân từ thẻ SD.
 
 Trước khi bạn bắt đầu, [chuẩn bị môi trường](#prepare-the-environment).
 
 Nếu camera của bạn hỗ trợ thẻ SD và bạn có lệnh `fatload` trong bootloader, thì bạn có thể đọc các tệp nhị phân firmware từ thẻ SD.
 
-Đầu tiên, chuẩn bị thẻ: định dạng nó thành hệ thống tệp FAT và đặt các tệp nhị phân bootloader, kernel và rootfs ở đó. Lắp thẻ vào camera và khởi động vào bảng điều khiển bootloader.
+Đầu tiên, chuẩn bị thẻ: định dạng nó thành hệ thống tệp FAT và đặt bootloader, kernel và tệp nhị phân rootfs vào đó. Lắp thẻ vào camera và khởi động vào bảng điều khiển bootloader.
 
 Kiểm tra xem bạn có quyền truy cập vào thẻ hay không.
 
@@ -267,7 +267,7 @@ sf write ${baseaddr} 0x250000 ${filesize}
 
 ### Vượt qua bootloader được bảo vệ bằng mật khẩu.
 
-Thay đổi bootloader là một thao tác rủi ro. Có khả năng cao là biến camera của bạn thành cục chặn giấy nếu có sự cố xảy ra. Vì vậy, trước khi bạn flash một bootloader mới, bạn phải cân nhắc tất cả các rủi ro và lợi ích. Trong hầu hết các trường hợp, bootloader gốc cộng với kernel mới và hệ điều hành mới sẽ hoạt động tốt. Nhưng có những trường hợp ngoại lệ.
+Thay đổi bootloader là một thao tác rủi ro. Có khả năng cao biến camera của bạn thành cục chặn giấy nếu có sự cố xảy ra. Vì vậy, trước khi bạn flash bootloader mới, bạn phải cân nhắc tất cả các rủi ro và lợi ích. Trong hầu hết các trường hợp, bootloader gốc cộng với kernel mới và hệ điều hành mới sẽ hoạt động tốt. Nhưng có những trường hợp ngoại lệ.
 
 #### Chập các chân trên chip flash
 
@@ -283,11 +283,11 @@ Các chân 5 và 6 của chip SOIC8 nằm ở góc đối diện với chân 1, 
 ![](../images/flash-pins.webp)
 ![](../images/flash-pins-2.webp)
 
-[Hack này chi tiết](https://cybercx.co.nz/bypassing-bios-password/) hoặc phiên bản [đã lưu trữ](https://github.com/OpenIPC/wiki/blob/master/en/help-uboot.md#bypassing-password-protected-bootloader) của bài viết
+[Bài viết chi tiết về thủ thuật này](https://cybercx.co.nz/bypassing-bios-password/) hoặc phiên bản [đã lưu trữ](https://github.com/OpenIPC/wiki/blob/master/en/help-uboot.md#bypassing-password-protected-bootloader) của bài viết
 
 #### Hạ cấp firmware gốc.
 
-Ngày nay, chúng ta thấy ngày càng nhiều camera có quyền truy cập vào bảng điều khiển bootloader được bảo vệ bằng mật khẩu. Do đó, ngay cả khi bạn kết nối với cổng UART của camera, tất cả những gì bạn sẽ thấy sau khi ngắt chu kỳ khởi động tiêu chuẩn là lời nhắc nhập mật khẩu. Trong trường hợp đó, một giải pháp tương đối an toàn là hạ cấp firmware xuống phiên bản mà tính năng bảo vệ bằng mật khẩu chưa được triển khai. Ví dụ: đối với camera Xiongmai, tính năng bảo vệ bằng mật khẩu bootloader bắt đầu xuất hiện ở đâu đó vào khoảng tháng 7 năm 2021, do đó bạn cần có firmware cho camera của mình từ ngày trước đó. Sau khi bạn hạ cấp thành công camera của mình xuống bootloader không có mật khẩu, bạn có thể cài đặt firmware OpenIPC theo cách thông thường.
+Ngày nay, chúng ta thấy ngày càng nhiều camera có quyền truy cập vào bảng điều khiển bootloader được bảo vệ bằng mật khẩu. Do đó, ngay cả khi bạn kết nối với cổng UART của camera, tất cả những gì bạn sẽ thấy sau khi ngắt chu kỳ khởi động tiêu chuẩn là lời nhắc nhập mật khẩu. Trong trường hợp đó, một giải pháp tương đối an toàn là hạ cấp firmware xuống phiên bản mà tính năng bảo vệ bằng mật khẩu chưa được triển khai. Ví dụ: đối với camera Xiongmai, tính năng bảo vệ bằng mật khẩu bootloader bắt đầu xuất hiện ở đâu đó vào khoảng tháng 7 năm 2021, do đó bạn cần firmware cho camera của mình từ ngày trước đó. Sau khi bạn hạ cấp thành công camera của mình xuống bootloader không có mật khẩu, bạn có thể cài đặt firmware OpenIPC theo cách thông thường.
 
 #### Tải phụ bootloader đã mở khóa.
 
@@ -295,7 +295,7 @@ Nhiều camera hiện đại sử dụng giao thức fastboot cho phép camera t
 
 #### Sửa đổi firmware gốc.
 
-Một cách để vượt qua bảo vệ bootloader là xuất firmware gốc và thay thế bootloader ở đó bằng một bản thay thế đã mở khóa. Hoặc bạn có thể flash toàn bộ firmware OpenIPC vì dù sao bạn cũng có chip trong bộ lập trình.
+Một cách để vượt qua bảo vệ bootloader là xuất firmware gốc và thay thế bootloader ở đó bằng một lựa chọn thay thế đã mở khóa. Hoặc bạn có thể flash toàn bộ firmware OpenIPC vì dù sao bạn cũng có chip trong bộ nạp.
 
 __ĐỪNG QUÊN SAO LƯU FIRMWARE GỐC CỦA BẠN!__
 
@@ -303,7 +303,7 @@ __ĐỪNG QUÊN SAO LƯU FIRMWARE GỐC CỦA BẠN!__
 
 Trước khi bạn bắt đầu, [chuẩn bị môi trường](#prepare-the-environment).
 
-Nếu bạn nhận được lỗi `Too many args` trong khi cố gắng đặt biến môi trường, hãy thử làm điều đó từ trong Linux bằng cách sử dụng `fw_setenv` thay vì `setenv` trong U-boot.
+Nếu bạn gặp lỗi `Too many args` (quá nhiều đối số) trong khi cố gắng đặt biến môi trường, hãy thử làm điều đó từ trong Linux bằng cách sử dụng `fw_setenv` thay vì `setenv` trong U-boot.
 
 __Bảng điều khiển U-boot:__
 
@@ -320,40 +320,3 @@ root@openipc-hi3518ev100:~# fw_setenv uk 'mw.b ${baseaddr} 0xff ${flashsize}; tf
 
 [burn]: https://github.com/OpenIPC/burn
 [telegram]: https://t.me/OpenIPC
-
-
-**Giải thích thuật ngữ:**
-
-* **U-Boot:** Là một bootloader phổ biến được sử dụng trong các hệ thống nhúng.
-* **Bootloader:** Là một chương trình nhỏ được thực thi khi thiết bị khởi động, chịu trách nhiệm tải hệ điều hành.
-* **Shell:** Là một giao diện dòng lệnh cho phép người dùng tương tác với hệ thống.
-* **UART:** Là một giao diện truyền thông nối tiếp.
-* **RAM:** Bộ nhớ truy cập ngẫu nhiên.
-* **Hexadecimal:** Hệ thập lục phân.
-* **Binary:** Nhị phân.
-* **TFTP:** Là một giao thức truyền tệp đơn giản.
-* **SD card:** Thẻ nhớ SD.
-* **MicroSD:** Thẻ nhớ microSD.
-* **Partition table:** Bảng phân vùng.
-* **Kernel:** Là phần cốt lõi của hệ điều hành.
-* **Rootfs:** Hệ thống tệp gốc.
-* **Squashfs:** Là một hệ thống tệp nén chỉ đọc.
-* **Fastboot:** Là một giao thức được sử dụng để flash phân vùng trên thiết bị Android.
-* **SoC:** Hệ thống trên một chip.
-* **fw_setenv:** Là một lệnh được sử dụng để đặt biến môi trường trong firmware.
-* **tftpboot:** Là một lệnh được sử dụng để tải tệp qua TFTP.
-* **sf probe:** Là một lệnh được sử dụng để dò tìm chip flash.
-* **sf erase:** Là một lệnh được sử dụng để xóa chip flash.
-* **sf write:** Là một lệnh được sử dụng để ghi vào chip flash.
-* **reset:** Là một lệnh được sử dụng để khởi động lại thiết bị.
-* **run setnor16m:** Là một lệnh được sử dụng để ánh xạ lại phân vùng cho chip flash 16MB.
-* **fatload:** Là một lệnh được sử dụng để tải tệp từ hệ thống tệp FAT.
-* **mmc rescan:** Là một lệnh được sử dụng để quét lại thẻ SD.
-* **u-boot-with-spl.bin:** Là tệp bootloader.
-* **uImage.${soc}:** Là tệp kernel.
-* **rootfs.squashfs.${soc}:** Là tệp hệ thống tệp gốc.
-
-
-
-
-

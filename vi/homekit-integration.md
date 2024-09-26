@@ -1,11 +1,11 @@
-## Wiki OpenIPC
+# Wiki OpenIPC
 [Mục lục](../README.md)
 
 
 ## Tích hợp OpenIPC vào HomeKit
 ---
 
-Hiện tại OpenIPC chưa có hỗ trợ HomeKit gốc, việc tích hợp được thực hiện bởi gói bên thứ 3 [go2rtc](https://github.com/AlexxIT/go2rtc "go2rtc"), cảm ơn [@gtxaspec](https://github.com/gtxaspec "@gtxaspec") đã thêm gói này vào OpenIPC.
+Hiện tại, OpenIPC chưa có hỗ trợ HomeKit gốc, việc tích hợp được thực hiện bởi gói bên thứ ba [go2rtc](https://github.com/AlexxIT/go2rtc "go2rtc"), cảm ơn [@gtxaspec](https://github.com/gtxaspec "@gtxaspec") đã thêm gói này vào OpenIPC.
 
 ### Yêu cầu phần cứng
 
@@ -13,13 +13,13 @@ Vì tệp nhị phân đã biên dịch sẽ có kích thước 3,3MB, kích th�
 
 ### Biên dịch gói go2rtc
 
-Cài đặt go và upx trước
+Cài đặt Go và UPX trước
 ```
 apt update
 apt install golang upx
 ```
 - #### Phương pháp 1: Biên dịch toàn bộ firmware
-Chỉnh sửa tệp cấu hình bảng trong thư mục `firmware/br-ext-chip-xxxx/configs`, thêm dòng sau để bật gói go2rtc
+Chỉnh sửa tệp cấu hình bo mạch trong thư mục `firmware/br-ext-chip-xxxx/configs`, thêm dòng sau để bật gói go2rtc
 ```
 BR2_PACKAGE_GO2RTC=y
 ```
@@ -82,33 +82,10 @@ Thêm các dòng sau vào /etc/rc.local
 /usr/bin/go2rtc -config /etc/go2rtc.yaml &
 ```
 
-### Giới hạn
+### Hạn chế
 
 - Chưa hỗ trợ HomeKit Secure Video.
 - Chưa hỗ trợ cảm biến chuyển động.
 - Chưa hỗ trợ âm thanh hai chiều.
-
-
-**Giải thích thuật ngữ:**
-
-* **HomeKit:** Là một nền tảng tự động hóa nhà của Apple.
-* **go2rtc:** Là một ứng dụng trung gian cho phép bạn tích hợp các camera RTSP vào HomeKit.
-* **Firmware:** Phần mềm được nhúng vào bộ nhớ ROM của thiết bị phần cứng.
-* **Flash chip:** Chip flash, là một loại bộ nhớ không bay hơi được sử dụng để lưu trữ firmware.
-* **DDR:** Double Data Rate, là một loại bộ nhớ truy cập ngẫu nhiên.
-* **Board config file:** Tệp cấu hình bảng, là một tệp văn bản chứa các cài đặt cho quá trình biên dịch firmware.
-* **Binary file:** Tệp nhị phân, là một tệp chứa dữ liệu ở dạng nhị phân.
-* **Config file:** Tệp cấu hình, là một tệp văn bản chứa các cài đặt cho một chương trình.
-* **RTSP:** Real Time Streaming Protocol, là một giao thức mạng được sử dụng để truyền phát video và âm thanh trực tiếp.
-* **WebRTC:** Web Real-Time Communication, là một bộ API cho phép truyền thông âm thanh và video trực tiếp trong trình duyệt web.
-* **STUN:** Session Traversal Utilities for NAT, là một giao thức mạng được sử dụng để vượt qua NAT.
-* **Home app:** Ứng dụng Home, là ứng dụng của Apple để điều khiển các thiết bị HomeKit.
-* **PIN:** Personal Identification Number, là một mã số bí mật được sử dụng để xác thực.
-* **HomeKit Secure Video:** Là một tính năng của HomeKit cho phép bạn lưu trữ video được mã hóa từ camera của mình trên iCloud.
-* **Motion sensor:** Cảm biến chuyển động, là một cảm biến phát hiện chuyển động.
-* **Two-way audio:** Âm thanh hai chiều, là khả năng nói chuyện và nghe qua camera.
-
-
-
 
 

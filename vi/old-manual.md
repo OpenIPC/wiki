@@ -11,13 +11,13 @@ Trang này mô tả biến thể firmware dựa trên OpenWRT.
 * RTSP, ONVIF, NETIP
 * Hỗ trợ dịch vụ ipeye gốc
 * Hỗ trợ squashfs, jffs2, overlayfs, vfat
-* Hỗ trợ Vlan và cầu nối
+* Hỗ trợ VLAN và cầu nối
 * Hệ thống gói OPKG tiêu chuẩn
 * Tiny SNMP daemon
 * Curl với SSL để tải lên/tải xuống tệp
 * Chạy lệnh tùy ý từ u-boot ENV (linux_cmd=)
 * VPN L2/L3 đơn giản với định hình lưu lượng và nén (vtun)
-* Đơn giản là bot Telegram gửi (estgb)
+* Bot Telegram gửi đơn giản (estgb)
 * Hỗ trợ modem USB 3G/4G chi phí thấp ở chế độ hilink
 * Dịch vụ đường hầm µVPN
 * và hơn thế nữa ...
@@ -41,7 +41,7 @@ với Google Dịch).
 * <http://192.168.1.10/> - Giao diện hệ thống tiêu chuẩn dựa trên OpenWrt Luci
 
 
-### Bộ phát trực tuyến Majestic
+### Trình phát trực tuyến Majestic
 
 Majestic là một ứng dụng phát video trực tuyến, trái tim của firmware của chúng tôi (liên quan
 đến chức năng giám sát camera/video). Nó có thể cấu hình thông qua
@@ -63,7 +63,7 @@ killall -sigint majestic; export SENSOR=$(ipctool --sensor_id); majestic 2>&1 | 
 
 ### URL liên quan đến camera trong firmware
 
-Thông tin về URL của bộ phát trực tuyến và mô tả của chúng có thể được tìm thấy trong [Wiki][9].
+Bạn có thể tìm thấy thông tin về URL của trình phát trực tuyến và mô tả của chúng trong [Wiki][9].
 
 
 ### Dữ liệu thống kê
@@ -81,19 +81,19 @@ Nhận firmware
 
 ### Tải xuống (dev mới nhất)
 
-| Trạng thái xây dựng            | SoC         | U-Boot      | Kernel        | Rootfs        |
+| Trạng thái build           | SoC         | U-Boot      | Kernel        | Rootfs        |
 |----------------------------|-------------|-------------|---------------|---------------|
-| ![Hi3516Cv100 images][b1]  | Hi3516CV100 | [uboot][u1] | [kernel][k1]  | [rootfs][r1]  |
-| ![Hi3516Cv200 images][b2]  | Hi3516CV200 | [uboot][u2] | [kernel][k2]  | [rootfs][r2]  |
-| ![Hi3516Cv300 images][b3]  | Hi3516CV300 | [uboot][u3] | [kernel][k3]  | [rootfs][r3]  |
-| ![Hi3516Ev100 images][b4]  | Hi3516EV100 | [uboot][u4] | [kernel][k4]  | [rootfs][r4]  |
-| ![Hi3518Av100 images][b5]  | Hi3518AV100 | [uboot][u5] | [kernel][k5]  | [rootfs][r5]  |
-| ![Hi3518Cv100 images][b6]  | Hi3518CV100 | [uboot][u6] | [kernel][k6]  | [rootfs][r6]  |
-| ![Hi3518Ev100 images][b7]  | Hi3518EV100 | [uboot][u7] | [kernel][k7]  | [rootfs][r7]  |
-| ![Hi3518Ev200 images][b8]  | Hi3518EV200 | [uboot][u8] | [kernel][k8]  | [rootfs][r8]  |
-| ![Hi3518Ev201 images][b9]  | Hi3518EV201 | [uboot][u9] | [kernel][k9]  | [rootfs][r9]  |
-| ![Hi3520Dv100 images][b10] | Hi3520DV100 | !           | [kernel][k10] | [rootfs][r10] |
-| ![Hi3520Dv200 images][b11] | Hi3520DV200 | !           | [kernel][k11] | [rootfs][r11] |
+| ![Ảnh Hi3516Cv100][b1]  | Hi3516CV100 | [uboot][u1] | [kernel][k1]  | [rootfs][r1]  |
+| ![Ảnh Hi3516Cv200][b2]  | Hi3516CV200 | [uboot][u2] | [kernel][k2]  | [rootfs][r2]  |
+| ![Ảnh Hi3516Cv300][b3]  | Hi3516CV300 | [uboot][u3] | [kernel][k3]  | [rootfs][r3]  |
+| ![Ảnh Hi3516Ev100][b4]  | Hi3516EV100 | [uboot][u4] | [kernel][k4]  | [rootfs][r4]  |
+| ![Ảnh Hi3518Av100][b5]  | Hi3518AV100 | [uboot][u5] | [kernel][k5]  | [rootfs][r5]  |
+| ![Ảnh Hi3518Cv100][b6]  | Hi3518CV100 | [uboot][u6] | [kernel][k6]  | [rootfs][r6]  |
+| ![Ảnh Hi3518Ev100][b7]  | Hi3518EV100 | [uboot][u7] | [kernel][k7]  | [rootfs][r7]  |
+| ![Ảnh Hi3518Ev200][b8]  | Hi3518EV200 | [uboot][u8] | [kernel][k8]  | [rootfs][r8]  |
+| ![Ảnh Hi3518Ev201][b9]  | Hi3518EV201 | [uboot][u9] | [kernel][k9]  | [rootfs][r9]  |
+| ![Ảnh Hi3520Dv100][b10] | Hi3520DV100 | !           | [kernel][k10] | [rootfs][r10] |
+| ![Ảnh Hi3520Dv200][b11] | Hi3520DV200 | !           | [kernel][k11] | [rootfs][r11] |
 
 
 ### Bản phát hành
@@ -162,7 +162,7 @@ Chuẩn bị cài đặt
 
 Kết nối nối tiếp (UART) với thiết bị camera của bạn là bắt buộc.
 
-* CamHi | Nhấn **Ctrl+C** trong khi khởi động U-boot và mật khẩu truy cập - HI2105CHIP
+* CamHi | Nhấn **Ctrl+C** trong khi khởi động U-boot và truy cập mật khẩu - HI2105CHIP
 * Dahua | Nhấn **Shift 8** trong khi khởi động U-boot
 * JVT | Nhấn **Ctrl+Q** trong khi khởi động U-boot
 * XM | Nhấn **Ctrl+C** trong khi khởi động U-boot
@@ -178,7 +178,7 @@ Bạn chắc chắn nên ghi lại MAC gốc của thiết bị trên cổng eth
 
 ### Sao lưu firmware gốc
 
-#### Flash 8M
+#### Flash 8MB
 
 ```txt
 setenv ipaddr 192.168.1.10
@@ -189,7 +189,7 @@ sf read 0x82000000 0x0 0x800000
 tftp 0x82000000 fullflash.img 0x800000
 ```
 
-#### Flash 16M
+#### Flash 16MB
 
 ```txt
 setenv ipaddr 192.168.1.10
@@ -200,7 +200,7 @@ sf read 0x82000000 0x0 0x1000000
 tftp 0x82000000 fullflash.img 0x1000000
 ```
 
-#### Flash 32M
+#### Flash 32MB
 
 ```txt
 setenv ipaddr 192.168.1.10
@@ -253,7 +253,7 @@ Flash firmware mới
 
 **Chú ý!**
 
-Tất cả các ví dụ đều cho biết việc tải xuống các thành phần firmware thông qua máy chủ TFTP.
+Tất cả các ví dụ đều cho biết việc tải xuống các thành phần firmware thông qua máy chủ TFTP. 
 Nếu thiết bị của bạn không có cổng Ethernet, hãy thay thế tất cả các lệnh `tftp` bằng
 `fatload mmc 0:1`. Ví dụ:
 
@@ -266,7 +266,7 @@ fatload mmc 0:1 0x82000000 openwrt-hi35xx-XXXXX-u-boot.bin
 ### Hi3516Cv100
 
 **Loại bo mạch này có hệ thống điều khiển Ethernet bổ sung thông qua GPIO và
-thanh ghi. Tham khảo ý kiến chuyên gia!**
+thanh ghi. Hãy tham khảo ý kiến chuyên gia!**
 
 **Thiết bị thử nghiệm:**
 
@@ -370,7 +370,7 @@ sf write 0x82000000 0x250000 ${filesize}
 ### Hi3518Cv100
 
 **Loại bo mạch này có hệ thống điều khiển Ethernet bổ sung thông qua GPIO và
-thanh ghi. Tham khảo ý kiến chuyên gia!**
+thanh ghi. Hãy tham khảo ý kiến chuyên gia!**
 
 ```txt
 setenv ipaddr 192.168.1.10
@@ -396,7 +396,7 @@ sf write 0x82000000 0x250000 ${filesize}
 ### Hi3518Ev100
 
 **Loại bo mạch này có hệ thống điều khiển Ethernet bổ sung thông qua GPIO và
-thanh ghi. Tham khảo ý kiến chuyên gia!**
+thanh ghi. Hãy tham khảo ý kiến chuyên gia!**
 
 ```txt
 setenv ipaddr 192.168.1.10
@@ -492,8 +492,8 @@ sf write 0x82000000 0x250000 ${filesize}
 Cập nhật các phần của firmware
 ------------------------------
 
-Nếu bạn đã cài đặt firmware OpenIPC, bạn có thể cập nhật các
-phân vùng flash riêng lẻ từ dòng lệnh shell:
+Nếu bạn đã cài đặt firmware OpenIPC, bạn có thể cập nhật riêng lẻ
+các phân vùng flash từ dòng lệnh shell:
 
 
 ### Cập nhật u-boot
@@ -572,9 +572,9 @@ reboot
 ```
 
 
-### Dọn dẹp u-boot env
+### Dọn dẹp môi trường u-boot
 
-> **Khôi phục về mặc định u-boot env**
+> **Khôi phục về môi trường u-boot mặc định**
 
 ```txt
 flash_eraseall -j /dev/$(awk -F ':' '/env/ {print $1}' /proc/mtd)
@@ -648,4 +648,4 @@ Sẽ được viết ...
 [2]: https://aliexpress.com/item/32851596596.html
 [3]: https://aliexpress.com/item/1005002315913099.html
 [4]: https://aliexpress.com/item/1005002298832047.html
-[5]: https://aliexpress.com/
+[5]: https://aliexpress.

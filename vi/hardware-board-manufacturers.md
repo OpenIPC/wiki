@@ -2,7 +2,7 @@
 
 [Mục lục](../README.md)
 
-Phần cứng: Các nhà sản xuất bảng mạch IPC
+Phần cứng: Các nhà sản xuất bo mạch IPC
 ---------------------------------
 
 * [ACTi](https://www.acti.com/)
@@ -55,13 +55,4 @@ Phần cứng: Các nhà sản xuất bảng mạch IPC
 * [Zenotech](http://www.videopark.com.cn)
 * [ZOSI](https://www.zositech.com/)
 
-> _th? -- có thể là một công ty thương mại_
-
-
-**Giải thích thuật ngữ:**
-
-* **IPC (Internet Protocol Camera):** Camera IP, là một loại camera kỹ thuật số có thể gửi và nhận dữ liệu qua mạng IP.
-* **Board:** Bảng mạch.
-* **Trading house:** Công ty thương mại.
-
-
+> _th? -- có thể là công ty thương mại_

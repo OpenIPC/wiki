@@ -25,9 +25,9 @@ Phục hồi Sigmastar
 
 ---
 
-**Kiểm tra bộ nhớ flash của thiết bị bằng snander:**
-- Thiết bị phải được cấp nguồn khi kết nối với bộ lập trình.
-- Tắt và bật nguồn có thể giúp ích nếu không thể phát hiện thiết bị.
+**Kiểm tra flash của thiết bị bằng snander:**
+- Thiết bị phải được cấp nguồn khi kết nối với bộ nạp.
+- Tắt/bật nguồn có thể hữu ích nếu thiết bị không được phát hiện.
 ```
 snander -i -q
 ```
@@ -41,9 +41,9 @@ snander -l 0x200000 -e
 
 <img src="../images/sigmastar-erase.webp">
 
-**Ghi tệp uboot mới:**
+**Ghi tệp u-boot mới:**
 - https://github.com/openipc/firmware/releases/tag/latest
-- thả tệp vào cùng thư mục với chương trình
+- Thả tệp vào cùng thư mục với chương trình
 ```
 snander -w u-boot-ssc338q-nand.bin
 ```
@@ -58,7 +58,7 @@ snander -w u-boot-ssc338q-nand.bin
 
 ---
 
-- [Phương pháp Raspberry thay thế bởi MarioFPV](https://youtu.be/88C8UvyKQlQ)
+- [Phương pháp thay thế bằng Raspberry Pi của MarioFPV](https://youtu.be/88C8UvyKQlQ)
 
 
 

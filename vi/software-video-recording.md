@@ -1,7 +1,7 @@
 # OpenIPC Wiki
 [Mục lục](../README.md)
 
-Phần mềm Ghi hình Video
+Phần mềm Quay video
 ------------------------
 
 - [Agent DVR](https://www.ispyconnect.com/) (trước đây là iSpy)
@@ -24,4 +24,5 @@ Phần mềm Ghi hình Video
 - [Xeoma](https://felenasoft.com/xeoma/en/)
 - [Yucca](https://yucca.app)
 - [ZoneMinder](https://zoneminder.com/)
+
 

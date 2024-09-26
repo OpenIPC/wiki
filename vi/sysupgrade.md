@@ -5,9 +5,9 @@ Nâng cấp firmware
 ------------------
 
 ### Nâng cấp từ GitHub
-Đối với firmware cũ, chạy `sysupgrade` không có tham số là đủ. Đối với firmware mới hơn, hãy chạy `sysupgrade -k -r` để cập nhật cả kernel và rootfs.
+Đối với firmware cũ, chạy `sysupgrade` không cần tham số là đủ. Đối với firmware mới hơn, hãy chạy `sysupgrade -k -r` để cập nhật cả kernel và rootfs.
 
-__CHÚ Ý! Nâng cấp firmware có thể dẫn đến việc "biến camera của bạn thành cục gạch". Hãy chắc chắn rằng bạn đã chuẩn bị cả về mặt tinh thần và kỹ năng. Chuẩn bị sẵn thẻ SD cứu hộ và/hoặc bộ điều hợp UART của bạn. Hãy chuẩn bị để hàn lại và lập trình lại chip flash như là phương sách cuối cùng. Không nâng cấp camera đang hoạt động trừ khi bạn thực sự phải làm vậy!__
+**CHÚ Ý! Nâng cấp firmware có thể dẫn đến "biến camera của bạn thành cục gạch". Hãy chắc chắn rằng bạn đã chuẩn bị cả về mặt tinh thần và kỹ năng. Chuẩn bị sẵn thẻ SD cứu hộ và/hoặc bộ điều hợp UART của bạn. Hãy chuẩn bị để hàn lại và lập trình lại chip flash như là phương sách cuối cùng. Không nâng cấp camera đang hoạt động trừ khi bạn thực sự phải làm vậy!**
 
 ### Nâng cấp từ máy chủ TFTP
 
@@ -29,7 +29,7 @@ busybox tftp -r uImage.${soc} -g ${serverip}
 
 #### Github: Ngoài ra, từ U-Boot
 
-đối với ảnh 8MB
+Đối với ảnh 8MB
 
 ```bash
 tftp ${baseaddr} uImage.${soc}
@@ -39,7 +39,7 @@ tftp ${baseaddr} rootfs.squashfs.${soc}
 sf probe 0; sf erase 0x250000 0x500000; sf write ${baseaddr} 0x250000 ${filesize}
 ```
 
-đối với ảnh 16MB
+Đối với ảnh 16MB
 
 ```bash
 tftp ${baseaddr} uImage.${soc}
@@ -56,7 +56,7 @@ Giải nén gói và tải nội dung của nó lên camera bằng cách sử d�
 
 ```bash
 tar xvf <firmware.tgz>
-scp uImage* rootfs* root@<yourcameraip>:/tmp/
+scp uImage* rootfs* root@<địa-chỉ-ip-camera-của-bạn>:/tmp/
 ```
 
 Trên camera, hãy chạy:
@@ -75,7 +75,7 @@ Lắp thẻ SD vào máy tính để bàn của bạn. Giải nén gói và sao 
 
 ```bash
 tar xvf <firmware.tgz>
-cp uImage* rootfs* /media/<username>/<card-id>/
+cp uImage* rootfs* /media/<tên-người-dùng>/<id-thẻ>/
 ```
 
 Lắp thẻ SD vào camera của bạn.
@@ -88,7 +88,7 @@ sysupgrade --kernel=/mnt/mmcblk0p1/uImage.${soc} --rootfs=/mnt/mmcblk0p1/rootfs.
 
 #### Thẻ SD: Ngoài ra, từ U-Boot
 
-đối với ảnh 8MB
+Đối với ảnh 8MB
 
 ```bash
 mw.b ${baseaddr} 0xff 0x200000
@@ -100,7 +100,7 @@ fatload mmc 0:1 ${baseaddr} rootfs.squashfs.${soc}
 sf probe 0; sf erase 0x250000 0x500000; sf write ${baseaddr} 0x250000 ${filesize}
 ```
 
-đối với ảnh 16MB
+Đối với ảnh 16MB
 
 ```bash
 mw.b ${baseaddr} 0xff 0x300000
@@ -114,7 +114,7 @@ sf probe 0; sf erase 0x350000 0xa00000; sf write ${baseaddr} 0x350000 ${filesize
 
 ### Flash U-Boot qua ymodem
 
-Dọn dẹp 320K RAM và tải tệp bộ tải khởi động vào đó:
+Dọn dẹp 320K RAM và tải tệp bootloader vào đó:
 
 ```bash
 mw.b ${baseaddr} 0xff 0x50000
@@ -144,7 +144,7 @@ losetup: /tmp/rootfs.squashfs.${soc}: Không tìm thấy tệp hoặc thư mục
 Rootfs: Không thể lấy tên máy chủ, quá trình thực thi đã bị gián đoạn...
 ```
 
-thì hãy thử cập nhật kernel trước:
+thì trước tiên hãy thử cập nhật kernel:
 `sysupgrade -k`
 
 Nếu không được, hãy sử dụng tùy chọn `--force`:
@@ -155,7 +155,5 @@ Nếu bạn gặp trục trặc, hãy lấy phiên bản mới nhất của ti�
 ```bash
 curl -k -L -o /usr/sbin/sysupgrade "https://raw.githubusercontent.com/OpenIPC/firmware/master/general/overlay/usr/sbin/sysupgrade"
 ```
-
-
 
 

@@ -4,11 +4,11 @@
 Thiết bị được hỗ trợ
 -----------------
 
-Rất tiếc, chúng tôi không thể cung cấp cho bạn một danh sách dài các thiết bị chắc chắn tương thích với firmware của chúng tôi. Các nhà sản xuất camera có xu hướng thay đổi thiết kế phần cứng và hoán đổi các thành phần ngay cả trong cùng một dòng model mà không cần thông báo trước.
+Rất tiếc, chúng tôi không thể cung cấp cho bạn một danh sách dài các thiết bị chắc chắn tương thích với firmware của chúng tôi. Các nhà sản xuất camera có xu hướng thay đổi thiết kế phần cứng và hoán đổi các linh kiện ngay cả trong cùng một dòng model mà không cần thông báo trước.
 
-Dưới đây, chúng tôi đã liệt kê một số camera mà chúng tôi đã sở hữu, nhưng một lần nữa, không có gì đảm bảo rằng nếu bạn mua một trong những camera đó ngày hôm nay, bạn sẽ không nhận được phần cứng không được hỗ trợ.
+Dưới đây, chúng tôi đã liệt kê một số camera mà chúng tôi đã sở hữu, nhưng một lần nữa, không có gì đảm bảo rằng nếu bạn mua một trong những camera đó ngày hôm nay, bạn sẽ không gặp phải phần cứng không được hỗ trợ.
 
-Phương pháp hoạt động phần nào để xác định xem camera của bạn có được hỗ trợ bởi phiên bản firmware gần đây của chúng tôi hay không là mở[^1] vỏ camera và xem các dấu hiệu trên chip. Sau đó, tra cứu chip của bạn trong [danh sách phần cứng được hỗ trợ][1]
+Phương pháp tương đối hiệu quả để xác định xem camera của bạn có được hỗ trợ bởi phiên bản firmware gần đây của chúng tôi hay không là mở[^1] vỏ camera và xem các ký hiệu trên chip. Sau đó, tra cứu chip của bạn trong [danh sách phần cứng được hỗ trợ][1]
 và kiểm tra trạng thái phát triển của nó.
 
 Nếu bạn vẫn còn nghi ngờ, hãy chụp ảnh cận cảnh phần cứng với độ phân giải cao
@@ -17,15 +17,15 @@ và yêu cầu trợ giúp trong một trong các nhóm Telegram của chúng t�
 [^1]: Chú ý! Khi làm như vậy, bạn tự chịu trách nhiệm hoàn toàn về hành động của mình.
 Nhiều khả năng, việc mở vỏ máy sẽ làm mất hiệu lực bảo hành của thiết bị. Chúng tôi không thể
 chịu trách nhiệm cho bất kỳ thiệt hại nào đối với camera, bản thân bạn, ngôi nhà của bạn, thú cưng của bạn
-hoặc bất cứ thứ gì khác. Nếu bạn không cảm thấy thoải mái với phần cứng, dự án này
+hoặc bất cứ thứ gì khác. Nếu bạn không cảm thấy thoải mái khi tiếp xúc với phần cứng, dự án này
 có thể không phù hợp với bạn.
 
-Bạn cũng có thể xem danh sách các thiết bị được điều chỉnh trong một dự án Trình tạo đặc biệt -
+Bạn cũng có thể xem danh sách các thiết bị được điều chỉnh trong một dự án Builder đặc biệt -
 https://github.com/OpenIPC/builder
 
-_Nếu bạn có một thiết bị được hỗ trợ khác để thêm, vui lòng thực hiện [tại đây][2]._
+_Nếu bạn có một thiết bị được hỗ trợ khác để thêm vào, vui lòng thực hiện [tại đây][2]._
 
-| Thương hiệu | Model              | Bộ xử lý   | Cảm biến | Bộ nhớ Flash | LAN | WLAN           | USB  | Thẻ |
+| Thương hiệu | Model              | Bộ xử lý   | Cảm biến | Bộ nhớ Flash | LAN | WLAN           | USB  | Thẻ nhớ |
 |------------|--------------------|-------------|--------|--------------|-----|----------------|------|------|
 |            |                    |             |        |              |     |                |      |      |
 | Anjoy      | MS-J10             | SSC335      | IMX307 |              | Có  | Không           | Có   | Không |
@@ -41,7 +41,7 @@ _Nếu bạn có một thiết bị được hỗ trợ khác để thêm, vui l
 |            |                    |             |        |              |     |                |      |      |
 | Smartwares | [CIP-37210][4]     | HI3518EV200 |        |              | Không | RTL8188FU      | WiFi | Có   |
 |            |                    |             |        |              |     |                |      |      |
-| TOP        | TOP-201/MCO-720P Mini Camera  | HI3518EV100 | OV9712 |   | Có  | Không           | Không | Không |
+| TOP        | TOP-201/MCO-720P Mini Camera  | HI3518EV100 | OV9712 |             | Có  | Không           | Không | Không |
 |            |                    |             |        |              |     |                |      |      |
 | Xiaomi     | [MJSXJ02HL][7]     | HI3518EV300 |        |              | Không |                |      | Có   |
 | Xiaomi     | [MJSXJ03HL][6]     | T31N        | JXQ03 | QH128A-104HIP | Không | RTL8189FTV     | Không | Có   |
@@ -63,7 +63,7 @@ _Nếu bạn có một thiết bị được hỗ trợ khác để thêm, vui l
 | Uniview    | IPC-D122-PF28      | SSC335      | SC2335 | XM25QH64C    | Có  | Không           | Không | Không |
 
 
-| Bộ xử lý | Cảm biến           | Nhà cung cấp | SKU          | Nhận dạng bảng              |
+| Bộ xử lý | Cảm biến           | Nhà cung cấp | SKU          | Nhận dạng bo mạch            |
 |-------------|------------------|------------|--------------|---------------------------------|
 | Hi3516Cv100 | IMX222_spi_dc    | XM         |              | [BLK18C-0222-38X38_S-V1.03][1]  |
 | Hi3516Cv100 | OV2710_i2c_dc    | Jovision   |              | IPG5020A-H-V1.0                 |
@@ -116,6 +116,5 @@ _Nếu bạn có một thiết bị được hỗ trợ khác để thêm, vui l
 [7]: https://github.com/OpenIPC/device-mjsxj02hl
 
 
-[^2]: WiFi có thể được bật với flash 8MB bằng cách sử dụng bản dựng tùy chỉnh hoặc bằng cách nâng cấp lên flash 16MB và sử dụng firmware Ultimate.
-
+[^2]: WiFi có thể được bật với bộ nhớ flash 8MB bằng cách sử dụng bản dựng tùy chỉnh hoặc bằng cách nâng cấp lên bộ nhớ flash 16MB và sử dụng firmware Ultimate.
 

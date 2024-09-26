@@ -6,9 +6,9 @@ Syslog từ xa
 
 Đôi khi cần phải lấy nhật ký từ nhiều thiết bị OpenIPC từ xa.
 
-Điều này không có gì khó khăn, bạn cần cấu hình máy chủ bằng cách bật tùy chọn nhận thông tin và ghi địa chỉ IP của nó trong lệnh gọi đến trình xử lý trên camera.
+Việc này không có gì khó khăn, bạn cần cấu hình máy chủ bằng cách bật tùy chọn nhận thông tin và ghi địa chỉ IP của nó trong lệnh gọi đến trình xử lý trên camera.
 
-Sẽ bắt đầu với camera. Thêm tùy chọn -R địa chỉ-ip-máy-chủ:514 với địa chỉ như được hiển thị trong ví dụ và khởi động lại thiết bị.
+Bắt đầu với camera. Thêm tùy chọn `-R địa-chỉ-ip-máy-chủ:514` với địa chỉ như được hiển thị trong ví dụ và khởi động lại thiết bị.
 
 ```bash
 root@openipc-hi3516ev300:~# differ /etc/init.d/S01syslogd
@@ -28,7 +28,7 @@ root@openipc-hi3516ev300:~# differ /etc/init.d/S01syslogd
  [ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
 ```
 
-Trong tệp cấu hình máy chủ, hãy ghi lại các tùy chọn về số cổng và giao thức nào để lắng nghe nó và khởi động lại dịch vụ.
+Trong tệp cấu hình máy chủ, hãy ghi lại các tùy chọn về số cổng và giao thức nào để lắng nghe và khởi động lại dịch vụ.
 
 ```diff
 --- rsyslog.conf.orig 2022-09-30 16:41:52.081353630 +0300
@@ -52,5 +52,5 @@ Trong tệp cấu hình máy chủ, hãy ghi lại các tùy chọn về số c�
  module(load="imklog" permitnonkernelselfacility="on")
 ```
 
-Hoan nghênh ý kiến ​​và bổ sung. Tạm biệt !
+Hoan nghênh các bình luận và bổ sung. Tạm biệt! 
 

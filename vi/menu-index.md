@@ -18,7 +18,7 @@ Chúng tôi sẽ rất biết ơn mọi phản hồi và đề xuất.
 * [OpenIPC trên GitHub](https://github.com/OpenIPC/) - Tổ chức GitHub, hầu hết các dự án được lưu trữ tại đây.
 * [OpenIPC trên OpenCollective](https://opencollective.com/openipc) - Cộng đồng OpenCollective.
 * [OpenIPC trên Twitter](https://twitter.com/openipc) - Tin tức chính của chúng tôi.
-* [OpenIPC trên YouTube](https://www.youtube.com/channel/UCaXlbR2uGTRFh8jQ2lCFd2g) - Hướng dẫn và luồng của chúng tôi (trong kế hoạch).
+* [OpenIPC trên YouTube](https://www.youtube.com/channel/UCaXlbR2uGTRFh8jQ2lCFd2g) - Hướng dẫn và luồng của chúng tôi (đang trong kế hoạch).
 
 
 ## Các nhóm trò chuyện Telegram
@@ -27,7 +27,7 @@ Chúng tôi sẽ rất biết ơn mọi phản hồi và đề xuất.
 * [OpenIPC modding](https://t.me/openipc_modding) (RU) - các vấn đề chung về sửa đổi firmware thiết bị IPCam, [*](https://combot.org/c/-1001247643198)
 * [OpenIPC development](https://t.me/openipc_software) (RU) - HiSilicon, XM porting trong OpenWrt và các vấn đề về lập trình, [*](https://combot.org/c/-1001196905312)
 * [OpenIPC advice](https://t.me/openipc_advice) (RU) - các vấn đề, tìm kiếm giải pháp, các cuộc trò chuyện dài, [*](https://combot.org/c/1385065634)
-* [OpenIPC Iranian](https://t.me/joinchat/T_GwQUBTJdfXJrFb) (IR) - nhóm đặc biệt dành cho người dùng Iran / تیم OpenIPC برای کاربران ایرانی, [*](https://combot.org/c/-1001341239361)
+* [OpenIPC Iranian](https://t.me/joinchat/T_GwQUBTJdfXJrFb) (IR) - nhóm đặc biệt dành cho người dùng Iran / OpenIPC Team dành cho người dùng Iran, [*](https://combot.org/c/-1001341239361)
 * [OpenIPC demo](https://t.me/openipc_demo)  (EN/RU) - bot thử nghiệm với các nút, sau khi kết nối, hãy nhập "/menu", [*](https://combot.org/c/1414887196)
 * [OpenIPC ExIPCam](https://t.me/ExIPCam) (RU) - Chương trình ExIPCam và sửa chữa phần cứng/phần mềm thiết bị, [*](https://combot.org/c/1213889378)
 * [OpenIPC updates](https://t.me/s/openipc_updates) (RU) - Kênh thông tin cập nhật Firmware & Phần mềm
@@ -38,14 +38,14 @@ Chúng tôi sẽ rất biết ơn mọi phản hồi và đề xuất.
 
 ### Firmware
 
-* [openipc-2.x](https://github.com/openipc/firmware) - Hệ thống phát triển và tạo Firmware dựa trên Buildroot.
-* [openipc-1.0][chaos_calmer] - Hệ thống phát triển và tạo Firmware dựa trên OpenWrt 15.05.
+* [openipc-2.x](https://github.com/openipc/firmware) - Hệ thống phát triển và tạo firmware dựa trên Buildroot.
+* [openipc-1.0][chaos_calmer] - Hệ thống phát triển và tạo firmware dựa trên OpenWrt 15.05.
 * [coupler][coupler] - Chuyển đổi liền mạch giữa firmware camera video.
 
-### Streamers
+### Trình phát trực tuyến
 
-* [majestic](https://openipc.org/majestic-endpoints) - Bộ phát trực tuyến IPCam phổ dụng.
-* [mini][mini] - Bộ phát trực tuyến camera IP Mini mã nguồn mở.
+* [majestic](https://openipc.org/majestic-endpoints) - Trình phát trực tuyến IPCam phổ dụng.
+* [mini][mini] - Trình phát trực tuyến camera IP Mini mã nguồn mở.
 
 ### Công cụ
 
@@ -61,19 +61,19 @@ Chúng tôi sẽ rất biết ơn mọi phản hồi và đề xuất.
 
 ## Các nhà phát triển
 
-| Tên                                                             | Vai trò                                                   | Tham gia                                                            |
+| Tên                                                             | Vai trò                                                  | Tham gia                                                            |
 |------------------------------------------------------------------|--------------------------------------------------------|--------------------------------------------------------------------------|
-| [Dmitry Ilyin](https://web.telegram.org/#/im?p=@widgetii)        | đồng sáng lập và người tham gia chính của dự án OpenIPC | [ipctool][ipctool], [majestic][majestic], [mini][mini], [motors][motors] |
-| [Dmitry Ermakov](https://web.telegram.org/#/im?p=@dimerrr)       | người tham gia chính                                       | [coupler][coupler], [firmware][firmware], [ipctool][ipctool]             |
-| [Igor Zalatov](https://web.telegram.org/#/im?p=@FlyRouter)       | **người sáng lập dự án và điều phối viên phát triển**        | [chaos_calmer][chaos_calmer], [firmware][firmware], [wiki][wiki]         |
-| [Ivan Pozdeev](https://web.telegram.org/#/im?p=@John)            | nhà phát triển                                              | [microbe-web][webui], [yaml-cli][yaml-cli]                               |
-| [Konstantin](#)                                                  | nhà phát triển                                              | [hisi-trace][hisi-trace], [yaml-cli][yaml-cli]                           |
-| [Maksim Patrushev](https://web.telegram.org/#/im?p=@maxi380)     | nhà phát triển                                              | [motors][motors]                                                         |
-| [Maxim Chertov](https://web.telegram.org/#/im?p=@mAX3773)        | đồng sáng lập dự án OpenIPC                      | [chaos_calmer][chaos_calmer], [ipctool][ipctool], [mini][mini]           |
-| [Paul Philippov](https://web.telegram.org/#/im?p=@themactep)     | người tham gia chính                                       | [microbe-web][webui]                                                     |
-| [Sergey Sharshunov](https://web.telegram.org/#/im?p=@USSSSSH)    | đồng sáng lập dự án OpenIPC                      | [chaos_calmer][chaos_calmer], [burn][burn]                               |
-| [Temirkhan Myrzamadi](https://web.telegram.org/#/im?p=@hirrolot) | người tham gia chính                                       | [smolrtsp][smolrtsp]                                                     |
-| [Vasiliy Yakovlev](https://web.telegram.org/#/im?p=@#)           | người hỗ trợ chung                                    |                                                                          |
+| [Dmitry Ilyin](https://web.telegram.org/#/im?p=@widgetii)        | đồng sáng lập và người tham gia chính của dự án OpenIPC  | [ipctool][ipctool], [majestic][majestic], [mini][mini], [motors][motors] |
+| [Dmitry Ermakov](https://web.telegram.org/#/im?p=@dimerrr)       | người tham gia chính                                      | [coupler][coupler], [firmware][firmware], [ipctool][ipctool]             |
+| [Igor Zalatov](https://web.telegram.org/#/im?p=@FlyRouter)       | **người sáng lập dự án và điều phối viên phát triển**       | [chaos_calmer][chaos_calmer], [firmware][firmware], [wiki][wiki]         |
+| [Ivan Pozdeev](https://web.telegram.org/#/im?p=@John)            | nhà phát triển                                             | [microbe-web][webui], [yaml-cli][yaml-cli]                               |
+| [Konstantin](#)                                                  | nhà phát triển                                             | [hisi-trace][hisi-trace], [yaml-cli][yaml-cli]                           |
+| [Maksim Patrushev](https://web.telegram.org/#/im?p=@maxi380)     | nhà phát triển                                             | [motors][motors]                                                         |
+| [Maxim Chertov](https://web.telegram.org/#/im?p=@mAX3773)        | đồng sáng lập dự án OpenIPC                       | [chaos_calmer][chaos_calmer], [ipctool][ipctool], [mini][mini]           |
+| [Paul Philippov](https://web.telegram.org/#/im?p=@themactep)     | người tham gia chính                                      | [microbe-web][webui]                                                     |
+| [Sergey Sharshunov](https://web.telegram.org/#/im?p=@USSSSSH)    | đồng sáng lập dự án OpenIPC                       | [chaos_calmer][chaos_calmer], [burn][burn]                               |
+| [Temirkhan Myrzamadi](https://web.telegram.org/#/im?p=@hirrolot) | người tham gia chính                                      | [smolrtsp][smolrtsp]                                                     |
+| [Vasiliy Yakovlev](https://web.telegram.org/#/im?p=@#)           | người hỗ trợ chung                                     |                                                                          |
 
 
 ### Hỗ trợ

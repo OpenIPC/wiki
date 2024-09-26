@@ -6,7 +6,7 @@ Trình phát trực tiếp Majestic
 
 ### Lời mở đầu
 
-Majestic là một ứng dụng phát trực tiếp video, trái tim của firmware của chúng tôi (liên quan đến chức năng camera / giám sát video). Majestic có thể cấu hình thông qua tệp /etc/majestic.yaml và có nhiều tính năng / dịch vụ được bật theo mặc định. Các tùy chọn không cần thiết có thể được tắt để bảo mật và hiệu suất tốt hơn. Xem /etc/majestic.full để biết các tùy chọn cấu hình.
+Majestic là một ứng dụng phát trực tiếp video, trái tim của firmware của chúng tôi (liên quan đến chức năng camera / giám sát video). Majestic có thể cấu hình thông qua tệp /etc/majestic.yaml và có nhiều tính năng/dịch vụ được bật theo mặc định. Các tùy chọn không cần thiết có thể được tắt để bảo mật và hiệu suất tốt hơn. Xem /etc/majestic.full để biết các tùy chọn cấu hình.
 
 ### Tín hiệu điều khiển
 
@@ -20,7 +20,7 @@ Majestic là một ứng dụng phát trực tiếp video, trái tim của firmw
 Majestic hỗ trợ nhiều định dạng âm thanh, video và hình ảnh tĩnh, v.v.
 Bạn có thể tìm thấy danh sách đầy đủ các điểm cuối khả dụng trên [trang này](https://openipc.org/majestic-endpoints).
 
-Tham số điều khiển JPEG dài không phù hợp với ví dụ trên trang web và chúng tôi xuất bản nó tại đây:
+Tham số điều khiển JPEG dài không vừa với ví dụ trên trang web và chúng tôi xuất bản nó tại đây:
 
 `/image.jpg?width=640&height=360&qfactor=73&color2gray=1`
 
@@ -100,7 +100,7 @@ Bạn sẽ thấy tập lệnh chạy sau các sự kiện phát hiện chuyển
 cli -s .video0.codec h264
 cli -s .audio.enabled true
 cli -s .outgoing.enabled true
-cli -s .outgoing.server rtmp://a.rtmp.youtube.com/live2/you-key-here
+cli -s .outgoing.server rtmp://a.rtmp.youtube.com/live2/your-key-here
 reboot
 ```
 
@@ -150,7 +150,7 @@ echo viewer:123456 | chpasswd
 
 ### JPEG và MJPEG
 
-Nhằm mục đích thống nhất và tiêu chuẩn hóa cho tất cả các nền tảng, cũng như tăng tính ổn định của trình phát trực tiếp, kích thước hình ảnh sẽ luôn bằng kích thước trên kênh Video0 và không có cài đặt riêng biệt.
+Nhằm mục đích thống nhất và tiêu chuẩn hóa cho tất cả các nền tảng, cũng như tăng tính ổn định của trình phát trực tiếp, kích thước hình ảnh sẽ luôn bằng kích thước trên kênh Video0 và không có cài đặt riêng biệt nào được cung cấp.
 
 ### ROI
 
@@ -216,4 +216,5 @@ curl -u root:12345 --data-binary @test.pcm http://192.168.1.10/play_audio
 [ffplay]: https://ffmpeg.org/ffplay.html
 [ffmpeg]: https://ffmpeg.org/
 [sox]: https://en.wikipedia.org/wiki/SoX
+
 

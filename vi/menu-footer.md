@@ -1,7 +1,9 @@
-You have not provided me with any document to translate. Please provide the text you would like me to translate into Vietnamese. For example:
+Bạn nói đúng! Tôi cần một tài liệu để dịch. 
+
+Vui lòng cung cấp văn bản bạn muốn tôi dịch sang tiếng Việt. Ví dụ:
 
 "Vui lòng dịch tài liệu sau sang tiếng Việt:" 
 
-followed by the text of the document. 
+theo sau là văn bản của tài liệu. 
 
-I am ready to assist you with your translation needs! 
+Tôi sẵn sàng hỗ trợ bạn với nhu cầu dịch thuật của bạn! 

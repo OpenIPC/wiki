@@ -1,14 +1,14 @@
-## Wiki OpenIPC
+# Wiki OpenIPC
 [Mục lục](../README.md)
 
 ## Tích hợp PTZ với Home Assistant
 
-Tích hợp này dựa trên lệnh ssh tới firmware OpenIPC để tích hợp các điều khiển PTZ, dành cho các camera không hỗ trợ ONVIF.
+Tích hợp này dựa trên lệnh SSH tới firmware OpenIPC để tích hợp các điều khiển PTZ, dành cho các camera không hỗ trợ ONVIF.
 
 ## Cấu hình Camera
 Tải các mô-đun với các tham số (bạn có thể cần thử nghiệm với các giá trị hmaxstep và vmaxstep cho camera cụ thể của mình).
 
-Sao chép motor_sample.ko ---> bộ nhớ trong (sao chép ssh)
+Sao chép motor_sample.ko ---> bộ nhớ trong (sao chép qua SSH)
 ```
 scp "C:\Users\Downloads\sample_motor.ko" root@192.168.1.29:/sample_motor.ko
 ```
@@ -20,10 +20,10 @@ Thêm các dòng này
 ```
 # addmod
 insmod /sample_motor.ko vstep_offset=0 hmaxstep=2130 vmaxstep=1600
-# go to 0 position 
+# di chuyển đến vị trí 0 
 t31-kmotor -d   h -r
 ```
-Thay đổi chế độ tệp (thêm quyền thực thi)
+Thay đổi quyền truy cập tệp (thêm quyền thực thi)
 ```
  $ chmod +x /etc/rc.local
 ```
@@ -89,7 +89,7 @@ c101_r:
 ```
 
 **TẬP LỆNH**
-Tập lệnh này được tìm thấy trong kho lưu trữ này
+Bạn có thể tìm thấy tập lệnh này trong kho lưu trữ này
 https://github.com/OpenIPC/motors/tree/4c7dc45e5e877f38c076343f361159844374920a/t31-kmotor
 
 Tạo tập lệnh này trong thư mục /config
@@ -97,7 +97,7 @@ Tạo tập lệnh này trong thư mục /config
 ```
 vi camara_scrip.sh
 ```
-Dán tệp này
+Dán nội dung sau
 ```
 #!/bin/bash
 
@@ -157,12 +157,12 @@ chmod +x camara_scrip.sh
 ```
 Nhập dữ liệu camera của bạn (tên trước ví dụ c101)
 
-**Lưu ý:** cần tạo tập lệnh cho các tệp khác (configuration.yml và scrips.yml)
+**Lưu ý:** cần tạo tập lệnh cho các tệp khác (configuration.yml và scripts.yml)
 
 
 
 ## Ví dụ Lovelace
-Thêm đoạn trích này vào một thẻ mới theo cách thủ công (định dạng yaml)
+Thêm đoạn mã này vào một thẻ mới theo cách thủ công (định dạng YAML)
 ```
 camera_view: live
 type: picture-elements
@@ -237,24 +237,3 @@ Ví dụ về chế độ xem
 
 ![Giao diện GUI](../images/GUI_Interface.png)
 # Tận hưởng luồng.
-
-
-**Giải thích thuật ngữ:**
-
-* **PTZ:** Pan-Tilt-Zoom, là khả năng điều khiển camera xoay ngang, dọc và phóng to/thu nhỏ.
-* **Home Assistant:** Là một nền tảng tự động hóa nhà mã nguồn mở.
-* **ONVIF:** Là một tiêu chuẩn mở cho các thiết bị giám sát IP.
-* **SSH:** Secure Shell, là một giao thức kết nối an toàn đến máy chủ từ xa.
-* **Module:** Mô-đun, là một phần mềm có thể được tải vào kernel Linux.
-* **Autostart script:** Tập lệnh tự động khởi động, là một tập lệnh được thực thi khi hệ thống khởi động.
-* **Docker:** Là một nền tảng ảo hóa container.
-* **sshpass:** Là một công cụ cho phép bạn cung cấp mật khẩu cho SSH thông qua dòng lệnh.
-* **configuration.yaml:** Là tệp cấu hình chính cho Home Assistant.
-* **scripts.yaml:** Là tệp cấu hình cho các tập lệnh trong Home Assistant.
-* **Lovelace:** Là giao diện người dùng dựa trên web cho Home Assistant.
-* **YAML:** Là một ngôn ngữ đánh dấu dữ liệu được sử dụng trong các tệp cấu hình.
-* **Picture-elements card:** Là một loại thẻ trong Lovelace cho phép bạn tùy chỉnh giao diện của camera.
-
-
-
-

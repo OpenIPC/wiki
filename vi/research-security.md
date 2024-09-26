@@ -1,7 +1,7 @@
 # OpenIPC Wiki
 [Mục lục](../README.md)
 
-Truy cập SSH, telnet, FTP và các dịch vụ khác
+Truy cập SSH, Telnet, FTP và các dịch vụ khác
 ---------------------------------------------
 
 Rất thường xuyên, firmware gốc cung cấp quyền truy cập vào hệ điều hành của nó nhưng
@@ -45,7 +45,7 @@ mật khẩu văn bản thuần túy ban đầu có thể được chọn trong 
 phải vài giờ, đặc biệt là sử dụng từ điển chất lượng cao.
 
 Trong ví dụ trên, chúng tôi đã sử dụng mật khẩu "openipc". Bạn có thể kiểm tra tính hợp lệ của
-mật khẩu bằng `mkpasswd` hoặc `openssl`:
+mật khẩu bằng cách sử dụng `mkpasswd` hoặc `openssl`:
 
 ```bash
 $ mkpasswd -m md5crypt -S bh2njiGH openipc
@@ -54,9 +54,9 @@ $ openssl passwd -1 -salt bh2njiGH openipc
 $1$bh2njiGH$4duacOMcXDh6myANzbZTf.
 ```
 
-Khi mật khẩu được tìm thấy, nên chia sẻ công khai để những người khác
-nhà nghiên cứu trong lĩnh vực này có thể dành nguồn lực mật mã của họ cho
-khám phá thêm nhiều mật khẩu chưa biết. Chia sẻ là quan tâm, các bạn!
+Khi tìm thấy mật khẩu, nên chia sẻ công khai để các nhà
+nghiên cứu khác trong lĩnh vực này có thể dành nguồn lực mật mã của họ cho
+việc khám phá thêm nhiều mật khẩu chưa biết. Chia sẻ là quan tâm, các bạn!
 
 ### Một số mật khẩu mà chúng tôi tìm thấy trong các firmware khác nhau
 
@@ -105,43 +105,43 @@ khám phá thêm nhiều mật khẩu chưa biết. Chia sẻ là quan tâm, cá
 ### Chiếm quyền mật khẩu mặc định
 > _đã thử nghiệm trên Goke_
 
-Qua giao diện UART, có thể tạm thời làm gián đoạn trình tự khởi động bình thường
-và chuyển sang một trình bao Linux hạn chế ở giai đoạn đầu của
+Thông qua giao diện UART, có thể tạm thời làm gián đoạn trình tự khởi động bình thường
+và chuyển sang một shell Linux hạn chế ở giai đoạn đầu
 khởi động hệ thống.
 ```
 setenv bootargs ${bootargs} single init=/bin/sh
 boot
 ```
-Trình bao này sẽ không tải toàn bộ hệ thống đang hoạt động, vì vậy bạn phải sửa đổi thủ công.
-Đầu tiên, gắn kết hệ thống tệp `/rom`:
+Shell này sẽ không tải toàn bộ hệ thống đang hoạt động, vì vậy bạn phải sửa đổi nó theo cách thủ công.
+Đầu tiên, hãy mount hệ thống tệp `/rom`:
 ```
 mount -t jffs2 /dev/mtdblock3 /rom
 ```
-Gắn kết phần còn lại của các điểm gắn kết từ `/etc/fstab`:
+Mount phần còn lại của các điểm mount từ `/etc/fstab`:
 ```
 mount -a
 ```
-Ngoài ra, hãy gắn kết thẻ SD để sao chép tệp đến và đi:
+Ngoài ra, hãy mount thẻ SD để sao chép tệp đến và đi:
 ```
-mount /dev/mmcblk0p1 on /mnt/s0
+mount /dev/mmcblk0p1 trên /mnt/s0
 ```
-Trên hệ thống tệp `/rom`, bạn có thể chỉnh sửa tệp `/room/etc/passwd` nhưng sau khi
+Trên hệ thống tệp `/rom`, bạn có thể chỉnh sửa tệp `/room/etc/passwd` nhưng một khi
 thiết bị khởi động lại, nó sẽ được đặt lại về mặc định. Điều này xảy ra vì có
-tệp bin hướng dẫn tạo lại tệp `passwd` trong mỗi lần khởi động, vì vậy chúng ta cần sửa đổi
+một tệp bin hướng dẫn tạo lại tệp `passwd` trong mỗi lần khởi động, vì vậy chúng ta cần sửa đổi
 tệp thực thi đó.
 
 Sao chép `system.dat` vào thẻ SD:
 ```
 cp /rom/system.dat /mnt/s0
 ```
-Trên máy tính linux, giải nén tệp `system.dat` bằng cách sử dụng `unsquashfs`:
+Trên máy tính Linux, giải nén tệp `system.dat` bằng cách sử dụng `unsquashfs`:
 ```
 mkdir squashfs-temp
 cd squashfs-temp
 unsquashfs system.dat
 ```
-Tìm tệp hướng dẫn và chỉnh sửa nội dung của nó trong trình soạn thảo hex để sửa đổi tên của
-tệp mà mật khẩu được ghi trong mỗi lần khởi động lại. Tìm kiếm `/etc/passwd` và
+Tìm tệp hướng dẫn và chỉnh sửa nội dung của nó trong trình soạn thảo hex để sửa đổi tên
+của tệp mà mật khẩu được ghi trong mỗi lần khởi động lại. Tìm kiếm `/etc/passwd` và
 thay đổi một chữ cái trong tên của nó thành một cái gì đó khác, như `/etc/passwT`.
 
 Đóng gói hệ thống tệp squash bằng cách sử dụng `mksquashfs`:
@@ -166,5 +166,4 @@ bạn khởi động lại thiết bị, bạn sẽ có hệ thống hoạt đ�
 
 
 ---------------------------------------------------
-
 

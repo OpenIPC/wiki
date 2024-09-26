@@ -1,4 +1,4 @@
-## Wiki OpenIPC
+# Wiki OpenIPC
 [Mục lục](../README.md)
 
 Ghi chú nghiên cứu và gỡ lỗi SoC Ingenic
@@ -16,16 +16,16 @@ Options:
   -e, --enable                   Bật kênh
   -d, --disable                  Tắt kênh
   -p, --polarity=<0|1>           Đặt cực tính (0: Đảo ngược, 1: Bình thường)
-  -D, --duty=<duty_ns>           Đặt chu kỳ nhiệm vụ tính bằng ns
-  -P, --period=<period_ns>       Đặt chu kỳ tính bằng ns
-  -r, --ramp=<value>             Tăng dần PWM (+value: Tăng dần, -value: Giảm dần)
+  -D, --duty=<duty_ns>           Đặt chu kỳ nhiệm vụ tính bằng nano giây
+  -P, --period=<period_ns>       Đặt chu kỳ tính bằng nano giây
+  -r, --ramp=<value>             Tăng/giảm dần PWM (+value: Tăng dần, -value: Giảm dần)
   -x, --max_duty=<max_duty_ns>   Đặt chu kỳ nhiệm vụ tối đa cho việc tăng dần
   -n, --min_duty=<min_duty_ns>   Đặt chu kỳ nhiệm vụ tối thiểu cho việc tăng dần
   -h, --help                     Hiển thị thông báo trợ giúp này
 ```
 
 Ví dụ về lệnh:  
-Bật đèn LED, Dim ON: Đặt kênh PWM 3 được bật, Chu kỳ thành 1000000, Nhiệm vụ tối thiểu 0, Nhiệm vụ tối đa 1000000, tốc độ tăng dần + Dim Up, - để Dim Down  
+Bật đèn LED, Dim ON: Đặt kênh PWM 3 được bật, Chu kỳ thành 1000000, Nhiệm vụ tối thiểu 0, Nhiệm vụ tối đa 1000000, tốc độ tăng dần + để tăng độ sáng, - để giảm độ sáng.
 
 `ingenic-pwm -c 3 -e -p 1 -P 1000000 -n 0 -x 1000000 -r 50000`  
 `ingenic-pwm -c 3 -e -p 1 -P 1000000 -n 0 -x 1000000 -r -50000`  
@@ -79,7 +79,7 @@ Lưu ý: Một số mô-đun kernel cũ có thể phàn nàn về các ký hiệ
 [    4.357160] sample_core: Ký hiệu không xác định __dynamic_dev_dbg (lỗi 1)
 [    4.361299] sample_hal: Ký hiệu không xác định __dynamic_dev_dbg (lỗi 1)
 ```
-Để giải quyết vấn đề này, hãy đảm bảo bạn cập nhật toàn bộ cài đặt OpenIPC lên phiên bản mới nhất sau ngày 10-20-2023 hoặc thử cập nhật các mô-đun kernel riêng lẻ gặp sự cố. Là phương sách cuối cùng, bạn cũng có thể tắt `CONFIG_DYNAMIC_DEBUG` trong cấu hình kernel của mình, nhưng thử nghiệm rộng rãi đã cho thấy đây không phải là vấn đề.
+Để giải quyết vấn đề này, hãy đảm bảo bạn cập nhật toàn bộ cài đặt OpenIPC lên phiên bản mới nhất sau ngày 20/10/2023 hoặc thử cập nhật các mô-đun kernel riêng lẻ gặp sự cố. Là phương sách cuối cùng, bạn cũng có thể tắt `CONFIG_DYNAMIC_DEBUG` trong cấu hình kernel của mình, nhưng thử nghiệm rộng rãi đã cho thấy đây không phải là vấn đề.
 
 ---
 
@@ -97,19 +97,19 @@ Sử dụng các lệnh này để bật hoặc tắt thiết bị SDIO sau khi 
 `echo "INSERT" > /sys/devices/platform/jzmmc_v1.2.X/present`  
 `echo "REMOVE" > /sys/devices/platform/jzmmc_v1.2.X/present` 
 
-Trong đó X = thiết bị MMC bạn muốn điều khiển MSC0 = 0 MSC1 = 1
+Trong đó X = thiết bị MMC bạn muốn điều khiển  MSC0=0 MSC1=1
 
 ---
 
 ### IMP-Control
 
-IMP-Control là một công cụ linh hoạt được thiết kế để điều khiển và cấu hình nhiều tham số trong thư viện IMP Ingenic, trong trình phát Majestic. Công cụ này cho phép tinh chỉnh cả cài đặt âm thanh và video để đạt được hiệu suất tối ưu trong các môi trường khác nhau.
+IMP-Control là một công cụ linh hoạt được thiết kế để điều khiển và cấu hình nhiều tham số trong thư viện IMP Ingenic, trong trình phát trực tuyến Majestic. Công cụ này cho phép tinh chỉnh cả cài đặt âm thanh và video để đạt được hiệu suất tối ưu trong các môi trường khác nhau.
 
 #### Các tính năng và chức năng chính
 1. **Điều chỉnh âm thanh:**
-   - `aihpf`: Bật/tắt bộ lọc High Pass Filter.
+   - `aihpf`: Bật/tắt bộ lọc thông cao.
    - `aiagc`: Điều khiển khuếch đại tự động với các mức khuếch đại và bù có thể điều chỉnh.
-   - `ains`: Loại bỏ tiếng ồn với các mức cường độ.
+   - `ains`: Khử nhiễu với các mức cường độ.
    - `aiaec`: Bật/tắt khử tiếng vọng.
    - `aivol` và `aovol`: Điều chỉnh âm lượng đầu vào và đầu ra âm thanh tương ứng.
    - `aigain` và `aogain`: Đặt mức khuếch đại đầu vào và đầu ra âm thanh.
@@ -123,7 +123,7 @@ IMP-Control là một công cụ linh hoạt được thiết kế để điều
    - `dpc`, `drc`: Điều khiển cường độ DPC và DRC.
    - `hilight`: Điều chỉnh cường độ điểm sáng.
    - `again`, `dgain`: Đặt mức khuếch đại tương tự và kỹ thuật số.
-   - `hue`: Sửa đổi màu sắc.
+   - `hue`: Sửa đổi sắc độ màu.
    - `ispmode`: Chuyển đổi giữa chế độ ngày và đêm.
    - `flicker`: Cài đặt chống nhấp nháy.
 
