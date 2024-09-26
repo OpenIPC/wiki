@@ -98,7 +98,7 @@ scp uImage* rootfs* root@<yourcameraip>:/tmp/
 ```bash
 scp -O uImage* rootfs* root@<yourcameraip>:/tmp/
 ```
-ssh
+
 #### On the camera:
 Now create a terminal session with the camera e.g. ssh root@192.168.1.10 and run the sysupgrade command pointing at your new images in /tmp.
 
