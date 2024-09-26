@@ -3,31 +3,50 @@
 
 Upgrading firmware
 ------------------
+Once the initial installation of the OpenIPC software for your camera is complete it is possible to upgrade it either via the Majestic web interface or manually via a terminal window.
 
-### Upgrading from GitHub
-For old firmware running `sysupgrade` without parameters is enough. For newer firmware, run `sysupgrade -k -r` to update both kernel and rootfs.
+This article is about how to manually perform an update using a terminal window using the sysupgrade command.
 
-__ATTENTION! Upgrading firmware can lead to "bricking" your camera. Make sure you are prepared both morally and skillwise. Have your rescue SD card and/or UART adapter ready. Be prepared to de-solder and reprogram flash chip as the last resort. Do not upgrade production cameras unless you really have to!__
+_Note: By default, sysupgrade will reboot the camera to complete the update. If you don't wish to do that then use the -x option (see sysupgrade --help for all options)_
 
-### Upgrading from a TFTP server
+### Upgrading from the GitHub latest release.
+By default, running sysupgrade will attempt to download the latest software for your camera model from the github sources. 
 
-[Set up a TFTP server](installation-tftpd.md).
+There are other options available such as pointing to your own online .tgz file or a local copy of the Linux kernel (uImage) and camera software (rootfs.squashfs)
 
-Go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC.
-Extract content of the bundle into the root directory of your TFTP server.
+For old firmware running `sysupgrade` without parameters is enough. For newer firmware, run `sysupgrade -k -r` to update both kernel and rootfs is required
 
-On the camera run:
+__ATTENTION! Upgrading firmware can lead to "bricking" your camera. Make sure you are prepared both morally and skill wise. Have your rescue SD card and/or UART adapter ready. Be prepared to de-solder and reprogram flash chip as the last resort. Do not upgrade production cameras unless you really have to!__
 
-#### Github: From Linux
+### Using sysupgrade
+Typically running sysupgrade will give you the latest release for your camera, as described above, however if you wish to revert to a previous image, or load your own updates, then use any the following options. 
 
+Remember once you are ready to run sysupgrade you must use the syntax </br></br>
+`sysupgrade --kernel=/tmp/uImage.${soc} --rootfs=/tmp/rootfs.squashfs.${soc} -z` </br></br>where '${soc}' is your camera specific soc e.g. gk7205v300 
+otherwise the Github latest will be downloaded.
+
+### Using a TFTP server
+#### On your host machine:
+If you haven't already got a TFTP server running on your host machine then take a look at the Wiki article [Set up a TFTP server](installation-tftpd.md).
+
+If you don't already have the uImage and rootfs.squashfs images for your camera then go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC and extract the content of the bundle into the root directory of your TFTP server. 
+
+If you have built your own versions using a copy of the [firmware repository](https://github.com/OpenIPC/firmware) then your uImage and rootsfs.squashfs images will be in your _output/images_ folder. Copy these to the root of your tftp server.
+
+#### On the camera:
+You can either update the images from a Linux terminal session or from the U-Boot prompt if you have a UART serial connection and interrupted Linux loading.
+
+##### From Linux
 ```bash
 soc=$(fw_printenv -n soc)
 serverip=$(fw_printenv -n serverip)
+cd /tmp
 busybox tftp -r rootfs.squashfs.${soc} -g ${serverip}
 busybox tftp -r uImage.${soc} -g ${serverip}
+sysupgrade --kernel=/tmp/uImage.${soc} --rootfs=/tmp/rootfs.squashfs.${soc} -z
 ```
 
-#### Github: Alternatively, from U-Boot
+##### From U-Boot
 
 for 8MB image
 
@@ -49,37 +68,45 @@ tftp ${baseaddr} rootfs.squashfs.${soc}
 sf probe 0; sf erase 0x250000 0xA00000; sf write ${baseaddr} 0x250000 ${filesize}
 ```
 
-### Upgrading from local files
+Now restart the camera to load the new images
 
-Go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC.
-Unpack the bundle and upload its content on camera using `scp`:
+### Using scp
+#### On your host machine:
+If you don't already have the uImage and rootfs.squashfs images for your camera then go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC and extract the contents
+
+If you have built your own versions using a copy of the [firmware repository](https://github.com/OpenIPC/firmware) then your uImage and rootsfs.squashfs images will be in your _output/images_ folder.
+
+Now copy these to the camera using scp
 
 ```bash
 tar xvf <firmware.tgz>
 scp uImage* rootfs* root@<yourcameraip>:/tmp/
 ```
 
-On the camera run:
+#### On the camera:
+Now create a terminal session with the camera e.g. ssh root@192.168.1.10 and run the sysupgrade command pointing at your new images in /tmp.
 
 ```bash
 soc=$(fw_printenv -n soc)
 sysupgrade --kernel=/tmp/uImage.${soc} --rootfs=/tmp/rootfs.squashfs.${soc} -z
 ```
 
-### Upgrading from SD card
+### Upgrading from an SD card
+#### On your host machine
+If you don't already have the uImage and rootfs.squashfs images for your camera then go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC and extract the contents
 
-#### SD Card: From Linux
+If you have built your own versions using a copy of the [firmware repository](https://github.com/OpenIPC/firmware) then your uImage and rootsfs.squashfs images will be in your _output/images_ folder.
 
-Go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC.
-Insert an SD card into your desktop PC. Unpack the bundle and copy its content to the card:
+Insert an SD card into your host machine and copy the uImage and squashfs files to the card e.g.
 
 ```bash
-tar xvf <firmware.tgz>
 cp uImage* rootfs* /media/<username>/<card-id>/
 ```
 
+#### On your camera
 Insert the SD card into your camera.
-On the camera run:
+
+Create a terminal session and run the following
 
 ```bash
 soc=$(fw_printenv -n soc)
@@ -114,7 +141,7 @@ sf probe 0; sf erase 0x350000 0xa00000; sf write ${baseaddr} 0x350000 ${filesize
 
 ### Flashing U-Boot via ymodem
 
-Clean 320K of RAM amd load bootloader file into it:
+Clean 320K of RAM and load bootloader file into it:
 
 ```bash
 mw.b ${baseaddr} 0xff 0x50000
