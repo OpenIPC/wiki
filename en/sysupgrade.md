@@ -3,7 +3,7 @@
 
 Upgrading firmware
 ------------------
-Once the initial installation of the OpenIPC software for your camera is complete it is possible to upgrade it either via the Majestic web interface or manually via a terminal window.
+Once the initial installation of the OpenIPC software for your camera is complete it is possible to upgrade it either via the web interface or manually via a terminal window.
 
 This article is about how to manually perform an update using a terminal window using the sysupgrade command.
 
@@ -12,18 +12,18 @@ _Note: By default, sysupgrade will reboot the camera to complete the update. If 
 ### Upgrading from the GitHub latest release.
 By default, running sysupgrade will attempt to download the latest software for your camera model from the github sources. 
 
-There are other options available such as pointing to your own online .tgz file or a local copy of the Linux kernel (uImage) and camera software (rootfs.squashfs)
+There are other options available so you can use a local copy of the Linux kernel (uImage) and camera software (rootfs.squashfs)
 
 For old firmware running `sysupgrade` without parameters is enough. For newer firmware, run `sysupgrade -k -r` to update both kernel and rootfs is required
 
 __ATTENTION! Upgrading firmware can lead to "bricking" your camera. Make sure you are prepared both morally and skill wise. Have your rescue SD card and/or UART adapter ready. Be prepared to de-solder and reprogram flash chip as the last resort. Do not upgrade production cameras unless you really have to!__
 
 ### Using sysupgrade
-Typically running sysupgrade will give you the latest release for your camera, as described above, however if you wish to revert to a previous image, or load your own updates, then use any the following options. 
+Typically running sysupgrade will give you the latest release for your camera, as described above, however if you wish to revert to a previous image, or load your own updates, then use any the options described below. 
 
 Remember once you are ready to run sysupgrade you must use the syntax </br></br>
 `sysupgrade --kernel=/tmp/uImage.${soc} --rootfs=/tmp/rootfs.squashfs.${soc} -z` </br></br>where '${soc}' is your camera specific soc e.g. gk7205v300 
-otherwise the Github latest will be downloaded.
+otherwise the latest release on Github will be downloaded.
 
 ### Using a TFTP server
 #### On your host machine:
@@ -34,7 +34,11 @@ If you don't already have the uImage and rootfs.squashfs images for your camera 
 If you have built your own versions using a copy of the [firmware repository](https://github.com/OpenIPC/firmware) then your uImage and rootsfs.squashfs images will be in your _output/images_ folder. Copy these to the root of your tftp server.
 
 #### On the camera:
-You can either update the images from a Linux terminal session or from the U-Boot prompt if you have a UART serial connection and interrupted Linux loading.
+You can either update the images from a Linux terminal session or from the U-Boot prompt, if you have a UART serial connection and interrupted Linux loading.
+
+Check that your camera environment variable for the TFTP server is correct by looking for the _serverip_ entry when listing them with _fw_printenv_.
+
+If it needs updating use _fw_setenv serverip <your.tftp.ip.address>_ command.
 
 ##### From Linux
 ```bash
