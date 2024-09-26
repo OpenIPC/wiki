@@ -7,14 +7,14 @@ Once the initial installation of the OpenIPC software for your camera is complet
 
 This article is about how to manually perform an update using a terminal window using the sysupgrade command.
 
-_Note: By default, sysupgrade will reboot the camera to complete the update. If you don't wish to do that then use the -x option (see sysupgrade --help for all options)_
+_Note: By default, sysupgrade will reboot the camera to complete the update. If you don't wish to do that then use the -x option (see sysupgrade --help for all options)_.
 
 ### Upgrading from the GitHub latest release.
 By default, running sysupgrade will attempt to download the latest software for your camera model from the github sources. 
 
-There are other options available so you can use a local copy of the Linux kernel (uImage) and camera software (rootfs.squashfs)
+There are other options available so you can use a local copy of the Linux kernel (uImage) and camera software (rootfs.squashfs).
 
-For old firmware running `sysupgrade` without parameters is enough. For newer firmware, run `sysupgrade -k -r` to update both kernel and rootfs is required
+For old firmware running `sysupgrade` without parameters is enough. For newer firmware, run `sysupgrade -k -r` to update both kernel and rootfs is required.
 
 __ATTENTION! Upgrading firmware can lead to "bricking" your camera. Make sure you are prepared both morally and skill wise. Have your rescue SD card and/or UART adapter ready. Be prepared to de-solder and reprogram flash chip as the last resort. Do not upgrade production cameras unless you really have to!__
 
@@ -29,7 +29,11 @@ otherwise the latest release on Github will be downloaded.
 #### On your host machine:
 If you haven't already got a TFTP server running on your host machine then take a look at the Wiki article [Set up a TFTP server](installation-tftpd.md).
 
-If you don't already have the uImage and rootfs.squashfs images for your camera then go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC and extract the content of the bundle into the root directory of your TFTP server. 
+If you don't already have the uImage and rootfs.squashfs images for your camera then go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC and extract the content of the bundle into the root directory of your TFTP server.
+
+```bash
+tar xvf <firmware.tgz>
+```
 
 If you have built your own versions using a copy of the [firmware repository](https://github.com/OpenIPC/firmware) then your uImage and rootsfs.squashfs images will be in your _output/images_ folder. Copy these to the root of your tftp server.
 
@@ -72,21 +76,29 @@ tftp ${baseaddr} rootfs.squashfs.${soc}
 sf probe 0; sf erase 0x250000 0xA00000; sf write ${baseaddr} 0x250000 ${filesize}
 ```
 
-Now restart the camera to load the new images
+Now restart the camera to load the new images.
 
 ### Using scp
 #### On your host machine:
-If you don't already have the uImage and rootfs.squashfs images for your camera then go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC and extract the contents
-
-If you have built your own versions using a copy of the [firmware repository](https://github.com/OpenIPC/firmware) then your uImage and rootsfs.squashfs images will be in your _output/images_ folder.
-
-Now copy these to the camera using scp
+If you don't already have the uImage and rootfs.squashfs images for your camera then go to <https://github.com/OpenIPC/firmware/releases/tag/latest> and download the latest firmware bundle for your SoC and extract the contents.
 
 ```bash
 tar xvf <firmware.tgz>
+```
+
+If you have built your own versions using a copy of the [firmware repository](https://github.com/OpenIPC/firmware) then your uImage and rootsfs.squashfs images will be in your _output/images_ folder.
+
+Now copy these to the camera using scp.
+
+```bash
 scp uImage* rootfs* root@<yourcameraip>:/tmp/
 ```
 
+**Note:** If you get an error that '/usr/libexec/sftp-server could not be found' it is because in later versions of scp sftp is now used behind the scenes and this is not built into the busybox implementation currently. To force scp to use the legacy behavour use the -O option so 
+```bash
+scp -O uImage* rootfs* root@<yourcameraip>:/tmp/
+```
+ssh
 #### On the camera:
 Now create a terminal session with the camera e.g. ssh root@192.168.1.10 and run the sysupgrade command pointing at your new images in /tmp.
 
