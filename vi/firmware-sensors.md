@@ -4,11 +4,11 @@
 Các Cảm biến được Hỗ trợ
 -----------------
 
-Cảm biến được hỗ trợ trên cơ sở mỗi họ SoC (trên mỗi SDK).
-Để tra cứu danh sách các cảm biến được hỗ trợ cho SoC của bạn, trước tiên bạn cần xác định họ SoC của mình, sau đó kiểm tra gói tương ứng.
+Các cảm biến được hỗ trợ dựa trên từng dòng SoC (trên mỗi SDK).
+Để tra cứu danh sách các cảm biến được hỗ trợ cho SoC của bạn, trước tiên bạn cần xác định dòng SoC của mình, sau đó kiểm tra gói tương ứng.
 
-__Xin lưu ý rằng ngay cả khi bạn thấy trình điều khiển phù hợp với cảm biến của mình, điều đó không đảm bảo rằng trình điều khiển hoạt động như dự định,
-hoặc thậm chí nó sẽ được bao gồm trong tệp nhị phân cuối cùng cho SoC đó. Một số thử nghiệm và tinh chỉnh bổ sung có thể là cần thiết.__
+**Xin lưu ý rằng ngay cả khi bạn thấy trình điều khiển phù hợp với cảm biến của mình, điều đó không đảm bảo rằng trình điều khiển hoạt động như dự định,
+hoặc thậm chí nó sẽ được bao gồm trong tệp nhị phân cuối cùng cho SoC đó. Một số thử nghiệm và tinh chỉnh bổ sung có thể là cần thiết.**
 
 - [Ambarella S3L](https://github.com/OpenIPC/firmware/tree/master/general/package/ambarella-osdrv-s3l/files/sensor)
 - [Fullhan FH8852V100](https://github.com/OpenIPC/firmware/tree/master/general/package/fullhan-osdrv-fh8852v100/files/sensor)

@@ -14,5 +14,5 @@ nfsboot=tftp 0x42000000 uImage;setenv setargs setenv bootargs ${bootargsnfs};run
 run nfsboot
 ```
 
-Cách khởi động OpenIPC bằng NFS và TFTP mà không cần thay thế firmware gốc (bài đăng tiếng Nga):
+Cách khởi động OpenIPC bằng NFS và TFTP mà không cần thay thế firmware gốc (bài viết tiếng Nga):
 https://habr.com/ru/companies/ruvds/articles/774482/

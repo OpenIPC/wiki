@@ -3,22 +3,22 @@
 
 ## Tên công ty
 
-- Công ty TNHH Phần mềm Hangzhou Ezviz.
-- Công ty TNHH Vi điện tử Shanghai Fullhan.
-- Công ty TNHH Điện tử Shenzhen Huishi.
-- Công ty TNHH Shenzhen Topper Vision.
-- Công ty TNHH Công nghệ Shenzhen Gainstrong.
-- Công ty TNHH Công nghệ Quang học Yutong.
-- Công ty TNHH Công nghệ Shenzhen Hanvision.
-- Công ty TNHH Công nghệ Hangzhou Xiongmai.
-- Công ty TNHH Điện tử Gia đình Thông minh Shenzhen Gospell.
-- Công ty TNHH Công nghệ Shenzhen Zhangwo.
-- Công ty TNHH Phát triển Công nghệ Sunivision.
-- Công ty TNHH Công nghệ Longse.
-- Công ty TNHH Công nghệ Zhejiang Uniview.
-- Công ty TNHH Công nghệ Thế kỷ Shenzhen Zhongwei.
-- Công ty TNHH Công nghệ Tầm nhìn Shenzhen Hichip.
-- Công ty TNHH Khoa học và Công nghệ Thành Đô Powerview.
-- Công ty TNHH Công nghệ Thông tin Nam Kinh Ajcloud.
-- Công ty Cổ phần Quốc tế Ajcloud.
-- Công ty TNHH Công nghệ Wansview.
+- Hangzhou Ezviz Software Co., Ltd.
+- Shanghai Fullhan Microelectronics Co., Ltd.
+- Shenzhen Huishi Electronics Co., Ltd.
+- Shenzhen Topper Vision Co., Ltd.
+- Shenzhen Gainstrong Technology Co., Ltd.
+- Yutong Optical Technology Co., Ltd.
+- Shenzhen Hanvision Technology Co., Ltd.
+- Hangzhou Xiongmai Technology Co., Ltd.
+- Shenzhen Gospell Smarthome Electronic Co., Ltd.
+- Shenzhen Zhangwo Technology Co., Ltd.
+- Sunivision Technology Development Co., Ltd.
+- Longse Technology Co., Ltd.
+- Zhejiang Uniview Technologies Co., Ltd.
+- Shenzhen Zhongwei Century Technology Co., Ltd.
+- Shenzhen Hichip Vision Technology Co., Ltd.
+- Chengdu Powerview Science and Technology Co., Ltd.
+- Nanjing Ajcloud Infotech Co., Ltd.
+- Ajcloud International Inc.
+- Wansview Technology Co., Ltd.

@@ -17,7 +17,7 @@ Smartwares CIP-37210
 
 Bên cạnh camera, bạn sẽ cần các công cụ sau:
 - Tuốc nơ vít hoặc đầu vít PH0
-- Tuốc nơ vít lưỡi nhỏ, ví dụ: 0,6 × 3,5 mm
+- Tuốc nơ vít đầu dẹt nhỏ, ví dụ: 0,6 × 3,5 mm
 - Bộ chuyển đổi USB sang TTL để giao tiếp UART. (Tôi đã sử dụng thiết bị dựa trên CP2102, nhưng có [nhiều lựa chọn tốt khác](https://github.com/OpenIPC/wiki/blob/master/en/equipment-flashing.md))
 - Thẻ nhớ microSD (Tôi đã sử dụng thẻ 2 GB cũ)
 - Một số dây nhảy
@@ -30,45 +30,45 @@ Do đó, chúng ta sẽ cần kết hợp hai phương pháp lệch khỏi quy t
 
 #### Mở thiết bị
 
-Tháo vít phillips có thể nhìn thấy ở mặt sau của đế camera bằng tuốc nơ vít PH0.
-![unscrew](/images/cip-37210_open_001.jpg "Tháo vít phillips")
+Tháo vít Phillips có thể nhìn thấy ở mặt sau của đế camera bằng tuốc nơ vít PH0.
+![unscrew](/images/cip-37210_open_001.jpg "Tháo vít Phillips")
 
-Sử dụng tuốc nơ vít lưỡi nhỏ để cạy mở vỏ camera, nơi gắn đế:
+Sử dụng tuốc nơ vít đầu dẹt để cạy mở vỏ camera, nơi gắn đế:
 ![pry_open](/images/cip-37210_open_002.jpg "Cạy mở camera")
 
 #### Thiết lập kết nối UART
 
-Sau khi mở thiết bị, đã đến lúc thiết lập kết nối UART. Bật nguồn cho camera đang mở bằng bộ nguồn micro USB đi kèm. Bây giờ là lúc kiểm tra 4 lỗ chân có vẻ khả nghi trên đầu pcb: Đo điện áp của các lỗ chân bằng đồng hồ vạn năng của bạn, bằng cách kết nối chúng với GND (Tôi đã sử dụng một trong các miếng đệm xung quanh các vít ở giữa).
+Sau khi mở thiết bị, đã đến lúc thiết lập kết nối UART. Bật nguồn cho camera đang mở bằng bộ nguồn micro USB đi kèm. Bây giờ là lúc kiểm tra 4 lỗ chân có vẻ khả nghi trên đầu PCB: Đo điện áp của các lỗ chân bằng đồng hồ vạn năng của bạn, bằng cách kết nối chúng với GND (Tôi đã sử dụng một trong các miếng đệm xung quanh các vít ở giữa).
 
-Tôi tìm thấy hai lỗ chân có 3,3 V, một lỗ chân có điện áp hơi thấp hơn 3,3 V và một lỗ chân có 0 V. Bây giờ là lúc theo dõi các chân 3,3 V trong quá trình khởi động - chân có điện áp dao động là chân TX và chân 3,3 V ổn định là Vcc.
+Tôi tìm thấy hai lỗ chân có 3,3 V, một lỗ chân có điện áp hơi thấp hơn 3,3 V và một lỗ chân có 0 V. Bây giờ là lúc theo dõi các chân 3,3 V trong quá trình khởi động – chân có điện áp dao động là chân TX và chân 3,3 V ổn định là Vcc.
 
 **Tóm lại:** Lỗ chân gần vít đen nhất là RX, lỗ chân bên cạnh là TX, lỗ chân bên cạnh là GND. Kết nối GND với GND, TX với RX và RX với TX.
 
 ![uart_cip-37210](/images/uart_cip-37210_cropped.jpg "Các lỗ chân UART được đánh dấu trên PCB CIP-37210")
 
-Tôi đã sử dụng dây nhảy DuPont male-to-female đơn giản để kết nối với các lỗ chân. Tất nhiên có những giải pháp tốt hơn như hàn đầu nối vào các lỗ chân hoặc sử dụng móc thử nghiệm, nhưng miễn là dây nhảy không chạm vào nhau, nó sẽ hoạt động tốt.
+Tôi đã sử dụng dây nhảy DuPont male-to-female đơn giản để kết nối với các lỗ chân. Tất nhiên, có những giải pháp tốt hơn như hàn đầu nối vào các lỗ chân hoặc sử dụng móc kiểm tra, nhưng miễn là dây nhảy không chạm vào nhau, nó sẽ hoạt động tốt.
 
 ![uart_cip-37210_action](/images/uart_cip-37210_action.jpg "Kết nối UART đã được thiết lập.")
 
 #### Lưu firmware gốc
 
-Trước khi flash OpenIPC, có thể nên lưu firmware gốc, trong trường hợp bạn không thích OpenIPC và muốn khôi phục hoặc brick một cái gì đó. Vì tftp là không thể nên chúng ta sẽ lưu nội dung của flash vào thẻ nhớ microSD. Vì thiết bị chạy Linux nên bạn không cần phải lo lắng về việc định dạng thẻ nhớ microSD bây giờ. Khởi động camera trong khi kết nối với bộ chuyển đổi USB sang TTL của bạn và khởi động màn hình:
+Trước khi flash OpenIPC, bạn nên lưu firmware gốc, trong trường hợp bạn không thích OpenIPC và muốn quay trở lại hoặc vô tình làm hỏng ("brick") thiết bị. Vì tftp là không thể nên chúng ta sẽ lưu nội dung của flash vào thẻ nhớ microSD. Vì thiết bị chạy Linux nên bạn không cần phải lo lắng về việc định dạng thẻ nhớ microSD bây giờ. Khởi động camera trong khi kết nối với bộ chuyển đổi USB sang TTL của bạn và khởi động screen:
 
 ```sh
 sudo screen -L /dev/ttyUSB0 115200
 ```
 
-Bây giờ là lúc đăng nhập với tư cách root với mật khẩu `I81ou812` mà tôi tìm thấy [trên internet](https://gist.github.com/gabonator/74cdd6ab4f733ff047356198c781f27d). Thẻ nhớ microSD đã được gắn tự động vào điểm gắn kết `/mnt/sd/`, vì vậy hãy tạo một thư mục mới trên thẻ SD và đổ nội dung của flash:
+Bây giờ là lúc đăng nhập với tư cách root với mật khẩu `I81ou812` mà tôi tìm thấy [trên internet](https://gist.github.com/gabonator/74cdd6ab4f733ff047356198c781f27d). Thẻ nhớ microSD đã được gắn tự động vào điểm gắn kết `/mnt/sd/`, vì vậy hãy tạo một thư mục mới trên thẻ SD và dump nội dung của flash:
 
 ```sh
 mkdir /mnt/sd/image
 for mtd in $(ls /dev/mtdblock*); do dd if=${mtd} of=/mnt/sd/image/${mtd##/*/}.bin; done
 ```
-Bạn có thể muốn lặp lại bước này với một thư mục khác và so sánh tổng kiểm tra md5 của các tệp nhị phân để đảm bảo rằng việc dump đã thành công. Thoát khỏi màn hình bằng `C-a` theo sau là `d`, lắp thẻ nhớ microSD trở lại máy tính của bạn và sao lưu các tệp nhị phân.
+Bạn có thể muốn lặp lại bước này với một thư mục khác và so sánh tổng kiểm tra md5 của các tệp nhị phân để đảm bảo rằng việc dump đã thành công. Thoát khỏi screen bằng `C-a` theo sau là `d`, lắp thẻ nhớ microSD trở lại máy tính của bạn và sao lưu các tệp nhị phân.
 
 #### Flash OpenIPC
 
-Đã đến lúc định dạng thẻ nhớ microSD, vì vậy u-boot sẽ có thể tải fatload hình ảnh. Những bước này có thể thay đổi tùy thuộc vào bản phân phối Linux của bạn. [Đã có một tập lệnh hoạt động trên Debian Sid](https://gist.github.com/themactep/d0b72f4c5d5f246e2551622e95bc9987), nhưng thật đáng buồn là nó không hoạt động trên máy của tôi. (Phiên bản fdisk khác nhau và cách đặt tên khác nhau của thiết bị và phân vùng). Đây là những lệnh tôi đã chạy:
+Đã đến lúc định dạng thẻ nhớ microSD để u-boot có thể fatload hình ảnh. Những bước này có thể thay đổi tùy thuộc vào bản phân phối Linux của bạn. [Đã có một tập lệnh hoạt động trên Debian Sid](https://gist.github.com/themactep/d0b72f4c5d5f246e2551622e95bc9987), nhưng thật đáng buồn là nó không hoạt động trên máy của tôi. (Phiên bản fdisk khác nhau và cách đặt tên khác nhau của thiết bị và phân vùng). Đây là những lệnh tôi đã chạy:
 
 ```sh
 # tạo bảng phân vùng
@@ -120,7 +120,7 @@ fatls mmc 0
 
 1 file(s), 0 dir(s)
 ```
-Tốt! Bây giờ là lúc tải tệp nhị phân vào bộ nhớ. Các biến là biến môi trường mà OpenIPC u-boot biết để phân giải, vì vậy bạn chỉ cần sao chép và dán:
+Tuyệt vời! Bây giờ là lúc tải tệp nhị phân vào bộ nhớ. Các biến là biến môi trường mà OpenIPC u-boot biết để phân giải, vì vậy bạn chỉ cần sao chép và dán:
 ```sh
 mw.b ${baseaddr} 0xff 0x1000000; fatload mmc 0:1 ${baseaddr} openipc-${soc}-ultimate-16mb.bin
 ```
@@ -130,7 +130,7 @@ reading openipc-hi3518ev200-ultimate-16mb.bin
 
 16777216 bytes read
 ```
-Bây giờ là lúc để viết và cầu nguyện:
+Bây giờ là lúc để ghi và cầu nguyện:
 ```sh
 sf probe 0; sf erase 0x0 0x1000000; sf write ${baseaddr} 0x0 ${filesize}
 ```
@@ -141,7 +141,7 @@ Erasing at 0x1000000 -- 100% complete.
 Writing at 0x1000000 -- 100% complete.
 ```
 
-Nếu có bất cứ điều gì sai sót ở đây, đừng tắt nguồn thiết bị và hãy yêu cầu [nhóm Telegram](https://t.me/openipc) trợ giúp! Nếu không, hãy nhập `reset` và vào u-boot mới được flash bằng cách nhấn bất kỳ phím nào để dừng tự động khởi động. Chạy lệnh sau và bạn đã hoàn tất:
+Nếu có bất cứ điều gì sai sót ở đây, đừng tắt nguồn thiết bị và hãy yêu cầu [nhóm Telegram](https://t.me/openipc) trợ giúp! Nếu không, hãy nhập `reset` và vào u-boot mới flash bằng cách nhấn bất kỳ phím nào để dừng tự động khởi động. Chạy lệnh sau và bạn đã hoàn tất:
 ```sh
 run setnor16m
 ```
@@ -177,9 +177,9 @@ Mật khẩu root là `12345`. Đừng quên thay đổi nó bằng `passwd` sau
 Nếu bạn đang gặp khó khăn với hướng dẫn này và vẫn muốn thử OpenIPC trên Smartwares CIP-37210, bạn có thể [mua nó với firmware OpenIPC v2.2 được cài đặt sẵn tại open collective](https://opencollective.com/openipc/contribute/wifi-camera-showme-by-openipc-44355).
 
 ## Kết nối với wifi
-Bây giờ là lúc để kết nối camera với mạng Wi-Fi 2,4 GHz của bạn. Trước hết, hãy đảm bảo rằng các biến môi trường firmware được đặt chính xác.
+Bây giờ là lúc kết nối camera với mạng Wi-Fi 2,4 GHz của bạn. Trước hết, hãy đảm bảo rằng các biến môi trường firmware được đặt chính xác.
 
-Đầu tiên đặt trình điều khiển mạng:
+Đầu tiên, hãy đặt trình điều khiển mạng:
 
 ```sh
 fw_setenv wlandev rtl8188fu-generic
@@ -205,7 +205,7 @@ auto wlan0
 iface wlan0 inet dhcp
     pre-up echo 3 > /sys/class/gpio/export
     pre-up echo out > /sys/class/gpio/gpio3/direction
-    pre-up echo 1 > /sys/class/gpio/gpio3/value  # GPIO3 là nguồn WIFI
+    pre-up echo 1 > /sys/class/gpio/gpio3/value  # GPIO3 là nguồn cấp cho WIFI
     pre-up modprobe mac80211
     pre-up sleep 1
     pre-up modprobe 8188fu
@@ -221,12 +221,12 @@ iface wlan0 inet dhcp
 EOF
 ```
 
-Bây giờ là lúc để kiểm tra xem nó có hoạt động không:
+Bây giờ là lúc kiểm tra xem nó có hoạt động không:
 ```sh
 ifup wlan0
 ip addr
 ```
-Kiểm tra xem bạn có thể ping và ssh vào camera không. Khởi động lại và kiểm tra xem camera có tự động kết nối với mạng wifi của bạn không. Lắp ráp lại camera, bây giờ là lúc tạm biệt UART và sử dụng ssh và giao diện web. (Thông tin đăng nhập là root và mật khẩu bạn đã đặt trước đó.)
+Kiểm tra xem bạn có thể ping và ssh vào camera hay không. Khởi động lại và kiểm tra xem camera có tự động kết nối với mạng wifi của bạn không. Lắp ráp lại camera, bây giờ là lúc tạm biệt UART và sử dụng ssh và giao diện web. (Thông tin đăng nhập là root và mật khẩu bạn đã đặt trước đó.)
 
 Cuối cùng, bạn nên xem `/etc/majestic.yaml` và đặc biệt đặt các phần này như sau để có ánh xạ GPIO chính xác cho chế độ ban đêm và âm thanh.
 

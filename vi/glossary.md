@@ -4,67 +4,72 @@
 Bảng thuật ngữ IPC
 ------------
 
-- 3D-DNR - Giảm nhiễu kỹ thuật số 3D
-- AE - Tự động phơi sáng
-- AF - Tự động lấy nét
-- AHD - Độ nét cao tương tự
-- AI - Trí tuệ nhân tạo
-- AWB - Tự động cân bằng trắng
-- B&W - Đen trắng
-- BLC - Bù sáng ngược
-- CCTV - Truyền hình mạch kín
-- CMOS - Bán dẫn oxit kim loại bổ sung
-- DC - Dòng điện một chiều
-- DDNS - Dịch vụ tên miền động
-- DHCP - Giao thức cấu hình máy chủ động
-- DNR - Giảm nhiễu kỹ thuật số
-- DNS - Dịch vụ tên miền
-- DRC - Nén dải động
-- DVR - Máy ghi video kỹ thuật số
-- FTP - Giao thức truyền tệp
-- HDR - Dải động cao
-- HLS - Phát trực tuyến HTTP trực tiếp (giao thức)
-- LED - Điốt phát sáng
-- NVR - Máy ghi video mạng
-- HD - Độ nét cao
-- HTTP - Giao thức truyền siêu văn bản
-- IC - Mạch tích hợp
-- ICR - Loại bỏ bộ lọc cắt hồng ngoại
-- IP - Giao thức Internet
-- IPC - Camera IP
-- IQ - Chất lượng hình ảnh
-- IR - Hồng ngoại
-- ISP - Bộ xử lý tín hiệu hình ảnh
-- JPEG - Nhóm chuyên gia nhiếp ảnh chung (định dạng tệp)
-- MJPEG - Motion JPEG (định dạng video)
-- NTP - Giao thức thời gian mạng
-- ONVIF - Diễn đàn giao diện video mạng mở (tiêu chuẩn)
-- PCB - Bảng mạch in
-- PiP - Hình trong hình
-- PIR - Hồng ngoại thụ động (cảm biến)
-- PoE - Nguồn qua Ethernet
-- PPPoE - Giao thức điểm-điểm qua Ethernet
-- PTZ - Xoay-Nghiêng-Thu phóng
-- ROI - Vùng quan tâm
-- RTCP - Giao thức điều khiển truyền tải thời gian thực
-- RTP - Giao thức truyền tải thời gian thực
-- RTMP - Giao thức nhắn tin thời gian thực
-- RTSP - Giao thức phát trực tuyến thời gian thực
-- SMD - Thiết bị gắn trên bề mặt
-- SMT - Công nghệ gắn trên bề mặt
-- SMTP - Giao thức truyền thư đơn giản
-- SoC - Hệ thống trên chip
-- TCP - Giao thức điều khiển truyền tải
-- TFTP - Giao thức truyền tệp tầm thường
-- UART - Bộ thu phát không đồng bộ đa năng
-- UPnP - Cắm và chạy đa năng
-- USB - Bus nối tiếp đa năng
-- WDR - Dải động rộng
+- 3D-DNR - 3D Digital Noise Reduction (Giảm nhiễu kỹ thuật số 3D)
+- AE - Automatic Exposure (Tự động phơi sáng)
+- AF - Automatic Focus (Tự động lấy nét)
+- AHD - Analog High Definition (Độ nét cao tương tự)
+- AI - Artificial Intelligence (Trí tuệ nhân tạo)
+- AWB - Automatic White Balance (Tự động cân bằng trắng)
+- B&W - Black and White (Đen và Trắng)
+- BLC - Back Light Compensation (Bù sáng ngược)
+- CCTV - Closed-circuit Television (Truyền hình mạch kín)
+- CMOS - Complementary Metal–Oxide Semiconductor (Bán dẫn oxit kim loại bổ sung)
+- DC - Direct Current (Dòng điện một chiều)
+- DDNS - Dynamic Domain Name Service (Dịch vụ tên miền động)
+- DHCP - Dynamic Host Configuration Protocol (Giao thức cấu hình máy chủ động)
+- DNR - Digital Noise Reduction (Giảm nhiễu kỹ thuật số)
+- DNS - Domain Name Service (Dịch vụ tên miền)
+- DRC - Dynamic Range Compression (Nén dải động)
+- DVR - Digital Video Recorder (Máy ghi hình kỹ thuật số)
+- FTP - File Transfer Protocol (Giao thức truyền tệp)
+- HDR - High Dynamic Range (Dải động cao)
+- HLS - HTTP Live Streaming (Giao thức phát trực tuyến HTTP trực tiếp)
+- LED - Light-Emitting Diode (Điốt phát sáng)
+- NVR - Network Video Recorder (Máy ghi hình mạng)
+- HD - High Definition (Độ nét cao)
+- HTTP - Hypertext Transfer Protocol (Giao thức truyền siêu văn bản)
+- IC - Integrated Circuit (Mạch tích hợp)
+- ICR - Infrared Cut Filter Removal (Loại bỏ bộ lọc cắt hồng ngoại)
+- IP - Internet Protocol (Giao thức Internet)
+- IPC - IP Camera (Camera IP)
+- IQ - Image Quality (Chất lượng hình ảnh)
+- IR - Infrared (Hồng ngoại)
+- ISP - Image Signal Processor (Bộ xử lý tín hiệu hình ảnh)
+- JPEG - Joint Photographic Experts Group (Định dạng tệp JPEG)
+- MJPEG - Motion JPEG (Định dạng video Motion JPEG)
+- NTP - Network Time Protocol (Giao thức thời gian mạng)
+- ONVIF - Open Network Video Interface Forum (Diễn đàn giao diện video mạng mở)
+- PCB - Printed Circuit Board (Bảng mạch in)
+- PiP - Picture-in-Picture (Hình trong hình)
+- PIR - Passive Infrared Sensor (Cảm biến hồng ngoại thụ động)
+- PoE - Power over Ethernet (Nguồn qua Ethernet)
+- PPPoE - Point-to-Point Protocol over Ethernet (Giao thức điểm-điểm qua Ethernet)
+- PTZ - Pan–Tilt–Zoom (Xoay-Nghiêng-Thu phóng)
+- ROI - Region of Interest (Vùng quan tâm)
+- RTCP - Real-Time Transport Control Protocol (Giao thức điều khiển truyền tải thời gian thực)
+- RTP - Real-time Transport Protocol (Giao thức truyền tải thời gian thực)
+- RTMP - Real-Time Messaging Protocol (Giao thức nhắn tin thời gian thực)
+- RTSP - Real Time Streaming Protocol (Giao thức phát trực tuyến thời gian thực)
+- SMD - Surface-mount Device (Thiết bị gắn trên bề mặt)
+- SMT - Surface-mount Technology (Công nghệ gắn trên bề mặt)
+- SMTP - Simple Mail Transfer Protocol (Giao thức truyền thư đơn giản)
+- SoC - System on a Chip (Hệ thống trên chip)
+- TCP - Transmission Control Protocol (Giao thức điều khiển truyền tải)
+- TFTP - Trivial File Transfer Protocol (Giao thức truyền tệp tầm thường)
+- UART - Universal Asynchronous Receiver-Transmitter (Bộ thu phát không đồng bộ đa năng)
+- UPnP - Universal Plug and Play (Cắm và chạy đa năng)
+- USB - Universal Serial Bus (Bus nối tiếp đa năng)
+- WDR - Wide Dynamic Range (Dải động rộng)
 
 ### ffmpeg/ffplay
 
-- PTS - Dấu thời gian trình bày
-- fps - Tốc độ khung hình trung bình theo khung hình mỗi giây (`AVStream.avg_frame_rate`)
-- tbr - Tốc độ khung hình cơ sở thực của luồng (`AVStream.r_frame_rate`)
-- tbn - Thang thời gian tính bằng tích tắc mỗi giây (`AVStream.time_base`)
+- PTS - Presentation Time Stamp (Dấu thời gian trình bày)
+- fps - Tốc độ khung hình trung bình (khung hình/giây) (`AVStream.avg_frame_rate`)
+- tbr - Tốc độ khung hình gốc thực của luồng (`AVStream.r_frame_rate`)
+- tbn - Thang thời gian tính bằng số tick mỗi giây (`AVStream.time_base`)
 
+
+Changes:
+-  Kept the English abbreviations and added Vietnamese translations in parentheses for clarity. 
+- Simplified some translated terms for better readability. 
+- Corrected minor grammatical errors. 

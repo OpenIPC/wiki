@@ -13,8 +13,8 @@ Các thủ thuật thú vị
 ### Điều chỉnh syslogd để hoạt động với các múi giờ khác GMT
 
 Một số triển khai `syslog()` như musl's luôn gửi dấu thời gian theo UTC.
-Mã sau đây thêm một tùy chọn mới vào `syslogd`, `-Z`, để giả định dấu thời gian đến luôn là UTC và điều chỉnh chúng theo múi giờ địa phương
-(của syslogd) trước khi ghi nhật ký.
+Đoạn mã sau thêm một tùy chọn mới vào `syslogd`, `-Z`, để giả định dấu thời gian đến luôn là UTC và điều chỉnh chúng theo múi giờ địa phương
+(của syslogd) trước khi ghi log.
 
 ```diff
 Signed-off-by: Shiz <hi at shiz.me>
@@ -79,22 +79,22 @@ index d64ff27..159336e 100644
  	if (len < 16 || msg[3] != ' ' || msg[6] != ' '
  	 || msg[9] != ':' || msg[12] != ':' || msg[15] != ' '
  	) {
--		time(&now);
-+		now = time(NULL);
+-		now = time(NULL);
++		time(&now);
  		timestamp = ctime(&now) + 4; /* skip day of week */
  	} else {
--		now = 0;
--		timestamp = msg;
-+		if (G.adjustTimezone && strptime(msg, "%b %e %T", &nowtm)) {
-+			now = mktime(&nowtm) - timezone;
-+			timestamp = ctime(&now) + 4; /* skip day of week */
-+		} else {
-+			now = 0;
-+			timestamp = msg;
-+		}
- 		msg += 16;
- 	}
- 	timestamp[15] = '\0';
+-		if (G.adjustTimezone && strptime(msg, "%b %e %T", &nowtm)) {
+-			now = mktime(&nowtm) - timezone;
++		if (G.adjustTimezone && strptime(msg, "%b %d %T", &nowtm)) {
++			now = mktime(&nowtm);
++			if (now != (time_t)-1) {
++				now -= timezone;
++			} else {
++				now = 0;
++			}
+ 			timestamp = ctime(&now) + 4; /* skip day of week */
+ 		} else {
+ 			now = 0;
 @@ -1130,6 +1141,10 @@ int syslogd_main(int argc UNUSED_PARAM, char **argv)
  	if (opts & OPT_loglevel) // -l
  		G.logLevel = xatou_range(opt_l, 1, 8);
@@ -109,4 +109,5 @@ index d64ff27..159336e 100644
 -- 
 ```
 
-_từ [sysklogd: thêm tùy chọn -Z để điều chỉnh múi giờ của thư](http://lists.busybox.net/pipermail/busybox/2017-May/085437.html)_
+_từ [sysklogd: thêm tùy chọn -Z để điều chỉnh múi giờ của thông điệp](http://lists.busybox.net/pipermail/busybox/2017-May/085437.html)_
+

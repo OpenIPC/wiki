@@ -3,11 +3,11 @@
 
 Tích hợp Wyze
 ----------------
-Đây là nơi chúng tôi sẽ ghi lại hướng dẫn của mình để flash các thiết bị mới và báo cáo về các thí nghiệm của chúng tôi. Các bảng bên dưới cũng bao gồm một số "bản sao" do Hualai, nhà cung cấp ODM cho Wyze sản xuất để tham khảo.
+Đây là nơi chúng tôi sẽ ghi lại hướng dẫn flash các thiết bị mới và báo cáo về các thử nghiệm của chúng tôi.  Các bảng bên dưới cũng bao gồm một số "bản sao" do Hualai, nhà cung cấp ODM cho Wyze sản xuất để tham khảo.
 
-### Các bản sửa đổi camera đã biết:
+### Các phiên bản camera đã biết:
 
-| MODEL     | IC 25466- | FCC ID         | PCB VER                           | SoC      | WIFI                  | TIỀN TỐ MAC | ĐƯỢC HỖ TRỢ | GHI CHÚ                                                     |
+| MODEL     | IC 25466- | FCC ID         | PHIÊN BẢN PCB                     | SoC      | WIFI                  | TIỀN TỐ MAC | ĐƯỢC HỖ TRỢ | GHI CHÚ                                                     |
 |-----------|-----------|----------------|-----------------------------------|----------|-----------------------|------------|-----------|-----------------------------------------------------------|
 | WYZEC2    |           | 2ANJHWYZEC2    | 2019-06-38                        | T20X BGA | SDIO: Realtek 8189FTV | 2C:AA:8E   | CÓ        | https://gist.github.com/csev1755/e60abe15d8708e0d2b0a592e808b2022  |
 | WYZECP1   |           | 2ANJHHWYZECP1  | DF3-IFPM01 V1.4                   | T20X BGA | SDIO: Realtek 8189ES  | 2C:AA:8E   | CÓ        |                                                           |
@@ -21,7 +21,7 @@ Tích hợp Wyze
 | WYZEC3    | WYZEC3F   | 2AUIUWYZEC3F   | WYZEV3_T31AGC2053 V3.2_20210714   | T31A BGA | SDIO: AltoBeam 6031   | D0:3F:27   | CÓ        | https://youtu.be/VkqX9yg0odU                              |
 | WVDBV1    | WVDB1A    | 2AUIUWVDB1A    | WYZEDB3_MB_T31_2.2                | T31X     | SDIO: Realtek 8189FTV | 7C:78:B2   | CÓ        |                                                           |
 | WYZECP2   | WYZECP2A  | 2AUIUWYZECP2   | DF3-MCU-S01-V2.2                  | T31X     | SDIO: AltoBeam 6031   | 7C:78:B2   | CÓ        |                                                           |
-| WYZECPAN3 | WYZECPAN3 | 2AUIUWYZECPAN3 | WYZE PAN V3 MB V 1.3              | T31X     | SDIO: AltoBeam 6031   | D0:3F:27   | KHÔNG     | KHÔNG ĐƯỢC HỖ TRỢ - Khởi động an toàn ĐÃ BẬT                       |
+| WYZECPAN3 | WYZECPAN3 | 2AUIUWYZECPAN3 | WYZE PAN V3 MB V 1.3              | T31X     | SDIO: AltoBeam 6031   | D0:3F:27   | KHÔNG     | KHÔNG ĐƯỢC HỖ TRỢ - Khởi động An toàn ĐÃ ĐƯỢC BẬT           |
 | WYZEC3P   | WYZEC3P   | 2AUIUWYZEC3P   | WYZEV3PRO_T40GC4653_v2.2_20220228 | T40XP    | SDIO: Realtek 8192FS  | D0:3F:27   | CHƯA THỬ NGHIỆM | CHƯA THỬ NGHIỆM                                                  |
 | WVOD2     | WVOD2     | 2AUIUWVOD2     | HL_WCO2 MAIN01 V1.0               | T31ZX    | SDIO: BCM43438        | D0:3F:27   | CHƯA THỬ NGHIỆM | CHƯA THỬ NGHIỆM - Nền tảng pin Ingenic Zeratul               |
 | ATOMCAM2  |           |                | V3C_T31GC2063 V1.1_202001110      | T31ZX    | SDIO: AltoBeam 6031   | 7C:DD:E9   | CÓ        | AtomCam 2 Nhật Bản http://www.atomtech.co.jp                 |
@@ -54,14 +54,14 @@ GPIO:
 
 ---
 
-## Camera Wyze Cam Pan v3 có khóa phần cứng trong secureboot và không thể nâng cấp lên OpenIPC!
+## Camera Wyze Cam Pan v3 có khóa phần cứng trong secure boot và không thể nâng cấp lên OpenIPC!
 
 ---
 
 ### Cài đặt OpenIPC
 
 > [!CẢNH BÁO]
-> Liên kết bên dưới không còn hoạt động, Vui lòng thay thế liên kết bằng liên kết hoạt động hoặc được cập nhật.
+> Liên kết bên dưới không còn hoạt động. Vui lòng thay thế liên kết bằng liên kết hoạt động hoặc được cập nhật.
 
 [Sử dụng các tập lệnh này](https://github.com/themactep/device-wyze-v3/blob/master/installation.md) để chuyển đổi Wyze Cam V3 của bạn sang OpenIPC.
 
@@ -69,5 +69,8 @@ GPIO:
 
 * ~~Độ phơi sáng không hoạt động tốt https://github.com/OpenIPC/majestic/issues/102~~
 * ~~Thẻ SD không hoạt động trong U-Boot (nguồn có sẵn)~~ đã sửa
-* ~~Vấn đề với việc tải u-boot từ thẻ nhớ microSD. Nó không đến được dấu nhắc. Không chỉ trên wyze v3 (https://t.me/openipc_modding/179369), mà còn trên một bo mạch T31L khác (https://t.me/openipc/47739). Rất có thể nó sẽ KHÔNG THỂ, bởi vì trong camera có MOSFET quản lý nguồn microSD, phải được bật TRƯỚC KHI khởi động từ thẻ (thí nghiệm với u-boot chưa được tải đầy đủ là có thể do nguồn điện trực tiếp đến thẻ microSD, bỏ qua bóng bán dẫn). Vui lòng xác nhận phiên bản của tôi nếu không thể làm cách khác.~~ không thể thực hiện được nếu không sửa đổi (nguồn điện trực tiếp 3.3V cho đầu đọc thẻ microSD)
+* ~~Vấn đề với việc tải u-boot từ thẻ nhớ microSD. Nó không đến được dấu nhắc lệnh. Không chỉ trên wyze v3 (https://t.me/openipc_modding/179369), mà còn trên một bo mạch T31L khác (https://t.me/openipc/47739). Rất có thể nó sẽ KHÔNG THỂ, bởi vì trong camera có MOSFET quản lý nguồn microSD, phải được bật TRƯỚC KHI khởi động từ thẻ (thí nghiệm với u-boot chưa được tải đầy đủ là có thể do nguồn điện trực tiếp đến thẻ microSD, bỏ qua bóng bán dẫn). Vui lòng xác nhận phiên bản của tôi nếu không thể làm cách khác.~~ không thể thực hiện được nếu không sửa đổi (nguồn điện trực tiếp 3.3V cho đầu đọc thẻ microSD)
+
+
+
 

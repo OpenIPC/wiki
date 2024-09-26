@@ -3,13 +3,13 @@ Xoay, Nghiêng, Lấy nét và Thu phóng (thông qua dòng lệnh ssh)
 
 ## Cài đặt OpenIPC:
 
-Mở vỏ máy ra, hóa ra, SoC là **hi3518cv100**, **16MB** và cảm biến camera là **mt9p006**. Cài đặt máy chủ TFTP trên PC và làm theo hướng dẫn cài đặt: https://github.com/OpenIPC/wiki/blob/master/en/installation.md Tải xuống hình ảnh chính xác (16MB, Lite) từ đây https://openipc.org/cameras/vendors/hisilicon/socs/hi3518cv100 và đặt nó vào thư mục của máy chủ TFTP (trong trường hợp hình ảnh không được đóng gói, có thể bỏ qua bước "giải nén"). Như đã mô tả, kết nối bộ chuyển đổi UART với các chân trên bo mạch SoC và khởi động thiết bị đầu cuối trên PC:
+Mở vỏ máy ra, hóa ra, SoC là **hi3518cv100**, **16MB** và cảm biến camera là **mt9p006**. Cài đặt máy chủ TFTP trên PC và làm theo hướng dẫn cài đặt: https://github.com/OpenIPC/wiki/blob/master/en/installation.md Tải xuống hình ảnh chính xác (16MB, Lite) từ đây https://openipc.org/cameras/vendors/hisilicon/socs/hi3518cv100 và đặt nó vào thư mục của máy chủ TFTP (trong trường hợp hình ảnh không được đóng gói, có thể bỏ qua bước "giải nén"). Như đã mô tả, kết nối bộ chuyển đổi UART với các chân trên bo mạch SoC và khởi động một terminal trên PC:
 
 ```sh
 screen -L -Logfile ipcam-$(date +%s).log /dev/ttyUSB0 115200
 ```
 
-Làm theo hướng dẫn được tạo bởi trang web OpenIPC. Để truy cập UBOOT, hãy nhấn Ctrl-C ngay sau khi cắm nguồn điện. Để làm cho mạng hoạt động sau này trong Linux: Trước lệnh "đặt lại" cuối cùng trong UBOOT, hãy nhập các lệnh sau, theo: https://github.com/OpenIPC/wiki/blob/master/en/network-perversions.md
+Làm theo hướng dẫn được tạo bởi trang web OpenIPC. Để truy cập U-Boot, hãy nhấn Ctrl-C ngay sau khi cắm nguồn điện. Để làm cho mạng hoạt động sau này trong Linux: Trước lệnh "reset" cuối cùng trong U-Boot, hãy nhập các lệnh sau, theo: https://github.com/OpenIPC/wiki/blob/master/en/network-perversions.md
 
 ```sh
 setenv extras 'hieth.phyaddru=3 hieth.mdioifu=0'
@@ -45,15 +45,15 @@ ip a
 Truy cập giao diện web bằng trình duyệt qua cổng 85 và thay đổi mật khẩu và địa chỉ MAC.
 
 ## Cấu hình chuyển đổi chế độ ban đêm:
-Thông qua ipctool (ipctool gpio scan), người ta có thể dễ dàng tìm ra rằng đầu vào cảm biến ánh sáng (để tự động chuyển đổi giữa ngày và đêm) là số 2. Bộ lọc IR được điều khiển bởi 1 và 0.
+Thông qua ipctool (ipctool gpio scan), người ta có thể dễ dàng tìm ra rằng đầu vào cảm biến ánh sáng (để tự động chuyển đổi giữa ngày và đêm) là số 2. Bộ cắt IR được điều khiển bởi 1 và 0.
 
 * Cài đặt Chế độ xem trước-Ban đêm:
 
 ```
 Bật chế độ ban đêm: bật
 Chân GPIO của tín hiệu từ cảm biến IR: 2
-Chân GPIO1 của tín hiệu cho bộ lọc IRcut: 1
-Chân GPIO2 của tín hiệu cho bộ lọc IRcut: 0
+Chân GPIO1 của tín hiệu cho bộ lọc IR-cut: 1
+Chân GPIO2 của tín hiệu cho bộ lọc IR-cut: 0
 ```
 
 ## Cấu hình độ phân giải camera:
@@ -98,7 +98,7 @@ Số khối: 4
 * Hệ thống:
 
 ```
-Phục vụ quản trị web thông qua Majestic: tắt
+Phục vụ Quản trị Web thông qua Majestic: tắt
 ```
 
 ## Cấu hình watchdog:
@@ -125,7 +125,7 @@ mpv rtsp://root:12345@192.168.1.188:554/stream=0
 ```
 
 ## Kiểm tra xoay, nghiêng, thu phóng và lấy nét:
-Hóa ra, camera sử dụng giao thức pelco-d qua cổng nối tiếp ttyAMA1, vì vậy hãy đăng nhập vào camera qua ssh (sử dụng ip của bạn):
+Hóa ra, camera sử dụng giao thức Pelco-D qua cổng nối tiếp ttyAMA1, vì vậy hãy đăng nhập vào camera qua ssh (sử dụng IP của bạn):
 
 ```sh
 ssh root@192.168.1.188
@@ -263,7 +263,7 @@ printf '\xFF\x01\x00\x08\x08\x00\x11' >/dev/ttyAMA1
 
 
 ### Tập lệnh ./stop
-Tập lệnh sau đây dừng mọi hành động bao gồm quét ngang và dọc). Đó là một cách giải quyết, bởi vì lệnh "dừng" pelco-d thông thường không phải lúc nào cũng hoạt động. Hóa ra "lên", "xuống", "trái", "phải" luôn dừng các lệnh quét, vì vậy các lệnh trái + phải ngắn được bao gồm trong tập lệnh này:
+Tập lệnh sau đây dừng mọi hành động bao gồm quét ngang và dọc. Đó là một cách giải quyết, bởi vì lệnh "dừng" Pelco-D thông thường không phải lúc nào cũng hoạt động. Hóa ra "lên", "xuống", "trái", "phải" luôn dừng các lệnh quét, vì vậy các lệnh trái + phải ngắn được bao gồm trong tập lệnh này:
 
 ```sh
 #!/bin/sh 
@@ -282,8 +282,9 @@ printf '\xFF\x01\x00\x00\x00\x00\x01' >/dev/ttyAMA1
 
 - Camera dường như có bo mạch PoE, nhưng dường như nó không hoạt động. Có thể có hai phiên bản (một phiên bản 12V và một phiên bản PoE) khác nhau chủ yếu ở cáp. Vì vậy, có thể camera có thể được sửa đổi để sử dụng bo mạch PoE.
 
-- Có khe cắm SDCard (mặc dù chỉ có thể truy cập khi mở vỏ). Nó không hoạt động vào lúc này. Mặc dù đã có bản cập nhật firmware gốc giải quyết rõ ràng chức năng SDCard, nhưng không chắc chắn liệu nó có bao giờ hoạt động với firmware gốc hay không.
+- Có khe cắm thẻ nhớ SD (mặc dù chỉ có thể truy cập khi mở vỏ). Nó không hoạt động vào lúc này. Mặc dù đã có bản cập nhật firmware gốc giải quyết rõ ràng chức năng SDCard, nhưng không chắc chắn liệu nó có bao giờ hoạt động với firmware gốc hay không.
 
-- Camera có mô-đun Wifi. Có thể điều này có thể được kích hoạt thông qua OpenIPC.
+- Camera có mô-đun Wi-Fi. Có thể điều này có thể được kích hoạt thông qua OpenIPC.
 
-- Camera có bảng thu phóng và lấy nét. Tài liệu cho bảng này tồn tại bằng tiếng Trung Quốc (có thể được dịch qua google dịch). Dường như có một quy trình "hiệu chuẩn nhà máy" để gán cài đặt lấy nét "tiêu chuẩn" cho các mức thu phóng.
+- Camera có bảng thu phóng và lấy nét. Tài liệu cho bảng này tồn tại bằng tiếng Trung Quốc (có thể được dịch qua Google Dịch). Dường như có một quy trình "hiệu chuẩn nhà máy" để gán cài đặt lấy nét "tiêu chuẩn" cho các mức thu phóng.
+

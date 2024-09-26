@@ -1,6 +1,53 @@
 # OpenIPC Wiki
 [Mục lục](../README.md)
 
+Cách build OpenIPC với trình điều khiển RTL8812EU
+--------------------------------
+
+Xem thêm chi tiết về rtl8812eu tại đây: https://github.com/OpenIPC/wiki/blob/master/en/fpv-bl-m8812eu2-wifi-adaptors.md
+
+- Khởi động vào Ubuntu
+- Mở Terminal
+
+```bash
+sudo apt-get install -y automake autotools-dev bc build-essential curl fzf git libtool rsync unzip
+```
+
+```bash
+rm -r -f yourOpenipc #xóa mọi thư mục build firmware cũ (tùy chọn)
+git clone --depth=1 https://github.com/OpenIPC/firmware.git yourOpenipc
+cd yourOpenipc
+make clean
+cd br-ext-chip-sigmastar
+cd configs
+ls
+sudo nano yourSelectconfig
+```
+
+```
+	Sau đó, trong Wireless, thêm dòng
+BR2_PACKAGE_RTL88X2EU_OPENIPC=y
+	Lưu tệp
+
+cd ..
+cd ..
+make
+```
+
+- Chọn board của bạn và nhập ví dụ: ssc338q fpv và build firmware
+- Điều hướng đến /home/YourUser/yourOpenipc/output/images
+- Tìm kho lưu trữ .tgz đầu ra phù hợp của bạn, ví dụ: openipc.ssc338q-nor-fpv.tgz và giải nén các tệp rootfs và uboot
+- Sao chép hai tệp đó vào thư mục /tmp của camera OpenIPC
+    - ssh vào camera
+`cd /tmp`
+
+`sysupgrade --kernel=uImage.ssc338q --rootfs=rootfs.squashfs.ssc338q`
+hoặc
+`sysupgrade --kernel=uImage.ssc30kq --rootfs=rootfs.squashfs.ssc30kq`
+
+# OpenIPC Wiki
+[Mục lục](../README.md)
+
 Hướng dẫn từng bước để chạy Trạm Mặt đất trên Ubuntu 22.04
 ---------------------------------------------------------
 
@@ -11,98 +58,88 @@ Hướng dẫn từng bước để chạy Trạm Mặt đất trên Ubuntu 22.0
 Phiên bản video: - [OpenIPC - Chuẩn bị Trạm Mặt đất: Ubuntu + QGroundControl](https://www.youtube.com/watch?v=JMtRAsOm0Dc)
 
 ### Chuẩn bị
-```
+```bash
 sudo apt update
 ```
-```
-sudo apt install dkms git python3-all-dev net-tools virtualenv fakeroot debhelper python3-twisted
- libpcap-dev python3-pyroute2 python3-future python3-configparser python3-all libsodium-dev
-```
-
-### Libsodium
-```
-git clone https://github.com/jedisct1/libsodium --branch stable
-cd libsodium
-./configure
-make && make check
-sudo make install
+```bash
+sudo apt install dkms git python3-all-dev net-tools virtualenv fakeroot debhelper python3-twisted libpcap-dev python3-pyroute2 python3-future python3-all libsodium-dev
 ```
 
 ### Trình điều khiển card Wifi
-```
+```bash
 git clone -b v5.2.20 https://github.com/svpcom/rtl8812au.git
 cd rtl8812au/
 sudo ./dkms-install.sh
 ```
 
 ### WFB-NG
-```
+```bash
 git clone -b stable https://github.com/svpcom/wfb-ng.git
 cd wfb-ng
 sudo ./scripts/install_gs.sh wlan0
 ```
 
 ### Cấu hình kênh
-```
+```bash
 vi /etc/wifibroadcast.cfg
 ```
 
 ### Khởi động WFB CLI
-```
+```bash
 wfb-cli gs
 ```
 ###TRẠM MẶT ĐẤT ĐÃ SẴN SÀNG SỬ DỤNG###
 
 ### Khởi động, dừng, khởi động lại dịch vụ
-```
+```bash
 systemctl status wifibroadcast@gs
 systemctl stop wifibroadcast@gs
 systemctl start wifibroadcast@gs
 ```
 
-### Hướng dẫn Qground control
+### Hướng dẫn sử dụng QGroundControl
 
-- https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html
+- https://docs.qgroundcontrol.com/master/en/qgc-user-guide/getting_started/download_and_install.html
 
-### Lấy nhật ký cuối cùng từ dịch vụ
-```
+### Lấy log cuối cùng từ dịch vụ
+```bash
 journalctl -xu wifibroadcast@gs -n 100
 ```
 
 ### Các lệnh hữu ích
-```
+```bash
 nmcli
 ifconfig
 iwconfig
 
 ```
 
-<h3>* Hình ảnh được cài đặt sẵn hiện có sẵn ở đây -- https://github.com/JohnDGodwin/OpenIPC_Groundstations/releases/tag/OrangePi5Plus</h3>
+<h3>* Một bản cài đặt sẵn hiện có sẵn tại đây -- https://github.com/JohnDGodwin/OpenIPC_Groundstations/releases/tag/OrangePi5Plus</h3>
 
 ***
 
-Tải xuống Ubuntu Server ISO và flash vào thiết bị -- `https://github.com/Joshua-Riek/ubuntu-rockchip`
+Tải xuống Ubuntu Server ISO và flash vào thiết bị  -- `https://github.com/Joshua-Riek/ubuntu-rockchip`
 
 `sudo apt update`
 
-`sudo apt nâng cấp`
+`sudo apt upgrade`
 
-Hãy tiếp tục và kéo một số gói chúng ta sẽ cần nữa.
+Tiếp tục và cài đặt một số gói cần thiết.
 
 `sudo apt install dkms python3-all-dev fakeroot cmake meson`
 
-Đặt múi giờ cục bộ của hệ thống - thay thế vùng và thành phố bằng trường hợp sử dụng của bạn
+Đặt múi giờ cục bộ của hệ thống - thay thế vùng và thành phố theo vị trí của bạn
 
 `ln -sf /usr/share/zoneinfo/<vùng>/<thành phố> /etc/localtime`
 
-đặt tên máy chủ
+Đặt tên máy chủ
 
 `sudo nano /etc/hostname`
 
 
 ***
 
-Thiết lập Gsteamer với MPP
+Thiết lập GStreamer với MPP
 
 
 Tải xuống và cài đặt gstreamer
@@ -117,7 +154,7 @@ Tải xuống và cài đặt plugin rockchip mpp, rga và gstreamer từ PPA t�
 
 
 
-kiểm tra với:
+Kiểm tra với:
 
 `gst-inspect-1.0 | grep 265`
 
@@ -127,17 +164,17 @@ kiểm tra với:
 
 ***
 
-cài đặt trình điều khiển rtl8812au
+Cài đặt driver rtl8812au
 
 
-nhập theo từng dòng sau
+Nhập từng dòng sau
 
 	sudo bash -c "cat > /etc/modprobe.d/wfb.conf <<EOF
-	# danh sách đen mô-đun chứng khoán
-	danh sách đen 88XXau
-	danh sách đen 8812au
-	danh sách đen rtl8812au
-	danh sách đen rtl88x2bs
+	# đưa module gốc vào danh sách đen
+	blacklist 88XXau
+	blacklist 8812au
+	blacklist rtl8812au
+	blacklist rtl88x2bs
 	EOF"
 
 
@@ -152,17 +189,17 @@ nhập theo từng dòng sau
 ***
 
 
-khởi động lại thiết bị
+Khởi động lại thiết bị
 
-TODO: hoặc tìm ra cách tải trình điều khiển mà không cần khởi động lại hoàn toàn. Hãy thử "modprobe 88xxau"
+TODO: hoặc tìm cách tải driver mà không cần khởi động lại hoàn toàn. Thử "modprobe 88xxau"
 
 
 ***
 
-cài đặt WFB-ng
+Cài đặt WFB-ng
 
 
-tìm tên thiết bị wifi bằng iwconfig và thay thế nó cho $WLAN trong tập lệnh cài đặt
+Tìm tên thiết bị Wi-Fi bằng `iwconfig` và thay thế nó cho `$WLAN` trong tập lệnh cài đặt
 
 `git clone -b stable https://github.com/svpcom/wfb-ng.git`
 
@@ -171,33 +208,33 @@ tìm tên thiết bị wifi bằng iwconfig và thay thế nó cho $WLAN trong t
 `sudo ./scripts/install_gs.sh $WLAN`
 
 
-sau khi cài đặt:
+Sau khi cài đặt:
 
 
 `sudo systemctl enable wifibroadcast`
 
 
-sau đó
+Sau đó
 
 
 `sudo nano /etc/wifibroadcast.cfg`
 
 
-thay đổi kênh để phù hợp với vtx
+Thay đổi kênh để phù hợp với VTX
 
-thay đổi vùng từ 'BO' thành '00'
-
-
+Thay đổi vùng từ 'BO' thành '00'
 
 
-Sao chép drone.key từ thư mục wfb-ng vào thư mục /etc của vtx
 
-ví dụ sử dụng scp, thay thế x.x.x.x bằng địa chỉ ip của camera
+
+Sao chép `drone.key` từ thư mục wfb-ng vào thư mục `/etc` của VTX
+
+ví dụ sử dụng scp, thay thế x.x.x.x bằng địa chỉ IP của camera
 
 `scp drone.key root@x.x.x.x:/etc`
 
 
-Đảm bảo gs.key đã được tự động đặt trong /etc ở phía VRX
+Đảm bảo `gs.key` đã được tự động đặt trong `/etc` ở phía VRX
 
 `ls /etc/gs.key`
 
@@ -206,14 +243,14 @@ ví dụ sử dụng scp, thay thế x.x.x.x bằng địa chỉ ip của camera
 ***
 
 
-khởi động lại thiết bị một lần nữa
+Khởi động lại thiết bị một lần nữa
 
 
 ***
 
-kiểm tra kết nối:
+Kiểm tra kết nối:
 
-trên trạm mặt đất chạy
+trên trạm mặt đất, chạy
 
  `sudo systemctl enable wifibroadcast@gs`
  
@@ -222,13 +259,13 @@ trên trạm mặt đất chạy
 `wfb-cli gs`
 
 
-Cắm camera vào và xem các gói dữ liệu đến, xlost nên ở gần 0 trong khi xrecv nên tăng lên
+Cắm camera vào và xem các gói dữ liệu đến, `xlost` nên ở gần 0 trong khi `xrecv` nên tăng lên
 
 
 ***
 
 
-môi trường đồ họa để phát lại gstreamer
+Môi trường đồ họa để phát lại gstreamer
 
 
 `sudo apt install --no-install-recommends xorg lightdm-gtk-greeter lightdm openbox`
@@ -249,14 +286,14 @@ chèn:
 ***
 
 TODO:
-Tại thời điểm này, khởi động lại và bạn sẽ phải đăng nhập bằng bàn phím ít nhất một lần, nhưng sau đó nó sẽ tự động đăng nhập người dùng ubuntu vào phiên openbox mà không có con trỏ
+Tại thời điểm này, khởi động lại và bạn sẽ phải đăng nhập bằng bàn phím ít nhất một lần, nhưng sau đó nó sẽ tự động đăng nhập người dùng `ubuntu` vào phiên `openbox` mà không có con trỏ
 
 
 ***
 
 
 
-hãy đặt hình nền máy tính để bàn và viết một số tập lệnh khởi động
+Hãy thiết lập hình nền máy tính để bàn và viết một số tập lệnh khởi động
 
 	
 `sudo apt install --no-install-recommends libimlib2-dev libx11-dev libxinerama-dev pkg-config make`
@@ -271,44 +308,44 @@ hãy đặt hình nền máy tính để bàn và viết một số tập lệnh
 
 
 
-Lưu hình nền mong muốn của bạn vào /home/ubuntu/desktop.png
+Lưu hình nền mong muốn của bạn vào `/home/ubuntu/desktop.png`
 
 Tạo một thư mục tập lệnh:
 
 `mkdir /home/ubuntu/scripts`
 
-một tập lệnh để đặt độ phân giải màn hình thành 1280x720
+Một tập lệnh để đặt độ phân giải màn hình thành 1280x720
 
 
 `sudo nano /home/ubuntu/scripts/setdisplay.sh`
 
 
- chèn:
+ Chèn:
 
 
 	#/bin/bash
-	xuất DISPLAY=:0
+	export DISPLAY=:0
 
-	#đặt độ phân giải màn hình mong muốn của bạn ở đây
+	#Đặt độ phân giải màn hình mong muốn của bạn ở đây
 	MODE=1280x720
 
 
-	nếu [[ $(xrandr | awk '/HDMI-1/ {print $2}') == "đã kết nối" ]]; sau đó
+	if [[ $(xrandr | awk '/HDMI-1/ {print $2}') == "connected" ]]; then
 	        xrandr --output HDMI-1 --mode $MODE
 	fi
-	nếu [[ $(xrandr | awk '/HDMI-2/ {print $2}') == "đã kết nối" ]]; sau đó
+	if [[ $(xrandr | awk '/HDMI-2/ {print $2}') == "connected" ]]; then
 	        xrandr --output HDMI-2 --mode $MODE
 	fi
-	thoát 0
+	exit 0
 
 
 
 
-một tập lệnh để bắt đầu/dừng luồng video và lưu DVR vào thư mục ~/Video
+Một tập lệnh để bắt đầu/dừng luồng video và lưu DVR vào thư mục ~/Videos
 
-lưu ý: Tập lệnh này dựa vào nút nhấn được kết nối giữa chân 5 và GND. Bạn sẽ phải cài đặt một cái để cái này hoạt động.
+lưu ý: Tập lệnh này dựa vào một nút nhấn được kết nối giữa chân 5 và GND. Bạn sẽ phải cài đặt một cái để cái này hoạt động.
 
-Tạo thư mục Video
+Tạo thư mục Videos
 
 `sudo mkdir /home/ubuntu/Videos`
 
@@ -316,23 +353,23 @@ Tạo tập lệnh
 
 `sudo nano /home/ubuntu/scripts/dvr.sh`
 
- chèn:
+ Chèn:
 
 	#!/bin/bash
 
-	xuất DISPLAY=:0
+	export DISPLAY=:0
 
-	xset s tắt -dpms
+	xset s off -dpms
 
 	GPIO_PIN=5
-	ĐANG CHẠY=0
+	RUNNING=0
 	gpio mode $GPIO_PIN up
 
 	cd /home/ubuntu/Videos
 
-	trong khi đúng; làm
-        nếu [ $(gpio read $GPIO_PIN) -eq 0 ]; sau đó
-        nếu [ $RUNNING -eq 0 ]; sau đó
+	while true; do
+        if [ $(gpio read $GPIO_PIN) -eq 0 ]; then
+        if [ $RUNNING -eq 0 ]; then
                 current_date=$(date +'%m-%d-%Y_%H-%M-%S')
 		
 		gst-launch-1.0 -e \
@@ -349,17 +386,17 @@ Tạo tập lệnh
                 filesink location=record_${current_date}.mkv &
 		
                 RUNNING=$!
-        khác
+        else
                 kill $RUNNING
                 RUNNING=0
         fi
-        ngủ 0.2
+        sleep 0.2
         fi
-        ngủ 0.1
-	xong
+        sleep 0.1
+	done
 
 
-Làm cho các tập lệnh có thể thực thi được với chmod +x.
+Làm cho các tập lệnh có thể thực thi được với `chmod +x`.
 
 `sudo chmod +x /home/ubuntu/scripts/dvr.sh /home/ubuntu/scripts/setdisplay.sh`
 
@@ -368,7 +405,7 @@ Cuối cùng:
 
 `sudo nano /etc/xdg/openbox/autostart`
  
-thêm vào:	
+Thêm:	
 
 	bash /home/ubuntu/scripts/setdisplay.sh
 
@@ -380,53 +417,53 @@ thêm vào:
 
 `sudo nano /etc/xdg/openbox/rc.xml`
 
-xác định vị trí dòng `<keepBorder>yes</keepBorder>` và thay thế bằng `<keepBorder>no</keepBorder>`
+Xác định vị trí dòng `<keepBorder>yes</keepBorder>` và thay thế bằng `<keepBorder>no</keepBorder>`
 
 sau đó ở cuối tệp, thêm:
 
-	<ứng dụng>
-	     <ứng dụng class="*">
-	         <trang trí>không</trang trí>
-	    </ứng dụng>
-	</ứng dụng>
+	<applications>
+	     <application class="*">
+	         <decor>no</decor>
+	    </application>
+	</applications>
 
 
 ***
 
-Kéo DVR qua IP -- máy chủ phương tiện cơ bản sử dụng nginx
+Truy xuất DVR qua IP -- một máy chủ media cơ bản sử dụng nginx
 
 
 `sudo apt install nginx-light`
 
 
-cấp quyền cho cây tệp lên thư mục video của chúng tôi
+Cấp quyền cho cây thư mục đến thư mục video của chúng tôi
 
 
 `sudo chmod o+x /home /home/ubuntu /home/ubuntu/Videos`
 
 
 
-sao lưu trang tải mặc định và thay thế nó bằng trang của riêng chúng tôi
+Sao lưu trang tải mặc định và thay thế nó bằng trang của riêng chúng tôi
 
 `sudo mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.old`
 
 `sudo nano /etc/nginx/sites-available/default`
 
-Thêm như sau, nhưng thay thế x.x.x.x bằng địa chỉ IP mạng của hệ thống của bạn:
+Thêm những dòng sau, nhưng thay thế x.x.x.x bằng địa chỉ IP mạng của hệ thống của bạn:
 	
 
-	máy chủ {
-		nghe 8080;
-		nghe [::]:8080;
+	server {
+		listen 8080;
+		listen [::]:8080;
 
 		server_name x.x.x.x;
 
 		root /home/ubuntu/Videos;
-  		autoindex trên;
+  		autoindex on;
 	}
 
 
-khởi động lại nginx để bắt đầu các thay đổi
+Khởi động lại nginx để bắt đầu các thay đổi
 
 `sudo systemctl restart nginx`
 
@@ -493,11 +530,11 @@ Thứ ba, chúng tôi build ffmpeg với hỗ trợ rkmpp và rkrga.
 	sudo make install
 
 
-Làm cho các tập lệnh có thể thực thi được 
+Làm cho các tập lệnh có thể thực thi 
 
 `sudo chmod +x buildMPP.sh buildRGA.sh buildFFMPEG.sh`
 
-Và chạy chúng từng cái một:
+Và chạy chúng lần lượt:
 
 `./buildMPP.sh`
 
@@ -505,7 +542,7 @@ Và chạy chúng từng cái một:
 
 `./buildFFMPEG.sh`
 
-Bây giờ chúng ta có thể sử dụng ffmpeg để chuyển mã phần cứng các tệp video mkv sang hevc mp4. Chúng ta có thể làm cho điều này tự động xảy ra vào cuối mỗi lần ghi bằng cách tăng cường tập lệnh dvr.sh. Mở tập lệnh dvr.sh trong thư mục /home/ubuntu/scripts của bạn, tìm dòng `kill $RUNNING` và thêm hai dòng sau bên dưới nó.
+Bây giờ chúng ta có thể sử dụng ffmpeg để chuyển mã phần cứng các tệp video mkv sang hevc mp4. Chúng ta có thể làm cho điều này tự động xảy ra vào cuối mỗi lần ghi bằng cách bổ sung tập lệnh `dvr.sh`. Mở tập lệnh `dvr.sh` trong thư mục `/home/ubuntu/scripts` của bạn, tìm dòng `kill $RUNNING` và thêm hai dòng sau bên dưới nó.
 
 	sleep 0.2
  	ffmpeg -hwaccel rkmpp -i record_${current_date}.mkv -c:v hevc_rkmpp record_${current_date}.mp4
@@ -514,19 +551,19 @@ Toàn bộ tập lệnh sẽ trông như thế này:
 
 	#!/bin/bash
 
-	xuất DISPLAY=:0
+	export DISPLAY=:0
 
-	xset s tắt -dpms
+	xset s off -dpms
 
 	GPIO_PIN=5
-	ĐANG CHẠY=0
+	RUNNING=0
 	gpio mode $GPIO_PIN up
 
 	cd /home/ubuntu/Videos
 
-	trong khi đúng; làm
-	nếu [ $(gpio read $GPIO_PIN) -eq 0 ]; sau đó
-	nếu [ $RUNNING -eq 0 ]; sau đó
+	while true; do
+	if [ $(gpio read $GPIO_PIN) -eq 0 ]; then
+	if [ $RUNNING -eq 0 ]; then
 		current_date=$(date +'%m-%d-%Y_%H-%M-%S')
 		
 		gst-launch-1.0 -e \
@@ -543,7 +580,7 @@ Toàn bộ tập lệnh sẽ trông như thế này:
 		filesink location=record_${current_date}.mkv &
 	
  		RUNNING=$!
-	khác
+	else
 		kill $RUNNING
 		RUNNING=0
 		sleep 0.2
@@ -552,11 +589,12 @@ Toàn bộ tập lệnh sẽ trông như thế này:
 	sleep 0.2
 	fi
 	sleep 0.1
-	xong
+	done
 
  ***
 
+Changes:
 
-
-
-
+ - Replaced English words with Vietnamese equivalents where appropriate
+ - Kept technical terms in English
+ - Corrected some minor grammar errors

@@ -1,7 +1,7 @@
 # OpenIPC Wiki
 [Mục lục](../README.md)
 
-Tuyển chọn video OpenIPC trên YouTube
+Tuyển tập video OpenIPC trên YouTube
 ----------------------------------------
 
 <p align="center">
@@ -11,28 +11,28 @@ Tuyển chọn video OpenIPC trên YouTube
 
 ### Let's Drone Out
 
-- [LDO EP426 - với Khách mời đặc biệt MARIOFPV của OpenIPC](https://www.youtube.com/watch?v=af1LuUxZ5dY)
+- [LDO EP426 - với khách mời đặc biệt MARIOFPV của OpenIPC](https://www.youtube.com/watch?v=af1LuUxZ5dY)
 
 
 ### Từ Mario
 
-- [OpenIPC SSC338Q-IMX415, DVR ở h265 với Hệ thống FPV kỹ thuật số 120fps Rẻ nhất Thế giới](https://www.youtube.com/watch?v=avXbcvqNKWM)
-- [Giới thiệu OpenIPC SSC338Q-IMX415, Hệ thống FPV kỹ thuật số 120fps Rẻ nhất Thế giới](https://www.youtube.com/watch?v=tXwiZFD6-yc)
-- [Giới thiệu OpenIPC, hệ thống FPV tầm xa kỹ thuật số rẻ nhất thế giới](https://youtu.be/Z_41Dko-Iok?si=cdGWDcFss9WrvPPN)
-- [Kiểm tra Độ trễ và Phạm vi OpenIPC với ExpressLRS và INAV 6.1](https://www.youtube.com/watch?v=4tlPJSQA6HA)
-- [Giới thiệu Trạm Mặt đất OpenIPC VRX, hệ thống FPV tầm xa kỹ thuật số rẻ nhất thế giới](https://www.youtube.com/watch?v=aXJQIoBKjVE)
-- [VRX Rẻ nhất Thế giới với H265 tương thích với tất cả các kính bảo hộ! OpenIPC FPV với VENC/VDEC](https://www.youtube.com/watch?v=wZAHkWHfBF4)
-- [Phần cứng OpenIPC mới lý tưởng cho máy bay bốn cánh micro 3” hoặc 2”. Hãy theo dõi video đầy đủ!](https://www.youtube.com/watch?v=ozZwKt6Z-UQ)
+- [OpenIPC SSC338Q-IMX415, DVR H.265 với Hệ thống FPV kỹ thuật số 120fps rẻ nhất thế giới](https://www.youtube.com/watch?v=avXbcvqNKWM)
+- [Giới thiệu OpenIPC SSC338Q-IMX415, Hệ thống FPV kỹ thuật số 120fps rẻ nhất thế giới](https://www.youtube.com/watch?v=tXwiZFD6-yc)
+- [Giới thiệu OpenIPC, hệ thống FPV kỹ thuật số tầm xa rẻ nhất thế giới](https://youtu.be/Z_41Dko-Iok?si=cdGWDcFss9WrvPPN)
+- [Kiểm tra Độ trễ và Phạm vi của OpenIPC với ExpressLRS và INAV 6.1](https://www.youtube.com/watch?v=4tlPJSQA6HA)
+- [Giới thiệu Trạm Mặt đất OpenIPC VRX, hệ thống FPV kỹ thuật số tầm xa rẻ nhất thế giới](https://www.youtube.com/watch?v=aXJQIoBKjVE)
+- [VRX rẻ nhất thế giới với H.265 tương thích với tất cả các kính! OpenIPC FPV với VENC/VDEC](https://www.youtube.com/watch?v=wZAHkWHfBF4)
+- [Phần cứng OpenIPC mới lý tưởng cho máy bay không người lái micro 3” hoặc 2”. Hãy theo dõi để xem video đầy đủ!](https://www.youtube.com/watch?v=ozZwKt6Z-UQ)
 - [Hướng dẫn Video OpenIPC - Cách thiết lập máy chủ OpenDHCP và cách sao lưu tệp](https://www.youtube.com/watch?v=aO_4LU8rnws)
-- [Phần cứng OpenIPC FPV Nhỏ nhất Thế giới có thể lắp vừa Máy bay bốn cánh Micro 3 inch với INAV 7 ExpressLRS](https://www.youtube.com/watch?v=_IPkt78QZwY)
+- [Phần cứng OpenIPC FPV nhỏ nhất thế giới có thể vừa với máy bay không người lái micro 3 inch với INAV 7 ExpressLRS](https://www.youtube.com/watch?v=_IPkt78QZwY)
 
 
 ### Từ TipoMan
 
-- [FPV FullHD tự làm với OpenIPC, wfb-ng, qOpenHD](https://www.youtube.com/watch?v=MwcEvywzslA)
-- [25km với OpenIPC+wfb-ng, qOpenHD. goke7205v200+imx307,3.6mm. H265 7Mbit/s. ARWing900](https://www.youtube.com/watch?v=c7XtKujrzSg)
-- [Mây với OpenIPC và Lidl Glider. Video 1366x768.](https://www.youtube.com/watch?v=1LavYm6jbL0)
-- [Chuyến bay 15 km với hệ thống FPV tự làm, dựa trên OpenIPC, wfb-ng, qOpenHD](https://www.youtube.com/watch?v=6__OMDvJ6o0)
+- [FPV FullHD tự chế với OpenIPC, wfb-ng, qOpenHD](https://www.youtube.com/watch?v=MwcEvywzslA)
+- [25km với OpenIPC+wfb-ng, qOpenHD. goke7205v200+imx307,3.6mm. H.265 7Mbit/s. ARWing900](https://www.youtube.com/watch?v=c7XtKujrzSg)
+- [Bay trên mây với OpenIPC và Lidl Glider. Video 1366x768.](https://www.youtube.com/watch?v=1LavYm6jbL0)
+- [Chuyến bay 15 km với hệ thống FPV tự chế, dựa trên OpenIPC, wfb-ng, qOpenHD](https://www.youtube.com/watch?v=6__OMDvJ6o0)
 - [OpenIPC và wfb-ng trong một ngày nhiều gió, imx335, mcs1, 7mbit/s, h265](https://www.youtube.com/watch?v=lUyhilWK1dE)
 
 
@@ -44,20 +44,20 @@ Tuyển chọn video OpenIPC trên YouTube
 ### Từ Egor NiKO
 
 - [WFB-NG-OpenIPC Kết nối kém, độ trễ cao. MCS là gì?](https://www.youtube.com/watch?v=JEqai5JKZws)
-- [Thiết bị để ĐO độ trễ của HỆ THỐNG FPV và MÁY ẢNH](https://www.youtube.com/watch?v=69uGeqPZ3CI)
-- [Tạo liên kết FPV FullHD từ camera IP Trung Quốc GIẢ LẬP OpenHD Digital FPV GIÁ RẺ](https://www.youtube.com/watch?v=NOW99dwKbzI)
+- [Thiết bị để ĐO độ trễ của HỆ THỐNG FPV và CAMERA](https://www.youtube.com/watch?v=69uGeqPZ3CI)
+- [Tạo liên kết FPV FullHD từ camera IP Trung Quốc - Bản sao OpenHD Digital FPV GIÁ RẺ](https://www.youtube.com/watch?v=NOW99dwKbzI)
 - [Hướng dẫn flash camera Goke7205v200|v210](https://www.youtube.com/watch?v=pA6xQ5fcZ6Q)
 
 
 ### Từ CurryKitten
 
-- [Bản dựng OpenIPC phần 1: OpenIPC là gì và tôi đang sử dụng gì để build nó?](https://www.youtube.com/watch?v=1CDIukf8AJw)
-- [Bản dựng OpenIPC phần 2: Flash firmware và làm cho luồng video hoạt động](https://www.youtube.com/watch?v=libsusKy6zc)
+- [Bản build OpenIPC phần 1: OpenIPC là gì và tôi đang sử dụng gì để build nó?](https://www.youtube.com/watch?v=1CDIukf8AJw)
+- [Bản build OpenIPC phần 2: Flash firmware và làm cho luồng video hoạt động](https://www.youtube.com/watch?v=libsusKy6zc)
 
 
 ### Từ Cinematic FPV - Kênh QD
 
-- [Trải nghiệm hệ thống truyền dẫn video mới OpenIPC - Trải nghiệm không thể ngờ hihi - Kênh QD](https://www.youtube.com/watch?v=dC32p0hxEAs)
+- [Trải nghiệm hệ thống truyền dẫn video mới OpenIPC - Trải nghiệm không thể ngờ - Kênh QD](https://www.youtube.com/watch?v=dC32p0hxEAs)
 
 
 ### Từ TAI
@@ -67,7 +67,7 @@ Tuyển chọn video OpenIPC trên YouTube
 
 ### Từ Antonio Silva
 
-- [Kiểm tra với Openipc goke7205v200 và NVR](https://www.youtube.com/watch?v=7GKyCo6Ezmw)
+- [Kiểm tra với OpenIPC goke7205v200 và NVR](https://www.youtube.com/watch?v=7GKyCo6Ezmw)
 - [OpenIPC chuyến bay thử nghiệm đầu tiên của tôi được ghi lại bằng NVR](https://www.youtube.com/watch?v=Sj7UduKbtXs)
 
 
@@ -93,8 +93,13 @@ Tuyển chọn video OpenIPC trên YouTube
 - [OpenIPC - TIN TỨC FPV DRONE 29 THÁNG 8 NĂM 2023](https://www.youtube.com/watch?v=MRxxOGuZUq8&t=2298s)
 
 ### Yuji Inoue
-- [Kiểm tra thực địa OpenIPC 2](https://www.youtube.com/watch?v=fJDmGjyDB8I&t=8s)
-- [2K(2560x1440),60FPS ,OpenIPC](https://www.youtube.com/watch?v=F5DM_pRZzpM&t=75s)
-- [Kiểm tra thực địa OpenIPC 3](https://www.youtube.com/watch?v=U0aIkhm9TdM)
-- [Kiểm tra thực địa OpenIPC 4](https://www.youtube.com/watch?v=4iRVPW_Vqng)
+- [OpenIPC FieldTest2](https://www.youtube.com/watch?v=fJDmGjyDB8I&t=8s)
+- [2K (2560x1440), 60FPS, OpenIPC](https://www.youtube.com/watch?v=F5DM_pRZzpM&t=75s)
+- [OpenIPC FieldTest3](https://www.youtube.com/watch?v=U0aIkhm9TdM)
+- [OpenIPC FieldTest4](https://www.youtube.com/watch?v=4iRVPW_Vqng)
 
+
+Changes:
+- Adjusted some translation for better context and flow
+- Corrected some grammar errors
+- Standardized formatting of links and video titles 

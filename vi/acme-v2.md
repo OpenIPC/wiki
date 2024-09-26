@@ -4,7 +4,7 @@
 
 ### Cách cài đặt chứng chỉ HTTPS trên camera của bạn
 
-Đảm bảo rằng camera của bạn có thể truy cập từ Internet trên cả cổng 80 (HTTP) và cổng 443 (HTTPS). Bạn có thể cần phải thiết lập chuyển tiếp cổng trên bộ định tuyến của mình cho việc này.
+Đảm bảo rằng camera của bạn có thể truy cập từ Internet trên cả cổng 80 (HTTP) và cổng 443 (HTTPS). Bạn có thể cần phải thiết lập **chuyển tiếp cổng** trên bộ định tuyến của mình cho việc này.
 
 ### Tạo tài khoản ACME:
 
@@ -16,11 +16,11 @@ uacme -y -v new
 
 ### Đặt FQDN cho camera của bạn
 
-Giao thức HTTP bảo mật (HTTPS) không thể được cấp cho địa chỉ IP trần, bạn cần một Tên miền đầy đủ (FQDN) cho camera của mình. Đó là cách camera của bạn sẽ được truy cập qua HTTPS.
+Giao thức HTTP bảo mật (HTTPS) không thể được cấp cho địa chỉ IP **đơn lẻ**, bạn cần một **Tên miền đầy đủ (FQDN)** cho camera của mình. Đó là cách camera của bạn sẽ được truy cập qua HTTPS.
 
-Tạo một tài khoản với bất kỳ Nhà đăng ký tên miền nào và đăng ký một tên miền, ví dụ: _mysuperduperdomain.com_.
+Tạo một tài khoản với bất kỳ **Nhà đăng ký tên miền** nào và đăng ký một tên miền, ví dụ: _mysuperduperdomain.com_.
 
-Thiết lập vùng DNS cho tên miền đó và tạo một bản ghi cho camera của bạn trong vùng miền đó.
+Thiết lập **vùng DNS** cho tên miền đó và tạo một **bản ghi** cho camera của bạn trong vùng miền đó.
 
 ```console
 Bản ghi DNS
@@ -40,7 +40,7 @@ Thêm chuyển tiếp cổng từ cổng 80 của giao diện WAN đến cổng 
 75.123.45.555:80 => 192.168.1.10:80
 ```
 
-Nếu bạn có một số thiết bị trên mạng của mình phục vụ các yêu cầu HTTP công khai, thì hãy thêm tên miền camera của bạn vào proxy HTTP.
+Nếu bạn có một số thiết bị trên mạng của mình phục vụ các yêu cầu HTTP công khai, thì hãy thêm tên miền camera của bạn vào **máy chủ proxy HTTP**.
 
 
 ### Cấp chứng chỉ cho miền của bạn:
@@ -63,6 +63,4 @@ hoặc bạn có thể tạo một bản ghi trên máy chủ DNS cục bộ c�
 
 ### Khởi động lại majestic và kiểm tra truy cập
 
-Mở trình duyệt web yêu thích của bạn và truy cập <https://ipc-001.mysuperduperdomain.com/>
-
-
+Mở trình duyệt web yêu thích của bạn và truy cập <https://ipc-001.mysuperduperdomain.com/> 

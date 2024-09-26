@@ -15,17 +15,7 @@ Phiên bản video: - [OpenIPC - Chuẩn bị Trạm Mặt đất: Ubuntu + QGro
 sudo apt update
 ```
 ```
-sudo apt install dkms git python3-all-dev net-tools virtualenv fakeroot debhelper python3-twisted
- libpcap-dev python3-pyroute2 python3-future python3-configparser python3-all libsodium-dev
-```
-
-### Libsodium
-```
-git clone https://github.com/jedisct1/libsodium --branch stable
-cd libsodium
-./configure
-make && make check
-sudo make install
+sudo apt install dkms git python3-all-dev net-tools virtualenv fakeroot debhelper python3-twisted libpcap-dev python3-pyroute2 python3-future python3-all libsodium-dev
 ```
 
 ### Trình điều khiển card Wifi
@@ -51,7 +41,7 @@ vi /etc/wifibroadcast.cfg
 ```
 wfb-cli gs
 ```
-###TRẠM MẶT ĐẤT ĐÃ SẴN SÀNG SỬ DỤNG###
+### TRẠM MẶT ĐẤT ĐÃ SẴN SÀNG SỬ DỤNG ###
 
 ### Khởi động, dừng, khởi động lại dịch vụ
 ```
@@ -60,11 +50,11 @@ systemctl stop wifibroadcast@gs
 systemctl start wifibroadcast@gs
 ```
 
-### Hướng dẫn sử dụng Qground control
+### Hướng dẫn sử dụng QGroundControl
 
-- https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html
+- https://docs.qgroundcontrol.com/master/en/qgc-user-guide/getting_started/download_and_install.html
 
-### Lấy nhật ký cuối cùng từ dịch vụ
+### Lấy log cuối cùng từ dịch vụ
 ```
 journalctl -xu wifibroadcast@gs -n 100
 ```
@@ -77,5 +67,10 @@ iwconfig
 
 ```
 
+Changes:
+- "Trạm Mặt đất" -> "Trạm mặt đất" (consistency)
+- "Libsodium" -> removed
+- "python3-configparser"  -> "python3-all" (since python3-all includes python3-configparser)
+- "Hướng dẫn sử dụng Qground control" -> "Hướng dẫn sử dụng QGroundControl"
 
 

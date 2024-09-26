@@ -22,20 +22,20 @@ Ethernet chỉ hoạt động với các thông số này
 
 ### GPIO
 
-CẢNH BÁO!!! Trạng thái chân gpio động cơ không chính xác sau khi khởi động, cuộn dây động cơ có thể bị cháy, hãy khởi tạo với [những cái này](#kiểm-tra-động-cơ) càng sớm càng tốt hoặc rút đầu nối động cơ trước khi bật nguồn.
+CẢNH BÁO!!! Trạng thái chân gpio động cơ không chính xác sau khi khởi động, cuộn dây động cơ có thể bị cháy, hãy khởi tạo với [những cái này](#kiểm-tra-động-cơ) càng sớm càng tốt, hoặc rút đầu nối động cơ trước khi bật nguồn.
 
 | Nr        | Mô tả   | Màu     |
 |-----------|---------------|---------|
 | 38        | irCut_1       |         |
 | 39        | irCut_2       |         |
-| 9         | Động cơ thu phóng A1 | Xanh lá cây |
-| 48        | Động cơ thu phóng A2 | Cam    |
-| 51        | Động cơ thu phóng B1 | Vàng    |
-| 43        | Động cơ thu phóng B2 | Tím    |
-| 52        | Động cơ lấy nét A1  | Đen     |
-| 55        | Động cơ lấy nét A2  | Xanh lam |
-| 53        | Động cơ lấy nét B1  | Trắng   |
-| 54        | Động cơ lấy nét B2  | Đỏ      |
+| 9         | Động cơ Zoom A1 | Xanh lá cây |
+| 48        | Động cơ Zoom A2 | Cam    |
+| 51        | Động cơ Zoom B1 | Vàng    |
+| 43        | Động cơ Zoom B2 | Tím    |
+| 52        | Động cơ Lấy nét A1  | Đen     |
+| 55        | Động cơ Lấy nét A2  | Xanh lam |
+| 53        | Động cơ Lấy nét B1  | Trắng   |
+| 54        | Động cơ Lấy nét B2  | Đỏ      |
 
 ### Kiểm tra động cơ
 
@@ -375,7 +375,7 @@ do
 done
 
 
-# chuyển sang bước đầy đủ và vô hiệu hóa động cơ
+# chuyển sang full step và tắt động cơ
 if [ $1 = "-f" ]; then
   echo "0" >/sys/class/gpio/gpio$gpio_FN_Bm/value
   usleep $sleep_time

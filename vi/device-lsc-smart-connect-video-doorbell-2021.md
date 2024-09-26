@@ -27,7 +27,7 @@ Thiết lập phần cứng và phần mềm rất giống với: [chacron ipcam
 | Cắt IR        | Hoạt động                                                  |
 
 
-### Kết nối nối tiếp
+### Kết nối serial
 
 ![device_lsc_doorbell3](../images/device-lsc-smart-connect-doorbell3.jpg)
 
@@ -36,9 +36,9 @@ Thiết lập phần cứng và phần mềm rất giống với: [chacron ipcam
 
 ### Nor flash
 [XM25QH64A](https://datasheet.lcsc.com/lcsc/XMC-XM25QH64AHIG_C328461.pdf)
-- 8MB NOR Flash
+- NOR Flash 8MB
 
-### GPIOs
+### GPIO
 
 | nr        | Mô tả   |
 |-----------|---------------|
@@ -121,7 +121,7 @@ sensors:
 
 ### Đèn LED
 
-Camera có đèn LED hai màu (đỏ/xanh) được kết nối với GPIO 50 và 51.
+Camera có đèn LED hai màu (đỏ/xanh lam) được kết nối với GPIO 50 và 51.
 Để điều khiển các đèn LED đó, bạn có thể sử dụng API /sys:
 ```
 # làm cho GPIO có thể truy cập được
@@ -130,9 +130,9 @@ echo 50 > /sys/class/gpio/export
 echo out > /sys/class/gpio50/direction
 echo out > /sys/class/gpio51/direction
 
-# bật đèn LED xanh
+# bật đèn LED xanh lam
 echo 1 > /sys/class/gpio50/value
-# tắt đèn LED xanh
+# tắt đèn LED xanh lam
 echo 0 > /sys/class/gpio50/value
 
 # bật đèn LED đỏ
@@ -141,12 +141,13 @@ echo 1 > /sys/class/gpio51/value
 echo 0 > /sys/class/gpio51/value
 ```
 
-### Hỗ trợ Homeassistant
+### Hỗ trợ Home Assistant
 
-Một MQTT Client tùy chỉnh đã được viết để xử lý sự kiện chuông cửa và gửi nó đến Home assistant bằng MQTT.
-Dự án có thể được tìm thấy ở đây: [lscdoorbellmqtt](https://github.com/berobloom/lscdoorbellmqtt)
+Một MQTT Client tùy chỉnh đã được viết để xử lý sự kiện chuông cửa và gửi nó đến Home Assistant bằng MQTT.
+Bạn có thể tìm thấy dự án tại đây: [lscdoorbellmqtt](https://github.com/berobloom/lscdoorbellmqtt)
 
 ## Nguồn:
 
 * https://github.com/OpenIPC/wiki/blob/master/en/device-chacon-ipcam-ri01.md
 * https://github.com/berobloom/lscdoorbellmqtt
+

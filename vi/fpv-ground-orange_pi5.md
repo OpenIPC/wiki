@@ -18,7 +18,7 @@ sudo apt update
 sudo apt upgrade
 ```
 
-### Tải xuống và cài đặt tiêu đề kernel Linux cho rockchip rk3588
+### Tải xuống và cài đặt header kernel Linux cho Rockchip rk3588
 
 [https://drive.google.com/drive/folders/1R7VmAeo3_LpFDQvYSEG9ymAC-DvaLt47](https://drive.google.com/drive/folders/1R7VmAeo3_LpFDQvYSEG9ymAC-DvaLt47)
 
@@ -33,7 +33,7 @@ sudo dpkg -i linux-image-legacy-rockchip-rk3588_1.1.2_arm64.deb
 
 ```
 sudo bash -c "cat > /etc/modprobe.d/wfb.conf <<EOF
-# Danh sách đen mô-đun gốc
+# Danh sách đen module gốc
 blacklist 88XXau
 blacklist 8812au
 blacklist rtl8812au
@@ -51,7 +51,7 @@ sudo ./dkms-install.sh
 
 ### Cài đặt WFB-NG
 
-Sử dụng lệnh "nmcli", chúng ta tìm ra tên của bộ chuyển đổi wifi của bạn và thay thế $WLAN vào vị trí
+Sử dụng lệnh "nmcli", chúng ta sẽ tìm ra tên của adapter Wi-Fi của bạn và thay thế `$WLAN` vào vị trí đó
 
 ```
 git clone -b stable https://github.com/svpcom/wfb-ng.git
@@ -103,7 +103,7 @@ h264
 gst-launch-1.0 udpsrc port=5600 caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264' ! rtph264depay ! h264parse ! mppvideodec ! xvimagesink sync=false
 ```
 
-###TRẠM MẶT ĐẤT ĐÃ SẴN SÀNG SỬ DỤNG###
+### TRẠM MẶT ĐẤT ĐÃ SẴN SÀNG SỬ DỤNG ###
 
 ### DVR (Máy ghi hình kỹ thuật số)
 
@@ -123,7 +123,7 @@ fi
 
 ```
 
-Khi chạy với tùy chọn **save**, video sẽ được lưu vào **/thư mục home/Video/**
+Khi chạy với tùy chọn **save**, video sẽ được lưu vào **thư mục /home/Video/**
 
 ### Khởi động, dừng, khởi động lại dịch vụ
 
@@ -133,28 +133,28 @@ systemctl stop wifibroadcast@gs
 systemctl start wifibroadcast@gs
 ```
 
-### Lấy nhật ký mới nhất từ ​​dịch vụ
+### Lấy log mới nhất từ ​​dịch vụ
 
 ```
 journalctl -u wifibroadcast@gs -f
 journalctl -xu wifibroadcast@gs -n 100
 ```
 
-### Lệnh hữu ích
+### Các lệnh hữu ích
 
 ```
 # Kiểm tra hoạt động của wfb-ng
 /usr/bin/wfb_rx -p 0 -c 127.0.0.1 -u 5600 -K /etc/gs.key -i 7669206 $WLAN
 
-# Tìm ra tên của bộ chuyển đổi wifi
+# Tìm ra tên của adapter Wi-Fi
 nmcli
 ifconfig
 iw
 
-# Hiển thị các tham số có thể có của bộ chuyển đổi wifi
+# Hiển thị các tham số có thể có của adapter Wi-Fi
 iw list
 
-# Hiển thị cài đặt hiện tại của bộ chuyển đổi Wifi
+# Hiển thị cài đặt hiện tại của adapter Wi-Fi
 iw dev
 
 # Xuất ra các tham số tần số và công suất hiện tại
@@ -164,7 +164,7 @@ sudo iw reg get
 sudo iw reg set RU
 https://hackware.ru/?p=17978 - Giải quyết vấn đề lựa chọn kênh
 
-# Xem các quy trình wfb-ng đang chạy
+# Xem các tiến trình wfb-ng đang chạy
 ps -aux | grep wfb
 
 # Đặt công suất
@@ -175,12 +175,20 @@ sudo ip link set $WLAN up
 # Xem các plugin có sẵn để giải mã
 gst-inspect-1.0 | grep 265
 
-# Hiển thị danh sách các trình điều khiển/mô-đun đã tải xuống
+# Hiển thị danh sách các driver/module đã tải xuống
 lsmod
 
-# Hiển thị danh sách các thiết bị USB được kết nối và các trình điều khiển liên quan
+# Hiển thị danh sách các thiết bị USB được kết nối và các driver liên quan
 usb-devices
 ```
+
+Changes:
+- "card Wifi" -> "card Wi-Fi"
+- "bộ chuyển đổi wifi" -> "adapter Wi-Fi"
+- "tự động tải lên" -> "tự động tải lên" (no change, but clarify the meaning)
+- "Máy ghi hình kỹ thuật số" -> "Máy ghi hình kỹ thuật số" (no change, but clarify the meaning)
+- "thư mục home/Video" -> "thư mục /home/Video"
+- "nhật ký mới nhất" -> "log mới nhất"
 
 
 

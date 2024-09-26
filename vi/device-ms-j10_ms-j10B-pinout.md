@@ -4,7 +4,7 @@
 ## Phần cứng
 
 
-| Tên | chân | Mô tả | GPIO | Cách sử dụng |
+| Tên | Chân | Mô tả | GPIO | Cách sử dụng |
 | --- | --- | --- |---|---|
 | **c1** | 1 | ICR | | |
 || 2 | ICR | | |
@@ -32,10 +32,10 @@
 || | | | |
 | **c5** | 1 | đặt lại | | |
 || 2 | GND | | |
-|| 3 | uart TX | ttyS2 | 9600; `echo 234 > /dev/ttyS2` |
-|| 4 | uart RX | ttyS2 | 9600; `cat /dev/ttyS2` |
-|| 5 | uart TX | ttyS1 | 9600; `echo 234 > /dev/ttyS1` |
-|| 6 | uart RX | ttyS1 | 9600; `cat /dev/ttyS1` |
+|| 3 | UART TX | ttyS2 | 9600; `echo 234 > /dev/ttyS2` |
+|| 4 | UART RX | ttyS2 | 9600; `cat /dev/ttyS2` |
+|| 5 | UART TX | ttyS1 | 9600; `echo 234 > /dev/ttyS1` |
+|| 6 | UART RX | ttyS1 | 9600; `cat /dev/ttyS1` |
 || 7 | tắt tiếng âm thanh | gpio80 | `echo 1 >  /sys/class/gpio/gpio80/value` |
 || | | | |
 | **c6** | 1 | Âm thanh ra | | |
@@ -59,12 +59,13 @@
 || 15 | AlarmIn | gpio44 | `cat /sys/class/gpio/gpio44/value` |
 || 16 | AlarmOut | gpio45 | | |
 || | | | |
-| **j8** | 1 | uart TX | ttyS0 | |
-|| 2 | uart RX | ttyS0 | | |
+| **j8** | 1 | UART TX | ttyS0 | |
+|| 2 | UART RX | ttyS0 | | |
 || | | | |
 
 ## Bổ sung
 | Mô tả | Cách sử dụng |
 |---|---|
 | Nhiệt độ CPU | `cat /sys/class/mstar/msys/TEMP_R` |
+
 

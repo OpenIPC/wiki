@@ -4,7 +4,7 @@
 
 [Tờ dữ liệu sản phẩm](https://chacon.com/datasharing/doc/IPCAM-RI01/ipcam-ri01_user_manual.pdf)
 
-Camera này là sản phẩm đổi thương hiệu của một công ty sản xuất được xác định bởi "PPStrong".
+Camera này là một phiên bản đổi thương hiệu của một công ty sản xuất được xác định bởi "PPStrong".
 Tôi chắc chắn rằng có những camera khác ngoài kia đang sử dụng cùng một phần cứng (hoặc tương tự với những thay đổi nhỏ).
 
 ## Phần cứng
@@ -33,8 +33,8 @@ Bo mạch chủ của camera được xác định bởi "SPEED5S-H1MB_F23".
 
 ![device_chacon_ipcam-ri01_board_top](https://user-images.githubusercontent.com/1659543/149513254-d326f57f-902b-4c58-98e6-73bfe7fa33d2.jpg)
 Ở phía trên của bo mạch chủ:
-- một khe cắm thẻ nhớ micro sd ở bên phải
-- đầu nối có nhãn "IR" cấp nguồn cho đèn LED IR, đèn LED đỏ và đèn LED xanh
+- một khe cắm thẻ nhớ microSD ở bên phải
+- đầu nối có nhãn "IR" cấp nguồn cho đèn LED IR, đèn LED đỏ và đèn LED xanh lam
 - đầu nối "ICR" cấp nguồn cho bộ lọc cắt IR
 - đầu nối không được xác định là đầu vào cho micrô
 - chip flash SPI NOR (QH128A)
@@ -44,9 +44,9 @@ Bo mạch chủ của camera được xác định bởi "SPEED5S-H1MB_F23".
 Ở phía dưới của bo mạch chủ:
 - SoC Hi3518EV300
 - Mô-đun WiFi RTL8188FTV
-- Công tắc đặt lại
+- Nút Reset
 - Đầu nối (từ trên xuống dưới):
-  - Nguồn (5V từ đầu nối micro usb)
+  - Nguồn (5V từ đầu nối micro USB)
   - Động cơ bước nghiêng/dọc
   - Động cơ bước xoay/ngang
   - Loa
@@ -75,52 +75,52 @@ Bo mạch chủ của camera được xác định bởi "SPEED5S-H1MB_F23".
 ![device_chacon_ipcam-ri01_flash](https://user-images.githubusercontent.com/1659543/149519439-7ac8f1c0-4d00-495f-94ab-82ba9c552822.jpg)
 
 
-### Chân UART (cổng nối tiếp)
+### Chân UART (cổng serial)
 
 ![device_chacon_ipcam-ri01_uart](https://user-images.githubusercontent.com/1659543/149518771-a33ab23f-a4f0-44db-83a6-873bd1802056.jpg)
 
 
 ### GPIO
 
-| số        | Mô tả   |
+| số        | Mô tả       |
 |-----------|---------------|
 | 0x0f (15) | irCut_1       |
 | 0x0c (12) | irCut_2       |
-| 0x28 (40) | Đèn LED IR        |
-| 0x33 (51) | Đèn LED đỏ       |
-| 0x32 (50) | Đèn LED xanh      |
-| 0x0d (13) | nguồn wlan    |
+| 0x28 (40) | Đèn LED IR    |
+| 0x33 (51) | Đèn LED đỏ     |
+| 0x32 (50) | Đèn LED xanh    |
+| 0x0d (13) | Nguồn WLAN    |
 | 0x00 (0)  | AcShdn        |
-| 0x09 (9)  | Nút đặt lại  |
-| 0x3b (59) | Động cơ nghiêng A1 |
-| 0x3a (58) | Động cơ nghiêng A2 |
-| 0x39 (57) | Động cơ nghiêng B1 |
-| 0x38 (56) | Động cơ nghiêng B2 |
-| 0x47 (71) | Động cơ xoay A1  |
-| 0x45 (69) | Động cơ xoay A2  |
-| 0x46 (70) | Động cơ xoay B1  |
-| 0x44 (68) | Động cơ xoay B2  |
+| 0x09 (9)  | Nút Reset      |
+| 0x3b (59) | Động cơ Nghiêng A1 |
+| 0x3a (58) | Động cơ Nghiêng A2 |
+| 0x39 (57) | Động cơ Nghiêng B1 |
+| 0x38 (56) | Động cơ Nghiêng B2 |
+| 0x47 (71) | Động cơ Xoay A1  |
+| 0x45 (69) | Động cơ Xoay A2  |
+| 0x46 (70) | Động cơ Xoay B1  |
+| 0x44 (68) | Động cơ Xoay B2  |
 
 ### Sửa đổi
-#### Cổng USB nối tiếp
+#### Cổng Serial USB
 
-Có một đầu nối micro usb để cấp nguồn cho camera và với một số hàn, đầu nối này cũng có thể được sử dụng cho bộ chuyển đổi nối tiếp sang usb.
-Nếu bạn thấy khó hàn dây trên đầu nối micro usb của camera, hãy mua một [bảng breakout micro usb](https://www.google.com/search?q=micro+usb+breakout+board&tbm=isch).
+Có một đầu nối micro USB để cấp nguồn cho camera và với một số thao tác hàn, đầu nối này cũng có thể được sử dụng cho bộ chuyển đổi serial sang USB.
+Nếu bạn thấy khó hàn dây trên đầu nối micro USB của camera, hãy mua một [bảng breakout micro USB](https://www.google.com/search?q=micro+usb+breakout+board&tbm=isch).
 
 ![device_chacon_ipcam-ri01_usbmod](https://user-images.githubusercontent.com/1659543/149561868-f991f75e-e766-4b71-920e-ea2918182796.jpg)
 
-1. Lấy bộ chuyển đổi 3.3V TTL sang USB (sử dụng bộ chuyển đổi pl2303hx rẻ tiền)
+1. Lấy một bộ chuyển đổi 3.3V TTL sang USB (sử dụng một bộ chuyển đổi pl2303hx rẻ tiền)
 2. Tháo đầu nối và chân USB-A
-3. Kết nối cổng micro usb của camera với bộ chuyển đổi
-4. Kết nối uart của camera với bộ chuyển đổi
+3. Kết nối cổng micro USB của camera với bộ chuyển đổi
+4. Kết nối UART của camera với bộ chuyển đổi
 
 
 ## Firmware gốc
 
-Camera uBoot được bảo vệ bằng mật khẩu với "pps_password".
+Camera uBoot được bảo vệ bằng mật khẩu là "pps_password".
 
 ### Tạo bản sao lưu
-Để sao lưu firmware gốc, bạn cần một bộ chuyển đổi nối tiếp USB được kết nối với bo mạch và một thẻ nhớ sd.
+Để sao lưu firmware gốc, bạn cần một bộ chuyển đổi serial USB được kết nối với bảng mạch và một thẻ nhớ SD.
 
 Tìm ra kích thước chip flash của bạn:
 ```
@@ -130,9 +130,9 @@ D:0x20 0x70 0x17
 Name:"XM25QH64AHIG"
 ```
 
-Các lệnh uBoot để sao lưu toàn bộ bộ nhớ flash trên thẻ nhớ sd (**tất cả nội dung thẻ nhớ sd sẽ bị mất**).
+Lệnh uBoot để sao lưu toàn bộ bộ nhớ flash trên thẻ nhớ SD (**tất cả nội dung của thẻ nhớ SD sẽ bị mất**).
 Tùy thuộc vào kích thước bộ nhớ flash của camera, hãy thay thế \<kích thước1\>/\<kích thước2\> bằng:
-- 0x800000/0x4000 cho flash 8M
+- 0x800000/0x4000 cho flash 8MB
 - 0x1000000/0x8000 cho flash 16Mb
 (kích thước2 = kích thước1 / 512)
 
@@ -157,11 +157,11 @@ MMC write: dev # 0, block # 0, count 16384 ... had init
 pps # 
 ```
 
-Điều này sẽ ghi toàn bộ flash vào thẻ mmc ở "chế độ thô" (không có hệ thống tệp).
+Thao tác này sẽ ghi toàn bộ flash vào thẻ mmc ở "chế độ thô" (không có hệ thống tệp).
 
-**CẢNH BÁO**: nếu bạn để thẻ trong camera và nó khởi động FW gốc, thẻ sẽ bị định dạng và bản sao lưu sẽ bị mất!
+**CẢNH BÁO**: nếu bạn để thẻ trong camera và camera khởi động FW gốc, thẻ sẽ bị định dạng và bản sao lưu sẽ bị mất!
   
-Sau đó, để lưu bản dump vào một tệp, hãy lắp thẻ vào hệ thống đang chạy linux và:
+Sau đó, để lưu bản dump vào một tệp, hãy lắp thẻ vào hệ thống đang chạy Linux và:
 ```
 dd if=/dev/mmcblk0 of=./flash_backup.bin bs=512 count=<kích thước2>
 ```
@@ -203,7 +203,7 @@ mtd9: 00020000 00010000 "oeminfo" 131072        16646144 - 16777216
 
 ### Khởi động telnetd
 
-FW gốc của camera chạy máy chủ REST với xác thực (người dùng: PpStRoNg, mật khẩu: #%&wL1@\*tU123zv).
+FW gốc của camera chạy một máy chủ REST với xác thực (tên người dùng: PpStRoNg, mật khẩu: #%&wL1@\*tU123zv).
 
 Một trong những tính năng thú vị nhất là chức năng "runcmd" (thay thế \<your_cam_ip\> bằng địa chỉ IP camera của bạn):
 
@@ -226,11 +226,11 @@ Content-Length: 129
 }
 ```
 
-Trong FW mới nhất, họ đã xóa tệp nhị phân "telnetd", vì vậy bạn cần đặt nó trên thẻ nhớ sd:
+Trong FW mới nhất, họ đã xóa tệp nhị phân "telnetd", vì vậy bạn cần đặt nó trên thẻ nhớ SD:
 [telnetd.zip](https://github.com/ljalves/wiki/files/7875319/telnetd.zip)
 
 
-Để khởi động máy chủ, hãy sao chép tệp nhị phân telnetd vào thẻ nhớ sd và chạy:
+Để khởi động máy chủ, hãy sao chép tệp nhị phân telnetd vào thẻ nhớ SD và chạy:
 ```
 curl -u PpStRoNg:#%\&wL1@*tU123zv -i http://<your_cam_ip>:80/devices/runcmd --request POST --data '{"cmd":"echo 'anyone::0:0:root:/:/bin/sh' >> /etc/passwd"}'
 curl -u PpStRoNg:#%\&wL1@*tU123zv -i http://<your_cam_ip>:80/devices/runcmd --request POST --data '{"cmd":"/mnt/mmc01/telnetd &"}'
@@ -251,7 +251,7 @@ BusyBox v1.26.2 (2019-04-16 05:35:27 PDT) built-in shell (ash)
 ```
 
 
-### Đầu ra [ipctool](https://github.com/OpenIPC/ipctool) (flash 8Mb):
+### Đầu ra của [ipctool](https://github.com/OpenIPC/ipctool) (flash 8Mb):
 
 ```
 /mnt/mmc01 # ./ipctool
@@ -312,20 +312,20 @@ sensors:
 ## Firmware OpenIPC
 
 ## Flash OpenIPC
-(sớm...)
+(sắp ra mắt...)
 
 ### Dump khởi động
 (quá dài để dịch, nếu bạn cần phần này được dịch, vui lòng cho tôi biết)
 
 
-(sớm...)
+(sắp ra mắt...)
 
 ### rtl8188fu
-(sớm...)
+(sắp ra mắt...)
 
 ### Trình điều khiển động cơ
 
-Camera có 2 động cơ bước để điều khiển độ nghiêng (lên/xuống) và xoay (trái/phải).
+Camera có 2 động cơ bước để điều khiển nghiêng (lên/xuống) và xoay (trái/phải).
 
 Thay thế trình điều khiển động cơ tại /lib/modules/4.9.37/hisilicon/camhi-motor.ko bằng trình điều khiển được bao gồm bên dưới.
 
@@ -356,8 +356,8 @@ nightMode:
 ```
 
 ### Đèn LED
-Camera có đèn LED hai màu (đỏ/xanh) được kết nối với GPIO 50 và 51.
-Để điều khiển các đèn LED đó, bạn có thể sử dụng api /sys:
+Camera có đèn LED hai màu (đỏ/xanh lam) được kết nối với GPIO 50 và 51.
+Để điều khiển các đèn LED đó, bạn có thể sử dụng API /sys:
 ```
 # làm cho GPIO có thể truy cập được
 echo 50 > /sys/class/gpio/export
@@ -365,9 +365,9 @@ echo 50 > /sys/class/gpio/export
 echo out > /sys/class/gpio50/direction
 echo out > /sys/class/gpio51/direction
 
-# bật đèn LED xanh
+# bật đèn LED xanh lam
 echo 1 > /sys/class/gpio50/value
-# tắt đèn LED xanh
+# tắt đèn LED xanh lam
 echo 0 > /sys/class/gpio50/value
 
 # bật đèn LED đỏ
@@ -375,3 +375,4 @@ echo 1 > /sys/class/gpio51/value
 # tắt đèn LED đỏ
 echo 0 > /sys/class/gpio51/value
 ```
+

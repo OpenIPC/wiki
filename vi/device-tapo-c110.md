@@ -23,3 +23,5 @@ fw_setenv wlandev ssw101b-ssc333-tapo-c110
 fw_setenv wlanssid Router
 fw_setenv wlanpass 12345678
 ```
+
+

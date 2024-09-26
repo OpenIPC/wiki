@@ -8,7 +8,7 @@ Foscam X5 / Acculenz R5 / Assark X3E
 Định dạng thẻ nhớ SD sang FAT32 và sao chép nội dung của kho lưu trữ sau vào thẻ:
 - [foscam-openipc.zip][1]
 
-Cập nhật thông tin đăng nhập mạng không dây của bạn trên autostart.sh:
+Cập nhật thông tin xác thực không dây của bạn trên autostart.sh:
 ```diff
 #!/bin/sh
 +WLAN_SSID="Router"
@@ -18,7 +18,7 @@ Cập nhật thông tin đăng nhập mạng không dây của bạn trên autos
 #### Cài đặt
 - Đảm bảo camera đã tắt nguồn, đặt thẻ nhớ SD đã chuẩn bị vào thiết bị.
 - Bật nguồn thiết bị và đợi ít nhất 4 phút.
-- Ngay sau đó, một camera OpenIPC sẽ xuất hiện trên mạng wlan của bạn.
+- Một camera OpenIPC sẽ xuất hiện trên mạng WLAN của bạn sau một thời gian ngắn.
 
 ---
 

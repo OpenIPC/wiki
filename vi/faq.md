@@ -9,13 +9,13 @@ Câu hỏi thường gặp
 Câu trả lời ngắn gọn là không.
 
 Nếu bạn có kỹ năng và mong muốn làm cho OpenIPC hoạt động trên phần cứng mới, chúng tôi có thể chia sẻ kiến thức mà chúng tôi có.
-Nếu không, hãy tự mua một chiếc camera được hỗ trợ.
+Nếu không, hãy tự mua một camera được hỗ trợ.
 
-### Làm cách nào để biết phần cứng nào nằm bên trong camera trước khi mua?
+### Làm cách nào để biết phần cứng bên trong camera trước khi mua?
 
-Hầu hết thời gian bạn không thể. Đặc biệt nếu đó là một bản sao giá rẻ của Trung Quốc của một bản sao của một chiếc camera được đổi thương hiệu.
-Đối với các thương hiệu tên tuổi uy tín đã trải qua chứng nhận phần cứng, có cơ hội xem xét bên trong camera trong các tài liệu chứng nhận. Tìm ID FCC trên hộp hoặc vỏ của camera
-và sau đó tra cứu nó trong [cơ sở dữ liệu ID FCC](https://fccid.io/).
+Hầu hết thời gian bạn không thể, đặc biệt là nếu đó là bản sao giá rẻ của Trung Quốc của một bản sao của một camera được đổi thương hiệu.
+Đối với các thương hiệu tên tuổi uy tín đã trải qua chứng nhận phần cứng, bạn có thể xem xét bên trong camera trong các tài liệu chứng nhận. Tìm FCC ID trên hộp hoặc vỏ của camera
+và sau đó tra cứu nó trong [cơ sở dữ liệu FCC ID](https://fccid.io/).
 
 ### Sự khác biệt giữa Lite và Ultimate
 
@@ -23,17 +23,19 @@ và sau đó tra cứu nó trong [cơ sở dữ liệu ID FCC](https://fccid.io/
 - Hỗ trợ nhận dạng mã QR (cơ bản)
 - Hỗ trợ iptables (tường lửa)
 - Hỗ trợ đường hầm ZeroTier
-- Hỗ trợ MQTT (đo từ xa)
+- Hỗ trợ MQTT (thu thập dữ liệu từ xa)
 - Hỗ trợ WiFi
 - Hỗ trợ lame (mp3) và libwebsockets
+- Hỗ trợ WebRTC thử nghiệm (chỉ dành cho Hisi/Goke gần đây)
 
+$\color{red}{\text{Chúng tôi luôn khuyến nghị chỉ sử dụng firmware Lite}}$
 
 ### Cách loại bỏ tiêu đề trình bao bọc hình ảnh U-Boot khỏi hình ảnh nhị phân
 
 Đôi khi firmware của nhà cung cấp bao gồm các hình ảnh nhị phân dành cho
-sử dụng với trình tải hình ảnh U-Boot và được thêm trước bằng tiêu đề ở
+sử dụng với trình tải hình ảnh U-Boot và được thêm vào trước tiêu đề ở
 [định dạng trình bao bọc hình ảnh U-Boot](https://formats.kaitai.io/uimage/).
-Tiêu đề nên được gỡ bỏ trước khi bạn có thể sử dụng một hình ảnh như vậy
+Tiêu đề nên được gỡ bỏ trước khi bạn có thể sử dụng hình ảnh đó
 như một tệp nhị phân thô. Đây là cách bạn có thể loại bỏ 64 byte đầu tiên
 khỏi một tệp:
 
@@ -47,24 +49,24 @@ hoặc cách khác
 tail -c +65 tệp_đầu_vào.img > tệp_đầu_ra.bin
 ```
 
-### Làm cách nào để vào shell của bootloader?
+### Làm cách nào để vào shell của bộ nạp khởi động?
 
-[Có một số cách để truy cập shell của bootloader bị khóa](help-uboot.md#bypassing-password-protected-bootloader)
+[Có một số cách để truy cập shell của bộ nạp khởi động bị khóa](help-uboot.md#bypassing-password-protected-bootloader)
 
-### Làm cách nào để đặt lại cài đặt camera từ U-Boot
+### Làm cách nào để đặt lại cài đặt camera từ U-Boot?
 
 Đôi khi cài đặt không đúng khiến camera không ổn định đến mức
 không thể đăng nhập hoặc không đủ thời gian trước khi khởi động lại để sửa cài đặt.
 Đây là cách xóa hoàn toàn phân vùng lớp phủ trong firmware OpenIPC,
-ngay từ shell của bootloader, để đưa camera về trạng thái nguyên sơ:
+ngay từ shell của bộ nạp khởi động, để đưa camera về trạng thái ban đầu:
 
-> __chỉ dành cho phân vùng flash 8MB__
+> **Chỉ dành cho phân vùng flash 8MB**
 
 ```
 sf probe 0; sf erase 0x750000 0xb0000; reset
 ```
 
-> __chỉ dành cho phân vùng flash 16MB__
+> **Chỉ dành cho phân vùng flash 16MB**
 
 ```
 sf probe 0; sf erase 0xd50000 0x2b0000; reset
@@ -76,19 +78,19 @@ sf probe 0; sf erase 0xd50000 0x2b0000; reset
 
 Mật khẩu mặc định là _12345_.
 
-### Làm cách nào để đăng nhập vào giao diện người dùng Web của camera?
+### Làm cách nào để đăng nhập vào Giao diện người dùng Web của camera?
 
 Mở http://<địa_chỉ_ip_camera> và đăng nhập bằng tên người dùng mặc định _root_
 và mật khẩu mặc định _12345_. Bạn sẽ được yêu cầu thay đổi mật khẩu sau
 khi đăng nhập thành công.
 
-__Xin lưu ý, nó cũng sẽ thay đổi mật khẩu root ssh của bạn!__
+**Xin lưu ý, thao tác này cũng sẽ thay đổi mật khẩu root ssh của bạn!**
 
 ### Làm cách nào để đặt lại mật khẩu cho SSH/Giao diện người dùng Web?
 
 Tạo kết nối nối tiếp với camera bằng bộ chuyển đổi UART và chương trình
-thiết bị đầu cuối. Sau khi bật camera, nhấn Ctrl-C để ngắt quá trình khởi động
-và vào shell của bootloader.
+thiết bị đầu cuối. Sau khi bật camera, hãy nhấn Ctrl-C để ngắt quá trình khởi động
+và vào shell của bộ nạp khởi động.
 
 Đối với camera có chip flash 8MB, hãy chạy
 
@@ -108,13 +110,13 @@ sf probe 0; sf erase 0xd50000 0x2b0000; reset
 
 ### Tôi không thấy ipctool trên camera. Tại sao?
 
-Bạn không thấy nó bởi vì ban đầu nó không có ở đó, nhưng có một lệnh shell
+Bạn không thấy nó vì ban đầu nó không có ở đó, nhưng có một lệnh shell
 cùng tên.
 
 _(Vì nó là một lệnh shell, nó sẽ không hoạt động từ Bảng điều khiển Web trong giao diện người dùng Web.
-Đăng nhập vào camera qua SSH và chạy lệnh ở đó.)_
+Hãy đăng nhập vào camera qua SSH và chạy lệnh ở đó.)_
 
-Khi bạn chạy lệnh này, phiên bản mới nhất của tiện ích `ipctool` khả dụng
+Khi bạn chạy lệnh này, phiên bản mới nhất của tiện ích `ipctool` 
 sẽ được tải xuống thư mục `/tmp/` và chạy từ đó. Vì tiện ích
 nằm trong `/tmp/`, nó sẽ không tồn tại sau khi khởi động lại, do đó sẽ không chiếm bất kỳ dung lượng hữu ích nào
 trên camera sau đó.
@@ -122,12 +124,12 @@ trên camera sau đó.
 Nếu bạn cần biết có gì trong lệnh, hãy tìm kiếm `ipctool` trong
 tệp `/etc/profile`.
 
-### Thay thế bootloader từ Linux
+### Thay thế bộ nạp khởi động từ Linux
 
-Các lệnh được thực thi riêng biệt bởi mỗi dòng với thời gian chờ kết thúc thực thi.
-Tên đầy đủ của bootloader thay thế và tính khả dụng của nó có thể được kiểm tra [tại đây][3]
+Các lệnh được thực thi riêng biệt trên mỗi dòng với thời gian chờ cho đến khi kết thúc quá trình thực thi.
+Tên đầy đủ của bộ nạp khởi động thay thế và tính khả dụng của nó có thể được kiểm tra [tại đây][3]
 
-Trước khi chạy các lệnh, đừng quên nhập tên bootloader chính xác!
+Trước khi chạy các lệnh, đừng quên nhập tên bộ nạp khởi động chính xác!
 
 ```
 FILE=u-boot-SOC-LOẠI.bin
@@ -148,19 +150,19 @@ chmod 755 ${FILE}
 
 ### Làm cách nào để cập nhật firmware OpenIPC cũ?
 
-Các lệnh được thực thi riêng biệt bởi mỗi dòng với thời gian chờ kết thúc thực thi.
+Các lệnh được thực thi riêng biệt trên mỗi dòng với thời gian chờ kết thúc thực thi.
 Lệnh đầu tiên cập nhật một tiện ích có thuật toán đã được thay đổi vào tháng 2 năm 2023.
 Nếu bạn cần cập nhật tiện ích trên bộ xử lý T31, vui lòng thêm hậu tố -mips vào URL của tiện ích đã tải xuống.
-Lệnh thứ hai cập nhật chính các thành phần firmware.
+Lệnh thứ hai cập nhật chính các thành phần firmware. 
 
 ```
 curl -L -o /tmp/ipcinfo https://github.com/OpenIPC/ipctool/releases/download/latest/ipcinfo && chmod +x /tmp/ipcinfo; /tmp/ipcinfo -csF
 curl -s https://raw.githubusercontent.com/OpenIPC/firmware/master/general/overlay/usr/sbin/sysupgrade | sh -s -- -k -r -n
 ```
 
-### Có thể chuyển đổi từ “lite” sang “ultimate” qua “Over the Air” không?
+### Có thể chuyển đổi từ "lite" sang "ultimate" qua "Over the Air" không?
 
-Trên Ingenic và Sigmastar, có thể tách rootfs.squashfs cuối cùng và flash nó vào phân vùng rootfs (mtd3) và lớp phủ (mtd4).
+Trên Ingenic và Sigmastar, có thể tách rootfs.squashfs cuối cùng và flash nó vào phân vùng rootfs (mtd3) và overlay (mtd4).
 
 ```
 dd if=rootfs.squashfs of=mtd3.bin bs=1k count=5120
@@ -169,7 +171,7 @@ flashcp mtd3.bin /dev/mtd3 -v
 flashcp mtd4.bin /dev/mtd4 -v
 ```
 
-### Làm cách nào để dump toàn bộ firmware vào chia sẻ NFS
+### Làm cách nào để dump toàn bộ firmware vào chia sẻ NFS?
 
 Điều này có thể hoạt động nếu bạn may mắn, bạn đã truy cập vào shell Linux trên firmware gốc
 và nó hỗ trợ gắn kết NFS:
@@ -185,28 +187,28 @@ mv $fw ${nfs}/firmware_full.bin
 
 Hãy chắc chắn sử dụng địa chỉ IP và đường dẫn của riêng bạn đến chia sẻ NFS!
 
-### Làm cách nào để tìm địa chỉ MAC gốc trong dump firmware
+### Làm cách nào để tìm địa chỉ MAC gốc trong bản dump firmware?
 
 ```bash
 strings dumpfile.bin | grep ^ethaddr
 ```
 
-### Làm cách nào để cấu hình ủy quyền phiên ssh bằng khóa
+### Làm cách nào để cấu hình ủy quyền phiên ssh bằng khóa?
 
-__Trên camera__: Đăng nhập vào giao diện người dùng web trên cổng 85 của camera của bạn.
+**Trên camera**: Đăng nhập vào giao diện người dùng web trên cổng 85 của camera của bạn.
 
 ```bash
 passwd
 ```
 
-__Trên máy tính để bàn__: Sao chép khóa chung vào camera bằng cách đăng nhập bằng
+**Trên máy tính để bàn**: Sao chép khóa chung vào camera bằng cách đăng nhập bằng
 mật khẩu đã tạo ở trên.
 
 ```bash
 ssh-copy-id root@192.168.1.66
 ```
 
-__Trên camera__: Tạo một thư mục `.ssh` trong thư mục chính của người dùng root
+**Trên camera**: Tạo một thư mục `.ssh` trong thư mục chính của người dùng root
 và sao chép tệp có kho khóa được ủy quyền vào đó.
 
 ```bash
@@ -214,7 +216,7 @@ mkdir ~/.ssh
 cp /etc/dropbear/authorized_keys ~/.ssh/
 ```
 
-__Trên máy tính để bàn__: Mở một phiên mới để xác minh rằng ủy quyền được
+**Trên máy tính để bàn**: Mở một phiên mới để xác minh rằng ủy quyền được
 chuyển bằng cách sử dụng khóa chung mà không yêu cầu mật khẩu.
 
 ```bash
@@ -223,7 +225,7 @@ ssh root@192.168.1.66
 
 ### Majestic
 
-#### Làm cách nào để lấy dump bộ nhớ để gỡ lỗi?
+#### Làm cách nào để lấy bản dump bộ nhớ để gỡ lỗi?
 
 Bật và cấu hình Core Dump trong menu **Majestic** > **Majestic Debugging**.
 
@@ -231,10 +233,10 @@ Bật và cấu hình Core Dump trong menu **Majestic** > **Majestic Debugging**
 
 Bạn cần chỉ định chân GPIO để điều khiển bộ lọc hồng ngoại.
 Cài đặt cho một số camera có thể được tìm thấy trong [bảng này][1].
-Nếu camera của bạn không có trong bảng thì bạn cần sử dụng [tiện ích ipctool][2].
+Nếu camera của bạn không có trong bảng, bạn cần sử dụng [tiện ích ipctool][2].
 
 Firmware OpenIPC sẽ tự động tải xuống phiên bản mới nhất của
-tiện ích vào thư mục /tmp khi `ipctool` được gọi lần đầu tiên.
+tiện ích vào thư mục `/tmp` khi `ipctool` được gọi lần đầu tiên.
 
 Trên firmware gốc, bạn sẽ cần tự tải xuống tiện ích vào camera
 bằng cách sử dụng bất kỳ công cụ nào có sẵn trong hệ thống: wget, curl, tftp, v.v.
@@ -258,21 +260,21 @@ mount -o nolock 95.217.179.189:/srv/ro /tmp/utils/
 ```
 
 Sau khi tiện ích được tải xuống camera, hãy chạy lệnh `ipctool gpio scan`
-trong thiết bị đầu cuối và mở-đóng ống kính camera vài lần bằng
+trong thiết bị đầu cuối và đóng-mở ống kính camera vài lần bằng
 lòng bàn tay của bạn.
 
 Xem đầu ra của ipctool để xác định các chân chịu trách nhiệm điều khiển
 màn che bộ lọc IR.
 
 Nhập các giá trị thu được trong cài đặt cho chế độ ban đêm Majestic. Nếu
-màu hồng vẫn còn, bạn có thể cần bật đảo ngược tín hiệu cảm biến.
+màu hồng vẫn còn, bạn có thể cần bật **đảo ngược tín hiệu cảm biến**.
 
 Đừng quên thêm model camera và giá trị GPIO đã tìm thấy vào bảng!
 
 #### Có thể hiển thị dữ liệu để đặt tự động lấy nét của ống kính
 thay vì sample_af hiện tại trong /metrics tiêu chuẩn không?
 
-Không, đây là một thuật toán khó, nó không có ý nghĩa để chạy theo cách này.
+Không, đây là một thuật toán khó, không có ý nghĩa để chạy theo cách này.
 
 #### Sao chép tệp từ hệ thống Linux sang camera
 
@@ -299,7 +301,3 @@ scp -O ~/tệp_của_tôi root@192.168.1.65:/tmp/
 [1]: https://openipc.org/wiki/en/gpio-settings.html
 [2]: https://github.com/OpenIPC/ipctool/releases/download/latest/ipctool
 [3]: https://github.com/OpenIPC/firmware/releases/tag/latest
-
-
-
-

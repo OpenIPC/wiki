@@ -3,7 +3,7 @@
 
 ## Các gói OpenIPC Buildroot
 
-Danh sách các gói OpenIPC Buildroot và các gói Buildroot gốc bị thay thế theo từng phiên bản.
+Danh sách các gói OpenIPC Buildroot và các gói Buildroot gốc bị **ẩn** theo từng phiên bản.
 
 | OpenIPC                             | Buildroot 2020.02.12    | Buildroot 2021.02       | Buildroot 2022.08       | Buildroot HEAD          |
 |-------------------------------------|-------------------------|-------------------------|-------------------------|-------------------------|
@@ -49,7 +49,7 @@ Danh sách các gói OpenIPC Buildroot và các gói Buildroot gốc bị thay t
 | ipctool (git)                       |                         |                         |                         |                         |
 | json-c-openipc json-c-0.15-20200726 | json-c 0.15             | json-c 0.15             | json-c 0.16             | json-c 0.16             |
 | lame-openipc 3.100                  | lame 3.100              | lame 3.100              | lame 3.100              | lame 3.100              |
-| libcurl-openipc 7.76.0              | libcurl 7.76.0          | libcurl 7.79.1          | libcurl 7.84.0          | lame 3.100              |
+| libcurl-openipc 7.76.0              | libcurl 7.76.0          | libcurl 7.79.1          | libcurl 7.84.0          | libcurl 7.86.0          |
 | libevent-openipc (git)              | libevent 2.1.11         | libevent 2.1.12         | libevent 2.1.12         | libevent 2.1.12         |
 | libhv-openipc 1.1.1                 |                         |                         |                         |                         |
 | libogg-openipc 1.3.5                | libogg 1.3.4            | libogg 1.3.4            | libogg 1.3.5            | libogg 1.3.5            |
@@ -62,7 +62,7 @@ Danh sách các gói OpenIPC Buildroot và các gói Buildroot gốc bị thay t
 | majestic                            |                         |                         |                         |                         |
 | majestic-fonts                      |                         |                         |                         |                         |
 | mavlink-router                      |                         |                         |                         |                         |
-| mbedtls-openipc 2.25.0              | mbedtls 2.16.10         | mbedtls 2.16.12         | mbedtls 2.28.1          | linux-firmware 20220310 |
+| mbedtls-openipc 2.25.0              | mbedtls 2.16.10         | mbedtls 2.16.12         | mbedtls 2.28.1          | mbedtls 3.0.0           |
 | memdump                             |                         |                         |                         |                         |
 | microbe-web (git)                   |                         |                         |                         |                         |
 | microsnander (git)                  |                         |                         |                         |                         |

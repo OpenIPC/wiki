@@ -6,12 +6,12 @@ Dành cho camera LifeSmart: LS179
 ## BOM
 
 SoC: HI3518EV200  
-Flash: ENQH127A (16MB NOR)  
+Flash: ENQH127A (NOR 16MB)  
 Cảm biến: soif23 (???)
 
 ## Cài đặt
 
-Làm theo [hướng dẫn](help-uboot.md#bypassing-password-protected-bootloader) để truy cập vào U-boot.
+Làm theo [hướng dẫn](help-uboot.md#bypassing-password-protected-bootloader) để truy cập U-boot.
 
 Sao lưu flash và cài đặt OpenIPC theo [hướng dẫn](https://openipc.org/cameras/vendors/hisilicon/socs/hi3518ev200).
 
@@ -30,11 +30,11 @@ fw_setenv wlanpass "password"
 reboot
 ```
 
-Thao tác này sẽ cấp nguồn cho mô-đun WiFi USB (GPO #54) và tải trình điều khiển Kernel thích hợp (`8188fu`).
+Thao tác này sẽ cấp nguồn cho mô-đun WiFi USB (GPIO #54) và tải trình điều khiển Kernel thích hợp (`8188fu`).
 
 ## Đèn LED
 
-Các đèn LED được điều khiển bởi GPO #2.
+Các đèn LED được điều khiển bởi GPIO #2.
 
 ```bash
 # bật

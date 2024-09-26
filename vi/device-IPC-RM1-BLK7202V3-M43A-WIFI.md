@@ -5,13 +5,13 @@
   - [Mặt trước](#mặt-trước)
   - [Mặt sau](#mặt-sau)
 - [GPIO](#gpio)
-  - [Ghép kênh](#ghép-kênh)
+  - [Đa hợp](#đa-hợp)
   - [Thẻ SD](#thẻ-sd)
   - [Loa](#loa)
 - [Cài đặt](#cài-đặt)
-  - [Bố cục bộ nhớ flash](#bố- cục-bộ-nhớ-flash)
+  - [Bố cục bộ nhớ flash](#bố-cục-bộ-nhớ-flash)
 - [Tóm tắt](#tóm-tắt)
-- [Việc cần làm](#việc-cần-làm)
+- [Cần làm](#cần-làm)
 
 # Tổng quan
 Bảng mạch được tìm thấy trong camera PTZ WiFi Cootli trong nhà giá rẻ. Bảng mạch trông rất giống với [XM IPG-G4-WR-BL](http://baike.xm030.cn:81/%E4%BA%A7%E5%93%81%E5%8F%82%E6%95%B0/English/IPG%E6%A8%A1%E7%BB%84/Parameters%20for%20IPG-G4-WR.pdf) nhưng bố cục PCB hơi khác một chút.
@@ -24,7 +24,7 @@ Tất cả các thử nghiệm đã hoàn thành trên firmware [gk7202v300_lite
 | SoC | GK7202V300 | |
 | Flash | XMC XM25QH64CHIQ | 8MB |
 | Cảm biến | SmartSens SC223A* | 1920x1080 |
-| Âm thanh | MIC + SPK | |
+| Âm thanh | MIC + Loa | |
 | Lưu trữ | Thẻ nhớ Micro SD | |
 | LAN | - | - |
 | WiFi | iComm SV6355 | UF.L (IPX) |
@@ -56,11 +56,11 @@ Loại đầu nối JST 1.25mm
 
 ## Mặt sau
 - Ổ cắm thẻ nhớ Micro SD
-- UART (chưa hàn, ở bên trái SPK, chân 1 RX, chân 2 TX)
+- UART (chưa hàn, ở bên trái của Loa, chân 1 RX, chân 2 TX)
 
 | Đầu nối | Kiểu |
 |:-:|:-|
-| SPK | 2 chân JST |
+| Loa | 2 chân JST |
 | H | 5 chân JST |
 | V | 5 chân JST |
 | +5V | 2 chân JST |
@@ -71,48 +71,48 @@ Loại đầu nối JST 1.25mm
 |:-:|:-:|:-:|
 | 0* | - | Nút đặt lại |
 | 4 | Chân LED 5 | WLED |
-| 8 | Mô-đun WiFi chân 3 | LO - Bật nguồn |
-| 12 | Chân H 5 | Động cơ H |
-| 13 | Chân H 2 | Động cơ H |
-| 14 | Chân H 4 | Động cơ H |
-| 15 | Chân H 3 | Động cơ H |
+| 8 | Chân mô-đun WiFi 3 | THẤP - Bật nguồn |
+| 12 | Chân H 5 | Động cơ Ngang |
+| 13 | Chân H 2 | Động cơ Ngang |
+| 14 | Chân H 4 | Động cơ Ngang |
+| 15 | Chân H 3 | Động cơ Ngang |
 | 16 | Chân LED 4 | IRLED |
-| 52 | Chân V 2 | Động cơ V |
-| 53 | Chân V 3 | Động cơ V |
-| 54 | Chân V 4 | Động cơ V |
-| 55 | Chân V 5 | Động cơ V |
-| 56 | Chân IRCUT 1 | LO - IRCUT BẬT |
+| 52 | Chân V 2 | Động cơ Dọc |
+| 53 | Chân V 3 | Động cơ Dọc |
+| 54 | Chân V 4 | Động cơ Dọc |
+| 55 | Chân V 5 | Động cơ Dọc |
+| 56 | Chân IRCUT 1 | THẤP - IRCUT BẬT |
 | 57* | Chân LED 3 | Cảm biến IR |
-| 58 | Chân IRCUT 2 | LO - IRCUT TẮT |
-| 70 | - | Nguồn SD (LO - Bật nguồn) |
+| 58 | Chân IRCUT 2 | THẤP - IRCUT TẮT |
+| 70 | - | Nguồn SD (THẤP - Bật nguồn) |
 | 51 | - | Bộ khuếch đại ÂM THANH |
 
 \* - chưa được xác nhận.
 
-## Ghép kênh
-Không cần ghép kênh nếu Majestic kiểm soát các chân. Nếu không, có thể thực hiện ghép kênh bằng cách sử dụng các lệnh sau.
+## Đa hợp
+Không cần đa hợp nếu Majestic kiểm soát các chân. Nếu không, có thể thực hiện đa hợp bằng cách sử dụng các lệnh sau.
 
-Ghép kênh GPIO16 để kiểm soát chân IRLED:
+Đa hợp GPIO16 để kiểm soát chân IRLED:
 ```sh
 devmem 0x120c0020 32 0x432      # GPIO2_0 (GPIO16)
 ```
 
 Cũng dành cho động cơ.  
-Ghép kênh GPIO12, GPIO14, GPIO15 (đầu nối động cơ H):
+Đa hợp GPIO12, GPIO14, GPIO15 (đầu nối động cơ Ngang):
 ```sh
 devmem 0x120c0010 32 0x1e02     # GPIO1_4 (GPIO12)
 devmem 0x120c0018 32 0x1d02     # GPIO1_6 (GPIO14)
 devmem 0x120c001c 32 0x1402     # GPIO1_7 (GPIO15)
 ```
 
-Ngay sau **Đang tải các mô-đun hạt nhân...**, GPIO13 chuyển sang HI (một trong các cuộn dây động cơ được cấp nguồn liên tục), vì vậy có thể cần thiết phải chuyển nó sang LO:
+Ngay sau **Đang tải các mô-đun kernel...**, GPIO13 chuyển sang CAO (một trong các cuộn dây động cơ được cấp nguồn liên tục), vì vậy có thể cần thiết phải chuyển nó sang THẤP:
 ```sh
 gpio clear 13
 gpio unexport 13
 ```
 
 ## Thẻ SD
-Theo mặc định, Thẻ SD không được cấp nguồn, vì vậy chúng ta cần chuyển GPIO70 sang LO bằng cách nào đó.
+Theo mặc định, Thẻ SD không được cấp nguồn, vì vậy chúng ta cần chuyển GPIO70 sang THẤP bằng cách nào đó.
 
 Để bật nguồn Thẻ SD từ Kernel:
 ```sh
@@ -121,14 +121,14 @@ gpio clear 70
 hoặc
 ```sh
 devmem 0x120B8400 32 0x40       # chuyển GPIO8_6 sang chế độ đầu ra
-devmem 0x120B8100 32 0x00       # đặt GPIO8_6 thành LO
+devmem 0x120B8100 32 0x00       # đặt GPIO8_6 thành THẤP
 ```
 Và gắn lại thẻ SD.
 
 Để bật nguồn Thẻ SD từ U-Boot:
 ```sh
 mw 0x120B8400 0x40      # chuyển GPIO8_6 sang chế độ đầu ra
-mw 0x120B8100 0x00      # đặt GPIO8_6 thành LO
+mw 0x120B8100 0x00      # đặt GPIO8_6 thành THẤP
 mmc rescan
 ```
 
@@ -149,7 +149,7 @@ curl -v -u user:pass -H "Content-Type: application/json" -X POST --data-binary @
 Firmware gốc bị khóa pwd và giao diện LAN không có, vì vậy tôi đoán các phương pháp sau đây có sẵn để flash bảng này:
 - [burn](https://github.com/OpenIPC/burn)  + [u-boot-gk7202v300-universal.bin](https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-gk7202v300-universal.bin) và sau đó tải lên FW qua X/Y/ZMODEM (ví dụ: **loady**. Mẹo: sử dụng tùy chọn **baud** để tăng tốc độ) hoặc từ thẻ SD (yêu cầu cung cấp nguồn, [xem ở trên](#thẻ-sd))
 - tải toàn bộ hình ảnh thông qua giao diện web gốc (chưa được kiểm tra)
-- lập trình viên flash
+- bộ nạp flash
 - bằng cách nào đó vào bộ nạp khởi động gốc
 
 ## Bố cục bộ nhớ flash
@@ -157,7 +157,7 @@ Firmware gốc bị khóa pwd và giao diện LAN không có, vì vậy tôi đo
 |:-|:-|:-|
 | 0x00000000 | 0x00040000 (262144 byte) | bộ nạp khởi động |
 | 0x00040000 | 0x00010000 (65536 byte) | env |
-| 0x00050000 | 0x00200000 (2097152 byte) | hạt nhân |
+| 0x00050000 | 0x00200000 (2097152 byte) | kernel |
 | 0x00250000 | 0x00500000 (5242880 byte) | rootfs |
 | 0x00750000 | 0x000B0000 (720896 byte) | rootfs_data |
 
@@ -169,5 +169,5 @@ Firmware gốc bị khóa pwd và giao diện LAN không có, vì vậy tôi đo
 - [X] Loa hoạt động
 - [ ] PTZ/Động cơ (Chân GPIO được tìm thấy/có thể truy cập, trình điều khiển chưa được kiểm tra)
 
-# Việc cần làm
+# Cần làm
 - bằng cách nào đó vá/thích ứng camhi-motor.ko, để làm cho nó hoạt động trên bảng này.
