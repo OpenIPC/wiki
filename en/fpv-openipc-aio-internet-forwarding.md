@@ -63,20 +63,20 @@ Here: `wlp2s0` is my internet connection, it could be also `eth0` on other setup
 # $1 is the interface name of the AIO card
 
 USB_AIO=$1
-echo $1
+INTERNET_IF=$2
 
-sudo iptables -A FORWARD -i $USB_AIO -o wlp2s0 -j ACCEPT
-sudo iptables -A FORWARD -i wlp2s0 -o $USB_AIO -m state --state RELATED,ESTABLISHED -j ACCEPT
-sudo iptables --table nat -A POSTROUTING -o wlp2s0 -j MASQUERADE
+sudo iptables -A FORWARD -i $USB_AIO -o $INTERNET_IF -j ACCEPT
+sudo iptables -A FORWARD -i $INTERNET_IF -o $USB_AIO -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo iptables --table nat -A POSTROUTING -o $INTERNET_IF -j MASQUERADE
 ```
-This script will receive as input `$1` the AIO ethernet interface, and forward the traffic to `wlp2s0`. You can change `wlp2s0` accordingly
+This script will receive as input `$1` the AIO ethernet interface, and forward the traffic to `$2`.
 
 9. Run the script on your local PC:
 ```bash
-chmod u+x ./forward_red.sh
-sudo ./forward_red.sh enx00e099fead02
+chmod u+x ./forward.sh
+sudo ./forward.sh enx00e099fead02 wlp2s0
 ```
-Here: `enx00e099fead02` is AIO ethernet interface.
+Here: `enx00e099fead02` is AIO ethernet interface, and `wlp2s0` local PC interface.
 
 10. On AIO Mario we need to configure DNS servers. Edit `/etc/resolv.conf` and add:
 ```
