@@ -71,6 +71,20 @@ sudo iptables --table nat -A POSTROUTING -o $INTERNET_IF -j MASQUERADE
 ```
 This script will receive as input `$1` the AIO ethernet interface, and forward the traffic to `$2`.
 
+Enable IP forwading by editing `/etc/sysctl.conf` on your local PC and adding:
+```
+net.ipv4.ip_forward = 1
+```
+And enable the changes with:
+```bash
+sudo sysctl -p /etc/sysctl.conf
+```
+
+on Debian/Ubuntu systems this can be also done restarting the procps service:
+```
+sudo /etc/init.d/procps restart
+```
+
 9. Run the script on your local PC:
 ```bash
 chmod u+x ./forward.sh
