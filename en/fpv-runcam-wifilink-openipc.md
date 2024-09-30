@@ -8,8 +8,9 @@ RunCam WiFiLink based on OpenIPC
 
 - What changes have you made compared to the original OpenIPC firmware ?
     - We optimized the IQ sensor and added the /etc/user_config.sh script to implement the WiFi card configuration function.
-### Runcam Setup 
-
+  
+Runcam Setup 
+--------------------------------
 So you just bought a Runcam WiFi link? Great!
 This guide will help you to set it up. 
 
@@ -26,13 +27,13 @@ A fairly modern Smartphone with Android 13 or 14 installed. The smartphone shoul
 Internet connection
 
 
-1. Hardware Setup
+### 1. Hardware Setup
 Connect the antennas to Runcam.
 Connect the 4 cable to UART on Spedybee dedicated to connecting digital VTX’s use the image below as a guide.
  Attention: the cable color codes will match only on one end. Double check your wiring (gnd to gnd, vcc to vcc, etc)
 Insert a formatted micro SD card into the Runcam. The slot is on the bottom of the unit, when the fan faces up.
 Connect an Ethernet cable  supplied with Runcam to the device.
-2. INAV Setup.
+### 2. INAV Setup.
 Connect your flight controller through a USB C to a computer that has INAV configurator installed
 In the Ports tab, set up MSP Display port as per image below. Note: if you are using a different FC then in this example, you might need to chose a different UART.
 In the configuration tab, make sure Telemetry and OSD are enabled 
@@ -40,11 +41,10 @@ In the configuration tab, make sure Telemetry and OSD are enabled
 f) Set up OSD in OSD tab. Enable and arrange all the information as you wish. Set  Video Format to AVATAR.
 
 
-3. Runcam Setup
+### 3. Runcam Setup
 Insert an empty, formatted micro SD into the runcam device. The card pads need to face the board. The slot for the micro SD can be on the ‘inside’ of the board so you might need to disassemble it to put the card in.
 When you first  power up your runcam, the device will create a ‘user’ file and a ‘gs.key’ file. Take the SD card out from your runcam and copy the GS.key file into your android device. You can do it easily using ie. google drive.
-4. OpenIPC Configurator setup
-
+### 4. OpenIPC Configurator setup
 
 OpenIPC cnfigurator is a useful tool to change many different settings on your a camera that runs OpenIPC firmware.
 
@@ -61,7 +61,7 @@ On the configurator, enter IP address: 192.168.1.10 and press connect
 Refer to this Readme for setting up OSD
 Set up all the settings. There are too many to go through them all here.
 
-5. Android Ground station 
+### 5. Android Ground station 
 Download Pixel Pilot Apk file from github, straight into your phone.
 Go into Android file browser, find that file and install it.
 Open the Pixel Pilot app, and tap at the gear icon in top left corner
@@ -69,13 +69,12 @@ Set up: Channel: 161
 Connect the external wifi adapter with the phone through a USB to USB C adapter. The adapter from runcam can be faulty so if your WFB service doesn't start, try a different adapter. It needs to be OTG (on the go) adapter.
 Connect antennas to your external WiFi adapter.
 Press the gear icon, then press GS.key, then navigate to the GS.key file you have copied over from the sd card. Select that file.
-6. Running the video stream
+### 6. Running the video stream
 Turn on the App
 Power on your aircraft. The Runcam should start by itself and the fan should be spinning.
 After 12-14 seconds you should see on your phone the video from your aircraft.
 
-
-Mirroring the camera:
+###  Mirroring the camera (optional):
 The default camera orientation is so that the top of the video is where the cable is.
 If you prefer the cable on the bottom, do the following steps:
 Take the micro SD card out from your Runcam
@@ -88,7 +87,7 @@ Save the file
 Put the micro SD back into the camera
 
 
-Adding audio
+### Adding audio
 Make sure you have the latest Pixel pilot installed
 Install Win SCP to connect to your camera
 Connect your camera with ethernet cable and power it on ( use a  3s battery  or a 12V power source
@@ -102,7 +101,7 @@ Test if audio in pixel pilot app works.
 
 At the time of writing this Audio works, but it’s not being recorded in the mp4 file.
 
-Troubleshooting:
+### Troubleshooting:
 
 There is no video on my android device.
 Make sure the GS.key file was properly set up. (see point 3 c))
