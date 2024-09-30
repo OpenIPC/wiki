@@ -48,8 +48,8 @@ When you first  power up your runcam, the device will create a ‘user’ file a
 
 OpenIPC cnfigurator is a useful tool to change many different settings on your a camera that runs OpenIPC firmware.
 
-Download and install the latest version of Putty
-Download the OpenIPC configurator and install it
+Download and install the latest version of Putty https://www.chiark.greenend.org.uk/~sgtatham/putty/
+Download the OpenIPC configurator  https://github.com/OpenIPC/configurator/releases and install it
 Setting up IP
 -Connect your runcam to your computer’s Ethernet port with the Ethernet cable provided by Runcam
 - Open up a windows file browser, scroll down on the left bar and left click on Network, select properties.
@@ -58,11 +58,11 @@ Setting up IP
 - Enter numbers as per image below 
 
 On the configurator, enter IP address: 192.168.1.10 and press connect
-Refer to this Readme for setting up OSD
+Refer to this Readme https://github.com/OpenIPC/configurator/blob/master/README-manual.md for setting up OSD
 Set up all the settings. There are too many to go through them all here.
 
 ### 5. Android Ground station 
-Download Pixel Pilot Apk file from github, straight into your phone.
+Download Pixel Pilot Apk file https://github.com/OpenIPC/PixelPilot/releases from github, straight into your phone.
 Go into Android file browser, find that file and install it.
 Open the Pixel Pilot app, and tap at the gear icon in top left corner
 Set up: Channel: 161
