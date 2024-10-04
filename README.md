@@ -63,6 +63,7 @@ OpenIPC Wiki
 - [A selection of OpenIPC videos on YouTube](en/fpv-youtube.md)
 - [RunCam WiFiLink based on OpenIPC](en/fpv-runcam-wifilink-openipc.md)
 - [Radxa based groundstation](en/fpv-radxa.md)
+- [The mavfwd tool](en/fpv-mavfwd.md)
 
 ### Troubleshooting
 
