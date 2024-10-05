@@ -6,7 +6,7 @@ SSH access using public key authentication
 ## Introduction
 OpenIPC uses a package called Dropbear for managing **S**ecure **SH**ell (SSH) client connections. By default this is configured to use the root username and associated password however it can be made both more secure and simpler by making it passwordless.
 
-If you are new to understanding SSH and PKI then it is suggested you read one of the [many articles](https://www.ssh.com/academy/ssh) already written for a full understanding however unless you need to debug why connections are failing in detail the basic understanding of the terms client, server and keys should be sufficient as described here.
+If you are new to understanding SSH and PKI then it is suggested you read the ssh guide [here](https://www.ssh.com/academy/ssh) for a full understanding however unless you need to debug why connections are failing or some other in depth issue then the basic understanding of the terms client, server and keys should be sufficient.
 
 The term PKI is used to describe all of the elements used for creating a secure encrypted connection between two devices. These devices are referred to as clients or servers. In simple terms the target machine you are connecting to is the server and the host machine you are connecting from is the client.
 
@@ -23,15 +23,15 @@ There are a few things to watch out for to ensure a successful connection as the
 This article has been written on how to achieve this using the standard SSH clients included with most modern Linux and Windows distributions i.e. OpenSSH.
 
 ## OpenIPC camera with public key (most common setup)
-For the most common configuration, where we have the private key as described above, we first need to generate a key pair and securely get our key to the camera into the authorized_key file.
+For the most common configuration we first need to generate a key pair and securely get our key to the camera into the authorized_key file.
 
 #### Step 1: connect to the camera
-First we need to establish a terminal connection to the camera using the traditional way with your current root password (as per the Majestic web login) e.g. ``` ssh root@192.168.1.10 ```
+Establish a terminal connection to the camera using the traditional way with your current root password (as per the Majestic web login) e.g. ``` ssh root@192.168.1.10 ```
 
 #### Step 2: check there is a symlink to the dropbear files
 When using SSH there are two key files, authorized_keys and known_hosts, which are expected to be found in the users **.ssh** directory in both Windows and Linux systems. 
 
-As OpenIPC uses Dropbear, and not OpenSSH, these files are actually located in the /etc/dropbear directory and so on the camera there is a link created in the root user home directory (/root) that points to the required files and will look like this **.ssh -> /etc/dropbear/**. 
+As OpenIPC uses Dropbear, and not OpenSSH, these files are actually located in the **/etc/dropbear** directory and so on the camera there is a link created in the **root user home directory (/root)** that points to the required files and will look like this **.ssh -> /etc/dropbear/**. 
 
 If this is missing then it is critical to recreate it with the command **ln -s ~/.ssh /etc/dropbear**
 
@@ -44,7 +44,7 @@ To create the key pair on your **client** machine open a terminal window enter `
 
 You will be prompted with a few questions, simply press enter to accept the defaults.
 
-You should see an output similar to.
+You should see an output similar to this.
 
 ```Generating public/private ed25519 key pair.
 Enter file in which to save the key (/home/<yourusername>/.ssh/id_ed25519): 
@@ -74,7 +74,7 @@ If using windows then you will see /users/<yourusername> instead of the Linux /h
 So we now have a private key and the associated public key on our host machine and the challenge is how to securely get this onto our target, in this case our camera, and added to the authorized_keys file in the target .ssd folder.
 
 Thankfully this has been thought of and there is a utility called ssh-copy-id which allows us to do that.
-Enter the following:
+Enter the following substituting your camera ip address and username:
 ```
 ssh-copy-id -i /home/<yourusername>/.ssh/id_ed25519 root@<yourcameraip>
 
@@ -138,4 +138,4 @@ To get a clue how to resolve issues then when entering the ssh command add -vvv 
 
 
 #### Finally
-Remember the private key in your local host machine should never be duplicated or moved  Enjoy no more passwords to enter :-) 
+Remember the private key in your local host machine should never be duplicated or moved.
