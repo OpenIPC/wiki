@@ -24,7 +24,7 @@ This article has been written on how to achieve this using the standard SSH clie
 For the most common configuration we first need to generate a key pair and securely get our key to the camera into the authorized_key file.
 
 #### Step 1: connect to the camera
-Establish a terminal connection to the camera using the traditional way with your current root password (as per the Majestic web login) e.g. ``` ssh root@192.168.1.10 ```
+Establish a terminal connection to the camera using the traditional way with your current root password (as per the Majestic web login) e.g. ``` ssh root@<camera_ip_address> ```
 
 #### Step 2: check there is a symlink to the dropbear files
 When using SSH there are two key files, authorized_keys and known_hosts, which are expected to be found in the users home **.ssh** directory in both Windows and Linux systems. 
@@ -74,12 +74,12 @@ So we now have a private key and the associated public key on our host machine a
 Thankfully this has been thought of and there is a utility called ssh-copy-id which allows us to do that.
 Enter the following substituting your camera ip address and username:
 ```
-ssh-copy-id -i /home/<yourusername>/.ssh/id_ed25519 root@<yourcameraip>
+ssh-copy-id -i /home/<yourusername>/.ssh/id_ed25519 root@<camera_ip_address>
 
 ```
 
 You should get the following 
-```ssh-copy-id -i /home/<yourusername>/.ssh/id_ed25519 root@<yourcamipaddress>
+```ssh-copy-id -i /home/<yourusername>/.ssh/id_ed25519 root@<camera_ip_address>
 /usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/<yourusername>/.ssh/id_ed25519.pub"
 /usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
 /usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
@@ -87,12 +87,12 @@ root@<yourcameraip>'s password:
 
 Number of key(s) added: 1
 
-Now try logging into the machine, with:   "ssh 'root@<yourcamipaddress>'"
+Now try logging into the machine, with:   "ssh 'root@<camera_ip_address>'"
 and check to make sure that only the key(s) you wanted were added.
 ```
 
 Now test it is working by trying to access the camera. You should find it will successfully login without asking for a password.
-```~$ ssh root@<yourcamipadddress>192.168.1.173
+```~$ ssh root@<camera_ip_address>
 
    .d88888b.                             8888888 8888888b.   .d8888b.
   d88P" "Y88b                              888   888   Y88b d88P  Y88b
