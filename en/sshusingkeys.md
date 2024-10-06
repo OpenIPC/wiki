@@ -18,8 +18,6 @@ In the initial connection phase there is also a check that the server is the cor
 
 There are many algorithms that have been implemented over the years to ensure connections are extremely hard to break into and so with modern computing power this has meant some of the earlier ones are no longer supported. Modern popular public key encryption standards include RSA (Rivest–Shamir–Adleman) and EdDSA (Edwards-curve Digital Signature Algorithm).
 
-There are a few things to watch out for to ensure a successful connection as the security settings, for example, are crucial on the files and folders so ensure you follow the instructions step by step below.
-
 This article has been written on how to achieve this using the standard SSH clients included with most modern Linux and Windows distributions i.e. OpenSSH.
 
 ## OpenIPC camera with public key (most common setup)
@@ -29,9 +27,9 @@ For the most common configuration we first need to generate a key pair and secur
 Establish a terminal connection to the camera using the traditional way with your current root password (as per the Majestic web login) e.g. ``` ssh root@192.168.1.10 ```
 
 #### Step 2: check there is a symlink to the dropbear files
-When using SSH there are two key files, authorized_keys and known_hosts, which are expected to be found in the users **.ssh** directory in both Windows and Linux systems. 
+When using SSH there are two key files, authorized_keys and known_hosts, which are expected to be found in the users home **.ssh** directory in both Windows and Linux systems. 
 
-As OpenIPC uses Dropbear, and not OpenSSH, these files are actually located in the **/etc/dropbear** directory and so on the camera there is a link created in the **root user home directory (/root)** that points to the required files and will look like this **.ssh -> /etc/dropbear/**. 
+As OpenIPC uses Dropbear, and not OpenSSH, these files are actually located in the cameras **/etc/dropbear** directory and so there is a link in the **root user home directory (/root)** that points to the required files and will look like this **.ssh -> /etc/dropbear/**. 
 
 If this is missing then it is critical to recreate it with the command **ln -s ~/.ssh /etc/dropbear**
 
@@ -132,10 +130,9 @@ drwxr-xr-x    1 root     root             0 Oct  4 12:28 ..
 ####  Step 4: Troubleshooting
 There are few reasons why if you have followed the above that this will not work however the main issue faced is if for some reason the permissions are not correct on the .ssh folder and the files within it.
 
-Ensure the .ssh folder has 700 permissions and the authorized_keys file 600 or similar in Windows only your user and administrators have permission.  
+Ensure the .ssh folder has 700 permissions and the authorized_keys file 600 or similar in Windows, only your user and administrators have permission.  
 
 To get a clue how to resolve issues then when entering the ssh command add -vvv which gives verbose debug output and usually will highlight where things are failing.
 
-
 #### Finally
-Remember the private key in your local host machine should never be duplicated or moved.
+Remember the private key should never be duplicated or moved.
