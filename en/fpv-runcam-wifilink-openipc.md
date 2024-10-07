@@ -11,8 +11,8 @@ RunCam WiFiLink based on OpenIPC
   
 Runcam Setup 
 --------------------------------
-## So you just bought a Runcam WiFi link? Great! This guide will help you to set it up. 
 
+So you just bought a Runcam WiFi link? Great! This guide will help you to set it up. 
 The Runcam WiFi link and OpenIPC is still under development, so it's
 possible this guide will soon be outdated.
 
@@ -162,9 +162,9 @@ If you prefer the cable on the bottom, do the following steps:
 
 ## Adding audio
 
-1)  Make sure you have the latest [[Pixel
-    > pilot]{.underline}](https://github.com/OpenIPC/PixelPilot/releases)
-    > installed
+1)  Make sure you have the latest Pixel
+    pilot installed] (https://github.com/OpenIPC/PixelPilot/releases)
+    
 
 2)  Install Win SCP to connect to your camera
 
