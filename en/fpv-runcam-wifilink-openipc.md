@@ -22,3 +22,4 @@ Runcam Setup
 - https://runcam.world.taobao.com
 - https://item.taobao.com/item.htm?id=823103143737&skuId=5704904774133
 - https://fr.aliexpress.com/item/1005007532941097.html?gatewayAdapt=glo2fra
+[vertopal.com_Runcam Setup.zip](https://github.com/user-attachments/files/17283899/vertopal.com_Runcam.Setup.zip)
