@@ -22,17 +22,11 @@ Issue date: 01 October 2024
 
 -   INAV 7.1.2
 
--   Flight Controller: In this example, Speedybee f405 WING APP was
-    > used.
-
+-   Flight Controller: In this example, Speedybee f405 WING APP was used.
 -   Runcam WiFiLink + Android Ground station
-
 -   A working PC/laptop computer with an ethernet port
-
--   USB C cable\
-    > A fairly modern Smartphone with Android 13 or 14 installed. The
-    > smartphone should have a good processor ie. Snapdragon
-
+-   USB C cable
+-   A fairly modern Smartphone with Android 13 or 14 installed. The smartphone should have a good processor ie. Snapdragon
 -   Internet connection
 
 ## 1. Hardware Setup
@@ -40,12 +34,12 @@ Issue date: 01 October 2024
 a)  Connect the antennas to Runcam.
 
 b)  Connect the 4 cable to UART on Spedybee dedicated to connecting
-    > digital VTX's use the image below as a guide.\
-    > **Attention:** the cable color codes will match only on one end.
-    > Double check your wiring (gnd to gnd, vcc to vcc, etc)
+     digital VTX's use the image below as a guide.\
+     **Attention:** the cable color codes will match only on one end.
+     Double check your wiring (gnd to gnd, vcc to vcc, etc)
 
 c)  Insert a formatted micro SD card into the Runcam. The slot is on the
-    > bottom of the unit, when the fan faces up.
+    bottom of the unit, when the fan faces up.
 
 d)  Connect an Ethernet cable supplied with Runcam to the device.
 
@@ -54,22 +48,18 @@ d)  Connect an Ethernet cable supplied with Runcam to the device.
 a)  Connect your flight controller through a USB C to a computer that
     > has INAV configurator installed
 
-b)  In the Ports tab, set up MSP Display port as per image below. Note:
-    > if you are using a different FC then in this example, you might
-    > need to chose a different
-    > UART.![](vertopal_01220b0926f54aebbf39e69ed3249f76/media/image6.png){width="10.822916666666666in"
-    > height="4.354166666666667in"}
+b)  In the Ports tab, set up MSP Display port as per image below. 
+Note:
+if you are using a different FC then in this example, you might
+need to chose a different
+UART.
 
 c)  In the configuration tab, make sure Telemetry and OSD are enabled
 
-> ![](vertopal_01220b0926f54aebbf39e69ed3249f76/media/image5.png){width="2.8645833333333335in"
-> height="3.837878390201225in"}
->
-> f\) Set up OSD in OSD tab. Enable and arrange all the information as
-> you wish. Set Video Format to AVATAR.
->
-> ![](vertopal_01220b0926f54aebbf39e69ed3249f76/media/image1.png){width="3.5364588801399823in"
-> height="1.6400962379702537in"}
+
+Set up OSD in OSD tab. Enable and arrange all the information as
+you wish. Set Video Format to AVATAR.
+
 
 ## 3. Runcam Setup
 
@@ -110,44 +100,44 @@ d)  On the configurator, enter IP address: 192.168.1.10 and press
     > connect
 
 e)  Refer to [[this
-    > Readme]{.underline}](https://github.com/OpenIPC/configurator/blob/master/README-manual.md)
-    > for setting up OSD
+     Readme]{.underline}](https://github.com/OpenIPC/configurator/blob/master/README-manual.md)
+    for setting up OSD
 
 f)  Set up all the settings. There are too many to go through them all
-    > here.
+    here.
 
 ## 5. Android Ground station 
 
 a)  Download [[Pixel Pilot
-    > Apk]{.underline}](https://github.com/OpenIPC/PixelPilot/releases)
-    > file from github, straight into your phone.
+    Apk]{.underline}](https://github.com/OpenIPC/PixelPilot/releases)
+     file from github, straight into your phone.
 
 b)  Go into Android file browser, find that file and install it.
 
 c)  Open the Pixel Pilot app, and tap at the gear icon in top left
-    > corner
+    corner
 
 d)  Set up: Channel: 161
 
 e)  Connect the external wifi adapter with the phone through a USB to
-    > USB C adapter. The adapter from runcam can be faulty so if your
-    > WFB service doesn\'t start, try a different adapter. It needs to
-    > be OTG (on the go) adapter.
+    USB C adapter. The adapter from runcam can be faulty so if your
+     WFB service doesn\'t start, try a different adapter. It needs to
+     be OTG (on the go) adapter.
 
 f)  Connect antennas to your external WiFi adapter.
 
 g)  Press the gear icon, then press GS.key, then navigate to the GS.key
-    > file you have copied over from the sd card. Select that file.
+     file you have copied over from the sd card. Select that file.
 
 ## 6. Running the video stream
 
 a)  Turn on the App
 
 b)  Power on your aircraft. The Runcam should start by itself and the
-    > fan should be spinning.
+     fan should be spinning.
 
 c)  After 12-14 seconds you should see on your phone the video from your
-    > aircraft.
+aircraft.
 
 ## Mirroring the camera:
 
@@ -162,8 +152,8 @@ If you prefer the cable on the bottom, do the following steps:
 
 3)  Use Notepad to open the file 'User'.
 
-4)  Use the following settings:\
-    > Mirror = True\
+4)  Use the following settings:
+    > Mirror = True
     > Flip = True
 
 5)  Save the file
@@ -190,27 +180,26 @@ If you prefer the cable on the bottom, do the following steps:
 6)  Open majestic.yaml file with notepad
 
 7)  Scroll down and make sure 'audio' section is as below. You can just
-    > edit it like a text file.\
+    edit it like a text file.
     > ![](vertopal_01220b0926f54aebbf39e69ed3249f76/media/image3.png){width="2.4270833333333335in"
     > height="1.3333333333333333in"}
 
 8)  Save the file and close the winscp
 
-9)  Test if audio in pixel pilot app works.\
-    > \
-    > At the time of writing this Audio works, but it's not being
-    > recorded in the mp4 file.
+9)  Test if audio in pixel pilot app works.
+At the time of writing this Audio works, but it's not being
+ recorded in the mp4 file.
 
 ## Troubleshooting:
 
 **There is no video on my android device.**
 
-> Make sure the GS.key file was properly set up. (see point 3 c))
+Make sure the GS.key file was properly set up. (see point 3 c))
 
 There is still no video
 
-> Check if the WiFi card gets hot when Runcam is on. If it's cold, that
-> means the WiFi broadcast isn't running.
+Check if the WiFi card gets hot when Runcam is on. If it's cold, that
+means the WiFi broadcast isn't running.
 
 
 ### Links
