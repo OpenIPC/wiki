@@ -49,6 +49,7 @@ OpenIPC Wiki
 ### FPV
 
 - [Frequently Asked Question (FAQ) for FPV](en/fpv-faq.md)
+- [General Info](en/fpv-general.md)
 - [OpenIPC AIO "Mario"](en/fpv-openipc-aio-mario.md)
 - [OpenIPC AIO "UltraSight"](en/fpv-openipc-aio-ultrasight.md)
 - [Guide to configure an FPV camera and groundstation](en/fpv-step-by-step-guide.md)
@@ -62,6 +63,7 @@ OpenIPC Wiki
 - [A selection of OpenIPC videos on YouTube](en/fpv-youtube.md)
 - [RunCam WiFiLink based on OpenIPC](en/fpv-runcam-wifilink-openipc.md)
 - [Radxa based groundstation](en/fpv-radxa.md)
+- [The mavfwd tool](en/fpv-mavfwd.md)
 
 ### Troubleshooting
 
