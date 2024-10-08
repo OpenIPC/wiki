@@ -103,6 +103,12 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 | Hi3516Ev200 | 53     | 52     | 4     |                                    |
 | Hi3516Cv100 | 42     | 43     | 6     | IPG5020A-H-V1.0, 5013A-CF/5020A-FF |
 
+### JVT boards
+
+| Processor   | IRCUT1 | IRCUT2 | LIGHT | RESET | PWM | USB |   TESTED BOARDS  |
+|-------------|--------|--------|-------|-------|-----|-----|------------------|
+| GK7205v300  |        |        |       | 9     | 3   | 61  |                  |
+
 ### JUAN boards (Sannce)
 
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS      | TESTED BOARDS | DEVICE ID |
