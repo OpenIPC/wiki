@@ -59,7 +59,7 @@ c)  In the configuration tab, make sure Telemetry and OSD are enabled
 
 Set up OSD in OSD tab. Enable and arrange all the information as
 you wish. Set Video Format to AVATAR.
-
+![INAV SETUP](https://github.com/wkumik/wiki/blob/master/images/RUNCAM%20SETUP%20GUIDE%20IMAGES/image1.png)
 
 ## 3. Runcam Setup
 
