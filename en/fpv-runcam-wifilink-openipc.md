@@ -53,9 +53,11 @@ Note:
 if you are using a different FC then in this example, you might
 need to chose a different
 UART.
+![msp DISPLAY PORT](https://github.com/wkumik/wiki/blob/master/images/RUNCAM%20SETUP%20GUIDE%20IMAGES/image6.png)
 
 c)  In the configuration tab, make sure Telemetry and OSD are enabled
 
+![Telemetry](https://github.com/wkumik/wiki/blob/master/images/RUNCAM%20SETUP%20GUIDE%20IMAGES/image5.png)
 
 Set up OSD in OSD tab. Enable and arrange all the information as
 you wish. Set Video Format to AVATAR.
@@ -79,11 +81,11 @@ OpenIPC configurator is a useful tool to change many different settings
 on your camera that runs OpenIPC firmware.
 
 a)  Download and install the latest version of
-    > [[Putty]{.underline}](https://www.chiark.greenend.org.uk/~sgtatham/putty/)
+   [PUTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/)
 
-b)  Download the [[OpenIPC
-    > configurator]{.underline}](https://github.com/OpenIPC/configurator/releases)
-    > and install it
+b)  Download the [OpenIPC
+    configurator](https://github.com/OpenIPC/configurator/releases)
+    and install it
 
 c)  Setting up IP\
     > -Connect your runcam to your computer's Ethernet port with the
@@ -93,14 +95,12 @@ c)  Setting up IP\
     > - Select change adapter settings\
     > - double click on Internet Protocol Version 4\
     > - Enter numbers as per image below\
-    > ![](vertopal_01220b0926f54aebbf39e69ed3249f76/media/image4.png){width="4.0625in"
-    > height="4.729166666666667in"}
+![IP address](https://github.com/wkumik/wiki/blob/master/images/RUNCAM%20SETUP%20GUIDE%20IMAGES/image4.png)
 
 d)  On the configurator, enter IP address: 192.168.1.10 and press
     > connect
 
-e)  Refer to [[this
-     Readme]{.underline}](https://github.com/OpenIPC/configurator/blob/master/README-manual.md)
+e)  Refer to separate wiki document
     for setting up OSD
 
 f)  Set up all the settings. There are too many to go through them all
@@ -108,8 +108,8 @@ f)  Set up all the settings. There are too many to go through them all
 
 ## 5. Android Ground station 
 
-a)  Download [[Pixel Pilot
-    Apk]{.underline}](https://github.com/OpenIPC/PixelPilot/releases)
+a)  Download [Pixel Pilot
+    Apk](https://github.com/OpenIPC/PixelPilot/releases)
      file from github, straight into your phone.
 
 b)  Go into Android file browser, find that file and install it.
@@ -162,8 +162,8 @@ If you prefer the cable on the bottom, do the following steps:
 
 ## Adding audio
 
-1)  Make sure you have the latest Pixel
-    pilot installed] (https://github.com/OpenIPC/PixelPilot/releases)
+1)  Make sure you have the latest [Pixel
+    pilot installed](https://github.com/OpenIPC/PixelPilot/releases)
     
 
 2)  Install Win SCP to connect to your camera
@@ -172,8 +172,7 @@ If you prefer the cable on the bottom, do the following steps:
     > battery or a 12V power source
 
 4)  Open WinSCP and connect to your camera
-    > ![](vertopal_01220b0926f54aebbf39e69ed3249f76/media/image2.png){width="6.708333333333333in"
-    > height="4.583333333333333in"}
+![WinSCP](https://github.com/wkumik/wiki/blob/master/images/RUNCAM%20SETUP%20GUIDE%20IMAGES/image2.png)
 
 5)  Go to: etc folder
 
@@ -181,12 +180,12 @@ If you prefer the cable on the bottom, do the following steps:
 
 7)  Scroll down and make sure 'audio' section is as below. You can just
     edit it like a text file.
-    > ![](vertopal_01220b0926f54aebbf39e69ed3249f76/media/image3.png){width="2.4270833333333335in"
-    > height="1.3333333333333333in"}
+    
+  ![AUDIO](https://github.com/wkumik/wiki/blob/master/images/RUNCAM%20SETUP%20GUIDE%20IMAGES/image3.png)
 
-8)  Save the file and close the winscp
+9)  Save the file and close the winscp
 
-9)  Test if audio in pixel pilot app works.
+10)  Test if audio in pixel pilot app works.
 At the time of writing this Audio works, but it's not being
  recorded in the mp4 file.
 
