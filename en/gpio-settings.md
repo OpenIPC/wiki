@@ -103,12 +103,6 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 | Hi3516Ev200 | 53     | 52     | 4     |                                    |
 | Hi3516Cv100 | 42     | 43     | 6     | IPG5020A-H-V1.0, 5013A-CF/5020A-FF |
 
-### JVT boards
-
-| Processor   | IRCUT1 | IRCUT2 | LIGHT | RESET | PWM | USB |   TESTED BOARDS  |
-|-------------|--------|--------|-------|-------|-----|-----|------------------|
-| GK7205v300  |        |        |       | 9     | 3   | 61  |                  |
-
 ### JUAN boards (Sannce)
 
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS      | TESTED BOARDS | DEVICE ID |
@@ -117,13 +111,14 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 
 ### JVT boards
 
-| Processor   | IRCUT1 | IRCUT2 | LIGHT |
-|-------------|--------|--------|-------|
+| Processor   | IRCUT1 | IRCUT2 | LIGHT | RESET | PWM | USB |   TESTED BOARDS  |
+|-------------|--------|--------|-------|-------|-----|-----|------------------|
 | Hi3516Cv100 |
 | Hi3516Cv200 | 64     | 65     | 62    |
 | Hi3516Cv300 |
 | Hi3516Ev200 |
 | Hi3518Ev200 | 64     | 65     | 47    |
+| GK7205v300  | 10     | 11     |       | 9     | 3   | 61  |                
 
 ### iSNATCH (HeySmart) mini "cube" camera
 
