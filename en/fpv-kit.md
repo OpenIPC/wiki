@@ -4,11 +4,6 @@
 Selecting hardware to complete OpenIPC FPV kits
 -----------------------------------------------
 
-<p align="center">
-  <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-logo.jpg?raw=true" alt="Logo"/>
-</p>
-
-
 ### FPV kit 1
 
 - IPCam board GK7205V200 + IMX307

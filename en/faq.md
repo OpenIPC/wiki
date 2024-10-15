@@ -105,6 +105,10 @@ For a camera with 16MB flash chip, run
 sf probe 0; sf erase 0xd50000 0x2b0000; reset
 ```
 
+### How to connect to camera with SSH using keys / no password 
+
+See seperate wiki page [here](en/sshusingkeys.md)
+
 ### How to find information about the camera hardware and software?
 
 Sign in on camera via `ssh` and run `ipctool`.
@@ -192,36 +196,6 @@ Make sure to use your own IP address and path to the NFS share!
 
 ```bash
 strings dumpfile.bin | grep ^ethaddr
-```
-
-### How to configure ssh session authorization by key
-
-__On the camera__: Sign in into web UI on port 85 of your camera.
-
-```bash
-passwd
-```
-
-__On the desktop__: Copy the public key to the camera by logging in with the
-password created above.
-
-```bash
-ssh-copy-id root@192.168.1.66
-```
-
-__On the camera__: Create a `.ssh` folder in the root user's home directory
-and copy the file with the authorized keystore into it.
-
-```bash
-mkdir ~/.ssh
-cp /etc/dropbear/authorized_keys ~/.ssh/
-```
-
-__On the desktop__: Open a new session to verify that the authorization is
-passed using the public key not requesting a password.
-
-```bash
-ssh root@192.168.1.66
 ```
 
 ### Majestic
