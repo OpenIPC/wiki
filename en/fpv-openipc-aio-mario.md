@@ -57,12 +57,32 @@ MSIC BEC on board is up to 2A 5V output
 
 enter uboot use  uart device connect to top of AIO board(R0,T0)pad.
 
+How to get lower voltage input for DC input
+
+AIO power supply from 2s-3S battery needed more current and required 4wires connected, but higher voltage 4S+ may works 2wire connection.
+
+Remove two resistors then you can get input as low as 5.4V input available.
+
+![image](https://github.com/user-attachments/assets/24218925-fca8-47e2-bc4a-1326dabeaa68)
+
+
+
 
 ### Connect usb debug port
 
 Plug USB cable to connect AIO and PC first, then power on DC, or usb power only.
 
 If there are unknown USB devices in the computer, the following [corechip-sr9900](https://github.com/user-attachments/files/16829005/corechip-sr9900-usb20-to-fast-ethernet-adapter-1750095.zip) drivers need to be installed.
+
+Operations on Mac OS
+
+<img width="686" alt="Screenshot 2024-09-21 at 10 07 24 AM" src="https://github.com/user-attachments/assets/15fde52d-8f14-4377-87ed-cec6e05dc70a">
+
+<img width="714" alt="Screenshot 2024-09-21 at 10 09 18 AM" src="https://github.com/user-attachments/assets/ce029aab-7505-41f8-81fc-283e41dfe84a">
+
+<img width="544" alt="Screenshot 2024-09-21 at 10 11 31 AM" src="https://github.com/user-attachments/assets/97aff8d8-1a1b-4682-a304-4af58a29e68a">
+
+
 
 #### Autosetup in windows
 Please download [Auto_Set_Mario_CDC.zip](https://github.com/user-attachments/files/17010487/Auto_Set_Mario_CDC.zip) file, unzip it and run as administrator.
@@ -77,10 +97,39 @@ set this card ipv4 address to 192.168.1.11 mask:255.255.255.0
 
 apply
 
-
 then open ssh to connect AIO address:192.168.1.10
 
 user:root password:12345
+
+**How to get internet for AIO**
+
+1.Open network connections on you windows, right click your main network adapter properties---Sharing: Allow other network users choose USB CDC
+
+
+![image](https://github.com/user-attachments/assets/e3f41122-7601-4dff-b599-a325e0693b8c)
+
+Apply,then the CDC ethernet will got a ip address 192.168.137.1 automaticlly
+
+
+![image](https://github.com/user-attachments/assets/bac7350b-399e-419c-8a4a-557d4378cf79)
+
+open admin terminal
+
+![image](https://github.com/user-attachments/assets/7eaae7ca-16c6-4e59-a8de-9178c9e3b77c)
+
+using arp -a to find AIO's IP
+
+![image](https://github.com/user-attachments/assets/f6d2641e-a5e9-45cd-90cb-5328d423a6c7)
+
+here 192.168.137.147 is my AIO's ip address.
+
+open ssh connect to AIO,Done.
+
+![5ed177f3dc690f9e70452e3e4c93b17](https://github.com/user-attachments/assets/48f44a3d-ae04-4780-aac7-b878a043c3e6)
+
+Now you can use sysupgrade -r -k -n --force_ver to update your firmware.
+
+
 
 
 ### Upgrade firmware
@@ -133,8 +182,10 @@ on bench test or debug is disable the record function defaultly
 
 To enable the recording function set (record value)true in majestic.yaml
 
+SD card must insert before Powering.
 
-On board heat sink and cooling fan:
+
+**On board heat sink and cooling fan:**
 
 cooling fan out put power up to 500mA max
 

@@ -111,13 +111,14 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 
 ### JVT boards
 
-| Processor   | IRCUT1 | IRCUT2 | LIGHT |
-|-------------|--------|--------|-------|
+| Processor   | IRCUT1 | IRCUT2 | LIGHT | RESET | PWM | USB | NetAcct | NetLink |   TESTED BOARDS  |
+|-------------|--------|--------|-------|-------|-----|-----|---------|---------|------------------|
 | Hi3516Cv100 |
 | Hi3516Cv200 | 64     | 65     | 62    |
 | Hi3516Cv300 |
 | Hi3516Ev200 |
 | Hi3518Ev200 | 64     | 65     | 47    |
+| GK7205v300  | 10     | 11     |       | 9     | 3   | 61  | 41      | 40 |               
 
 ### iSNATCH (HeySmart) mini "cube" camera
 
