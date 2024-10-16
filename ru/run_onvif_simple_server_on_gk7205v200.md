@@ -1,14 +1,21 @@
+
+
 После нескольких попыток запуска onvif_simple_server на камере с процессором gk7205v200 и получением ошибки 401 Unauthorized был придуман следующий костыль:
-Запускаю дополнительный httpd сервер
 
+#### Запускаю дополнительный httpd сервер
+```
 httpd -p 8080 -h /var/www -c /etc/httpdonvif.conf
+```
 
-содержимое httpdonvif.conf примерно такое:
+#### Содержимое httpdonvif.conf примерно такое:
+```
 A:*
 /cgi-bin:*:*
+```
 
 
-В /etc/onvif.config прописываю следующее (пример):
+#### В /etc/onvif.config прописываю следующее (пример):
+```
 # General
 model=OpenIPC ShowMe
 manufacturer=OpenIPC
@@ -49,5 +56,6 @@ move_up=motor gk7205v200 0 1
 move_down=motor gk7205v200 0 -1
 #move_stop=motor -d s
 #move_preset=xm-kmotor -d t
+```
 
-Onvif работает.
+#### Onvif работает.
