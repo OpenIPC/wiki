@@ -108,6 +108,7 @@ OpenIPC Wiki
 
 ### Cameras
 
+- [AHD2NET converter](en/device-ahd2net-converter.md)
 - [Chacon IPCAM-RI01](en/device-chacon-ipcam-ri01.md)
 - [Smartwares CIP-37210](en/device-smartwares-cip-37210.md)
 - [Foscam X5](en/device-foscam-x5.md)
@@ -125,6 +126,7 @@ OpenIPC Wiki
 ### Packages
 
 - [Vtun](en/package-vtun.md)
+- [WireGuard](en/package-wireguard.md)
 
 ### Subprojects
 
