@@ -8,7 +8,7 @@ OpenIPC FPV ground station
   <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-logo.jpg?raw=true" alt="Logo"/>
 </p>
 
-Here is a good [getting started](https://wiki.radxa.com/Zero/getting_started) if you are not familiar with Radza. 
+Here is a good [getting started](https://wiki.radxa.com/Zero/getting_started) if you are not familiar with Radxa. 
 
 ### Flashing 
 
