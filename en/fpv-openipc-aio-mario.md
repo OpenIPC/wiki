@@ -171,18 +171,18 @@ RF Power max 18dbm for onbard PA input.
   
   Video bitrate:4096 /8192/12688(mcs 3+)
 
-  when use stbc=1,ldpc=1 recommand rf power setting for MCS3 from 8-15 for test.
+  when you use stbc=1,ldpc=1 we recommand RF power setting for MCS3 from 8-15 for test.
 
   Keep RF power < = 15 when on bench test(when only usb connect)
 
 
 ### SD solt for Air camera record
 
-on bench test or debug is disable the record function defaultly
+On bench test or debug the record function is disabled by default.
 
 To enable the recording function set (record value)true in majestic.yaml
 
-SD card must insert before Powering.
+SD card must be inserted before Powering.
 
 
 **On board heat sink and cooling fan:**
@@ -201,7 +201,7 @@ all heat sink mount holes are M2 screws thread.
 
 USB only for debug mode, when DC power only, the cdc ethernet works in sleep mode to save energy.
 
-USB power only mode Power limited 5W input.
+ In USB power only mode, the Power is limited to 5W input.
 
 **Upgrade Firmware to Ruby FPV**
 
