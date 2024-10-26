@@ -1,222 +1,175 @@
 # OpenIPC Wiki
-[Table of Content](../README.md)
+[Table of Contents](../README.md)
 
-OpenIPC AIO "Mario"
--------------------
+## OpenIPC AIO "Mario"
+### [Product Link](https://store.openipc.org/OpenIPC-AIO-Mario-v1-0-p633320808)
 
-https://store.openipc.org/OpenIPC-AIO-Mario-v1-0-p633320808
+![OpenIPC AIO Mario](https://github.com/user-attachments/assets/ad675599-61ce-4cec-a9bf-5933d907c53a)
 
-![image](https://github.com/user-attachments/assets/ad675599-61ce-4cec-a9bf-5933d907c53a)
+**Note:** Remove the lens cover film before use.
 
-Remove the lens cover film befor use
+![Lens Cover Film](https://github.com/user-attachments/assets/9ead08a6-f4eb-45a0-bc63-19d3abd3ec1e)
 
-![image](https://github.com/user-attachments/assets/9ead08a6-f4eb-45a0-bc63-19d3abd3ec1e)
+---
 
+### Installation Overview
+The OpenIPC AIO "Mario" integrates seamlessly with various RC planes and drones. To ensure proper functionality, follow these installation steps carefully:
 
+#### Step 1: Secure the Camera Case
+- **Mounting:** Use the provided four M1.2 screws to secure the camera case. The side mount holes are compatible with M2 screws.
 
-The Mario camera case with 4x M1.2 screws.
+#### Step 2: Antenna Installation
+- **Install Antennas:** Attach the antennas designed for AIO to ensure optimal signal reception.
 
-Side mount holes are M2 x2 screw thread.
+![Antenna Installation](https://github.com/user-attachments/assets/e10e6671-553f-4840-aacd-16816be0813b)
 
-Install atennas for AIO.
+#### Step 3: Cable Connections
+Connect the following cables from the OpenIPC AIO "Mario" to your flight controller (e.g., SpeedyBee F405 WING):
 
-![image](https://github.com/user-attachments/assets/e10e6671-553f-4840-aacd-16816be0813b)
+- **GND (Ground):** Connect to the ground pin on the flight controller. This is crucial for stable power and signal integrity.
+- **VCC (Power):** Connect to the VCC pin on the flight controller. This pin typically provides the necessary power supply (make sure the voltage matches your flight controller specifications).
+- **RX (Receive):** Connect to the TX pin on the flight controller. This allows the AIO to receive data from the flight controller.
+- **TX (Transmit):** Connect to the RX pin on the flight controller. This enables the AIO to send data back to the flight controller.
 
+Ensure that all connections are secure and insulated to prevent any shorts or signal interference.
 
+---
 
-### LED function
+### Additional Setup Considerations
+- Before powering on, double-check all connections for correctness.
+- Refer to your flight controller's manual for specific pin locations and configurations.
+- If applicable, configure your flight controller to recognize the AIO camera in its settings for optimal performance.
 
-Red glimmering	Power on with Battery
+---
 
-Red 	Wired linked
+### LED Functions
+The status LEDs indicate different power states:
+- **Red (Glimmering):** Power on with battery
+- **Red:** Wired connection established
+- **Blue (Flashing):** RF transmitter active
+- **Green:** To Be Determined (TBD)
 
-Blue flash	RF transmitter
+#### Board Specifications
+- **Board Size:** 30mm x 32mm with 4 M2 mount holes
+- **Heat Sink Size:** 20mm x 20mm mount holes
 
-Green	TBD
+![Board Specifications](https://github.com/user-attachments/assets/1c7e34c1-76a9-45ee-9caf-ffd33261e154)
 
-Board Size 30mmx32mm with 4*M2 mount holes.
-
-Heat Sink with 20mmx20mm mount holes.
-
-![image](https://github.com/user-attachments/assets/1c7e34c1-76a9-45ee-9caf-ffd33261e154)
-
-
-
+---
 
 ### Power Section
+#### Power Input:
+- Accepts 2S-6S battery input.
 
-Power input:
+#### On-Board BEC Capacity:
+- **RF BEC:** Up to 3A, 5V output
+- **MSIC BEC:** Up to 2A, 5V output
 
-2S-6S
+To enter U-Boot, connect a UART device to the top of the AIO board (R0, T0 pads).
 
-The on board dualway BEC Capacity:
+#### Adjusting Voltage Input
+To achieve lower voltage input for DC:
+- A 2S-3S battery requires four wires connected for adequate current. Higher voltage (4S+) may only need a two-wire connection.
+- Remove two resistors to lower the input voltage to as low as 5.4V.
 
-RF BEC on board is up to 3A 5V output
+![Voltage Input Adjustment](https://github.com/user-attachments/assets/24218925-fca8-47e2-bc4a-1326dabeaa68)
 
-MSIC BEC on board is up to 2A 5V output
+---
 
-enter uboot use  uart device connect to top of AIO board(R0,T0)pad.
+### Connecting USB Debug Port
+1. **Connect USB Cable:** Attach the USB cable between the AIO and your PC.
+2. **Power On:** Turn on the DC or use USB power only.
 
-How to get lower voltage input for DC input
+If your computer detects unknown USB devices, install the required [corechip-sr9900 drivers](https://github.com/user-attachments/files/16829005/corechip-sr9900-usb20-to-fast-ethernet-adapter-1750095.zip).
 
-AIO power supply from 2s-3S battery needed more current and required 4wires connected, but higher voltage 4S+ may works 2wire connection.
+#### Mac OS Operations
+![Mac Operations Screenshot](https://github.com/user-attachments/assets/15fde52d-8f14-4377-87ed-cec6e05dc70a)
 
-Remove two resistors then you can get input as low as 5.4V input available.
+![Mac Operations Screenshot](https://github.com/user-attachments/assets/ce029aab-7505-41f8-81fc-283e41dfe84a)
 
-![image](https://github.com/user-attachments/assets/24218925-fca8-47e2-bc4a-1326dabeaa68)
+![Mac Operations Screenshot](https://github.com/user-attachments/assets/97aff8d8-1a1b-4682-a304-4af58a29e68a)
 
+---
 
+### Auto Setup on Windows
+1. Download the [Auto_Set_Mario_CDC.zip](https://github.com/user-attachments/files/17010487/Auto_Set_Mario_CDC.zip) file, unzip it, and run it as an administrator.
+2. Alternatively, set it up manually:
+   - Go to **Control Panel** > **Internet** > **Network**.
+   - Find the USB 2.0 to Fast Ethernet Adapter.
+   - Set the IPv4 address to `192.168.1.11` and mask to `255.255.255.0`.
+   - Apply the settings.
+3. Open SSH to connect to the AIO at address `192.168.1.10` with the following credentials:
+   - **User:** root
+   - **Password:** 12345
 
+#### Internet Access for AIO
+1. Open **Network Connections** on Windows.
+2. Right-click your main network adapter and select **Properties**.
+3. Under **Sharing**, allow other network users to choose USB CDC.
 
-### Connect usb debug port
+![Network Sharing](https://github.com/user-attachments/assets/e3f41122-7601-4dff-b599-a325e0693b8c)
 
-Plug USB cable to connect AIO and PC first, then power on DC, or usb power only.
+Apply settings, and the CDC Ethernet will automatically receive an IP address of `192.168.137.1`.
 
-If there are unknown USB devices in the computer, the following [corechip-sr9900](https://github.com/user-attachments/files/16829005/corechip-sr9900-usb20-to-fast-ethernet-adapter-1750095.zip) drivers need to be installed.
+![Automatic IP Address](https://github.com/user-attachments/assets/bac7350b-399e-419c-8a4a-557d4378cf79)
 
-Operations on Mac OS
+4. Open an admin terminal and use `arp -a` to find the AIO's IP.
 
-<img width="686" alt="Screenshot 2024-09-21 at 10 07 24 AM" src="https://github.com/user-attachments/assets/15fde52d-8f14-4377-87ed-cec6e05dc70a">
+![Find AIO IP](https://github.com/user-attachments/assets/f6d2641e-a5e9-45cd-90cb-5328d423a6c7)
 
-<img width="714" alt="Screenshot 2024-09-21 at 10 09 18 AM" src="https://github.com/user-attachments/assets/ce029aab-7505-41f8-81fc-283e41dfe84a">
+*Example AIO IP:* `192.168.137.147`
 
-<img width="544" alt="Screenshot 2024-09-21 at 10 11 31 AM" src="https://github.com/user-attachments/assets/97aff8d8-1a1b-4682-a304-4af58a29e68a">
+Now you can use SSH to connect to AIO.
 
+![SSH Connection](https://github.com/user-attachments/assets/48f44a3d-ae04-4780-aac7-b878a043c3e6)
 
+You can now execute `sysupgrade -r -k -n --force_ver` to update your firmware.
 
-#### Autosetup in windows
-Please download [Auto_Set_Mario_CDC.zip](https://github.com/user-attachments/files/17010487/Auto_Set_Mario_CDC.zip) file, unzip it and run as administrator.
+---
 
-or setting manually as follows:
+### Firmware Upgrade
+Firmware updates can be performed via SD card or using WinSCP to drag the root filesystem and kernel files to `/tmp`.
 
-go to control panel- internet -network:
+Use the following command to upgrade:
+You can download firmware for updates [here](https://github.com/OpenIPC/wiki/blob/master/en/fpv-openipc-aio-ultrasight.md#software).
 
-find a usb2.0 to fast Ethernet Adapter
+For discussions and suggestions, visit:
+- [Telegram Discussion 1](https://t.me/c/1809358416/98818/103632)
+- [Telegram Discussion 2](https://t.me/c/1809358416/98818/108052)
 
-set this card ipv4 address to 192.168.1.11 mask:255.255.255.0
+You may also use the configurator available at: [OpenIPC Configurator](https://github.com/OpenIPC/configurator).
 
-apply
+---
 
-then open ssh to connect AIO address:192.168.1.10
+### RF Section
+#### RF Antenna Characteristics
+![RF Antenna Characteristics](https://github.com/user-attachments/assets/d54050b4-2769-4942-95d7-8aad3b5e2e21)
+![RF Antenna Characteristics](https://github.com/user-attachments/assets/0a709f70-ac8b-4880-93f5-49e1d958eb1b)
 
-user:root password:12345
+#### Recommended RF Settings
+- **Max RF Power:** 18dBm for onboard PA input.
+- For **1T1R RF settings:** Range from 1-63; ensure firmware is updated to the latest version.
+- Set `stbc=0` and `ldpc=0` with recommended RF power values below 45.
+- Use MCS index 1,3 (0-7 for 1T1R; 8+ for 2T2R).
+- **Video Bitrate Options:** 4096 / 8192 / 12688 (for MCS 3+).
+- When using `stbc=1` and `ldpc=1`, recommend RF power settings for MCS3 between 8-15 for testing.
+- Keep RF power at or below 15 during bench tests (when only USB is connected).
 
-**How to get internet for AIO**
+---
 
-1.Open network connections on you windows, right click your main network adapter properties---Sharing: Allow other network users choose USB CDC
+### SD Slot for Air Camera Record
+During bench testing or debugging, the recording function is disabled by default. To enable recording, set the `record value` to `true` in `majestic.yaml`. Ensure the SD card is inserted before powering on.
 
+**Onboard Heat Sink and Cooling Fan:**
+- Cooling fan output power is up to 500mA max.
+- Adjust `thermal throttle` as needed.
 
-![image](https://github.com/user-attachments/assets/e3f41122-7601-4dff-b599-a325e0693b8c)
+---
 
-Apply,then the CDC ethernet will got a ip address 192.168.137.1 automaticlly
+### Additional Resources
+For further assistance and updates, refer to:
+- [OpenIPC Wiki](https://github.com/OpenIPC/wiki)
+- [OpenIPC Community](https://t.me/OpenIPC)
 
-
-![image](https://github.com/user-attachments/assets/bac7350b-399e-419c-8a4a-557d4378cf79)
-
-open admin terminal
-
-![image](https://github.com/user-attachments/assets/7eaae7ca-16c6-4e59-a8de-9178c9e3b77c)
-
-using arp -a to find AIO's IP
-
-![image](https://github.com/user-attachments/assets/f6d2641e-a5e9-45cd-90cb-5328d423a6c7)
-
-here 192.168.137.147 is my AIO's ip address.
-
-open ssh connect to AIO,Done.
-
-![5ed177f3dc690f9e70452e3e4c93b17](https://github.com/user-attachments/assets/48f44a3d-ae04-4780-aac7-b878a043c3e6)
-
-Now you can use sysupgrade -r -k -n --force_ver to update your firmware.
-
-
-
-
-### Upgrade firmware
-
-Update firmware possible via SD card or just use win scp drug the rootfs and kernel files to /tmp
-
-```
-sysupgrade -n -z --kernel=/tmp/uImage.ssc338q --rootfs=/tmp/rootfs.squashfs.ssc338q
-```
-
-You can [download](https://github.com/OpenIPC/wiki/blob/master/en/fpv-openipc-aio-ultrasight.md#software) firmware via the link that is used for online updates.
-
-You can also read the current discussions and suggestions here:
-
-- https://t.me/c/1809358416/98818/103632
-- https://t.me/c/1809358416/98818/108052
-
-Or just use the configurator - https://github.com/OpenIPC/configurator
-
-
-### RF section
-
-RF antenna characteristics
-
-![image](https://github.com/user-attachments/assets/d54050b4-2769-4942-95d7-8aad3b5e2e21)
-
-![image](https://github.com/user-attachments/assets/0a709f70-ac8b-4880-93f5-49e1d958eb1b)
-
-
-Default Antenna is ANT1 for 1T1R, ANT0+ANT1 is 2T2R
-
-Reconmand RF setting 
-
-RF Power max 18dbm for onbard PA input. 
- For 1T1R rf setting range: 1-63 firmware update to latest! 
- stbc=0,ldpc=0 Recommand RF power value < 45
-  
-  MCS index 1,3(0-7 is 1T1R, 8+ is 2T2R)
-  
-  Video bitrate:4096 /8192/12688(mcs 3+)
-
-  when use stbc=1,ldpc=1 recommand rf power setting for MCS3 from 8-15 for test.
-
-  Keep RF power < = 15 when on bench test(when only usb connect)
-
-
-### SD solt for Air camera record
-
-on bench test or debug is disable the record function defaultly
-
-To enable the recording function set (record value)true in majestic.yaml
-
-SD card must insert before Powering.
-
-
-**On board heat sink and cooling fan:**
-
-cooling fan out put power up to 500mA max
-
-all heat sink mount holes are M2 screws thread.
-
-
-### Extend connector**
-
-![image](https://github.com/user-attachments/assets/af8124e3-539f-42c6-a757-a560eb93e3fe)
-
-
-**NOTE**
-
-USB only for debug mode, when DC power only, the cdc ethernet works in sleep mode to save energy.
-
-USB power only mode Power limited 5W input.
-
-**Upgrade Firmware to Ruby FPV**
-
-plug usb cable and setting cdc ethernet ipv4: 192.168.1.11 255.255.255.0
-
-use winscp drag unzip files to /tmp 
-
-use ssh login and copy following command:
-
-sysupgrade --kernel=/tmp/uImage.ssc338q --rootfs=/tmp/rootfs.squashfs.ssc338q -z -n
-
-after update and reboot
-
-use ssh login and set command: 
-
-fw_setenv sensor imx335 && fw_setenv upgrade https://github.com/OpenIPC/firmware/releases/download/latest/openipc.ssc338q-nor-rubyfpv.tgz && reboot
-
+---
 
