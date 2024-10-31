@@ -10,6 +10,26 @@ OpenIPC FPV ground station
 
 Here is a good [getting started](https://wiki.radxa.com/Zero/getting_started) if you are not familiar with Radxa. 
 
+# OpenIPC VRX Enclosures Documentation
+
+This documentation provides a list of enclosures for OpenIPC VRX setups, available from various makers. Click on each link to view or download the enclosure files and instructions.
+
+## Enclosure Models
+
+1. [OpenIPC VRX Enclosure](https://www.printables.com/model/1051224-openipc-vrx-enclosure)
+2. [OpenIPC Radxa GS Case](https://www.printables.com/model/967795-openipc-radxa-gs-case)
+3. [Another OpenIPC Radxa GS Case](https://www.printables.com/model/979788-another-openipc-radxa-gs-case)
+4. [OpenIPC GS Case V1](https://www.printables.com/model/1034290-openipc-gs-case-v1)
+5. [A Case for the OpenIPC GS](https://www.printables.com/model/988543-a-case-for-the-openipc-gs)
+6. [Radxa Zero 3W GS Box](https://www.printables.com/model/822826-radxa03w-gs_box)
+7. [OpenIPC Radxa Zero 3W HDMI Ground Station](https://www.printables.com/model/1020246-openipc-radxa-zero-3w-hdmi-ground-station)
+8. [Radxa Zero 3W Case for OpenIPC](https://www.printables.com/model/1054879-radxa-zero-3w-case-for-openipc)
+9. [OpenIPC VRX Case on Thingiverse](https://www.thingiverse.com/thing:6680584)
+
+---
+
+Each link directs you to the appropriate 3D model site, where you can access STL files, printing details, and additional images of the VRX enclosures.
+
 ### Flashing 
 
 * SDCard
