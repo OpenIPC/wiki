@@ -4,6 +4,10 @@
 Foscam X5 / Acculenz R5 / Assark X3E
 ---
 
+#### Caution
+
+Make sure you have a device with label stating [FCC ID: ZDER3Version 1.0]. There are now devices on the market still marked as Foscam X5, which probably have different internals and do not support following flashing procedure/image. You will end up with bricked device! The label on those newer models contain designation like: [Device Name: MPS50501 FCC ID: ZDEX5 Version 6.0][3]
+
 #### Preparation
 Format an sdcard to FAT32 and copy the content of the following archive to the card:
 - [foscam-openipc.zip][1]
@@ -68,3 +72,5 @@ fw_setenv wlanpass 12345678
 - https://fccid.io/ZDER3
 
 [1]: https://github.com/openipc/wiki/files/13301107/foscam-openipc.zip
+[2]: https://fccid.io/ZDER3/Label/Label-Location-5529099
+[3]: https://fccid.io/ZDEX5/Label/Label-Info-7719960
