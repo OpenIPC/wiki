@@ -11,6 +11,20 @@ relation to camera/video surveillance functionality). Majestic is configurable
 via /etc/majestic.yaml file, and has many features/services enabled by default.
 Unneeded options can be switched off for better security and performance. See /etc/majestic.full for configuration options.
 
+### User levels in the system
+
+At the moment, the access has two level in system:
+
+**root** - the main system user, whose name and password are identical when logging into the system via SSH and WEB, there are no restrictions.
+
+**viewer** - a user with limited rights who is denied access via SSH and WEB. The user can only receive RTSP requiring authorization. 
+Update by 2024.11.08 - in the near future we will also give him the ability to watch all media resources available on the WEB port, and also 
+control the /night/toggle switch, but the login to the interface itself will still be prohibited. 
+We might also add a specific path to the directory of scripts that it will be allowed to execute
+```
+adduser viewer -s /bin/false -D -H ; echo viewer:123456 | chpasswd
+```
+
 ### Control signals
 
 ```
