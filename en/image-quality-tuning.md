@@ -58,5 +58,5 @@ camera and click `OK`.
 Use [this manual][man] as a reference.
 
 [mcr]: https://ssd.mathworks.com/supportfiles/MCR_Runtime/R2012a/MCR_R2012a_win32_installer.exe
-[pqt]: https://drive.google.com/file/d/1c4XZRbJKXjMBwfMJaLl5jUPcVqMbO936/view?usp=sharing
+[pqt]: https://openipc.org/utilities
 [man]: https://drive.google.com/file/d/1mY1lXMZVNz2Ia5CPvTF-K-907eIioSYU/view?usp=sharing
