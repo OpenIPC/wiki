@@ -323,9 +323,6 @@ on the network, `gatewayip` is the IP address of a router to access the network,
 `netmask` is the subnet mask, and `serverip` is am IP address of the TFTP server
 from step 3. Save updated values to flash memory.
 
-For exact commands please use [automatically generated instructions](https://openipc.org/supported-hardware/)
-for your hardware, consult data sheets, or seek help on [our Telegram channel][telegram].
-
 #### Installation.
 
 For exact commands please use [automatically generated instructions](https://openipc.org/supported-hardware/)
