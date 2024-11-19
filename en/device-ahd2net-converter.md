@@ -97,6 +97,9 @@ saveenv
 
 reset
 
+## Autodetect video type scripts
+
+[script.sh](https://github.com/OpenIPC/sandbox/tree/main/scripts/bt656/tp9950)
 
 ## Warning 
 
