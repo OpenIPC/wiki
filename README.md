@@ -52,6 +52,7 @@ OpenIPC Wiki
 - [General Info](en/fpv-general.md)
 - [OpenIPC AIO "Mario"](en/fpv-openipc-aio-mario.md)
 - [OpenIPC AIO "UltraSight"](en/fpv-openipc-aio-ultrasight.md)
+- [OpenIPC AIO "Thinker"](en/fpv-openipc-aio-Thinker.md)
 - [Guide to configure an FPV camera and groundstation](en/fpv-step-by-step-guide.md)
 - [Steps from buy to fly](en/fpv-from-buy-to-fly.md)
 - [OpenIPC as FPV system](en/fpv.md)
