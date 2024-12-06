@@ -2,6 +2,10 @@ Thinker Board dimensions
 
 ![image](https://github.com/user-attachments/assets/3a4a4605-a2ff-417f-9cc1-12a035f2eb07)
 
+Heat Sink dimensions
+
+![image](https://github.com/user-attachments/assets/2e8b1f4c-5a1b-40c2-b88f-97454b9fb3e8)
+
 
 Power supply 2S-6S
 
