@@ -19,6 +19,8 @@ We are continuously working towards creating a high-quality source code reposito
 
 Before you start building your own firmware, it's essential to make a few changes to your system and understand the general process.
 
+As of December 1, 2024, for trouble-free assembly of OpenIPC firmware, we recommend using Ubuntu versions no lower than 22.04.4 LTS, and if possible, focus on 24.04 LTS.
+
 ### Clone OpenIPC Firmware Git Repository
 First step is to make a local copy of the OpenIPC firmware source code. We are using 'mylocalOpenIPC/src' in the script below but you can change this to whatever location you prefer e.g. ~/myprojects/myOpenIPC 
 
