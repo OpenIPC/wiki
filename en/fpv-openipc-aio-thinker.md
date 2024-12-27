@@ -29,6 +29,15 @@ https://github.com/OpenIPC/builder/releases/download/latest/ssc338q_fpv_openipc-
 
 Default include RTL8812AU and RTL873XBU driver.
 
+<b>Note: "... rtl8731bu has limitations as a recieving unit (does not support ldpc), which requires you to specifically disable it on groundstation if you use tunnel/mavlink. As a transmission unit it seems to be working good for both 2.4ghz and 5.8ghz ..."
+https://t.me/c/1809358416/127308/129654</b>
+
+On GS in /etc/wifibroadcast.cfg use:
+```
+[tunnel]
+ldpc = 0
+```
+
 For externel wifi RTL8812EU please update Firmware
 
 https://github.com/OpenIPC/builder/releases/download/latest/ssc338q_fpv_openipc-urllc-aio-nor.tgz
