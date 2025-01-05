@@ -1,0 +1,23 @@
+#!/bin/sh
+
+start() {
+  /usr/bin/rcjoystick -t 25 -c 16 -i wlan0 &
+}
+
+stop() {
+	killall rcjoystick
+}
+
+restart() {
+	stop
+	sleep 1
+	start
+}
+
+case "$1" in
+	start|stop|restart)
+		"$1";;
+	*)
+		echo "Usage: $0 {start|stop|restart}"
+		exit 1
+esac
