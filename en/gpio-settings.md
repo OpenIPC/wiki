@@ -160,6 +160,12 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 
 > For the `SC2135` sensor on the `SJG_HI38_GW2M02_V1.3` board, it was necessary to change the `ComMsk0` mask from `fff0000` to `3ff0000` in the sensor configuration (`/etc/sensors/sc2135_i2c_1080p.ini`) to eliminate the pink tint of the picture in daytime mode.
 
+### Tenda CT6/KCT6
+
+| Processor   | IRCUT1 | IRCUT2 | LIGHT IR | LIGHT WHITE | RESET | BLUE_LED  |  AUDIO OUTPUT   |
+|-------------|--------|--------|----------|-------------|-------|-----------|-----------------|
+| hi3516Ev200 | 8      | 15     | 12       | 14          | 0     | 4         | 51              |
+
 ### Tiandy boards
 
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | RESET |
