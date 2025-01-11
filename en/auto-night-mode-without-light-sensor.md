@@ -1,7 +1,7 @@
 # OpenIPC Wiki
 [Table of Content](../README.md)
 
-**Attention, this instruction is outdated since summer 2024 and now control of Majestic modes is possible from the Web interface !**
+**Attention, this instruction is outdated since summer 2024 and now [control](https://github.com/OpenIPC/wiki/blob/master/en/majestic-streamer.md#auto-daynight-detection) of Majestic modes is possible from the Web interface !**
 
 
 Auto nightmode on devices without a light sensor
