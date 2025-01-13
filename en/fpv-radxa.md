@@ -25,6 +25,7 @@ This documentation provides a list of enclosures for OpenIPC VRX setups, availab
 7. [OpenIPC Radxa Zero 3W HDMI Ground Station](https://www.printables.com/model/1020246-openipc-radxa-zero-3w-hdmi-ground-station)
 8. [Radxa Zero 3W Case for OpenIPC](https://www.printables.com/model/1054879-radxa-zero-3w-case-for-openipc)
 9. [OpenIPC VRX Case on Thingiverse](https://www.thingiverse.com/thing:6680584)
+10. [OpenIPC Radxa Zero 3W HDZero Rail Mount](https://www.printables.com/model/811132-openipc-radxa-zero-3w-hdzero-goggle-case-rail-moun/files)
 
 ---
 
@@ -49,12 +50,13 @@ Note: for RubyFPV you will either need a USB Network Dongle like the one below
 
 or access serial console, please check [here](https://wiki.radxa.com/Zero/dev/serial-console) on how to do that.
 
-### DVR with FPV firmware
+### GPIO Buttons
 
-DVR functionality; It requires a push button to be installed to the gpio header between physical pins 25 and 27 like so:
+Connect a button or switch to 3.3v and physical pins 16 and 18 to increase/decrease your vrx channel. 
+Connect a button or switch to physical pin 38 and 3.3v to toggle your vrx bandwidth between 20MHz and 40Mhz. 
+Physical pin 32 controls DVR recording, connect a button/switch to join 3.3v and pin 32 to start/stop recordings.
 
-
-![image](../images/fpv-radxa-gpio.png)
+(![GPIO Mappings](https://github.com/user-attachments/assets/6b524a5a-37d8-4bc0-8bdd-e3b15b33ddf5)
 
 To record DVR, push the button once. The stream will start and DVR will begin recording. When finished, push the button once to stop the recording and save the file.
 
