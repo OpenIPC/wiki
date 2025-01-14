@@ -178,6 +178,7 @@ In Russian
 
 - [Для FPV](ru/fpv.md)
 - [Экшн-камера](ru/action-camera.md)
+- [Детектирование и подсчёт объектов с камер на OpenIPC](https://github.com/sw3nlab/webyolofox)
 - Астрокамера
 - Видеорегистратор
 
