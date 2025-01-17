@@ -168,9 +168,10 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 
 ### Tiandy boards
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | RESET |
-|-------------|--------|--------|----------|-------|-------|
-| SSC335      | 78     | 79     | ---      | 37    |       |
+| Processor   | MODEL    | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | RESET |
+|-------------|----------|--------|--------|----------|-------|-------|
+| SSC335      |          | 78     | 79     | ---      | 37    |       |
+| GK7205V210  | TC-C32QN | 52     | 54     | ---      | 4     |       |
 
 ### Uniview boards
 
