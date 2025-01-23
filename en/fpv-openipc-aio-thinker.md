@@ -45,11 +45,16 @@ Bottom View
 
 Tiny WIFI Version
 
-Build in RF setting VS output
 
 ![image](https://github.com/user-attachments/assets/66b8e281-bbe5-4b46-a47e-fab66566ed11)
 
+Build in RF setting VS output
+
 ![image](https://github.com/user-attachments/assets/4edbafca-f737-446b-ab2e-4677f23c6a6d)
+
+![image](https://github.com/user-attachments/assets/44b6810e-67cb-4b66-a3b1-000d402e65da)
+
+
 
 Firmware update link
 
