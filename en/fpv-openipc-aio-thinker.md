@@ -22,7 +22,7 @@ Tiny WIFI Version
 
 ![image](https://github.com/user-attachments/assets/66b8e281-bbe5-4b46-a47e-fab66566ed11)
 
-Build in RF setting VS output
+
 Thinker Board dimensions
 
 ![image](https://github.com/user-attachments/assets/3a4a4605-a2ff-417f-9cc1-12a035f2eb07)
@@ -44,6 +44,8 @@ Bottom View
 
 
 Tiny WIFI Version
+
+Build in RF setting VS output
 
 ![image](https://github.com/user-attachments/assets/66b8e281-bbe5-4b46-a47e-fab66566ed11)
 
