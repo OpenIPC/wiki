@@ -175,11 +175,11 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 
 ### Uniview boards
 
-| Processor   | IRCUT1 | IRCUT2 | RESET | IRCTL | IRLED | WiFi | DEVICE ID                             |
-|-------------|--------|--------|-------|-------|-------|------|---------------------------------------|
-| Hi3516Ev300 | 63     | 67     | 64    |       |  72   |  7   | Rostelecom IPC8232SWC-WE, C1L-2WN-G   |
-| SSC335DE    | 61     | 79     |       |   4   |       |      | Rostelecom IPC8232SWC-WE-B            |
-| SSC335      | 61     | 79     |       |       |  76   |      | Uniarch UV-IPC-D122-PF28              |
+| Processor   | IRCUT1 | IRCUT2 | RESET | IRCTL | IRLED | WiFi | RED LED | AUDIO OUTPUT | DEVICE ID                             |
+|-------------|--------|--------|-------|-------|-------|------|---------|--------------|---------------------------------------|
+| Hi3516Ev300 | 63     | 67     | 64    |       |  72   |  7   |    10   |     28       | Rostelecom IPC8232SWC-WE              |
+| SSC335DE    | 61     | 79     |       |   4   |       |      |         |              | Rostelecom IPC8232SWC-WE-B, C1L-2WN-G |
+| SSC335      | 61     | 79     |       |       |  76   |      |         |              | Uniarch UV-IPC-D122-PF28              |
 
 ### Wansview
 
