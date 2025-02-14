@@ -16,8 +16,8 @@ Use [this guide](https://ruvds.com/ru/helpcenter/nastroyka-vpn-s-ispolzovaniem-w
 ```shell
 auto wg0
 iface wg0 inet static
-    address 10.10.10.10.2
-    netmask 255.255.255.255.0
+    address 10.10.10.2
+    netmask 255.255.255.0
     pre-up modprobe wireguard
     pre-up ip link add dev wg0 type wireguard
     pre-up wg setconf wg0 /etc/wireguard.conf
@@ -28,7 +28,7 @@ iface wg0 inet static
 [Interface].
 PrivateKey = MO3+yxTyFnnOgeOk9NKFSKHqgFfW6cBhctUO4YeiwV0=
 [Peer]
-AllowedIPs = 10.10.10.10.0/24
+AllowedIPs = 10.10.10.0/24
 Endpoint = 192.168.0.2:51820
 PersistentKeepalive = 25
 PublicKey = M2/axcXbD+eg/c4vfEQTiIpV6LU+kzgJCGqDpzIpHS4=
