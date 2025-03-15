@@ -92,7 +92,7 @@ OpenIPC Wiki
 - [Bug reports](https://github.com/OpenIPC/firmware/issues)
 - [Buildroot User Manual](https://buildroot.org/docs.html)
 - [U-Boot Documentation](https://u-boot.readthedocs.io/)
-- [adding-usb-drive](adding-usb-driver.md)
+- [Adding USB driver](adding-usb-driver.md)
 
 ### Help, Tips, and Tricks
 
