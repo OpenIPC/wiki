@@ -26,7 +26,7 @@ echo 40 > /sys/class/pwm/pwmchip0/pwm4/duty_cycle
 echo 1 > /sys/class/pwm/pwmchip0/pwm4/enable
 ```
 
-#### 61 pin  red_led PM_GPIO2
+#### 61 pin  red_led PM_GPIO2, SSC335DE
 
 ```
 ./devmem 0x1f001CA0 w 0x40
@@ -38,7 +38,7 @@ echo 1 > /sys/class/pwm/pwmchip0/pwm2/enable
 ```
 
 
-#### 63 pin  blue_led PM_GPIO3
+#### 63 pin  blue_led PM_GPIO3, SSC335DE
 
 ```
 ./devmem 0x1f001CA0 w 0x100
