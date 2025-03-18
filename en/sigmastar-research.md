@@ -18,7 +18,7 @@ echo 1 > /sys/class/pwm/pwmchip0/pwm1/enable
 #### Control PWM IR led on 8232SWC-WE-B device, SSC335DE
 
 ```
-# set PWM4 on GPIO4
+# PINMUX_FOR_PWM4_MODE_3 - set PWM4 on GPIO4
 devmem 0x1f203C1C w 0x3000 
 echo 4 > /sys/class/pwm/pwmchip0/export
 echo 40000 > /sys/class/pwm/pwmchip0/pwm4/period
