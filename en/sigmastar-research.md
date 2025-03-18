@@ -25,3 +25,26 @@ echo 40000 > /sys/class/pwm/pwmchip0/pwm4/period
 echo 40 > /sys/class/pwm/pwmchip0/pwm4/duty_cycle
 echo 1 > /sys/class/pwm/pwmchip0/pwm4/enable
 ```
+
+#### 61 pin  red_led PM_GPIO2, SSC335DE
+
+```
+./devmem 0x1f001CA0 w 0x40
+
+echo 2 > /sys/class/pwm/pwmchip0/export
+echo 16000 > /sys/class/pwm/pwmchip0/pwm2/period
+echo 50 > /sys/class/pwm/pwmchip0/pwm2/duty_cycle
+echo 1 > /sys/class/pwm/pwmchip0/pwm2/enable
+```
+
+
+#### 63 pin  blue_led PM_GPIO3, SSC335DE
+
+```
+./devmem 0x1f001CA0 w 0x100
+
+echo 3 > /sys/class/pwm/pwmchip0/export
+echo 16000 > /sys/class/pwm/pwmchip0/pwm3/period
+echo 80 > /sys/class/pwm/pwmchip0/pwm3/duty_cycle
+echo 1 > /sys/class/pwm/pwmchip0/pwm3/enable
+```
