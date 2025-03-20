@@ -15,6 +15,14 @@ Board specific GPIO settings list
 | SSC338Q     | 23     | 24     | 60       | 59          | 10    |     |    8    | MC800S-V3        |      39         |
 | SSC377      | 11     | 80     | 9        | 13          |       |     |         | MC-A42P-V1.1     |      12         |
 
+
+### Brovotech boards
+
+| Processor   | IRCUT1 | IRCUT2 | LIGHT IR | LIGHT WHITE | RESET | I/O | USB_ENA | TESTED BOARDS       |
+|-------------|--------|--------|----------|-------------|-------|-----|---------|---------------------|
+| HI3516CV100 | 18     |        |          |             |       |     |         | 600102005-BV-H0205  |
+
+
 ### CamHi / Xin boards
 
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA | UART2_RTS/RS485_DE | UART2_RXD/RS485_RO | UART2_TXD/RS485_DI | AUDIO_ENA | RESET | PWM | SD_VCC | BOARD    |
