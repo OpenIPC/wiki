@@ -116,4 +116,12 @@ Some known combinations for specific boards:
     saveenv
 ```
 
+### Brovotech 600102005-BV-H0205, HI3516CV100 + IMX122
+
+*For U-boot network:*
+```
+    setenv extras 'hieth.mdioifu=0 hieth.mdioifd=0'
+    saveenv
+```
+
 If nothing of the above worked for you, please ask in [our Telegram channel](https://t.me/openipc).
