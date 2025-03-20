@@ -18,9 +18,9 @@ Board specific GPIO settings list
 
 ### Brovotech boards
 
-| Processor   | IRCUT1 | IRCUT2 | LIGHT IR | LIGHT WHITE | RESET | I/O | USB_ENA | TESTED BOARDS       |
-|-------------|--------|--------|----------|-------------|-------|-----|---------|---------------------|
-| HI3516CV100 | 18     |        |          |             |       |     |         | 600102005-BV-H0205  |
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS| LIGHT IR | LIGHT WHITE | RESET | I/O | USB_ENA | TESTED BOARDS       |
+|-------------|--------|--------|---------|----------|-------------|-------|-----|---------|---------------------|
+| HI3516CV100 | 18     |        | 6       |          |             |       |     |         | 600102005-BV-H0205  |
 
 
 ### CamHi / Xin boards
