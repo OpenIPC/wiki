@@ -198,6 +198,32 @@ Make sure to use your own IP address and path to the NFS share!
 strings dumpfile.bin | grep ^ethaddr
 ```
 
+### How to build an image and firmware components ?
+
+To build an image to upload via TFTP or a programmer, you will need several components:
+- U-Boot bootloader for your device type
+- Linux kernel taken from the firmware archive
+- root file system in squashfs format taken from the firmware archive
+
+You can use either the full build script from the Firmware archive:
+https://raw.githubusercontent.com/OpenIPC/firmware/refs/heads/master/general/scripts/repack_firmware.sh
+
+Or its simplified copy with an example here:
+
+```bash
+#!/bin/sh
+
+uboot=u-boot-ssc338q-nor.bin      # Get from https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-ssc338q-nor.bin
+kernel=uImage.ssc338q             # Get from https://github.com/OpenIPC/builder/releases/download/latest/ssc338q_fpv_openipc-urllc-aio-nor.tgz
+rootfs=rootfs.squashfs.ssc338q    # Get from https://github.com/OpenIPC/builder/releases/download/latest/ssc338q_fpv_openipc-urllc-aio-nor.tgz
+output=fullflash-openipc-ssc338q-openipc-fpv-nor.bin
+
+dd if=/dev/zero bs=1K count=5000 status=none | tr '\000' '\377' > ${output}
+dd if=${uboot} of=${output} bs=1K seek=0 conv=notrunc status=none
+dd if=${kernel} of=${output} bs=1K seek=320 conv=notrunc status=none
+dd if=${rootfs} of=${output} bs=1K seek=2368 conv=notrunc status=none
+```
+
 ### Majestic
 
 #### How to get a memory dump for debugging?
