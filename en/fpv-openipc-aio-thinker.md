@@ -77,7 +77,7 @@ This module uses the same hardware as the IMX335 module but features an IMX415-b
   - SD Card Slot (available on Base edition)
   - **On Base edition** units, an **external WiFi module must be connected** to designated pins
   - **On Tiny edition** units, the **USB** header **cannot be used** to connect external hardware, as the connection is used by the integrated WiFi module.
-  - The UART available for communication with flight controller
+  - The *Power / UART2 Header* UART can be used for communication with a flight controller
 
 Various notes:
 - Do not remove the **thermal putty** from the heatsink, it **cannot be replaced with thermal paste**. If already removed, use low hardness thermal pads, or thermal putty as a replacement.
@@ -98,13 +98,16 @@ Various notes:
 | DM          | I/O  | Ext. WiFi Module USB Data -                                    |
 | DP          | I/O  | Ext. WiFi Module USB Data +                                    |
 | GND         | —    | Ground                                                         |
-| **Power / UART1 Header**                                                        | | |
+| **Power / UART2 Header**                                                        | | |
 | Vcc         | In   | Power input                                                    |
 | Vcc         | In   | Power input (duplicate pin, merge wires)                       |
 | RX          | In   | UART2 receive line (to FC)                                     |
 | TX          | Out  | UART2 transmit line (to FC)                                    |
 | GND         | —    | Ground                                                         |
 | GND         | —    | Ground (duplicate pin, merge wires)                            |
+| **UART1 Solder Pads**                                                           | | |
+| RX          | In   | UART1 receive line                                             |
+| TX          | Out  | UART1 transmit line                                            |
 
 [^2]: Output voltage can be programmed, 
 [^3]: The use of Vd is optional, high-power WiFi modules can be powered externally. In such cases, connect DM, DP, and GND only.
