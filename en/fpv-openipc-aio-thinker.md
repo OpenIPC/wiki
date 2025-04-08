@@ -87,12 +87,12 @@ Various notes:
 | Pin Name    | Dir  | Description                                                    |
 |-------------|------|----------------------------------------------------------------|
 | **RJ45 / UART0 Header**                                                         | | |
-| UART0 RX    | In   | UART0 receive line (connect to RJ45 adapter or serial console) |
+| UART0 RX    | In   | UART0 receive line                                             |
 | UART0 TX    | Out  | UART0 transmit line                                            |
-| RJ45 TX+    | Out  | Ethernet transmit (positive)                                   |
-| RJ45 TX−    | Out  | Ethernet transmit (negative)                                   |
-| RJ45 RX+    | In   | Ethernet receive (positive)                                    |
-| RJ45 RX−    | In   | Ethernet receive (negative)                                    |
+| RJ45 TX+    | Out  | Ethernet TX+                                                   |
+| RJ45 TX−    | Out  | Ethernet TX-                                                   |
+| RJ45 RX+    | In   | Ethernet RX+                                                   |
+| RJ45 RX−    | In   | Ethernet RX-                                                   |
 | **USB Header**                                                                  | | |
 | Vd          | Out  | Ext. WiFi Module Power output[^2][^3]                          |
 | DM          | I/O  | Ext. WiFi Module USB Data -                                    |
@@ -118,7 +118,7 @@ Various notes:
 
 ## Firmware Update
 
-To update the firmware, [download the latest release](https://github.com/OpenIPC/builder/releases/download/latest/ssc338q_fpv_openipc-thinker-aio-nor.tgz). This release includes drivers for RTL8812AU and RTL873XBU. 
+The latest firmware can be [downloaded here](https://github.com/OpenIPC/builder/releases/download/latest/ssc338q_fpv_openipc-thinker-aio-nor.tgz). This release includes drivers for RTL8812AU and RTL873XBU. 
 
 **Note:**
 The RTL8731BU has limitations as a receiving unit (does not support LDPC), disable it on the ground station when using tunnel/MAVLink. It works well as a transmission unit for both 2.4 GHz and 5.8 GHz.[^4].
