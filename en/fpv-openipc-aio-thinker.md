@@ -1,6 +1,6 @@
-## OpenIPC "Thinker" v1.0 Air Unit
+# OpenIPC "Thinker" v1.0 Air Unit
 
-The OpenIPC Thinker is a compact and lightweight camera and video transmission unit, which integrates seamlessly with various RC vehicles.
+The OpenIPC Thinker is a compact and lightweight camera and video transmission unit, which integrates seamlessly with a variety of remote-controlled vehicles.
 
 Two variants of the unit are available:
 
@@ -11,9 +11,9 @@ Two variants of the unit are available:
 
 ![image: Thinker Air Unit Kit](../images/aio-thinker/thinker-webshop-photo.jpg "Thinker Air Unit Kit")
 
-### Specifications
+## Specifications
 
-#### Features
+### Features
 
 - SSC338Q SoC
 - Power Supply: 2-6S
@@ -26,7 +26,7 @@ Two variants of the unit are available:
   - 1x Ethernet
   - 1x Power Input
 
-#### Physical Characteristics
+### Physical Characteristics
 
 - **Board Size:** 25x25mm
 - **Weight** (main unit and connected camera module only):
@@ -37,7 +37,7 @@ Two variants of the unit are available:
   - **With heat sink installed**: 25.5x25.5mm
 - **Cooling:** Optional aluminium heat sink with passive cooling
 
-#### Camera Options
+### Camera Options
 
 **IMX335 Module** ([Store Link](https://store.openipc.org/OpenIPC-IMX335-v2-module-without-cable-p721231276))
 
@@ -51,13 +51,13 @@ Two variants of the unit are available:
 
 This module uses the same hardware as the IMX335 module but features an IMX415-based sensor.
 
-### Hardware Installation
+## Hardware Installation
 
 The Thinker Air Unit consists of three distinct hardware components in the Thinker Base model, or two in the Thinker Tiny model, which has the WiFi module integrated.
 
 These components include the main unit, the camera module, and the WiFi module. Properly connecting and powering them is necessary for the unit to function correctly.
 
-#### Connecting Power & The Flight Controller
+### Connecting Power & The Flight Controller
 
 1. Locate the *Power & UART cable* in your Thinker AIO Kit. It has 6 leads attached to a JST connector, with the following color sequence: Black, Black, Yellow, Green, Red, and Red.
 2. Solder the black leads to the negative terminal and the red leads to the positive terminal of your vehicle's battery connector or power source.
@@ -67,7 +67,7 @@ These components include the main unit, the camera module, and the WiFi module. 
 For proper communication, connect TX to RX and RX to TX between your flight controller and the Thinker.
 5. Connect the cable to the Power & UART2 connector on the side of the unit where the heat sink is located.
 
-#### Connecting An External WiFi Module
+### Connecting An External WiFi Module
 
 1. If you have the Thinker Base model, connecting an external WiFi module is necessary for operation. **If you have the Thinker Tiny unit, skip this step.**
 2. Locate the *4-pin USB cable*. The leads are color-coded as follows: Red, Blue, Yellow, and Black.
@@ -76,20 +76,20 @@ You will need to connect the black lead of the cable to the module's GND pad, th
 4. If the USB cable’s leads are colored differently, refer to the connectivity diagram below.
 For proper communication, ensure that D+ is connected to D+ and D- is connected to D- between the WiFi module and the Thinker.
 
-#### Replacing The Camera Module
+### Replacing The Camera Module
 
 1. Your Thinker AIO unit comes with an IMX335 camera module pre-installed. **If you do not intend to replace the camera module with a different model, you can skip the remainder of this step.**
 2. To replace the camera module, start by removing the aluminium heat sink. Unscrew the 4 screws securing the heat sink, then gently separate it from the circuit board.
 (Do not remove the thermal putty from the heat sink, as it does not need to be replaced when reseating the heat sink and cannot be substituted with thermal paste.)
 3. Carefully disconnect the old camera module from the unit and attach the replacement module. Then, reposition the heat sink and secure it to the circuit board by fastening the mounting screws.
 
-#### Ethernet Connectivity For Configuration And Updates
+### Ethernet Connectivity For Configuration And Updates
 
 1. Locate the Ethernet cable, which has a 6-pin JST connector on one end and an RJ45 jack on the other.
 2. Plug the 6-pin JST connector into the *Ethernet & UART0 port* on the side of the unit opposite the heat sink.
 3. The RJ45 jack on the other end can be connected directly to a computer, or to a standard Ethernet cable using the included adapter.
 
-#### System Connectivity & Physical Specifications
+### System Connectivity & Physical Specifications
 
 ![image: Thinker Connectivity & User-Accessible Components](../images/aio-thinker/thinker-connectivity.png "Thinker Connectivity & User-Accessible Components")
 
@@ -120,7 +120,7 @@ For proper communication, ensure that D+ is connected to D+ and D- is connected 
 
 ![image: Thinker PCB And Heats Sink Dimensions](../images/aio-thinker/thinker-dimensions.png "Thinker PCB And Heat Sink Dimensions")
 
-#### *Installation Tips and Precautions*
+### *Installation Tips and Precautions*
 
 - **Do not power the unit through USB Vd**, as it is a power output, not an input.
 - When removing the heat sink for any reason, **do not remove the thermal putty** from the heat sink. It does not need to be replaced and **cannot be substituted with thermal paste**.
@@ -130,13 +130,13 @@ For proper communication, ensure that D+ is connected to D+ and D- is connected 
 - **Tiny** (WiFi) units **cannot use an external WiFi module**, as the USB connection is already occupied by the integrated WiFi module.
 - Both the Ethernet and Power cables use similar 6-pin connectors. Take care to avoid plugging them into the wrong ports.
 
-### Software Setup And Installation
+## Software Setup And Installation
 
-#### Get up and running
+### Get up and running
 
 The Thinker Air Unit is designed to be plug-and-play on the software side. Upon powering up, it should automatically connect to a ground station (provided it has the default gs.key file installed, commonly included with most OpenIPC FPV software).
 
-##### Connecting Ethernet & Accessing The Web UI
+#### Connecting Ethernet & Accessing The Web UI
 
 You can access the Thinker’s configuration utilities over a wired Ethernet connection. Some advanced features - such as automatic firmware updates - also require internet access.
 
@@ -164,7 +164,7 @@ Once connected, you can access the Web UI by navigating to either the IP address
 >
 > These credentials are used system-wide. Upon first login, you will be prompted to set a new password.
 
-##### Updating the Firmware
+#### Updating the Firmware
 
 There are several ways to update the firmware on your Thinker Air Unit, but the two most user-friendly methods are:
 
@@ -175,6 +175,6 @@ The latest standard firmware can be downloaded [here](https://github.com/OpenIPC
 
 If you're using an **RTL8812EU** module, use [this alternate firmware](https://github.com/OpenIPC/builder/releases/download/latest/ssc338q_fpv_openipc-urllc-aio-nor.tgz)  (`ssc338q_fpv_openipc-urllc-aio-nor`).
 
-#### Advanced Configuration
+### Advanced Configuration
 
 For more advanced setup options use the [OpenIPC Configurator](https://github.com/OpenIPC/openipc-configurator), and refer to the [OpenIPC Documentation](https://docs.openipc.org).
