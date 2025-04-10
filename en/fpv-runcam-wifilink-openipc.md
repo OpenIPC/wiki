@@ -84,7 +84,7 @@ a)  Download and install the latest version of
    [PUTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/)
 
 b)  Download the [OpenIPC
-    configurator](https://github.com/OpenIPC/configurator/releases)
+    configurator](https://github.com/OpenIPC/configurator/releases) or https://github.com/OpenIPC/openipc-configurator (Multiplatform)
     and install it
 
 c)  Setting up IP\
@@ -138,6 +138,18 @@ b)  Power on your aircraft. The Runcam should start by itself and the
 
 c)  After 12-14 seconds you should see on your phone the video from your
 aircraft.
+
+## 7. Important Note About SD Card Configuration
+
+Just a reminder about RunCam cameras, Configurators and SD Cards: 
+If you are using the stick Runcam firmware, RunCam added a feature which creates/reads the settings from user.ini file. If the SD Card is inserted, there is a script that runs on boot which applies the settings from this file. It will overwrite anything you configured with either configurator.
+
+The script path is `/etc/init.d/S95majestic` which contains:
+```
+12,7:  /etc/runcam_cfg.sh &
+```
+
+The `runcam_cfg.sh` script reads and applies settings from the user.ini file on your SD card. Keep this in mind when making configuration changes - if you're experiencing issues with settings not sticking, check if your SD card's user.ini file is overriding your configurations.
 
 ## Mirroring the camera:
 
