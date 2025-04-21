@@ -1,3 +1,23 @@
+# 🚨 Deprecated Wiki 🚨
+
+This repository is no longer maintained and has been replaced by a new, more user-friendly documentation platform. 
+
+Explore the new OpenIPC documentation site here: 👉 [https://docs.openipc.org](https://docs.openipc.org)
+
+This marks a new era of openness and collaboration for OpenIPC, offering improved navigation and easier access to information.
+
+## 🛠 Contribution Guidelines
+
+Contribute to the new docs by following the guide here: 👉 [Contribution Guidelines](https://docs.openipc.org/development/contribution-guidelines/)
+
+We welcome contributions, from small fixes to full content additions!
+
+## 📅 Help Us Migrate Content
+
+We need your help to migrate important content from this wiki to the new platform. Let’s work together to ensure valuable information is transferred over.
+
+---
+
 OpenIPC Wiki
 ============
 
