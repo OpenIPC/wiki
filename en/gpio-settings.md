@@ -236,6 +236,12 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 [^2]: 00014911 firmware
 [^3]: 000699Q3 firmware
 
+```
+Tested on GK7205V300 for /dev/ttyАМА1:
+  devmem 0x100c0010 32 0x2
+  devmem 0x112c0074 32 0x2
+```
+
 
 ### Zenotech/Videopark
 
