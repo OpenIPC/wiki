@@ -29,7 +29,7 @@ and then look it up in the [FCC ID database](https://fccid.io/).
 - lame (mp3) and libwebsockets support
 - experimental WebRTC support (only recent Hisi/Goke)
 
-$\color{red}{\text{We always recommend using only Lite firmware with 8M flash}}$
+$\color{red}{\text{We always recommend using only Lite firmware with 8M}}$
 
 ### How to strip U-Boot Image wrapper header from a binary image
 
