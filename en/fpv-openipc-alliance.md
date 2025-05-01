@@ -1,20 +1,19 @@
-# OpenIPC Wiki
+# OpenIPC Wiki  
 [Table of Content](../README.md)
 
-OpenIPC Alliance for FPV
-------------------------
+## OpenIPC FPV Alliance
 
 ### OpenIPC Hardware Standardization for FPV
 
-#### Introduction
-The OpenIPC team has established the OpenIPC Initiative to drive the standardization and unification of FPV hardware. This initiative aims to create open circuit design standards that enhance compatibility, improve interoperability, and support the broader adoption of MIPI-based solutions in the FPV ecosystem.
+#### Introduction  
+The OpenIPC team has launched the OpenIPC Initiative to promote the standardization and unification of FPV hardware. This initiative aims to develop open circuit design standards that enhance compatibility, improve interoperability, and accelerate the adoption of MIPI-based solutions in the FPV ecosystem.
 
-This page provides updates on Initiative members, reports on industry developments, and offers links to relevant projects and resources.
+This page provides updates on initiative members, reports on industry developments, and links to relevant projects and resources.
 
-#### Standardized Sensor Interface Connector
-The first major step toward FPV hardware standardization is defining a universal connector between OpenIPC AIO mainboards ("UltraSight," "Thinker," "Mario") and OpenIPC sensor modules (IMX307, IMX335, IMX347, IMX415). This unified approach ensures seamless integration and reliability across different components.
+#### Standardized Sensor Interface Connector  
+The first major step toward FPV hardware standardization is defining a universal connector between OpenIPC AIO mainboards ("UltraSight," "Thinker," "Mario") and OpenIPC sensor modules (IMX307, IMX335, IMX347, IMX415). This unified approach ensures seamless integration and consistent reliability across components.
 
-It is important to note that third-party sensor modules from other manufacturers are **not compatible** with OpenIPC hardware. Using non-standard components may result in hardware damage and system failure.
+Note that third-party sensor modules from other manufacturers are **not compatible** with OpenIPC hardware. Using non-standard components may cause hardware damage or system failure.
 
 <p align="left">
   <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-openipc-alliance/openipc-alliance-fpv-sensor-pinout.jpg?raw=true"/>
