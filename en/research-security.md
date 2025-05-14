@@ -77,7 +77,7 @@ discover even more yet unknown passwords. Sharing is caring, boys!
 | $1$FMNq4QIj$lJg6WzZxy1HWl3sL.YwIq1    |            |
 | $1$IZfqary9$IrG6loat5pDTBLr6ksKTD0    |            |
 | $1$ocmTTAhE$v.q2/jwr4BS.20KYshYQZ1    |            |
-| $1$OIKWDzOV$WjZNcNtHSKVscbi9WQcpu/    |            |
+| $1$OIKWDzOV$WjZNcNtHSKVscbi9WQcpu/    | root       |
 | $1$rnjbbPTD$tR9oAIWgUp/jRrhjDuUwp0    |            |
 | $1$RYIwEiRA$d5iRRVQ5ZeRTrJwGjRy.B0    | xmhdipc    |
 | $1$uF5XC.Im$8k0Gkw4wYaZkNzuOuySIx/    |            |
