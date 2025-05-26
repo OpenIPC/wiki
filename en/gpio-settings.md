@@ -59,11 +59,11 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 
 ### CCDCAM / Hankvision boards
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA | Description |
-|-------------|--------|--------|----------|-------|---------|-------------|
-| GK7205V200  | 68     | 70     |  9       |       |         |             |
-| GK7205V200  | 50     | 51     |          |       |         | Old plastic domophone |
-| GK7205V300  | 68     | 70     |  9       |       |         |             |
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA |AUDIO_ENA| Description |
+|-------------|--------|--------|----------|-------|---------|---------|-------------|
+| GK7205V200  | 68     | 70     |  9       |       |         |         |             |
+| GK7205V200  | 50     | 51     |          |       |         |         |Old plastic domophone |
+| GK7205V300  | 68     | 70     |  9       |       |         | 67      |             |
 
 > _Yes, it's amazing but it really matches on two Goke processors_
 
@@ -72,7 +72,7 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA |
 |-------------|--------|--------|----------|-------|---------|
-| T31L        | 58     | 57     |          | 49    |         |
+| T31L        | 58     | 57     |          | 49    |         | 
 
 
 ### Herospeed/Longse/Cantonk boards
