@@ -21,4 +21,6 @@ Note that third-party sensor modules from other manufacturers are **not compatib
 
 **Standard Connector Type:** - **DF56L-26P-0.3SD**
 
+The receptacle (i.e. the component to place on the PCB) is actually the DF56C-26S-0.3V
+
 By adopting and adhering to these FPV hardware standards, the OpenIPC Initiative fosters a more robust, reliable, and forward-thinking FPV ecosystem. Manufacturers who follow these standards can ensure full compatibility with OpenIPC hardware and benefit from community-driven support. However, we cannot guarantee support for devices that do not adhere to these specifications.
