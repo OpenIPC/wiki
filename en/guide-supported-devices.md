@@ -34,7 +34,7 @@ _If you have another supported device to add, please do it [here][2]._
 | Brand      | Model              | Processor   | Sensor | Flash Memory | LAN | WLAN           | USB  | Card |
 |------------|--------------------|-------------|--------|--------------|-----|----------------|------|------|
 |            |                    |             |        |              |     |                |      |      |
-| Anjoy      | MS-J10             | SSC335      | IMX307 |              | Yes | No             | Yes  | No   |
+| Anjoy      | MS-J10             | SSC335      | IMX307 |              | Yes | No             | Yes  | Ext  |
 | Anjoy      | YM-J10D            | SSC337      | IMX307 |              | Yes | No             | Yes  | No   |
 | Amorvue    | NC1080AW           | HI3518EV200 | SC2135 | MX25L6405D   | Yes | RTL8188EUS[^2] | No   | No   |
 | Chacon     | [IPCAM-RI01][3]    | HI3518EV300 | JXF23  | XM25QH128A   | No  | RTL8188FTV     | WiFi | Yes  |
