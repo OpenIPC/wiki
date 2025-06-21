@@ -117,6 +117,7 @@ To instantly launch a YouTube broadcast, run these commands in the console:
 cli -s .video0.codec h264
 cli -s .audio.enabled true
 cli -s .outgoing.enabled true
+cli -s .outgoing.naluSize 1200
 cli -s .outgoing.server rtmp://a.rtmp.youtube.com/live2/you-key-here
 reboot
 ```
@@ -130,6 +131,8 @@ Examples of other addresses for different services:
     - rtmp://upload.rutube.ru/live_push/---KEY---
 - OK and VK
     - rtmp://ovsu.mycdn.me/input/---KEY---
+
+Important ! Many RTMP services will only work if audio streaming is enabled, so be careful.
 
 We ask that you add information about other popular services here, thank you.
 
