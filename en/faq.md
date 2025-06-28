@@ -31,6 +31,15 @@ and then look it up in the [FCC ID database](https://fccid.io/).
 
 $\color{red}{\text{We always recommend using only Lite firmware with 8M}}$
 
+### What is the difference between Firmware and Builder repositories?
+
+The Firmware repository is the basis of the OpenIPC project and contains universal basic configurations for 
+devices, regardless of the device manufacturer and usually contains many drivers for sensors, i.e. it is universal.
+
+The Builder repository is a system that uses the basic Firmware repository when assembling firmware, while 
+adding profiles for specific devices from manufacturers and usually already has presets for all GPIOs, 
+contains the necessary WiFi drivers and contains only those sensor drivers that are used in a given model.
+
 ### How to strip U-Boot Image wrapper header from a binary image
 
 Sometimes vendor's firmware consists of binary images intended
