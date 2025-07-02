@@ -124,4 +124,4 @@ Some known combinations for specific boards:
     saveenv
 ```
 
-If nothing of the above worked for you, please ask in [our Telegram channel](https://t.me/openipc).
+If nothing of the above worked for you, please ask in [our Telegram channels](https://openipc.org/our-channels).
