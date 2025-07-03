@@ -62,7 +62,15 @@ cli -s .video0.codec h264 ; cli -s .video0.fps 10 ; killall -HUP majestic
 /night/ircut
 /night/light
 ```
-
+Example for disable and enable night mode
+```
+root@openipc-ssc377d:~# wget -q -O - http://localhost/night/off
+0
+root@openipc-ssc377d:~# wget -q -O - http://localhost/night/on
+1
+root@openipc-ssc377d:~# wget -q -O - http://localhost/night/toggle
+*
+```
 
 ### Auto day/night detection
 
