@@ -68,6 +68,15 @@ sudo udevadm trigger
 
 then unplug the programmer and plug it back in a USB port.
 
+### Power supply isolation
+
+We also recommend insulating the output going to the VCC terminal block and clamps
+with a piece of heat pipe to prevent power supply to the board through this circuit. 
+Power supply can trigger the processor to start up and the work of reading/writing 
+information from the flash chip will be disrupted.
+
+![](../images/hardware-ch341a-hack-7.png)
+
 ### Software
 
 - [SNANDer](https://github.com/McMCCRU/SNANDer) or [this fork](https://github.com/Droid-MAX/SNANDer)
