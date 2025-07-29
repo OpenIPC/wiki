@@ -54,7 +54,7 @@ Picking a Programmer
 ### CH341A
 There are many programmers available, and they all have their pros and cons.  The most popular
 programmers are boards leveraging the CH341A, which is a cheap and easy to use chipset.  For more details about the CH341A, 
-see [CH341A Hardware Programmer](hardware-programmer.md).
+see [CH341A Hardware Programmer](hardware-programmer-ch341a-voltage-fix.md).
 
 
 ### Raspberry Pi Pico
