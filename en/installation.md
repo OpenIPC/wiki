@@ -348,4 +348,4 @@ firstboot
 [logo]: ../images/logo_openipc.png
 [FTDI]: https://www.google.com/search?q=ftdi+usb+ttl
 [TLLC]: https://google.com/search?q=logic+level+converter+3.3v+5v
-[telegram]: https://t.me/OpenIPC
+[telegram]: https://openipc.org/our-channels
