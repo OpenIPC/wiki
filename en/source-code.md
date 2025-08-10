@@ -13,7 +13,7 @@
 
 This document serves as a comprehensive guide for developers looking to contribute to the OpenIPC firmware, including how to build from sources, understand the project's structure, modify, and add new packages, as well as instructions for installing the firmware on devices.
 
-We are continuously working towards creating a high-quality source code repository. Your patience is appreciated as we strive to deliver a fully polished and ready-to-use project and welcome your thoughts and feedback through the [OpenIPC telegram channel](https://t.me/openipc/117235)
+We are continuously working towards creating a high-quality source code repository. Your patience is appreciated as we strive to deliver a fully polished and ready-to-use project and welcome your thoughts and feedback through the [OpenIPC telegram channel](https://openipc.org/our-channels)
 
 ## Building from Sources
 

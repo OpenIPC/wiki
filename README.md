@@ -166,7 +166,7 @@ OpenIPC Wiki
 - [Releases in Telegram](https://t.me/s/openipc_dev)
 - [OpenCollective](https://opencollective.com/openipc)
 - [Twitter](https://twitter.com/OpenIPC)
-- [Telegram](https://t.me/openipc)
+- [Telegram](https://openipc.org/our-channels)
 
 ### Roadmap
 
