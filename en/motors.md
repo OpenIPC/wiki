@@ -24,4 +24,4 @@ This is a simple and direct method to control a stepper motor by setting off GPI
 
 ## Configuring ONVIF
 
-With [onvif_simple_server](https://github.com/roleoroleo/onvif_simple_server) you can easily gain access to PTZ controls through ONVIF. Functionality will vary depending on the motor control package you use. See the server's example config in it's repo for all of the available commands. 
+With [onvif_simple_server](https://github.com/roleoroleo/onvif_simple_server) you can easily gain access to PTZ controls through ONVIF (simple [example](https://github.com/OpenIPC/sandbox/tree/main/scripts/onvif)). Functionality will vary depending on the motor control package you use. See the server's example config in it's repo for all of the available commands. 
