@@ -58,4 +58,10 @@ snander -w u-boot-ssc338q-nand.bin
 
 ---
 
+**Important to know:**
+
+After successfully restoring the bootloader or installing it into a clean NOR/NAND flash chip, you will be able to access it on the ttyS0 port (intended for engineering connections and debugging).
+
+---
+
 - [Alternative Raspberry method by MarioFPV](https://youtu.be/88C8UvyKQlQ)
