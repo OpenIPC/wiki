@@ -81,7 +81,10 @@ Some known combinations for specific boards:
 
 *For Linux network:*
 ```
-   setenv hieth.mdioifu=0 hieth.mdioifd=0 hieth.phyaddru=1 hieth.phyaddrd=2
+   setenv hieth.mdioifu 0
+   setenv hieth.mdioifd 0
+   setenv hieth.phyaddru 1
+   setenv hieth.phyaddrd 2
    saveenv
 ```
 
