@@ -6,14 +6,14 @@ Board specific GPIO settings list
 
 ### Anjoy / Anjvision boards
 
-| Processor   | IRCUT1 | IRCUT2 | LIGHT IR | LIGHT WHITE | RESET | I/O | USB_ENA | TESTED BOARDS    |  AUDIO OUTPUT   |
-|-------------|--------|--------|----------|-------------|-------|-----|---------|------------------|-----------------|
-| SSC30KQ     | 23     | 24     | 60/59/25 |             | 10    |     |         | MC-L12, MC-L12B  |      9          |
-| SSC335      | 78     | 79     | 61/53    |             | 66    | 52  |         | [MS-J10](../en/device-ms-j10_ms-j10B-pinout.md), YM200J10 |      80         |
-| SSC337      | 78     | 79     | 61       |             | 66    | 52  |         | MC-F40, YM-J10D  |                 |
-| SSC337DE    | 78     | 79     | 61       |             | 66    |     |         | MC500L8          |                 |
-| SSC338Q     | 23     | 24     | 60       | 59          | 10    |     |    8    | MC800S-V3        |      39         |
-| SSC377      | 11     | 80     | 9        | 13          |       |     |         | MC-A42P-V1.1     |      12         |
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | LIGHT IR | LIGHT WHITE | RESET | I/O | USB_ENA | TESTED BOARDS    |  AUDIO OUTPUT   |
+|-------------|--------|--------|----------|----------|-------------|-------|-----|---------|------------------|-----------------|
+| SSC30KQ     | 23     | 24     | 25       | 60/59    |             | 10    |     |         | MC-L12, MC-L12B  |      9          |
+| SSC335      | 78     | 79     |          | 61/53    |             | 66    | 52  |         | [MS-J10](../en/device-ms-j10_ms-j10B-pinout.md), YM200J10 |      80         |
+| SSC337      | 78     | 79     |          | 61       |             | 66    | 52  |         | MC-F40, YM-J10D  |                 |
+| SSC337DE    | 78     | 79     |          | 61       |             | 66    |     |         | MC500L8          |                 |
+| SSC338Q     | 23     | 24     |          | 60       | 59          | 10    |     |    8    | MC800S-V3        |      39         |
+| SSC377      | 11     | 80     |          | 9        | 13          |       |     |         | MC-A42P-V1.1     |      12         |
 
 
 ### Brovotech boards
