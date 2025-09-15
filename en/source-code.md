@@ -83,11 +83,26 @@ You will be greeted with a list of available targets.
 
 Each target's name consists of a name of vendor, SoC model (System-on-Chip,
 the heart of an IP camera, central processor with extra features) and flavor
-denoting releases for different purposes - **Lite**, a compact release for
-cameras with only 8MB of ROM; **Ultimate**, an extended release for cameras
-with 16MB+ ROM, **FPV**, a release crafted specifically for use in drones,
-or **Mini**, a fully liberated version of the firmware with an alternative
-open-source streamer.
+denoting releases for different purposes: 
+- **Lite**, a compact release for cameras with only 8MB of ROM ;
+- **Ultimate**, an extended release for cameras with 16MB+ ROM ([not recommended](https://github.com/OpenIPC/wiki/blob/master/en/faq.md#differences-between-lite-and-ultimate)) for beginners.
+
+**Attention ON -----**
+
+The following inserted paragraph may be important for understanding by those who are looking for information
+
+Previously, the Firmware repository contained other types of builds, such as:
+- **APFPV**, for radio-controlled toys, doorbells and baby monitors using regular WiFi routers
+- **FPV**, a release crafted specifically for use in drones and industrial automation ;
+- **LTE**, for experiments with 3G/4G and LTE modems on HiSilicon and Goke processors
+- **Mini**, a fully liberated version of the firmware with an alternative open-source streamer;
+- **RubyFPV**, for integration with the [RubyFPV](https://rubyfpv.com/) project, which is our partner
+- **SIP**, for audio and video communication via SIP protocol for intercoms and baby monitors
+- **Venc**, containing an open streamer for HiSilicon/Goke processors for FPV and industrial automation
+
+All these profile options require frequent optimization and improvements and therefore have been moved to the neighboring [Builder](https://github.com/OpenIPC/builder) repository, which was made specifically for this purpose and also supports many profiles of ordinary household video cameras.
+
+**Attention OFF -----**
 
 Select the desired target and hit enter. Building will start.
 
