@@ -6,6 +6,15 @@ SigmaStar SoC research and debugging notes
 
 #### Control PWM channels on SigmaStar SSC338Q
 
+Switch GPIO? to PWM1 mode and set parameters
+```
+devmem 0x1f207994 16 0x01102
+echo 0 > /sys/class/pwm/pwmchip0/export
+echo 1600000 > /sys/class/pwm/pwmchip0/pwm0/period
+echo 25 > /sys/class/pwm/pwmchip0/pwm0/duty_cycle
+echo 1 > /sys/class/pwm/pwmchip0/pwm0/enable
+```
+
 Switch GPIO1 to PWM1 mode and set parameters
 ```
 devmem 0x1F207994 16 0x1121 
