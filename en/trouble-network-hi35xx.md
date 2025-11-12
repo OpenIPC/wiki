@@ -63,7 +63,7 @@ setenv phyaddru 1; setenv phyaddrd 1; saveenv; reset
 
 Some known combinations for specific boards:
 
-### XiongMai, HI3518EV100
+### XiongMai, HI3518EV100 and HI3516CV100
 *For U-boot network:*
 ```
     setenv phyaddru 1
