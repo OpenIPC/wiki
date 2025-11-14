@@ -237,8 +237,7 @@ dd if=${rootfs} of=${output} bs=1K seek=2368 conv=notrunc status=none
 
 Please note that this method is currently only suitable for SigmaStar and Ingenic devices in which the SD card is initialized in the bootloader.
 
-#### Brief:
-Please download the files of the firmware you need, unzip them, put them on the SD card. 
+Download the files of the firmware you need, unzip them, put them on the SD card. 
 Also put the file with instructions for the U-Boot bootloader on the SD card. 
 You can take my ready-made file or create your own in Linux using the mkimage command:
 
