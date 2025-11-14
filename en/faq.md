@@ -233,6 +233,25 @@ dd if=${kernel} of=${output} bs=1K seek=320 conv=notrunc status=none
 dd if=${rootfs} of=${output} bs=1K seek=2368 conv=notrunc status=none
 ```
 
+### How to restore kernel or root file system from SD card ?
+
+Please note that this method is currently only suitable for SigmaStar and Ingenic devices in which the SD card is initialized in the bootloader.
+
+#### Brief:
+Please download the files of the firmware you need, unzip them, put them on the SD card. 
+Also put the file with instructions for the U-Boot bootloader on the SD card. 
+You can take my ready-made file or create your own in Linux using the mkimage command:
+
+```bash
+echo -e "setenv updatetool fatload mmc 0\nrun uknor\nrun urnor" >./bootcmd.txt
+mkimage -A arm -T script -d ./bootcmd.txt ./boot.scr
+```
+
+The principle of operation is very simple:
+at startup, the bootloader searches for a file with commands on the SD card, if it is found, the commands will be executed and the device will be flashed.
+In this example, this is firmware from the SD card, but no one forbids modifying the script for advanced functions and introducing new variables, such as WiFi settings, and other things that we use now in the any firmware.
+
+
 ### Majestic
 
 #### How to get a memory dump for debugging?
