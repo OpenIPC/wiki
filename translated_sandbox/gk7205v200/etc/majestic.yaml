@@ -1,0 +1,65 @@
+system:
+  webAdmin: disabled
+  buffer: 1024
+image:
+  mirror: false
+  flip: false
+  rotate: none
+  contrast: 50
+  hue: 50
+  saturation: 50
+  luminance: 50
+osd:
+  enabled: false
+  template: "%a %e %B %Y %H:%M:%S %Z"
+nightMode:
+  enabled: false
+records:
+  enabled: false
+  path: /mnt/mmc/%Y/%m/%d/%H.mp4
+  maxUsage: 95
+video0:
+  enabled: true
+  bitrate: 6144
+  codec: h265
+  rcMode: cbr
+  gopSize: 1.0
+  size: 1280x720
+  fps: 50
+video1:
+  enabled: false
+jpeg:
+  enabled: false
+mjpeg:
+  size: 640x360
+  fps: 5
+  bitrate: 1024
+audio:
+  enabled: false
+  volume: auto
+  srate: 8000
+rtsp:
+  enabled: false
+  port: 554
+hls:
+  enabled: false
+youtube:
+  enabled: false
+motionDetect:
+  enabled: false
+  visualize: true
+  debug: true
+ipeye:
+  enabled: false
+watchdog:
+  enabled: true
+  timeout: 10
+isp:
+  slowShutter: disabled
+  drc: 350
+  lowDelay: true
+  sensorConfig: /etc/sensors/imx307_i2c_2l_720p_50fps.ini
+netip:
+  enabled: false
+outgoing:
+- udp://127.0.0.1:5600
