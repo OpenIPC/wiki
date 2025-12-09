@@ -25,7 +25,7 @@ and then look it up in the [FCC ID database](https://fccid.io/).
 - iptables support (firewall)
 - ZeroTier tunnel support
 - MQTT (telemetry) support
-- WiFi support
+- WiFi support (no drivers for network cards)
 - lame (mp3) and libwebsockets support
 - experimental WebRTC support (only recent Hisi/Goke)
 
