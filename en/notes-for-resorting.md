@@ -29,7 +29,7 @@ The process is described on the main site on [firmware page](https://openipc.org
 
 * Can OpenIPC be installed on Raspberry Pi or other hardware?
 
-No. Currently, only HiSilicon HI35xx SoC are supported. But theoretically it is
+No. Currently,For other hardware, refer to the [Supported Hardware](https://openipc.org/supported-hardware/full-list). But theoretically it is
 possible to support other architectures and boards. Though it will require a lot
 of efforts, and thus it is not a near time focus of the project.
 
