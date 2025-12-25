@@ -223,8 +223,10 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 |                                                                                                              | Hi3516Ev200     | 8      | 9      | 15       | 16    | 4, 53  | 55      | 14      | 12      | 0     |         |
 |                                                                                                              | Hi3516Ev300     | 11     | 10     | 66       | 52    | 4, 67  | 65      | 30      | 31      | 0     |         |
 |                                                                                                              | Hi3518Ev100     | 39     | 38     | 24       |       | 49     | 26      |         |         |       |         |
-|                                                                                                              | Hi3518Ev200     | 33     | 34     | 24       |       | 61     | 35      |         |         |       |         | 3       |              | IPG-50HV20PET-S |
-| 50H20L                                                                                                       | Hi3518Ev300     | 8      |        |  55      |       | 13     |         |         |         | 15    |         | 3       |
+|                                                                                                              | Hi3518Ev200     | 33     | 34     | 24       |       | 61     | 35      |         |         |       |         | 3       |              | | IPG-50HV20PET-S |
+| 50H20L                                                                                                       | Hi3518Ev300     | 8      |        |  55      |       | 13     |         |         |         | 15    |         | 3  
+|                                                                                                              |                 |        |        |          |       |        |         |         |         |       |         |
+| IVG-N8S                                                                                                      | NT98566         | 225    | 226    |  233     | 232   |        |         |         |         |       |         | 132     |            |  231    |      |
 
 > There is a map between table's columns and parameters in `nightMode` section in `majestic.yaml`<br>
 > IRCUT1 is an irCutPin1<br>
@@ -240,6 +242,18 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 Tested on GK7205V300 for /dev/ttyАМА1:
   devmem 0x100c0010 32 0x2
   devmem 0x112c0074 32 0x2
+```
+```
+Novatek gpio   
+ group 0 mean C_gpio? froup 7 mean DSI_gpio, so GPIO7_2 mean 0xE0+2 = gpio226 
+C_GPIO_BASE=0x00
+P_GPIO_BASE=0x20
+S_GPIO_BASE=0x40
+L_GPIO_BASE=0x60
+D_GPIO_BASE=0x80
+H_GPIO_BASE=0xA0
+A_GPIO_BASE=0xC0
+DSI_GPIO_BASE=0xE0
 ```
 
 
