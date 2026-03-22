@@ -6,6 +6,15 @@ SigmaStar SoC research and debugging notes
 
 #### Control PWM channels on SigmaStar SSC338Q
 
+Switch GPIO? to PWM1 mode and set parameters
+```
+devmem 0x1f207994 16 0x01102
+echo 0 > /sys/class/pwm/pwmchip0/export
+echo 1600000 > /sys/class/pwm/pwmchip0/pwm0/period
+echo 25 > /sys/class/pwm/pwmchip0/pwm0/duty_cycle
+echo 1 > /sys/class/pwm/pwmchip0/pwm0/enable
+```
+
 Switch GPIO1 to PWM1 mode and set parameters
 ```
 devmem 0x1F207994 16 0x1121 
@@ -48,3 +57,15 @@ echo 16000 > /sys/class/pwm/pwmchip0/pwm3/period
 echo 80 > /sys/class/pwm/pwmchip0/pwm3/duty_cycle
 echo 1 > /sys/class/pwm/pwmchip0/pwm3/enable
 ```
+
+#### Control PWM IR led on IPC-HDW1230v3 device, SSC335DE
+
+```
+# PINMUX_FOR_PWM0_pin - set PWM0 on GPIO52
+devmem 0x1F203C1C w 0x0001
+echo 0 > /sys/class/pwm/pwmchip0/export
+echo 40000 > /sys/class/pwm/pwmchip0/pwm0/period
+echo 40 > /sys/class/pwm/pwmchip0/pwm0/duty_cycle
+echo 1 > /sys/class/pwm/pwmchip0/pwm0/enable
+```
+

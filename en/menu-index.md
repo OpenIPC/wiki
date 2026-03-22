@@ -18,24 +18,12 @@ We would be grateful for any feedback and suggestions.
 
 ## Official links
 
-* [OpenIPC on Wiki](https://github.com/openipc/wiki) - Collection of various documentation and instructions.
 * [OpenIPC on GitHub](https://github.com/OpenIPC/) - GitHub organization, most projects are hosted here.
+* [OpenIPC on Telegram](https://openipc.org/our-channels) - Discussions, experiments and technical support..
+* [OpenIPC on Wiki](https://github.com/openipc/wiki) - Collection of various documentation and instructions.
 * [OpenIPC on OpenCollective](https://opencollective.com/openipc) - OpenCollective community.
 * [OpenIPC on Twitter](https://twitter.com/openipc) - Our main news.
 * [OpenIPC on YouTube](https://www.youtube.com/channel/UCaXlbR2uGTRFh8jQ2lCFd2g) - Our instructions and streams (in the plans).
-
-
-## Telegram chat groups
-
-* [OpenIPC](https://t.me/openipc) (EN) - International channel to discuss the development of our project, [*](https://combot.org/c/1166652144)
-* [OpenIPC modding](https://t.me/openipc_modding) (RU) - general issues on modifying IPCam device firmware, [*](https://combot.org/c/-1001247643198)
-* [OpenIPC development](https://t.me/openipc_software) (RU) - HiSilicon, XM porting in OpenWrt and programmer issues, [*](https://combot.org/c/-1001196905312)
-* [OpenIPC advice](https://t.me/openipc_advice) (RU) - problems, finding solutions, long conversations, [*](https://combot.org/c/1385065634)
-* [OpenIPC Iranian](https://t.me/joinchat/T_GwQUBTJdfXJrFb) (IR) - special group for Iranian users / تیم OpenIPC برای کاربران ایرانی, [*](https://combot.org/c/-1001341239361)
-* [OpenIPC demo](https://t.me/openipc_demo)  (EN/RU) - test bot with buttons, after connecting, give the "/menu", [*](https://combot.org/c/1414887196)
-* [OpenIPC ExIPCam](https://t.me/ExIPCam) (RU) - ExIPCam program and hardware/software repairing devices, [*](https://combot.org/c/1213889378)
-* [OpenIPC updates](https://t.me/s/openipc_updates) (RU) - Firmware & Software updates information channel
-* [OpenIPC dev](https://t.me/s/openipc_dev) - Firmware & Software development channel
 
 
 ## Team developments

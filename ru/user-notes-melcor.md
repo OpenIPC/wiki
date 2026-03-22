@@ -74,4 +74,4 @@ reset
 
 После загрузки, выполнить `firstboot` в консоли Putty.
 
-[t1]: https://t.me/openipc_modding
+[t1]: https://openipc.org/our-channels
