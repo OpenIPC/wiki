@@ -89,6 +89,11 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 | Hi3516Ev200 | 12     | 13     |          | 4     |
 | Hi3516Av300 | 5      | 6      |
 
+### HiWatch
+
+| Processor   | IRCUT1 | IRCUT2 | IRCTL | DEVICE ID |
+|-------------|--------|--------|-------|-----------|
+| Hi3518Ev200 | 65     | 64     | 60    | DS-I103   |
 
 ### Huishi / Vatilon boards
 
@@ -96,7 +101,6 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 |-------------|--------|--------|----------|-------|
 | SSC377      | 80     | 81     |          |       |
 | SSC378DE    | 80     | 81     |          | 13    |
-
 
 ### Jabsco boards
 
