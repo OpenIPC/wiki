@@ -141,7 +141,7 @@ Erasing at 0x1000000 -- 100% complete.
 Writing at 0x1000000 -- 100% complete.
 ```
 
-It anything goes wrong here, don't power off the device and ask the mentioned [Telegram group](https://t.me/openipc) for help! Otherwise enter `reset` and get into the freshly flashed u-boot by hitting any key to stop autoboot. Run the following command and you are done:
+It anything goes wrong here, don't power off the device and ask the mentioned [Telegram group](https://openipc.org/our-channels) for help! Otherwise enter `reset` and get into the freshly flashed u-boot by hitting any key to stop autoboot. Run the following command and you are done:
 ```sh
 run setnor16m
 ```

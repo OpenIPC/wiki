@@ -14,7 +14,7 @@ Some motors can be controlled through a UART TTY device. See [xm-uart.](https://
 
 ### GPIO
 
-This is a simple and direct method to control a stepper motor by setting off GPIOs to a component on the board that assists in driving the motor. As long as you can probe your board and determine which GPIOs are connected to something like a ULN2803, there's a good chance you'll be able to control it. 
+This is a simple and direct method to control a stepper motor by setting off GPIOs to a component on the board that assists in driving the motor. As long as you can probe your board and determine which GPIOs are connected to something like a ULN2803, there's a good chance you'll be able to control it. See [gpio-motors.](https://github.com/OpenIPC/firmware/tree/master/general/package/gpio-motors)
 
 #### ULN2003 Pinout
 ![wfdsad](../images/uln2803-pinout.png)
@@ -24,4 +24,4 @@ This is a simple and direct method to control a stepper motor by setting off GPI
 
 ## Configuring ONVIF
 
-With [onvif_simple_server](https://github.com/roleoroleo/onvif_simple_server) you can easily gain access to PTZ controls through ONVIF. Functionality will vary depending on the motor control package you use. See the server's example config in it's repo for all of the available commands. 
+With [onvif_simple_server](https://github.com/roleoroleo/onvif_simple_server) you can easily gain access to PTZ controls through ONVIF (simple [example](https://github.com/OpenIPC/sandbox/tree/main/scripts/onvif)). Functionality will vary depending on the motor control package you use. See the server's example config in it's repo for all of the available commands. 

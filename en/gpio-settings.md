@@ -6,14 +6,14 @@ Board specific GPIO settings list
 
 ### Anjoy / Anjvision boards
 
-| Processor   | IRCUT1 | IRCUT2 | LIGHT IR | LIGHT WHITE | RESET | I/O | USB_ENA | TESTED BOARDS    |  AUDIO OUTPUT   |
-|-------------|--------|--------|----------|-------------|-------|-----|---------|------------------|-----------------|
-| SSC30KQ     | 23     | 24     | 60/59    |             | 10    |     |         | MC-L12, MC-L12B  |      9          |
-| SSC335      | 78     | 79     | 61/53    |             | 66    | 52  |         | [MS-J10](../en/device-ms-j10_ms-j10B-pinout.md), YM200J10 |      80         |
-| SSC337      | 78     | 79     | 61       |             | 66    | 52  |         | MC-F40, YM-J10D  |                 |
-| SSC337DE    | 78     | 79     | 61       |             | 66    |     |         | MC500L8          |                 |
-| SSC338Q     | 23     | 24     | 60       | 59          | 10    |     |    8    | MC800S-V3        |      39         |
-| SSC377      | 11     | 80     | 9        | 13          |       |     |         | MC-A42P-V1.1     |      12         |
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | LIGHT IR | LIGHT WHITE | RESET | I/O | USB_ENA | TESTED BOARDS    |  AUDIO OUTPUT   |
+|-------------|--------|--------|----------|----------|-------------|-------|-----|---------|------------------|-----------------|
+| SSC30KQ     | 23     | 24     | 25       | 60/59    |             | 10    |     |         | MC-L12, MC-L12B  |      9          |
+| SSC335      | 78     | 79     |          | 61/53    |             | 66    | 52  |         | [MS-J10](../en/device-ms-j10_ms-j10B-pinout.md), YM200J10 |      80         |
+| SSC337      | 78     | 79     |          | 61       |             | 66    | 52  |         | MC-F40, YM-J10D  |                 |
+| SSC337DE    | 78     | 79     |          | 61       |             | 66    |     |         | MC500L8          |                 |
+| SSC338Q     | 23     | 24     |          | 60       | 59          | 10    |     |    8    | MC800S-V3        |      39         |
+| SSC377      | 11     | 80     |          | 9        | 13          |       |     |         | MC-A42P-V1.1     |      12         |
 
 
 ### Brovotech boards
@@ -25,23 +25,23 @@ Board specific GPIO settings list
 
 ### CamHi / Xin boards
 
-| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | USB_ENA | UART2_RTS/RS485_DE | UART2_RXD/RS485_RO | UART2_TXD/RS485_DI | AUDIO_ENA | RESET | PWM | SD_VCC | BOARD    |
-|-------------|--------|--------|----------|-------|---------|--------------------|--------------------|--------------------|-----------|-------|-----|--------|----------|
-| Gk7205v200  | 14     | 15     | 8        | 4     | 9i      | 54                 | 12                 | 13                 | 12        | 50    |     |        | 2M-M2103 |
-| Gk7205v200  | 13     | 15     | 8        | 4     | 9i      | 54                 | 12                 | 13                 | 12        | 50    |     |        | 2G-M3072 |
-| Gk7205v300  | 10     | 11     | 8        | 72    | 7i      |                    |                    |                    | 52        | 42    |
-|             |        |        |          |       |         |
-| Hi3516Cv100 |        |        |          |       |         |
-| Hi3516Cv200 |        |        |          |       |         |
-| Hi3516Cv300 |        |        |          |       |         |
-| Hi3516Ev100 |        |        |          |       |         |
-| Hi3516Ev200 |        |        |          |       | 9i      |
-| Hi3516Ev300 | 10     | 11     |          |       | 7i      | 63                 |                    |                    |           | 42    |
-| Hi3518Ev100 | 43     |        | 74       |       |         |
-| Hi3518Ev200 | 1      | 2      | 48       |       |         |
-| Hi3518Ev300 |        |        |          |       |         |
-|             |        |        |          |       |         |
-| T31         | 58     | 57     |          | 49    | 61i     | 53                 | 55                 | 56                 | 63          | 11    | 50  | 62     |
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS | IRCTL | LIGHT WHITE | USB_ENA | UART2_RTS/RS485_DE | UART2_RXD/RS485_RO | UART2_TXD/RS485_DI | AUDIO_ENA | RESET | PWM | SD_VCC | BOARD    |
+|-------------|--------|--------|----------|-------|-------------|---------|--------------------|--------------------|--------------------|-----------|-------|-----|--------|----------|
+| Gk7205v200  | 14     | 15     | 8        | 4     |             | 9i      | 54                 | 12                 | 13                 | 12        | 50    |     |        | 2M-M2103 |
+| Gk7205v200  | 13     | 15     | 8        | 4     |             | 9i      | 54                 | 12                 | 13                 | 12        | 50    |     |        | 2G-M3072 |
+| Gk7205v300  | 10     | 11     | 8        | 72    |             | 7i      |                    |                    |                    | 52        | 42    |
+|             |        |        |          |       |             |         |
+| Hi3516Cv100 |        |        |          |       |             |         |
+| Hi3516Cv200 |        |        |          |       |             |         |
+| Hi3516Cv300 |        |        |          |       |             |         |
+| Hi3516Ev100 |        |        |          |       |             |         |
+| Hi3516Ev200 |        |        |          |       |             | 9i      |
+| Hi3516Ev300 | 10     | 11     |          |       | 4           | 7i      | 63                 |                    |                    |           | 42    |
+| Hi3518Ev100 | 43     |        | 74       |       |             |         |
+| Hi3518Ev200 | 1      | 2      | 48       |       |             |         |
+| Hi3518Ev300 |        |        |          |       |             |         |
+|             |        |        |          |       |             |         |
+| T31         | 58     | 57     |          | 49    |             | 61i     | 53                 | 55                 | 56                 | 63          | 11    | 50  | 62     |
 
 > _i - inverted value_
 
@@ -89,6 +89,11 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 | Hi3516Ev200 | 12     | 13     |          | 4     |
 | Hi3516Av300 | 5      | 6      |
 
+### HiWatch
+
+| Processor   | IRCUT1 | IRCUT2 | IRCTL | DEVICE ID |
+|-------------|--------|--------|-------|-----------|
+| Hi3518Ev200 | 65     | 64     | 60    | DS-I103   |
 
 ### Huishi / Vatilon boards
 
@@ -96,7 +101,6 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 |-------------|--------|--------|----------|-------|
 | SSC377      | 80     | 81     |          |       |
 | SSC378DE    | 80     | 81     |          | 13    |
-
 
 ### Jabsco boards
 
@@ -183,11 +187,11 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 
 ### Uniview boards
 
-| Processor   | IRCUT1 | IRCUT2 | RESET | IRCTL | IRLED | WiFi | RED LED | AUDIO OUTPUT | SD | DEVICE ID                             |
-|-------------|--------|--------|-------|-------|-------|------|---------|--------------|----|---------------------------------------|
-| Hi3516Ev300 | 63     | 67     | 64    |       |  72   |  7   |    10   |     28       | 38 | Rostelecom IPC8232SWC-WE              |
-| SSC335DE    | 61     | 79     |       |   4   |       |      |         |              |    | Rostelecom IPC8232SWC-WE-B, C1L-2WN-G |
-| SSC335      | 61     | 79     |       |       |  76   |      |         |              |    | Uniarch UV-IPC-D122-PF28              |
+| Processor   | IRCUT1 | IRCUT2 | RESET | IRCTL | IRLED | WiFi | RED LED | AUDIO OUTPUT | SD | DEVICE ID                                         |
+|-------------|--------|--------|-------|-------|-------|------|---------|--------------|----|---------------------------------------------------|
+| Hi3516Ev300 | 63     | 67     | 64    |       |  72   |  7   |    10   |     28       | 38 | Rostelecom IPC8232SWC-WE                          |
+| SSC335DE    | 61     | 79     |       |   4   |       |      |         |              |    | Rostelecom IPC8232SWC-WE-B, C1L-2WN-G             |
+| SSC335      | 61     | 79     |       |       |  76   |      |         |              |    | Uniarch UV-IPC-D122-PF28, Uniarch IPC-B122-APF28K |
 
 ### Wansview
 
@@ -223,8 +227,10 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 |                                                                                                              | Hi3516Ev200     | 8      | 9      | 15       | 16    | 4, 53  | 55      | 14      | 12      | 0     |         |
 |                                                                                                              | Hi3516Ev300     | 11     | 10     | 66       | 52    | 4, 67  | 65      | 30      | 31      | 0     |         |
 |                                                                                                              | Hi3518Ev100     | 39     | 38     | 24       |       | 49     | 26      |         |         |       |         |
-|                                                                                                              | Hi3518Ev200     | 33     | 34     | 24       |       | 61     | 35      |         |         |       |         | 3       |              | IPG-50HV20PET-S |
-| 50H20L                                                                                                       | Hi3518Ev300     | 8      |        |  55      |       | 13     |         |         |         | 15    |         | 3       |
+|                                                                                                              | Hi3518Ev200     | 33     | 34     | 24       |       | 61     | 35      |         |         |       |         | 3       |              | | IPG-50HV20PET-S |
+| 50H20L                                                                                                       | Hi3518Ev300     | 8      |        |  55      |       | 13     |         |         |         | 15    |         | 3  
+|                                                                                                              |                 |        |        |          |       |        |         |         |         |       |         |
+| IVG-N8S                                                                                                      | NT98566         | 225    | 226    |  233     | 232   |        |         |         |         |       |         | 132     |            |  231    |      |
 
 > There is a map between table's columns and parameters in `nightMode` section in `majestic.yaml`<br>
 > IRCUT1 is an irCutPin1<br>
@@ -240,6 +246,18 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 Tested on GK7205V300 for /dev/ttyАМА1:
   devmem 0x100c0010 32 0x2
   devmem 0x112c0074 32 0x2
+```
+```
+Novatek gpio   
+ group 0 mean C_gpio? froup 7 mean DSI_gpio, so GPIO7_2 mean 0xE0+2 = gpio226 
+C_GPIO_BASE=0x00
+P_GPIO_BASE=0x20
+S_GPIO_BASE=0x40
+L_GPIO_BASE=0x60
+D_GPIO_BASE=0x80
+H_GPIO_BASE=0xA0
+A_GPIO_BASE=0xC0
+DSI_GPIO_BASE=0xE0
 ```
 
 

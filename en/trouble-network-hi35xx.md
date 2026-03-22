@@ -63,7 +63,7 @@ setenv phyaddru 1; setenv phyaddrd 1; saveenv; reset
 
 Some known combinations for specific boards:
 
-### XiongMai, HI3518EV100
+### XiongMai, HI3518EV100 and HI3516CV100
 *For U-boot network:*
 ```
     setenv phyaddru 1
@@ -81,7 +81,10 @@ Some known combinations for specific boards:
 
 *For Linux network:*
 ```
-   setenv hieth.mdioifu=0 hieth.mdioifd=0 hieth.phyaddru=1 hieth.phyaddrd=2
+   setenv hieth.mdioifu 0
+   setenv hieth.mdioifd 0
+   setenv hieth.phyaddru 1
+   setenv hieth.phyaddrd 2
    saveenv
 ```
 

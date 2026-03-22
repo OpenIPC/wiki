@@ -11,7 +11,7 @@ The first thing to do is locate the flash memory chip on the camera circuit
 board. Typically this is a square chip with 8 pins labeled 25Q64 or 25Q128,
 rarely 25L64 or 25L128. If you have trouble locating the chip, try taking
 some pictures of your board from both sides. Then ask for help
-[in our Telegram channel](https://t.me/openipc).
+[in our Telegram channel](https://openipc.org/our-channels).
 __Do not try to short-circuit any random chip! It will most likely burn your camera circuit.__
 
 Short-circuit pins 5 and 6 of the flash chip with a small metal object,

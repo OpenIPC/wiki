@@ -56,7 +56,7 @@ While working with this technology, the idea of simplifying the flight system an
 * Reduces overall consumption and increases system reliability by simplifying the circuitry
 * Reduces video latency: in our Glass-to-Glass tests, we got about 80ms latency for 1080p@60 (on mid-budget cameras), and about 60 ms for 720p@60 and about 100 ms for 1080p@30 (for the most budget cameras).
 * There is a possibility of tuning hardware encoder, for example, more frequent formation of I frame (the specifics depend on the vendor of IP camera)
-* The community has accumulated a lot of experience in [repairing IP cameras](https://t.me/ExIPCam), which makes it possible to further reduce the cost of operation of the system.
+* The community has accumulated a lot of experience in [repairing IP cameras](https://openipc.org/our-channels), which makes it possible to further reduce the cost of operation of the system.
 
 ### Disadvantages
 
@@ -298,7 +298,7 @@ Unfortunately, to get a WDR image the whole system must work at least twice as f
 
 #### Can I use an LTE adapter instead of WiFi?
 
-Yes, but firmware modification will be required. We recommend that you ask questions about adapting specific hardware [in the official group](https://t.me/openipc_modding).
+Yes, but firmware modification will be required. We recommend that you ask questions about adapting specific hardware [in the official group](https://openipc.org/our-channels).
 
 #### Can I connect SD card for video recording?
 
@@ -363,7 +363,7 @@ Our team has extensive experience in low latency media transmission (some projec
 
 - https://github.com/openipc/sandbox-fpv
 - https://github.com/OpenIPC/silicon_research
-- [OpenIPC for building FPV systems, chat in telegram messenger](https://t.me/+BMyMoolVOpkzNWUy)
+- [OpenIPC for building FPV systems, chat in telegram messenger](https://openipc.org/our-channels)
 - [WFB-ng Data Transport Standard (Draft)](https://github.com/svpcom/wfb-ng/blob/master/doc/wfb-ng-std-draft.md)
 
 **And our general resources:**
