@@ -1,20 +1,21 @@
-# 🚨 Deprecated Wiki 🚨
+# 🍀 Current Wiki
 
-This repository is no longer maintained and has been replaced by a new, more user-friendly documentation platform. 
+Some time ago we planned to move the content to the Docs platform, but we ran into organizational difficulties and a lack of willingness from volunteers,
+even for some payment, to do responsible work. Many started this, but as a rule the quality was either low or the motivation disappeared. 
 
-Explore the new OpenIPC documentation site here: 👉 [https://docs.openipc.org](https://docs.openipc.org)
+Therefore, we removed the informational message that this Wiki is outdated (it is not) and are accepting PRs for its improvement. 
 
-This marks a new era of openness and collaboration for OpenIPC, offering improved navigation and easier access to information.
+At the same time, work on [Docs](https://docs.openipc.org) and the [Portal](https://openipc.github.io) will be resumed.
 
 ## 🛠 Contribution Guidelines
 
 Contribute to the new docs by following the guide here: 👉 [Contribution Guidelines](https://docs.openipc.org/development/contribution-guidelines/)
 
-We welcome contributions, from small fixes to full content additions!
+We welcome any suggestions, from minor corrections to complete content additions!
 
-## 📅 Help Us Migrate Content
+## 📅 Help us migrate content
 
-We need your help to migrate important content from this wiki to the new platform. Let’s work together to ensure valuable information is transferred over.
+We need your help migrating important content from this wiki to the [new platform](https://docs.openipc.org). Let's work together to ensure this valuable information is migrated.
 
 ---
 
