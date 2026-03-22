@@ -218,6 +218,7 @@ In Russian
 - [Hikvision DS-2CD2345F-IS](ru/hikvision-ds-2cd2345f-is.md)
 - [Ростелеком IPC-HFW1230SP/IPC-HDW1230SP](ru/rostelecom-ipc-hfw1230sp.md)
 - [HiWatch DS-I122](ru/hiwatch-ds-i122.md)
+- [Ростелеком IPC-HDW1230SP v3](ru/ru/rostelecom-ipc-hdw1230sp_v3.md)
 
 ## Что можно прочитать про прошивку OpenIPC?
 
