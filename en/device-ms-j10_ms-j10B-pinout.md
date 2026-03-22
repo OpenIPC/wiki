@@ -49,15 +49,15 @@ MS-J10    MS-J10B
 ||3|3.3V |
 ||4| |gpio47
 ||5|3.3V |
-||6| |gpio58
-||7|3.3V |
-||8| |gpio55
+||6| |gpio58 | sd_D2
+||7|3.3V | | sd_D3
+||8| |gpio55 | sd_CMD
 ||9|GND
-||10| |gpio54
+||10| |gpio54 |  sd_CLK
 ||11|GND
-||12| |gpio56
-||13 | |gpio57
-||14 | |gpio60 
+||12| |gpio56 |  sd_D0
+||13 | |gpio57 | sd_D1
+||14 | |gpio60 | sd_Card_detect
 ||15|AlarmIn | gpio44 | cat /sys/class/gpio/gpio44/value 
 ||16|AlarmOut | gpio45
 ||
