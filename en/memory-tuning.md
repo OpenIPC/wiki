@@ -81,20 +81,83 @@ reserved-memory {
 };
 ```
 
+#### Choosing the right CMA size (kernel 6.6+)
+
+The default CMA reservation is 96MB. This value was carried over from the 4.9
+`mem=32M` split where "everything except 32MB" went to video. With CMA this
+reasoning no longer applies — let's look at actual usage.
+
+A typical hi3516ev300 streaming session with majestic (2592x1520 H.264 + MJPEG):
+
+```
+cat /proc/media-mem
+# ---MMZ_USE_INFO:
+#  total size=98304KB(96MB), used=34396KB(33MB), remain=63908KB(62MB)
+```
+
+The video pipeline uses **~34MB**. The remaining 62MB of the CMA region sits
+idle (though reusable by the kernel for movable pages).
+
+**Why does CMA size matter if pages are reusable?**
+
+CMA pages can only hold **movable** allocations (user memory, page cache). They
+cannot hold non-movable allocations (kernel slab, page tables, DMA buffers,
+kernel stacks). On a 128MB board with 96MB CMA, only 32MB is guaranteed
+available for non-movable kernel allocations — effectively the same constraint
+as the old `mem=32M`.
+
+Reducing CMA gives the kernel more room for non-movable allocations:
+
+| CMA size | Non-movable headroom | Video headroom | Good for |
+|---|---|---|---|
+| 96MB | 32MB (tight) | 62MB spare | Maximum video buffers, multiple streams |
+| 64MB | 64MB (comfortable) | 30MB spare | Typical single-stream use |
+| 48MB | 80MB (generous) | 14MB spare | Minimal video + heavy network/app workload |
+
+**How to override CMA size without rebuilding:**
+
+The kernel accepts a `cma=` bootarg that overrides the Device Tree default:
+
+```bash
+# In U-Boot:
+setenv bootargs mem=128M cma=48M console=ttyAMA0,115200 panic=20 ...
+saveenv
+```
+
+This sets the CMA pool to 48MB regardless of what the DT declares. You can
+experiment with different values and check the result:
+
+```bash
+# Verify the active CMA size
+grep Cma /proc/meminfo
+# CmaTotal:       49152 kB    <-- 48MB
+# CmaFree:        16384 kB
+
+# Check if video has enough memory
+cat /proc/media-mem
+# If "used" is close to "total", increase the CMA size
+
+# Monitor for CMA allocation failures
+dmesg | grep -i "cma.*alloc.*failed"
+```
+
+> **Recommendation:** start with `cma=48M` for single-stream setups. If you see
+> allocation failures in dmesg or majestic fails to start, increase to `cma=64M`.
+> The default 96MB is safe but wastes non-movable headroom.
+
 #### What this means for end users
 
 **128MB boards (hi3516ev300):**
 
 With 6.6, you can give the kernel the full 128MB (`mem=128M` or just remove the
-`mem=` bootarg entirely). The 96MB CMA region is marked `reusable`, meaning the
-kernel can use those pages for normal allocations when video is not running.
-When video starts, CMA migrates pages out and provides contiguous buffers.
-
-All three configurations work on 6.6:
+`mem=` bootarg entirely). All three configurations work:
 
 ```
-# Full memory (recommended) - kernel manages everything via CMA
+# Full memory, default CMA (recommended for most users)
 mem=128M console=ttyAMA0,115200 ...
+
+# Full memory, tuned CMA (recommended for advanced users)
+mem=128M cma=48M console=ttyAMA0,115200 ...
 
 # No mem= at all - kernel gets full RAM from DT
 console=ttyAMA0,115200 ...
@@ -105,9 +168,9 @@ mem=128M ... mmz_allocator=cma mmz=anonymous,0,0x42000000,96M
 
 **64MB boards (hi3516ev200, hi3518ev300):**
 
-The 6.6 kernel with CMA has not yet been tested on 64MB boards. The DT
-`reserved-memory` region size may need adjustment (32MB instead of 96MB).  For
-now, continue using the 4.9 kernel with `mem=32M`.
+The 6.6 kernel with CMA has not yet been tested on 64MB boards. Use `cma=24M`
+or `cma=32M` via bootargs if you are experimenting. For production, continue
+using the 4.9 kernel with `mem=32M`.
 
 **Checking CMA status on a running system:**
 
@@ -125,18 +188,20 @@ grep Cma /proc/meminfo
 cat /proc/media-mem
 ```
 
-#### Upgrading U-Boot bootargs
+#### Upgrading from kernel 4.9 to 6.6
 
-If you are upgrading a hi3516ev300 from 4.9 to 6.6, you can update your U-Boot
-environment to give the kernel full memory:
+If you are upgrading a hi3516ev300 from 4.9 to 6.6, update your U-Boot
+environment:
 
 ```
+# Recommended: give kernel full memory, optionally tune CMA
 setenv bootargs mem=128M console=ttyAMA0,115200 panic=20 ...
 saveenv
 ```
 
-Old bootargs with `mmz_allocator=cma mmz=anonymous,...` still work on 6.6, they
-are simply ignored.  There is no need to change U-Boot before upgrading.
+Old bootargs with `mmz_allocator=cma mmz=anonymous,...` still work on 6.6 —
+they are silently ignored. There is no need to change U-Boot before upgrading,
+but you will benefit from updating `mem=` to `128M` afterwards.
 
 ---
 
