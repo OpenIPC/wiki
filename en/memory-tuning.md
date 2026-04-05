@@ -15,27 +15,28 @@ There are three allocator backends:
 | | hisi (static) | cma (vendor) | cma (mainline) |
 |---|---|---|---|
 | **Available on** | Kernel 4.9 | Kernel 4.9 | Kernel 6.6+ (neo) |
-| **How it works** | Kernel is given a reduced `mem=` size; the remaining RAM is invisible to Linux and owned entirely by MMZ | Uses vendor `hi_cma.c` to allocate from a CMA region declared via bootargs; kernel sees reduced `mem=` | Kernel sees all RAM; CMA reserves a region via Device Tree marked `reusable` that Linux can use for movable pages until video needs it |
-| **Memory efficiency** | Low -- the MMZ region is wasted when video is idle | Low -- same as hisi, kernel still restricted by `mem=` | High -- CMA pages serve normal allocations and are migrated out on demand when video starts |
-| **Allocation latency** | Deterministic -- buffers come from a dedicated pool that is always free | Deterministic -- same as hisi, dedicated pool | May spike -- CMA must migrate pages out before returning contiguous memory; first allocation after boot can take a few milliseconds |
+| **How it works** | Kernel is given a reduced `mem=` size; the remaining RAM is invisible to Linux and owned entirely by MMZ | Kernel sees all RAM (`mem=128M`); vendor `hi_cma.c` manages a CMA region declared via bootargs; pages are reusable by the kernel when video is idle | Kernel sees all RAM; mainline CMA reserves a region via Device Tree; pages are reusable by the kernel when video is idle |
+| **Memory efficiency** | Low -- the MMZ region is wasted when video is idle (e.g. during boot, firmware updates, network-only workloads) | High -- CMA pages serve normal allocations and are migrated out on demand when video starts | High -- same as vendor CMA |
+| **Allocation latency** | Deterministic -- buffers come from a dedicated pool that is always free | May spike -- CMA must migrate pages out before returning contiguous memory; first allocation can take a few milliseconds | May spike -- same as vendor CMA |
+| **Implementation** | Simple range allocator over a hidden memory region | Vendor `hi_cma.c` integration with the kernel's CMA | Kernel built-in CMA framework (`dma_alloc_from_contiguous`) |
 | **Configuration** | `mmz_allocator=hisi mmz=anonymous,...` | `mmz_allocator=cma mmz=anonymous,...` | Device Tree `reserved-memory` node; no bootargs needed |
-| **Best for** | Memory-constrained (64MB) boards | 128MB boards on kernel 4.9 (default for hi3516ev300_lite) | General use on 6.6+, especially 128MB+ boards where wasting 96MB on a static pool is painful |
+| **Best for** | Memory-constrained (64MB) boards where the kernel must fit in 32MB | 128MB boards on kernel 4.9 (default for hi3516ev300_lite) | 128MB+ boards on kernel 6.6+ (default for neo builds) |
 
-On kernel 4.9, the `hisi` and `cma` backends are both configured via U-Boot
-bootargs and both require `mem=32M` to hide RAM from the kernel. The difference
-is the underlying allocation mechanism: `hisi` uses a simple range allocator
-while `cma` uses the vendor's `hi_cma.c` which integrates with the kernel's page
-allocator but is not the same as mainline CMA.
+On kernel 4.9, the `hisi` allocator hides memory from the kernel via `mem=32M`,
+giving MMZ exclusive ownership of the remaining RAM. The `cma` allocator lets
+the kernel see all RAM (`mem=128M`) and shares the MMZ region with normal
+allocations via the vendor's `hi_cma.c`. Both are configured via U-Boot
+bootargs.
 
 On kernel 6.6+, the vendor `hi_cma.c` does not exist. Instead, the open-source
 OSAL module uses the kernel's built-in CMA framework directly, configured
-through the Device Tree. This is a fundamentally different approach: the kernel
-manages all RAM and shares the CMA region with normal allocations.
+through the Device Tree. Functionally it behaves the same as vendor CMA --
+the key improvement is that no bootargs are needed, the region is declared
+in the Device Tree and the kernel configures everything automatically.
 
-> **Rule of thumb:** if your board has 128MB+ RAM and runs kernel 6.6+, use
-> mainline CMA (it is the default for `neo` builds and requires no bootargs).
-> If you are on kernel 4.9, use `mmz_allocator=cma` for 128MB boards or
-> `mmz_allocator=hisi` for 64MB boards.
+> **Rule of thumb:** if your board has 128MB+ RAM, use the `cma` allocator
+> (vendor CMA on 4.9, mainline CMA on 6.6+ -- both are the default). If you
+> have 64MB RAM on kernel 4.9, use `mmz_allocator=hisi` with `mem=32M`.
 
 #### Kernel 4.9 (legacy)
 
