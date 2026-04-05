@@ -10,20 +10,32 @@ HiSilicon SoCs require contiguous physical memory for ISP and video DMA buffers.
 This memory is managed by the MMZ (Media Memory Zone) subsystem inside the
 `open_osal` kernel module.
 
-There are two allocator backends. The choice depends on your kernel version:
+There are three allocator backends:
 
-| | hisi (static) | CMA (mainline) |
-|---|---|---|
-| **Available on** | Kernel 4.9 | Kernel 6.6+ (neo) |
-| **How it works** | Kernel is given a reduced `mem=` size; the remaining RAM is invisible to Linux and owned entirely by MMZ | Kernel sees all RAM; CMA reserves a region marked `reusable` that Linux can use for movable pages until video needs it |
-| **Memory efficiency** | Low -- the MMZ region is wasted when video is idle (e.g. during boot, firmware updates, network-only workloads) | High -- CMA pages serve normal allocations and are migrated out on demand when video starts |
-| **Allocation latency** | Deterministic -- buffers come from a dedicated pool that is always free | May spike -- CMA must migrate pages out before returning contiguous memory; first allocation after boot can take a few milliseconds |
-| **Configuration** | U-Boot bootargs (`mmz_allocator=cma mmz=anonymous,...`) | Device Tree `reserved-memory` node; no bootargs needed |
-| **Best for** | Low-latency or memory-constrained (64MB) boards where every millisecond of ISP startup matters | General use, especially 128MB+ boards where wasting 96MB on a static pool is painful |
+| | hisi (static) | cma (vendor) | cma (mainline) |
+|---|---|---|---|
+| **Available on** | Kernel 4.9 | Kernel 4.9 | Kernel 6.6+ (neo) |
+| **How it works** | Kernel is given a reduced `mem=` size; the remaining RAM is invisible to Linux and owned entirely by MMZ | Uses vendor `hi_cma.c` to allocate from a CMA region declared via bootargs; kernel sees reduced `mem=` | Kernel sees all RAM; CMA reserves a region via Device Tree marked `reusable` that Linux can use for movable pages until video needs it |
+| **Memory efficiency** | Low -- the MMZ region is wasted when video is idle | Low -- same as hisi, kernel still restricted by `mem=` | High -- CMA pages serve normal allocations and are migrated out on demand when video starts |
+| **Allocation latency** | Deterministic -- buffers come from a dedicated pool that is always free | Deterministic -- same as hisi, dedicated pool | May spike -- CMA must migrate pages out before returning contiguous memory; first allocation after boot can take a few milliseconds |
+| **Configuration** | `mmz_allocator=hisi mmz=anonymous,...` | `mmz_allocator=cma mmz=anonymous,...` | Device Tree `reserved-memory` node; no bootargs needed |
+| **Best for** | Memory-constrained (64MB) boards | 128MB boards on kernel 4.9 (default for hi3516ev300_lite) | General use on 6.6+, especially 128MB+ boards where wasting 96MB on a static pool is painful |
 
-> **Rule of thumb:** if your board has 128MB+ RAM and runs kernel 6.6+, use CMA
-> (it is the default for `neo` builds). If you are on kernel 4.9 or have 64MB
-> RAM, use the hisi allocator with `mem=32M`.
+On kernel 4.9, the `hisi` and `cma` backends are both configured via U-Boot
+bootargs and both require `mem=32M` to hide RAM from the kernel. The difference
+is the underlying allocation mechanism: `hisi` uses a simple range allocator
+while `cma` uses the vendor's `hi_cma.c` which integrates with the kernel's page
+allocator but is not the same as mainline CMA.
+
+On kernel 6.6+, the vendor `hi_cma.c` does not exist. Instead, the open-source
+OSAL module uses the kernel's built-in CMA framework directly, configured
+through the Device Tree. This is a fundamentally different approach: the kernel
+manages all RAM and shares the CMA region with normal allocations.
+
+> **Rule of thumb:** if your board has 128MB+ RAM and runs kernel 6.6+, use
+> mainline CMA (it is the default for `neo` builds and requires no bootargs).
+> If you are on kernel 4.9, use `mmz_allocator=cma` for 128MB boards or
+> `mmz_allocator=hisi` for 64MB boards.
 
 #### Kernel 4.9 (legacy)
 
@@ -133,10 +145,10 @@ Kernel modules take about 5 megabytes of RAM (code with dynamic memory for
 buffers) and some of them are useless unless you need specific functionality like
 OSD, motion detection, audio, or specific codecs.
 
-The table below shows both legacy vendor module names (kernel 4.9) and the modern
-open-source module names (kernel 6.6+ / opensdk).
+The table below shows vendor SDK module names, open-source module names (used by
+both 4.9 and 6.6 kernels in OpenIPC), and approximate sizes.
 
-| Feature | Legacy modules (4.9) | Open modules (6.6+) | Size |
+| Feature | Vendor SDK modules | OpenIPC modules | Size |
 |---|---|---|---|
 | Audio output | hi3516ev200_ao, hi3516ev200_adec | open_ao, open_adec | 78 KB |
 | Audio input | hi3516ev200_ai, hi3516ev200_aenc | open_ai, open_aenc | 106 KB |
@@ -150,15 +162,15 @@ open-source module names (kernel 6.6+ / opensdk).
 | H.264 codec | hi3516ev200_h264e | open_h264e | 131 KB |
 | H.265 codec | hi3516ev200_h265e | open_h265e | 156 KB |
 | Video encoder core | hi3516ev200_venc | open_venc | 274 KB |
-| Rate control | -- | open_rc | 111 KB |
-| Encode device | -- | open_vedu | 29 KB |
+| Rate control | hi3516ev200_rc | open_rc | 111 KB |
+| Encode device | hi3516ev200_vedu | open_vedu | 29 KB |
 | OSD / regions | hi3516ev200_rgn | open_rgn | 86 KB |
 | ISP | hi3516ev200_isp | open_isp | 201 KB |
-| Video input | -- | open_vi | 373 KB |
-| VPSS | -- | open_vpss | 332 KB |
-| VGS | -- | open_vgs | 143 KB |
-| MIPI receiver | -- | open_mipi_rx | 37 KB |
-| Watchdog | -- | open_wdt | 12 KB |
+| Video input | hi3516ev200_vi | open_vi | 373 KB |
+| VPSS | hi3516ev200_vpss | open_vpss | 332 KB |
+| VGS | hi3516ev200_vgs | open_vgs | 143 KB |
+| MIPI receiver | hi_mipi_rx | open_mipi_rx | 37 KB |
+| Watchdog | hi_wdt | open_wdt | 12 KB |
 
 To disable a module, comment out or remove the corresponding `modprobe` line in
 `/usr/bin/load_hisilicon`. For example, to disable audio entirely, comment out
