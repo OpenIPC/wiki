@@ -108,11 +108,11 @@ as the old `mem=32M`.
 
 Reducing CMA gives the kernel more room for non-movable allocations:
 
-| CMA size | Non-movable headroom | Video headroom | Good for |
+| CMA size | Non-movable headroom | Video headroom | Status |
 |---|---|---|---|
-| 96MB | 32MB (tight) | 62MB spare | Maximum video buffers, multiple streams |
-| 64MB | 64MB (comfortable) | 30MB spare | Typical single-stream use |
-| 48MB | 80MB (generous) | 14MB spare | Minimal video + heavy network/app workload |
+| 96MB (default) | 32MB | 62MB spare | Safe, but wastes non-movable headroom |
+| 64MB | 64MB | 13MB spare | Tested, recommended for single-stream 4MP |
+| 48MB | 80MB | Allocation failures | Too small for 2592x1520 streaming |
 
 **How to override CMA size without rebuilding:**
 
@@ -124,8 +124,8 @@ setenv bootargs mem=128M cma=48M console=ttyAMA0,115200 panic=20 ...
 saveenv
 ```
 
-This sets the CMA pool to 48MB regardless of what the DT declares. You can
-experiment with different values and check the result:
+The kernel will log `bypass mmz node, using cmdline CMA params instead` and
+allocate a CMA pool of the specified size. You can verify:
 
 ```bash
 # Verify the active CMA size
@@ -141,9 +141,11 @@ cat /proc/media-mem
 dmesg | grep -i "cma.*alloc.*failed"
 ```
 
-> **Recommendation:** start with `cma=48M` for single-stream setups. If you see
-> allocation failures in dmesg or majestic fails to start, increase to `cma=64M`.
-> The default 96MB is safe but wastes non-movable headroom.
+> **Recommendation:** use `cma=64M` for single-stream 4MP setups. This uses
+> ~50MB for video with 13MB spare, and gives the kernel 64MB for non-movable
+> allocations (double the default). If you see allocation failures in dmesg or
+> majestic fails to start, remove the `cma=` parameter to fall back to the 96MB
+> default.
 
 #### What this means for end users
 
