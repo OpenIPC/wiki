@@ -11,8 +11,8 @@
 
 ## Дампы 
 Качаем с GitHub архивы с загрузчиком и образами ядра и файловой системы для имеющегося процессора.
-- [u-boot-ssc337de-nor.bin](https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-ssc337de-nor.bin)
-- [openipc.ssc337de-nor-lite.tgz](https://github.com/OpenIPC/firmware/releases/download/latest/openipc.ssc337de-nor-lite.tgz)
+- [u-boot-ssc335de-nor.bin](https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-ssc335de-nor.bin)
+- [openipc.ssc335de-nor-lite.tgz](https://github.com/OpenIPC/firmware/releases/download/latest/openipc.ssc335de-nor-lite.tgz)
 
 Загрузчик кладём в папку tftp-сервера как есть, а образы ядра и файловой системы нужно предварительно распаковать. 
 Для прошивки понадобится подключиться через UART, что соответственно, потребует адаптер USB-TTL, коннектор к нему и программу-терминал.
@@ -28,7 +28,7 @@
 ```
 setenv ipaddr 192.168.1.10; setenv serverip 192.168.1.254
 mw.b 0x21000000 0xff 0x50000
-tftpboot 0x21000000 u-boot-ssc337de-nor.bin
+tftpboot 0x21000000 u-boot-ssc335de-nor.bin
 sf probe 0
 sf erase 0x0 0x50000; sf write 0x21000000 0x0 0x50000
 reset
