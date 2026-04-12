@@ -114,6 +114,7 @@ OpenIPC Wiki
 - [Buildroot User Manual](https://buildroot.org/docs.html)
 - [U-Boot Documentation](https://u-boot.readthedocs.io/)
 - [Adding USB driver](en/adding-usb-driver.md)
+- [Reading SPI flash unique ID](en/dev-flash-unique-id.md)
 
 ### Help, Tips, and Tricks
 
