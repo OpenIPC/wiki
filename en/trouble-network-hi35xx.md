@@ -111,6 +111,14 @@ Some known combinations for specific boards:
     saveenv
 ```
 
+### JVT (board IP2001 2014-09-22), HI3516CV100
+
+*For U-boot network:*
+```
+    setenv extras 'hieth.phyaddru=1 hieth.mdioifu=0'
+    saveenv
+```
+
 ### Harex (5013A-CF/5020A-FF), HI3516CV100
 
 *For U-boot network:*
