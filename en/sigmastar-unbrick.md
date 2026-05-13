@@ -65,3 +65,5 @@ After successfully restoring the bootloader or installing it into a clean NOR/NA
 ---
 
 - [Alternative Raspberry method by MarioFPV](https://youtu.be/88C8UvyKQlQ)
+- [Some other info from chenxing](https://linux-chenxing.org/isp/)
+- 
