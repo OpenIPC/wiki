@@ -56,6 +56,7 @@ OpenIPC Wiki
 - [Majestic usage research](en/majestic-research.md)
 - [Web interface](en/web-interface.md)
 - [Upgrade firmware](en/sysupgrade.md)
+- [Nightly builds, dated releases, and bisect](en/nightly-builds-and-bisect.md)
 - [Image quality tuning](en/image-quality-tuning.md)
 - [Memory tuning](en/memory-tuning.md)
 - [Using ipctool](en/example-ipctool.md)
