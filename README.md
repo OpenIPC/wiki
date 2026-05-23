@@ -116,6 +116,7 @@ OpenIPC Wiki
 - [U-Boot Documentation](https://u-boot.readthedocs.io/)
 - [Adding USB driver](en/adding-usb-driver.md)
 - [Reading SPI flash unique ID](en/dev-flash-unique-id.md)
+- [Frame timestamps & time synchronization](en/timestamps-and-time-sync.md)
 
 ### Help, Tips, and Tricks
 
