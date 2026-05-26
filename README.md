@@ -68,6 +68,7 @@ OpenIPC Wiki
 - [Automatic night mode without light sensor](en/auto-night-mode-without-light-sensor.md)
 - [ZeroTier setup](en/zerotier.md)
 - [Motor control](en/motors.md)
+- [Build your own doorbell from any OpenIPC camera](en/howto-doorbell-from-camera.md)
 
 ### FPV
 
