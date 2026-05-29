@@ -62,13 +62,10 @@ OpenIPC Wiki
 - [Using ipctool](en/example-ipctool.md)
 - [Board specific GPIO settings list](en/gpio-settings.md)
 - [ACMEv2](en/acme-v2.md)
-- [YouTube streaming](en/youtube-streaming.md)
 - [WiFi XM530](en/wifi-xm530.md)
-- [HomeKit integration](en/homekit-integration.md)
 - [Automatic night mode without light sensor](en/auto-night-mode-without-light-sensor.md)
 - [ZeroTier setup](en/zerotier.md)
 - [Motor control](en/motors.md)
-- [Build your own doorbell from any OpenIPC camera](en/howto-doorbell-from-camera.md)
 
 ### FPV
 
@@ -124,7 +121,6 @@ OpenIPC Wiki
 - [Frequently Asked Question (FAQ)](en/faq.md)
 - [U-Boot Tips](en/help-uboot.md)
 - [Web UI Help](en/help-webui.md)
-- [Live streaming to Telegram](en/howto-streaming-telegram.md)
 - [Interesting tricks](en/dev-tricks.md)
 - [Glossary](en/glossary.md)
 
@@ -150,6 +146,16 @@ OpenIPC Wiki
 ### Software
 
 - [List of Software for Recording Video](en/software-video-recording.md)
+
+### Integrations
+
+- [Integrate Frigate NVR with OpenIPC](en/howto-frigate-integration.md)
+- [HomeKit integration](en/homekit-integration.md)
+- [Home Assistant generic camera](en/home-assitantant-view.md)
+- [Home Assistant PTZ control](en/home-assitantant-PTZ_bashIntegration.md)
+- [Build your own doorbell from any OpenIPC camera](en/howto-doorbell-from-camera.md)
+- [Live streaming to Telegram](en/howto-streaming-telegram.md)
+- [YouTube streaming](en/youtube-streaming.md)
 
 ### Packages
 
