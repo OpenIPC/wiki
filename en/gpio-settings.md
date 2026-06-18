@@ -269,6 +269,37 @@ DSI_GPIO_BASE=0xE0
 |             |        |        |       |                          |
 | Hi3516Ev300 | 14     | 12     |       | ZN-CM-HSC500S1L-PZ       |
 | Hi3516Ev300 | 40     | 41     | 65    | unknown                  |
+| GK7205V510  | 10     | 11     | PWM8/9| NC-IPTC2200_DL (4G PTZ)  |
+
+#### GK7205V510 — NC-IPTC2200_DL_4G (4G PTZ dome)
+
+GK7205V510 is firmware-compatible with the `gk7205v500` family. Full GPIO map read
+from the vendor `/proc/devcfg` (active level in parentheses):
+
+| Function                   | GPIO / PWM      | Notes                                    |
+|----------------------------|-----------------|------------------------------------------|
+| Pan (roll) stepper coil    | 3, 4, 72, 73    | 4-wire half-step, HW timer 2             |
+| Tilt (pitch) stepper coil  | 69, 59, 58, 57  | 4-wire half-step, HW timer 3             |
+| IRCUT1 / IRCUT2            | 10 / 11 (high)  | dual-pin ICR                             |
+| IR LED (SmartIR)           | PWM8 / PWM9     | PWM, period 60000 ns — not a plain GPIO |
+| LED white / LED red        | 52 / 53 (high)  |                                          |
+| Reset button               | 64 (low)        |                                          |
+| Audio amp / speaker enable | 28 (high)       |                                          |
+| SD/MMC power               | 38 (low)        |                                          |
+| Sensor power-down          | 50 (low)        |                                          |
+| Ethernet PHY reset         | 23 (low)        |                                          |
+| 4G modem power-supply      | 22 (high)       |                                          |
+| 4G modem power-on / key    | 29 (low)        |                                          |
+| 4G modem reset             | 30 (high)       |                                          |
+| 4G modem VBUS control      | 20 (high)       |                                          |
+| UART1 RX / TX (RS485)      | 61 / 60         | `/dev/ttyAMA1`, pinmux value 1           |
+
+PTZ via OpenIPC `gpio-motors`: `fw_setenv gpio_motors '3 4 72 73 69 59 58 57'`
+(first four = pan/horizontal coil, last four = tilt/vertical coil).
+
+> Note: the pan coil uses GPIO 72/73, which live in bank 9 (`gpio_chip9@0x120b9000`,
+> base 72). That node is `status = "disabled"` in the goke DTS — enable it
+> (`&gpio_chip9 { status = "okay"; };`) or the pan motor cannot be driven via gpiolib.
 
 
 ### Zosi
