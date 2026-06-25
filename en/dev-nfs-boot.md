@@ -210,9 +210,9 @@ firmware and no kernel changes.
   can include debug tooling (`gdb`, `strace`, test harnesses) that never fits in a
   normal build.
 - **Stable per-device MAC** — a single kernel patch makes the early-boot network
-  take its MAC from the device tree, then from an `ethaddr=` boot argument, before
-  falling back to a random MAC. Stable MACs make DHCP reservations and per-device
-  NFS exports reliable.
+  take its MAC from the device tree if present, otherwise from an `ethaddr=` boot
+  argument, before falling back to a random MAC. Stable MACs make DHCP
+  reservations and per-device NFS exports reliable.
 - **Fleet provisioning** — boot many cameras from one server; key each device on
   its MAC or on DHCP option 60 (settable in the u-boot env as `bootp_vci`) to
   decide which kernel/rootfs to serve.
@@ -302,17 +302,29 @@ setenv bootargs console=ttyS0,115200 \
     nfsroot=192.168.1.10:/srv/nfs/cam-gk7205v300,vers=3,tcp \
     ro \
     ethaddr=00:11:22:33:44:55 \
-    hostname=cam-lab-01
+    hostname=cam-lab-01 \
+    mtdparts=sfc:256k(boot),64k(env),-(unused)
 ```
+
+> Include an `mtdparts=` definition with at least the `boot` and `env`
+> partitions. Without it `fw_setenv` cannot locate the u-boot environment, so
+> `/etc/fw_env.config` is not created on boot (causing log warnings) and SSH host
+> key persistence fails. Adjust the partition layout to match your flash.
 
 Tokens the OpenIPC init keys on:
 
 - **`root=/dev/nfs`** — selects the NFS-root path in `/init`.
 - **`ro` / `rw`** — read-only (tmpfs overlay) vs read-write (direct). See below.
-- **`ethaddr=`** — stable MAC. Omit it to let a device-tree MAC win; omit both for
-  a random MAC. The u-boot default `00:00:23:34:45:66` is deliberately ignored so
-  it never overrides a real address.
-- **`hostname=`** — optional; otherwise a DHCP- or build-supplied hostname is used.
+- **`ethaddr=`** — stable MAC, used **only when the device tree has no MAC**. A
+  device-tree MAC always wins, even if `ethaddr=` is also present. With neither, a
+  random MAC is used. The u-boot default `00:00:23:34:45:66` is deliberately
+  ignored so it never overrides a real address.
+- **`hostname=`** — the preferred way to name a device, because it works across
+  multiple cameras sharing one read-only rootfs. It is only overridden if the
+  hostname is sent in the DHCP request and the server returns a different name
+  (e.g. a static lease); with dynamic leases the requested name is honoured. For
+  DHCP fleets, set `hostname=` (bootargs) and `bootp_vci` (u-boot env) to the same
+  unique name — that makes per-device tagging and option-serving easy to configure.
 
 Static IP instead of DHCP:
 
@@ -334,6 +346,25 @@ the share and changes persist, but **only one device may use a given export** �
 concurrent writers will corrupt it. First-boot setup runs once, guarded by
 `/etc/firstboot`.
 
+### Per-camera config on the server (fleets)
+
+A convenient layout that keeps a shared base image but allows per-device tweaks,
+using `overlayfs` **on the NFS host**:
+
+- Keep a single read-only base rootfs per platform (the `make_nfsroot` output).
+- For each camera, create a small overlay directory on the server and mount it
+  with `overlayfs`, using the shared base as `lowerdir` and the per-camera
+  directory as `upperdir`.
+- Export and mount each camera RW against its own merged overlay.
+- Per-device changes (SSH keys, `majestic` tweaks, etc.) land in the camera's
+  upper layer; the common base stays pristine and can be replaced wholesale when
+  you deploy a new `make_nfsroot` build.
+
+This cleanly separates device-specific state from the base image. Note it relies
+on `overlayfs` running on the **NFS host** (Linux-specific) — it cannot be done on
+the camera itself, because the kernel's NFS client does not support using an NFS
+mount as an overlay `upperdir`.
+
 ### Networking note
 
 On an NFS root, `eth0` and `lo` are brought up by the kernel's early network
@@ -351,7 +382,7 @@ it. This is intentional and specific to NFS-root builds.
 | Random/wrong MAC each boot | No `ethaddr=` and no device-tree MAC. Add `ethaddr=` to bootargs or provide it via the device tree. |
 | Changes vanish after reboot | You are in `ro` mode — expected (tmpfs overlay). Use `rw` for persistence, single device only. |
 | Corrupted rootfs with several cameras | Multiple devices on one `rw` export. Switch them to `ro` (shared) or give each its own `rw` export. |
-| SSH host-key changes each boot | `fw_setenv` is not writable on your board, so the key can't be persisted. Check u-boot env access. |
+| SSH host-key changes each boot / `fw_env.config` warnings | `fw_setenv` can't reach the u-boot env. Add an `mtdparts=` with `boot`+`env` partitions to the bootargs, and check the env is writable. |
 
 ### See also
 
