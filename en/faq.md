@@ -21,11 +21,11 @@ and then look it up in the [FCC ID database](https://fccid.io/).
 ### Differences between Lite and Ultimate
 
 - Amazon server support
-- QR code recognition support (basic)
+- QR code recognition support (basic), integrated into Lite in Builder firmware
 - iptables support (firewall)
 - ZeroTier tunnel support
-- MQTT (telemetry) support
-- WiFi support (there are no drivers for network cards)
+- MQTT (telemetry) support, integrated into Lite in Builder firmware
+- WiFi support (there are no drivers for network cards), integrated into Lite in Builder firmware
 - lame (mp3) and libwebsockets support
 - experimental WebRTC support (only recent Hisi/Goke)
 
