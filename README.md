@@ -50,6 +50,7 @@ OpenIPC Wiki
 - [Network settings](en/network-settings.md)
 - [Adding a wifi driver to your firmware](en/adding-wifi-driver.md)
 - [Wireless settings](en/wireless-settings.md)
+- [802.11ah HaLow Wi-Fi (Taixin TXW8301)](en/wifi-halow.md)
 - [System features](en/system-features.md)
 - [Majestic streamer](en/majestic-streamer.md)
 - [Majestic example config](en/majestic-config.md)

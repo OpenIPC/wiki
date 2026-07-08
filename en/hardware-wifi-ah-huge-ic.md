@@ -3,6 +3,11 @@
 
 Adding Huge-IC AH WiFi HaLow drivers for Ingenic T31
 ----------------------------------------------------
+> [!NOTE]
+> For a general introduction to Wi-Fi HaLow and the packaged Taixin TXW8301
+> driver (no manual compilation needed), see
+> [802.11ah HaLow Wi-Fi on OpenIPC](wifi-halow.md).
+
 For basic users like myself, advanced users can ignore this document altogether.
 
 This document describes how to add a Huge-IC's AH [WiFi HaLow](https://iot4beginners.com/wi-fi-halow/) drivers to OpenIPC firmware.
