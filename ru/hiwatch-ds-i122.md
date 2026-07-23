@@ -88,10 +88,16 @@ reset
 а переключение происходит только если закрыть сам объектив. Ни в стоковой, ни в РТ-шной прошивке следов **GPIO** датчика обнаружено не было, соответственно, либо это какой-то другой датчик, либо он фейковый.
 Отсюда следует, что переключать режим нужно скриптом. И для ручного и для автоматического переключения нужно настроить **GPIO** ИК-фильтра и подсветки. Это можно сделать либо в консоли, либо в веб-интерфейсе.
 ```
-cli -s .nightMode.enabled true
-cli -s .nightMode.irCutPin1 6
-cli -s .nightMode.irCutPin2 5
-cli -s .nightMode.backlightPin 42
+curl http://localhost/api/v1/config --data-binary @- <<'EOF'
+{
+  "nightMode": {
+    "enabled": true,
+    "irCutPin1": 6,
+    "irCutPin2": 5,
+    "backlightPin": 42
+  }
+}
+EOF
 ```
 
 ### Облако IPEye

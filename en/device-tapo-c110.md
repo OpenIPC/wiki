@@ -10,9 +10,17 @@ IRLed | WhiteLed | RedLed | GreenLed | Speaker | Reset | IRCut
 GPIO14 | GPIO15 | GPIO46 | GPIO47 | GPIO61 | GPIO66 | GPIO78
 
 ```
-cli -s .nightMode.irCutPin1 78
-cli -s .nightMode.backlightPin 14
-cli -s .audio.speakerPin 61
+curl http://localhost/api/v1/config --data-binary @- <<'EOF'
+{
+  "nightMode": {
+    "irCutPin1": 78,
+    "backlightPin": 14
+  },
+  "audio": {
+    "speakerPin": 61
+  }
+}
+EOF
 ```
 
 ---

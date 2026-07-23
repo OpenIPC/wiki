@@ -22,7 +22,7 @@ Adjust the fps value in /etc/majestic.yaml according to your sensor specs.
 Search for "Isp_FrameRate" in your sensor configuration file [/etc/sensors/sc223a_i2c_1080p.ini](https://github.com/OpenIPC/firmware/raw/master/general/package/goke-osdrv-gk7205v200/files/sensor/config/sc223a_i2c_1080p.ini).
 
 ```sh
-cli -s .video0.fps 30
+curl 'http://localhost/api/v1/set?video0.fps=30'
 ```
 
 (Re)start streamer:

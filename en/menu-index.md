@@ -42,7 +42,7 @@ We would be grateful for any feedback and suggestions.
 ### Tools
 
 * [ipctool](https://github.com/openipc/ipctool) - Tool (and library) for checking IP camera hardware.
-* [yaml-cli][yaml-cli] - Tool for change setting in CLI.
+* [yaml-cli][yaml-cli] - Tool for changing settings from the CLI (deprecated for Majestic; use the [HTTP API](majestic-streamer.md#changing-parameters-via-the-http-api) instead).
 * [glutinium](https://github.com/ZigFisher/Glutinium) - Additional OpenWRT packages.
 
 ### Windows software

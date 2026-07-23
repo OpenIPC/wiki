@@ -141,8 +141,14 @@ otherwise eats CPU.
 ### 3a. Enable motion detection in Majestic
 
 ```sh
-cli -s .motionDetect.enabled true
-cli -s .motionDetect.debug true
+curl http://localhost/api/v1/config --data-binary @- <<'EOF'
+{
+  "motionDetect": {
+    "enabled": true,
+    "debug": true
+  }
+}
+EOF
 killall majestic; sleep 3; majestic &
 ```
 

@@ -46,17 +46,25 @@ reset
 Логинимся под пользователем root с паролем 12345 и присутпаем к конфигурированию. Сенсор определяется автоматчески а натсроить нужно
 только переключение режима день/ночь и микрофон.
 ```
-cli -s .nightMode.irCutPin1 79
-cli -s .nightMode.irCutPin2 78
-cli -s .nightMode.backlightPin 52
-cli -s .nightMode.lightSensorPin 80
-cli -s .nightMode.lightSensorInvert true
-cli -s .nightMode.lightMonitor true
-cli -s .nightMode.colorToGray true
-cli -s .audio.enabled true
-cli -s .audio.codec aac
-cli -s .audio.srate 48000
-cli -s .audio.inputChannel 1
+curl http://localhost/api/v1/config --data-binary @- <<'EOF'
+{
+  "nightMode": {
+    "irCutPin1": 79,
+    "irCutPin2": 78,
+    "backlightPin": 52,
+    "lightSensorPin": 80,
+    "lightSensorInvert": true,
+    "lightMonitor": true,
+    "colorToGray": true
+  },
+  "audio": {
+    "enabled": true,
+    "codec": "aac",
+    "srate": 48000,
+    "inputChannel": 1
+  }
+}
+EOF
 reboot
 ```
 После перезапуска можно увидеть в консоли, какой адрес получит камера и зайти по нему в браузере. Если не получилось увидеть, то нужно снова залогиниться и ввести команду ifconfig eth0.

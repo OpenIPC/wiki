@@ -144,16 +144,28 @@ chmod +x /usr/bin/led_blink
 Эти же gpio прописываем в yaml'е:
 
 ```
-cli -s .nightMode.irCutPin1 14
-cli -s .nightMode.irCutPin2 15
+curl http://localhost/api/v1/config --data-binary @- <<'EOF'
+{
+  "nightMode": {
+    "irCutPin1": 14,
+    "irCutPin2": 15
+  }
+}
+EOF
 ```
 
 Включаем запись звука:
 
 ```
-cli -s .audio.enabled true
-cli -s .audio.srate 24000
-cli -s .audio.codec aac
+curl http://localhost/api/v1/config --data-binary @- <<'EOF'
+{
+  "audio": {
+    "enabled": true,
+    "srate": 24000,
+    "codec": "aac"
+  }
+}
+EOF
 ```
 
 Вставьте флэш-карточку в камеру и посмотрите, куда она смонтировалась:
@@ -165,9 +177,14 @@ mount | grep mnt
 Этот путь нужно указать в настройках стримера:
 
 ```
-cli -s .records.enabled true
-cli -s .records.path /mnt/mmcblk0p1/%Y-%m-%d-%H.mp4
-
+curl http://localhost/api/v1/config --data-binary @- <<'EOF'
+{
+  "records": {
+    "enabled": true,
+    "path": "/mnt/mmcblk0p1/%Y-%m-%d-%H.mp4"
+  }
+}
+EOF
 ```
 
 Теперь, после загрузки камеры, старые видео будут перемещаться в новую папку, а последний видеоролик лежать в корне флэшки.

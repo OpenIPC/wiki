@@ -14,7 +14,7 @@ peer = 'connect://127.0.0.1:14550'  # outgoing connection
 
 Update settings:
 ```
-echo cli -s .video0.fps 120 > /dev/udp/localhost/14550
+echo curl http://localhost/api/v1/set?video0.fps=120 > /dev/udp/localhost/14550
 ```
 
 Update drone key:

@@ -10,8 +10,15 @@ Video using OPUS 16000 OPUS samplerate: https://youtu.be/Z0KxSS24j7o
 ### Majestic and general settings
 Audio settings (majestic.yaml):
 ```
-cli -s .audio.enabled true
-cli -s .audio.srate 8000 (8000 pretty crap, 16000 usable and 48000 really good)
+# srate: 8000 pretty crap, 16000 usable, 48000 really good
+curl http://localhost/api/v1/config --data-binary @- <<'EOF'
+{
+  "audio": {
+    "enabled": true,
+    "srate": 8000
+  }
+}
+EOF
 ```
 
 ### Working sound, video & save to file

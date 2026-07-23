@@ -32,12 +32,20 @@ IRLed | IRCut | Speaker | Reset | IRSensor
 GPIO0 | GPIO3 | GPIO14 | GPIO66 | GPIO80
 
 ```
-cli -s .nightMode.irSensorPin 80
-cli -s .nightMode.irCutPin1 3
-cli -s .nightMode.irCutSingleInvert true
-cli -s .nightMode.backlightPin 0
-cli -s .audio.speakerPin 14
-cli -s .audio.speakerPinInvert true
+curl http://localhost/api/v1/config --data-binary @- <<'EOF'
+{
+  "nightMode": {
+    "irSensorPin": 80,
+    "irCutPin1": 3,
+    "irCutSingleInvert": true,
+    "backlightPin": 0
+  },
+  "audio": {
+    "speakerPin": 14,
+    "speakerPinInvert": true
+  }
+}
+EOF
 ```
 
 ---
