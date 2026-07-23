@@ -41,15 +41,33 @@ The long JPEG control parameter did not fit into the example on the site and we 
 
 `/image.jpg?width=640&height=360&qfactor=73&color2gray=1`
 
-### Changing parameters via cli
+### Changing parameters via the HTTP API
 
-At the moment it is possible to change parameters in the configuration file via the CLI utility.
+Parameters can be changed at runtime through Majestic's HTTP API. Setting a
+value applies it to the running streamer and saves it to `/etc/majestic.yaml`
+in a single step — there is no need to reload or restart Majestic afterwards.
 
-This allows parameters to be changed with a single line in pseudo-dynamic mode on some platforms 
-simply by forcing a re-read of the configuration file.
+Set a single parameter (the key is the config path *without* the leading dot):
 ```
-cli -s .video0.codec h264 ; cli -s .video0.fps 10 ; killall -HUP majestic 
+curl 'http://localhost/api/v1/set?video0.fps=10'
 ```
+
+Set several parameters at once by posting a JSON document. Group the keys the
+same way they are nested in the config file:
+```
+curl http://localhost/api/v1/config --data-binary @- <<'EOF'
+{
+  "video0": {
+    "codec": "h264",
+    "fps": 10
+  }
+}
+EOF
+```
+
+> The older `cli` / `yaml-cli` utility (e.g. `cli -s .video0.fps 10 ; killall
+> -HUP majestic`) is deprecated. Prefer the HTTP API above, which applies the
+> change live and persists it for you.
 
 ### Experimental Control Features (not yet described in endpoints)
 
@@ -85,8 +103,14 @@ If the sensor gain is 1024 on a bright day the minThreshold could be set to 2000
 if the sensor gain is 32000 on a dark night the maxThreshold could be set to 10000.
 
 ```
-cli -s .nightMode.minThreshold 10
-cli -s .nightMode.maxThreshold 50
+curl http://localhost/api/v1/config --data-binary @- <<'EOF'
+{
+  "nightMode": {
+    "minThreshold": 10,
+    "maxThreshold": 50
+  }
+}
+EOF
 ```
 
 ### Motion detection
@@ -101,8 +125,14 @@ When a motion event is detected, `majestic` invokes a predefined script `/usr/sb
 Enable motion detection in `majestic` configuration:
 
 ```
-cli -s .motionDetect.enabled true
-cli -s .motionDetect.debug true
+curl http://localhost/api/v1/config --data-binary @- <<'EOF'
+{
+  "motionDetect": {
+    "enabled": true,
+    "debug": true
+  }
+}
+EOF
 ```
 
 Reboot the camera and restart `majestic` in the foreground:
@@ -122,11 +152,21 @@ You should see the script running after motion detection events:
 
 To instantly launch a YouTube broadcast, run these commands in the console:
 ```
-cli -s .video0.codec h264
-cli -s .audio.enabled true
-cli -s .outgoing.enabled true
-cli -s .outgoing.naluSize 1200
-cli -s .outgoing.server rtmp://a.rtmp.youtube.com/live2/you-key-here
+curl http://localhost/api/v1/config --data-binary @- <<'EOF'
+{
+  "video0": {
+    "codec": "h264"
+  },
+  "audio": {
+    "enabled": true
+  },
+  "outgoing": {
+    "enabled": true,
+    "naluSize": 1200,
+    "server": "rtmp://a.rtmp.youtube.com/live2/you-key-here"
+  }
+}
+EOF
 reboot
 ```
 
@@ -171,7 +211,7 @@ outgoing:
 For basic ONVIF to work correctly, you need to enable it and add a user to the system as shown in the example:
 
 ```
-cli -s .onvif.enabled true
+curl 'http://localhost/api/v1/set?onvif.enabled=true'
 adduser viewer -s /bin/false -D -H
 echo viewer:123456 | chpasswd
 ```
