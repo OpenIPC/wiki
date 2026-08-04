@@ -212,16 +212,17 @@ but you will benefit from updating `mem=` to `128M` afterwards.
 The sections above size the memory *region*. This one covers what the video
 pipeline puts **into** it, and the three settings that change how much it takes.
 
-All three settings below are read when the video pipeline starts, so a change
-only takes effect after the streamer restarts:
+All three settings below are read when the video pipeline starts, so setting
+one is only half the job — the pipeline has to be rebuilt before it takes
+effect:
 
 ```bash
-/etc/init.d/S95majestic restart
+killall -HUP majestic
 ```
 
-Setting one through the API persists it and returns `200`, but the running
-pipeline keeps its existing buffers until that restart — so always check the
-result rather than assuming the call was enough.
+The API call itself persists the value and returns `200`, but the running
+pipeline keeps the buffers it already has. Always confirm the result rather
+than assuming the call was enough.
 
 All of the region's usage is visible at runtime:
 
@@ -244,7 +245,7 @@ stalls or never starts.
 
 ```bash
 curl 'http://localhost/api/v1/set?isp.blkCnt=4'
-/etc/init.d/S95majestic restart
+killall -HUP majestic
 ```
 
 Change it one step at a time and confirm the stream still runs.
@@ -267,7 +268,7 @@ high-motion scene at a high bitrate — at the cost of a few megabytes.
 
 ```bash
 curl 'http://localhost/api/v1/set?isp.memMode=normal'
-/etc/init.d/S95majestic restart
+killall -HUP majestic
 ```
 
 #### `isp.yuvCompression` — compressing the frame pool
@@ -278,7 +279,7 @@ size and the difference is returned to the system.
 
 ```bash
 curl 'http://localhost/api/v1/set?isp.yuvCompression=seg'
-/etc/init.d/S95majestic restart
+killall -HUP majestic
 ```
 
 `auto` (the default) leaves compression off, so nothing changes unless you ask
@@ -327,7 +328,7 @@ Overlays, timestamps, motion detection, digital image stabilisation and low
 delay all work normally alongside it.
 
 To confirm it took effect, compare `/proc/media-mem` before and after the
-restart. If the numbers do not move, either the SoC is one of those that
+reload. If the numbers do not move, either the SoC is one of those that
 reserves the full size anyway, or one of the settings above overrode it — the
 log says which.
 ---
