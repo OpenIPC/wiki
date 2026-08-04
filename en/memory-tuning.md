@@ -212,17 +212,10 @@ but you will benefit from updating `mem=` to `128M` afterwards.
 The sections above size the memory *region*. This one covers what the video
 pipeline puts **into** it, and the three settings that change how much it takes.
 
-All three settings below are read when the video pipeline starts, so setting
-one is only half the job — the pipeline has to be rebuilt before it takes
-effect:
-
-```bash
-killall -HUP majestic
-```
-
-The API call itself persists the value and returns `200`, but the running
-pipeline keeps the buffers it already has. Always confirm the result rather
-than assuming the call was enough.
+These are applied like any other setting, through the HTTP API described in
+[Majestic streamer](majestic-streamer.md). They differ from most in one
+respect worth knowing: they decide how the video pipeline's buffers are laid
+out, so changing one rebuilds the pipeline and the stream drops for a moment.
 
 All of the region's usage is visible at runtime:
 
@@ -245,10 +238,13 @@ stalls or never starts.
 
 ```bash
 curl 'http://localhost/api/v1/set?isp.blkCnt=4'
-killall -HUP majestic
 ```
 
-Change it one step at a time and confirm the stream still runs.
+Change it one step at a time and confirm the stream still runs. If you also
+enable compression below, be more conservative here: compression takes some of
+these buffers for itself, so the two together go further than either alone. On
+a 5 MP hi3516ev300, `isp.blkCnt=4` on its own is fine and `isp.blkCnt=4` with
+compression stops snapshots working.
 
 #### `isp.memMode` — what "reduction" actually changes
 
@@ -268,7 +264,6 @@ high-motion scene at a high bitrate — at the cost of a few megabytes.
 
 ```bash
 curl 'http://localhost/api/v1/set?isp.memMode=normal'
-killall -HUP majestic
 ```
 
 #### `isp.yuvCompression` — compressing the frame pool
@@ -279,7 +274,6 @@ size and the difference is returned to the system.
 
 ```bash
 curl 'http://localhost/api/v1/set?isp.yuvCompression=seg'
-killall -HUP majestic
 ```
 
 `auto` (the default) leaves compression off, so nothing changes unless you ask
@@ -327,8 +321,7 @@ let them fail, and logs the reason:
 Overlays, timestamps, motion detection, digital image stabilisation and low
 delay all work normally alongside it.
 
-To confirm it took effect, compare `/proc/media-mem` before and after the
-reload. If the numbers do not move, either the SoC is one of those that
+To confirm it took effect, compare `/proc/media-mem` before and after. If the numbers do not move, either the SoC is one of those that
 reserves the full size anyway, or one of the settings above overrode it — the
 log says which.
 ---
