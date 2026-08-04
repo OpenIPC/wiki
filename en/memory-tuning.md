@@ -229,22 +229,97 @@ Most of `used` is frame buffers: a pool of full-size video frames that the ISP,
 the scaler and the encoder pass between them. A 1080p frame is about 3 MB and a
 5 MP frame about 5.6 MB, so the pool dominates everything else on the board.
 
+The streamer sizes that pool itself, from the pipeline your configuration asks
+for. The first setting below explains what it arrives at and when it is worth
+overriding; the other two change what goes into the pool rather than how much
+of it there is.
+
 #### `isp.blkCnt` — how many frames are pooled
 
-The number of frames reserved for the pipeline. Lowering it frees whole frames
-at a time, which makes it the biggest single lever — and the easiest one to
-overshoot: too few buffers and the encoder starves, producing a stream that
-stalls or never starts.
+The number of frames reserved for the pipeline, and the biggest single lever on
+the board — each one is a whole frame.
+
+**You do not normally need to set it.** The streamer works out how many the
+pipeline holds and reserves that plus one spare. It logs the arithmetic on every
+start:
 
 ```bash
-curl 'http://localhost/api/v1/set?isp.blkCnt=4'
+logread | grep 'VB sizing'
+# VB sizing: 4 blocks for the pipeline (2 of them held by the VI path),
+#            default 5, isp.blkCnt 5 in effect
 ```
 
-Change it one step at a time and confirm the stream still runs. If you also
-enable compression below, be more conservative here: compression takes some of
-these buffers for itself, so the two together go further than either alone. On
-a 5 MP hi3516ev300, `isp.blkCnt=4` on its own is fine and `isp.blkCnt=4` with
-compression stops snapshots working.
+Two things go into that figure. One block per encoding channel — video0, video1
+if enabled, and the JPEG/MJPEG channel. Plus whatever the capture path holds:
+nothing if it feeds the scaler directly, two blocks if it writes raw frames
+through memory, four if it writes processed frames through memory.
+
+Which of those applies is decided by the sensor's width, not by the model of
+SoC, and it is why two cameras with the same chip can need different amounts:
+
+| Camera | Capture path | Blocks it holds | Pipeline total |
+|---|---|---|---|
+| gk7205v200 + 1920x1080 sensor | straight through | 0 | 3 |
+| hi3516ev300 + 2592x1520 sensor | raw through memory | 2 | 4 |
+| hi3516av300 + 3840x2160 sensor | processed through memory | 4 | 6 |
+
+A sensor wider than the capture pipe's limit — 2304 pixels on most parts — has
+to go through memory, and that costs whole frames. It is the single largest
+reason a 5 MP camera needs more than a 1080p one, beyond the frames being bigger.
+
+##### When you would override it
+
+```bash
+curl 'http://localhost/api/v1/set?isp.blkCnt=6'
+```
+
+Raise it if you serve many snapshots at once, or run something that holds frames
+for longer than the pipeline expects. Lower it only if you are short of memory
+and willing to test — and know what running short looks like, because it is not
+obvious:
+
+> **A pool one block short does not stop the video.** The stream encodes
+> perfectly and snapshots return nothing at all. Anyone judging the camera by
+> its RTSP feed will conclude it is healthy.
+
+Nothing fails when you set it too low — the pool is reserved exactly as asked
+and every call succeeds — so the streamer checks the figure against what the
+pipeline needs and says when it does not reach:
+
+```
+VB short: 3 blocks for a pipeline that holds 4 — expect snapshots to go
+unanswered while video keeps running. Raise isp.blkCnt, or lower the
+resolution or the stream count
+```
+
+Setting it too high is handled rather than fatal. If the reservation does not
+fit the region, the streamer falls back to its own computed figure instead of
+taking everything that will fit — the frame pool is the only allocation big
+enough to starve the encoders, and one that swallows the region leaves a camera
+that starts, reports no errors and streams nothing.
+
+##### Checking the headroom you actually have
+
+`/proc/umap/vb` records the low-water mark of every pool, so you can see how
+close the camera came to running out rather than guessing:
+
+```bash
+cat /proc/umap/vb
+# PoolId  ...  BlkCnt  Free  MinFree
+# 0            5       4     1
+```
+
+`MinFree` is the fewest blocks that have been free at any point since boot. `1`
+means the pool never had more than one to spare. `0` means every block was in
+use at once, so anything asking for one more at that moment went without — which
+is survivable, and is what a camera running at exactly its computed figure looks
+like, but leaves nothing for a burst.
+
+Exercise the camera before reading it — take several snapshots, connect a client
+— since a pool that has done nothing yet reports plenty free.
+
+The same file attributes each block to the subsystem holding it, which is how
+the table above was measured.
 
 #### `isp.memMode` — what "reduction" actually changes
 
@@ -268,9 +343,9 @@ curl 'http://localhost/api/v1/set?isp.memMode=normal'
 
 #### `isp.yuvCompression` — compressing the frame pool
 
-A recent majestic update can store the pipeline's frames **compressed** in
-memory. Where the SoC allows it, the pool is then reserved at the compressed
-size and the difference is returned to the system.
+The pipeline's frames can be stored **compressed** in memory. Where the SoC
+allows it, the pool is then reserved at the compressed size and the difference
+is returned to the system.
 
 ```bash
 curl 'http://localhost/api/v1/set?isp.yuvCompression=seg'
@@ -285,11 +360,22 @@ after:
 | hi3516ev300 | 2592x1520 | 53032 KB | 47108 KB | **5.8 MB** |
 | gk7205v200 | 1920x1080 | 21560 KB | 19460 KB | **2.1 MB** |
 
-Roughly 1 MB per pooled frame at 1080p and 2 MB at 5 MP, for two or three
-frames depending on `isp.blkCnt`. Your absolute figures will differ — total
-usage depends on resolution, second stream, snapshots and the rest of the
-configuration — so compare the **difference** across the restart rather than
-matching the numbers above.
+Roughly 1 MB per pooled frame at 1080p and 2 MB at 5 MP. Your absolute figures
+will differ — total usage depends on resolution, second stream, snapshots and
+the rest of the configuration — so compare the **difference** across the restart
+rather than matching the numbers above.
+
+Only the main encoding channel reads compressed frames; everything else in the
+pipeline still needs ordinary ones. The streamer works out how many frames it
+can move to the compressed pool while keeping the rest supplied, so this does
+not need pairing with a lower `isp.blkCnt`. If there is nothing to spare it
+leaves the pool alone and says so, and you get the compression without the
+saving:
+
+```
+VB split skipped: 4 blocks available (3 must stay linear), seg 3927 B vs
+linear 5771 B
+```
 
 **Not every chip benefits.** The saving comes from reserving less, and only
 some SoCs' buffer arithmetic will reserve less for a compressed frame — the
@@ -321,9 +407,11 @@ let them fail, and logs the reason:
 Overlays, timestamps, motion detection, digital image stabilisation and low
 delay all work normally alongside it.
 
-To confirm it took effect, compare `/proc/media-mem` before and after. If the numbers do not move, either the SoC is one of those that
-reserves the full size anyway, or one of the settings above overrode it — the
+To confirm it took effect, compare `/proc/media-mem` before and after. If the
+numbers do not move, the SoC is one of those that reserves the full size anyway,
+the pool had nothing to spare, or one of the settings above overrode it — the
 log says which.
+
 ---
 
 ### Disable subsystems you don't use
