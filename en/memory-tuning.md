@@ -207,6 +207,125 @@ but you will benefit from updating `mem=` to `128M` afterwards.
 
 ---
 
+### Streamer memory settings
+
+The sections above size the memory *region*. This one covers what the video
+pipeline puts **into** it, and the three settings that change how much it takes.
+
+These are applied like any other setting, through the HTTP API described in
+[Majestic streamer](majestic-streamer.md). They differ from most in one
+respect worth knowing: they decide how the video pipeline's buffers are laid
+out, so changing one rebuilds the pipeline and the stream drops for a moment.
+
+All of the region's usage is visible at runtime:
+
+```bash
+cat /proc/media-mem
+# ---MMZ_USE_INFO:
+#  total size=98304KB(96MB),used=53032KB(51MB),remain=45272KB(44MB)
+```
+
+Most of `used` is frame buffers: a pool of full-size video frames that the ISP,
+the scaler and the encoder pass between them. A 1080p frame is about 3 MB and a
+5 MP frame about 5.6 MB, so the pool dominates everything else on the board.
+
+#### `isp.blkCnt` — how many frames are pooled
+
+The number of frames reserved for the pipeline. Lowering it frees whole frames
+at a time, which makes it the biggest single lever — and the easiest one to
+overshoot: too few buffers and the encoder starves, producing a stream that
+stalls or never starts.
+
+```bash
+curl 'http://localhost/api/v1/set?isp.blkCnt=4'
+```
+
+Change it one step at a time and confirm the stream still runs. If you also
+enable compression below, be more conservative here: compression takes some of
+these buffers for itself, so the two together go further than either alone. On
+a 5 MP hi3516ev300, `isp.blkCnt=4` on its own is fine and `isp.blkCnt=4` with
+compression stops snapshots working.
+
+#### `isp.memMode` — what "reduction" actually changes
+
+Defaults to `reduction`. Despite the name it does **not** shrink the frame
+pool. It changes three things on the encoder side:
+
+- **Mini-buffer mode** — the encoder works from smaller internal buffers.
+- **Smaller output buffers** — the compressed-stream buffer is sized at about
+  half of what `normal` reserves (with a floor, so very small streams still get
+  a workable buffer).
+- **Reference-frame sharing** — the encoder reuses one buffer for reconstructed
+  and reference frames instead of holding both.
+
+`normal` reserves more headroom for all three. It is worth trying if you see
+frames being dropped or re-encoded under a bitrate spike — for example with a
+high-motion scene at a high bitrate — at the cost of a few megabytes.
+
+```bash
+curl 'http://localhost/api/v1/set?isp.memMode=normal'
+```
+
+#### `isp.yuvCompression` — compressing the frame pool
+
+A recent majestic update can store the pipeline's frames **compressed** in
+memory. Where the SoC allows it, the pool is then reserved at the compressed
+size and the difference is returned to the system.
+
+```bash
+curl 'http://localhost/api/v1/set?isp.yuvCompression=seg'
+```
+
+`auto` (the default) leaves compression off, so nothing changes unless you ask
+for it. Measured on a 128 MB board, comparing `/proc/media-mem` before and
+after:
+
+| SoC | Sensor | Before | After | Freed |
+|---|---|---|---|---|
+| hi3516ev300 | 2592x1520 | 53032 KB | 47108 KB | **5.8 MB** |
+| gk7205v200 | 1920x1080 | 21560 KB | 19460 KB | **2.1 MB** |
+
+Roughly 1 MB per pooled frame at 1080p and 2 MB at 5 MP, for two or three
+frames depending on `isp.blkCnt`. Your absolute figures will differ — total
+usage depends on resolution, second stream, snapshots and the rest of the
+configuration — so compare the **difference** across the restart rather than
+matching the numbers above.
+
+**Not every chip benefits.** The saving comes from reserving less, and only
+some SoCs' buffer arithmetic will reserve less for a compressed frame — the
+rest reserve the full uncompressed size no matter what, on the basis that
+compression is not guaranteed to achieve any particular ratio. On those parts
+the frames are still compressed (less data crosses the memory bus, which is
+useful in its own right) but `/proc/media-mem` will not move.
+
+| SoC | Frees memory? |
+|---|---|
+| hi3516ev200, hi3516ev300, gk7205v200, gk7205v500 | **Yes** — 2 to 6 MB |
+| hi3516cv500, hi3516av300 | No — reserved size is unchanged |
+| hi3516cv300, hi3519v101 | No — marginally larger |
+| hi3516av100, hi3518ev200, hi3516cv610 | Setting not available |
+
+**It is ignored when it would break something.** Compression is silently
+incompatible with several features, so the streamer turns it off rather than
+let them fail, and logs the reason:
+
+- `image.rotate` (90 or 270) and `image.mirror` — the pipeline cannot rotate or
+  mirror a compressed frame. Note that `image.flip` is fine.
+- `osd.privacyMasks` — privacy masks are **not drawn** on a compressed frame.
+  This one matters: without the safeguard the stream would look correct while
+  publishing the very area you meant to hide.
+- `image.tuning` and the raw `/image.yuv420` and `/image.webp` endpoints — these
+  read raw pixels, and nothing on these SoCs can turn a compressed frame back
+  into pixels.
+
+Overlays, timestamps, motion detection, digital image stabilisation and low
+delay all work normally alongside it.
+
+To confirm it took effect, compare `/proc/media-mem` before and after. If the numbers do not move, either the SoC is one of those that
+reserves the full size anyway, or one of the settings above overrode it — the
+log says which.
+---
+
 ### Disable subsystems you don't use
 
 Kernel modules take about 5 megabytes of RAM (code with dynamic memory for
