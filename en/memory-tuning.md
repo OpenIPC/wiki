@@ -210,7 +210,7 @@ but you will benefit from updating `mem=` to `128M` afterwards.
 ### Streamer memory settings
 
 The sections above size the memory *region*. This one covers what the video
-pipeline puts **into** it, and the three settings that change how much it takes.
+pipeline puts **into** it, and the settings that change how much it takes.
 
 These are applied like any other setting, through the HTTP API described in
 [Majestic streamer](majestic-streamer.md). They differ from most in one
@@ -230,9 +230,21 @@ the scaler and the encoder pass between them. A 1080p frame is about 3 MB and a
 5 MP frame about 5.6 MB, so the pool dominates everything else on the board.
 
 The streamer sizes that pool itself, from the pipeline your configuration asks
-for. The first setting below explains what it arrives at and when it is worth
-overriding; the other two change what goes into the pool rather than how much
-of it there is.
+for — one frame per encoding channel, plus what the capture path holds. So the
+largest savings come from telling it about channels you do not want, rather than
+from tuning the pool directly:
+
+| Setting | What it does | Typical saving |
+|---|---|---|
+| [`jpeg.enabled: false`](#jpegenabled--snapshots-and-the-mjpeg-stream) | no snapshots at all, and no frame reserved for them | **one frame** |
+| [`video1.enabled: false`](#one-frame-per-channel) | drops the second stream and its frame | **one frame** |
+| [`isp.yuvCompression: seg`](#ispyuvcompression--compressing-the-frame-pool) | stores the pooled frames compressed | 2–6 MB, some SoCs |
+| [`jpeg.tuned`](#jpegtuned--parameterised-snapshots) | caps parameterised snapshots to a size you choose | avoids a full frame |
+| [`isp.blkCnt`](#ispblkcnt--how-many-frames-are-pooled) | overrides the frame count outright | one frame per step |
+| [`isp.memMode`](#ispmemmode--what-reduction-actually-changes) | encoder-side buffers, not the pool | a few MB |
+
+A frame is about 3 MB at 1080p, 5.6 MB at 5 MP and 11.9 MB at 4K, so on a small
+board one of these is worth more than all the tuning below it.
 
 #### `isp.blkCnt` — how many frames are pooled
 
@@ -249,10 +261,19 @@ logread | grep 'VB sizing'
 #            default 5, isp.blkCnt 5 in effect
 ```
 
+##### One frame per channel
+
 Two things go into that figure. One block per encoding channel — video0, video1
-if enabled, and the JPEG/MJPEG channel. Plus whatever the capture path holds:
-nothing if it feeds the scaler directly, two blocks if it writes raw frames
-through memory, four if it writes processed frames through memory.
+if enabled, and the JPEG/MJPEG channel if `jpeg.enabled` is on. Plus whatever
+the capture path holds: nothing if it feeds the scaler directly, two blocks if
+it writes raw frames through memory, four if it writes processed frames through
+memory.
+
+Every channel costs a whole frame whether or not it is producing one at the
+moment, because the pool is fixed when the streamer starts — a channel raised on
+demand still needs its block sitting there waiting. That is why switching a
+channel off is worth more than any amount of tuning: `video1.enabled: false` and
+`jpeg.enabled: false` each return a full frame.
 
 Which of those applies is decided by the sensor's width, not by the model of
 SoC, and it is why two cameras with the same chip can need different amounts:
@@ -320,6 +341,82 @@ Exercise the camera before reading it — take several snapshots, connect a clie
 
 The same file attributes each block to the subsystem holding it, which is how
 the table above was measured.
+
+#### `jpeg.enabled` — snapshots and the MJPEG stream
+
+Controls whether the camera serves JPEG at all, and it is the single biggest
+saving available on a small board: with it off, no frame is reserved for the
+snapshot channel.
+
+```bash
+curl 'http://localhost/api/v1/set?jpeg.enabled=false'
+```
+
+Off means off, so be sure nothing you use needs it:
+
+- `/image.jpg` answers **503**
+- the `/mjpeg` HTTP stream answers "MJPEG is unavailable"
+- the RTSP JPEG track is left out of the stream description
+
+That includes **ONVIF snapshot URIs and the web UI preview**, which both fetch
+`/image.jpg`. If a home-automation integration pulls stills from this camera,
+leave it on. Video over RTSP is unaffected either way.
+
+Measured, on cameras with one h264 stream and no snapshot ever taken:
+
+| SoC | Sensor | Pool with JPEG on | Off | Freed |
+|---|---|---|---|---|
+| gk7205v200 | 1920x1080 | 12156 KB | 9116 KB | **3.0 MB** |
+| hi3516ev300 | 2592x1520 | 28860 KB | 23088 KB | **5.6 MB** |
+
+On a gk7205v200, whose whole media region is 24 MB, that is an eighth of it.
+
+The startup log states both halves, so the saving is never a mystery and neither
+are the refusals:
+
+```
+JPEG off: no block reserved for it, and /image.jpg and the MJPEG stream will
+be refused. Set jpeg.enabled to true to restore them
+```
+
+#### `jpeg.tuned` — parameterised snapshots
+
+`/image.jpg` accepts `width`, `height`, `qfactor`, `gray` and `crop`, which are
+served by a **second** snapshot encoder on its own geometry. That encoder needs
+frames of its own, so it is off by default:
+
+```bash
+# largest parameterised snapshot to serve; off (the default) refuses them
+curl 'http://localhost/api/v1/set?jpeg.tuned=640x360'
+```
+
+The value is a size rather than a switch because the memory follows it. Frames
+are reserved for the size you name, not for the sensor — at 5 MP a full frame is
+5.6 MB, where three 640x360 frames come to 1013 KB:
+
+| `jpeg.tuned` | Reserved on a 5 MP camera |
+|---|---|
+| `off` (default) | nothing; requests refused **503** |
+| `640x360` | ~1.0 MB |
+| `1280x720` | ~4.0 MB |
+| `1920x1080` | ~8.9 MB — more than a full frame; prefer a crop |
+
+Pick the largest picture you actually fetch. Anything above the size is refused
+**400** naming the cap, rather than quietly served from the pipeline's own
+frames:
+
+```
+snapshot is larger than jpeg.tuned allows; ask for a smaller size or raise
+jpeg.tuned and restart
+```
+
+A request at or above the sensor's own resolution is always refused, whatever
+the cap: the full frame is already going to video0 and the MJPEG channel, and a
+third copy of it is never produced. Ask for a smaller size, or use `crop` to cut
+a region at 1:1.
+
+Plain `/image.jpg` with no parameters does not need this setting — it is served
+by the MJPEG channel that `jpeg.enabled` already pays for.
 
 #### `isp.memMode` — what "reduction" actually changes
 
