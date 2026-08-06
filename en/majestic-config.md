@@ -44,6 +44,7 @@ video0:
   rcMode: vbr
   gopSize: 1.0
   #gopMode: normal
+  #svct: off
   #crop: 0x0x960x540
   #sliceUnits: 4
   #minQp: 12
@@ -152,5 +153,28 @@ cloud:
   # https://www.w3.org/TR/webrtc/#rtciceserver-dictionary with optional
   # '?transport=udp' or '?transport=tcp'
   #iceServers: stun:stun.kinesisvideo.eu-north-1.amazonaws.com:443
+
+# Encoder reference structure and the rest of the fpv block, main stream only.
+# See "Majestic encoder tuning" for what these do and when they are worth it.
+# Every integer here is skipped when negative, which is what an absent key
+# reads back as, so each one is individually opt-in.
+#fpv:
+  # SigmaStar only, and it also disables userspace 3A
+  #enabled: false
+  # Every P frame references the keyframe: one lost frame costs one frame.
+  # Wants a SHORT gopSize (~1.0), not a long one.
+  #refEnhance: 0
+  #refPred: false
+  # Cyclic intra refresh, SigmaStar only
+  #intraLine: 8
+  #intraQp: false
+  # 3DNR strength, SigmaStar only
+  #noiseLevel: 2
+  # Up to 8 regions with a QP delta each (-30..30), SigmaStar only
+  #roiRect:
+  #  - 0x0x640x360
+  #roiQp: "-5"
+  # ISP IQ API index whose bypass is toggled, diagnostic, SigmaStar only
+  #bypass: 0
 
 ```
