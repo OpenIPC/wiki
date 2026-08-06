@@ -210,7 +210,7 @@ but you will benefit from updating `mem=` to `128M` afterwards.
 ### Streamer memory settings
 
 The sections above size the memory *region*. This one covers what the video
-pipeline puts **into** it, and the three settings that change how much it takes.
+pipeline puts **into** it, and the settings that change how much it takes.
 
 These are applied like any other setting, through the HTTP API described in
 [Majestic streamer](majestic-streamer.md). They differ from most in one
@@ -229,22 +229,194 @@ Most of `used` is frame buffers: a pool of full-size video frames that the ISP,
 the scaler and the encoder pass between them. A 1080p frame is about 3 MB and a
 5 MP frame about 5.6 MB, so the pool dominates everything else on the board.
 
+The streamer sizes that pool itself, from the pipeline your configuration asks
+for — one frame per encoding channel, plus what the capture path holds. So the
+largest savings come from telling it about channels you do not want, rather than
+from tuning the pool directly:
+
+| Setting | What it does | Typical saving |
+|---|---|---|
+| [`jpeg.enabled: false`](#jpegenabled--snapshots-and-the-mjpeg-stream) | no snapshots at all, and no frame reserved for them | **one frame** |
+| [`video1.enabled: false`](#one-frame-per-channel) | drops the second stream and its frame | **one frame** |
+| [`isp.yuvCompression: seg`](#ispyuvcompression--compressing-the-frame-pool) | stores the pooled frames compressed | 2–6 MB, some SoCs |
+| [`jpeg.tuned`](#jpegtuned--parameterised-snapshots) | caps parameterised snapshots to a size you choose | avoids a full frame |
+| [`isp.blkCnt`](#ispblkcnt--how-many-frames-are-pooled) | overrides the frame count outright | one frame per step |
+| [`isp.memMode`](#ispmemmode--what-reduction-actually-changes) | encoder-side buffers, not the pool | a few MB |
+
+A frame is about 3 MB at 1080p, 5.6 MB at 5 MP and 11.9 MB at 4K, so on a small
+board one of these is worth more than all the tuning below it.
+
 #### `isp.blkCnt` — how many frames are pooled
 
-The number of frames reserved for the pipeline. Lowering it frees whole frames
-at a time, which makes it the biggest single lever — and the easiest one to
-overshoot: too few buffers and the encoder starves, producing a stream that
-stalls or never starts.
+The number of frames reserved for the pipeline, and the biggest single lever on
+the board — each one is a whole frame.
+
+**You do not normally need to set it.** The streamer works out how many the
+pipeline holds and reserves that plus one spare. It logs the arithmetic on every
+start:
 
 ```bash
-curl 'http://localhost/api/v1/set?isp.blkCnt=4'
+logread | grep 'VB sizing'
+# VB sizing: 4 blocks for the pipeline (2 of them held by the VI path),
+#            default 5, isp.blkCnt 5 in effect
 ```
 
-Change it one step at a time and confirm the stream still runs. If you also
-enable compression below, be more conservative here: compression takes some of
-these buffers for itself, so the two together go further than either alone. On
-a 5 MP hi3516ev300, `isp.blkCnt=4` on its own is fine and `isp.blkCnt=4` with
-compression stops snapshots working.
+##### One frame per channel
+
+Two things go into that figure. One block per encoding channel — video0, video1
+if enabled, and the JPEG/MJPEG channel if `jpeg.enabled` is on. Plus whatever
+the capture path holds: nothing if it feeds the scaler directly, two blocks if
+it writes raw frames through memory, four if it writes processed frames through
+memory.
+
+Every channel costs a whole frame whether or not it is producing one at the
+moment, because the pool is fixed when the streamer starts — a channel raised on
+demand still needs its block sitting there waiting. That is why switching a
+channel off is worth more than any amount of tuning: `video1.enabled: false` and
+`jpeg.enabled: false` each return a full frame.
+
+Which of those applies is decided by the sensor's width, not by the model of
+SoC, and it is why two cameras with the same chip can need different amounts:
+
+| Camera | Capture path | Blocks it holds | Pipeline total |
+|---|---|---|---|
+| gk7205v200 + 1920x1080 sensor | straight through | 0 | 3 |
+| hi3516ev300 + 2592x1520 sensor | raw through memory | 2 | 4 |
+| hi3516av300 + 3840x2160 sensor | processed through memory | 4 | 6 |
+
+A sensor wider than the capture pipe's limit — 2304 pixels on most parts — has
+to go through memory, and that costs whole frames. It is the single largest
+reason a 5 MP camera needs more than a 1080p one, beyond the frames being bigger.
+
+##### When you would override it
+
+```bash
+curl 'http://localhost/api/v1/set?isp.blkCnt=6'
+```
+
+Raise it if you serve many snapshots at once, or run something that holds frames
+for longer than the pipeline expects. Lower it only if you are short of memory
+and willing to test — and know what running short looks like, because it is not
+obvious:
+
+> **A pool one block short does not stop the video.** The stream encodes
+> perfectly and snapshots return nothing at all. Anyone judging the camera by
+> its RTSP feed will conclude it is healthy.
+
+Nothing fails when you set it too low — the pool is reserved exactly as asked
+and every call succeeds — so the streamer checks the figure against what the
+pipeline needs and says when it does not reach:
+
+```
+VB short: 3 blocks for a pipeline that holds 4 — expect snapshots to go
+unanswered while video keeps running. Raise isp.blkCnt, or lower the
+resolution or the stream count
+```
+
+Setting it too high is handled rather than fatal. If the reservation does not
+fit the region, the streamer falls back to its own computed figure instead of
+taking everything that will fit — the frame pool is the only allocation big
+enough to starve the encoders, and one that swallows the region leaves a camera
+that starts, reports no errors and streams nothing.
+
+##### Checking the headroom you actually have
+
+`/proc/umap/vb` records the low-water mark of every pool, so you can see how
+close the camera came to running out rather than guessing:
+
+```bash
+cat /proc/umap/vb
+# PoolId  ...  BlkCnt  Free  MinFree
+# 0            5       4     1
+```
+
+`MinFree` is the fewest blocks that have been free at any point since boot. `1`
+means the pool never had more than one to spare. `0` means every block was in
+use at once, so anything asking for one more at that moment went without — which
+is survivable, and is what a camera running at exactly its computed figure looks
+like, but leaves nothing for a burst.
+
+Exercise the camera before reading it — take several snapshots, connect a client
+— since a pool that has done nothing yet reports plenty free.
+
+The same file attributes each block to the subsystem holding it, which is how
+the table above was measured.
+
+#### `jpeg.enabled` — snapshots and the MJPEG stream
+
+Controls whether the camera serves JPEG at all, and it is the single biggest
+saving available on a small board: with it off, no frame is reserved for the
+snapshot channel.
+
+```bash
+curl 'http://localhost/api/v1/set?jpeg.enabled=false'
+```
+
+Off means off, so be sure nothing you use needs it:
+
+- `/image.jpg` answers **503**
+- the `/mjpeg` HTTP stream answers "MJPEG is unavailable"
+- the RTSP JPEG track is left out of the stream description
+
+That includes **ONVIF snapshot URIs and the web UI preview**, which both fetch
+`/image.jpg`. If a home-automation integration pulls stills from this camera,
+leave it on. Video over RTSP is unaffected either way.
+
+Measured, on cameras with one h264 stream and no snapshot ever taken:
+
+| SoC | Sensor | Pool with JPEG on | Off | Freed |
+|---|---|---|---|---|
+| gk7205v200 | 1920x1080 | 12156 KB | 9116 KB | **3.0 MB** |
+| hi3516ev300 | 2592x1520 | 28860 KB | 23088 KB | **5.6 MB** |
+
+On a gk7205v200, whose whole media region is 24 MB, that is an eighth of it.
+
+The startup log states both halves, so the saving is never a mystery and neither
+are the refusals:
+
+```
+JPEG off: no block reserved for it, and /image.jpg and the MJPEG stream will
+be refused. Set jpeg.enabled to true to restore them
+```
+
+#### `jpeg.tuned` — parameterised snapshots
+
+`/image.jpg` accepts `width`, `height`, `qfactor`, `gray` and `crop`, which are
+served by a **second** snapshot encoder on its own geometry. That encoder needs
+frames of its own, so it is off by default:
+
+```bash
+# largest parameterised snapshot to serve; off (the default) refuses them
+curl 'http://localhost/api/v1/set?jpeg.tuned=640x360'
+```
+
+The value is a size rather than a switch because the memory follows it. Frames
+are reserved for the size you name, not for the sensor — at 5 MP a full frame is
+5.6 MB, where three 640x360 frames come to 1013 KB:
+
+| `jpeg.tuned` | Reserved on a 5 MP camera |
+|---|---|
+| `off` (default) | nothing; requests refused **503** |
+| `640x360` | ~1.0 MB |
+| `1280x720` | ~4.0 MB |
+| `1920x1080` | ~8.9 MB — more than a full frame; prefer a crop |
+
+Pick the largest picture you actually fetch. Anything above the size is refused
+**400** naming the cap, rather than quietly served from the pipeline's own
+frames:
+
+```
+snapshot is larger than jpeg.tuned allows; ask for a smaller size or raise
+jpeg.tuned and restart
+```
+
+A request at or above the sensor's own resolution is always refused, whatever
+the cap: the full frame is already going to video0 and the MJPEG channel, and a
+third copy of it is never produced. Ask for a smaller size, or use `crop` to cut
+a region at 1:1.
+
+Plain `/image.jpg` with no parameters does not need this setting — it is served
+by the MJPEG channel that `jpeg.enabled` already pays for.
 
 #### `isp.memMode` — what "reduction" actually changes
 
@@ -268,9 +440,9 @@ curl 'http://localhost/api/v1/set?isp.memMode=normal'
 
 #### `isp.yuvCompression` — compressing the frame pool
 
-A recent majestic update can store the pipeline's frames **compressed** in
-memory. Where the SoC allows it, the pool is then reserved at the compressed
-size and the difference is returned to the system.
+The pipeline's frames can be stored **compressed** in memory. Where the SoC
+allows it, the pool is then reserved at the compressed size and the difference
+is returned to the system.
 
 ```bash
 curl 'http://localhost/api/v1/set?isp.yuvCompression=seg'
@@ -285,11 +457,22 @@ after:
 | hi3516ev300 | 2592x1520 | 53032 KB | 47108 KB | **5.8 MB** |
 | gk7205v200 | 1920x1080 | 21560 KB | 19460 KB | **2.1 MB** |
 
-Roughly 1 MB per pooled frame at 1080p and 2 MB at 5 MP, for two or three
-frames depending on `isp.blkCnt`. Your absolute figures will differ — total
-usage depends on resolution, second stream, snapshots and the rest of the
-configuration — so compare the **difference** across the restart rather than
-matching the numbers above.
+Roughly 1 MB per pooled frame at 1080p and 2 MB at 5 MP. Your absolute figures
+will differ — total usage depends on resolution, second stream, snapshots and
+the rest of the configuration — so compare the **difference** across the restart
+rather than matching the numbers above.
+
+Only the main encoding channel reads compressed frames; everything else in the
+pipeline still needs ordinary ones. The streamer works out how many frames it
+can move to the compressed pool while keeping the rest supplied, so this does
+not need pairing with a lower `isp.blkCnt`. If there is nothing to spare it
+leaves the pool alone and says so, and you get the compression without the
+saving:
+
+```
+VB split skipped: 4 blocks available (3 must stay linear), seg 3927 B vs
+linear 5771 B
+```
 
 **Not every chip benefits.** The saving comes from reserving less, and only
 some SoCs' buffer arithmetic will reserve less for a compressed frame — the
@@ -321,9 +504,11 @@ let them fail, and logs the reason:
 Overlays, timestamps, motion detection, digital image stabilisation and low
 delay all work normally alongside it.
 
-To confirm it took effect, compare `/proc/media-mem` before and after. If the numbers do not move, either the SoC is one of those that
-reserves the full size anyway, or one of the settings above overrode it — the
+To confirm it took effect, compare `/proc/media-mem` before and after. If the
+numbers do not move, the SoC is one of those that reserves the full size anyway,
+the pool had nothing to spare, or one of the settings above overrode it — the
 log says which.
+
 ---
 
 ### Disable subsystems you don't use
