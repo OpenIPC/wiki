@@ -72,6 +72,21 @@ BR2_PACKAGE_SSV635X_OPENIPC
 BR2_PACKAGE_MT7601U_OPENIPC
 ```
 
+Note: for MT7601U there are two different drivers. The mainline kernel driver
+(`mt7601u.ko`, enabled via the kernel config) and the vendor-lineage MediaTek
+DPO STA driver (`mt7601sta.ko`, built by `BR2_PACKAGE_MT7601U_OPENIPC`, with
+cfg80211 support so the interface is a plain `wlan0` and wpa_supplicant drives
+it as usual). They are not equivalent: on a Hi3518EV200 camera with a USB
+`148f:7601` dongle, measured on the same access point and channel, the mainline
+driver managed only 0.4–1.0 Mbps transmit (with repeated `mt7601u_mcu_wait_resp
+retrying` in dmesg and gateway RTT spikes to 800+ ms), while `mt7601sta` reached
+15–17 Mbps transmit with clean 9.7 ms RTT — the difference between an RTSP
+stream that lags by seconds and one that keeps its send queue empty. If your
+video stalls on this chip while download speed looks fine, measure the upload
+direction and try the STA driver. Do not swap the two drivers on a live system
+(rmmod/modprobe churn can wedge the dongle MCU until a power cycle) — pick one
+at boot.
+
 #### SigmaStar:
 ```
 BR2_PACKAGE_SSW101B
