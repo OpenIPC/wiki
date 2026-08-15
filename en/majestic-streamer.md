@@ -182,6 +182,29 @@ Examples of other addresses for different services:
 
 Important ! Many RTMP services will only work if audio streaming is enabled, so be careful.
 
+The outgoing stream sends an audio codec the RTMP container supports, converting
+from `audio.codec` when needed, so `audio.codec` can stay on Opus for RTSP while
+the broadcast still carries audio a service accepts. To pin a specific codec set
+`outgoing.audioCodec` (`aac`, `alaw`, `ulaw`, `pcm`); leave it empty to follow
+`audio.codec`. For A-law and mu-law the RTMP container is fixed at 8 kHz, so set
+`audio.srate: 8000` or the audio plays back at the wrong speed.
+
+If the camera has no microphone, `outgoing.audioSource` supplies a track anyway:
+
+```
+outgoing:
+  audioSource: auto     # auto | mic | silence | file | none
+  audioFile: ""         # path to an ADTS .aac file to loop
+```
+
+`auto` (the default) uses the microphone when there is one and otherwise sends a
+built-in silent track to services that require audio — including YouTube — so a
+mic-less camera streams there without enabling audio at all, and nothing changes
+for other destinations. `silence` forces the silent track everywhere; `file`
+loops audio you supply instead (create one with
+`ffmpeg -i music.mp3 -c:a aac -f adts loop.aac`; keep it under a megabyte, it is
+held in RAM); `none` sends no audio.
+
 We ask that you add information about other popular services here, thank you.
 
 RTMP reconnection and timeout logic works as follows:
@@ -195,16 +218,32 @@ RTMP reconnection and timeout logic works as follows:
 
 ### Other outgoing options
 
+A single destination is set with `server`:
+
 ```
 outgoing:
   enabled: true
-  server: udp://192.168.1.10:5600
   naluSize: 1200
-  - udp://IP-1:port
-  - udp://IP-2:port
-  - unix:/tmp/rtpstream.sock
-  - rtmps://dc4-1.rtmp.t.me/s/mykey
+  server: udp://192.168.1.10:5600
 ```
+
+For several destinations, list them under `servers` (this key is only read from
+`/etc/majestic.yaml`, it is not exposed in the WebUI). Every entry is started as
+its own connection: `udp://` and `unix:` endpoints are sent as RTP, `rtmp://`
+and `rtmps://` as RTMP.
+
+```
+outgoing:
+  enabled: true
+  naluSize: 1200
+  servers:
+    - udp://IP-1:port
+    - udp://IP-2:port
+    - unix:/tmp/rtpstream.sock
+    - rtmps://dc4-1.rtmp.t.me/s/mykey
+```
+
+If both `server` and `servers` are present, they are combined.
 
 ### ONVIF
 
