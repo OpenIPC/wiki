@@ -72,7 +72,7 @@ osd:
 
 audio:
   enabled: false
-  volume: 30
+  volume: 30                                              # 0 mutes the input
   srate: 8000
   codec: opus
   outputEnabled: false
@@ -116,9 +116,15 @@ outgoing:
   enabled: false
   #server: udp://192.168.1.10:5600
   #naluSize: 1200
-  #- udp://IP:port                                        # Multiple data sending is configured only in the /etc/majestic.yaml file and is not available for control from the WebUI
-  #- unix:/tmp/rtpstream.sock
-  #- rtmps://dc4-1.rtmp.t.me/s/mykey
+  #audioCodec: ""                                         # RTMP audio codec (aac|alaw|ulaw|pcm); empty follows audio.codec
+  #audioSource: auto                                      # auto|mic|silence|file|none; silence/file feed a track when there is no microphone
+  #audioFile: ""                                          # ADTS .aac looped when audioSource is file
+  # Several destinations (majestic.yaml only, not available in the WebUI). Each
+  # entry is its own connection: udp/unix as RTP, rtmp/rtmps as RTMP.
+  #servers:
+  #  - udp://IP:port
+  #  - unix:/tmp/rtpstream.sock
+  #  - rtmps://dc4-1.rtmp.t.me/s/mykey
 
 watchdog:
   enabled: true
@@ -132,10 +138,6 @@ onvif:
 
 ipeye:
   enabled: false
-
-youtube:                                                  # This function only works with the external daemon plugin for Majestic
-  enabled: false
-  #key: xxxx-xxxx-xxxx-xxxx-xxxx
 
 netip:
   enabled: false
