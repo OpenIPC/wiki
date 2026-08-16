@@ -292,18 +292,110 @@ ffplay -ar 48000 -ac 1 -f mulaw http://192.168.1.10/audio.ulaw
 ffplay -ar 8000 -ac 1 -f alaw http://192.168.1.10/audio.g711a
 ```
 
+### Enabling the speaker
+
+Audio output needs both switches, not just the second one — the speaker is
+brought up as part of the audio block, so `enabled: false` leaves it off no
+matter what `outputEnabled` says:
+
+```
+audio:
+  enabled: true
+  outputEnabled: true
+  outputVolume: 80
+  srate: 8000
+```
+
+Many boards gate the amplifier behind a GPIO. Set `audio.speakerPin` (and
+`audio.speakerPinInvert` if it is active-low), otherwise the logs look clean and
+nothing comes out.
+
+Speaker output is available on HiSilicon, Ingenic, Sigmastar, Allwinner,
+Rockchip and Xiongmai. `audio.srate` is shared by input and output; there is no
+separate output rate.
+
 ### How to create an audio file to play on camera's speaker over network
 
-Using [sox][sox] program convert any source audio file to [PCM][pcm] 8kbps audio:
+Using [sox][sox] program convert any source audio file to raw [PCM][pcm]:
 ```
 sox speech.mp3 -t raw -r 8000 -e signed -b 16 -c 1 test.pcm
 ```
+
+Or with [ffmpeg][ffmpeg]:
+```
+ffmpeg -i speech.mp3 -ac 1 -ar 8000 -f s16le -acodec pcm_s16le test.pcm
+```
+
+`/play_audio` has no decoder behind it — the bytes you upload are pushed
+straight at the speaker as raw signed 16-bit little-endian mono PCM. Uploading a
+compressed file (AAC, MP3, Opus) plays it as noise, and a `.wav` clicks at the
+start because its header is played as samples. `audio.codec` applies only to the
+audio the camera sends out and has no effect here.
+
+The sample rate must match `audio.srate` exactly, or playback comes out at the
+wrong pitch and speed.
 
 ### How to play audio file on camera's speaker over network
 
 ```
 curl -u root:12345 --data-binary @test.pcm http://192.168.1.10/play_audio
 ```
+
+This is a one-shot clip player: a new upload cancels the clip currently playing,
+and the clip is capped at roughly 2 MB on most SoCs (about two minutes at
+8 kHz). For a live conversation use two-way audio below.
+
+### Two-way audio (talkback)
+
+#### RTSP back-channel, ONVIF Profile T
+
+The interoperable option, understood by ONVIF NVRs, Blue Iris, go2rtc and
+Frigate. Enable the speaker as above, then:
+
+```
+rtsp:
+  backchannel: true
+audio:
+  jitterBufferMs: 80     # 0 = passthrough, fine on LAN; 80 helps over Wi-Fi/WAN
+```
+
+Restart Majestic. To confirm the camera advertises it:
+
+```
+printf 'DESCRIBE rtsp://CAM/stream=0 RTSP/1.0\r\nCSeq: 1\r\nAccept: application/sdp\r\nRequire: www.onvif.org/ver20/backchannel\r\n\r\n' | nc CAM 554
+```
+
+The SDP gains a second media section:
+
+```
+m=audio 0 RTP/AVP 0
+a=rtpmap:0 PCMU/8000
+a=sendonly
+a=control:audio-backchannel
+```
+
+The codec is [G.711][g711] mu-law at 8 kHz, as Profile T requires — the client
+transcodes. Transport is RTSP-interleaved over TCP only; a UDP `SETUP` is
+answered with 461.
+
+#### WebRTC in the browser
+
+Ultimate builds serve a page at `http://192.168.1.10/webrtc` with a microphone
+button that sends your browser's microphone to the camera speaker. Browsers only
+grant microphone access in a secure context, so over plain HTTP the button reads
+"needs HTTPS" — put the camera behind TLS or a TLS-terminating reverse proxy.
+
+#### SIP
+
+Lite and Ultimate builds include a SIP client. Point the `sip.*` settings at a
+PBX and the camera can place a call carrying H.264 video and G.711 audio in both
+directions, optionally triggered by a GPIO button — the usual doorbell setup.
+
+#### Caveat
+
+There is no acoustic echo cancellation. Unless speaker and microphone are
+physically isolated, the far end hears itself on a full-duplex call. Half-duplex
+push-to-talk is unaffected.
 
 [aac]: https://en.wikipedia.org/wiki/Advanced_Audio_Coding
 [alaw]: https://en.wikipedia.org/wiki/A-law_algorithm
