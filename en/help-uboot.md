@@ -329,6 +329,100 @@ flash a new bootloader you have to weigh up all the risks and benefits. In most
 cases the original bootloader plus new kernel and new operating system should
 work just fine. But there are exceptions.
 
+Work through the options below in order. The first two — the known bootloader
+password, and side-loading an unlocked bootloader over UART — write nothing to
+flash, so neither of them can brick the camera. Try those before you reach for
+tweezers or a programmer.
+
+#### Known bootloader passwords
+
+Before anything else, try this password at the prompt:
+
+```
+#Ux6@9V&4_Rz
+```
+
+It is an OEM-level default baked into a bootloader codebase shared by several
+vendors, and it has been confirmed working on Goke GK7205V300, Goke GK7205V500
+and Novatek NT98566 boards. Two older strings occasionally seen on
+Xiongmai-derived firmware are `HI2105CHIP` and `ubootpwd`, though they are much
+less likely to work on recent builds.
+
+If none of them are accepted, move on to side-loading — it does not care what
+password the vendor set.
+
+#### Side-loading an unlocked bootloader.
+
+This is the method to reach for when the console is password-locked, when the
+autoboot delay is zero and there is no window to interrupt, or when shorting
+pins refuses to cooperate. It works in all three cases, and it is safe.
+
+Every HiSilicon and Goke SoC carries a mask-ROM bootrom that listens on UART0
+for a serial download handshake at power-on, *before* the bootloader gets
+control. That bootrom is in silicon: a vendor can lock their U-Boot however they
+like, but they cannot disable or password-protect the code that runs ahead of
+it. So you upload an unlocked OpenIPC bootloader straight into RAM over the same
+UART you are already connected to, and you get a working console on a camera
+whose flash still holds the locked vendor bootloader. Nothing is written to
+flash, so there is nothing to brick.
+
+Our tool for this is [defib][defib]. It runs in the browser with nothing to
+install:
+
+**<https://openipc.github.io/defib/>**
+
+It needs the WebSerial API, so use Chrome, Edge or Opera — Firefox and Safari
+will not work.
+
+> __Not every SoC works in the browser yet.__ Chips that need a "frame-blast"
+> handshake are only supported by the command-line tool, described further
+> down. That includes `hi3516ev300`, `hi3516ev200`, `hi3516cv300`,
+> `hi3516cv500`, `hi3516av200` and `hi3518ev200`. Parts confirmed working in
+> the browser include `gk7202v300`, `gk7205v200`, `gk7205v300`, `hi3518ev300`,
+> `hi3516cv200` and `hi3516dv300`. If your chip is in the first list, skip to
+> the command line — the browser will let you select it but the upload cannot
+> complete. See [defib#121][defib121].
+
+1. **Chip Model** — pick your SoC. If you are unsure, read it off the
+   bootloader's own banner, e.g. `U-Boot 2016.11 ... gk7205v300`.
+2. **U-Boot image** — *Download from OpenIPC*. The binary is fetched from our
+   releases and verified against the published SHA-256.
+3. **Serial Port** — select your USB-UART adapter.
+4. Tick **Send Ctrl-C after upload (enter U-Boot console)**.
+5. **Start Recovery**. When it prints
+   `Waiting for bootrom... power-cycle the device now!`, cut power to the camera
+   and reapply it.
+
+Start the tool *first*, then power-cycle. It sends the handshake continuously,
+which is how it catches the bootrom window on fast-booting boards.
+
+Once you are at the prompt, press **Dump Flash** to save a full backup of the
+stock firmware to your computer before you erase anything. Then continue with
+the regular TFTP installation for your SoC.
+
+The command-line tool supports every SoC — including the frame-blast parts the
+browser cannot drive — and adds flash restore, a high-speed bare-metal flash
+agent and full unattended installs:
+
+```shell
+uv tool install defib     # or: pipx install defib
+defib list-chips
+defib burn -c hi3516ev300 -p /dev/ttyUSB0 -t
+```
+
+Start it before you power-cycle the camera, exactly as in the browser. The `-t`
+flag drops you into the U-Boot console once the upload finishes. To take a
+backup first:
+
+```shell
+defib agent read -c hi3516ev300 -p /dev/ttyUSB0 -o flash_backup.bin
+```
+
+If a later `sf erase` appears to succeed but the data does not change, the
+vendor bootloader has armed the flash's status-register block protection —
+watch for `WPS=1` or `Total Lock Blks` in the boot log. The `defib agent` path
+clears those lock bits explicitly before erasing.
+
 #### Shorting pins on flash chip
 
 If you can't interrupt the boot sequence with a key combination, or if your
@@ -366,11 +460,6 @@ somewhere around July 2021, hence you need a firmware for your camera from an
 earlier date. After you successfully downgrade your camera to a password-free
 bootloader, you could install the OpenIPC firmware in a regular way.
 
-#### Side-loading unlocked bootloader.
-
-Many modern cameras utilize fastboot protocol that allows camera to load a
-bootloader binary code directly into memory and then run it from there.
-Check if our [burn utility][burn] supports your camera's SoC.
 
 #### Modifying stock firmware.
 
@@ -400,5 +489,6 @@ __OpenIPC Linux:__
 root@openipc-hi3518ev100:~# fw_setenv uk 'mw.b ${baseaddr} 0xff ${flashsize}; tftp ${baseaddr} uImage.${soc}; sf probe 0; sf erase 0x50000 0x200000; sf write ${baseaddr} 0x50000 ${filesize}'
 ```
 
-[burn]: https://github.com/OpenIPC/burn
+[defib]: https://github.com/OpenIPC/defib
+[defib121]: https://github.com/OpenIPC/defib/issues/121
 [telegram]: https://openipc.org/our-channels
