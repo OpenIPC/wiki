@@ -374,8 +374,17 @@ install:
 It needs the WebSerial API, so use Chrome, Edge or Opera — Firefox and Safari
 will not work.
 
+> __Not every SoC works in the browser yet.__ Chips that need a "frame-blast"
+> handshake are only supported by the command-line tool, described further
+> down. That includes `hi3516ev300`, `hi3516ev200`, `hi3516cv300`,
+> `hi3516cv500`, `hi3516av200` and `hi3518ev200`. Parts confirmed working in
+> the browser include `gk7202v300`, `gk7205v200`, `gk7205v300`, `hi3518ev300`,
+> `hi3516cv200` and `hi3516dv300`. If your chip is in the first list, skip to
+> the command line — the browser will let you select it but the upload cannot
+> complete. See [defib#121][defib121].
+
 1. **Chip Model** — pick your SoC. If you are unsure, read it off the
-   bootloader's own banner, e.g. `U-Boot 2016.11 ... hi3516ev300`.
+   bootloader's own banner, e.g. `U-Boot 2016.11 ... gk7205v300`.
 2. **U-Boot image** — *Download from OpenIPC*. The binary is fetched from our
    releases and verified against the published SHA-256.
 3. **Serial Port** — select your USB-UART adapter.
@@ -391,13 +400,22 @@ Once you are at the prompt, press **Dump Flash** to save a full backup of the
 stock firmware to your computer before you erase anything. Then continue with
 the regular TFTP installation for your SoC.
 
-The same thing is available as a command-line tool, along with flash restore, a
-high-speed bare-metal flash agent and full unattended installs:
+The command-line tool supports every SoC — including the frame-blast parts the
+browser cannot drive — and adds flash restore, a high-speed bare-metal flash
+agent and full unattended installs:
 
 ```shell
 uv tool install defib     # or: pipx install defib
 defib list-chips
-defib burn -c hi3516ev300 -f u-boot.bin -p /dev/ttyUSB0
+defib burn -c hi3516ev300 -p /dev/ttyUSB0 -t
+```
+
+Start it before you power-cycle the camera, exactly as in the browser. The `-t`
+flag drops you into the U-Boot console once the upload finishes. To take a
+backup first:
+
+```shell
+defib agent read -c hi3516ev300 -p /dev/ttyUSB0 -o flash_backup.bin
 ```
 
 If a later `sf erase` appears to succeed but the data does not change, the
@@ -472,4 +490,5 @@ root@openipc-hi3518ev100:~# fw_setenv uk 'mw.b ${baseaddr} 0xff ${flashsize}; tf
 ```
 
 [defib]: https://github.com/OpenIPC/defib
+[defib121]: https://github.com/OpenIPC/defib/issues/121
 [telegram]: https://openipc.org/our-channels
