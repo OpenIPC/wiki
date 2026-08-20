@@ -95,7 +95,7 @@ nightMode:
   #minThreshold: 2000
   #maxThreshold: 5000
   #lightSensorPin: 62
-  lightSensorPinInvert: false
+  lightSensorInvert: false
   #dncDelay: 30
 
 motionDetect:
