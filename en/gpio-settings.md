@@ -236,7 +236,7 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 > IRCUT1 is an irCutPin1<br>
 > IRCUT2 is an irCutPin2<br>
 > IRCTL is a backlightPin<br>
-> IRSTATUS is an irSensorPin
+> IRSTATUS is a lightSensorPin
 
 [^1]: 00014914 firmware
 [^2]: 00014911 firmware

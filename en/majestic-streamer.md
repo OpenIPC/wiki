@@ -93,7 +93,7 @@ root@openipc-ssc377d:~# wget -q -O - http://localhost/night/toggle
 ### Auto day/night detection
 
 If these variables are used, it is possible to replace the used sandbox scripts.
-Works only for simple day/night schemes with minimal configuration and in the absence of mentions of irSensorPin in the majestic.yaml configuration file.
+Works only for simple day/night schemes with minimal configuration and in the absence of mentions of lightSensorPin in the majestic.yaml configuration file.
 If the light sensor gpio is set, it will use the default mode.
 
 The settings work like this:

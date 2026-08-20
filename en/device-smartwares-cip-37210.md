@@ -241,9 +241,8 @@ audio:
   speakerPin: 51
   speakerPinInvert: true
 nightMode:
-  enabled: true
-  irSensorPin: 62
-  irSensorPinInvert: true
+  lightSensorPin: 62
+  lightSensorInvert: true
   irCutPin1: 64
   backlightPin: 63
   dncDelay: 30

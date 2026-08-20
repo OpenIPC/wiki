@@ -161,7 +161,7 @@ curl http://localhost/api/v1/config --data-binary @- <<'EOF'
 {
   "audio": {
     "enabled": true,
-    "srate": 24000,
+    "srate": 48000,
     "codec": "aac"
   }
 }

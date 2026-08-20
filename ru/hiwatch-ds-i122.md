@@ -91,7 +91,6 @@ reset
 curl http://localhost/api/v1/config --data-binary @- <<'EOF'
 {
   "nightMode": {
-    "enabled": true,
     "irCutPin1": 6,
     "irCutPin2": 5,
     "backlightPin": 42
