@@ -45,6 +45,20 @@ video0:
   gopSize: 1.0
   #gopMode: normal
   #svct: off
+  # Encoder reference structure. Every P frame references the keyframe, so
+  # one lost frame costs one frame. Wants a SHORT gopSize (~1.0). See
+  # "Majestic encoder tuning". Each key here is skipped when absent, so
+  # leaving it out changes nothing.
+  #refEnhance: 0
+  #refPred: false
+  # SigmaStar, video0 only: cyclic intra refresh, 3DNR, ROI and ISP bypass
+  #intraLine: 8
+  #intraQp: false
+  #noiseLevel: 2
+  #roiRect:
+  #  - 0x0x640x360
+  #roiQp: "-5"
+  #bypass: 0
   #crop: 0x0x960x540
   #sliceUnits: 4
   #minQp: 12
@@ -154,27 +168,10 @@ cloud:
   # '?transport=udp' or '?transport=tcp'
   #iceServers: stun:stun.kinesisvideo.eu-north-1.amazonaws.com:443
 
-# Encoder reference structure and the rest of the fpv block, main stream only.
-# See "Majestic encoder tuning" for what these do and when they are worth it.
-# Every integer here is skipped when negative, which is what an absent key
-# reads back as, so each one is individually opt-in.
+# fpv.enabled switches the SigmaStar FPV path on, and also disables
+# userspace 3A. The encoder knobs it used to gate now live per channel,
+# under video0/video1 with the rest of them.
 #fpv:
-  # SigmaStar only, and it also disables userspace 3A
   #enabled: false
-  # Every P frame references the keyframe: one lost frame costs one frame.
-  # Wants a SHORT gopSize (~1.0), not a long one.
-  #refEnhance: 0
-  #refPred: false
-  # Cyclic intra refresh, SigmaStar only
-  #intraLine: 8
-  #intraQp: false
-  # 3DNR strength, SigmaStar only
-  #noiseLevel: 2
-  # Up to 8 regions with a QP delta each (-30..30), SigmaStar only
-  #roiRect:
-  #  - 0x0x640x360
-  #roiQp: "-5"
-  # ISP IQ API index whose bypass is toggled, diagnostic, SigmaStar only
-  #bypass: 0
 
 ```

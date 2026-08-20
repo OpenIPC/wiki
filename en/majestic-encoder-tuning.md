@@ -5,11 +5,18 @@ Majestic encoder tuning
 -----------------------
 
 Settings that change *how* the video encoder predicts and structures frames,
-rather than how many bits it spends. They live in two places in
-`/etc/majestic.yaml`: the per-channel `video0:` section, and an `fpv:` section
-that despite its name is not only useful for FPV.
+rather than how many bits it spends. They live in the per-channel `video0:` /
+`video1:` sections of `/etc/majestic.yaml`, alongside `gopSize` and `bitrate`.
 
-All of the `fpv:` settings apply to the **main stream only**.
+Nothing here is specific to FPV, despite where these used to live. Spreading a
+keyframe over several frames suits any lossy link, and spending bits on one
+region of the frame is what a fixed surveillance camera wants.
+
+> **These moved.** They were a global `fpv:` block until August 2026, and a
+> config still naming them there is ignored rather than translated. Only
+> `fpv.enabled` remains, being a SigmaStar pipeline switch rather than an
+> encoder setting. Which channels accept which knob is in
+> [Platform support](#platform-support) below.
 
 ### Reference structure — surviving packet loss
 
@@ -22,16 +29,15 @@ reference-parameter call, whose base period is fixed at 1:
 
 | setting | vendor field | meaning |
 |---|---|---|
-| `fpv.refEnhance` | `u32Enhance` | enhancement-layer period |
-| `fpv.refPred` | `bEnablePred` | may base-layer frames reference each other |
+| `video<N>.refEnhance` | `u32Enhance` | enhancement-layer period |
+| `video<N>.refPred` | `bEnablePred` | may base-layer frames reference each other |
 
 The combination worth knowing about is:
 
 ```yaml
-fpv:
+video0:
   refEnhance: 0      # no enhancement layer
   refPred: false     # base frames do not reference each other
-video0:
   gopSize: 1.0
 ```
 
@@ -126,38 +132,62 @@ Majestic can do the dropping per RTSP session — append `?thin=1` to the stream
 URL and that session receives the base layer only, while other clients continue
 at full rate.
 
-`svct` and `fpv.refEnhance` drive the same hardware registers, so they are
-mutually exclusive. Setting both logs a warning and `svct` wins.
+`svct` and `refEnhance` drive the same hardware registers on the same channel,
+so they are mutually exclusive. Setting both logs a warning and `svct` wins.
 
-### The rest of the `fpv:` section
+### The rest of the channel knobs
 
 | setting | type | effect |
 |---|---|---|
-| `enabled` | bool | Turns the block on. **Also disables userspace 3A** (auto exposure/white balance) at startup, so do not enable it just to reach one of the settings below. |
-| `noiseLevel` | int | 3DNR strength on the video pipeline. |
+| `noiseLevel` | int | 3DNR strength on the video pipeline. `0` turns it off, which is a value rather than an absence — leaving the key out is not the same thing. |
 | `refEnhance` | int | See above. |
 | `refPred` | bool | See above. |
 | `intraLine` | int | Cyclic intra refresh: how many macroblock rows are re-encoded as intra each frame. Spreads keyframe cost across the GOP instead of spending it in one burst. |
 | `intraQp` | bool | Ask the encoder for an I-frame QP on refreshed rows. |
 | `roiRect` | list | Up to 8 regions of interest as `XxYxWxH` strings. Coordinates are rounded to multiples of 32 and clamped to the frame. |
-| `roiQp` | string | Comma-separated QP delta per region, in the same order as `roiRect`, each clamped to -30..30. Negative means better quality. |
+| `roiQp` | string | Comma-separated QP delta per region, in the same order as `roiRect`, each clamped to -30..30. Negative means better quality. At most 16 values are read; the rest are ignored. |
 | `bypass` | int | ISP IQ API index whose bypass state is **toggled** when applied. Diagnostic. |
 
 Every integer above is skipped when negative, which is also what an absent key
 reads back as — so each one is individually opt-in and leaving it out changes
-nothing.
+nothing. That is why none of them carries a default: writing one would turn an
+opt-in knob into one that always applies.
+
+`fpv.enabled` is the one setting still in the old place. It turns the SigmaStar
+FPV path on and **also disables userspace 3A** (auto exposure and white balance)
+at startup, so do not enable it just to reach one of the settings above.
+
+### Setting them
+
+All of these are published in the config schema, so they appear in the web UI
+under their channel and can be written through the API:
+
+```
+curl 'http://localhost/api/v1/set?video0.refEnhance=0'
+curl 'http://localhost/api/v1/set?video0.refPred=false'
+```
+
+A value outside the range the schema declares is refused with `400` rather than
+written, so `video0.refEnhance=99` fails where you typed it instead of sitting
+in the config as a number the encoder was never going to use.
 
 ### Platform support
 
 | setting | HiSilicon | SigmaStar |
 |---|---|---|
-| `video0.svct` | gen 2 and later | yes |
-| `fpv.refEnhance`, `fpv.refPred` | gen 2 and later | SSC338Q (infinity6e) |
-| everything else under `fpv:` | — | SSC338Q (infinity6e) |
+| `svct` | gen 2 and later, per channel | per channel |
+| `refEnhance`, `refPred` | gen 2 and later, **per channel** | `video0` only |
+| `noiseLevel`, `intraLine`, `intraQp`, `roiRect`, `roiQp`, `bypass` | — | `video0` only |
 
-On SigmaStar the `fpv:` settings additionally require `fpv.enabled: true`. On
-HiSilicon there is no `fpv` module, so `refEnhance` on its own is enough and the
-3A side effect does not apply.
+On HiSilicon each encoder reads its own channel, so `video0` and `video1` can
+carry different reference structures. On SigmaStar the code that applies these
+returns early for anything but the main stream, so only `video0` declares them —
+and they additionally require `fpv.enabled: true`, which brings the 3A side
+effect with it. On HiSilicon there is no FPV module and `refEnhance` on its own
+is enough.
+
+A knob absent from your camera's schema is not supported by that build; the API
+answers `404` rather than accepting a setting nothing would apply.
 
 > The reference-structure measurements on this page were all taken on
 > HiSilicon. SigmaStar takes the identical parameters through the identical
