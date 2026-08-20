@@ -35,7 +35,7 @@ GPIO0 | GPIO3 | GPIO14 | GPIO66 | GPIO80
 curl http://localhost/api/v1/config --data-binary @- <<'EOF'
 {
   "nightMode": {
-    "irSensorPin": 80,
+    "lightSensorPin": 80,
     "irCutPin1": 3,
     "irCutSingleInvert": true,
     "backlightPin": 0
