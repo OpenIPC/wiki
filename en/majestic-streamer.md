@@ -310,7 +310,7 @@ Many boards gate the amplifier behind a GPIO. Set `audio.speakerPin` (and
 `audio.speakerPinInvert` if it is active-low), otherwise the logs look clean and
 nothing comes out.
 
-Speaker output is available on HiSilicon, Ingenic, Sigmastar, Allwinner,
+Speaker output is available on HiSilicon/Goke, Ingenic, Sigmastar, Allwinner,
 Rockchip and Xiongmai. `audio.srate` is shared by input and output; there is no
 separate output rate.
 
