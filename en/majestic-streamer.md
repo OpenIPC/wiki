@@ -115,7 +115,7 @@ EOF
 
 ### Motion detection
 
-Motion detect is supported for Hisilion/Goke, Ingenic and Sigmastar.
+Motion detect is supported for HiSilicon/Goke, Ingenic and Sigmastar.
 When a motion event is detected, `majestic` invokes a predefined script `/usr/sbin/motion.sh` with a parameter specifying the object count:
 
 ```
