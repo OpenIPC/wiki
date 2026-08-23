@@ -24,10 +24,14 @@ compare. majestic cannot do that against the hashed system password in
 config key.
 
 **If `onvif.password` is empty, tinyCam fails to authenticate even with correct
-credentials** (you get an "authorization required" error or the credentials
-prompt keeps reappearing). This is the single most common reason tinyCam "won't
-connect" to an OpenIPC camera. Other clients that offer `PasswordText` or HTTP
-Basic (e.g. ODM, VLC-style RTSP) can work without it; tinyCam cannot.
+credentials** — it reports "authorization required" and the login prompt keeps
+reappearing no matter what you type:
+
+![tinyCam "authorization required" prompt caused by an unset onvif.password](../images/howto-tinycam-onvif-auth-required.png)
+
+This is the single most common reason tinyCam "won't connect" to an OpenIPC
+camera. Other clients that offer `PasswordText` or HTTP Basic (e.g. ODM,
+VLC-style RTSP) can work without it; tinyCam cannot.
 
 ### Camera side (majestic)
 
@@ -72,14 +76,17 @@ Notes:
      ONVIF on the same port as the WebUI. This is `80` by default; if you
      changed `system.webPort`, use that value.
    - **RTSP port number:** `554` (or leave **Auto**).
-   - **Username / Password:** the `onvif.username` / `onvif.password` you set above.
+   - **Username / Password** (under **LOGIN SETTINGS**): the `onvif.username` /
+     `onvif.password` you set above. This is the part that matters — the
+     password here must equal the cleartext `onvif.password` on the camera.
+
+![tinyCam LOGIN SETTINGS where the ONVIF username and password are entered](../images/howto-tinycam-onvif-login.png)
+
 4. Tap **Camera status** to run the connection test.
 
 On success tinyCam authenticates over ONVIF, fills in the **Advanced info**
 (Manufacturer `OpenIPC`, model, firmware version, stream and snapshot URLs) from
-those calls, and shows a live stream:
-
-![tinyCam showing a live stream from an OpenIPC camera over ONVIF](../images/howto-tinycam-onvif-live.png)
+those calls, and shows a live stream.
 
 ### Troubleshooting
 
