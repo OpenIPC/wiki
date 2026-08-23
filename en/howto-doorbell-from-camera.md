@@ -173,6 +173,11 @@ sip:
   callTarget: "sip:*43@192.168.1.10:5060"   # *43 = Asterisk echo test
   doRegister: true                          # set false for direct dial only
 
+  # --- who to ring (see "Ringing more than one person" below) ---
+  ringMode: sequential     # or `parallel`
+  ringSeconds: 10          # per target (sequential), or per fork (parallel)
+  ringCycles: 3            # passes over the list; 0 = until someone answers
+
   # --- where this camera lives on the LAN ---
   localIp: 192.168.1.50    # the camera's own IP
   localPort: 5060
@@ -183,7 +188,9 @@ sip:
   buttonActiveLow: true    # `true` = button pulls the pin to ground when pressed
 ```
 
-`killall -HUP majestic` to reload. The interesting log lines:
+`killall -HUP majestic` to reload — this picks up `sip.*` changes as of the
+2026-08 builds; older ones needed a full restart of majestic, and quietly left
+SIP switched off until they got one. The interesting log lines:
 
 ```
 sip uac: bound 192.168.1.50:5060, server 192.168.1.10:5060
@@ -224,6 +231,93 @@ That last `audio_jitter:` line is a goldmine when debugging — see
 Now change `callTarget` to your real destination (your Linphone URI,
 or another extension like `sip:1002@192.168.1.10`) and you have a
 working doorbell.
+
+## Ringing more than one person
+
+A doorbell that rings one handset is a doorbell that gets missed. `callTarget`
+accepts a list. Separate the entries with commas; whitespace around them is
+ignored, so write it however reads best:
+
+```yaml
+sip:
+  callTarget: "sip:1001@192.168.1.10, sip:1002@192.168.1.10, sip:1003@192.168.1.10"
+  ringMode: sequential
+  ringSeconds: 10
+  ringCycles: 3
+```
+
+Two modes:
+
+- **`sequential`** rings the first number for `ringSeconds`, hangs up properly,
+  rings the next, and so on. After the last one it starts again from the top.
+  Best when you want one person to get first refusal — say, ring the kitchen
+  handset before waking the whole house.
+- **`parallel`** rings everyone at once and connects whoever picks up first;
+  the other phones stop ringing immediately. Best for "somebody please answer
+  the door".
+
+`ringCycles` decides how many times to go round the list before giving up —
+the default of `3` means a visitor who presses the bell and walks away does not
+leave every phone in the house ringing indefinitely. Set it to `0` if you
+genuinely want it to ring until someone answers.
+
+Parallel mode rings at most **four** numbers at once (each one costs a call
+leg and a pair of RTP ports); a longer list is still fine in sequential mode.
+
+> **If you have a PBX, consider letting it do this instead.** An Asterisk
+> dialplan can fork the call for you — see "Group ring" under *What's next* —
+> and a PBX knows things the camera cannot, like which handsets are actually
+> registered right now. The camera-side version earns its keep when there is
+> no PBX: `doRegister: false` with a list of handsets on the LAN, where nothing
+> else exists to do the forking. In that direct-dial mode each entry is dialled
+> at its own address, so the numbers can live on different machines — as long
+> as each one is written as a literal IP. Hostnames still go to `sip.server`,
+> because resolving them at call time would stall the video pipeline.
+
+## Controlling calls over HTTP
+
+Everything the button does is also available on the API, which is handy for
+home-automation glue, a wall tablet, or just testing.
+
+These endpoints use the same login as the rest of the camera's web interface,
+so from another machine pass the camera's credentials — `root` and the
+password you set on it:
+
+```sh
+# ring the configured callTarget list
+curl -u root:PASSWORD -X POST http://<camera>/api/v1/sip/call
+
+# ring one specific person, ignoring the list
+curl -u root:PASSWORD -X POST \
+  'http://<camera>/api/v1/sip/call?target=sip:1002@192.168.1.10'
+
+# hang up whatever is happening
+curl -u root:PASSWORD -X POST http://<camera>/api/v1/sip/hangup
+
+# what is it doing right now?
+curl -u root:PASSWORD http://<camera>/api/v1/sip/status
+```
+
+Requests made *from* the camera count as local and need no credentials, which
+is what a button script or a plugin on the device itself will use:
+
+```sh
+curl -X POST http://127.0.0.1/api/v1/sip/call
+```
+
+`status` answers something like:
+
+```json
+{"registered":true,"ringing":true,"idle":false,"targets":3,"activeLegs":1,
+ "cyclesDone":0,"legs":[{"state":"calling","target":"sip:1002@192.168.1.10"}]}
+```
+
+`state` is one of `calling` (ringing), `confirmed` (someone answered),
+`cancelling` or `hanging` (on the way down).
+
+**Set a password.** A camera that will place a phone call to any address it is
+handed is worth rather more to a stranger than one that only shows pictures,
+and an unconfigured camera refuses the web interface rather than opening it.
 
 ## Going remote — making it work over 4G/LTE
 
@@ -366,9 +460,11 @@ What each field means:
 - **Multiple buttons / cameras.** Each camera gets its own
   extension on the PBX (1001, 1002, ...). A simple Asterisk
   dialplan can ring all of them at once for a small office.
-- **Group ring.** `exten => doorbell,1,Dial(PJSIP/1001&PJSIP/1002&PJSIP/1003,30)`
+- **Group ring, on the PBX.** `exten => doorbell,1,Dial(PJSIP/1001&PJSIP/1002&PJSIP/1003,30)`
   rings three softphones in parallel; whichever picks up first gets
-  the call.
+  the call. Prefer this when you have a PBX — see "Ringing more than one
+  person" above for the camera-side equivalent, which is what direct-dial
+  setups without a PBX need.
 - **Smart-home integration.** Home Assistant has a SIP integration
   that can act as a UAS endpoint, so the doorbell call appears in
   your HA UI alongside everything else.
