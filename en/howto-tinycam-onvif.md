@@ -31,26 +31,36 @@ Basic (e.g. ODM, VLC-style RTSP) can work without it; tinyCam cannot.
 
 ### Camera side (majestic)
 
-Enable ONVIF and set an explicit ONVIF username/password. Over SSH:
+Enable ONVIF and set an explicit ONVIF username/password through majestic's
+HTTP API (this applies the change live and persists it to `/etc/majestic.yaml`
+in one step — no reload or restart needed). Run these against the camera's web
+port, substituting your own values:
 
 ```sh
-cli -s .onvif.enabled true
-cli -s .onvif.username root
-cli -s .onvif.password 123456      # cleartext — required for PasswordDigest
-killall -HUP majestic              # hot-reload, no reboot
+curl 'http://<camera-ip>/api/v1/set?onvif.enabled=true'
+curl 'http://<camera-ip>/api/v1/set?onvif.username=<user>'
+curl 'http://<camera-ip>/api/v1/set?onvif.password=<your-onvif-password>'
 ```
 
-Or the equivalent block in `/etc/majestic.yaml`:
+The resulting section in `/etc/majestic.yaml` looks like:
 
 ```yaml
 onvif:
   enabled: true
-  username: root
-  password: "123456"
+  username: <user>
+  password: "<your-onvif-password>"
 ```
 
-Use whatever credentials you like — the point is that `onvif.password` must be
-**set to a cleartext value**, and you enter that same value in tinyCam.
+Notes:
+
+- `onvif.password` must be a **cleartext** value (that is the whole point — see
+  above), and you enter the same value in tinyCam.
+- **Choose a strong password.** OpenIPC's published default web login is
+  `root` / `123456`; do not leave a trivial password like that on a camera that
+  is reachable from anywhere untrusted.
+- The HTTP API is the current method. The older `cli -s .onvif.password …` +
+  `killall -HUP majestic` approach still works but is
+  [documented as deprecated](majestic-streamer.md#changing-parameters-via-the-http-api).
 
 ### tinyCam side
 
@@ -58,16 +68,18 @@ Use whatever credentials you like — the point is that `onvif.password` must be
 2. **Camera brand:** choose **`(ONVIF)`**. The model auto-selects **Profile S**.
 3. Fill the mandatory settings:
    - **Hostname/IP address:** your camera's IP.
-   - **ONVIF port number:** `80` (majestic serves ONVIF on the web port).
+   - **ONVIF port number:** your camera's **web/HTTP port** — majestic serves
+     ONVIF on the same port as the WebUI. This is `80` by default; if you
+     changed `system.webPort`, use that value.
    - **RTSP port number:** `554` (or leave **Auto**).
    - **Username / Password:** the `onvif.username` / `onvif.password` you set above.
 4. Tap **Camera status** to run the connection test.
 
-On success tinyCam fills in the **Advanced info** (Manufacturer `OpenIPC`, model,
-firmware version, stream and snapshot URLs) from the authenticated ONVIF calls,
-and shows a live H264 stream:
+On success tinyCam authenticates over ONVIF, fills in the **Advanced info**
+(Manufacturer `OpenIPC`, model, firmware version, stream and snapshot URLs) from
+those calls, and shows a live stream:
 
-![tinyCam status showing a working OpenIPC ONVIF connection](../images/howto-tinycam-onvif-status.png)
+![tinyCam showing a live stream from an OpenIPC camera over ONVIF](../images/howto-tinycam-onvif-live.png)
 
 ### Troubleshooting
 
@@ -76,11 +88,9 @@ and shows a live H264 stream:
   the username too — it must match `onvif.username`.
 - **ONVIF connects but there is no video.** That is an RTSP problem, not ONVIF.
   Verify the RTSP port (`554`) and that the stream plays in a plain RTSP player:
-  `rtsp://root:123456@<camera-ip>:554/stream=0`.
-- **"Too many frames dropped" / low fps.** A rendering-performance note from
-  tinyCam's decoder on a high-resolution stream, not an authentication or
-  connectivity problem. Try tinyCam's hardware decoder, or a lower-resolution
-  sub-stream.
+  `rtsp://<user>:<password>@<camera-ip>:554/stream=0`.
+- **Cannot reach ONVIF at all.** Make sure you used the camera's web port, not a
+  fixed `80`, and that ONVIF is enabled (`onvif.enabled=true`).
 - **Auth still fails with the password set, on older firmware.** Some older
   majestic builds could not parse tinyCam's ONVIF token because it uses an XML
   *default namespace* rather than a `wsse:` prefix. If you hit this, update to a
