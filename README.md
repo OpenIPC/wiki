@@ -158,6 +158,7 @@ OpenIPC Wiki
 - [Home Assistant generic camera](en/home-assitantant-view.md)
 - [Home Assistant PTZ control](en/home-assitantant-PTZ_bashIntegration.md)
 - [Build your own doorbell from any OpenIPC camera](en/howto-doorbell-from-camera.md)
+- [tinyCam Monitor (Android) over ONVIF](en/howto-tinycam-onvif.md)
 - [Live streaming to Telegram](en/howto-streaming-telegram.md)
 - [YouTube streaming](en/youtube-streaming.md)
 
