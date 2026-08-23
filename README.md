@@ -56,6 +56,7 @@ OpenIPC Wiki
 - [Majestic example config](en/majestic-config.md)
 - [Majestic encoder tuning](en/majestic-encoder-tuning.md)
 - [Majestic usage research](en/majestic-research.md)
+- [Majestic plugins](en/majestic-plugins.md)
 - [Web interface](en/web-interface.md)
 - [Upgrade firmware](en/sysupgrade.md)
 - [Nightly builds, dated releases, and bisect](en/nightly-builds-and-bisect.md)
