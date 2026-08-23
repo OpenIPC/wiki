@@ -235,7 +235,8 @@ working doorbell.
 ## Ringing more than one person
 
 A doorbell that rings one handset is a doorbell that gets missed. `callTarget`
-accepts a list — separate the entries with commas (spaces and `|` work too):
+accepts a list. Separate the entries with commas; whitespace around them is
+ignored, so write it however reads best:
 
 ```yaml
 sip:
@@ -276,20 +277,32 @@ leg and a pair of RTP ports); a longer list is still fine in sequential mode.
 ## Controlling calls over HTTP
 
 Everything the button does is also available on the API, which is handy for
-home-automation glue, a wall tablet, or just testing:
+home-automation glue, a wall tablet, or just testing.
+
+These endpoints use the same login as the rest of the camera's web interface,
+so from another machine pass the camera's credentials — `root` and the
+password you set on it:
 
 ```sh
 # ring the configured callTarget list
-curl -X POST http://<camera>/api/v1/sip/call
+curl -u root:PASSWORD -X POST http://<camera>/api/v1/sip/call
 
 # ring one specific person, ignoring the list
-curl -X POST 'http://<camera>/api/v1/sip/call?target=sip:1002@192.168.1.10'
+curl -u root:PASSWORD -X POST \
+  'http://<camera>/api/v1/sip/call?target=sip:1002@192.168.1.10'
 
 # hang up whatever is happening
-curl -X POST http://<camera>/api/v1/sip/hangup
+curl -u root:PASSWORD -X POST http://<camera>/api/v1/sip/hangup
 
 # what is it doing right now?
-curl http://<camera>/api/v1/sip/status
+curl -u root:PASSWORD http://<camera>/api/v1/sip/status
+```
+
+Requests made *from* the camera count as local and need no credentials, which
+is what a button script or a plugin on the device itself will use:
+
+```sh
+curl -X POST http://127.0.0.1/api/v1/sip/call
 ```
 
 `status` answers something like:
@@ -302,9 +315,9 @@ curl http://<camera>/api/v1/sip/status
 `state` is one of `calling` (ringing), `confirmed` (someone answered),
 `cancelling` or `hanging` (on the way down).
 
-These endpoints use the same login as the rest of the camera's web interface.
 **Set a password.** A camera that will place a phone call to any address it is
-handed is worth rather more to a stranger than one that only shows pictures.
+handed is worth rather more to a stranger than one that only shows pictures,
+and an unconfigured camera refuses the web interface rather than opening it.
 
 ## Going remote — making it work over 4G/LTE
 
