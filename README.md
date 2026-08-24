@@ -94,6 +94,7 @@ OpenIPC Wiki
 
 - [Network does not work on hi35xx](en/trouble-network-hi35xx.md)
 - [Majestic does not work, camera reboots](en/trouble-majestic.md)
+- [Load average looks impossibly high](en/trouble-load-average.md)
 - [Sigmastar unbrick instructions](en/sigmastar-unbrick.md)
 - [Ingenic T31 unbrick with SD card](en/ingenic-t31-unbrick-with-sd-card.md)
 
