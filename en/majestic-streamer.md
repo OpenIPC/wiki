@@ -35,9 +35,14 @@ adduser viewer -s /bin/false -D -H ; echo viewer:123456 | chpasswd
 ### Camera related URLs in firmware
 
 Majestic supports multiple audio, video and still image formats, and more.
-You can find the full list of available endpoints on [this page](https://openipc.org/majestic-endpoints).
+The full list of endpoints is on the **Majestic Endpoints** page of the camera's
+own web interface: open `http://<camera-address>/` in a browser and pick it from
+the menu. That page is built from the firmware that is actually running, so it
+matches your build rather than whatever was current when a document was written.
+It also fills in the camera's own address, uses the right scheme for your setup
+(http or https, ws or wss), and says whether the endpoints ask for a password.
 
-The long JPEG control parameter did not fit into the example on the site and we publish it here:
+A JPEG snapshot takes control parameters, for example:
 
 `/image.jpg?width=640&height=360&qfactor=73&color2gray=1`
 

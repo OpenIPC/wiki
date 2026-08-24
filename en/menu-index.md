@@ -36,7 +36,7 @@ We would be grateful for any feedback and suggestions.
 
 ### Streamers
 
-* [majestic](https://openipc.org/majestic-endpoints) - Universal IPCam streamer.
+* [majestic][majestic] - Universal IPCam streamer.
 * [mini][mini] - OpenSource Mini IP camera streamer.
 
 ### Tools
