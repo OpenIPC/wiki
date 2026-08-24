@@ -63,7 +63,7 @@ They are not stuck and they are not busy — they simply spend the gap between
 frames in the one sleep state that the load average counts.
 
 On an SSC30KQ (Infinity6E) with one video channel and JPEG snapshots enabled,
-these twelve threads are permanently in `D`:
+and with OSD and audio both off, these twelve threads are permanently in `D`:
 
 | Thread | Waiting in |
 | --- | --- |
@@ -74,8 +74,19 @@ these twelve threads are permanently in `D`:
 | `mi_log` | `msleep` |
 | `ehci_monitor` | `msleep` |
 
-Twelve threads in `D` → a load average that settles at just over 12. Enabling
-audio adds a thirteenth (`ai0_P0_MAIN`) and the load settles at just over 13.
+Twelve threads in `D` → a load average that settles at just over 12.
+
+Enabling a feature that opens another SDK module adds its thread and moves the
+floor up by one. Two measured on the same camera:
+
+| Enabling | Adds the thread | Floor becomes |
+| --- | --- | --- |
+| `audio.enabled` | `ai0_P0_MAIN` | ~13 |
+| `osd.enabled` | `RGN BUF WQ` (waiting in `_mi_rgn_drv_buf_work_thread`) | ~13 |
+
+Enabling a second *video channel*, by contrast, adds nothing — `venc1_P0_MAIN`
+already exists for the JPEG encoder, and the vpe ports are fixed. So the floor
+tracks which SDK modules are in use, not how much work the camera is doing.
 
 Note that `msleep()` in the Linux kernel is uninterruptible by definition, so
 any driver thread that polls in a `msleep()` loop contributes to the load
@@ -130,7 +141,7 @@ Load average: 12.38 12.33 12.29 1/79 2458
 
 ```
 for t in /proc/[0-9]*/task/[0-9]*; do
-    [ "$(awk '{print $3}' "$t/stat" 2>/dev/null)" = "D" ] && \
+    [ "$(awk '/^State:/{print $2}' "$t/status" 2>/dev/null)" = "D" ] && \
         echo "$(cat "$t/comm")  <-  $(cat "$t/wchan")"
 done
 ```
@@ -145,13 +156,21 @@ venc0_P0_MAIN    <-  mi_sys_internal_main_worker_thread
 Every entry is a kernel thread from the vendor SDK, and their count matches the
 load average.
 
+These commands read the state from `/proc/<tid>/status` rather than from
+`/proc/<tid>/stat`, and that detail matters. In `stat` the format is
+`pid (comm) state …`, and a kernel thread's name may contain spaces — this SDK
+has one called `RGN BUF WQ` — so splitting `stat` on whitespace and taking the
+third field returns part of the *name* instead of the state, and silently drops
+exactly the threads it is looking for. `status` puts the state on its own
+`State:` line, where nothing can shift it.
+
 Save that list. It is your camera's baseline, and comparing against it is the
 only dependable way to tell a newly stuck task from the vendor's permanent
 ones:
 
 ```
 for t in /proc/[0-9]*/task/[0-9]*; do
-    [ "$(awk '{print $3}' "$t/stat" 2>/dev/null)" = "D" ] && cat "$t/comm"
+    [ "$(awk '/^State:/{print $2}' "$t/status" 2>/dev/null)" = "D" ] && cat "$t/comm"
 done | sort > /tmp/loadavg-baseline
 ```
 
@@ -238,7 +257,7 @@ baseline you saved earlier:
 
 ```
 for t in /proc/[0-9]*/task/[0-9]*; do
-    [ "$(awk '{print $3}' "$t/stat" 2>/dev/null)" = "D" ] && cat "$t/comm"
+    [ "$(awk '/^State:/{print $2}' "$t/status" 2>/dev/null)" = "D" ] && cat "$t/comm"
 done | sort | diff /tmp/loadavg-baseline -
 ```
 
