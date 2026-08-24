@@ -20,13 +20,19 @@ The camera itself streams normally, stays cool and does not reboot.
 
 ### Short answer
 
-**Nothing is wrong with the camera.** On SigmaStar SoCs a load average of
-roughly 12 (or 13 with audio enabled) is the *idle* value, and it will never go
-lower. Load average on Linux is not a CPU-usage figure, and on these cameras it
-cannot be used as an overload signal at all.
+**Nothing is wrong with the camera.** Load average on Linux is not a CPU-usage
+figure, and on these cameras most of what it reports comes from driver threads
+that are fast asleep.
 
-Remove any trigger you have on `node_load1` / `node_load5` / `node_load15` and
-alert on CPU utilisation instead — see [What to monitor
+Every SigmaStar camera has a *floor* — a load average it shows when completely
+idle and never drops below. On the SSC30KQ measured for this article the floor
+is about 12, or 13 with audio enabled. **The exact value is a property of the
+SoC, the firmware and the enabled pipeline, not a constant**, so establish the
+floor for your own camera rather than assuming these numbers;
+[Checking it yourself](#checking-it-yourself) shows how.
+
+Remove any trigger you have on `node_load1` / `node_load5` / `node_load15` at
+these levels and alert on CPU utilisation instead — see [What to monitor
 instead](#what-to-monitor-instead) below.
 
 ### What load average actually measures
@@ -79,6 +85,11 @@ Two of the threads above (`mi_log` and `ehci_monitor`) are created when the
 modules load and are present even with the streamer stopped. The rest appear
 with the video pipeline and disappear with it.
 
+Because the count follows the ports the SDK actually creates, another SoC in the
+family, another firmware build or another set of loaded modules will have its
+own floor — higher or lower than twelve. Take the numbers above as one worked
+example rather than a specification.
+
 Cameras on other vendor SoCs — HiSilicon, Ingenic and so on — typically show a
 load average near zero, because their SDK threads do not idle in `D`. This is
 why two healthy cameras sitting side by side can report 0.26 and 13.35.
@@ -96,9 +107,13 @@ cat /proc/loadavg
 12.49 12.35 12.29 1/78 2452
 ```
 
-The fourth field is the giveaway: `1/78` means **1 runnable task out of 78**.
-A genuinely overloaded single-core camera would show a large first number
+The fourth field is the first clue: `1/78` means **1 runnable task out of 78**.
+A camera whose CPU is genuinely oversubscribed would show a large first number
 there, not a 1.
+
+Be precise about what that does and does not establish. It rules out a
+*runnable* backlog. It says nothing at all about tasks in `D` — which are what
+the load average is counting here, and which never appear in that numerator.
 
 Confirm the CPU is idle:
 
@@ -130,6 +145,16 @@ venc0_P0_MAIN    <-  mi_sys_internal_main_worker_thread
 Every entry is a kernel thread from the vendor SDK, and their count matches the
 load average.
 
+Save that list. It is your camera's baseline, and comparing against it is the
+only dependable way to tell a newly stuck task from the vendor's permanent
+ones:
+
+```
+for t in /proc/[0-9]*/task/[0-9]*; do
+    [ "$(awk '{print $3}' "$t/stat" 2>/dev/null)" = "D" ] && cat "$t/comm"
+done | sort > /tmp/loadavg-baseline
+```
+
 If you stop the streamer, the count drops to the two module-load threads and
 the load average decays towards 2 over the next few minutes (the "1 minute"
 average has a 60-second time constant, so give it time). Starting it again
@@ -146,16 +171,33 @@ node_cpu_seconds_total{cpu="0",mode="user"}
 node_cpu_seconds_total{cpu="0",mode="system"}
 ```
 
-These are counters of seconds spent in each mode, so alert on the *rate*. In
-PromQL, busy percentage over five minutes:
+These are counters of seconds spent in each mode, so alert on the *rate*. The
+busy fraction is idle time divided by **the sum of every mode** — that total is
+what makes the result a percentage of wall-clock time. In PromQL, over five
+minutes:
 
 ```
-100 * (1 - rate(node_cpu_seconds_total{mode="idle"}[5m])
-           / ignoring(mode) sum without(mode)(rate(node_cpu_seconds_total[5m])))
+100 * (1 - sum by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m]))
+         / sum by (instance) (rate(node_cpu_seconds_total[5m])))
 ```
 
-In Zabbix, take the same two counters as `Numeric (float)` items with a **Change
-per second** preprocessing step and build the ratio in a calculated item.
+In Zabbix, collect `/metrics` with a single **HTTP agent** master item of type
+*Text*, then add two dependent items, each with a **Prometheus pattern**
+preprocessing step followed by **Change per second**:
+
+| Dependent item | Prometheus pattern | Result |
+| --- | --- | --- |
+| `cpu.idle.rate` | `node_cpu_seconds_total{mode="idle"}` | value |
+| `cpu.total.rate` | `node_cpu_seconds_total` | aggregate: `sum` |
+
+Zabbix 5.2 and later provide the `sum` function in the Prometheus pattern step.
+On older versions, create one dependent item per mode and add them together in
+the calculated item — do not substitute a couple of hand-picked modes for the
+total. A calculated item then yields the busy percentage:
+
+```
+100 * (1 - last(//cpu.idle.rate) / last(//cpu.total.rate))
+```
 
 Other metrics from the same endpoint that mean what they appear to mean:
 
@@ -163,6 +205,7 @@ Other metrics from the same endpoint that mean what they appear to mean:
 | --- | --- |
 | `node_cpu_seconds_total` | CPU utilisation — the overload signal |
 | `node_procs_running_total` | Instantaneous run-queue length (`R` tasks only, no `D`) |
+| `node_procs_blocked_total` | Tasks blocked in kernel I/O waits — reads 0 on a healthy camera however high the load average is |
 | `node_hwmon_temp_celsius` | SoC temperature — the overheat signal |
 | `node_memory_MemAvailable_bytes` | Memory pressure, against `node_memory_MemTotal_bytes` |
 
@@ -174,17 +217,39 @@ badge is not a contradiction.
 
 ### When is a high load average real?
 
-On a SigmaStar camera, only *changes above the floor* are informative. If the
-baseline is normally 12 and it climbs to 20, something has genuinely joined the
-run queue. Read the raw value and check the other signals:
+Only movement away from your camera's floor carries information — and that
+movement needs reading carefully, because load rises for two quite different
+reasons and only one of them shows up as CPU usage.
 
-* `1/78` in `/proc/loadavg` stays at 1 → still no real contention.
-* `top` shows idle collapsing towards 0% → real CPU saturation.
-* `node_procs_running_total` consistently above 1 → real run-queue backlog.
-* Rising temperature and dropping available memory → real work.
+**Something joined the run queue.** Genuine CPU contention: `top` shows idle
+collapsing towards 0%, `node_procs_running_total` sits above 1, and the first
+number in the fourth field of `/proc/loadavg` climbs. Temperature usually
+follows.
 
-If CPU idle is healthy and the run queue is 1, the load average is measuring
-sleeping driver threads, no matter how large it looks.
+**Something new went into uninterruptible sleep.** A process wedged on a failing
+SD card, a stalled USB or network filesystem, a driver that has deadlocked. This
+raises the load average while using **no** CPU and **without** changing the
+runnable count, so from every angle except one it looks identical to the
+vendor's idle threads.
+
+That one angle is the thread list. A high load average with an idle CPU is
+therefore *not* self-evidently harmless — diff the `D` tasks against the
+baseline you saved earlier:
+
+```
+for t in /proc/[0-9]*/task/[0-9]*; do
+    [ "$(awk '{print $3}' "$t/stat" 2>/dev/null)" = "D" ] && cat "$t/comm"
+done | sort | diff /tmp/loadavg-baseline -
+```
+
+No output means the load is the vendor's sleeping threads and nothing else. Any
+added line is a task worth investigating, whatever the CPU happens to be doing.
+
+`node_procs_blocked_total` is a useful second opinion, because it counts only
+tasks blocked in kernel I/O waits — a strict subset of `D`. The SigmaStar worker
+threads are not among them, which is why it reads 0 on a healthy camera even
+with the load average sitting at 12. Sustained values above 0 indicate a real
+I/O stall and are worth alerting on.
 
 ### Can it be fixed?
 
@@ -194,5 +259,7 @@ stop inflating the load average, and the correct fix is for the driver to wait
 in that state instead. The SigmaStar MI modules are proprietary, out-of-tree
 binaries, so the change has to come from the vendor.
 
-Until then the number is cosmetic. It costs no CPU, no memory and no stability
-— it only misleads dashboards.
+Until then, the *vendor threads' contribution* is cosmetic: it costs no CPU, no
+memory and no stability, and misleads nothing but dashboards. What sits above
+that floor is still worth reading — see [When is a high load average
+real?](#when-is-a-high-load-average-real).
