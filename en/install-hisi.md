@@ -58,6 +58,36 @@ understand what you do.
 NB! Replace bootloader filename with the one matching your SoC. 
 Full list is [here](https://github.com/OpenIPC/firmware/releases/tag/latest).
 
+#### Hi3518EV200: check whether your board is DDR2 or DDR3 first
+
+This SoC ships with either kind of memory and the two bootloaders are not
+interchangeable — the DRAM type is fixed in a register table inside the image,
+so the wrong one leaves the board with no working memory at all. It flashes
+and verifies perfectly and then boots nothing, which looks like a bad flash
+and is not one.
+
+Read the memory controller from any working HiSilicon U-Boot prompt — the
+vendor's own bootloader will do, you do not need OpenIPC running yet:
+
+```
+hisilicon # md.l 0x20111050 1
+20111050: 00000016    ....
+```
+
+The last hex digit is the DRAM type:
+
+| last digit | memory | bootloader to flash |
+|---|---|---|
+| `5` | DDR2 | `u-boot-hi3518ev200-universal.bin` |
+| `6` | DDR3 | `u-boot-hi3518ev200-ddr3-universal.bin` |
+
+Do not tell the two apart by file size or checksum — the build embeds a
+timestamp, so those change between builds of identical sources.
+
+The `-recovery.bin` images are a different thing again: they are built to fit
+the boot ROM's SRAM window so they can be uploaded over UART to a board that
+will not boot at all. Do not flash them.
+
 ```
 mw.b 0x42000000 ff 1000000
 tftp 0x42000000 u-boot-hi3516xxxxx-beta.bin
