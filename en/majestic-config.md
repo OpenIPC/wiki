@@ -47,9 +47,9 @@ isp:
   #lowDelay: false
   #awbMode: auto                # auto|manual|day|cloudy|incandescent|
                                 # flourescent|twilight|shade|warm|custom
-  #memMode: reduction           # normal | reduction        (HiSilicon)
-  #slowShutter: disabled        # disabled|low|medium|high  (HiSilicon)
-  #dis: false                   # digital stabilisation     (HiSilicon, Ingenic)
+  #memMode: reduction           # normal | reduction        (HiSilicon/Goke)
+  #slowShutter: disabled        # disabled|low|medium|high  (HiSilicon/Goke)
+  #dis: false                   # digital stabilisation     (HiSilicon/Goke, Ingenic)
   #wdr: 0                       #                           (SigmaStar)
   #edgeGain: false              #                           (SigmaStar)
   #iqServer: false              #                           (SigmaStar)
@@ -58,10 +58,10 @@ isp:
                                 # frame buffer, ignored with rotate/mirror/masks
   # Manual exposure and gain. Each is skipped when absent, so leaving it out
   # keeps the automatic behaviour.
-  #exposure: 0                  #                (HiSilicon, SigmaStar, Ingenic)
-  #aGain: 0                     #                (HiSilicon, SigmaStar)
-  #dGain: 0                     #                (HiSilicon)
-  #ispGain: 0                   #                (HiSilicon)
+  #exposure: 0                  #                (HiSilicon/Goke, SigmaStar, Ingenic)
+  #aGain: 0                     #                (HiSilicon/Goke, SigmaStar)
+  #dGain: 0                     #                (HiSilicon/Goke)
+  #ispGain: 0                   #                (HiSilicon/Goke)
 
 image:
   mirror: false
@@ -104,9 +104,9 @@ video0:
   #crop: 0x0x960x540
   # Split a picture into several NAL slices, so one lost packet costs part of a
   # frame instead of all of it.
-  #sliceUnits: 4                # macroblock rows per slice (HiSilicon, SigmaStar)
+  #sliceUnits: 4                # macroblock rows per slice (HiSilicon/Goke, SigmaStar)
   #sliceBytes: 0                # target bytes per slice; wins over sliceUnits
-                                # when both are set          (HiSilicon)
+                                # when both are set          (HiSilicon/Goke)
   # Quantiser bounds. The defaults are per-vendor — read them back from
   # /api/v1/config.json rather than assuming the numbers here.
   #minQp: 28
@@ -120,14 +120,17 @@ video1:
   # video1 takes the same keys as video0
 
 jpeg:
-  enabled: true                 # the /mjpeg stream; /image.jpg works either way
+  enabled: true                 # JPEG as a whole. false frees the snapshot
+                                # channel's frame, but /image.jpg then answers
+                                # 503 and /mjpeg is unavailable -- ONVIF
+                                # snapshots and the WebUI preview with them
   qfactor: 50
   fps: 5                        # MJPEG stream only
   #size: 160x120                # applies to /mjpeg AND /image.jpg
   #osd: true                    # burn the OSD into JPEG output
   rtsp: false                   # also publish MJPEG over RTSP (max 2040 px/axis)
-  #tuned: off                   # HiSilicon only: largest /image.jpg?width=... to
-                                # serve, e.g. 1920x1080. Needs a restart.
+  #tuned: off                   # HiSilicon/Goke only: largest /image.jpg?width=...
+                                # to serve, e.g. 1920x1080. Needs a restart.
 
 osd:
   enabled: false

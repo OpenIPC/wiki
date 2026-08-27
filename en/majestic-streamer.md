@@ -431,8 +431,14 @@ still snapshots on `/image.jpg` alike; `jpeg.fps` is the MJPEG stream only,
 since a snapshot is taken when it is asked for. Leaving `jpeg.size` unset
 follows the `video0` resolution.
 
-`jpeg.enabled` governs the MJPEG stream and nothing else. Still snapshots work
-whether it is on or off.
+`jpeg.enabled` governs JPEG service as a whole, not just the stream. Turning it
+off reserves no frame for the snapshot channel — which is the single biggest
+memory saving on a small board — but then `/image.jpg` answers **503**, `/mjpeg`
+answers "MJPEG is unavailable", and the JPEG track is dropped from the RTSP
+description. ONVIF snapshot URIs and the web interface preview both fetch
+`/image.jpg`, so they stop working too. See
+[Memory tuning](memory-tuning.md#jpegenabled--snapshots-and-the-mjpeg-stream)
+for what it frees.
 
 Turning on `jpeg.rtsp` publishes the same MJPEG as an RTSP stream. RFC 2435
 caps that at 2040 px per axis, so a larger `jpeg.size` is reduced to 1280x720
