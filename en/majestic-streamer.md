@@ -11,25 +11,125 @@ relation to camera/video surveillance functionality). Majestic is configurable
 via /etc/majestic.yaml file, and has many features/services enabled by default.
 Unneeded options can be switched off for better security and performance. See /etc/majestic.full for configuration options.
 
+### Lite, Ultimate and FPV
+
+Majestic is published in three flavours. They are one streamer with a different
+set of optional parts compiled in, picked for what the camera is *for* rather
+than for what it costs:
+
+- **Lite** — the everyday build, and what almost every camera runs. Everything
+  a surveillance camera is expected to do, including audio, two-way talk,
+  WebRTC in the browser and pushing to YouTube.
+- **Ultimate** — Lite plus the extras that only some owners ask for: MP3 audio
+  and WebP snapshots.
+- **FPV** — a latency-first build for flying. Audio, WebRTC, SIP and RTMP are
+  compiled out, leaving a binary about half the size of Lite that does one
+  thing: put a picture on a radio link and get out of the way.
+
+Which one a camera runs is fixed by the firmware image, not by a setting. Ask
+the binary:
+
+```
+root@openipc-hi3516ev200:~# majestic -v
+Lite HiSilicon (hi3516ev200), 1.0.0, 2026-08-27 09:14
+```
+
+The first word is the flavour. It also appears in the first line of the log at
+every start, and on the built-in player page at `/hls`.
+
+#### In every build
+
+Nothing in the list below depends on the flavour. FPV has all of it too.
+
+H.264 and H.265 encoding on two channels · MJPEG · JPEG, HEIF and YUV
+snapshots · RTSP server, with MJPEG over RTSP · HLS · MP4 recording to a card ·
+ONVIF and WS-Discovery · netip and IPEYE · mDNS · RTP push over `udp://` and
+`unix:` · OSD with privacy masks · motion detection · night mode ·
+the web interface, the HTTP API and HTTPS.
+
+#### What the flavours change
+
+| | FPV | **Lite** | Ultimate |
+|---|:---:|:---:|:---:|
+| Microphone, speaker, `/audio.*` endpoints | — | ✅ | ✅ |
+| Opus, AAC, G.711 A-law / µ-law, raw PCM | — | ✅ | ✅ |
+| [MP3][mp3] audio (`/audio.mp3`, `audio.codec: mp3`) | — | — | ✅ |
+| [WebP][webp] snapshots (`/image.webp`) | — | — | ✅ |
+| Audio track in MP4 recordings | — | ✅ | ✅ |
+| Play a clip on the speaker (`/play_audio`) | — | ✅ | ✅ |
+| RTSP back-channel (ONVIF Profile T talkback) | — | ✅ | ✅ |
+| WebRTC — browser preview, adaptive bitrate, talkback | — | ✅ | ✅ |
+| Cloud signalling (`cloud.enabled`) | — | ✅ | ✅ |
+| SIP client (the doorbell use case) | — | ✅ | ✅ |
+| RTMP and RTMPS push (YouTube, Telegram, VK…) | — | ✅ | ✅ |
+
+The one thing FPV gains in exchange is room. Measured on a Goke GK7205V200,
+same commit, same toolchain, stripped:
+
+| flavour | binary | vs Lite |
+|---|---|---|
+| FPV | 496 KB | −46% |
+| **Lite** | 917 KB | — |
+| Ultimate | 1.24 MB | +38% |
+
+On a camera with 8 MB of flash that difference is the feature.
+
+#### Which cameras get which
+
+Lite is built for every supported SoC. Ultimate is published for GK7205V200,
+GK7205V500, Hi3516CV200, Hi3516CV300 and Hi3516EV200. FPV is published for
+GK7205V200 and Hi3516EV200 — the two chips the flying builds are actually
+flown on.
+
+If a setting or an endpoint from this wiki is missing on your camera, the build
+is the first thing to check: a knob absent from the schema is one this binary
+was not built with, and the API answers `404` for it rather than accepting a
+value nothing would apply. `curl http://localhost/api/v1/config.json` lists
+exactly what your build has.
+
 ### User levels in the system
 
-At the moment, the access has two level in system:
+Majestic authenticates against the system accounts in `/etc/shadow` — the same
+credentials as SSH — and sorts them into two levels:
 
-**root** - the main system user, whose name and password are identical when logging into the system via SSH and WEB, there are no restrictions.
+**root** — full access. The web interface, the API, the terminal and log
+sockets, firmware upgrade, everything.
 
-**viewer** - a user with limited rights who is denied access via SSH and WEB. The user can only receive RTSP requiring authorization. 
-Update by 2024.11.08 - in the near future we will also give him the ability to watch all media resources available on the WEB port, and also 
-control the /night/toggle switch, but the login to the interface itself will still be prohibited. 
-We might also add a specific path to the directory of scripts that it will be allowed to execute
+**any other system account** — media only. Such an account can fetch snapshots
+and the MJPEG stream, watch over WebSocket video, and work the night-mode
+switches, but it cannot log in to the interface or touch the API. Concretely,
+the paths it is allowed are `/image*`, `/mjpeg*`, `/night/*`, `/ws/video` and
+`/cgi-bin/v*`. It also authenticates for RTSP and for ONVIF.
+
+The conventional name for such an account is `viewer`, and creating one takes a
+line:
+
 ```
 adduser viewer -s /bin/false -D -H ; echo viewer:123456 | chpasswd
 ```
 
+A "remember me" session cookie is only ever issued to root, so a media account
+has to present its credentials on each request.
+
+Authentication can be turned off entirely with `system.unsafe: true`. That
+opens every endpoint on the camera to anyone who can reach the port — use it on
+an isolated bench, not on a network.
+
 ### Control signals
 
+| Signal | What it does |
+|---|---|
+| `SIGHUP` | Re-read `/etc/majestic.yaml`, tear the media pipeline down and build it again. This is what `killall -HUP majestic` — and the WebUI, and `cli` — use to apply a change. Repeat signals within 3 seconds are ignored. |
+| `SIGQUIT` | Release the SDK and the video memory with it, but keep the process running and answering. This is how `sysupgrade` frees RAM for a firmware download. A `SIGHUP` afterwards brings the pipeline back. |
+| `SIGINT`, `SIGTERM` | Release the SDK and exit. |
+| `SIGUSR2` | Start or end a SIP call — see [SIP](#sip) below. Only in builds with SIP, and only when `sip.enabled` is set. |
+| `SIGUSR1` | Reserved by Majestic's thread pool. Do not send it. |
+
+On Ingenic, a `SIGHUP` that arrives while a CGI script is running is postponed
+by a second rather than dropped, so a reload during a WebUI action is safe.
+
 ```
--HUP restart Majestic (Except Ingenic T21).
--SIGUSR2 SDK Shutdown (For all platforms).
+killall -HUP majestic
 ```
 
 ### Camera related URLs in firmware
@@ -42,9 +142,33 @@ matches your build rather than whatever was current when a document was written.
 It also fills in the camera's own address, uses the right scheme for your setup
 (http or https, ws or wss), and says whether the endpoints ask for a password.
 
-A JPEG snapshot takes control parameters, for example:
+A JPEG snapshot can be asked for at a size, quality or crop of its own, rather
+than the one `jpeg.*` sets for everybody:
 
-`/image.jpg?width=640&height=360&qfactor=73&color2gray=1`
+`/image.jpg?width=640&height=360&qfactor=73&gray=1&crop=0x0x1280x720`
+
+| parameter | meaning |
+|---|---|
+| `width`, `height` | Size of this snapshot. |
+| `qfactor` | JPEG quality, 1–100. |
+| `gray` | `1` for greyscale. |
+| `crop` | `XxYxWxH` — top-left corner, then size, the same order as `video0.crop`. A malformed value is rejected with `400` rather than quietly ignored. Sets the size too. |
+
+Two conditions apply, because a re-tuned snapshot needs a JPEG encoder
+configured for its own geometry and there is exactly one of those:
+
+- It works on **HiSilicon and Goke only**. Elsewhere the parameters are refused
+  with `501` — set `jpeg.size` and `jpeg.qfactor` in the config instead.
+- `jpeg.tuned` must name the largest size you intend to ask for, e.g.
+  `jpeg.tuned: 1920x1080`, and Majestic must be restarted after setting it. It
+  is `off` by default, because the frame buffers it reserves are paid for
+  whether or not anyone ever asks for a snapshot, and nothing shipped on the
+  camera does — ONVIF, netip and the web interface all take the plain one. A
+  request larger than the cap is refused and says so.
+
+Two clients asking for *different* parameters at the same time is answered with
+`409`; asking for the same ones shares a single capture. A plain `/image.jpg`
+with no parameters is unaffected by any of this and always works.
 
 ### Changing parameters via the HTTP API
 
@@ -76,10 +200,15 @@ EOF
 
 ### Experimental Control Features (not yet described in endpoints)
 
+`/metrics` returns everything below in Prometheus text format, plus process,
+thread-pool, uptime, allocator and HLS counters. The sub-paths return one group
+each:
+
 ```
-/metrics/isp
-/metrics/venc
-/metrics/motion
+/metrics/venc      encoder counters
+/metrics/isp       ISP parameters
+/metrics/night     day/night state and light level
+/metrics/motion    motion detection state
 ```
 ```
 /night/ircut
@@ -140,7 +269,14 @@ curl http://localhost/api/v1/config --data-binary @- <<'EOF'
 EOF
 ```
 
-Reboot the camera and restart `majestic` in the foreground:
+Motion detection is set up when the media pipeline is built, so unlike most
+settings this one needs a reload to take effect:
+
+```
+killall -HUP majestic
+```
+
+To watch it work, run Majestic in the foreground instead:
 
 ```
 killall majestic; sleep 3; majestic
@@ -172,8 +308,10 @@ curl http://localhost/api/v1/config --data-binary @- <<'EOF'
   }
 }
 EOF
-reboot
 ```
+
+The API applies this live and saves it; no reboot is needed. RTMP is in Lite
+and Ultimate builds, not FPV.
 
 Examples of other addresses for different services:
 - YouTube
@@ -252,31 +390,65 @@ If both `server` and `servers` are present, they are combined.
 
 ### ONVIF
 
-For basic ONVIF to work correctly, you need to enable it and add a user to the system as shown in the example:
+ONVIF is on by default (`onvif.enabled: true`). It authenticates against the
+system accounts, so the account an NVR logs in with has to exist:
 
 ```
-curl 'http://localhost/api/v1/set?onvif.enabled=true'
 adduser viewer -s /bin/false -D -H
 echo viewer:123456 | chpasswd
 ```
 
+Some clients cannot work that way. WSSE `PasswordDigest` and HTTP Digest both
+require the camera to *know* the password rather than just verify it, and a
+hash in `/etc/shadow` cannot be used for that — so a client that speaks only
+those, such as tinyCam Monitor or ONVIF Device Manager 2.2.x, is refused. For
+those, set an ONVIF-only credential pair:
+
+```
+curl http://localhost/api/v1/config --data-binary @- <<'EOF'
+{
+  "onvif": {
+    "username": "viewer",
+    "password": "123456"
+  }
+}
+EOF
+```
+
+It is opt-in and empty by default, and it is stored **in cleartext** in
+`/etc/majestic.yaml` — that is the trade being made, so only set it if a client
+needs it. When set, it is checked first and the `/etc/shadow` lookup is the
+fallback.
+
+Majestic also answers mDNS (`mdns.enabled`, on by default) alongside ONVIF's own
+WS-Discovery: `openipc.local` always, and `<hostname>.local` as well, so a
+renamed camera stays reachable under both.
+
 ### JPEG and MJPEG
 
-For the purpose of unification and standardization for all platforms, as well as to increase the stability of the streamer, the image size will always be equal to the size on the Video0 channel and a separate setting is not provided.
+`jpeg.size` and `jpeg.qfactor` apply to the MJPEG stream on `/mjpeg` **and** to
+still snapshots on `/image.jpg` alike; `jpeg.fps` is the MJPEG stream only,
+since a snapshot is taken when it is asked for. Leaving `jpeg.size` unset
+follows the `video0` resolution.
+
+`jpeg.enabled` governs the MJPEG stream and nothing else. Still snapshots work
+whether it is on or off.
+
+Turning on `jpeg.rtsp` publishes the same MJPEG as an RTSP stream. RFC 2435
+caps that at 2040 px per axis, so a larger `jpeg.size` is reduced to 1280x720
+with a warning in the log.
 
 ###  ROI
 
-Detection zones of two types:
+Motion detection can be restricted to one or more regions of interest:
 
 `motionDetect.roi: 1854x1304x216x606,1586x1540x482x622`
 
-`motionDetect.skipIn: 960x540x1920x1080`
+Only movement inside a listed region raises an event. With no `roi` set the
+whole frame is watched.
 
-**roi** - region of interest, when we specify one or more regions whose movements we are interested in.
-
-**skipIn** - on the contrary, if we are interested in movements on the whole screen, except for some areas (for example, there is a tree in the frame, which is swaying in the wind).
-
-Coordinate format is the same as in osd.privacyMasks: x,y of the top left point, length and width in pixels.
+Coordinate format is the same as in `osd.privacyMasks` and `video0.crop`: x,y
+of the top left point, then width and height in pixels.
 
 ### How to convert YUV image to a more common image format
 
@@ -296,6 +468,11 @@ ffplay -ar 48000 -ac 1 -f alaw http://192.168.1.10/audio.alaw
 ffplay -ar 48000 -ac 1 -f mulaw http://192.168.1.10/audio.ulaw
 ffplay -ar 8000 -ac 1 -f alaw http://192.168.1.10/audio.g711a
 ```
+
+There are also `/audio.opus` and `/audio.m4a` (AAC), which ffplay reads without
+being told the rate, and `/audio.mp3` in Ultimate builds. `/audio.html` is a
+small player page for them. All of them answer `501` while `audio.enabled` is
+off.
 
 ### Enabling the speaker
 
@@ -385,9 +562,10 @@ answered with 461.
 
 #### WebRTC in the browser
 
-Lite and Ultimate builds both carry WebRTC. It used to be Ultimate only, because
-the implementation was a vendored AWS SDK too large for the smaller boards;
-Majestic has its own since, and the SDK is gone.
+Lite and Ultimate builds both carry WebRTC ([see above](#what-the-flavours-change)).
+It used to be Ultimate only, because the implementation was a vendored AWS SDK
+too large for the smaller boards; Majestic has its own since, and the SDK is
+gone.
 
 For **watching**, there is nothing to set up: the WebUI's `Preview` page uses
 WebRTC by default, and so does the live preview beside the image controls in
@@ -419,7 +597,16 @@ talkback control yet.
 
 Lite and Ultimate builds include a SIP client. Point the `sip.*` settings at a
 PBX and the camera can place a call carrying H.264 video and G.711 audio in both
-directions, optionally triggered by a GPIO button — the usual doorbell setup.
+directions, optionally triggered by a GPIO button (`sip.buttonPin`) — the usual
+doorbell setup.
+
+A call can also be started and ended from a script, without a button:
+
+```
+killall -USR2 majestic
+```
+
+The first signal originates the call, the next one hangs it up.
 
 #### Caveat
 
@@ -442,6 +629,7 @@ push-to-talk is unaffected.
 [raw]: https://en.wikipedia.org/wiki/Raw_image_format
 [rtsp]: https://en.wikipedia.org/wiki/RTSP
 [ulaw]: https://en.wikipedia.org/wiki/%CE%9C-law_algorithm
+[webp]: https://en.wikipedia.org/wiki/WebP
 [yuv]: https://en.wikipedia.org/wiki/YUV
 [ffplay]: https://ffmpeg.org/ffplay.html
 [ffmpeg]: https://ffmpeg.org/
