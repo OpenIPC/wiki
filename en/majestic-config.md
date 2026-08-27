@@ -3,6 +3,24 @@
 
 Majestic example config
 -----------------------
+
+Majestic reads `/etc/majestic.yaml`. A camera only needs the keys it wants to
+change from the defaults, so a working file is usually much shorter than what
+follows — this page is a reference of what exists, not a file to paste whole.
+`/etc/majestic.full` on the camera is a shorter sample of the same thing.
+
+Two ways to check a key against the build you are actually running, which beats
+trusting any wiki page:
+
+```
+curl http://localhost/api/v1/config.json     # every key this binary has, with defaults and ranges
+curl 'http://localhost/api/v1/set?video0.fps=10'   # applies live and saves; 404 if the key is unknown
+```
+
+Sections marked *(build-dependent)* only exist in some builds — see
+[Lite, Ultimate and FPV](majestic-streamer.md#lite-ultimate-and-fpv). Sections
+marked *(platform-dependent)* only exist on the SoCs that can act on them.
+
 ```
 system:
   webPort: 80
@@ -11,40 +29,64 @@ system:
   #httpsCertificateKey: /etc/ssl/private/www.example.com.key
   logLevel: debug
   buffer: 1024
-  plugins: false
+  plugins: false                # load /usr/lib/<vendor>.so, see "Majestic plugins"
+  #telemetry: true              # anonymous install counter (MAC, uptime, chip,
+                                # sensor, flash/SD size) sent as a DNS query
+  #unsafe: false                # true disables ALL authentication
+  #staticDir: /var/www          # where the web interface is served from
 
+# (platform-dependent) Most of this section is per-vendor; the platforms that
+# read each key are noted. A key your build does not have answers 404.
 isp:
-  #sensorConfig: /etc/sensors/imx222_1080p_line.ini
-  antiFlicker: disabled
+  #sensorConfig: /etc/sensors/imx222_1080p_line.ini   # path, or just the sensor name
+  antiFlicker: disabled         # disabled | 50 | 60
   #blkCnt: 4
   #drc: 300
-  #rawMode: slow
+  #rawMode: slow                # none | slow | fast
   #iqProfile: <path/to/file>
   #lowDelay: false
-  #awbMode: auto
-  #memMode: reduction
-  #slowShutter: disabled
-  #dis: false
+  #awbMode: auto                # auto|manual|day|cloudy|incandescent|
+                                # flourescent|twilight|shade|warm|custom
+  #memMode: reduction           # normal | reduction        (HiSilicon/Goke)
+  #slowShutter: disabled        # disabled|low|medium|high  (HiSilicon/Goke)
+  #dis: false                   # digital stabilisation     (HiSilicon/Goke, Ingenic)
+  #wdr: 0                       #                           (SigmaStar)
+  #edgeGain: false              #                           (SigmaStar)
+  #iqServer: false              #                           (SigmaStar)
+  #pad: 0                       #                           (SigmaStar)
+  #yuvCompression: auto         # HiSilicon gen 3/4 only; saves ~1/3 of the main
+                                # frame buffer, ignored with rotate/mirror/masks
+  # Manual exposure and gain. Each is skipped when absent, so leaving it out
+  # keeps the automatic behaviour.
+  #exposure: 0                  #                (HiSilicon/Goke, SigmaStar, Ingenic)
+  #aGain: 0                     #                (HiSilicon/Goke, SigmaStar)
+  #dGain: 0                     #                (HiSilicon/Goke)
+  #ispGain: 0                   #                (HiSilicon/Goke)
 
 image:
   mirror: false
   flip: false
-  rotate: 0
+  rotate: 0                     # 0 | 90 | 270
   contrast: 50
   hue: 50
   saturation: 50
   luminance: 50
+  #tuning: false                # automatic image tuning
 
 video0:
   enabled: true
-  codec: h264
+  codec: h264                   # h264 | h265
   #size: 1920x1080
   fps: 20
   bitrate: 4096
-  rcMode: vbr
+  rcMode: vbr                   # cbr | vbr | avbr
+  #profile: main                # base | main | high
   gopSize: 1.0
-  #gopMode: normal
-  #svct: off
+  #gopMode: normal              # normal | dual | smart
+  #adjustBitrate: true          # may a WebRTC viewer on a thin link lower this
+                                # channel's rate; turn off for a channel feeding
+                                # an NVR, a recorder or an outgoing publisher
+  #svct: off                    # off | 2x | 4x — see "Majestic encoder tuning"
   # Encoder reference structure. Every P frame references the keyframe, so
   # one lost frame costs one frame. Wants a SHORT gopSize (~1.0). See
   # "Majestic encoder tuning". Each key here is skipped when absent, so
@@ -60,8 +102,14 @@ video0:
   #roiQp: "-5"
   #bypass: 0
   #crop: 0x0x960x540
-  #sliceUnits: 4
-  #minQp: 12
+  # Split a picture into several NAL slices, so one lost packet costs part of a
+  # frame instead of all of it.
+  #sliceUnits: 4                # macroblock rows per slice (HiSilicon/Goke, SigmaStar)
+  #sliceBytes: 0                # target bytes per slice; wins over sliceUnits
+                                # when both are set          (HiSilicon/Goke)
+  # Quantiser bounds. The defaults are per-vendor — read them back from
+  # /api/v1/config.json rather than assuming the numbers here.
+  #minQp: 28
   #maxQp: 42
 
 video1:
@@ -69,73 +117,115 @@ video1:
   codec: h264
   size: 704x576
   fps: 15
+  # video1 takes the same keys as video0
 
 jpeg:
-  enabled: true
+  enabled: true                 # JPEG as a whole. false frees the snapshot
+                                # channel's frame, but /image.jpg then answers
+                                # 503 and /mjpeg is unavailable -- ONVIF
+                                # snapshots and the WebUI preview with them
   qfactor: 50
-  fps: 5
-  #size: 160x120
-  rtsp: false
+  fps: 5                        # MJPEG stream only
+  #size: 160x120                # applies to /mjpeg AND /image.jpg
+  #osd: true                    # burn the OSD into JPEG output
+  rtsp: false                   # also publish MJPEG over RTSP (max 2040 px/axis)
+  #tuned: off                   # HiSilicon/Goke only: largest /image.jpg?width=...
+                                # to serve, e.g. 1920x1080. Needs a restart.
 
 osd:
   enabled: false
   font: /usr/share/fonts/truetype/UbuntuMono-Regular.ttf
   template: "%d.%m.%Y %H:%M:%S"
+  #size: "1.0"                  # font scale factor
+  #weight: normal               # normal | thin
+  #outline: true
+  #bgAlpha: 25                  # plate opacity, 0-100
+  # Placement. anchor: proportional (the default) uses posX/posY on their
+  # -16..16 scale; any other anchor uses offsetX/offsetY, measured inward from
+  # that corner or edge. An axis the anchor centres ignores its offset.
+  #anchor: proportional         # proportional | top-left | top | top-right |
+                                # left | center | right | bottom-left | bottom |
+                                # bottom-right
+  #offsetX: "0"
+  #offsetY: "0"
   posX: 16
   posY: 16
   #privacyMasks: 0x0x234x640,2124x0x468x1300
 
+# (build-dependent: absent from FPV builds)
 audio:
   enabled: false
   volume: 30                                              # 0 mutes the input
-  srate: 8000
-  codec: opus
+  #gain: 0                                                # 0-31, analogue gain
+  srate: 8000                                             # 8000|16000|32000|48000
+  codec: opus                   # opus | aac | pcm | alaw | ulaw (| mp3, Ultimate)
   outputEnabled: false
   outputVolume: 30
+  #outputGain: 0
   #speakerPin: 32
   #speakerPinInvert: false
+  #inputChannel: 0
+  #jitterBufferMs: 80           # RTSP back-channel: 0 = passthrough (LAN),
+                                # 80 helps over Wi-Fi/WAN
 
 rtsp:
   enabled: true
   port: 554
+  #alias1: cam/realmonitor      # extra URL path that selects stream 1
+  #alias2: cam/substream        # extra URL path that selects stream 2
+  #backchannel: false           # ONVIF Profile T talkback (needs audio output)
+  #audioCodec: ""               # override audio.codec for RTSP only
 
 nightMode:
-  lightMonitor: true
+  lightMonitor: false
   #irCutPin1: 1
   #irCutPin2: 2
   irCutSingleInvert: false
   #backlightPin: 65
   colorToGray: true
   #overrideDrc: 300
+  #overrideWdr: 0
   #minThreshold: 2000
   #maxThreshold: 5000
   #lightSensorPin: 62
   lightSensorInvert: false
-  #dncDelay: 30
+  #adcReadout: false
+  #monitorDelay: 30             # seconds, 0-60
 
 motionDetect:
   enabled: false
   visualize: false
   debug: false
   #roi: 1854x1304x216x606,1586x1540x482x622
-  #skipIn: 960x540x1920x1080
-  #sensitivity: 3
+  #sensitivity: 3               # 0-8
 
+# path is a DIRECTORY and filename is the base name; the extension is added by
+# Majestic. Both are strftime patterns, expanded when a file is opened. Older
+# configs that put the whole filename in `path` produce a directory of that
+# name — split them.
 records:
   enabled: false
-  path: /mnt/mmcblk0p1/%F/%H.mp4
-  maxUsage: 95
-  #splitRecord: 10
+  path: /mnt/mmcblk0p1/%F       # -> /mnt/mmcblk0p1/2026-08-27/
+  filename: "%H-%M"             # -> 14-30.mp4
+  maxUsage: 95                  # stop when the card is this full, %
+  #split: 20                    # minutes per file, 1-100
+  #substream: false             # record video1 instead of video0
+  #notime: false                # ignore filename, number files 00000.mp4 upward
+  #audioCodec: ""               # mp3 | aac | opus; empty follows audio.codec
+  #key: ""                      # XOR-obfuscate the payload; names files .enc
 
 outgoing:
   enabled: false
   #server: udp://192.168.1.10:5600
   #naluSize: 1200
+  #substream: false                                       # publish video1
+  #thinEnhance: false                                     # send the SVC-T base layer only
   #audioCodec: ""                                         # RTMP audio codec (aac|alaw|ulaw|pcm); empty follows audio.codec
   #audioSource: auto                                      # auto|mic|silence|file|none; silence/file feed a track when there is no microphone
   #audioFile: ""                                          # ADTS .aac looped when audioSource is file
   # Several destinations (majestic.yaml only, not available in the WebUI). Each
   # entry is its own connection: udp/unix as RTP, rtmp/rtmps as RTMP.
+  # rtmp/rtmps needs a Lite or Ultimate build; udp/unix work everywhere.
   #servers:
   #  - udp://IP:port
   #  - unix:/tmp/rtpstream.sock
@@ -148,11 +238,18 @@ watchdog:
 hls:
   enabled: false
 
+mdns:
+  enabled: true                 # answers for openipc.local and <hostname>.local
+
 onvif:
-  enabled: false
+  enabled: true
+  #username: root
+  #password: ""                 # opt-in CLEARTEXT pair, only for clients that
+                                # need WSSE PasswordDigest or HTTP Digest
 
 ipeye:
   enabled: false
+  #model: ""
 
 netip:
   enabled: false
@@ -162,16 +259,43 @@ netip:
   #snapshots: true
   #ignoreSetTime: false
 
+# (build-dependent: Lite and Ultimate)
 cloud:
   enabled: false
+  #host: ""                     # empty keeps the built-in default
+  #port: 0
 
+# (build-dependent: Lite and Ultimate)
+#sip:
+  #enabled: false
+  #server: pbx.example.com
+  #port: 5060
+  #username: doorbell
+  #password: secret
+  #localUri: ""
+  #callTarget: sip:100@pbx.example.com   # several, comma-separated, are allowed
+  #localIp: ""                 # goes into Via/Contact; must be routable back
+  #localPort: 5060
+  #doRegister: true
+  #registerExpires: 3600        # seconds, 60-86400; refreshed at expires-60
+  #buttonPin: 0                 # GPIO wired to the doorbell button
+  #buttonActiveLow: true
+  #rtpPortHint: 5004            # start of the local RTP port scan
+  #ringMode: sequential         # several targets: sequential | parallel
+  #ringSeconds: 10              # 1-300
+  #ringCycles: 3                # 0-100 passes over the target list; 0 = forever
+
+# (build-dependent: Lite and Ultimate)
 #webrtc:
   # https://www.w3.org/TR/webrtc/#rtciceserver-dictionary with optional
-  # '?transport=udp' or '?transport=tcp'. Comma-separated; turn: entries need
-  # turnUsername and turnCredential beside them. Unset means
-  # stun:stun.cloudflare.com:3478, which was measured to answer from networks
-  # where the older Google and AWS defaults stayed silent.
-  #iceServers: stun:stun.cloudflare.com:3478
+  # '?transport=udp' or '?transport=tcp'. A list, separated by commas or
+  # spaces. Unset means stun:stun.cloudflare.com:3478, which was measured to
+  # answer from networks where the older Google and AWS defaults stayed silent.
+  # Set it to 'none' to stop the camera contacting anyone.
+  #iceServers: stun:stun.cloudflare.com:3478, turn:relay.example:3478
+  # Required alongside any turn:/turns: entry. Without both, a browser refuses
+  # to build the connection at all, so an unauthenticated relay is dropped from
+  # the list rather than handed over.
   #turnUsername:
   #turnCredential:
 
@@ -180,5 +304,10 @@ cloud:
 # under video0/video1 with the rest of them.
 #fpv:
   #enabled: false
-
 ```
+
+### See also
+
+- [Majestic streamer](majestic-streamer.md) — endpoints, HTTP API, build flavours
+- [Majestic encoder tuning](majestic-encoder-tuning.md) — `refEnhance`, `refPred`, `svct`, ROI
+- [Majestic plugins](majestic-plugins.md) — what `system.plugins` turns on
