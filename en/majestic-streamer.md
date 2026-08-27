@@ -385,10 +385,35 @@ answered with 461.
 
 #### WebRTC in the browser
 
-Ultimate builds serve a page at `http://192.168.1.10/webrtc` with a microphone
-button that sends your browser's microphone to the camera speaker. Browsers only
-grant microphone access in a secure context, so over plain HTTP the button reads
-"needs HTTPS" — put the camera behind TLS or a TLS-terminating reverse proxy.
+Lite and Ultimate builds both carry WebRTC. It used to be Ultimate only, because
+the implementation was a vendored AWS SDK too large for the smaller boards;
+Majestic has its own since, and the SDK is gone.
+
+For **watching**, there is nothing to set up: the WebUI's `Preview` page uses
+WebRTC by default, and so does the live preview beside the image controls in
+`Settings`. Both fall back to the older MSE path on a browser or camera where
+WebRTC cannot be negotiated, so the picture arrives either way. The `WebRTC`
+button on `Preview` shows which one is in use and switches between them.
+
+Watching over WebRTC also lets the camera fit the stream to your connection —
+useful on a thin link, and worth knowing about, because the encoder is shared
+with everything else reading that channel. The preview watches the substream for
+that reason. `videoN.adjustBitrate` turns the adaptation off per channel if the
+rate is committed to something else, such as a recorder.
+
+For **talking back**, use the debug page at `http://192.168.1.10/webrtc`. Its
+`talk` button sends your browser's microphone to the camera speaker. Two things
+have to be true or nothing is heard:
+
+- `audio.outputEnabled` must be on, or the camera answers the offer with audio
+  in one direction only and says so in its log.
+- Browsers only grant microphone access in a secure context, so over plain HTTP
+  the button reads "needs HTTPS" — put the camera behind TLS or a
+  TLS-terminating reverse proxy.
+
+That page is a diagnostic rather than a viewer: it shows the ICE and DTLS state,
+what the camera has sent, and what it has received from you. The WebUI has no
+talkback control yet.
 
 #### SIP
 
