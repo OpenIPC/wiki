@@ -92,8 +92,18 @@ Use `${baseaddr}` rather than a literal address. `0x42000000` is only RAM on
 SoCs whose DRAM starts at `0x40000000` (Hi3516EV200/EV300, Hi3518EV300,
 GK720x). On Hi3516CV200 and Hi3518EV200 DRAM starts at `0x80000000`, so that
 address is not memory at all and the command ends in `data abort` and a reset.
-U-Boot already sets `baseaddr` correctly for the board; if `printenv baseaddr`
-comes back empty see [Help: U-Boot](help-uboot.md).
+U-Boot already sets `baseaddr` correctly for the board. If `printenv baseaddr`
+comes back empty, set it from the table below — and do not copy an address out
+of the sections above, which are written for the `0x40000000` family:
+
+| SoC | DRAM base | set `baseaddr` to |
+|---|---|---|
+| Hi3516CV200, Hi3516CV300, Hi3518EV200, Hi3518EV201 | `0x80000000` | `0x82000000` |
+| Hi3516EV200, Hi3516EV300, Hi3518EV300, GK720x | `0x40000000` | `0x42000000` |
+
+If your SoC is not listed, look it up at
+[openipc.org/supported-hardware](https://openipc.org/supported-hardware/)
+rather than guessing.
 
 ```
 printenv baseaddr

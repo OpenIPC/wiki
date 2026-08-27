@@ -13,10 +13,18 @@ printenv baseaddr
 
 If it is not there, set it yourself.
 
+The value depends on where DRAM starts on your SoC, which differs by
+generation — copying the wrong one gives `data abort` and a reset.
+
 ```bash
-# Look up address for your SoC at https://openipc.org/supported-hardware/
+# DRAM at 0x80000000: Hi3516CV200, Hi3516CV300, Hi3518EV200, Hi3518EV201
 setenv baseaddr 0x80600000
+
+# DRAM at 0x40000000: Hi3516EV200, Hi3516EV300, Hi3518EV300, GK720x
+setenv baseaddr 0x40600000
 ```
+
+Look up anything not listed at https://openipc.org/supported-hardware/
 
 Assign the hex size of your flash chip to a variable called `flashsize`.
 
