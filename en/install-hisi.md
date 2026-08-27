@@ -88,14 +88,41 @@ The `-recovery.bin` images are a different thing again: they are built to fit
 the boot ROM's SRAM window so they can be uploaded over UART to a board that
 will not boot at all. Do not flash them.
 
+Use `${baseaddr}` rather than a literal address. `0x42000000` is only RAM on
+SoCs whose DRAM starts at `0x40000000` (Hi3516EV200/EV300, Hi3518EV300,
+GK720x). On Hi3516CV200 and Hi3518EV200 DRAM starts at `0x80000000`, so that
+address is not memory at all and the command ends in `data abort` and a reset.
+U-Boot already sets `baseaddr` correctly for the board. If `printenv baseaddr`
+comes back empty, set it from the table below — and do not copy an address out
+of the sections above, which are written for the `0x40000000` family:
+
+| SoC | DRAM base | set `baseaddr` to |
+|---|---|---|
+| Hi3516CV200, Hi3516CV300, Hi3518EV200, Hi3518EV201 | `0x80000000` | `0x82000000` |
+| Hi3516EV200, Hi3516EV300, Hi3518EV300, GK720x | `0x40000000` | `0x42000000` |
+
+If your SoC is not listed, look it up at
+[openipc.org/supported-hardware](https://openipc.org/supported-hardware/)
+rather than guessing.
+
 ```
-mw.b 0x42000000 ff 1000000
-tftp 0x42000000 u-boot-hi3516xxxxx-beta.bin
+printenv baseaddr
+mw.b ${baseaddr} ff 1000000
+tftp ${baseaddr} u-boot-hi3516xxxxx-beta.bin
 sf probe 0
 sf erase 0x0 0x50000
-sf write 0x42000000 0x0 ${filesize}
+sf write ${baseaddr} 0x0 ${filesize}
 reset
 ```
+
+Run those as separate lines, and do not join them into one line with `&&`:
+U-Boot expands `${filesize}` when it parses the line, before `tftp` has run
+and set it, so the write gets no length and does nothing.
+
+Note also that `sf erase 0x0 0x50000` deliberately clears only the bootloader
+and its environment. Erasing the whole chip (`sf erase 0x0 0x1000000`) takes
+the kernel and rootfs with it, and the board will not boot again until all
+three are written back.
 
 [1]: guide-supported-devices.md
 
