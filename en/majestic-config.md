@@ -167,8 +167,13 @@ cloud:
 
 #webrtc:
   # https://www.w3.org/TR/webrtc/#rtciceserver-dictionary with optional
-  # '?transport=udp' or '?transport=tcp'
-  #iceServers: stun:stun.kinesisvideo.eu-north-1.amazonaws.com:443
+  # '?transport=udp' or '?transport=tcp'. Comma-separated; turn: entries need
+  # turnUsername and turnCredential beside them. Unset means
+  # stun:stun.cloudflare.com:3478, which was measured to answer from networks
+  # where the older Google and AWS defaults stayed silent.
+  #iceServers: stun:stun.cloudflare.com:3478
+  #turnUsername:
+  #turnCredential:
 
 # fpv.enabled switches the SigmaStar FPV path on, and also disables
 # userspace 3A. The encoder knobs it used to gate now live per channel,
