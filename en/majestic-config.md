@@ -131,6 +131,10 @@ jpeg:
   rtsp: false                   # also publish MJPEG over RTSP (max 2040 px/axis)
   #tuned: off                   # HiSilicon/Goke only: largest /image.jpg?width=...
                                 # to serve, e.g. 1920x1080. Needs a restart.
+  #toProgressive: false         # Ultimate only: send /image.jpg progressively,
+                                # so a slow link paints a whole coarse picture
+                                # first instead of a sharp band at a time. Same
+                                # image, ~5% smaller, and costs CPU per snapshot
 
 osd:
   enabled: false

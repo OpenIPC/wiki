@@ -390,6 +390,12 @@ frames of its own, so it is off by default:
 curl 'http://localhost/api/v1/set?jpeg.tuned=640x360'
 ```
 
+On an **Ultimate** build only `width`, `height` and `qfactor` still come this
+way. `crop` and `gray` are cut out of the frame the camera has already made,
+which reserves nothing and costs no quality — so if a smaller picture is what
+you are after, a crop asks for one without any of the memory below. On Lite and
+FPV all five parameters go through the second encoder.
+
 The value is a size rather than a switch because the memory follows it. Frames
 are reserved for the size you name, not for the sensor — at 5 MP a full frame is
 5.6 MB, where three 640x360 frames come to 1013 KB:

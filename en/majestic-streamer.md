@@ -20,8 +20,9 @@ than for what it costs:
 - **Lite** — the everyday build, and what almost every camera runs. Everything
   a surveillance camera is expected to do, including audio, two-way talk,
   WebRTC in the browser and pushing to YouTube.
-- **Ultimate** — Lite plus the extras that only some owners ask for: MP3 audio
-  and WebP snapshots.
+- **Ultimate** — Lite plus the extras that only some owners ask for: MP3 audio,
+  WebP snapshots, and snapshots that can be cropped, made greyscale or sent
+  progressively without a second encoder.
 - **FPV** — a latency-first build for flying. Audio, WebRTC, SIP and RTMP are
   compiled out, leaving a binary about half the size of Lite that does one
   thing: put a picture on a radio link and get out of the way.
@@ -55,6 +56,8 @@ the web interface, the HTTP API and HTTPS.
 | Opus, AAC, G.711 A-law / µ-law, raw PCM | — | ✅ | ✅ |
 | [MP3][mp3] audio (`/audio.mp3`, `audio.codec: mp3`) | — | — | ✅ |
 | [WebP][webp] snapshots (`/image.webp`) | — | — | ✅ |
+| Crop and greyscale snapshots on any SoC, without `jpeg.tuned` ([`/image.jpg?crop=`](#crop-and-gray-on-ultimate)) | — | — | ✅ |
+| [Progressive][prog] snapshots (`jpeg.toProgressive`) | — | — | ✅ |
 | Audio track in MP4 recordings | — | ✅ | ✅ |
 | Play a clip on the speaker (`/play_audio`) | — | ✅ | ✅ |
 | RTSP back-channel (ONVIF Profile T talkback) | — | ✅ | ✅ |
@@ -68,9 +71,9 @@ same commit, same toolchain, stripped:
 
 | flavour | binary | vs Lite |
 |---|---|---|
-| FPV | 496 KB | −46% |
-| **Lite** | 917 KB | — |
-| Ultimate | 1.24 MB | +38% |
+| FPV | 500 KB | −45% |
+| **Lite** | 913 KB | — |
+| Ultimate | 1.37 MB | +54% |
 
 On a camera with 8 MB of flash that difference is the feature.
 
@@ -149,16 +152,46 @@ than the one `jpeg.*` sets for everybody:
 
 | parameter | meaning |
 |---|---|
+| `crop` | `XxYxWxH` — top-left corner, then size, the same order as `video0.crop`. |
+| `gray` | `1` for greyscale. |
 | `width`, `height` | Size of this snapshot. |
 | `qfactor` | JPEG quality, 1–100. |
-| `gray` | `1` for greyscale. |
-| `crop` | `XxYxWxH` — top-left corner, then size, the same order as `video0.crop`. A malformed value is rejected with `400` rather than quietly ignored. Sets the size too. |
 
-Two conditions apply, because a re-tuned snapshot needs a JPEG encoder
-configured for its own geometry and there is exactly one of those:
+They fall into two groups, and which group a parameter is in decides what the
+camera has to do to serve it.
 
-- It works on **HiSilicon and Goke only**. Elsewhere the parameters are refused
-  with `501` — set `jpeg.size` and `jpeg.qfactor` in the config instead.
+#### `crop` and `gray`, on Ultimate
+
+An **Ultimate** build cuts a crop out of the captured frame, or drops its
+colour, by rearranging what the encoder already produced instead of encoding
+anything again. Nothing has to be switched on first, it works on every SoC, and
+it costs no quality — the picture inside the crop is the same picture, to the
+byte.
+
+It is also much cheaper than the full snapshot it comes from, which is the point
+on a slow link. On a 4K camera, a 1280×720 crop is roughly a seventh of the
+bytes and a fraction of the work.
+
+One consequence worth knowing. A JPEG is stored in blocks, so a crop that costs
+nothing can only *begin* on a 16-pixel boundary. The corner you ask for is
+rounded **outwards** — you always get at least the region you asked for, never
+less — and the rectangle actually used comes back in a header:
+
+```
+$ curl -sD - -o out.jpg 'http://camera/image.jpg?crop=100x100x1280x720' | grep -i x-crop
+X-Crop-Applied: 96x96x1284x724
+```
+
+Ask for a corner already on the grid (`0x0`, `96x96`, `640x480`…) and you get
+exactly the rectangle you named.
+
+#### `width`, `height` and `qfactor`, and everything on Lite
+
+A different size or a different quality cannot be had without encoding the frame
+again, and there is exactly one encoder to do that with. Two conditions apply:
+
+- **HiSilicon and Goke only.** Elsewhere the parameters are refused with `501` —
+  set `jpeg.size` and `jpeg.qfactor` in the config instead.
 - `jpeg.tuned` must name the largest size you intend to ask for, e.g.
   `jpeg.tuned: 1920x1080`, and Majestic must be restarted after setting it. It
   is `off` by default, because the frame buffers it reserves are paid for
@@ -166,9 +199,21 @@ configured for its own geometry and there is exactly one of those:
   camera does — ONVIF, netip and the web interface all take the plain one. A
   request larger than the cap is refused and says so.
 
-Two clients asking for *different* parameters at the same time is answered with
-`409`; asking for the same ones shares a single capture. A plain `/image.jpg`
-with no parameters is unaffected by any of this and always works.
+Two clients asking for *different* sizes or qualities at the same time is
+answered with `409`; asking for the same ones shares a single capture.
+
+On **Lite and FPV** there is no such rearranging built in, so `crop` and `gray`
+are served the same way as the rest, under the same two conditions.
+
+#### When it says no
+
+A `crop` that is malformed, has a negative corner, is empty, or falls outside
+the frame is rejected with `400` rather than quietly ignored. A crop or a
+greyscale conversion asked for while another one is still running is answered
+with `503`: that transformation *is* the request, so the camera says come back
+shortly rather than send an uncropped picture as if nothing had happened. A
+plain `/image.jpg` with no parameters is unaffected by any of this and always
+works.
 
 ### Changing parameters via the HTTP API
 
@@ -444,6 +489,17 @@ Turning on `jpeg.rtsp` publishes the same MJPEG as an RTSP stream. RFC 2435
 caps that at 2040 px per axis, so a larger `jpeg.size` is reduced to 1280x720
 with a warning in the log.
 
+On **Ultimate**, `jpeg.toProgressive` changes how `/image.jpg` is written. A
+normal JPEG arrives one sharp band at a time, so on a slow link you watch it
+fill in from the top; a progressive one arrives as the whole picture, coarse at
+first and sharpening as the rest turns up. It is the same image either way — the
+same pixels, about 5% fewer bytes.
+
+It is off by default because the camera pays for it in CPU on every snapshot,
+and that only buys anything on a link slow enough for the wait to be noticeable
+— which is the case it was added for. Asking for a `crop` at the same time costs
+far less than converting the whole frame, and sends far less over the link.
+
 ###  ROI
 
 Motion detection can be restricted to one or more regions of interest:
@@ -632,6 +688,7 @@ push-to-talk is unaffected.
 [mp4]: https://en.wikipedia.org/wiki/MPEG-4_Part_14
 [opus]: https://en.wikipedia.org/wiki/Opus_(audio_format)
 [pcm]: https://en.wikipedia.org/wiki/Pulse-code_modulation
+[prog]: https://en.wikipedia.org/wiki/JPEG#JPEG_compression
 [raw]: https://en.wikipedia.org/wiki/Raw_image_format
 [rtsp]: https://en.wikipedia.org/wiki/RTSP
 [ulaw]: https://en.wikipedia.org/wiki/%CE%9C-law_algorithm
