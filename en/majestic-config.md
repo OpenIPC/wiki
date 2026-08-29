@@ -89,9 +89,9 @@ video0:
   #osd: true                    # draw the overlay on THIS stream. The overlay is
                                 # rendered per stream and sized for this stream's
                                 # own frame, so turning it off here leaves the
-                                # other streams stamped. Does not affect privacy
-                                # masks, except on Ingenic — see "On-screen
-                                # display and privacy masks"
+                                # other streams stamped. Privacy masks are not
+                                # affected — see "On-screen display and privacy
+                                # masks"
   #svct: off                    # off | 2x | 4x — see "Majestic encoder tuning"
   # Encoder reference structure. Every P frame references the keyframe, so
   # one lost frame costs one frame. Wants a SHORT gopSize (~1.0). See
@@ -149,9 +149,8 @@ jpeg:
 
 osd:
   enabled: false                # the TEXT overlay. Privacy masks below are not
-                                # part of it and do not need it — except on
-                                # Ingenic, where they still do. Which streams get
-                                # the text is then video0.osd / video1.osd /
+                                # part of it and do not need it. Which streams
+                                # get the text is then video0.osd / video1.osd /
                                 # jpeg.osd, each on by default
   font: /usr/share/fonts/truetype/UbuntuMono-Regular.ttf
   template: "%d.%m.%Y %H:%M:%S"
