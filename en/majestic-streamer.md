@@ -292,6 +292,63 @@ curl http://localhost/api/v1/config --data-binary @- <<'EOF'
 EOF
 ```
 
+### On-screen display and privacy masks
+
+Two different things share the `osd` section, and they answer to different
+switches.
+
+The **text overlay** is the timestamp, or whatever `osd.template` renders. It is
+drawn on each stream separately and sized for that stream's own frame, so the
+clock takes up about as much of a 704x576 sub stream as it does of a 2592x1520
+main one. Turn it on with `osd.enabled`, then choose which streams carry it:
+
+| Key | Default | Applies to |
+| --- | --- | --- |
+| `video0.osd` | `true` | the main stream |
+| `video1.osd` | `true` | the sub stream |
+| `jpeg.osd` | `true` | `/image.jpg` and `/mjpeg` |
+
+All three are on by default, so `osd.enabled: true` alone stamps every stream.
+Turning one off leaves the others stamped.
+
+A **privacy mask** is not part of that. It is a rectangle of the picture blacked
+out, and it covers every stream that is running — both video channels and the
+snapshot — because a stream showing the picture has to hide the same part of it.
+Turning the text off on a stream does not uncover the mask.
+
+Masks are written against the main stream's frame and scaled into each of the
+others, so one rectangle describes the same part of the scene everywhere:
+
+```
+curl http://localhost/api/v1/config --data-binary @- <<'EOF'
+{
+  "osd": {
+    "privacyMasks": "200x200x1200x900"
+  }
+}
+EOF
+```
+
+Each rectangle is `left x top x width x height` in main-stream pixels — the same
+format as `video0.crop`. A rectangle with no width or height covers nothing and
+is ignored.
+
+Masks do not need `osd.enabled`, and they do not follow `video0.osd`,
+`video1.osd` or `jpeg.osd`. A camera that has never shown a timestamp can still
+hide part of the scene, and turning a clock off never uncovers anything.
+
+#### What each SoC family can do
+
+Privacy masks are implemented on HiSilicon/Goke, SigmaStar and Ingenic, and
+behave the same way on all three. Other SoCs draw the text overlay but have no
+masks, so `osd.privacyMasks` does nothing there.
+
+One exception is worth knowing. On SigmaStar, `motionDetect.visualize` and
+privacy masks cannot both be drawn — they need the same hardware, and each wants
+it configured its own way. Masks win: with both set, the picture stays masked and
+the motion boxes are not drawn. With no masks configured, `visualize` behaves as
+before.
+
 ### Motion detection
 
 Motion detect is supported for HiSilicon/Goke, Ingenic and Sigmastar.

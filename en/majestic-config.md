@@ -86,6 +86,12 @@ video0:
   #adjustBitrate: true          # may a WebRTC viewer on a thin link lower this
                                 # channel's rate; turn off for a channel feeding
                                 # an NVR, a recorder or an outgoing publisher
+  #osd: true                    # draw the overlay on THIS stream. The overlay is
+                                # rendered per stream and sized for this stream's
+                                # own frame, so turning it off here leaves the
+                                # other streams stamped. Privacy masks are not
+                                # affected — see "On-screen display and privacy
+                                # masks"
   #svct: off                    # off | 2x | 4x — see "Majestic encoder tuning"
   # Encoder reference structure. Every P frame references the keyframe, so
   # one lost frame costs one frame. Wants a SHORT gopSize (~1.0). See
@@ -117,6 +123,9 @@ video1:
   codec: h264
   size: 704x576
   fps: 15
+  #osd: true                    # as video0.osd, and on by default here too: a
+                                # sub stream carries the overlay unless this is
+                                # turned off
   # video1 takes the same keys as video0
 
 jpeg:
@@ -127,7 +136,9 @@ jpeg:
   qfactor: 50
   fps: 5                        # MJPEG stream only
   #size: 160x120                # applies to /mjpeg AND /image.jpg
-  #osd: true                    # burn the OSD into JPEG output
+  #osd: true                    # burn the OSD into JPEG output, sized for the
+                                # snapshot's own frame rather than the main
+                                # stream's
   rtsp: false                   # also publish MJPEG over RTSP (max 2040 px/axis)
   #tuned: off                   # HiSilicon/Goke only: largest /image.jpg?width=...
                                 # to serve, e.g. 1920x1080. Needs a restart.
@@ -137,7 +148,10 @@ jpeg:
                                 # image, ~5% smaller, and costs CPU per snapshot
 
 osd:
-  enabled: false
+  enabled: false                # the TEXT overlay. Privacy masks below are not
+                                # part of it and do not need it. Which streams
+                                # get the text is then video0.osd / video1.osd /
+                                # jpeg.osd, each on by default
   font: /usr/share/fonts/truetype/UbuntuMono-Regular.ttf
   template: "%d.%m.%Y %H:%M:%S"
   #size: "1.0"                  # font scale factor
@@ -154,6 +168,11 @@ osd:
   #offsetY: "0"
   posX: 16
   posY: 16
+  # Rectangles of the picture to black out, written against the MAIN stream's
+  # frame and scaled into each of the others. They cover every stream that is
+  # running -- both video channels and the snapshot -- and a rectangle covering
+  # nothing is ignored. See "On-screen display and privacy masks" for what each
+  # SoC family can and cannot do.
   #privacyMasks: 0x0x234x640,2124x0x468x1300
 
 # (build-dependent: absent from FPV builds)
@@ -198,7 +217,10 @@ nightMode:
 
 motionDetect:
   enabled: false
-  visualize: false
+  visualize: false              # draw a box around what moved. On SigmaStar this
+                                # and osd.privacyMasks cannot both be drawn; if
+                                # masks are set the masks are kept and the boxes
+                                # are not drawn
   debug: false
   #roi: 1854x1304x216x606,1586x1540x482x622
   #sensitivity: 3               # 0-8
@@ -313,5 +335,7 @@ cloud:
 ### See also
 
 - [Majestic streamer](majestic-streamer.md) — endpoints, HTTP API, build flavours
+- [On-screen display and privacy masks](majestic-streamer.md#on-screen-display-and-privacy-masks)
+  — which streams get the overlay, and what masks do on each SoC family
 - [Majestic encoder tuning](majestic-encoder-tuning.md) — `refEnhance`, `refPred`, `svct`, ROI
 - [Majestic plugins](majestic-plugins.md) — what `system.plugins` turns on
