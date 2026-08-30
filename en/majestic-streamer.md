@@ -311,6 +311,15 @@ main one. Turn it on with `osd.enabled`, then choose which streams carry it:
 All three are on by default, so `osd.enabled: true` alone stamps every stream.
 Turning one off leaves the others stamped.
 
+`osd.weight: thin` shaves a pixel off every glyph stroke — with a floor. The
+font is sized from the stream it lands on, so on a main stream the strokes
+have pixels to spare and Thin visibly thins; on a narrow substream (704 or
+800 wide) they are one or two pixels, and shaving there would not thin the
+clock but erase it — which is exactly what older builds did. The thinning now
+stops where erasure would begin, so **on a narrow stream Thin legitimately
+renders at Normal weight**. That is by design, not a broken setting: Thin
+means "as thin as this stream can draw without losing letters".
+
 A **privacy mask** is not part of that. It is a rectangle of the picture blacked
 out, and it covers every stream that is running — both video channels and the
 snapshot — because a stream showing the picture has to hide the same part of it.
