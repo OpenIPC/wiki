@@ -174,7 +174,11 @@ Connect again to the camera and run this command (same as -n in the previous com
 firstboot
 ```
 
-Remember! The user and password will be reset to default in most cases (the default is usually root/12345)
+Remember! `firstboot` erases the overlay, and the root password lives there — so
+the camera comes back **unclaimed**, with no password at all. It will stream
+nothing until you set one, either on the setup page it serves at
+`http://camera-ip/` or by logging in interactively over SSH or the serial
+console.
 
 ## Anatomy of the Project
 

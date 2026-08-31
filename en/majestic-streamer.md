@@ -648,7 +648,7 @@ wrong pitch and speed.
 ### How to play audio file on camera's speaker over network
 
 ```
-curl -u root:12345 --data-binary @test.pcm http://192.168.1.10/play_audio
+curl -u root:YOUR_PASSWORD --data-binary @test.pcm http://192.168.1.10/play_audio
 ```
 
 This is a one-shot clip player: a new upload cancels the clip currently playing,

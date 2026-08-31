@@ -43,12 +43,12 @@ rtsp://<user>:<pass>@<camera-ip>:554/stream=0    # main, full resolution
 rtsp://<user>:<pass>@<camera-ip>:554/stream=1    # sub, lower resolution
 ```
 
-Default credentials on a fresh image are `root` / `12345`. Verify the
-stream works before touching Frigate:
+A fresh image has no password: the camera asks you to choose one before it will stream
+anything. The account is `root`. Verify the stream works before touching Frigate:
 
 ```sh
 ffprobe -v error -rtsp_transport tcp -i \
-  "rtsp://root:12345@192.168.1.10:554/stream=0"
+  "rtsp://root:YOUR_PASSWORD@192.168.1.10:554/stream=0"
 ```
 
 You should see the codec (`hevc` or `h264`), resolution, and frame rate
@@ -81,11 +81,11 @@ cameras:
   openipc_front:
     ffmpeg:
       inputs:
-        - path: rtsp://root:12345@192.168.1.10:554/stream=1
+        - path: rtsp://root:YOUR_PASSWORD@192.168.1.10:554/stream=1
           input_args: preset-rtsp-restream
           roles:
             - detect
-        - path: rtsp://root:12345@192.168.1.10:554/stream=0
+        - path: rtsp://root:YOUR_PASSWORD@192.168.1.10:554/stream=0
           input_args: preset-rtsp-restream
           roles:
             - record

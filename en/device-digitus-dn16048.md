@@ -22,7 +22,8 @@ Finally enter:
 reset
 ```
 
-Logon to Linux using "root" and "12345". In Linux enter:
+Log in as "root". A freshly flashed camera has no password and asks you to choose one
+before it hands over a shell. Then enter:
 
 ```sh
 firstboot
@@ -42,7 +43,8 @@ ip a
 ```
 
 ## Change password and MAC address:
-Access the web interface using a browser via port 85 and change the password and the MAC address.
+Access the web interface using a browser on port 80. A new camera has no password and streams
+nothing until it has one, so it asks you to choose one straight away; set the MAC address after that.
 
 ## Configure night mode switching:
 Via ipctool (ipctool gpio scan) one can find out easily, that the light sensor input (for automatic switching between day and night) is number 2. The IR cutoff is controlled by 1 and 0.
@@ -121,7 +123,7 @@ For example, using a browser or the Android app "IPCamViewer" (replace IP with y
 For example, using "mpv" on Linux or the Android app "IPCamViewer". When using "IPCamViewer" select "Generic RTSP over UDP" (replace the password and IP with your current ones).
 
 ```sh
-mpv rtsp://root:12345@192.168.1.188:554/stream=0
+mpv rtsp://root:YOUR_PASSWORD@192.168.1.188:554/stream=0
 ```
 
 ## Test pan, tilt, zoom and focus:

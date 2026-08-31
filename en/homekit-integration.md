@@ -55,7 +55,7 @@ webrtc:
     - stun:8555
 
 streams:
-  openipc: rtsp://admin:12345@127.0.0.1/stream=0
+  openipc: rtsp://root:YOUR_PASSWORD@127.0.0.1/stream=0
 
 homekit:
   openipc:                   # same stream ID from streams list

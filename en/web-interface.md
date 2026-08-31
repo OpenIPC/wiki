@@ -5,7 +5,18 @@ Web interface
 ---------------------
 
 Web Interface is available on port 80 as _http://camera-ip_.
-Default login and password are _root_ and _12345_, respectively.
+
+A new camera has **no password at all**, and it streams nothing until it has
+one — RTSP, ONVIF and every page but the setup screen are refused. So the first
+thing it does is ask you to choose a password. That password belongs to _root_,
+and it is the one the web interface, SSH, RTSP and ONVIF all check.
+
+Setting it can also be done over SSH or the serial console: log in
+interactively and the camera walks you through `passwd` before giving you a
+shell. Whichever door you use, the other sees it immediately.
+
+> Firmware from before August 2026 shipped with a default password of _12345_
+> instead, and nagged you to change it after you had signed in with it.
 
 ### Updating the web interface from the web interface
 
