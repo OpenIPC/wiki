@@ -152,7 +152,7 @@ IP-Config: Complete:
 
 Log in over the console or SSH as `root`. A camera that has not been set up yet has no
 password: it asks you to choose one, and only then gives you a shell. That password is
-also what the web interface, RTSP and ONVIF check.
+also what the web interface and RTSP check.
 
 On XiongMai boards, stop the watchdog immediately so it doesn't reboot the camera
 mid-setup:

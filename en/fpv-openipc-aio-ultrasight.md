@@ -15,7 +15,7 @@ OpenIPC AIO "UltraSight"
 - Ensure proper cooling, airflow will be necessary to protect the board from overheating.
 - Power the board (see Power section) and either check your DHCP-Server (often your router) for a new device and it's IP address, the board will try to get an IP assigned through DHCP.
 - Open the OpenIPC WebUI to check for connectivity. A new board has no password yet, so it asks you
-  to choose one before anything else; the account is **root**, and SSH, RTSP and ONVIF use the same password.
+  to choose one before anything else; the account is **root**, and SSH and RTSP use the same password.
 
 ## Heatsink
 - The package comes with a heatsink and thermal pad. The thermal pad is covered in 3M double sided tape on both sides. Two screws are included with the set that can be used to mount the heatsink.

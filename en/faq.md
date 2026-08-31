@@ -95,7 +95,11 @@ Open http://<camera_ip_address>. A camera that has not been set up has no passwo
 streams nothing until it has one, so it asks you to choose one straight away — there is
 nothing to sign in with before that. Afterwards, sign in as _root_ with the password you chose.
 
-__Please note, this is also your ssh root password, and what RTSP and ONVIF check!__
+__Please note, this is also your ssh root password, and what RTSP checks!__
+
+ONVIF accepts it from clients sending HTTP Basic or WSSE PasswordText. Clients that
+authenticate with a digest need `onvif.password` set separately — see
+[Web interface](web-interface.md).
 
 ### How to reset password for SSH/Web UI?
 
