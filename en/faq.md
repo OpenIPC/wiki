@@ -86,15 +86,20 @@ sf probe 0; sf erase 0xd50000 0x2b0000; reset
 
 `ssh root@<camera_ip_address>`
 
-There is _12345_ password by default.
+A camera that has not been set up has no password. The first interactive login asks you to
+choose one and only then gives you a shell; after that, use the password you chose.
 
 ### How to sign in into camera Web UI?
 
-Open http://<camera_ip_address> and sign in using default username _root_
-and default password _12345_. You will be asked to change the password after
-successful login.
+Open http://<camera_ip_address>. A camera that has not been set up has no password and
+streams nothing until it has one, so it asks you to choose one straight away — there is
+nothing to sign in with before that. Afterwards, sign in as _root_ with the password you chose.
 
-__Please note, it will also change your ssh root password!__
+__Please note, this is also your ssh root password, and what RTSP checks!__
+
+ONVIF accepts it from clients sending HTTP Basic or WSSE PasswordText. Clients that
+authenticate with a digest need `onvif.password` set separately — see
+[Web interface](web-interface.md).
 
 ### How to reset password for SSH/Web UI?
 

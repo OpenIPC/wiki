@@ -37,7 +37,8 @@ Limit refetch to url change ->empty
   </div>
 </div>
 
-**Note:** Default User and PASS OpenIPC -> ("root" & ¨12345¨)
+**Note:** the OpenIPC account is `root`. A camera has no password until you set one on
+first boot, and that same password is what RTSP checks here.
 
 **Note:** Be carful with frame rate (Currently home assistant does not support more than 20 having flicker problems)
 

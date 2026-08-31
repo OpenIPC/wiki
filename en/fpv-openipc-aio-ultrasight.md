@@ -14,7 +14,8 @@ OpenIPC AIO "UltraSight"
 - Connect the Debug PCB and connect a network cable or USB-C cable.
 - Ensure proper cooling, airflow will be necessary to protect the board from overheating.
 - Power the board (see Power section) and either check your DHCP-Server (often your router) for a new device and it's IP address, the board will try to get an IP assigned through DHCP.
-- You can login to the WebUI of OpenIPC using the username **admin** and the password **12345** to check for connectivity.
+- Open the OpenIPC WebUI to check for connectivity. A new board has no password yet, so it asks you
+  to choose one before anything else; the account is **root**, and SSH and RTSP use the same password.
 
 ## Heatsink
 - The package comes with a heatsink and thermal pad. The thermal pad is covered in 3M double sided tape on both sides. Two screws are included with the set that can be used to mount the heatsink.
@@ -40,7 +41,7 @@ OpenIPC AIO "UltraSight"
 
 ### Automatic system upgrade
 - Connect your device to a network with the debug ethernet board.
-- Log into the system (root:12345).
+- Log into the system as `root` (a camera that has not been set up asks you to choose a password first).
 - Run the following commands:
 ```
 fw_setenv upgrade https://github.com/OpenIPC/builder/releases/download/latest/ssc338q_fpv_openipc-urllc-aio-nor.tgz
@@ -61,7 +62,7 @@ run urnor
 
 ### Connect to wireless router
 - Upgrade the firmware to the newest version.
-- Log into the system (root:12345).
+- Log into the system as `root` (a camera that has not been set up asks you to choose a password first).
 - Run the following commands:
 
 ```
@@ -72,7 +73,7 @@ network restart
 ```
 
 ### Update bootloader
-- Log into the system (root:12345).
+- Log into the system as `root` (a camera that has not been set up asks you to choose a password first).
 - Run the following commands:
 ```
 curl -L -o /tmp/uboot.bin https://github.com/openipc/firmware/releases/download/latest/u-boot-ssc338q-nor.bin

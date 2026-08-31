@@ -30,7 +30,6 @@ With this temporary OpenIPC firmware you can create a backup of the nand and fla
 - Use ssh to connect to the camera:
 ```
 ssh root@192.168.1.100
-12345
 ```
 
 #### Backup 

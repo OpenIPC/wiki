@@ -172,7 +172,8 @@ openipc-hi3518ev200 login: root
  Please visit https://openipc.org/sponsor/ to learn more. Thank you.
 ```
 
-The root password is `12345`. Don't forget to change it with `passwd` after the first login!
+A freshly flashed camera has no root password: it asks you to choose one on the first
+interactive login, and streams nothing until you do.
 
 If you are struggling with this tutorial and still want to try OpenIPC on a Smartwares CIP-37210, you can [buy it with OpenIPC v2.2 firmware pre-installed at open collective](https://opencollective.com/openipc/contribute/wifi-camera-showme-by-openipc-44355).
 
