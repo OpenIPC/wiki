@@ -14,7 +14,7 @@ _Note: By default, sysupgrade will reboot the camera to complete the update. If 
 
 Run it with **no options at all** and it does nothing: it prints the camera's vendor, SoC, model and versions, then tells you to look at `--help`. Very old firmware upgraded on a bare `sysupgrade`; current firmware does not, and nothing is downloaded or written to flash unless you pass one of `-k`, `-r`, `--url`, `--channel`, `--build` or `--archive`.
 
-`-n` is the exception that writes nothing at all — it erases the overlay, which is what `firstboot` and the WebUI's Reset firmware button do. See [Factory reset and the unclaimed camera](first-boot.md).
+`-n` is the exception: it writes no firmware. All it does is erase the overlay partition, which is what `firstboot` and the WebUI's Reset firmware button do. See [Factory reset and the unclaimed camera](first-boot.md).
 
 There are other options available so you can use a local copy of the Linux kernel (uImage) and camera software (rootfs.squashfs).
 
@@ -25,7 +25,7 @@ __ATTENTION! Upgrading firmware can lead to "bricking" your camera. Make sure yo
 
 Remember once you are ready to run sysupgrade you must use the syntax </br></br>
 `sysupgrade --kernel=/tmp/uImage.${soc} --rootfs=/tmp/rootfs.squashfs.${soc} -z` </br></br>where '${soc}' is your camera specific soc e.g. gk7205v300 
-otherwise the latest release on Github will be downloaded.
+naming the local files explicitly; use `-k -r` instead to fetch the latest release from Github.
 
 ### Using a TFTP server
 #### On your host machine:
