@@ -10,20 +10,22 @@ This article is about how to manually perform an update using a terminal window 
 _Note: By default, sysupgrade will reboot the camera to complete the update. If you don't wish to do that then use the -x option (see sysupgrade --help for all options)_.
 
 ### Upgrading from the GitHub latest release.
-By default, running sysupgrade will attempt to download the latest software for your camera model from the github sources. 
+`sysupgrade -k -r` downloads the latest software for your camera model from the github sources and flashes both the kernel and the rootfs.
+
+Run it with **no options at all** and it does nothing: it prints the camera's vendor, SoC, model and versions, then tells you to look at `--help`. Very old firmware upgraded on a bare `sysupgrade`; current firmware does not, and nothing is downloaded or written to flash unless you pass one of `-k`, `-r`, `--url`, `--channel`, `--build` or `--archive`.
+
+`-n` is the exception: it writes no firmware. All it does is erase the overlay partition, which is what `firstboot` and the WebUI's Reset firmware button do. See [Factory reset and the unclaimed camera](first-boot.md).
 
 There are other options available so you can use a local copy of the Linux kernel (uImage) and camera software (rootfs.squashfs).
-
-For old firmware running `sysupgrade` without parameters is enough. For newer firmware, run `sysupgrade -k -r` to update both kernel and rootfs is required.
 
 __ATTENTION! Upgrading firmware can lead to "bricking" your camera. Make sure you are prepared both morally and skill wise. Have your rescue SD card and/or UART adapter ready. Be prepared to de-solder and reprogram flash chip as the last resort. Do not upgrade production cameras unless you really have to!__
 
 ### Using sysupgrade
-Typically running sysupgrade will give you the latest release for your camera, as described above, however if you wish to revert to a previous image, or load your own updates, then use any the options described below. 
+`sysupgrade -k -r` gives you the latest release for your camera, as described above; if you wish to revert to a previous image, or load your own updates, then use any of the options described below. 
 
 Remember once you are ready to run sysupgrade you must use the syntax </br></br>
 `sysupgrade --kernel=/tmp/uImage.${soc} --rootfs=/tmp/rootfs.squashfs.${soc} -z` </br></br>where '${soc}' is your camera specific soc e.g. gk7205v300 
-otherwise the latest release on Github will be downloaded.
+naming the local files explicitly; use `-k -r` instead to fetch the latest release from Github.
 
 ### Using a TFTP server
 #### On your host machine:

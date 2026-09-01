@@ -87,7 +87,10 @@ sf probe 0; sf erase 0xd50000 0x2b0000; reset
 `ssh root@<camera_ip_address>`
 
 A camera that has not been set up has no password. The first interactive login asks you to
-choose one and only then gives you a shell; after that, use the password you chose.
+choose one and only then gives you a shell; after that, use the password you chose. Send no
+password at all on that first login — `12345` no longer exists, and a factory reset puts the
+camera back into that state. See
+[Factory reset and the unclaimed camera](first-boot.md).
 
 ### How to sign in into camera Web UI?
 
@@ -329,6 +332,11 @@ In this case, add `-O` option to the command:
 ```bash
 scp -O ~/myfile root@192.168.1.65:/tmp/
 ```
+
+On a camera nobody has claimed yet, `scp` is refused before any of that: a file
+copy cannot ask you for a password, so it is turned away with a message saying
+to log in interactively first. See
+[Factory reset and the unclaimed camera](first-boot.md).
 
 [1]: https://openipc.org/wiki/en/gpio-settings.html
 [2]: https://github.com/OpenIPC/ipctool/releases/download/latest/ipctool

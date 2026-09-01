@@ -25,6 +25,11 @@ shell. Whichever door you use, the other sees it immediately.
 > Firmware from before August 2026 shipped with a default password of _12345_
 > instead, and nagged you to change it after you had signed in with it.
 
+A factory reset erases the password along with the rest of the overlay, so the
+camera comes back with none — see [Factory reset and the unclaimed
+camera](first-boot.md), which also covers why `scp` and `ssh camera command` are
+refused until the camera has been claimed.
+
 ### Updating the web interface from the web interface
 
 In some cases, especially if it seems that something is not working, you might

@@ -178,7 +178,7 @@ Remember! `firstboot` erases the overlay, and the root password lives there — 
 the camera comes back **unclaimed**, with no password at all. It will stream
 nothing until you set one, either on the setup page it serves at
 `http://camera-ip/` or by logging in interactively over SSH or the serial
-console.
+console. See [Factory reset and the unclaimed camera](first-boot.md).
 
 ## Anatomy of the Project
 
