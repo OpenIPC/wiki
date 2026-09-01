@@ -199,20 +199,19 @@ rtsp:
   #backchannel: false           # ONVIF Profile T talkback (needs audio output)
   #audioCodec: ""               # override audio.codec for RTSP only
 
-nightMode:
+nightMode:                      # see en/ircut-filter.md for how the filter is
+                                # actually driven, and what the metrics mean
   lightMonitor: false
-  #irCutPin1: 1
-  #irCutPin2: 2
-  irCutSingleInvert: false
+  #irCutPin1: 1                 # the two coils of one H-bridge, not two
+  #irCutPin2: 2                 # switches — order decides which way it moves
+  irCutSingleInvert: false      # for a board with a single coil pad
   #backlightPin: 65
   colorToGray: true
   #overrideDrc: 300
-  #overrideWdr: 0
-  #minThreshold: 2000
-  #maxThreshold: 5000
+  #minThreshold: 2000           # compared against isp_again, whose units are
+  #maxThreshold: 5000           # per-SoC: read your own before choosing
   #lightSensorPin: 62
   lightSensorInvert: false
-  #adcReadout: false
   #monitorDelay: 30             # seconds, 0-60
 
 motionDetect:

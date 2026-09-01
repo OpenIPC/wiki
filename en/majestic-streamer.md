@@ -271,6 +271,10 @@ root@openipc-ssc377d:~# wget -q -O - http://localhost/night/toggle
 
 ### Auto day/night detection
 
+For how the filter itself is wired and driven — and why a swapped pair gives you
+a pink daylight picture — see
+[How an IR-cut filter is driven](ircut-filter.md).
+
 If these variables are used, it is possible to replace the used sandbox scripts.
 Works only for simple day/night schemes with minimal configuration and in the absence of mentions of lightSensorPin in the majestic.yaml configuration file.
 If the light sensor gpio is set, it will use the default mode.
@@ -278,8 +282,16 @@ If the light sensor gpio is set, it will use the default mode.
 The settings work like this:
 ```day < [minThreshold] | hysteresis | [maxThreshold] < night```
 
-If the sensor gain is 1024 on a bright day the minThreshold could be set to 2000,
-if the sensor gain is 32000 on a dark night the maxThreshold could be set to 10000.
+**These numbers are per-SoC — read your own camera's `isp_again` before picking
+them.** The gauge is in the SDK's own units and they are not comparable between
+vendors: the same idle, no-extra-gain state reads about **1024 on HiSilicon, 126
+on Ingenic and 20855 on SigmaStar**. A threshold copied from a HiSilicon example
+onto an Ingenic camera simply never trips.
+
+On a HiSilicon camera reading 1024 on a bright day, minThreshold could be set to
+2000; if it reads 32000 on a dark night, maxThreshold could be set to 10000. Watch
+`isp_again` at `/metrics` in your own conditions and pick a band inside it, with
+minThreshold below maxThreshold so there is hysteresis to sit in.
 
 ```
 curl http://localhost/api/v1/config --data-binary @- <<'EOF'
