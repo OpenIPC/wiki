@@ -67,6 +67,7 @@ OpenIPC Wiki
 - [Board specific GPIO settings list](en/gpio-settings.md)
 - [ACMEv2](en/acme-v2.md)
 - [WiFi XM530](en/wifi-xm530.md)
+- [How an IR-cut filter is driven](en/ircut-filter.md)
 - [Automatic night mode without light sensor](en/auto-night-mode-without-light-sensor.md)
 - [ZeroTier setup](en/zerotier.md)
 - [Motor control](en/motors.md)

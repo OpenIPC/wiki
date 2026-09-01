@@ -1,7 +1,16 @@
 # OpenIPC Wiki
 [Table of Content](../README.md)
 
-**Attention, this instruction is outdated since summer 2024 and now [control](https://github.com/OpenIPC/wiki/blob/master/en/majestic-streamer.md#auto-daynight-detection) of Majestic modes is possible from the Web interface !**
+**Attention, this instruction is outdated since summer 2024.** Majestic switches
+day/night by itself from the sensor's analog gain — see
+[auto day/night detection](majestic-streamer.md#auto-daynight-detection) for the
+two settings that replace these scripts, and set them from **Settings → Day /
+Night** in the web interface.
+
+**Step 1 below is also done for you now.** The web interface detects a filter
+that is open in daylight, and its **Test the filter** button moves the filter and
+compares the picture to tell "wired backwards" from "not wired". See
+[How an IR-cut filter is driven](ircut-filter.md).
 
 
 Auto nightmode on devices without a light sensor
@@ -11,8 +20,15 @@ Not all devices have an onboard light sensor to determine whether night mode sho
 For these devices, we can use the image sensor's analog gain value to switch. In low-light conditions, this value will be high, indicating the image sensor is applying gain to boost brightness. In well-lit conditions, this value will be low.
 
 #### Step 1: determine if IR cut filter is set up correctly
-This article assumes you have found and entered the correct GPIO pins for your IR cut filter and you are able to toggle the filter using the `IR-cut filter` button in the preview. During daylight conditions, in the preview, the image should not be pink.
-If it is pink, most likely your pins are in the wrong order and they need to be swapped in `Majestic > Night Mode`.
+This article assumes you have found and entered the correct GPIO pins for your IR
+cut filter and can toggle the filter — the **IR-cut** switch is on
+**Settings → Live adjustments** (it moved off the Live page, which is read-only).
+During daylight the image should not be pink. If it is, most likely your pins are
+in the wrong order and want swapping on the pin map in **Settings → Day / Night**.
+
+Rather than judging this by eye, press **Test the filter** on that page: it moves
+the filter, compares the picture in both positions, and says which of "wired
+correctly", "wired backwards" and "stuck" it found.
 
 #### Step 2: install night mode scripts
 We need 2 scripts: the actual night mode script and the startup script that enables the night mode script at boot.

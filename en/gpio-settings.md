@@ -238,6 +238,19 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 > IRCTL is a backlightPin<br>
 > IRSTATUS is a lightSensorPin
 
+**The two IRCUT pads are one H-bridge, and their order matters.** They are not
+independent switches: which of them is driven high while the other is held low is
+what decides whether the filter closes or opens, so a swapped pair gives you a
+correctly-moving filter that is pink in daylight. **Settings → Day / Night** has
+a **Test the filter** button that moves it and reports "wired correctly", "wired
+backwards" or "stuck" — quicker than reasoning about it, and it does not require
+waiting for nightfall. See [How an IR-cut filter is driven](ircut-filter.md).
+
+**This table is read by software as well as by people.** The web interface's pin
+scan tries the pairs recorded here before anything else, so a board listed below
+is normally found within seconds while an unlisted one falls back to a much
+longer sweep. Adding a board here helps the next person twice over.
+
 [^1]: 00014914 firmware
 [^2]: 00014911 firmware
 [^3]: 000699Q3 firmware
