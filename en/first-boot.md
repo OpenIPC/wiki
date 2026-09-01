@@ -29,6 +29,13 @@ you configured. So a reset camera comes back **with no password**, exactly as if
 it had just been flashed, and has to be claimed again before it streams or gives
 you a shell.
 
+`firstboot` is literally `sysupgrade -n`, and `-n` on its own writes no
+firmware: downloading and flashing happen only when you also pass `-k`, `-r`,
+`--url`, `--channel`, `--build` or `--archive`. A reset erases the overlay and
+reboots, and that is all it does. (`sysupgrade` with no options at all does
+nothing but print the camera's identity — see [Upgrade
+firmware](sysupgrade.md).)
+
 Reaching for `12345` after a reset is the most common way to run into this. It
 is not that the password is wrong — there is no password for it to be wrong
 against, and the connection you are being refused was never going to ask you for
