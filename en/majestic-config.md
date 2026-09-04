@@ -229,13 +229,16 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
   #backlightPwmMin: 10          # duty floor, % — LEDs have an ignition threshold
   #backlightPwmMax: 100         # duty ceiling, %
 
+# Motion runs /usr/sbin/motion.sh, and — with records.mode below — can record a
+# clip per event. There is no "exclude" key: roi says where motion counts, and
+# nothing says where it does not.
 motionDetect:
   enabled: false
   visualize: false              # draw a box around what moved. On SigmaStar this
                                 # and osd.privacyMasks cannot both be drawn; if
                                 # masks are set the masks are kept and the boxes
                                 # are not drawn
-  debug: false
+  debug: false                  # a log line per detection — several a second
   #roi: 1854x1304x216x606,1586x1540x482x622
   #sensitivity: 3               # 0-8
 
@@ -246,13 +249,40 @@ motionDetect:
 records:
   enabled: false
   path: /mnt/mmcblk0p1/%F       # -> /mnt/mmcblk0p1/2026-08-27/
-  filename: "%H-%M"             # -> 14-30.mp4
-  maxUsage: 95                  # stop when the card is this full, %
-  #split: 20                    # minutes per file, 1-100
+  filename: "%H-%M"             # -> 14-30.mp4. Add %S for second precision
+  maxUsage: 95                  # delete the oldest clips above this, %
+  #split: 20                    # minutes per file, 1-100. A clip is cut at the
+                                # next keyframe after the split falls due, so it
+                                # can run up to one gopSize long
   #substream: false             # record video1 instead of video0
   #notime: false                # ignore filename, number files 00000.mp4 upward
   #audioCodec: ""               # mp3 | aac | opus; empty follows audio.codec
   #key: ""                      # XOR-obfuscate the payload; names files .enc
+
+  # When to record. "continuous" is the default and records without stopping;
+  # "motion" writes one clip per detection and nothing in between, and needs
+  # motionDetect.enabled. See "Recording on motion" in majestic-streamer.md —
+  # in particular, set video0.gopSize at or below preRollSec or the run-up is
+  # mostly discarded.
+  #mode: continuous             # continuous | motion
+  #preRollSec: 5                # seconds kept from BEFORE the trigger, in RAM
+  #postRollSec: 10              # seconds kept after movement stops
+  #minClipSec: 3                # shortest a motion clip may be
+
+  # Housekeeping and durability. The defaults suit an SD card; there is rarely
+  # a reason to change them.
+  #purgeSeconds: 60             # how often free space is checked and the oldest
+                                # clips deleted. Used to follow `split`, so a
+                                # camera writing 20-minute files looked three
+                                # times an hour
+  #syncSeconds: 30              # how often the open clip is committed to the
+                                # card, which bounds what a power cut costs.
+                                # 0 disables it; a clip is still committed when
+                                # it is closed
+  #fragmentMs: 1000             # how much video one MP4 fragment holds. Also
+                                # the unit the recorder buffers and drops
+  #fragmentBytes: 0             # hard size limit for one fragment; 0 derives it
+                                # from the bitrate
 
 outgoing:
   enabled: false
@@ -275,8 +305,12 @@ watchdog:
   enabled: true
   timeout: 300
 
+# HLS and records are mutually exclusive — turning records on turns this off.
 hls:
   enabled: false
+  #segments: 4                  # finished segments held for clients, 2-8. Each
+                                # is a copy of that much video in RAM, so this
+                                # is memory; nothing is allocated while HLS is off
 
 mdns:
   enabled: true                 # answers for openipc.local and <hostname>.local

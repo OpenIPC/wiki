@@ -480,6 +480,120 @@ You should see the script running after motion detection events:
 20:37:02  <SED_IVE_DETCTOR> [   tools] motion_event@615              Execute motion script: /usr/sbin/motion.sh
 ```
 
+`roi` says where motion counts. There is no setting for where it does **not** —
+an `exclude:` line in the config is accepted by the parser and read by nothing.
+
+### Recording on motion
+
+The script above used to be the only thing a motion event could drive. Since
+September 2026 majestic can record a clip per event itself, and start it a few
+seconds **before** the detector fires:
+
+```yaml
+records:
+  enabled: true
+  mode: motion            # "continuous" is the default and stays the default
+  path: /mnt/mmcblk0p1/%F
+  preRollSec: 5           # seconds kept from before the trigger
+  postRollSec: 10         # seconds kept after movement stops
+motionDetect:
+  enabled: true
+video0:
+  gopSize: 5              # see below — this one matters
+```
+
+With nothing moving the camera writes no bytes at all. When the detector fires
+it opens a clip, writes the seconds it was holding in RAM, and keeps recording
+until movement has stopped for `postRollSec`. Two events a minute apart get two
+files; two events in the same minute get `14-30.mp4` and `14-30-1.mp4`.
+
+The detector waits two seconds of stillness before it calls movement over, so
+something shifting in frame does not chop one event into several clips. A long
+event still rotates on `records.split`, so an afternoon of movement does not
+become one enormous file.
+
+#### Set `gopSize` at or below `preRollSec`
+
+A recording can only begin at a keyframe, and `gopSize` is how many seconds
+apart those are. The camera holds the last `preRollSec` of finished video in
+RAM — but if there is no keyframe among those seconds, the run-up cannot be
+written and the clip starts at the trigger after all.
+
+With the defaults (`gopSize: 30` against `preRollSec: 5`) a keyframe falls
+inside the window about one event in six, so the run-up appears occasionally
+and not most of the time — which is more confusing than never getting it.
+Measured on a test camera with someone walking into frame, `gopSize: 5` and
+`preRollSec: 5`: the clip's first four seconds are an empty room and the
+movement starts at second five.
+
+The camera says so when it happens:
+
+```
+Motion: no run-up — none of the 5s held opens at a keyframe.
+Set video0.gopSize at or below records.preRollSec (5s) to keep it.
+```
+
+The run-up is also limited by RAM — five seconds at 4 Mbit is about 2.5 MB, so
+a 32 MB camera holds fewer seconds than you asked for and logs what it could
+actually keep.
+
+#### Checking it
+
+```
+curl -s http://<camera>/metrics | grep records_
+```
+
+`records_motion_clips_total` counts clips closed by an event. If that and
+`records_fragments_written_total` are both zero, nothing is triggering — start
+with `motionDetect.enabled` and `sensitivity`. `records_fragments_skipped_total`
+climbing by several per event is the `gopSize` problem above.
+
+Majestic warns once, when recording is switched on, if `records.mode` is
+`motion` while `motionDetect.enabled` is off — a camera that has quietly
+stopped recording looks exactly like one where nothing has moved.
+
+### Recordings, and what survives a power cut
+
+Recording writes fragmented MP4 to the card. A few things are worth knowing.
+
+**The card is committed on a timer, not per frame.** `records.syncSeconds`
+(default 30) is how often the open clip is flushed, and it bounds what a power
+cut costs: the fragment being accumulated, whatever is queued, and whatever the
+card had not yet committed. In practice a cut leaves the clip playable to its
+last whole second — five sysrq-b cuts on a test camera produced five clips that
+played end to end.
+
+**A clip may need trimming.** vfat has no journal, so past the last committed
+byte a file can hold whatever a deleted file left in the clusters it grew into.
+Majestic checks the most recently written clip when it starts, and there is a
+tool for the rest:
+
+```
+/etc/init.d/S95majestic stop
+majestic --repair /mnt/mmcblk0p1 --dry-run   # report only
+majestic --repair /mnt/mmcblk0p1             # trim
+/etc/init.d/S95majestic start
+```
+
+It refuses to run while majestic is running, because the clip being written has
+a "tail" that is simply the recording in progress. It **never** empties a file:
+a clip with no header cannot be played, but it is still footage, and it is
+reported and left alone rather than deleted.
+
+**Watching the recorder.** `/metrics/records` is majestic's own verdict on the
+card, which the filesystem cannot give you — a card can be mounted read-write
+with room on it and still be taking nothing:
+
+```
+records_state 0                     # 0 ok, 1 degraded, 2 failed, 3 offline
+records_fragments_dropped_total 0   # the card could not keep up
+records_write_errors_total 0
+records_fsync_us_max 18825          # a stalling card shows here first
+```
+
+The Recordings page in the web interface reads the same numbers and says so in
+words.
+
 ### Broadcasts using RTMP
 
 To instantly launch a YouTube broadcast, run these commands in the console:
