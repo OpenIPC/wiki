@@ -8,8 +8,9 @@ Recent `majestic` builds turn **any OpenIPC camera with a speaker and a
 microphone into a fully-featured SIP doorbell**: press a button, the
 camera dials a configured destination (your phone, your laptop
 softphone, your home PBX), the called side answers, and you get
-one-way video + two-way G.711 audio over a regular SIP call. No
-cloud, no app, no vendor lock-in.
+one-way video + two-way audio over a regular SIP call — Opus when
+the other side takes it, G.711 otherwise. No cloud, no app, no
+vendor lock-in.
 
 This article walks you through a working setup end-to-end, starting
 from zero SIP experience, and finishes with a **debug technique
@@ -20,10 +21,17 @@ hardware up.
 ## What you'll need
 
 - An OpenIPC camera that has a working speaker output and a working
-  mic input. Easiest way to confirm both work end-to-end: open
-  `http://<camera>/audio.ulaw` to verify the mic capture path (uLaw
-  is codec-free and matches the audio format the SIP doorbell uses
-  anyway), and POST a short raw-audio payload to
+  mic input. Easiest way to confirm the mic capture path is
+  `http://<camera>/audio.html`, the built-in player page, which
+  needs nothing installed. The raw endpoints work too but are
+  headerless, so a player has to be told the format. G.711 is always
+  8 kHz whatever the microphone captures at:
+
+  ```sh
+  ffplay -ar 8000 -ac 1 -f mulaw http://<camera>/audio.ulaw
+  ```
+
+  For the speaker, POST a short raw-audio payload to
   `http://<camera>/play_audio` (the speaker sink) — for example:
 
   ```sh
@@ -66,9 +74,9 @@ in the optional section near the end.
 When the visitor presses the button, the camera (acting as a SIP UAC
 — **U**ser **A**gent **C**lient) sends an `INVITE` to your PBX. The
 PBX rings your softphone. You answer, and the camera streams one-way
-H.264 (or H.265) video to you and full-duplex G.711 audio so you can
-hear the visitor and they can hear you. End the call by hanging up,
-or by pressing the doorbell button again (it toggles).
+H.264 (or H.265) video to you and full-duplex audio so you can hear
+the visitor and they can hear you. End the call by hanging up, or by
+pressing the doorbell button again (it toggles).
 
 ## Step 1 — Set up a SIP destination
 
@@ -120,6 +128,13 @@ max_contacts=2
 # Repeat the [1001] block for 1002, 1003, ... — one per device.
 ```
 
+`ulaw`/`alaw` are enough — the camera falls back to G.711 whenever the
+other side does not offer anything better. If you want the wideband
+option, add `allow=opus` to the endpoint template; on Asterisk that
+needs the Opus module (`res_format_attr_opus`, plus `codec_opus` if
+the PBX has to transcode rather than pass through), so leave it out
+until you have confirmed it loads.
+
 Minimal `/etc/asterisk/extensions.conf`:
 
 ```ini
@@ -155,8 +170,6 @@ sections:
 ```yaml
 audio:
   enabled: true            # mic capture
-  codec: ulaw              # PCMU — also try alaw if your PBX prefers
-  srate: 8000
   outputEnabled: true      # speaker
   outputVolume: 60         # 0..100; bump until you can hear yourself
   jitterBufferMs: 60       # 0 = LAN-only; see "Going remote" below
@@ -187,6 +200,21 @@ sip:
   buttonPin: 12            # the GPIO you wired the button to
   buttonActiveLow: true    # `true` = button pulls the pin to ground when pressed
 ```
+
+> **`audio.codec` and `audio.srate` are not SIP settings.** A call
+> negotiates its own codec on the wire: majestic offers Opus and
+> G.711 in one `m=audio` line and uses whichever the other side
+> picks, without ever reading `audio.codec`. That key selects the
+> codec for RTSP, recordings and the `/audio.*` endpoints, so
+> setting it to `ulaw` for the doorbell's sake only makes everything
+> *else* on the camera narrowband.
+>
+> `audio.srate` is likewise free. G.711 is 8 kHz on the wire by
+> definition, and the encoder resamples to it from whatever the
+> microphone is capturing, so a camera at 48 kHz makes correct calls
+> *and* keeps full-bandwidth recordings. Older builds did not
+> resample and needed `srate: 8000`; if calls sound sped-up or
+> distorted, that is the version to check.
 
 `killall -HUP majestic` to reload — this picks up `sip.*` changes as of the
 2026-08 builds; older ones needed a full restart of majestic, and quietly left
@@ -440,9 +468,11 @@ What each field means:
    speaker. Lower `outputVolume`, or physically separate the mic and
    speaker on the PCB.
 3. **`488 Not Acceptable Here` from the PBX.** Codec mismatch. The
-   camera advertises `ulaw` (PCMU) by default; if your PBX is
-   restricted to a different codec, change `audio.codec` accordingly
-   or add `allow=ulaw` to your PBX endpoint config.
+   camera offers Opus and G.711 together and takes whichever the PBX
+   picks, so this means the PBX accepts neither — widen its codec
+   list (`allow=ulaw` or `allow=alaw` on the endpoint is enough).
+   Changing `audio.codec` will not help: the SIP stack does not read
+   it, and lowering it only narrows RTSP and your recordings.
 4. **Call connects but no audio.** Almost always RTP firewall /
    NAT. Make sure UDP `rtpPortHint`..`rtpPortHint+3` (i.e. four
    ports) is reachable from the called side. For NAT traversal,

@@ -191,6 +191,21 @@ audio:
   #jitterBufferMs: 80           # RTSP back-channel: 0 = passthrough (LAN),
                                 # 80 helps over Wi-Fi/WAN
 
+# (build-dependent: Ultimate, and only on some SoCs — see "Microphone
+# processing (VQE)" in Majestic streamer). Runs on the capture channel, so one
+# setting reaches RTSP, SIP, WebRTC, the /audio.* endpoints and recordings
+# alike. All of it is inside the audio: section above.
+  #vqe: false                   # master switch for the three stages below
+  #anr: true                    # noise reduction (8/16 kHz only)
+  #anrIntensity: 25             # 0-25
+  #anrNoiseThreshold: 41        # 30-60 dB
+  #agc: true                    # automatic gain control
+  #agcTargetLevel: -1           # -40..-1 dBFS
+  #agcNoiseFloor: -42           # dBFS; -65..-20 at 8/16 kHz, -50..-20 at 48 kHz
+  #agcMaxGain: 20               # 0-30 dB
+  #hpf: true                    # high-pass filter
+  #hpfFreq: 80                  # 80 | 120 | 150 Hz; 48 kHz has 80 only
+
 rtsp:
   enabled: true
   port: 554
