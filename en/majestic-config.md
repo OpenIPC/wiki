@@ -201,10 +201,14 @@ rtsp:
 
 nightMode:                      # see en/ircut-filter.md for how the filter is
                                 # actually driven, and what the metrics mean
-  lightMonitor: false
+  lightMonitor: false           # on alone = automatic exposure-based day/night
+                                # (sensor pin wins if set; both thresholds win
+                                # over automatic)
+  #irCutEnabled: true           # false parks the filter: pins kept, not driven
   #irCutPin1: 1                 # the two coils of one H-bridge, not two
   #irCutPin2: 2                 # switches — order decides which way it moves
   irCutSingleInvert: false      # for a board with a single coil pad
+  #backlightEnabled: true       # false parks the lamp: wiring kept, stays dark
   #backlightPin: 65
   colorToGray: true
   #overrideDrc: 300
@@ -213,6 +217,17 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
   #lightSensorPin: 62
   lightSensorInvert: false
   #monitorDelay: 30             # seconds, 0-60
+  #autoNightGain: 16            # automatic mode: night at this gain multiple;
+                                # unset = night when the exposure runs out
+  #autoDayGain: 2               # automatic mode: day at or below this multiple
+  #autoNightDelay: 15           # seconds of darkness before night, 5-600
+  #autoDayDelay: 60             # seconds of brightness before day, 5-600
+  #backlightPwmChannel: none    # none | pwm1 | pwm3 — a dimmable lamp on a PWM
+                                # pad; EV200/EV300 and GK7205V200/V500 only,
+                                # backlightPin is then ignored
+  #backlightPwmFreq: 400        # Hz, 50-20000
+  #backlightPwmMin: 10          # duty floor, % — LEDs have an ignition threshold
+  #backlightPwmMax: 100         # duty ceiling, %
 
 motionDetect:
   enabled: false

@@ -252,7 +252,7 @@ each:
 ```
 /metrics/venc      encoder counters
 /metrics/isp       ISP parameters
-/metrics/night     day/night state and light level
+/metrics/night     day/night state, decision source, pending switch, lamp duty
 /metrics/motion    motion detection state
 ```
 ```
@@ -275,18 +275,63 @@ For how the filter itself is wired and driven — and why a swapped pair gives y
 a pink daylight picture — see
 [How an IR-cut filter is driven](ircut-filter.md).
 
-If these variables are used, it is possible to replace the used sandbox scripts.
-Works only for simple day/night schemes with minimal configuration and in the absence of mentions of lightSensorPin in the majestic.yaml configuration file.
-If the light sensor gpio is set, it will use the default mode.
+**Since September 2026, turning on the light monitor is all it takes.** With
 
-The settings work like this:
+```yaml
+nightMode:
+  lightMonitor: true
+```
+
+and nothing else configured, majestic on HiSilicon, Ingenic and SigmaStar
+switches day/night from the image sensor's own exposure state: night when the
+auto-exposure runs out of shutter and gain — a statement that means the same
+thing on every camera, so there is nothing to calibrate — and back to day when
+the gain settles at daylight levels. Built-in hysteresis and switching delays
+ignore a passing cloud, headlights at night, and the IR lamp's own light, and
+an anti-flapping guard slows the cycle down if fog ever drives one.
+
+One `lightMonitor` switch selects between three sources, by what else is
+configured:
+
+1. `lightSensorPin` set — the hardware light sensor decides (as always);
+2. both `minThreshold` and `maxThreshold` set — the legacy raw-gain
+   thresholds decide (below);
+3. neither — the automatic exposure-based mode above.
+
+The `night_mode_source` gauge on `/metrics` names which one has the wheel
+(1 sensor pin, 2 thresholds, 4 automatic), and **Settings → Day / Night** in
+the web interface shows the decision live: the watched value charted with the
+switching bands shaded, and a countdown when a switch is pending.
+
+The automatic mode can be tuned, in units that mean the same on every camera
+(gain as a multiple of 1x):
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `nightMode.autoNightGain` | empty | Go to night when gain reaches this multiple. Empty = the exposure-based trigger, no number needed. |
+| `nightMode.autoDayGain` | 2 | Return to day when gain stays at or below this multiple. |
+| `nightMode.autoNightDelay` | 15 | Seconds the scene must stay dark before night. |
+| `nightMode.autoDayDelay` | 60 | Seconds it must stay bright before day. |
+
+Two park switches sit beside the pin settings for when an actuator should stay
+still without losing its wiring: `nightMode.irCutEnabled` and
+`nightMode.backlightEnabled` (both default `true`). Off keeps the pin numbers
+configured but stops driving the filter or the lamp; the web interface says
+"switched off, wiring kept" instead of accusing the wiring.
+
+#### Legacy raw-gain thresholds
+
+The pre-2026.09 mode, still fully supported: set both thresholds and they take
+priority over the automatic mode.
+
 ```day < [minThreshold] | hysteresis | [maxThreshold] < night```
 
 **These numbers are per-SoC — read your own camera's `isp_again` before picking
 them.** The gauge is in the SDK's own units and they are not comparable between
-vendors: the same idle, no-extra-gain state reads about **1024 on HiSilicon, 126
-on Ingenic and 20855 on SigmaStar**. A threshold copied from a HiSilicon example
-onto an Ingenic camera simply never trips.
+vendors — even the scale differs (Q10 with 1024 = 1x on HiSilicon and
+SigmaStar, log2-gain × 32 on Ingenic), and the ceiling is sensor-specific. A
+threshold copied from a HiSilicon example onto an Ingenic camera simply never
+trips. The automatic mode exists exactly so nobody has to do this any more.
 
 On a HiSilicon camera reading 1024 on a bright day, minThreshold could be set to
 2000; if it reads 32000 on a dark night, maxThreshold could be set to 10000. Watch
@@ -303,6 +348,29 @@ curl http://localhost/api/v1/config --data-binary @- <<'EOF'
 }
 EOF
 ```
+
+### PWM backlight: a dimmable lamp
+
+On the HiSilicon EV200/EV300 and Goke GK7205V200/V500 family, a lamp wired to
+a PWM pad can be a dimmer instead of a switch — the in-camera version of the
+`devmem` backlight scripts from
+[the sandbox](https://github.com/OpenIPC/sandbox/tree/main/scripts/backlight-control):
+
+```yaml
+nightMode:
+  backlightPwmChannel: pwm1   # pwm1 (pad GPIO0_4) or pwm3 (pad GPIO2_0); none = switched lamp on backlightPin
+  backlightPwmFreq: 400       # Hz
+  backlightPwmMin: 10         # duty floor, % — LEDs have an ignition threshold
+  backlightPwmMax: 100
+```
+
+With a channel set, `backlightPin` is ignored. At night the lamp lights at the
+maximum and then trims itself to the ambient light every couple of seconds —
+brighter when the scene is starving, dimmer when the lamp overshoots — between
+the two duty bounds. The lamp's own light can never talk the camera back into
+day: the trim stops dimming well above the day threshold, so only real dawn
+ends the night. The current percentage is the `night_light_duty` gauge on
+`/metrics`, and the dashboard's day/night line shows it as "lamp 43%".
 
 ### On-screen display and privacy masks
 
