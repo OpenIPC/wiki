@@ -101,8 +101,13 @@ If the test says **wired backwards**, swap the two coils on the map. On a board
 with a single coil pad, turn on `Single IRcut is inverted` instead.
 
 The dashboard also raises a banner on its own when the configuration cannot work
-— no pin set, a light monitor with nothing to watch, thresholds with no
-hysteresis, or day and night disagreeing for long enough to be real.
+— no pin set, thresholds with no hysteresis, or day and night disagreeing for
+long enough to be real. A light monitor with no sensor pin and no thresholds is
+**not** one of those any more: on current firmware that selects the
+[automatic exposure-based mode](majestic-streamer.md#auto-daynight-detection),
+and the Day / Night page says so as an observation. Only an older majestic, or
+a SoC that reports no exposure state, still gets the "nothing to watch"
+warning — worded to say which it is.
 
 > **The scan drives pads whose job is unknown**, and one of them may reset the
 > network, cut power to the sensor or stop the camera answering. That risk cannot
