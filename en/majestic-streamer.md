@@ -944,6 +944,73 @@ and the console shows `dlopen ... libhive_HPF.so failed`. Audio keeps flowing
 normally; only the processing is missing. The fix is a firmware image that
 installs those libraries — update the firmware, don't change majestic.
 
+### Who may call the camera
+
+The SIP client answers calls as well as placing them, which makes the camera
+reachable from anywhere that can send it a UDP packet. Since the 2026-09
+builds it decides who is allowed to do that.
+
+**A camera that registers needs no configuration for this.** It trusts the
+registrar it was pointed at — the PBX in `sip.server` — and refuses everyone
+else. That is the setup the [doorbell guide](howto-doorbell-from-camera.md)
+describes, and nothing in it changes.
+
+Deployments with no registrar to trust say who may call, in one of two ways:
+
+```
+sip:
+  # either: name the addresses, and they call without a password
+  allowedPeers: "192.168.1.50, 192.168.9.0/24"
+
+  # or: ask everyone for one
+  authInbound: true
+  inboundPassword: "something-long"     # falls back to sip.password
+```
+
+`allowedPeers` takes dotted-quad addresses and CIDR ranges, separated by
+commas or spaces. `authInbound` challenges with SIP Digest, which every
+softphone and PBX can answer; `inboundUser` and `inboundPassword` fall back to
+`sip.username` and `sip.password`, so a doorbell that already has a PBX login
+does not need a second one invented for it.
+
+The two combine: an address in `allowedPeers` is never asked for a password,
+everybody else is asked if `authInbound` is on and refused with `403` if not.
+Liveness probes (`OPTIONS`) are always answered, because a PBX that cannot
+qualify the camera marks it unreachable and quietly stops routing calls to it.
+
+`system.unsafe` switches this off along with everything else.
+
+#### If the camera stops answering after an upgrade
+
+One deployment changes behaviour: `doRegister: false` with callers that used
+to be accepted because nothing was checking. Those need one of the two keys
+above. The camera says so at start-up, and this is the line to grep for:
+
+```
+sip uac: nothing may call this camera — it does not register, sip.allowedPeers
+is empty and sip.authInbound is off, so every inbound call will be refused. Set
+sip.allowedPeers to the caller's address, or sip.authInbound to ask it for a
+password
+```
+
+Refusals name the caller too, so `sip uac: refused a call from` tells you which
+address to add. Both keys are picked up by `killall -HUP majestic`.
+
+To go back to answering anyone — knowing what that means — set
+`allowedPeers: "0.0.0.0/0"`.
+
+#### What this does not protect
+
+SIP Digest is MD5 over UDP with no integrity protection, so it stops somebody
+who can reach the port, not somebody who can already read your traffic. Its
+real job is making an inbound call from an unknown address *possible at all*
+without leaving the camera open to everyone.
+
+Two things do not depend on it, and are worth knowing about because they used
+to be missing: a `BYE` must carry the dialog's tags before it ends a call, and
+a `CANCEL` must name the transaction it cancels. Previously a Call-ID copied
+off the wire was enough to do either.
+
 ### Two-way audio (talkback)
 
 #### RTSP back-channel, ONVIF Profile T
