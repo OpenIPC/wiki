@@ -498,8 +498,6 @@ records:
   postRollSec: 10         # seconds kept after movement stops
 motionDetect:
   enabled: true
-video0:
-  gopSize: 5              # see below — this one matters
 ```
 
 With nothing moving the camera writes no bytes at all. When the detector fires
@@ -512,19 +510,29 @@ something shifting in frame does not chop one event into several clips. A long
 event still rotates on `records.split`, so an afternoon of movement does not
 become one enormous file.
 
-#### Set `gopSize` at or below `preRollSec`
+#### Don't raise `gopSize` above `preRollSec`
 
 A recording can only begin at a keyframe, and `gopSize` is how many seconds
 apart those are. The camera holds the last `preRollSec` of finished video in
 RAM — but if there is no keyframe among those seconds, the run-up cannot be
 written and the clip starts at the trigger after all.
 
-With the defaults (`gopSize: 30` against `preRollSec: 5`) a keyframe falls
-inside the window about one event in six, so the run-up appears occasionally
-and not most of the time — which is more confusing than never getting it.
-Measured on a test camera with someone walking into frame, `gopSize: 5` and
-`preRollSec: 5`: the clip's first four seconds are an empty room and the
-movement starts at second five.
+Out of the box this is not a problem. `gopSize` is `1`, so every second held is
+a possible starting point and the whole run-up survives; you do not have to set
+anything. It becomes a problem on cameras where `gopSize` has been raised,
+which people do to save bitrate — keyframes are the expensive frames.
+
+Measured with someone walking into shot, `preRollSec: 5` throughout: at
+`gopSize: 5` the clip opens on four seconds of empty room and the movement
+starts at second five. At `gopSize: 30`, three consecutive events kept three
+seconds, one second, and nothing at all — a keyframe lands inside the window
+only when it happens to, and getting the run-up sometimes is more confusing
+than never getting it.
+
+So if you have lengthened `gopSize` for bandwidth and want the run-up back,
+bring it back to `preRollSec` or below. Raising `preRollSec` past `gopSize`
+works too, but it is the expensive direction: the run-up is held in RAM, and
+the limit below applies.
 
 The camera says so when it happens:
 
