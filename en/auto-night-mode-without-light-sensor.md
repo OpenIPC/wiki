@@ -1,11 +1,17 @@
 # OpenIPC Wiki
 [Table of Content](../README.md)
 
-**Attention, this instruction is outdated since summer 2024.** Majestic switches
-day/night by itself from the sensor's analog gain — see
-[auto day/night detection](majestic-streamer.md#auto-daynight-detection) for the
-two settings that replace these scripts, and set them from **Settings → Day /
-Night** in the web interface.
+**Attention, this instruction is outdated twice over.** Since summer 2024
+majestic can switch day/night by itself from the sensor's analog gain (the two
+threshold settings that replaced these scripts), and since September 2026 it
+needs **no thresholds at all**: turn on the light monitor with nothing else
+configured and the camera decides from its own exposure state — nothing to
+calibrate, same behaviour on HiSilicon, Ingenic and SigmaStar. See
+[auto day/night detection](majestic-streamer.md#auto-daynight-detection), and
+set it from **Settings → Day / Night** in the web interface, which also shows
+the decision live. Cameras whose lamp sits on a PWM pad can additionally
+[dim it to the ambient light](majestic-streamer.md#pwm-backlight-a-dimmable-lamp)
+instead of switching it. The scripts below remain for older firmware.
 
 **Step 1 below is also done for you now.** The web interface detects a filter
 that is open in daylight, and its **Test the filter** button moves the filter and
