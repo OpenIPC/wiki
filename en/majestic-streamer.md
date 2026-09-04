@@ -801,10 +801,17 @@ image format.
 Use [ffplay][ffplay] utility from [ffmpeg][ffmpeg] package.
 ```
 ffplay -ar 48000 -ac 1 -f s16le http://192.168.1.10/audio.pcm
-ffplay -ar 48000 -ac 1 -f alaw http://192.168.1.10/audio.alaw
-ffplay -ar 48000 -ac 1 -f mulaw http://192.168.1.10/audio.ulaw
+ffplay -ar 8000 -ac 1 -f alaw http://192.168.1.10/audio.alaw
+ffplay -ar 8000 -ac 1 -f mulaw http://192.168.1.10/audio.ulaw
 ffplay -ar 8000 -ac 1 -f alaw http://192.168.1.10/audio.g711a
 ```
+
+`-ar` has to match what the endpoint emits. `/audio.pcm` follows
+`audio.srate` — 48000 above is only an example, use whatever the camera is set
+to. The G.711 endpoints are always 8 kHz: that is the rate the codec is defined
+at, and the encoder resamples to it from whatever the microphone captures.
+Builds before 2026-09 passed the capture rate through unchanged, so on those
+`-ar` had to match `audio.srate` here too.
 
 There are also `/audio.opus` and `/audio.m4a` (AAC), which ffplay reads without
 being told the rate, and `/audio.mp3` in Ultimate builds. `/audio.html` is a

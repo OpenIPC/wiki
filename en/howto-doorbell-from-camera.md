@@ -21,10 +21,17 @@ hardware up.
 ## What you'll need
 
 - An OpenIPC camera that has a working speaker output and a working
-  mic input. Easiest way to confirm both work end-to-end: open
-  `http://<camera>/audio.ulaw` to verify the mic capture path (uLaw
-  is codec-free, so it needs nothing installed to play), and POST a
-  short raw-audio payload to
+  mic input. Easiest way to confirm the mic capture path is
+  `http://<camera>/audio.html`, the built-in player page, which
+  needs nothing installed. The raw endpoints work too but are
+  headerless, so a player has to be told the format. G.711 is always
+  8 kHz whatever the microphone captures at:
+
+  ```sh
+  ffplay -ar 8000 -ac 1 -f mulaw http://<camera>/audio.ulaw
+  ```
+
+  For the speaker, POST a short raw-audio payload to
   `http://<camera>/play_audio` (the speaker sink) — for example:
 
   ```sh
