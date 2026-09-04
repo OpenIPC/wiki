@@ -55,6 +55,7 @@ the web interface, the HTTP API and HTTPS.
 | Microphone, speaker, `/audio.*` endpoints | — | ✅ | ✅ |
 | Opus, AAC, G.711 A-law / µ-law, raw PCM | — | ✅ | ✅ |
 | [MP3][mp3] audio (`/audio.mp3`, `audio.codec: mp3`) | — | — | ✅ |
+| [Microphone processing](#microphone-processing-vqe) — noise reduction, AGC, high-pass (`audio.vqe`) | — | — | ✅¹ |
 | [WebP][webp] snapshots (`/image.webp`) | — | — | ✅ |
 | Crop and greyscale snapshots on any SoC, without `jpeg.tuned` ([`/image.jpg?crop=`](#crop-and-gray-on-ultimate)) | — | — | ✅ |
 | [Progressive][prog] snapshots (`jpeg.toProgressive`) | — | — | ✅ |
@@ -65,6 +66,9 @@ the web interface, the HTTP API and HTTPS.
 | Cloud signalling (`cloud.enabled`) | — | ✅ | ✅ |
 | SIP client (the doorbell use case) | — | ✅ | ✅ |
 | RTMP and RTMPS push (YouTube, Telegram, VK…) | — | ✅ | ✅ |
+
+¹ Not on every Ultimate camera — the SoC has to have the engines this is
+written against. See [Microphone processing (VQE)](#microphone-processing-vqe).
 
 The one thing FPV gains in exchange is room. Measured on a Goke GK7205V200,
 same commit, same toolchain, stripped:
@@ -642,8 +646,11 @@ The outgoing stream sends an audio codec the RTMP container supports, converting
 from `audio.codec` when needed, so `audio.codec` can stay on Opus for RTSP while
 the broadcast still carries audio a service accepts. To pin a specific codec set
 `outgoing.audioCodec` (`aac`, `alaw`, `ulaw`, `pcm`); leave it empty to follow
-`audio.codec`. For A-law and mu-law the RTMP container is fixed at 8 kHz, so set
-`audio.srate: 8000` or the audio plays back at the wrong speed.
+`audio.codec`. A-law and mu-law are 8 kHz by definition and the encoder
+resamples to it from whatever the microphone is capturing, so `audio.srate` can
+stay wherever the rest of the camera wants it. Builds before 2026-09 did not
+resample and needed `audio.srate: 8000` here, or the audio played back at the
+wrong speed.
 
 If the camera has no microphone, `outgoing.audioSource` supplies a track anyway:
 
@@ -856,6 +863,79 @@ curl -u root:YOUR_PASSWORD --data-binary @test.pcm http://192.168.1.10/play_audi
 This is a one-shot clip player: a new upload cancels the clip currently playing,
 and the clip is capped at roughly 2 MB on most SoCs (about two minutes at
 8 kHz). For a live conversation use two-way audio below.
+
+### Microphone processing (VQE)
+
+*Ultimate, and only on some SoCs.* HiSilicon and Goke parts carry a voice
+quality enhancement block on the audio input channel — noise reduction (ANR),
+automatic gain control (AGC) and a high-pass filter. Majestic can switch it on:
+
+```
+audio:
+  enabled: true
+  vqe: true
+```
+
+It sits on the **capture** channel, upstream of every encoder, so one setting
+reaches RTSP, SIP calls, WebRTC, the `/audio.*` endpoints and MP4 recordings
+alike. There is nothing per-protocol to configure and nothing that can
+disagree.
+
+Off by default: it changes how every stream from the camera sounds, and an
+upgrade should not move that under a camera someone has already tuned by ear.
+The shipped values are the ones a vendor firmware uses on this class of SoC, so
+turning it on lands somewhere known to work.
+
+Which stages you get depends on `audio.srate`, because the SoC has two engines
+and they are not interchangeable:
+
+| `audio.srate` | engine | ANR | AGC | high-pass |
+|---|---|:---:|:---:|:---:|
+| 8000, 16000 | talk | ✅ | ✅ | 80 / 120 / 150 Hz |
+| 48000 | record | — | ✅ | 80 Hz only |
+| 32000 | *neither* | — | — | — |
+
+At 32 kHz there is no engine at all; majestic logs that and carries on rather
+than pretending. The tuning keys are listed in
+[Majestic example config](majestic-config.md).
+
+#### Which cameras actually have it
+
+Two conditions, and both have to hold. The build must be Ultimate, **and** the
+SoC must be one of the three generations these SDK calls belong to. Of the
+chips Ultimate is published for:
+
+| chip | SoC code | VQE |
+|---|---|:---:|
+| Hi3516EV200 | 3516E200 | ✅ |
+| GK7205V200 | 7205200 | ✅ |
+| GK7205V500 | 7205500 | — |
+| Hi3516CV200 | 3518E200 | — |
+| Hi3516CV300 | 3516C300 | — |
+
+The older parts have a differently shaped SDK call and are not wired up. If
+your camera is not on the ✅ list the keys simply will not exist, and
+`curl http://localhost/api/v1/config.json` will not list them.
+
+Majestic also builds this for SoC code 3516C500 — the Hi3516CV500 / AV300 /
+DV300 family — but no Ultimate image is published for those chips today, so
+in practice the two above are the whole list.
+
+#### If the keys are there but nothing changes
+
+The DSP stages are separate shared libraries that the SDK loads at the moment
+VQE is switched on, and firmware images built before this feature existed do
+not carry them. Then the log says:
+
+```
+the SoC would not start the talk VQE engine (0xa0158041) — audio continues
+unprocessed. The stages are loaded by dlopen at this point, so the usual cause
+is a firmware image built without the VQE engine libraries
+```
+
+and the console shows `dlopen ... libhive_HPF.so failed`. Audio keeps flowing
+normally; only the processing is missing. The fix is a firmware image that
+installs those libraries — update the firmware, don't change majestic.
 
 ### Two-way audio (talkback)
 
