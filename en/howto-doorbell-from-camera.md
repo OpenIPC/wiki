@@ -216,6 +216,13 @@ sip:
 > resample and needed `srate: 8000`; if calls sound sped-up or
 > distorted, that is the version to check.
 
+> **Who may call the camera.** Registering, as above, is also what tells the
+> camera whose calls to accept: it takes them from the PBX in `sip.server` and
+> refuses everyone else, with nothing extra to configure. If you set
+> `doRegister: false` you have to say instead — `sip.allowedPeers` for the
+> addresses that may call without a password, or `sip.authInbound` to ask for
+> one. See [Who may call the camera](majestic-streamer.md#who-may-call-the-camera).
+
 `killall -HUP majestic` to reload — this picks up `sip.*` changes as of the
 2026-08 builds; older ones needed a full restart of majestic, and quietly left
 SIP switched off until they got one. The interesting log lines:
@@ -301,6 +308,11 @@ leg and a pair of RTP ports); a longer list is still fine in sequential mode.
 > at its own address, so the numbers can live on different machines — as long
 > as each one is written as a literal IP. Hostnames still go to `sip.server`,
 > because resolving them at call time would stall the video pipeline.
+>
+> Direct-dial mode is also the one that has to say who may call *in*. A camera
+> that registers trusts its PBX and needs nothing; one that does not has no
+> registrar to trust, so add `sip.allowedPeers` with the handsets' addresses —
+> see [Who may call the camera](majestic-streamer.md#who-may-call-the-camera).
 
 ## Controlling calls over HTTP
 
@@ -473,14 +485,26 @@ What each field means:
    list (`allow=ulaw` or `allow=alaw` on the endpoint is enough).
    Changing `audio.codec` will not help: the SIP stack does not read
    it, and lowering it only narrows RTSP and your recordings.
-4. **Call connects but no audio.** Almost always RTP firewall /
+4. **`403 Forbidden` or `401 Unauthorized` on a call *to* the camera.**
+   The camera is deciding who may call it. A registering camera takes
+   calls from its PBX only; one with `doRegister: false` takes them
+   from `sip.allowedPeers`, or asks for a password when
+   `sip.authInbound` is on. The log names the caller and the remedy —
+   grep for `sip uac: refused a call from`. See
+   [Who may call the camera](majestic-streamer.md#who-may-call-the-camera).
+5. **`481 Call/Transaction Does Not Exist` on a BYE or CANCEL.** The
+   request did not identify the call it was ending: a BYE has to carry
+   the dialog's tags and a CANCEL has to name the INVITE's `Via`
+   branch. A conformant peer sends both, so this usually means
+   something is replaying an old message.
+6. **Call connects but no audio.** Almost always RTP firewall /
    NAT. Make sure UDP `rtpPortHint`..`rtpPortHint+3` (i.e. four
    ports) is reachable from the called side. For NAT traversal,
    point the camera at a SIP server that does media relay (TURN /
    ICE) or run the PBX on the same LAN as the camera.
-5. **Choppy audio on Wi-Fi or 4G.** Set `audio.jitterBufferMs` to
+7. **Choppy audio on Wi-Fi or 4G.** Set `audio.jitterBufferMs` to
    `60` or higher. See the "Going remote" table above.
-6. **`sip uac: REGISTER failed (401)` loop.** Wrong password, or
+8. **`sip uac: REGISTER failed (401)` loop.** Wrong password, or
    the PBX expects a different `realm`. The exact challenge realm
    is in the log; some PBXes require `username` to match the From
    user, others a separate auth ID.

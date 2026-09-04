@@ -374,6 +374,15 @@ cloud:
   #ringSeconds: 10              # 1-300
   #ringCycles: 3                # 0-100 passes over the target list; 0 = forever
 
+  # Who may call this camera. A camera that registers already trusts its
+  # registrar and refuses everyone else, so these are for deployments with no
+  # registrar to trust. See "Who may call the camera" in Majestic streamer.
+  #allowedPeers: ""             # addresses allowed to call in, e.g.
+                                # "192.168.1.50, 192.168.9.0/24"
+  #authInbound: false           # ask everyone else for a password instead
+  #inboundUser: ""              # falls back to sip.username
+  #inboundPassword: ""          # falls back to sip.password
+
 # (build-dependent: Lite and Ultimate)
 #webrtc:
   # https://www.w3.org/TR/webrtc/#rtciceserver-dictionary with optional
