@@ -6,7 +6,12 @@
 # all developed in the open. They are the only checks here whose violation cannot be
 # undone after merge: a commit message on a public branch cannot be rewritten, and
 # editing a merged pull request's description leaves the original visible in its edit
-# history. They apply to the diff AND to the pull request's own title and description.
+# history.
+#
+# So they apply to everything the merge makes public, not only the pages: the diff,
+# the commit messages on the branch, and the pull request's own title and description.
+# The commit message is the easiest of those to forget and the hardest to take back --
+# a description can at least be edited, however visibly.
 #
 # Schema: https://docs.qodo.ai/v1/features/custom-compliance
 
@@ -30,7 +35,8 @@ pr_compliances:
       for the thing it is ("the camera stops the sensor and its image pipeline"),
       never in the vocabulary the source uses for itself.
     failure_criteria: >
-      A page, title or description about a closed component adds any of: a source path
+      A page, a commit message, the title or the description, concerning a closed
+      component, adds any of: a source path
       or file name from its tree; a function, macro, struct or enum identifier from it;
       an internal subsystem name used as though it were a term of art the reader should
       know; the name of an internal classification or state scheme the product applies
@@ -56,8 +62,8 @@ pr_compliances:
       a command. Where an address is ours rather than the reader's, it is a
       placeholder, a documentation domain, or an RFC 5737 example range.
     failure_criteria: >
-      The diff, the title or the description adds something identifying the project's
-      own test hardware or network: a lab host's name or domain, an address on the lab
+      The diff, a commit message on the branch, the title or the description adds
+      something identifying the project's own test hardware or network: a lab host's name or domain, an address on the lab
       network presented as a real machine a reader could reach, a login belonging to a
       specific lab device rather than a documented factory default, an SSH alias or
       config stanza reaching one, an unreleased build's branch name or commit id, or

@@ -60,8 +60,9 @@ something the pull request did not set out to document.
 
 compliance_user_guidelines = """
 Apply pr_compliance_checklist.yaml literally, to the lines the diff adds or changes AND
-to the pull request's own title and description — the disclosure gate is about what
-becomes public, and a pull request description is as public as the page.
+to the commit messages on the branch, the pull request's title and its description —
+the disclosure gate is about what becomes public, and all of those are as public as
+the page. A commit message is the one that cannot be edited afterwards at all.
 
 Do not raise a finding for pre-existing text that the diff merely moves or rewraps.
 """
