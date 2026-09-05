@@ -62,9 +62,9 @@ Notes:
 - **Choose a strong password.** OpenIPC's published default web login is
   `root` / `123456`; do not leave a trivial password like that on a camera that
   is reachable from anywhere untrusted.
-- The HTTP API is the current method. The older `cli -s .onvif.password …` +
-  `killall -HUP majestic` approach still works but is
-  [documented as deprecated](majestic-streamer.md#changing-parameters-via-the-http-api).
+- From a shell on the camera, `cli -s .onvif.password …` does the same thing —
+  it applies the change itself, with no `killall` needed. See
+  [changing parameters](majestic-streamer.md#changing-parameters-via-the-http-api).
 
 ### tinyCam side
 

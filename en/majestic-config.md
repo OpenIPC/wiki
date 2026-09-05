@@ -9,6 +9,13 @@ change from the defaults, so a working file is usually much shorter than what
 follows — this page is a reference of what exists, not a file to paste whole.
 `/etc/majestic.full` on the camera is a shorter sample of the same thing.
 
+Majestic keeps it that way. When it saves the file — from the WebUI, the API, or
+after a `cli` write — it writes only the keys that differ from the defaults this
+build carries, so a value you never changed stays absent rather than being
+frozen at whatever the default happened to be when you last pressed Save. That
+is deliberate: it is what lets a default corrected in a later version reach a
+camera that has already been configured.
+
 Two ways to check a key against the build you are actually running, which beats
 trusting any wiki page:
 
