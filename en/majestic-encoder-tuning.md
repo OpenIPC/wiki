@@ -199,14 +199,18 @@ answers `404` rather than accepting a setting nothing would apply.
 
 The reference structure is programmed between encoder channel creation and the
 start of encoding; the SDK ignores a later call. That does *not* mean you have
-to restart anything. Setting either key restarts the video pipeline on its own
-and the new value is picked up as encoding starts again, so this is enough:
+to restart anything. Setting either key is enough on its own:
 
 ```
 curl 'http://localhost/api/v1/set?video0.refEnhance=1'
 ```
 
-Majestic is not restarted and the camera does not reboot. The real cost is that
-the streams drop and come back, so viewers see a reconnect — do it when that is
-acceptable, not while something is recording. Confirm the new setting took
-effect with the bitrate check above rather than assuming it did.
+Majestic is not restarted and the camera does not reboot. What you will see is
+the streams drop and come back, so viewers reconnect — do it when that is
+acceptable, not while something is recording.
+
+Read the value back afterwards rather than assuming it was taken:
+
+```
+curl 'http://localhost/api/v1/config.json' | grep -A2 refEnhance
+```

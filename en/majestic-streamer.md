@@ -216,8 +216,10 @@ the frame is rejected with `400` rather than quietly ignored. A crop or a
 greyscale conversion asked for while another one is still running is answered
 with `503`: that transformation *is* the request, so the camera says come back
 shortly rather than send an uncropped picture as if nothing had happened. A
-plain `/image.jpg` with no parameters is unaffected by any of this and always
-works.
+plain `/image.jpg` with no parameters is unaffected by any of this. The one
+thing that does stop it is
+[idle suspension](#stopping-the-sensor-and-isp-when-nothing-is-watching), which
+is off unless you turn it on.
 
 ### Changing parameters via the HTTP API
 
@@ -389,6 +391,11 @@ isp:
   suspendIdleSeconds: 5   # grace period, 1-300
 ```
 
+These arrived in the nightly builds of 5 September 2026. A build without them
+answers `404` to the API and does not show them in the web interface, so if the
+keys are missing the firmware is older than the feature rather than the camera
+being unsupported.
+
 Audio, RTSP, the web server and the API keep running throughout, so a camera
 stays reachable, keeps answering its API and keeps streaming its microphone
 while its sensor is asleep. Enabling a stream brings the picture back.
@@ -429,9 +436,9 @@ Four behaviours worth knowing before turning it on:
   `isp_exptime` and the rest are readings from a stopped ISP, so they are
   omitted rather than reported stale. `node_hwmon_temp_celsius` and the memory
   gauges stay.
-- **It saves power, not memory.** The frame pool is fixed when the streamer
-  starts and is not returned by a suspend — see
-  [Memory tuning](memory-tuning.md) for what actually frees blocks.
+- **It saves power, not memory.** A suspended camera holds the same memory as a
+  running one — see [Memory tuning](memory-tuning.md) for what actually frees
+  any.
 
 Motion detection counts as wanting frames, so a camera with
 `motionDetect.enabled` never suspends.
