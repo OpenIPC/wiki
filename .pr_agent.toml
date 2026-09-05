@@ -1,0 +1,68 @@
+# Qodo code-review configuration.
+#
+# The binary hard gates live in a companion file at the repo root:
+#   pr_compliance_checklist.yaml
+#
+# Reference: https://docs.qodo.ai/install-and-configure/configuration-overview/configuration-file
+
+[github_app]
+pr_commands = [
+    "/agentic_describe",
+    "/agentic_review",
+]
+
+[review_agent]
+comments_location_policy = "both"
+
+# 1 = all severities inline, 2 = high+medium, 3 = high only.
+# 2 keeps disclosure findings inline without burying a documentation diff in nits.
+inline_comments_severity_threshold = 2
+
+issues_user_guidelines = """
+This repository is the OpenIPC wiki: user-facing documentation for camera firmware,
+the software that runs on it, and the hardware it runs on. Readers are operators and
+integrators, not the people who build it. Pages are Markdown under en/ and ru/.
+
+**This repository is PUBLIC, and not everything it documents is.** Majestic in
+particular is developed in a repository that is not open. Treat a page that explains
+how a closed component is built, rather than what it does, as a finding in its own
+right — see the disclosure gate in pr_compliance_checklist.yaml, the highest-priority
+check here and the only one that cannot be fixed after merge.
+
+Prioritise, in order:
+
+1. Disclosure. Internals of a component whose source is not public, and any detail
+   identifying the lab hardware used to verify a claim. Permanent once merged: a
+   commit message on a public branch cannot be rewritten, and editing a merged pull
+   request's description leaves the original visible in its history.
+
+2. Claims a reader cannot check, and claims that are simply wrong. This wiki's
+   recurring failure is a confident instruction nobody has retested since the software
+   changed — most often a stated requirement to restart or reboot for something that
+   now applies on its own, or a setting described with a default it no longer has. A
+   page that tells the reader how to confirm a result for themselves is worth more
+   than one that asserts it.
+
+3. Completeness where behaviour has more than one cause. When a page enumerates why
+   something happens — why an endpoint returns a particular status, why a feature is
+   unavailable — a newly added cause belongs in that list, not only in the section
+   introducing it. Half-updated enumerations send readers to the wrong remedy.
+
+4. Coverage claims. Where a feature exists only on some SoCs, builds or firmware
+   versions, say which, and say it where a reader on unsupported hardware will see it
+   before acting.
+
+Do not report: British or American spelling preferences, Markdown table alignment,
+line-length or wrapping style, the ru/ pages lagging behind en/ (they are translated
+when a translator is available, not per pull request), or the absence of a page for
+something the pull request did not set out to document.
+"""
+
+compliance_user_guidelines = """
+Apply pr_compliance_checklist.yaml literally, to the lines the diff adds or changes AND
+to the commit messages on the branch, the pull request's title and its description —
+the disclosure gate is about what becomes public, and all of those are as public as
+the page. A commit message is the one that cannot be edited afterwards at all.
+
+Do not raise a finding for pre-existing text that the diff merely moves or rewraps.
+"""

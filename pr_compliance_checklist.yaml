@@ -1,0 +1,74 @@
+# Hard gates for OpenIPC wiki pull requests.
+#
+# These are binary pass/fail checks, deliberately narrow and objective.
+#
+# Both exist because this repository is PUBLIC and documents software that is not
+# all developed in the open. They are the only checks here whose violation cannot be
+# undone after merge: a commit message on a public branch cannot be rewritten, and
+# editing a merged pull request's description leaves the original visible in its edit
+# history.
+#
+# So they apply to everything the merge makes public, not only the pages: the diff,
+# the commit messages on the branch, and the pull request's own title and description.
+# The commit message is the easiest of those to forget and the hardest to take back --
+# a description can at least be edited, however visibly.
+#
+# Schema: https://docs.qodo.ai/v1/features/custom-compliance
+
+pr_compliances:
+  - title: "Documents behaviour, not the internals behind it"
+    compliance_label: true
+    objective: >
+      Some of what this wiki documents is developed in repositories that are not
+      public, Majestic among them. A page describing how one is built rather than what
+      it does discloses a design its readers were not given, and does so permanently.
+      It is also the less useful page: internals are the part that changes without
+      notice, so a sentence resting on one stops being true while the behaviour it
+      was trying to explain stays exactly the same.
+    success_criteria: >
+      Statements about a closed component describe what an operator can observe,
+      configure or measure from outside it: configuration keys with their defaults and
+      ranges, HTTP endpoints and the status codes they return, metric names, timings,
+      measured power or temperature with the method used to obtain them, and the
+      behaviour a user sees — including caveats and things that will surprise them.
+      Where the mechanism genuinely helps a reader, it is given in ordinary language
+      for the thing it is ("the camera stops the sensor and its image pipeline"),
+      never in the vocabulary the source uses for itself. A screenshot is held to
+      the same standard as prose: what it shows on screen is as published as the
+      paragraph beside it.
+    failure_criteria: >
+      Anything the merge publishes — a page, an image or other committed artifact,
+      a commit message, the title or the description — concerning a closed
+      component, adds any of: a source path
+      or file name from its tree; a function, macro, struct or enum identifier from it;
+      an internal subsystem name used as though it were a term of art the reader should
+      know; the name of an internal classification or state scheme the product applies
+      to its own settings or components; a description of a vendor SDK call sequence or
+      register-level mechanism; a verbatim log line quoted as a thing to grep for; or
+      the name or URL of a private repository or a reference into a private tracker.
+      This criterion deliberately gives no examples: an example here would be the
+      disclosure it prohibits.
+
+  - title: "No lab environment details"
+    compliance_label: true
+    objective: >
+      The cameras used to verify what these pages claim are private infrastructure.
+      Publishing how to reach one, or what one printed, hands an address and a
+      credential to every reader of a public repository, permanently.
+    success_criteria: >
+      A measurement or verification is described by hardware class and configuration —
+      the SoC, the sensor, the stream settings, how many samples over how long — which
+      is what makes the result reproducible by someone else. Addresses and credentials
+      that belong to the product rather than to us are exactly what this wiki is for
+      and are unaffected: the address a camera ships on, the login a fresh device
+      accepts, what a factory reset restores, and the example ranges pages use to show
+      a command. Where an address is ours rather than the reader's, it is a
+      placeholder, a documentation domain, or an RFC 5737 example range.
+    failure_criteria: >
+      The diff, a commit message on the branch, the title or the description adds
+      something identifying the project's own test hardware or network: a lab host's name or domain, an address on the lab
+      network presented as a real machine a reader could reach, a login belonging to a
+      specific lab device rather than a documented factory default, an SSH alias or
+      config stanza reaching one, an unreleased build's branch name or commit id, or
+      console output, log text or screenshots captured from a lab device and
+      identifiable as such.
