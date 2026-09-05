@@ -323,12 +323,24 @@ watchdog:
   enabled: true
   timeout: 300
 
-# HLS and records are mutually exclusive — turning records on turns this off.
+# Applies without a restart, and runs alongside records rather than instead of
+# it — with recording on, the playlist describes byte ranges of the clip on the
+# card, which costs no memory and puts the live edge about a second behind.
 hls:
   enabled: false
-  #segments: 4                  # finished segments held for clients, 2-8. Each
-                                # is a copy of that much video in RAM, so this
-                                # is memory; nothing is allocated while HLS is off
+  #adaptive: false              # offer both encoder channels as two variants and
+                                # let the player choose. Only the recorded channel
+                                # comes from the card, so the second one is held in
+                                # RAM: this is the setting that costs memory
+  #segments: 4                  # finished segments the playlist offers, 2-8.
+                                # Only a memory cost when there is no recording
+                                # to describe — with records off, or records.key
+                                # set, each segment is held in RAM instead.
+                                # Nothing is allocated while HLS is off
+                                #
+                                # records.mode: motion turns this off: nothing
+                                # is written between detections, so there would
+                                # be no live stream to serve
 
 mdns:
   enabled: true                 # answers for openipc.local and <hostname>.local
