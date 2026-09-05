@@ -20,12 +20,14 @@ unset, the clips are being written in the clear and Majestic says so in the log.
 |---|---|---|---|---|
 | the card was pulled, or copied | readable | as strong as the passphrase | unreadable elsewhere | unreadable elsewhere |
 | the flash was cloned, `majestic.yaml` included | readable | **readable** | unreadable | unreadable |
-| the camera was stolen, and somebody has a shell on it | readable | readable | **readable** | unreadable |
-| the camera died, or the passphrase was lost | readable | readable | **lost** without a recovery key | readable with your private key |
+| the camera was stolen, and somebody has a shell on it | readable | readable | **readable** | unreadable (clips already closed) |
+| the camera died or was replaced | readable | readable, with the passphrase | **lost** without a recovery key | readable with your private key |
+| the passphrase or private key was lost | readable | **lost** | **lost** without a recovery key | **lost** |
 | plays in the web interface | yes | not yet | no | no |
 
-Only `pubkey` survives a stolen camera, and it is the one mode where the camera
-cannot play its own recordings. Everything else keeps something on the camera
+Only `pubkey` survives a stolen camera — for the clips already written, not for
+the one still open — and it is the one mode where the camera cannot play its own
+recordings. Everything else keeps something on the camera
 that opens the clip — and whoever has the camera has that too.
 
 ### The file is still an MP4
@@ -53,16 +55,17 @@ records:
   key: "a long passphrase"
 ```
 
-The passphrase is stretched with PBKDF2-HMAC-SHA256 (100 000 rounds, about a
-second on the camera, done once) and wraps each clip's key.
+The passphrase is stretched into a key-wrapping key — deliberately slowly, which
+is why the first clip after a restart takes about a second to start — and that
+wraps each clip's own key.
 
 It does **not** protect a stolen camera: the passphrase is in `majestic.yaml`,
 and anyone who can read the flash can read it. Use it when the risk you are
 addressing is a card walking out of a device that stays put.
 
-To open a clip, on your own machine, using
-[`tools/records_key.py`](https://github.com/OpenIPC/majestic/blob/master/tools/records_key.py)
-(standard library only, no dependencies):
+To open a clip, on your own machine, with `records_key.py` — the offline
+recovery tool published with Majestic, which needs only a Python 3 install and
+never touches the camera:
 
 ```
 records_key.py dump clip.mp4                                # what this clip carries
@@ -75,6 +78,7 @@ ffmpeg -decryption_key <that key> -i clip.mp4 -c copy clear.mp4
 
 ```yaml
 records:
+  enabled: true
   encryption: pubkey
   publicKey: /etc/records-owner.pub
 ```
@@ -113,6 +117,7 @@ and only after a key has been burned into the chip.
 
 ```yaml
 records:
+  enabled: true
   encryption: chip
   chipSlot: 1
   publicKey: /etc/records-owner.pub   # strongly recommended, see below
@@ -153,8 +158,11 @@ exactly as in the `pubkey` section above.
 
 - **Live streams.** RTSP, HLS, WebRTC and snapshots serve plaintext to whoever
   authenticates. This is about the card, not the network.
-- **A camera that is running.** The key is in RAM or in the engine while it
-  records; only `pubkey` gives a thief nothing.
+- **The clip being written right now.** Its key is in RAM, or in the crypto
+  engine, for as long as that clip is open — in every mode, `pubkey` included.
+  What `pubkey` protects is the recordings already closed on the card; someone
+  who takes a running camera and gets a shell still has the current clip, the
+  live video, and everything recorded from then on.
 - **Metadata.** File names carry the time, sizes carry the bitrate, and the frame
   boundaries stay readable. Someone with the card knows when the camera recorded
   and roughly how much was moving — not what.
@@ -168,15 +176,16 @@ exactly as in the `pubkey` section above.
 - **Changing the mode costs up to one GOP of video.** The new clip has to start
   on a keyframe, so on a camera with a 30-second GOP you lose up to 30 seconds at
   the switch. Change it when nothing important is happening.
-- **The cost while recording** is about 7% of one CPU core per MB/s written —
-  roughly 3-4% of a core at 4 Mbit/s on a hi3516av300, most of it the integrity
-  chain rather than the cipher. `chip` and `passphrase` cost the same, because
-  both use the crypto engine where the camera has one.
+- **The cost while recording** is about 7% of one CPU core per MB/s written, so
+  roughly 3-4% of a core at 4 Mbit/s on a Cortex-A7 class SoC. Most of that is
+  the integrity chain rather than the cipher, and `chip` and `passphrase` cost
+  the same, because both use the crypto engine where the camera has one. Measure
+  your own: sum `utime`+`stime` across `/proc/$(pidof majestic)/task/*/stat` over
+  a minute with encryption off, then again with it on, at the same bitrate.
 - **The web interface cannot play these yet.** Encrypted clips download and open
   on your own machine with the recipes above.
 
 ### See also
 
 - [Majestic example config](majestic-config.md) — the whole `records:` block
-- [`docs/recording-encryption.md`](https://github.com/OpenIPC/majestic/blob/master/docs/recording-encryption.md)
-  — the format, the box layout, and the threat model in detail
+- [Majestic streamer](majestic-streamer.md) — what else the recorder can do
