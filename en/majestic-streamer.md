@@ -713,9 +713,10 @@ the expensive way round.
 nothing is written, so there would be no new byte ranges to describe and the
 live edge would simply stop until something moved — which looks like a broken
 stream, not like a setting anyone chose. Turning motion recording on therefore
-turns `hls.enabled` off, and says so in the log; the settings page shows the
-HLS switch as unavailable while the recorder is in motion mode. A camera that
-has to do both is a camera that wants `records.mode: continuous`.
+turns `hls.enabled` off, and says so in the log; the settings page explains it
+under the HLS switch while the recorder is in motion mode, rather than letting
+the two be set against each other and leaving the result to be discovered. A
+camera that has to do both is a camera that wants `records.mode: continuous`.
 
 #### Low latency
 
