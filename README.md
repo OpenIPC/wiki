@@ -57,6 +57,7 @@ OpenIPC Wiki
 - [Majestic encoder tuning](en/majestic-encoder-tuning.md)
 - [Majestic usage research](en/majestic-research.md)
 - [Majestic plugins](en/majestic-plugins.md)
+- [Encrypted recordings on the SD card](en/recording-encryption.md)
 - [Web interface](en/web-interface.md)
 - [Factory reset and the unclaimed camera](en/first-boot.md)
 - [Upgrade firmware](en/sysupgrade.md)
