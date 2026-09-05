@@ -328,11 +328,19 @@ watchdog:
 # card, which costs no memory and puts the live edge about a second behind.
 hls:
   enabled: false
+  #adaptive: false              # offer both encoder channels as two variants and
+                                # let the player choose. Only the recorded channel
+                                # comes from the card, so the second one is held in
+                                # RAM: this is the setting that costs memory
   #segments: 4                  # finished segments the playlist offers, 2-8.
                                 # Only a memory cost when there is no recording
                                 # to describe — with records off, or records.key
                                 # set, each segment is held in RAM instead.
                                 # Nothing is allocated while HLS is off
+                                #
+                                # records.mode: motion turns this off: nothing
+                                # is written between detections, so there would
+                                # be no live stream to serve
 
 mdns:
   enabled: true                 # answers for openipc.local and <hostname>.local

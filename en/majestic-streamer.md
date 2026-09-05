@@ -704,9 +704,18 @@ of holding a second copy of every segment in RAM, so:
   so a player does not have to wait for the next keyframe before it has
   something to fetch.
 
-With recording off, or with `records.key` set — which scrambles the clips, so
-their bytes are not what a player needs — HLS falls back to keeping segments in
-memory. It still works; it is just the expensive way round.
+HLS falls back to keeping segments in memory whenever there is no clip to
+describe: with recording off, and with `records.key` set — which scrambles the
+clips, so their bytes are not what a player needs. It still works; it is just
+the expensive way round.
+
+`records.mode: motion` is refused rather than served badly. Between detections
+nothing is written, so there would be no new byte ranges to describe and the
+live edge would simply stop until something moved — which looks like a broken
+stream, not like a setting anyone chose. Turning motion recording on therefore
+turns `hls.enabled` off, and says so in the log; the settings page shows the
+HLS switch as unavailable while the recorder is in motion mode. A camera that
+has to do both is a camera that wants `records.mode: continuous`.
 
 #### Low latency
 
@@ -730,15 +739,37 @@ Players that do not implement blocking reload simply poll, and still get the
 
 #### Segment length follows gopSize
 
-A segment runs from one keyframe to the next, so `video0.gopSize` sets it. At
-`gopSize: 30` the segments are thirty seconds long, which makes a player slow
-to start and each segment large; at `gopSize: 1` they are a second. Parts make
-the *live edge* independent of that, but segment size is not, so a camera
-serving HLS to players without low-latency support wants a shorter GOP than one
-that is only recording.
+A segment runs from one keyframe to the next, so the recorded stream's
+`gopSize` sets it — `video0.gopSize` normally, and `video1.gopSize` when
+`records.substream: true`, because HLS describes whichever channel is being
+written. At `gopSize: 30` the segments are thirty seconds long, which makes a
+player slow to start and each segment large; at `gopSize: 1` they are a second.
+Parts make the *live edge* independent of that, but segment size is not, so a
+camera serving HLS to players without low-latency support wants a shorter GOP
+than one that is only recording.
 
 `hls.segments` sets how many finished segments the playlist offers, 2 to 8. It
-is only a memory cost in the fall-back case above.
+is only a memory cost in the fall-back cases above.
+
+#### Offering both streams
+
+`hls.adaptive` puts both encoder channels in the master playlist, as two
+variants with their own resolutions and bitrates, and the player picks whichever
+its connection can carry and switches between them as that changes. Without it
+the playlist has one variant: whichever channel is being recorded.
+
+The second variant is not free, and the price is the memory the recorded one
+stopped costing. Only the recorded channel can be described out of the clip on
+the card; the other is held in RAM the older way, so `malloc_hls_alloc_bytes`
+goes from 0 to roughly `hls.segments` multiplied by a GOP of that channel. On a
+camera whose second channel runs a thirty-second GOP that is megabytes, and a
+shorter `gopSize` on that channel is what brings it down.
+
+It is also video only. The recorded variant carries the audio; duplicating it in
+both would be work for something a player takes from whichever variant it is
+playing.
+
+Both settings apply without a restart, `hls.enabled` included.
 
 ### Broadcasts using RTMP
 
