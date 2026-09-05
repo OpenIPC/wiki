@@ -673,6 +673,73 @@ records_fsync_us_max 18825          # a stalling card shows here first
 The Recordings page in the web interface reads the same numbers and says so in
 words.
 
+### Live HLS
+
+`hls.enabled` turns on an HLS stream at `/master.m3u8`, with a player page at
+`/hls`. It applies immediately — no restart, and recording is not interrupted
+while you switch it on or off.
+
+```yaml
+hls:
+  enabled: true
+records:
+  enabled: true       # optional, and worth having: see below
+```
+
+**HLS and recording used to be mutually exclusive.** They are not any more, and
+running both is the better configuration rather than merely a permitted one.
+
+#### Why recording makes HLS cheaper and faster
+
+A recording on the card is already the format HLS serves. When the camera is
+recording, the playlist describes byte ranges of the clip it is writing instead
+of holding a second copy of every segment in RAM, so:
+
+- **it costs no memory.** `malloc_hls_alloc_bytes` in `/metrics` reads 0 while
+  HLS is served this way. With recording off it reads the size of the window
+  instead — `hls.segments` multiplied by however much video a GOP is, which at
+  a long `gopSize` and a high bitrate is tens of megabytes;
+- **the live edge is about a second behind**, not a whole GOP. The playlist
+  carries `EXT-X-PART` entries for the part of the stream still being written,
+  so a player does not have to wait for the next keyframe before it has
+  something to fetch.
+
+With recording off, or with `records.key` set — which scrambles the clips, so
+their bytes are not what a player needs — HLS falls back to keeping segments in
+memory. It still works; it is just the expensive way round.
+
+#### Low latency
+
+The stream advertises `CAN-BLOCK-RELOAD=YES`, so a player that supports
+Low-Latency HLS can ask for a playlist that does not exist yet and have the
+request held until it does, rather than polling for it:
+
+```
+GET /video.m3u8?_HLS_msn=<segment>&_HLS_part=<part>
+```
+
+The camera answers the moment that part is written, so the wait is one part —
+about a second, since a part is `records.fragmentMs` long and that defaults to
+1000. A request for something more than one segment ahead is refused with 400
+rather than held, and one that waits more than six seconds is answered with
+504, which means the stream has stalled rather than that the player asked for
+the wrong thing.
+
+Players that do not implement blocking reload simply poll, and still get the
+`EXT-X-PART` entries.
+
+#### Segment length follows gopSize
+
+A segment runs from one keyframe to the next, so `video0.gopSize` sets it. At
+`gopSize: 30` the segments are thirty seconds long, which makes a player slow
+to start and each segment large; at `gopSize: 1` they are a second. Parts make
+the *live edge* independent of that, but segment size is not, so a camera
+serving HLS to players without low-latency support wants a shorter GOP than one
+that is only recording.
+
+`hls.segments` sets how many finished segments the playlist offers, 2 to 8. It
+is only a memory cost in the fall-back case above.
+
 ### Broadcasts using RTMP
 
 To instantly launch a YouTube broadcast, run these commands in the console:
