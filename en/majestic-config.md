@@ -237,7 +237,14 @@ records:
   #substream: false             # record video1 instead of video0
   #notime: false                # ignore filename, number files 00000.mp4 upward
   #audioCodec: ""               # mp3 | aac | opus; empty follows audio.codec
-  #key: ""                      # XOR-obfuscate the payload; names files .enc
+  #encryption: none             # none | passphrase | chip | pubkey -- see
+                                # en/recording-encryption.md; a mode the camera
+                                # cannot honour stops recording, it never falls
+                                # back to writing in the clear
+  #key: ""                      # the passphrase, for encryption: passphrase
+  #publicKey: ""                # PEM public key: the only slot in pubkey mode,
+                                # a recovery key in the other two
+  #chipSlot: 1                  # which OTP key slot chip mode uses (1-3)
 
 outgoing:
   enabled: false
