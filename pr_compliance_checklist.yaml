@@ -33,9 +33,12 @@ pr_compliances:
       behaviour a user sees — including caveats and things that will surprise them.
       Where the mechanism genuinely helps a reader, it is given in ordinary language
       for the thing it is ("the camera stops the sensor and its image pipeline"),
-      never in the vocabulary the source uses for itself.
+      never in the vocabulary the source uses for itself. A screenshot is held to
+      the same standard as prose: what it shows on screen is as published as the
+      paragraph beside it.
     failure_criteria: >
-      A page, a commit message, the title or the description, concerning a closed
+      Anything the merge publishes — a page, an image or other committed artifact,
+      a commit message, the title or the description — concerning a closed
       component, adds any of: a source path
       or file name from its tree; a function, macro, struct or enum identifier from it;
       an internal subsystem name used as though it were a term of art the reader should
