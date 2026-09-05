@@ -27,24 +27,26 @@ unset, the clips are being written in the clear and Majestic says so in the log.
 
 Only `pubkey` survives a stolen camera — for the clips already written, not for
 the one still open — and it is the one mode where the camera cannot play its own
-recordings. Everything else keeps something on the camera
-that opens the clip — and whoever has the camera has that too.
+recordings. Everything else keeps something on the camera that opens the clip,
+and whoever has the camera has that too.
 
 ### The file is still an MP4
 
-Whatever the mode, an encrypted recording is an ordinary fragmented MP4 using
-Common Encryption (`cenc`, AES-128-CTR), keeps its `.mp4` name, and plays with:
+Whatever the mode, an encrypted recording is an ordinary MP4 using the standard
+Common Encryption scheme players already understand. It keeps its `.mp4` name,
+and given the key it plays with:
 
 ```
 ffmpeg -decryption_key <32 hex characters> -i clip.mp4 -c copy clear.mp4
 ```
 
-Each clip has its own key, drawn when the file is opened, and carries that key
-inside itself — wrapped, once per configured mode. Nothing on the camera has to
-remember which key went with which file, and no key is ever reused.
+Every clip has its own key and carries what is needed to open it, so there is no
+key database to keep, nothing to back up per file, and no key shared between two
+recordings.
 
-Every fragment also carries a chained HMAC, so a clip that was cut, reordered or
-edited is detectable. `records_key.py verify` reports how far the chain holds.
+A clip that has been cut short, edited or had parts reordered can be told apart
+from an intact one; the recovery tool reports how much of a clip it can vouch
+for.
 
 ### `passphrase` — protects a card somebody removed
 
@@ -55,24 +57,25 @@ records:
   key: "a long passphrase"
 ```
 
-The passphrase is stretched into a key-wrapping key — deliberately slowly, which
-is why the first clip after a restart takes about a second to start — and that
-wraps each clip's own key.
+Turning the passphrase into a key is deliberately slow, which is why the first
+clip after a restart takes about a second to begin. It happens once, not per
+clip.
 
 It does **not** protect a stolen camera: the passphrase is in `majestic.yaml`,
 and anyone who can read the flash can read it. Use it when the risk you are
 addressing is a card walking out of a device that stays put.
 
-To open a clip, on your own machine, with `records_key.py` — the offline
-recovery tool published with Majestic, which needs only a Python 3 install and
-never touches the camera:
+To open a clip you copy it to your own machine and use Majestic's offline
+recovery tool (`--help` lists its commands; it needs Python 3 and never talks to
+the camera). Give it the clip and the passphrase and it prints the clip's key,
+which is what `ffmpeg` wants:
 
 ```
-records_key.py dump clip.mp4                                # what this clip carries
-records_key.py verify --passphrase 'a long passphrase' clip.mp4
-records_key.py unwrap  --passphrase 'a long passphrase' clip.mp4   # prints the hex key
-ffmpeg -decryption_key <that key> -i clip.mp4 -c copy clear.mp4
+ffmpeg -decryption_key <the key it printed> -i clip.mp4 -c copy clear.mp4
 ```
+
+The same tool tells you what a clip carries and whether it is intact, which is
+worth running before you need it in earnest.
 
 ### `pubkey` — protects a stolen camera
 
@@ -92,20 +95,15 @@ scp owner.pub root@camera:/etc/records-owner.pub
 ```
 
 Each clip's key is sealed to that public key. The camera has no private half, by
-design, so nothing on it — not root, not a flash image, not the crypto engine —
+design, so nothing on it — not the root account, not a copy of its flash —
 can open a recording. That is the point, and the costs follow from it: the
 camera cannot play its own clips, and after a restart it records beside the
 interrupted clip rather than resuming it.
 
-Recovery needs the private key, and never the camera:
-
-```
-records_key.py unwrap --rsa-blob blob.bin clip.mp4
-openssl pkeyutl -decrypt -inkey owner.pem -in blob.bin -out material.bin \
-    -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256 -pkeyopt rsa_mgf1_md:sha256
-records_key.py verify --material material.bin clip.mp4
-records_key.py unwrap --material material.bin clip.mp4      # the hex key for ffmpeg
-```
+Recovery needs the private key, and never the camera. The recovery tool extracts
+the sealed blob from the clip and prints the exact `openssl pkeyutl -decrypt`
+line to run against it; feed what openssl produces back to the tool and it prints
+the clip's key for `ffmpeg`. Three commands, none of which involve the camera.
 
 **Keep `owner.pem` somewhere you will still have it in three years.** Lose it and
 every clip ever written in this mode is gone. There is no other copy anywhere.
@@ -123,14 +121,14 @@ records:
   publicKey: /etc/records-owner.pub   # strongly recommended, see below
 ```
 
-The clip's key is wrapped by the SoC's key ladder under a key in one-time
-programmable memory, and it unwraps only on that die — and only into the crypto
-engine, never into memory. A card or a whole flash image is unreadable anywhere
-else, because the key is in neither.
+The camera's chip carries a key that was written into it once and cannot be read
+back out — not by software on the camera, not by anything reading the flash.
+Recordings are locked to that one chip: a card, or a whole copy of the flash,
+opens on no other camera.
 
-It does **not** protect a stolen camera. A key ladder unwraps for whoever can
-talk to it, so root on the camera can decrypt; and these boards have no secure
-boot, so a stolen camera is a camera with root.
+It does **not** protect a stolen camera. The chip will still do the unlocking for
+whoever is holding it, and these boards have no verified boot to stop someone
+getting a shell, so a stolen camera is a camera that decrypts its own clips.
 
 Provisioning is irreversible, once per slot for the life of the chip, and there
 are three slots:
@@ -143,11 +141,11 @@ majestic --otp-burn --otp-slot 1 --i-understand-this-is-irreversible
 reboot
 ```
 
-The key is drawn from the chip's hardware random generator mixed with the
-kernel's, used once, and never stored or printed. Majestic refuses to burn a
-slot that is not blank, refuses to record against a slot that is blank, and
-verifies the burn through the ladder afterwards. The daemon has to be stopped
-first, because it drives the same hardware.
+The key is random, used once, and never stored or shown to anybody — there is no
+copy of it, on the camera or off it. Majestic refuses to write to a slot that is
+already used, refuses to record against a slot that is still empty, and checks
+afterwards that the key really took. Stop the daemon first: it uses the same
+hardware, and the write needs it to itself.
 
 **Set `publicKey` as well.** A chip clip with nothing else in it cannot be opened
 off the camera at all, and cannot be opened by anybody once the camera is dead or
@@ -158,8 +156,8 @@ exactly as in the `pubkey` section above.
 
 - **Live streams.** RTSP, HLS, WebRTC and snapshots serve plaintext to whoever
   authenticates. This is about the card, not the network.
-- **The clip being written right now.** Its key is in RAM, or in the crypto
-  engine, for as long as that clip is open — in every mode, `pubkey` included.
+- **The clip being written right now.** Its key is on the camera for as long as
+  that clip is open — in every mode, `pubkey` included.
   What `pubkey` protects is the recordings already closed on the card; someone
   who takes a running camera and gets a shell still has the current clip, the
   live video, and everything recorded from then on.
@@ -179,7 +177,8 @@ exactly as in the `pubkey` section above.
 - **The cost while recording** is about 7% of one CPU core per MB/s written, so
   roughly 3-4% of a core at 4 Mbit/s on a Cortex-A7 class SoC. Most of that is
   the integrity chain rather than the cipher, and `chip` and `passphrase` cost
-  the same, because both use the crypto engine where the camera has one. Measure
+  the same, because both use the camera's own encryption hardware where it has
+  some. Measure
   your own: sum `utime`+`stime` across `/proc/$(pidof majestic)/task/*/stat` over
   a minute with encryption off, then again with it on, at the same bitrate.
 - **The web interface cannot play these yet.** Encrypted clips download and open

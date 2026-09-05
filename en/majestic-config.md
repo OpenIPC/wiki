@@ -242,9 +242,9 @@ records:
                                 # cannot honour stops recording, it never falls
                                 # back to writing in the clear
   #key: ""                      # the passphrase, for encryption: passphrase
-  #publicKey: ""                # PEM public key: the only slot in pubkey mode,
-                                # a recovery key in the other two
-  #chipSlot: 1                  # which OTP key slot chip mode uses (1-3)
+  #publicKey: ""                # PEM public key: required by pubkey mode, and a
+                                # recovery key in the other two
+  #chipSlot: 1                  # which of the chip's key slots to use (1-3)
 
 outgoing:
   enabled: false
