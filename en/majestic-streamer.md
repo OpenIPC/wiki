@@ -410,7 +410,7 @@ configured, averaged over 60 samples per state:
 | **idle-suspended** | **1.01 W** | 49.5 °C |
 
 Suspending halves the draw. Stopping the encoders alone accounts for 0.29 W of
-that and stopping the sensor and ISP for a further 0.77 W, which is why the setting
+that and stopping the sensor and ISP for a further 0.76 W, which is why the setting
 exists at all — the second saving is nearly three times the first, and nothing
 before this could reach it. Temperature understates the difference badly, so
 judge this by current if you can measure it. The figures are draw at the port,
