@@ -49,11 +49,17 @@ pr_compliances:
     success_criteria: >
       A measurement or verification is described by hardware class and configuration —
       the SoC, the sensor, the stream settings, how many samples over how long — which
-      is what makes the result reproducible by someone else. Any address a reader needs
-      is a placeholder, a documentation domain, or an RFC 5737 example range.
+      is what makes the result reproducible by someone else. Addresses and credentials
+      that belong to the product rather than to us are exactly what this wiki is for
+      and are unaffected: the address a camera ships on, the login a fresh device
+      accepts, what a factory reset restores, and the example ranges pages use to show
+      a command. Where an address is ours rather than the reader's, it is a
+      placeholder, a documentation domain, or an RFC 5737 example range.
     failure_criteria: >
-      The diff, the title or the description adds a lab host's name or domain, a
-      private IP literal presented as real, a credential or a default password, an SSH
-      alias or config stanza reaching one, an unreleased build's branch name or commit
-      id, or console output, log text or screenshots captured from a lab device and
+      The diff, the title or the description adds something identifying the project's
+      own test hardware or network: a lab host's name or domain, an address on the lab
+      network presented as a real machine a reader could reach, a login belonging to a
+      specific lab device rather than a documented factory default, an SSH alias or
+      config stanza reaching one, an unreleased build's branch name or commit id, or
+      console output, log text or screenshots captured from a lab device and
       identifiable as such.
