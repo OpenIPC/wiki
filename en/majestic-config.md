@@ -56,6 +56,9 @@ isp:
   #pad: 0                       #                           (SigmaStar)
   #yuvCompression: auto         # HiSilicon gen 3/4 only; saves ~1/3 of the main
                                 # frame buffer, ignored with rotate/mirror/masks
+  #suspendWhenIdle: false       # HiSilicon/Goke: stop the sensor and ISP when
+                                # nothing wants frames -- see majestic-streamer.md
+  #suspendIdleSeconds: 5        # grace period before it does, 1-300
   # Manual exposure and gain. Each is skipped when absent, so leaving it out
   # keeps the automatic behaviour.
   #exposure: 0                  #                (HiSilicon/Goke, SigmaStar, Ingenic)

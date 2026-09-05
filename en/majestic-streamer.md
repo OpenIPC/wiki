@@ -216,8 +216,10 @@ the frame is rejected with `400` rather than quietly ignored. A crop or a
 greyscale conversion asked for while another one is still running is answered
 with `503`: that transformation *is* the request, so the camera says come back
 shortly rather than send an uncropped picture as if nothing had happened. A
-plain `/image.jpg` with no parameters is unaffected by any of this and always
-works.
+plain `/image.jpg` with no parameters is unaffected by any of this. The one
+thing that does stop it is
+[idle suspension](#stopping-the-sensor-and-isp-when-nothing-is-watching), which
+is off unless you turn it on.
 
 ### Changing parameters via the HTTP API
 
@@ -375,6 +377,71 @@ the two duty bounds. The lamp's own light can never talk the camera back into
 day: the trim stops dimming well above the day threshold, so only real dawn
 ends the night. The current percentage is the `night_light_duty` gauge on
 `/metrics`, and the dashboard's day/night line shows it as "lamp 43%".
+
+### Stopping the sensor and ISP when nothing is watching
+
+Turning both video streams off stops the *encoders*, but the sensor and the
+image pipeline behind them keep running, and that is where most of the power
+goes. On HiSilicon and Goke the camera can stop the sensor and its image
+pipeline as well, and not just the encoders:
+
+```yaml
+isp:
+  suspendWhenIdle: true   # default false
+  suspendIdleSeconds: 5   # grace period, 1-300
+```
+
+These arrived in the nightly builds of 5 September 2026. A build without them
+answers `404` to the API and does not show them in the web interface, so if the
+keys are missing the firmware is older than the feature rather than the camera
+being unsupported.
+
+Audio, RTSP, the web server and the API keep running throughout, so a camera
+stays reachable, keeps answering its API and keeps streaming its microphone
+while its sensor is asleep. Enabling a stream brings the picture back.
+
+Measured at the PoE port on a Hi3516EV300 + IMX335, with both streams and audio
+configured, averaged over 60 samples per state:
+
+| state | power drawn | die temperature |
+| --- | --- | --- |
+| both encoders streaming + audio | 2.06 W | 62.1 °C |
+| both encoders disabled, sensor and ISP still running | 1.77 W | 56.2 °C |
+| **idle-suspended** | **1.01 W** | 49.5 °C |
+
+Suspending halves the draw. Stopping the encoders alone accounts for 0.29 W of
+that and stopping the sensor and ISP for a further 0.76 W, which is why the setting
+exists at all — the second saving is nearly three times the first, and nothing
+before this could reach it. Temperature understates the difference badly, so
+judge this by current if you can measure it. The figures are draw at the port,
+so they include the losses in the splitter and the cable; the board's own rail
+is lower, and the ratio is the part that carries to a battery.
+
+**It is off by default, deliberately.** A camera already in the field should not
+begin power-cycling its sensor because somebody switched off a sub-stream.
+
+Four behaviours worth knowing before turning it on:
+
+- **Waking costs about two seconds of picture quality.** The sensor comes back
+  with no exposure history, so auto-exposure starts from its default and
+  converges. Frames arrive immediately and are correctly formed — they are
+  simply overexposed while the loop closes. If you drive the camera from an
+  external trigger, enable the stream slightly before the footage matters.
+- **A snapshot will not wake it, a viewer will.** `/image.jpg` while suspended
+  answers `503` with a message naming the setting, so a monitoring system
+  polling for stills cannot keep a battery camera awake for ever. A client that
+  stays connected to `/mjpeg`, or to MJPEG over RTSP, *does* wake it, and the
+  camera goes back to sleep once that client leaves.
+- **The ISP gauges leave `/metrics` while it is asleep.** `isp_again`,
+  `isp_exptime` and the rest are readings from a stopped ISP, so they are
+  omitted rather than reported stale. `node_hwmon_temp_celsius` and the memory
+  gauges stay.
+- **It saves power, not memory.** A suspended camera holds the same memory as a
+  running one — see [Memory tuning](memory-tuning.md) for what actually frees
+  any.
+
+Motion detection counts as wanting frames, so a camera with
+`motionDetect.enabled` never suspends.
 
 ### On-screen display and privacy masks
 
@@ -759,6 +826,11 @@ description. ONVIF snapshot URIs and the web interface preview both fetch
 `/image.jpg`, so they stop working too. See
 [Memory tuning](memory-tuning.md#jpegenabled--snapshots-and-the-mjpeg-stream)
 for what it frees.
+
+`jpeg.enabled` is not the only reason for that `503`. A camera running with
+`isp.suspendWhenIdle` answers the same status while its sensor is asleep, with
+a different message and a different remedy — enable a video stream. See
+[Stopping the sensor and ISP when nothing is watching](#stopping-the-sensor-and-isp-when-nothing-is-watching).
 
 Turning on `jpeg.rtsp` publishes the same MJPEG as an RTSP stream. RFC 2435
 caps that at 2040 px per axis, so a larger `jpeg.size` is reduced to 1280x720
