@@ -156,15 +156,15 @@ Where that falls in the startup sequence, and what does *not* re-trigger it:
 | Event | Plugin (re)loaded |
 |---|---|
 | Majestic start, after SDK init and encoder channel creation, just before the RTSP server | yes |
-| `killall -HUP majestic` (what the WebUI and `cli` use to apply a change) | yes |
-| A parameter set live through the HTTP API, such as `?video0.size=1920x1080` | no |
+| A reload that rebuilds the pipeline — `killall -HUP majestic`, or a change to a key that costs a rebuild, however it was made | yes |
+| A change Majestic applies in place, such as `?video0.bitrate=4096` or the same key through `cli` | no |
 
 So settings applied through the vendor's `/proc` interface, which a pipeline
 rebuild resets, can be re-applied from the constructor without any external
 timer. A live parameter change is applied in place by Majestic and does not pass
 through the plugin, so a knob that must follow the resolution has to be
-re-applied by whoever changes it — send the plugin command right after the API
-call that changed the setting.
+re-applied by whoever changes it — send the plugin command right after the write
+that changed the setting, whether that was an API call or `cli`.
 
 The one script hook Majestic has of its own is
 [`/usr/sbin/motion.sh`](majestic-streamer.md), run on a motion event.

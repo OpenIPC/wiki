@@ -126,7 +126,7 @@ an isolated bench, not on a network.
 
 | Signal | What it does |
 |---|---|
-| `SIGHUP` | Re-read `/etc/majestic.yaml`, tear the media pipeline down and build it again. This is what `killall -HUP majestic` — and the WebUI, and `cli` — use to apply a change. Repeat signals within 3 seconds are ignored. |
+| `SIGHUP` | Re-read `/etc/majestic.yaml` and apply whatever changed, at the smallest cost that will carry it: most keys are pushed straight at the SDK with the stream untouched, some restart one subsystem or rebuild one encoder channel, and only the rest tear the pipeline down and build it again. This is what `cli` asks for after a write, and what `killall -HUP majestic` does by hand. Repeat signals within 3 seconds collapse into one reload. |
 | `SIGQUIT` | Release the SDK and the video memory with it, but keep the process running and answering. This is how `sysupgrade` frees RAM for a firmware download. A `SIGHUP` afterwards brings the pipeline back. |
 | `SIGINT`, `SIGTERM` | Release the SDK and exit. |
 | `SIGUSR2` | Start or end a SIP call — see [SIP](#sip) below. Only in builds with SIP, and only when `sip.enabled` is set. |
@@ -245,9 +245,20 @@ curl http://localhost/api/v1/config --data-binary @- <<'EOF'
 EOF
 ```
 
-> The older `cli` / `yaml-cli` utility (e.g. `cli -s .video0.fps 10 ; killall
-> -HUP majestic`) is deprecated. Prefer the HTTP API above, which applies the
-> change live and persists it for you.
+> `cli` does the same job from a shell on the camera, and no longer needs a
+> `killall` after it:
+>
+> ```
+> cli -s .video0.fps 10
+> ```
+>
+> It writes `/etc/majestic.yaml` and then asks Majestic to reload, so the change
+> applies at the same cost the API would charge for it. Use whichever suits the
+> job. `cli` is the one that works before Majestic is running — a `customizer.sh`
+> seeding a camera on first boot has no API to call — and it can write a key this
+> build does not declare. The API is the one that validates: `404` for a key the
+> binary does not have, `400` for a value outside its range, and it can be called
+> from another machine.
 
 ### Experimental Control Features (not yet described in endpoints)
 
