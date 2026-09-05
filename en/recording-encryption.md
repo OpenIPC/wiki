@@ -22,13 +22,160 @@ unset, the clips are being written in the clear and Majestic says so in the log.
 | the flash was cloned, `majestic.yaml` included | readable | **readable** | unreadable | unreadable |
 | the camera was stolen, and somebody has a shell on it | readable | readable | **readable** | unreadable (clips already closed) |
 | the camera died or was replaced | readable | readable, with the passphrase | **lost** without a recovery key | readable with your private key |
-| the passphrase or private key was lost | readable | **lost** | **lost** without a recovery key | **lost** |
+| the passphrase or private key was lost | readable | **lost** without a recovery key | **lost** without a recovery key | **lost** |
 | plays in the web interface | yes | not yet | no | no |
 
 Only `pubkey` survives a stolen camera — for the clips already written, not for
 the one still open — and it is the one mode where the camera cannot play its own
 recordings. Everything else keeps something on the camera that opens the clip,
 and whoever has the camera has that too.
+
+### Which mode is yours
+
+The table says what each mode survives. This says who each one is for.
+
+#### `passphrase` — the shop, the rental, the hobby camera
+
+A shop with two cameras and a 128 GB card in each. The threat is the obvious
+one: somebody yanks a card, or the camera is carried off and sold for parts with
+the card still in it. The owner types one passphrase into the settings page,
+keeps it in a password manager, and that is the whole setup. When something
+happens they pull the card, open the clip on a laptop, and hand a decrypted copy
+to the police.
+
+That survives the realistic attack — a thief who wants hardware, not footage —
+and fails the unrealistic one, somebody who images the flash to read the
+passphrase out of it.
+
+It is also the only mode where a second person gets access with no key handling
+at all: tell the manager the passphrase and they can open last night's clip
+themselves.
+
+#### `chip` — the fleet, and the camera that comes back from the field
+
+Two hundred cameras on poles. Cards get swapped by field technicians, cameras go
+back for repair, old cards get recycled or lost — that is the leak, not a
+burglar. A card that falls out of the chain of custody is worthless to whoever
+finds it: it opens on the one chip that wrote it, and there is no passphrase for
+anybody to forget, share, or paste into a ticket.
+
+It also survives what `passphrase` does not. A camera taken off a pole and its
+flash read out gives up nothing, because the key is in the chip and not in the
+filesystem.
+
+The reason to prefer it over `passphrase` at this size is that no secret ever
+leaves a camera or has to reach the other 199. Burn a slot once at install and
+there is nothing to rotate, nothing to type, and nothing an installer can copy
+into a spreadsheet. Its honest limit is that a stolen powered-up camera with a
+shell on it still decrypts its own clips — which across a pole-mounted fleet is
+a smaller worry than two hundred people knowing one passphrase.
+
+#### `pubkey` — the footage itself is the target
+
+A camera on a cash office, a pharmacy dispensary, a contested driveway, a
+journalist's front door. Here whoever might take the camera is the person in the
+footage, and they will take the whole camera, powered or not. Every other mode
+hands them the clips: the passphrase is in the flash, and the chip unwraps for
+whoever is holding it.
+
+The owner keeps the private key on a laptop or a stick at home; the camera holds
+the public half and cannot play back what it recorded. A thief gets a box of
+electronics and a card of noise — including the recording of themselves taking
+it.
+
+Two more places it earns the inconvenience:
+
+- **Custody.** Because the camera cannot decrypt, nobody at the camera end can
+  quietly edit a clip and seal it up again. With the per-fragment integrity
+  chain, "this file is what the camera wrote" is a claim you can defend rather
+  than one you hope holds.
+- **Somebody else administers the camera.** A landlord or an installer keeps
+  SSH, firmware and settings while the tenant holds the private key and is the
+  only one who can watch anything. In the other two modes, whoever administers
+  the camera can read every recording on it.
+
+#### The combination most installations actually want
+
+`chip` or `passphrase` for everyday protection, plus a recovery key for the day
+the everyday one is gone.
+
+The whole idea in one paragraph. Every clip is locked with its own key, and that
+key travels inside the clip in a locked box. What `records.encryption` chooses
+is what opens that box: the passphrase you typed, the chip in this particular
+camera, or your private key. Setting `publicKey` **as well** puts a second box
+into every clip, holding the same key, and that one opens only with your private
+key. Two boxes, either one enough. Nobody gets a shortcut — a thief still has to
+open one of them — but you now have two ways in instead of one.
+
+You want the second way because the first one lives at the camera, and the
+camera is the thing that goes wrong:
+
+- **The board dies.** In `chip` mode the key is inside that chip and nowhere
+  else, so a dead camera leaves a stack of cards nobody can ever read again.
+  That is not an attack; that is a failed board, and it is the most common way
+  people actually lose their footage.
+- **The passphrase is forgotten**, or the person who chose it has left, or it
+  only ever existed in one password manager on one laptop.
+- **The camera is replaced.** The new one has a different chip, and the old
+  cards do not open on it.
+
+Setting it up takes three commands, once, on your own computer — not on the
+camera:
+
+```sh
+openssl genrsa -out owner.pem 2048
+openssl rsa -in owner.pem -pubout -out owner.pub
+scp owner.pub root@camera:/etc/records-owner.pub
+```
+
+`owner.pem` is the recovery key. It must never go on the camera; the entire
+point is that it lives somewhere the camera is not. A USB stick in a safe, a
+password manager, a printout in a drawer — anywhere it will outlive the camera.
+`owner.pub` is the public half and is harmless: it can lock, and it cannot
+open.
+
+Then name it in the config beside the mode you are actually running. With
+`chip`:
+
+```yaml
+records:
+  enabled: true
+  encryption: chip
+  chipSlot: 1
+  publicKey: /etc/records-owner.pub   # the recovery slot
+```
+
+or with `passphrase`:
+
+```yaml
+records:
+  enabled: true
+  encryption: passphrase
+  key: "a long passphrase"
+  publicKey: /etc/records-owner.pub   # the recovery slot
+```
+
+**It only covers clips recorded after you set it.** The recovery box goes into
+each clip as that clip is written, and nothing can go back and add one to a
+recording already sitting on the card. Do this on day one, before there is
+anything on the card you would miss.
+
+The day you need it, the camera is not involved at all — which is the point,
+because in the case you are most likely to be in, the camera is broken or gone.
+Take the card, copy the clip to your computer, and open it exactly as the
+`pubkey` section below describes: the recovery tool pulls the sealed box out of
+the clip and prints the `openssl` line to run against `owner.pem`, and feeding
+that result back to the tool prints the key for `ffmpeg`.
+
+Do that once now, on a clip you do not care about. Practising the recovery is
+how you find out the safe holds the right file, and the time to find that out is
+not the morning you need last night's footage.
+
+It costs nothing you will notice day to day: recording behaves exactly as it did
+before, and the extra box is a rounding error in a file measured in megabytes.
+
+If you are already running `pubkey`, you have this — the private key *is* the
+recovery key, and there is no second slot to add.
 
 ### The file is still an MP4
 
@@ -64,6 +211,9 @@ clip.
 It does **not** protect a stolen camera: the passphrase is in `majestic.yaml`,
 and anyone who can read the flash can read it. Use it when the risk you are
 addressing is a card walking out of a device that stays put.
+
+A forgotten passphrase is a total loss on its own. Set `publicKey` alongside it
+for a recovery slot, as described above.
 
 To open a clip you copy it to your own machine and use Majestic's offline
 recovery tool (`--help` lists its commands; it needs Python 3 and never talks to
