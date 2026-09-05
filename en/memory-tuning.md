@@ -215,7 +215,9 @@ pipeline puts **into** it, and the settings that change how much it takes.
 These are applied like any other setting, through the HTTP API described in
 [Majestic streamer](majestic-streamer.md). They differ from most in one
 respect worth knowing: they decide how the video pipeline's buffers are laid
-out, so changing one rebuilds the pipeline and the stream drops for a moment.
+out, so changing one rebuilds the pipeline and every stream drops for a moment.
+`videoN.enabled` is the exception — it is applied to its own channel alone, and
+viewers of the other stream stay connected.
 
 All of the region's usage is visible at runtime:
 
@@ -274,6 +276,14 @@ moment, because the pool is fixed when the streamer starts — a channel raised 
 demand still needs its block sitting there waiting. That is why switching a
 channel off is worth more than any amount of tuning: `video1.enabled: false` and
 `jpeg.enabled: false` each return a full frame.
+
+Both of those free their frame for the *next* start rather than immediately:
+the pool keeps whatever size it was given when the streamer came up, so
+switching a stream off on a running camera does not hand its block back. The
+figures above are what you measure after a restart. The same holds for
+[idle suspension](majestic-streamer.md#stopping-the-sensor-and-isp-when-nothing-is-watching),
+which stops the sensor and ISP outright — a large power saving, and not a
+memory one at all.
 
 Which of those applies is decided by the sensor's width, not by the model of
 SoC, and it is why two cameras with the same chip can need different amounts:

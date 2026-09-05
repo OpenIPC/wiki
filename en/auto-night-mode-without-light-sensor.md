@@ -66,6 +66,11 @@ After stopping the script, you can run `/usr/sbin/autonight.sh` manually in a te
 Metrics are displayed at the `/metrics` endpoint in the web interface.
 
 _The current analog gain value is displayed in `isp_again`:_
+
+> On HiSilicon and Goke with `isp.suspendWhenIdle` switched on, the ISP
+> gauges — `isp_again` among them — are omitted while the camera is
+> idle-suspended, because there is no running ISP to read them from. They
+> come back with the picture.
 ```
 # HELP isp_again Analog Gain
 # TYPE isp_again gauge
