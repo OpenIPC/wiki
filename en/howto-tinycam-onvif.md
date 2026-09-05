@@ -100,9 +100,8 @@ those calls, and shows a live stream.
   fixed `80`, and that ONVIF is enabled (`onvif.enabled=true`).
 - **Auth still fails with the password set, on older firmware.** Some older
   majestic builds could not parse tinyCam's ONVIF token because it uses an XML
-  *default namespace* rather than a `wsse:` prefix. If you hit this, update to a
-  current OpenIPC firmware. (Reference: majestic
-  [PR #400](https://github.com/widgetii/majestic/pull/400).)
+  *default namespace* rather than a `wsse:` prefix. This was fixed in majestic
+  in August 2026, so if you hit it, update to a current OpenIPC firmware.
 
 ### Why PasswordDigest, specifically
 
