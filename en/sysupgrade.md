@@ -195,8 +195,10 @@ then try to update only kernel first:
 If it doesn't help, use `--force` option:
 `sysupgrade -r --force`
 
+If sysupgrade stops with `Certificate verification failed`, the camera's clock is usually the cause: a certificate is only valid between two dates, and a camera without a real-time clock boots at its build date until NTP reaches it. sysupgrade syncs the time first and, when NTP is blocked, takes the date from a plain HTTP response instead, so this normally fixes itself; if it does not, set the clock (`ntpd -Nnq`, or `date -s`) and retry. A private update server with a self-signed certificate needs `--insecure`, which turns certificate verification off for that one run and should never be needed for OpenIPC's own servers.
+
 If you caught a glitch, retrieve the most recent version of the utility:
 
 ```bash
-curl -k -L -o /usr/sbin/sysupgrade "https://raw.githubusercontent.com/OpenIPC/firmware/master/general/overlay/usr/sbin/sysupgrade"
+curl -L -o /usr/sbin/sysupgrade "https://raw.githubusercontent.com/OpenIPC/firmware/master/general/overlay/usr/sbin/sysupgrade"
 ```
