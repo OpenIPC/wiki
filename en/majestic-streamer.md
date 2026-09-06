@@ -366,6 +366,33 @@ curl http://localhost/api/v1/config --data-binary @- <<'EOF'
 EOF
 ```
 
+### A lamp wired the other way round
+
+Some boards drive the illuminator **active-low**: the pad has to be held low to
+light it. On those, a camera that has been told nothing lights the lamp all day
+and switches it off at nightfall — which is the one fault here that looks like
+the camera working, because the lamp is plainly under control, just backwards.
+
+```yaml
+nightMode:
+  backlightPin: 59
+  backlightInvert: true       # default false
+```
+
+With it on, night holds the pad low and day holds it high. The lamp is also
+left **off** rather than on at the moments the camera is not deciding — while a
+day/night setting is being applied, and on an orderly shutdown — which for an
+active-low board means the pad is held high rather than simply let go. The
+setting describes the lamp rather than the pad, so it covers the dimmable lamp
+below as well.
+
+It shows up as *Camera light is inverted* on **Settings → Day / Night** and
+applies as soon as it is saved; the video stream is not restarted. There is no
+equivalent for the two IR-cut coils and none is needed: they are one H-bridge,
+and which way the filter moves is decided by which pad you put in `irCutPin1`.
+A single-pad filter has `irCutSingleInvert`, and the daylight sensor has
+`lightSensorInvert`.
+
 ### PWM backlight: a dimmable lamp
 
 On the HiSilicon EV200/EV300 and Goke GK7205V200/V500 family, a lamp wired to
@@ -381,13 +408,18 @@ nightMode:
   backlightPwmMax: 100
 ```
 
-With a channel set, `backlightPin` is ignored. At night the lamp lights at the
-maximum and then trims itself to the ambient light every couple of seconds —
-brighter when the scene is starving, dimmer when the lamp overshoots — between
-the two duty bounds. The lamp's own light can never talk the camera back into
-day: the trim stops dimming well above the day threshold, so only real dawn
-ends the night. The current percentage is the `night_light_duty` gauge on
-`/metrics`, and the dashboard's day/night line shows it as "lamp 43%".
+With a channel set, `backlightPin` is ignored, but `backlightInvert` is not:
+on an active-low driver the duty still reads as brightness, 0 for dark and 100
+for full, and the lamp is still left off at the moments the camera is not
+deciding.
+
+At night the lamp lights at the maximum and then trims itself to the ambient
+light every couple of seconds — brighter when the scene is starving, dimmer
+when the lamp overshoots — between the two duty bounds. The lamp's own light
+can never talk the camera back into day: the trim stops dimming well above the
+day threshold, so only real dawn ends the night. The current percentage is the
+`night_light_duty` gauge on `/metrics`, and the dashboard's day/night line
+shows it as "lamp 43%".
 
 ### Stopping the sensor and ISP when nothing is watching
 

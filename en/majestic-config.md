@@ -235,6 +235,8 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
   irCutSingleInvert: false      # for a board with a single coil pad
   #backlightEnabled: true       # false parks the lamp: wiring kept, stays dark
   #backlightPin: 65
+  backlightInvert: false        # true when the lamp lights on a LOW pad;
+                                # covers the PWM lamp below as well
   colorToGray: true
   #overrideDrc: 300
   #minThreshold: 2000           # compared against isp_again, whose units are
