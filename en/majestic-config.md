@@ -157,6 +157,59 @@ jpeg:
                                 # first instead of a sharp band at a time. Same
                                 # image, ~5% smaller, and costs CPU per snapshot
 
+# (build-dependent: on Goke gk7205v200/v500 builds that carry the USB dual-role
+# package. It is the first platform to get this and is being treated as such;
+# other SoCs are planned once it has been tested in the field. If your camera
+# does not have these keys, its build does not have the feature -- a key that is
+# not there answers 404 to the HTTP API and is ignored in the file.)
+#
+# A USB (UVC) webcam plugged into the camera's USB port, published as a SECOND
+# camera alongside the built-in sensor.
+#
+# It publishes ONE stream, and which one depends on `codec` below: MJPEG mode
+# is /stream=5, and h264 or transcode is /stream=3. There is no sub stream --
+# a webcam is one camera sending one thing. The id is 3 * cameraId + subtype,
+# with subtype 0 for main and 2 for MJPEG, so a different cameraId moves it.
+# Ask /api/v1/sources rather than working it out; see "A second camera" in
+# Majestic streamer.
+#
+# The port does one job at a time: usbcam consumes a webcam, uvcgadget below
+# makes this camera BE one. Turning both on is refused.
+#usbcam:
+  #enabled: false
+  #device: /dev/video0          # the node the webcam appeared as. It is a
+                                # per-boot fact, not a fixed name -- the WebUI's
+                                # USB page writes whichever one it landed on
+  #codec: auto                  # auto | mjpeg | h264 | transcode
+                                # auto picks what the webcam offers: MJPEG for
+                                # most of them, native H.264 for a C920-class
+                                # camera. transcode captures raw and re-encodes
+                                # on the SoC, which is the only way to get an
+                                # H.264 stream out of a webcam that has none
+  #cameraId: 1                  # which camera it is published as
+  #size: 1280x720               # capture size. On transcode this is the size
+                                # the SoC has to convert every frame at, in
+                                # SOFTWARE where the SoC has no converter for
+                                # the webcam's pixel format -- 1280x720 at 30fps
+                                # saturates a gk7205v200 to the point of losing
+                                # the shell. Ask for 640x480 there
+  #fps: 30
+  #bitrate: 4096                # transcode only
+  #sliceUnits: 0                # transcode only
+
+# (build-dependent: the same builds as usbcam above)
+#
+# The other direction: the camera IS the USB device, and a computer it is
+# plugged into sees a webcam. Mutually exclusive with usbcam -- one controller,
+# one role at a time -- and switching between them is what the WebUI's USB page
+# is for.
+#uvcgadget:
+  #enabled: false
+  #device: /dev/video1          # the gadget node, also a per-boot fact
+  #format: mjpeg                # mjpeg | h264 -- which encoded stream is fed to
+                                # the computer. It has to match a format the
+                                # gadget was set up with at boot
+
 osd:
   enabled: false                # the TEXT overlay. Privacy masks below are not
                                 # part of it and do not need it. Which streams
@@ -438,6 +491,8 @@ cloud:
 ### See also
 
 - [Majestic streamer](majestic-streamer.md) — endpoints, HTTP API, build flavours
+- [A second camera](majestic-streamer.md#a-second-camera) — what `usbcam` and
+  `uvcgadget` do, stream ids, and how to watch a USB webcam
 - [On-screen display and privacy masks](majestic-streamer.md#on-screen-display-and-privacy-masks)
   — which streams get the overlay, and what masks do on each SoC family
 - [Majestic encoder tuning](majestic-encoder-tuning.md) — `refEnhance`, `refPred`, `svct`, ROI

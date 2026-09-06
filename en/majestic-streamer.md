@@ -161,6 +161,9 @@ than the one `jpeg.*` sets for everybody:
 | `width`, `height` | Size of this snapshot. |
 | `qfactor` | JPEG quality, 1–100. |
 
+On a camera with more than one source, `?channel=N` picks which one the
+snapshot comes from — see [A second camera](#a-second-camera).
+
 They fall into two groups, and which group a parameter is in decides what the
 camera has to do to serve it.
 
@@ -715,6 +718,144 @@ records_fsync_us_max 18825          # a stalling card shows here first
 
 The Recordings page in the web interface reads the same numbers and says so in
 words.
+
+### A second camera
+
+Most cameras have one. Some have two, and where they do, everything below
+addresses them the same way.
+
+There are two ways a camera comes to have a second source. A few boards carry a
+**second sensor** of their own. And on builds with the USB dual-role package, a
+**USB (UVC) webcam** plugged into the camera's USB port is published as a second
+camera beside the built-in one.
+
+> The USB webcam path is new, and the **Goke gk7205v200/v500** OTG builds are the
+> first to carry it. It is deliberately being rolled out one platform at a time,
+> after testing on real hardware, so other SoCs will follow rather than having it
+> already. If your camera's web interface has no **USB** page and no `usbcam`
+> keys in its configuration, its build does not have the feature.
+
+#### Which sources a camera has
+
+Ask it:
+
+```
+curl -u root:PASSWORD http://<camera-address>/api/v1/sources
+```
+
+```json
+{"sources":[
+  {"camera":0,"kind":"sensor","streams":[
+    {"id":0,"subtype":"main","codec":"h264","fps":20,"width":1920,"height":1080,
+     "flowing":true,"configured":true,"present":true,"rtsp":true},
+    {"id":2,"subtype":"mjpeg","codec":"mjpeg","fps":5,
+     "configured":true,"present":true,"rtsp":false}]},
+  {"camera":1,"kind":"external","streams":[
+    {"id":5,"subtype":"mjpeg","codec":"mjpeg","fps":30,"width":640,"height":480,
+     "configured":true,"present":true,"rtsp":false}]}]}
+```
+
+A camera with one source answers with one entry, which is how a page can tell
+whether to offer a choice at all.
+
+| field | meaning |
+|---|---|
+| `camera` | 0 is the built-in sensor. Anything else is a second source. |
+| `kind` | `sensor` for a built-in one, `external` for a USB webcam. The camera does not name it in words — the web interface does that, so it can be translated. |
+| `id` | The stream id, used in URLs. See the arithmetic below. |
+| `subtype` | `main`, `sub` or `mjpeg`. |
+| `codec` | What this stream carries. Absent when nothing is behind the id. |
+| `configured` | The configuration asks for this stream. |
+| `present` | The machinery behind it is up right now. |
+| `flowing` | A picture has actually been seen. **Absent on an MJPEG stream**, which has no keyframes to report — absent means "cannot say", not "no". |
+| `rtsp` | The RTSP server will serve this stream. The sub track needs `video1.enabled` and the JPEG track needs `jpeg.rtsp`. |
+
+`configured` and `present` are separate on purpose: a stream you switched on
+that did not come up reads `configured: true, present: false`, which is the
+answer that tells you something is wrong rather than that nothing was asked for.
+
+#### Stream ids
+
+A stream id is `3 * camera + subtype`, where subtype is 0 for the main stream,
+1 for the sub stream and 2 for MJPEG. So:
+
+| | main | sub | MJPEG |
+|---|---|---|---|
+| **camera 0** (built-in) | 0 | 1 | 2 |
+| **camera 1** (second) | 3 | 4 | 5 |
+
+That is how the numbers are formed, not a promise that a camera has all six.
+Which ids actually exist is what `/api/v1/sources` answers, and it is worth
+asking rather than assuming: a **USB webcam publishes exactly one stream** — id
+5 when it sends MJPEG, id 3 when `usbcam.codec` is `h264` or `transcode` — and
+never a sub stream. Asking for one it does not publish gets you nothing, which
+looks like a broken camera and is not.
+
+The stream id is what goes in a URL:
+
+```
+rtsp://<camera-address>/stream=3            second camera, H.264
+ws://<camera-address>/ws/video?stream=3     the same, low latency (fMP4/MSE)
+```
+
+Both of those want a stream the transport can carry, so they are the H.264 case
+— a webcam left on MJPEG is reached through the image endpoints below instead.
+`/ws/video` refuses an MJPEG stream id outright rather than holding a socket
+open that will never carry a frame.
+
+The two HTTP image endpoints take a **camera** rather than a stream, because
+there is one MJPEG stream per camera:
+
+```
+http://<camera-address>/mjpeg?channel=1       second camera, MJPEG
+http://<camera-address>/image.jpg?channel=1   second camera, snapshot
+```
+
+Without `?channel=`, both mean the built-in camera. A camera that has no such
+source answers 404 rather than quietly handing back the built-in camera's
+picture.
+
+#### Watching it in the web interface
+
+With more than one source, the **Live** page grows a chooser beside the
+Main/Sub buttons — *Sensor* and *USB camera*. Picking one switches the picture
+and remembers the choice for next time.
+
+Two things follow from the source you pick, and they are not faults:
+
+- **The Main/Sub/Auto buttons may go unavailable.** They pick between encoder
+  channels, and a webcam in its usual MJPEG mode publishes one stream. There is
+  nothing to choose between.
+- **The WebRTC/MSE buttons may go unavailable too.** Neither transport can carry
+  an MJPEG stream, so such a source plays over plain HTTP instead. Set
+  `usbcam.codec` to `h264` or `transcode` and the same webcam moves to stream 3
+  as H.264, at which point both transports work on it.
+
+WebRTC serves the built-in camera only. A second camera plays over MSE
+(`/ws/video`) when it has an H.264 or H.265 stream, and over HTTP MJPEG when it
+does not.
+
+#### Recordings
+
+Each camera records to its own files. A second camera's clips carry a `-cam1`
+suffix before the extension, so one directory holds both:
+
+```
+12-04.mp4
+12-04-cam1.mp4
+```
+
+The Recordings page shows one camera's timeline at a time, with a picker when
+more than one has written that day. That is not just filtering: gaps, joins and
+durations only mean anything within a single camera's footage.
+
+#### Switching the port between the two roles
+
+A camera can consume a webcam or *be* one, and not both at once — there is one
+USB controller. The **USB** page in the web interface switches between them and
+saves the settings that go with the choice. Doing it by hand means changing the
+port's role and the `usbcam`/`uvcgadget` keys together, in that order; the page
+exists so that ordering is not yours to get right.
 
 ### Live HLS
 
