@@ -238,6 +238,13 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 > IRCTL is a backlightPin<br>
 > IRSTATUS is a lightSensorPin
 
+**A pad marked inverted has a setting, not a workaround.** Where a board holds a
+pad LOW for the active state, say so in the configuration rather than rewiring:
+`nightMode.backlightInvert` for the lamp, `nightMode.lightSensorInvert` for the
+daylight sensor, `nightMode.irCutSingleInvert` for a filter driven from a single
+pad. Boards whose lamp is active-low otherwise light the illuminator all day and
+switch it off at nightfall. The IRCUT **pair** needs none of this — see below.
+
 **The two IRCUT pads are one H-bridge, and their order matters.** They are not
 independent switches: which of them is driven high while the other is held low is
 what decides whether the filter closes or opens, so a swapped pair gives you a
