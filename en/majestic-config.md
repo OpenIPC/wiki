@@ -164,10 +164,14 @@ jpeg:
 # not there answers 404 to the HTTP API and is ignored in the file.)
 #
 # A USB (UVC) webcam plugged into the camera's USB port, published as a SECOND
-# camera alongside the built-in sensor. Its streams are addressed as
-# 3 * cameraId + subtype, so with cameraId 1 they are /stream=3 (main),
-# /stream=4 (sub) and /stream=5 (MJPEG). See "A second camera" in Majestic
-# streamer for how to watch it.
+# camera alongside the built-in sensor.
+#
+# It publishes ONE stream, and which one depends on `codec` below: MJPEG mode
+# is /stream=5, and h264 or transcode is /stream=3. There is no sub stream --
+# a webcam is one camera sending one thing. The id is 3 * cameraId + subtype,
+# with subtype 0 for main and 2 for MJPEG, so a different cameraId moves it.
+# Ask /api/v1/sources rather than working it out; see "A second camera" in
+# Majestic streamer.
 #
 # The port does one job at a time: usbcam consumes a webcam, uvcgadget below
 # makes this camera BE one. Turning both on is refused.

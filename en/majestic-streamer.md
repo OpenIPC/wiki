@@ -784,12 +784,24 @@ A stream id is `3 * camera + subtype`, where subtype is 0 for the main stream,
 | **camera 0** (built-in) | 0 | 1 | 2 |
 | **camera 1** (second) | 3 | 4 | 5 |
 
-That number is what goes in a URL:
+That is how the numbers are formed, not a promise that a camera has all six.
+Which ids actually exist is what `/api/v1/sources` answers, and it is worth
+asking rather than assuming: a **USB webcam publishes exactly one stream** — id
+5 when it sends MJPEG, id 3 when `usbcam.codec` is `h264` or `transcode` — and
+never a sub stream. Asking for one it does not publish gets you nothing, which
+looks like a broken camera and is not.
+
+The stream id is what goes in a URL:
 
 ```
-rtsp://<camera-address>/stream=3            second camera, main
+rtsp://<camera-address>/stream=3            second camera, H.264
 ws://<camera-address>/ws/video?stream=3     the same, low latency (fMP4/MSE)
 ```
+
+Both of those want a stream the transport can carry, so they are the H.264 case
+— a webcam left on MJPEG is reached through the image endpoints below instead.
+`/ws/video` refuses an MJPEG stream id outright rather than holding a socket
+open that will never carry a frame.
 
 The two HTTP image endpoints take a **camera** rather than a stream, because
 there is one MJPEG stream per camera:
