@@ -232,7 +232,12 @@ after the image is loaded, continue
 sf probe 0
 sf erase 0x0 ${flashsize}
 sf write ${baseaddr} 0x0 ${filesize}
+reset
 ```
+
+Then interrupt the boot once more and
+[set the partition layout](#setting-the-partition-layout-after-a-full-image) —
+without it a 16MB image boots to a kernel panic.
 
 ### Flashing full image from TFTP
 
@@ -258,7 +263,7 @@ Example for 8MB:
 
 ```shell
 mw.b ${baseaddr} 0xff ${flashsize}
-tftpboot ${baseaddr} openipc-${soc}-lite-8mb.bin
+tftpboot ${baseaddr} openipc-${soc}-nor-lite-8mb.bin
 sf probe 0; sf erase 0x0 ${flashsize}; sf write ${baseaddr} 0x0 ${filesize}
 reset
 ```
@@ -267,13 +272,51 @@ Example for 16MB:
 
 ```shell
 mw.b ${baseaddr} 0xff ${flashsize}
-tftpboot ${baseaddr} openipc-${soc}-ultimate-16mb.bin
+tftpboot ${baseaddr} openipc-${soc}-nor-ultimate-16mb.bin
 sf probe 0; sf erase 0x0 ${flashsize}; sf write ${baseaddr} 0x0 ${filesize}
 reset
 ```
 
-At the first boot, sign in into the bootloader shell once again and remap
-partitioning running `run setnor16m` command.
+At the first boot, interrupt the boot again and
+[set the partition layout](#setting-the-partition-layout-after-a-full-image).
+
+### Setting the partition layout after a full image
+
+A full image carries the bootloader with it, and the bootloader's compiled-in
+default is the 8MB partition map:
+
+```
+mtdparts=hi_sfc:256k(boot),64k(env),2048k(kernel),5120k(rootfs),-(rootfs_data)
+```
+
+The 16MB map is a separate macro, and it does not merely make the rootfs
+longer — it moves it, to 0x350000 from 0x250000, with 10240k rather than 5120k.
+The images openipc.org builds for a 16MB chip are laid out that way, so a 16MB
+image left on the 8MB default has its rootfs where the kernel does not look:
+
+```
+0x000000250000-0x000000750000 : "rootfs"
+No filesystem could mount root, tried:  squashfs
+Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(31,3)
+Rebooting in 20 seconds..
+```
+
+The kernel starts either way, because it sits at 0x50000 in both maps, so the
+camera looks like it is booting right up to the panic — and then loops every
+20 seconds.
+
+Interrupt the boot and run the macro for the layout you flashed:
+
+```shell
+run setnor8m     # 8MB layout
+run setnor16m    # 16MB layout
+run setnand      # NAND
+```
+
+Each of them sets the partition map, points `bootcmd` at it, saves the
+environment and resets, so there is nothing to type afterwards. Nothing needs
+re-flashing either — the image on the chip is already correct, only the map it
+is read with was wrong.
 
 ### Reading binary image from SD card.
 
