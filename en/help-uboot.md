@@ -443,8 +443,7 @@ directory before `defib agent` will do anything.
 If a later `sf erase` appears to succeed but the data does not change, the
 vendor bootloader has armed the flash's status-register block protection —
 watch for `WPS=1` or `Total Lock Blks` in the boot log. The `defib agent` path
-clears those lock bits explicitly before erasing, which is the one job worth
-building the agent for.
+clears those lock bits explicitly before erasing.
 
 #### Shorting pins on flash chip
 
