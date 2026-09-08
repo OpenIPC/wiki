@@ -412,19 +412,33 @@ The command-line tool supports every SoC — including the frame-blast parts the
 browser cannot drive — and adds flash restore, a high-speed bare-metal flash
 agent and full unattended installs:
 
+defib is not on PyPI, so install it from the repository — `uv tool install
+defib` finds some other package, or nothing at all:
+
 ```shell
-uv tool install defib     # or: pipx install defib
+uv tool install git+https://github.com/OpenIPC/defib
+# or: pipx install git+https://github.com/OpenIPC/defib
 defib list-chips
-defib burn -c hi3516ev300 -p /dev/ttyUSB0 -t
+defib burn -c hi3516ev300 -p /dev/ttyUSB0 -b -t
 ```
 
-Start it before you power-cycle the camera, exactly as in the browser. The `-t`
-flag drops you into the U-Boot console once the upload finishes. To take a
-backup first:
+Start it before you power-cycle the camera, exactly as in the browser. `-b`
+sends Ctrl-C as soon as the upload lands and `-t` opens the console, and you
+want both: the bootloader you just uploaded lives only in RAM, so if it
+autoboots into a flash that cannot boot, it resets — and the reset throws away
+the copy you uploaded, leaving the terminal talking to a dead board again.
+
+To take a backup first:
 
 ```shell
-defib agent read -c hi3516ev300 -p /dev/ttyUSB0 -o flash_backup.bin
+defib dump-flash -p /dev/ttyUSB0 -o flash_backup.bin
 ```
+
+That reads the flash out through the U-Boot console and needs nothing else
+installed. There is a much faster route, `defib agent read`, but the flash
+agent is bare-metal code compiled per SoC and no prebuilt binary ships in the
+package — you need a defib checkout and `make SOC=<soc>` in its `agent/`
+directory before `defib agent` will do anything.
 
 If a later `sf erase` appears to succeed but the data does not change, the
 vendor bootloader has armed the flash's status-register block protection —
