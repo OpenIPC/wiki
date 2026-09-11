@@ -213,6 +213,7 @@ In Russian
 - [Установка. Шаг за шагом.](ru/installation.md)
 - [Настройка.](ru/configuration.md)
 - [Сброс к заводским настройкам и «непринятая» камера](ru/first-boot.md)
+- [Аварийный режим (failsafe) и восстановление камеры](ru/failsafe-recovery.md)
 - [Модернизация адаптера USB2TT_004 для управления питанием.](ru/usb2ttl.md)
 - [Программный переход с openipc-1.0 (OpenWrt) на openipc-2.x (Buildroot)](ru/upgrade-from-1.md)
 - [Вопросы и ответы](ru/faq.md)
