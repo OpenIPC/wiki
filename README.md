@@ -61,6 +61,7 @@ OpenIPC Wiki
 - [Web interface](en/web-interface.md)
 - [Factory reset and the unclaimed camera](en/first-boot.md)
 - [Upgrade firmware](en/sysupgrade.md)
+- [Failsafe mode and recovery](en/failsafe-recovery.md)
 - [Nightly builds, dated releases, and bisect](en/nightly-builds-and-bisect.md)
 - [Image quality tuning](en/image-quality-tuning.md)
 - [Memory tuning](en/memory-tuning.md)
