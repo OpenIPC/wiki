@@ -413,9 +413,24 @@ nightMode:
 
 **Which channels your camera offers depends on its SoC**, so the list is not
 the same on every board and there is no table of it here that would stay true.
-The WebUI's Night mode page shows the ones this camera has; from a shell,
-`ipctool reginfo | grep -i pwm` prints every PWM-capable pad, with the pin it
-shares in square brackets when that function is the one currently selected.
+The WebUI's Night mode page shows the ones this camera has, and that is the
+answer for almost everyone.
+
+To see the pins behind them, `ipctool reginfo` prints one line per pad with
+every function that pad can take, and square brackets around the one it is set
+to at the moment:
+
+```
+muxctrl_reg4 0x100c0010 0 [GPIO0_4] PWM1 UART1_RXD I2C1_SDA
+```
+
+Two things to know before reading that list. `SVB_PWM` and `PMC_PWM` are
+**different controllers** — sensor bias supply and power management — so a row
+mentioning those is not a lamp channel, however much it looks like one; the
+ones that count are named `PWM0`…`PWM7`, or `PWM_OUT0`/`PWM_OUT1` on the older
+parts. And the `GPIOx_y` in the same row is the pin that channel takes over,
+which majestic numbers eight to a bank: `GPIO0_4` is pin 4, `GPIO2_0` is
+pin 16.
 
 A channel is not a pin. Some SoCs bring the same PWM out on two or three
 different pads, and then the plain name (`pwm3`) means the usual one while the
