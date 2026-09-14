@@ -1151,6 +1151,71 @@ convert -verbose -sampling-factor 4:2:0 -size 1920x1080 -depth 8 image.yuv image
 where `1920x1080` is the picture resolution of video0, and `.png` is the target
 image format.
 
+### Raw sensor data, as Adobe DNG
+
+`/image.dng` hands over what the sensor actually measured, before any of the
+processing that turns it into a picture — no white balance, no demosaicing, no
+noise reduction, no sharpening. It is a [raw image][raw] in [Adobe DNG][dng]
+format, so ordinary raw software opens it: RawTherapee, darktable, `dcraw`,
+Adobe's own tools, or `rawpy` if you would rather script it.
+
+```
+curl -u root:PASSWORD -o shot.dng http://192.168.1.10/image.dng
+```
+
+This is a **HiSilicon and Goke** feature; cameras built on other SoC families do
+not serve it, and neither do the oldest HiSilicon parts. There is no separate
+build flavour for it — Lite serves it just as Ultimate does.
+
+**It is on by default.** `isp.rawMode` is `slow` unless you changed it, so a
+camera that has never been configured for this still answers. `/image.yuv420`
+is the other endpoint people find while looking for raw data, and it is a
+different thing: that one is the processed picture, after the pipeline has
+finished with it, just not yet compressed.
+
+| `isp.rawMode` | what it does |
+|---|---|
+| `slow` | Default. The raw path is set up when a snapshot is asked for. |
+| `fast` | The raw path stays ready all the time. Takes effect at startup, so the camera has to be restarted after changing it. |
+| `none` | Off. `/image.dng` answers **501**, and the memory the raw frame would have needed is left to the rest of the pipeline. |
+
+On a 5 MP IMX335 attached to a Goke GK7205V300, three snapshots per mode over
+the loopback interface: `slow` took 0.745 s, `fast` 0.733 s. That difference is
+inside the noise of moving a 4.9 MB file, so on this hardware `fast` bought
+nothing worth the permanently reserved frame. Measure before assuming otherwise
+on yours — [Memory tuning](memory-tuning.md) explains what that frame competes
+with.
+
+#### What you get
+
+The file is uncompressed, so its size is a straight function of the frame: the
+same camera produced 2592x1520 at 10 bits per pixel, which is 4 924 800 bytes of
+sensor data plus a small header.
+
+Those dimensions are the frame **the sensor is configured to deliver**. They are
+not `video0.size`, and not the sensor's full array either — the camera above was
+streaming 1920x1080 from a sensor whose full frame is 2592x1944, and the DNG came
+out 2592x1520, the mode actually in use. Bit depth follows the sensor in the same
+way, commonly 10 or 12.
+
+#### The colour will be wrong, and that is expected
+
+The parts of the file that describe *how to interpret* the measurements are
+placeholders, identical on every camera: one colour matrix regardless of which
+sensor is fitted, a white balance of 1:1:1, and a black level of zero. The camera
+model field names the chip vendor rather than the sensor.
+
+The measurements themselves are exact — the geometry, the bit packing and the
+[CFA][cfa] pattern are all correct, and the file loads without complaint. But a
+raw converter has nothing real to work from, so the first render will have a
+colour cast and milky blacks. Shoot a grey card and set the white balance from
+it, or build a camera profile for your sensor, and it comes right.
+
+So this is the endpoint for measurement, sensor evaluation, calibration work and
+astrophotography-style stacking — anywhere you want the numbers rather than a
+pretty picture. For a picture, `/image.jpg` has had the camera's own tuning
+applied and will look far better with no work at all.
+
 ### How to play audio stream
 
 Use [ffplay][ffplay] utility from [ffmpeg][ffmpeg] package.
@@ -1510,6 +1575,7 @@ push-to-talk is unaffected.
 
 [aac]: https://en.wikipedia.org/wiki/Advanced_Audio_Coding
 [alaw]: https://en.wikipedia.org/wiki/A-law_algorithm
+[cfa]: https://en.wikipedia.org/wiki/Color_filter_array
 [dng]: https://en.wikipedia.org/wiki/Digital_Negative
 [g711]: https://en.wikipedia.org/wiki/G.711
 [heif]: https://en.wikipedia.org/wiki/High_Efficiency_Image_File_Format
