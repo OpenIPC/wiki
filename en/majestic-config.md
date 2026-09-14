@@ -377,7 +377,7 @@ records:
                                 # from the bitrate
 
 #outgoing:                                               # absent by default: the camera publishes nowhere
-  # Every place the camera publishes to, and the whole of this section. Editable
+  # Every place the camera publishes to. Editable
   # in the WebUI under Settings -> Network & Integrations -> Outgoing. Each entry
   # is its own connection: udp/unix as RTP, rtmp/rtmps as RTMP, http(s) as WHIP.
   # rtmp/rtmps needs a Lite or Ultimate build; udp/unix work everywhere.
@@ -394,7 +394,9 @@ records:
   #    audioSource: auto                                  # auto|mic|silence|file|none; silence/file feed a track when there is no microphone
   #    audioCodec: ""                                     # RTMP audio codec (aac|alaw|ulaw|pcm); empty follows audio.codec
   #    audioFile: ""                                      # ADTS .aac looped when audioSource is file
-  #thinEnhance: false                                     # send the SVC-T base layer only
+  #thinEnhance: false                                     # send the SVC-T base layer only. Belongs to the
+                                                          # section, not to an entry: it applies to everything
+                                                          # the camera sends
   # enabled, server, substream, audioSource, audioCodec and audioFile used to sit
   # here as ONE value for every destination at once. Each has the per-entry member
   # above that replaced it. A config still carrying them reads them once and writes

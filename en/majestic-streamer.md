@@ -1046,9 +1046,9 @@ RTMP reconnection and timeout logic works as follows:
 
 ### Other outgoing options
 
-Every place the camera publishes to is an entry under `servers`, and the list is
-the whole section. It is editable in the WebUI under **Settings → Network &
-Integrations → Outgoing**, which also shows what each destination is doing.
+Every place the camera publishes to is an entry under `servers`. It is editable
+in the WebUI under **Settings → Network & Integrations → Outgoing**, which also
+shows what each destination is doing.
 
 The address picks the protocol: `udp://` and `unix:` are sent as RTP, `rtmp://`
 and `rtmps://` as RTMP, and `http(s)://` is WHIP. An entry is a bare address, or
@@ -1071,6 +1071,10 @@ outgoing:
 
 Each destination switches on and off by itself, so the one that has started
 refusing connections can be parked without touching the two that have not.
+
+`thinEnhance` is the one setting that still belongs to the section rather than
+to an entry: it drops the SVC-T enhancement layer for everything the camera
+sends, so it sits beside `servers`, not inside it.
 
 #### Settings that used to apply to the whole section
 
