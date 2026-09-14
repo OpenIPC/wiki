@@ -1160,12 +1160,28 @@ format, so ordinary raw software opens it: RawTherapee, darktable, `dcraw`,
 Adobe's own tools, or `rawpy` if you would rather script it.
 
 ```
-curl -u root:PASSWORD -o shot.dng http://192.168.1.10/image.dng
+curl -u viewer:PASSWORD -o shot.dng http://192.168.1.10/image.dng
 ```
 
-This is a **HiSilicon and Goke** feature; cameras built on other SoC families do
-not serve it, and neither do the oldest HiSilicon parts. There is no separate
-build flavour for it — Lite serves it just as Ultimate does.
+`/image*` is one of the paths a media-only account may use, so give this a
+`viewer` rather than `root` — see [User levels in the
+system](#user-levels-in-the-system). Over plain `http` the password crosses the
+network in the clear either way, and a media account is the one you can afford
+to spend that way.
+
+This is a **HiSilicon and Goke** feature. Cameras on other SoC families do not
+serve it, and neither do the oldest HiSilicon parts. It is not tied to a build
+flavour — Lite, Ultimate and FPV all serve it wherever the hardware does.
+
+Rather than match your camera against a model list, ask it. A build that does
+not have the endpoint answers **404**, the same as any path it does not serve:
+
+```
+curl -u viewer:PASSWORD -o /dev/null -w '%{http_code}\n' http://192.168.1.10/image.dng
+```
+
+`404` means this firmware has no raw endpoint at all. `501` means it has one and
+`isp.rawMode` is `none`. `200` means you already have the file.
 
 **It is on by default.** `isp.rawMode` is `slow` unless you changed it, so a
 camera that has never been configured for this still answers. `/image.yuv420`
@@ -1175,8 +1191,8 @@ finished with it, just not yet compressed.
 
 | `isp.rawMode` | what it does |
 |---|---|
-| `slow` | Default. The raw path is set up when a snapshot is asked for. |
-| `fast` | The raw path stays ready all the time. Takes effect at startup, so the camera has to be restarted after changing it. |
+| `slow` | Default. The raw path is set up when a snapshot is asked for, so switching to it from `none` takes effect on the very next request, with no restart. |
+| `fast` | The raw path is kept ready rather than set up for each snapshot. The memory that reserves is claimed when the streamer starts, so switching to `fast` on a running camera does not reserve it until the next restart. |
 | `none` | Off. `/image.dng` answers **501**, and the memory the raw frame would have needed is left to the rest of the pipeline. |
 
 On a 5 MP IMX335 attached to a Goke GK7205V300, three snapshots per mode over
