@@ -250,6 +250,9 @@ audio:
   #outputGain: 0
   #speakerPin: 32
   #speakerPinInvert: false
+  #speakerPinHoldMs: 2000       # how long the amplifier stays powered after
+                                # the last sound; 0 keeps it powered whenever
+                                # audio output is on
   #inputChannel: 0
   #jitterBufferMs: 80           # RTSP back-channel: 0 = passthrough (LAN),
                                 # 80 helps over Wi-Fi/WAN

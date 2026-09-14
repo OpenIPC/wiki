@@ -1191,9 +1191,26 @@ Many boards gate the amplifier behind a GPIO. Set `audio.speakerPin` (and
 `audio.speakerPinInvert` if it is active-low), otherwise the logs look clean and
 nothing comes out.
 
+Where that pin is set, the amplifier is powered only while there is something to
+play, and drops again `audio.speakerPinHoldMs` after the last sound (default
+2000). An amplifier left powered draws current and passes its own hiss to the
+speaker continuously, which is audible in a quiet room. Set it to `0` to keep
+the amplifier powered for as long as audio output is enabled, which is what
+cameras did before this setting existed — worth doing if your hardware pops on
+the transition, or if something other than Majestic drives the speaker.
+
+Expect roughly the first tenth of a second of sound after a silence to be lost
+while the amplifier comes up; the exact figure is a property of the board.
+
 Speaker output is available on HiSilicon/Goke, Ingenic, Sigmastar, Allwinner,
 Rockchip and Xiongmai. `audio.srate` is shared by input and output; there is no
 separate output rate.
+
+On HiSilicon/Goke and Ingenic, `audio.volume` and `audio.outputVolume` take
+effect as soon as they are saved, without restarting the video pipeline — so you
+can find a level by ear without interrupting anyone watching the stream. On the
+other SoCs a volume change still rebuilds the pipeline, which drops every
+stream for a moment.
 
 ### How to create an audio file to play on camera's speaker over network
 
@@ -1207,14 +1224,31 @@ Or with [ffmpeg][ffmpeg]:
 ffmpeg -i speech.mp3 -ac 1 -ar 8000 -f s16le -acodec pcm_s16le test.pcm
 ```
 
-`/play_audio` has no decoder behind it — the bytes you upload are pushed
-straight at the speaker as raw signed 16-bit little-endian mono PCM. Uploading a
-compressed file (AAC, MP3, Opus) plays it as noise, and a `.wav` clicks at the
-start because its header is played as samples. `audio.codec` applies only to the
-audio the camera sends out and has no effect here.
+The camera decides what you sent from the `Content-Type` header, so the
+conversion above is only one of the options:
 
-The sample rate must match `audio.srate` exactly, or playback comes out at the
-wrong pitch and speed.
+| `Content-Type` | what the camera does |
+| --- | --- |
+| absent, or `application/octet-stream` | raw s16le mono at `audio.srate` |
+| `application/octet-stream;rate=44100` | raw s16le, resampled for you |
+| `audio/L16;rate=44100;channels=2` | the same, and stereo is mixed down |
+| `audio/ogg` | an Opus file, decoded on the camera |
+
+The type chooses the container; `rate` and `channels` are read from the
+parameters whatever the type is. Sending no header means exactly what it always
+did, so existing scripts keep working untouched.
+
+Two consequences worth knowing. **The rate no longer has to match
+`audio.srate`** — declare what you are sending and the camera resamples it. If
+you declare nothing and the rates differ, playback still comes out at the wrong
+pitch and speed, so declare it. And **an audio type the camera cannot decode is
+refused** with `501` rather than played as noise: MP3, AAC, FLAC and `audio/wav`
+all land there, as does `audio/basic`, which is mu-law rather than PCM. A `.wav`
+sent as raw bytes still clicks at the start, because its header is played as
+samples.
+
+`audio.codec` applies only to the audio the camera sends out and has no effect
+here.
 
 ### How to play audio file on camera's speaker over network
 
@@ -1222,9 +1256,30 @@ wrong pitch and speed.
 curl -u root:YOUR_PASSWORD --data-binary @test.pcm http://192.168.1.10/play_audio
 ```
 
-This is a one-shot clip player: a new upload cancels the clip currently playing,
-and the clip is capped at roughly 2 MB on most SoCs (about two minutes at
-8 kHz). For a live conversation use two-way audio below.
+An Opus file needs no conversion at all — the camera has the decoder:
+
+```
+curl -u root:YOUR_PASSWORD -H 'Content-Type: audio/ogg' \
+     --data-binary @music.opus http://192.168.1.10/play_audio
+```
+
+Either way this is a one-shot clip player: a new upload cancels the clip
+currently playing. For a live conversation use two-way audio below.
+
+The clip is played as it arrives rather than held in memory, so its length is
+not limited by the camera's RAM — the upload simply takes about as long as the
+audio does, because the camera accepts it no faster than the speaker can play
+it. That also means a stalled upload holds the speaker until it finishes or the
+camera gives up on it.
+
+Streaming a source that is not a file works the same way, with `-T -`:
+
+```
+ffmpeg -i https://example.org/stream.mp3 -f s16le -ac 1 -ar 44100 - | \
+  curl -u root:YOUR_PASSWORD -X POST -T - \
+       -H 'Content-Type: application/octet-stream;rate=44100' \
+       http://192.168.1.10/play_audio
+```
 
 ### Microphone processing (VQE)
 
