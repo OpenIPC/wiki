@@ -398,18 +398,41 @@ A single-pad filter has `irCutSingleInvert`, and the daylight sensor has
 
 ### PWM backlight: a dimmable lamp
 
-On the HiSilicon EV200/EV300 and Goke GK7205V200/V500 family, a lamp wired to
-a PWM pad can be a dimmer instead of a switch — the in-camera version of the
-`devmem` backlight scripts from
+On most HiSilicon and Goke cameras, a lamp wired to a PWM pad can be a dimmer
+instead of a switch — the in-camera version of the `devmem` backlight scripts
+from
 [the sandbox](https://github.com/OpenIPC/sandbox/tree/main/scripts/backlight-control):
 
 ```yaml
 nightMode:
-  backlightPwmChannel: pwm1   # pwm1 (pad GPIO0_4) or pwm3 (pad GPIO2_0); none = switched lamp on backlightPin
+  backlightPwmChannel: pwm1   # none = switched lamp on backlightPin
   backlightPwmFreq: 400       # Hz
   backlightPwmMin: 10         # duty floor, % — LEDs have an ignition threshold
   backlightPwmMax: 100
 ```
+
+**Which channels your camera offers depends on its SoC**, so the list is not
+the same on every board and there is no table of it here that would stay true.
+The WebUI's Night mode page shows the ones this camera has; from a shell,
+`ipctool reginfo | grep -i pwm` prints every PWM-capable pad, with the pin it
+shares in square brackets when that function is the one currently selected.
+
+A channel is not a pin. Some SoCs bring the same PWM out on two or three
+different pads, and then the plain name (`pwm3`) means the usual one while the
+others are spelled with the pin they are on (`pwm3@gpio54`). If your lamp is
+wired to one of the alternatives, pick that spelling — the plain name would
+drive a pin your lamp is not on. Where a channel has only one pad, which is the
+common case, there is only the plain name.
+
+The frequency is a real frequency: majestic knows the rate its SoC's PWM block
+counts at, so 400 Hz is 400 Hz on a hi3516cv100 as much as on an
+hi3516ev300. Anything from 50 Hz to 20 kHz is accepted. If your illuminator
+hums or your footage shows banding, move it.
+
+If a channel is set but the lamp cannot be brought up — the wrong pin, or a pin
+something else on the board already owns — majestic says so in the log and
+falls back to driving `backlightPin` as a plain switch, rather than leaving you
+in the dark.
 
 With a channel set, `backlightPin` is ignored, but `backlightInvert` is not:
 on an active-low driver the duty still reads as brightness, 0 for dark and 100
