@@ -307,9 +307,12 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
   #autoDayGain: 2               # automatic mode: day at or below this multiple
   #autoNightDelay: 15           # seconds of darkness before night, 5-600
   #autoDayDelay: 60             # seconds of brightness before day, 5-600
-  #backlightPwmChannel: none    # none | pwm1 | pwm3 — a dimmable lamp on a PWM
-                                # pad; EV200/EV300 and GK7205V200/V500 only,
-                                # backlightPin is then ignored
+  #backlightPwmChannel: none    # a dimmable lamp on a PWM pad; backlightPin
+                                # is then ignored. The channels offered are the
+                                # ones your camera's SoC actually brings out —
+                                # the WebUI lists them. Where one channel
+                                # reaches several pins the others are spelled
+                                # pwm2@gpio68
   #backlightPwmFreq: 400        # Hz, 50-20000
   #backlightPwmMin: 10          # duty floor, % — LEDs have an ignition threshold
   #backlightPwmMax: 100         # duty ceiling, %
