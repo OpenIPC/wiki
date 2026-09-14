@@ -279,6 +279,8 @@ rtsp:
   #alias2: cam/substream        # extra URL path that selects stream 2
   #backchannel: false           # ONVIF Profile T talkback (needs audio output)
   #audioCodec: ""               # override audio.codec for RTSP only
+  #naluSize: 1200               # RTP packet size, for RTSP clients and for the
+                                # udp:// destinations that do not set their own
 
 nightMode:                      # see en/ircut-filter.md for how the filter is
                                 # actually driven, and what the metrics mean
@@ -374,22 +376,33 @@ records:
   #fragmentBytes: 0             # hard size limit for one fragment; 0 derives it
                                 # from the bitrate
 
-outgoing:
-  enabled: false
-  #server: udp://192.168.1.10:5600
-  #naluSize: 1200
-  #substream: false                                       # publish video1
-  #thinEnhance: false                                     # send the SVC-T base layer only
-  #audioCodec: ""                                         # RTMP audio codec (aac|alaw|ulaw|pcm); empty follows audio.codec
-  #audioSource: auto                                      # auto|mic|silence|file|none; silence/file feed a track when there is no microphone
-  #audioFile: ""                                          # ADTS .aac looped when audioSource is file
-  # Several destinations (majestic.yaml only, not available in the WebUI). Each
-  # entry is its own connection: udp/unix as RTP, rtmp/rtmps as RTMP.
+#outgoing:                                               # absent by default: the camera publishes nowhere
+  # Every place the camera publishes to. Editable
+  # in the WebUI under Settings -> Network & Integrations -> Outgoing. Each entry
+  # is its own connection: udp/unix as RTP, rtmp/rtmps as RTMP, http(s) as WHIP.
   # rtmp/rtmps needs a Lite or Ultimate build; udp/unix work everywhere.
   #servers:
-  #  - udp://IP:port
+  #  - udp://IP:port                                      # a bare address is enough
   #  - unix:/tmp/rtpstream.sock
   #  - rtmps://dc4-1.rtmp.t.me/s/mykey
+  #  - url: https://mediamtx.lan:8889/cam/whip            # WHIP
+  #    token: s3cret                                      # bearer credential, if the endpoint asks for one
+  #  - url: rtmp://a.example/live/key
+  #    enabled: false                                     # keep the destination without dialling it; absent means on
+  #    channel: sub                                       # main|sub; absent means main
+  #    naluSize: 4000                                     # RTP packet size for this destination alone
+  #    audioSource: auto                                  # auto|mic|silence|file|none; silence/file feed a track when there is no microphone
+  #    audioCodec: ""                                     # RTMP audio codec (aac|alaw|ulaw|pcm); empty follows audio.codec
+  #    audioFile: ""                                      # ADTS .aac looped when audioSource is file
+  #thinEnhance: false                                     # send the SVC-T base layer only. Belongs to the
+                                                          # section, not to an entry: it applies to everything
+                                                          # the camera sends
+  # enabled, server, substream, audioSource, audioCodec and audioFile used to sit
+  # here as ONE value for every destination at once. Each has the per-entry member
+  # above that replaced it. A config still carrying them reads them once and writes
+  # them onto the entries on the next start; writing one through the API answers 404.
+  # outgoing.naluSize went to rtsp.naluSize instead -- the same setting sizes the
+  # packets RTSP clients get.
 
 watchdog:
   enabled: true

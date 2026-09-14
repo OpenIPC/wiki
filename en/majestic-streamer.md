@@ -969,9 +969,9 @@ curl http://localhost/api/v1/config --data-binary @- <<'EOF'
     "enabled": true
   },
   "outgoing": {
-    "enabled": true,
-    "naluSize": 1200,
-    "server": "rtmp://a.rtmp.youtube.com/live2/you-key-here"
+    "servers": [
+      { "url": "rtmp://a.rtmp.youtube.com/live2/you-key-here" }
+    ]
   }
 }
 EOF
@@ -979,6 +979,13 @@ EOF
 
 The API applies this live and saves it; no reboot is needed. RTMP is in Lite
 and Ultimate builds, not FPV.
+
+`servers` is a list because a camera can publish to several places at once, and
+each entry carries its own settings. Older guides set `outgoing.enabled` and
+`outgoing.server` here instead; those are deprecated and the API refuses them,
+so a copy of the old command fails with 404 and changes nothing. A camera whose
+config still has them keeps working — it converts them into the list on its
+next start.
 
 Examples of other addresses for different services:
 - YouTube
@@ -995,20 +1002,28 @@ Important ! Many RTMP services will only work if audio streaming is enabled, so 
 The outgoing stream sends an audio codec the RTMP container supports, converting
 from `audio.codec` when needed, so `audio.codec` can stay on Opus for RTSP while
 the broadcast still carries audio a service accepts. To pin a specific codec set
-`outgoing.audioCodec` (`aac`, `alaw`, `ulaw`, `pcm`); leave it empty to follow
-`audio.codec`. A-law and mu-law are 8 kHz by definition and the encoder
+`audioCodec` on that destination (`aac`, `alaw`, `ulaw`, `pcm`); leave it empty
+to follow `audio.codec`. A-law and mu-law are 8 kHz by definition and the encoder
 resamples to it from whatever the microphone is capturing, so `audio.srate` can
 stay wherever the rest of the camera wants it. Builds before 2026-09 did not
 resample and needed `audio.srate: 8000` here, or the audio played back at the
 wrong speed.
 
-If the camera has no microphone, `outgoing.audioSource` supplies a track anyway:
+If the camera has no microphone, a destination's `audioSource` supplies a track
+anyway:
 
 ```
 outgoing:
-  audioSource: auto     # auto | mic | silence | file | none
-  audioFile: ""         # path to an ADTS .aac file to loop
+  servers:
+    - url: rtmp://a.rtmp.youtube.com/live2/---KEY---
+      audioSource: auto     # auto | mic | silence | file | none
+      audioFile: ""         # path to an ADTS .aac file to loop
 ```
+
+These belong to the destination rather than to the section, so one camera can
+send its microphone to one service and a looped file to another. Setting them
+once for everything was the older shape; a config still written that way has
+them moved onto its destinations on the next start.
 
 `auto` (the default) uses the microphone when there is one and otherwise sends a
 built-in silent track to services that require audio — including YouTube — so a
@@ -1031,32 +1046,52 @@ RTMP reconnection and timeout logic works as follows:
 
 ### Other outgoing options
 
-A single destination is set with `server`:
+Every place the camera publishes to is an entry under `servers`. It is editable
+in the WebUI under **Settings → Network & Integrations → Outgoing**, which also
+shows what each destination is doing.
+
+The address picks the protocol: `udp://` and `unix:` are sent as RTP, `rtmp://`
+and `rtmps://` as RTMP, and `http(s)://` is WHIP. An entry is a bare address, or
+a mapping carrying that address plus what belongs to that destination alone.
 
 ```
 outgoing:
-  enabled: true
-  naluSize: 1200
-  server: udp://192.168.1.10:5600
-```
-
-For several destinations, list them under `servers` (this key is only read from
-`/etc/majestic.yaml`, it is not exposed in the WebUI). Every entry is started as
-its own connection: `udp://` and `unix:` endpoints are sent as RTP, `rtmp://`
-and `rtmps://` as RTMP.
-
-```
-outgoing:
-  enabled: true
-  naluSize: 1200
   servers:
     - udp://IP-1:port
     - udp://IP-2:port
     - unix:/tmp/rtpstream.sock
     - rtmps://dc4-1.rtmp.t.me/s/mykey
+    - url: https://mediamtx.lan:8889/cam/whip
+      token: s3cret        # bearer credential, if the endpoint asks for one
+    - url: rtmp://a.example/live/key
+      enabled: false       # keep the destination without dialling it
+      channel: sub         # main | sub; absent means main
+      naluSize: 4000       # RTP packet size for this destination alone
 ```
 
-If both `server` and `servers` are present, they are combined.
+Each destination switches on and off by itself, so the one that has started
+refusing connections can be parked without touching the two that have not.
+
+`thinEnhance` is the one setting that still belongs to the section rather than
+to an entry: it drops the SVC-T enhancement layer for everything the camera
+sends, so it sits beside `servers`, not inside it.
+
+#### Settings that used to apply to the whole section
+
+`enabled`, `server`, `substream`, `audioSource`, `audioCodec` and `audioFile`
+each held **one** value for every destination at once, which stopped making
+sense once there was a list of them. Each has the per-destination member that
+replaced it — `server` became an entry's address, `substream` became `channel`,
+and the three audio settings kept their names on the entry.
+
+They are deprecated, not silently dropped. A camera whose `/etc/majestic.yaml`
+still carries any of them reads them once and writes them onto its destinations
+on the next start, so nothing has to be entered again and the file settles on
+one spelling. Writing one through the API answers 404 instead.
+
+`outgoing.naluSize` moved elsewhere rather than onto the entries: it is
+`rtsp.naluSize` now, because the same setting sizes the packets RTSP clients
+get. An entry can still override it for itself with the `naluSize` above.
 
 ### ONVIF
 
