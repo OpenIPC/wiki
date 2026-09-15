@@ -24,6 +24,8 @@ unset, the clips are being written in the clear and Majestic says so in the log.
 | the camera died or was replaced | readable | readable, with the passphrase | **lost** without a recovery key | readable with your private key |
 | the passphrase or private key was lost | readable | **lost** without a recovery key | **lost** without a recovery key | **lost** |
 | plays in the web interface | yes | not yet | no | no |
+| **when** the camera saw movement | readable | readable | readable | readable |
+| **where in frame** it saw it | readable | unreadable | unreadable | unreadable |
 
 Only `pubkey` survives a stolen camera — for the clips already written, not for
 the one still open — and it is the one mode where the camera cannot play its own
@@ -314,6 +316,15 @@ exactly as in the `pubkey` section above.
 - **Metadata.** File names carry the time, sizes carry the bitrate, and the frame
   boundaries stay readable. Someone with the card knows when the camera recorded
   and roughly how much was moving — not what.
+- **When something moved, deliberately.** Alongside the clips, the recorder
+  keeps a small per-day index of the intervals in which the detectors saw
+  anything, and that index is **in the clear in every mode**. It is what the
+  recordings page paints its timeline from, and what makes finding an event on
+  a week-old card possible at all. It carries **intervals and counts only —
+  never a rectangle**: *when* is readable, *where in frame* is sealed inside
+  the clip with the video. Nothing is written for a camera that is not
+  recording, or whose detectors are off. See
+  [What the camera detects](analytics-metadata.md).
 
 ### Things that surprise people
 
@@ -338,3 +349,5 @@ exactly as in the `pubkey` section above.
 
 - [Majestic example config](majestic-config.md) — the whole `records:` block
 - [Majestic streamer](majestic-streamer.md) — what else the recorder can do
+- [What the camera detects](analytics-metadata.md) — the detection metadata
+  inside a clip, and the day index that is not inside one
