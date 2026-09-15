@@ -1275,6 +1275,48 @@ nothing worth the permanently reserved frame. Measure before assuming otherwise
 on yours — [Memory tuning](memory-tuning.md) explains what that frame competes
 with.
 
+#### On a board with little RAM, read this before you ask for one
+
+A raw frame is not a thumbnail. The uncompressed file is the whole sensor
+readout, and the streamer needs that much memory *while it is serving the
+request* — and, on current firmware, about twice it, because the frame is
+buffered for sending as well as read from the sensor. Measured on the 5 MP
+camera above, peak memory rose by roughly 9 MB for a single capture. Ask for
+two at the same time and it needs it twice over.
+
+That is fine on a 128 MB board and fatal on a small one. Measured on a
+Hi3518EV200 with 27 MB of RAM and roughly 10 MB free: several overlapping
+requests for `/image.dng` and the kernel killed the streamer outright —
+
+```
+Out of memory: Kill process 987 (majestic) score 202
+```
+
+The camera then stayed down. The restart got as far as loading the sensor
+driver and stopped there, because the process the kernel killed never released
+the video hardware, and it took a reboot to clear. Nothing in the request
+looked unusual; there were simply more of them in flight than the board had
+memory for.
+
+So on anything memory-constrained:
+
+- **Take one at a time.** Wait for each capture to finish before asking for the
+  next. Newer firmware refuses an overlapping request with **503** rather than
+  attempting it, but do not rely on the version in front of you doing that.
+- **Do not point a monitoring script at `/image.dng`.** It is a diagnostic
+  endpoint, not a stream. Anything that polls it on a timer will eventually
+  overlap with itself.
+- **Set `isp.rawMode` to `none`** when you are not using it, and turn it back
+  on for the session you need it in. With `slow` the cost is only paid per
+  request, but it is still paid.
+- **Expect the transfer to be slow, and do not race it.** The same 4.9 MB frame
+  that `curl` pulls in 1.2 s over a LAN took 4.5 to 5.7 s from a browser, and
+  once, on a loaded camera, 142 s. A client that gives up and retries while the
+  first request is still running is how you arrive at the paragraph above.
+
+If the streamer disappears while you are working with raw frames, this is the
+first thing to check: `logread | grep -i 'out of memory'`.
+
 #### What you get
 
 The file is uncompressed, so its size is a straight function of the frame: the
@@ -1287,18 +1329,33 @@ streaming 1920x1080 from a sensor whose full frame is 2592x1944, and the DNG cam
 out 2592x1520, the mode actually in use. Bit depth follows the sensor in the same
 way, commonly 10 or 12.
 
-#### The colour will be wrong, and that is expected
+#### How good the colour is depends on your firmware
 
-The parts of the file that describe *how to interpret* the measurements are
-placeholders, identical on every camera: one colour matrix regardless of which
-sensor is fitted, a white balance of 1:1:1, and a black level of zero. The camera
-model field names the chip vendor rather than the sensor.
+This part of the page used to say the colour data were placeholders. On current
+firmware they are not, and it is worth checking what your camera actually
+writes before you assume either way.
 
-The measurements themselves are exact — the geometry, the bit packing and the
-[CFA][cfa] pattern are all correct, and the file loads without complaint. But a
-raw converter has nothing real to work from, so the first render will have a
-colour cast and milky blacks. Shoot a grey card and set the white balance from
-it, or build a camera profile for your sensor, and it comes right.
+A recent build fills in what it genuinely knows: the black level the sensor is
+running at, the white balance the camera's own AWB had settled on, and a model
+field naming the sensor rather than just the chip vendor. A 5 MP IMX335 on a
+Goke GK7205V300 produced a black level of 50, a white balance of
+0.898 : 1.000 : 0.286 and `HiSilicon imx335` — all real values, none of them
+placeholders.
+
+Older builds wrote one colour matrix regardless of which sensor was fitted, a
+white balance of 1:1:1 and a black level of zero. If that is what you have, a
+raw converter has nothing real to work from and the first render will show a
+colour cast and milky blacks.
+
+Either way the measurements themselves are exact — the geometry, the bit
+packing and the [CFA][cfa] pattern are correct, and the file loads without
+complaint. If the colour looks wrong, shoot a grey card and set the white
+balance from it, or build a camera profile for your sensor.
+
+One thing no firmware can give you: a raw frame carries the scene as the sensor
+saw it, so if the camera's own white balance was wrong when you took it, the
+`AsShotNeutral` it records will be wrong in the same way. That is not a defect
+in the file — it is what a raw frame is for.
 
 So this is the endpoint for measurement, sensor evaluation, calibration work and
 astrophotography-style stacking — anywhere you want the numbers rather than a
