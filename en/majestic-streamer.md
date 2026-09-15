@@ -601,11 +601,17 @@ before.
 ### Motion detection
 
 Motion detect is supported for HiSilicon/Goke, Ingenic and Sigmastar.
-When a motion event is detected, `majestic` invokes a predefined script `/usr/sbin/motion.sh` with a parameter specifying the object count:
+When movement starts, `majestic` runs `/usr/sbin/motion.sh` with the bounding
+box of everything that moved, in main-stream pixels, as four arguments:
 
 ```
-/usr/sbin/motion.sh [count]
+/usr/sbin/motion.sh [left] [top] [right] [bottom]
 ```
+
+The script is run on the transition, not per frame, and no more than once every
+five seconds. For the detections themselves — every box rather than one box
+round all of them, live over a websocket, inside recordings, over ONVIF, and as
+a per-day index — see [What the camera detects](analytics-metadata.md).
 
 Enable motion detection in `majestic` configuration:
 
@@ -627,21 +633,30 @@ settings this one needs a reload to take effect:
 killall -HUP majestic
 ```
 
-To watch it work, run Majestic in the foreground instead:
+To watch it work, ask the camera what it is seeing:
 
-```
-killall majestic; sleep 3; majestic
+```console
+$ curl -s -u root:PASSWORD http://CAMERA/api/v1/analytics
+{"sources":[{"src":"motion","active":true,"w":3840,"h":2160,"n":3,"total":3,
+ "pts":5773196434,"t":1789396178290757,"q":"k",
+ "r":[[1200,300,240,180,0,0],[980,520,120,90,0,0],[2360,442,40,56,0,0]]}]}
 ```
 
-You should see the script running after motion detection events:
-
-```
-20:37:02  <SED_IVE_DETCTOR> [  motion] motion_update@155             Motion detected: [1163x0] -> [690x475]
-20:37:02  <SED_IVE_DETCTOR> [   tools] motion_event@615              Execute motion script: /usr/sbin/motion.sh
-```
+`active` is whether it sees something now, and `r` is one `[x, y, w, h, class,
+score]` per detection. Poll that while you wave at the camera, or open
+**Settings → Events → Motion detection** in the web interface, which draws the
+same boxes over the live picture. `/ws/analytics` streams them instead of
+making you poll — see [What the camera detects](analytics-metadata.md).
 
 `roi` says where motion counts. There is no setting for where it does **not** —
 an `exclude:` line in the config is accepted by the parser and read by nothing.
+
+`sensitivity` runs 0–8, and higher is more sensitive. Every value on that scale
+is usable: the top of it used to ask the detector to treat any difference at
+all as movement, which reported the whole frame as moving continuously whatever
+was in front of the camera. If you are running firmware from before September
+2026 and a camera at sensitivity 7 or 8 never stops reporting motion, that is
+what you are seeing — drop it to 6 or update.
 
 ### Recording on motion
 

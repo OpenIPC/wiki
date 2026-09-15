@@ -328,7 +328,27 @@ motionDetect:
                                 # are not drawn
   debug: false                  # a log line per detection — several a second
   #roi: 1854x1304x216x606,1586x1540x482x622
-  #sensitivity: 3               # 0-8
+  #sensitivity: 3               # 0-8, higher is more sensitive. Every value is
+                                # usable; before September 2026 the top of the
+                                # scale reported the whole frame as moving,
+                                # for ever, whatever was in front of the camera
+
+# The detections themselves -- where they come out and what they look like --
+# are in en/analytics-metadata.md. These two are properties of the fan-out
+# rather than of any one detector.
+#analytics:
+  #publishFps: 5                # 1-30. How often subscribers are told something
+                                # is STILL there. A transition is never dropped:
+                                # movement starting and stopping always get
+                                # through
+
+# CPU face detection. Hi3516CV500 only, and only in a firmware built with it
+# included -- otherwise this section does not exist. Runs inference only on
+# frames where motion fired, so motionDetect.enabled must be on too.
+#faceDetect:
+  #enabled: false
+  #confidence: 50               # 0-100, minimum score to report a face
+  #debug: false
 
 # path is a DIRECTORY and filename is the base name; the extension is added by
 # Majestic. Both are strftime patterns, expanded when a file is opened. Older
@@ -349,6 +369,13 @@ records:
                                 # can run up to one gopSize long
   #substream: false             # record video1 instead of video0
   #notime: false                # ignore filename, number files 00000.mp4 upward
+  #metadata: false              # write the detections into each clip as a timed
+                                # metadata track, for a player or an analysis
+                                # tool to read back -- en/analytics-metadata.md.
+                                # Default false because Safari 26.6 refuses such
+                                # a clip alongside H.264; this WebUI removes the
+                                # track as it plays, an older one cannot. Also
+                                # moves live HLS off the card and into memory
   #audioCodec: ""               # mp3 | aac | opus; empty follows audio.codec
   #encryption: none             # none | passphrase | chip | pubkey -- see
                                 # en/recording-encryption.md; a mode the camera
