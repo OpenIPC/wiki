@@ -58,6 +58,7 @@ OpenIPC Wiki
 - [Majestic usage research](en/majestic-research.md)
 - [Majestic plugins](en/majestic-plugins.md)
 - [Raw editor](en/raw-editor.md)
+- [Soundcheck: setting audio levels by ear](en/audio-soundcheck.md)
 - [What the camera detects, and how to read it](en/analytics-metadata.md)
 - [Encrypted recordings on the SD card](en/recording-encryption.md)
 - [Changing the SD card on a running camera](en/sd-card-swap.md)
