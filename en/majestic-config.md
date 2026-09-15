@@ -335,7 +335,12 @@ motionDetect:
 # configs that put the whole filename in `path` produce a directory of that
 # name — split them.
 records:
-  enabled: false
+  enabled: false               # the persistent switch. To stop recording just
+                               # long enough to change the card, POST to
+                               # /api/v1/records/standdown instead -- it saves
+                               # nothing, does not rebuild the pipeline, and
+                               # expires after ten minutes. See
+                               # en/sd-card-swap.md
   path: /mnt/mmcblk0p1/%F       # -> /mnt/mmcblk0p1/2026-08-27/
   filename: "%H-%M"             # -> 14-30.mp4. Add %S for second precision
   maxUsage: 95                  # delete the oldest clips above this, %

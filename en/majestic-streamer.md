@@ -230,6 +230,11 @@ Parameters can be changed at runtime through Majestic's HTTP API. Setting a
 value applies it to the running streamer and saves it to `/etc/majestic.yaml`
 in a single step — there is no need to reload or restart Majestic afterwards.
 
+> Two endpoints are deliberately the exception and save nothing:
+> `/api/v1/records/standdown` and `/api/v1/records/resume`, which pause and
+> restart the recorder for as long as a card swap takes. See **Recordings, and
+> what survives a power cut** below.
+
 Set a single parameter (the key is the config path *without* the leading dot):
 ```
 curl 'http://localhost/api/v1/set?video0.fps=10'
@@ -749,13 +754,38 @@ with room on it and still be taking nothing:
 
 ```
 records_state 0                     # 0 ok, 1 degraded, 2 failed, 3 offline
+records_stood_down 0                # 1 while recording is deliberately paused
 records_fragments_dropped_total 0   # the card could not keep up
 records_write_errors_total 0
 records_fsync_us_max 18825          # a stalling card shows here first
 ```
 
+`records_state` is a verdict on the storage, so it cannot tell you the
+difference between a card that has gone and a recorder somebody paused on
+purpose. `records_stood_down` is what says the pause was deliberate — worth
+checking before treating a quiet recorder as a fault.
+
 The Recordings page in the web interface reads the same numbers and says so in
 words.
+
+**Pausing the recorder.** Recording can be stopped and started at runtime
+without touching `majestic.yaml` and without rebuilding the video pipeline, so
+RTSP and WebRTC viewers are not disturbed:
+
+```
+curl -X POST http://localhost/api/v1/records/standdown
+{"stoodDown":true,"resumesInSec":600}
+
+curl -X POST http://localhost/api/v1/records/resume
+```
+
+The pause closes the open clip properly and releases the card, which is what
+makes the card removable. It expires on its own after ten minutes, because a
+pause that outlives its reason is a camera quietly not recording. `stoodDown`
+in the reply is what actually happened rather than what was asked for.
+
+This is what [changing the SD card on a running
+camera](sd-card-swap.md) is built on, and that page is the guided version.
 
 ### A second camera
 

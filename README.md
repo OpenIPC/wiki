@@ -58,6 +58,7 @@ OpenIPC Wiki
 - [Majestic usage research](en/majestic-research.md)
 - [Majestic plugins](en/majestic-plugins.md)
 - [Encrypted recordings on the SD card](en/recording-encryption.md)
+- [Changing the SD card on a running camera](en/sd-card-swap.md)
 - [Web interface](en/web-interface.md)
 - [Factory reset and the unclaimed camera](en/first-boot.md)
 - [Upgrade firmware](en/sysupgrade.md)
