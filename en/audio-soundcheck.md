@@ -44,10 +44,8 @@ rather than measuring something meaningless:
 | *This camera has not said what rate it captures at* | `audio.srate` is unset. The stream carries no header, so a guessed rate would play the test sound at the wrong pitch for the wrong length. | Set `audio.srate`. |
 
 The microphone row is the one that surprises people, and it is worth knowing
-whether you use the panel or not: audio output needs **both** switches, not just
-its own. The
-speaker is brought up as part of the audio block, so a camera with
-`audio.enabled: false` has no speaker either, whatever `audio.outputEnabled`
+whether you use the panel or not: audio output needs **both** switches. A camera
+with `audio.enabled: false` has no speaker either, whatever `audio.outputEnabled`
 says — see [Enabling the speaker](majestic-streamer.md#enabling-the-speaker).
 The panel refuses all three of its buttons there, rather than offering a speaker
 test that would play into an amplifier nothing had powered.
@@ -158,23 +156,37 @@ sox -n -t raw -r 8000 -e signed -b 16 -c 1 sweep.pcm synth 2.25 sine 1000-3200 g
 cat tone.pcm sweep.pcm > test.pcm
 ```
 
-Measure the room, then play it and measure again:
+Measure the room with nothing playing:
 
 ```
 curl -s -u root:YOUR_PASSWORD http://192.168.1.10/audio.pcm | head -c 32000 | \
     sox -t raw -r 8000 -e signed -b 16 -c 1 - -n stats
-
-curl -u root:YOUR_PASSWORD --data-binary @test.pcm http://192.168.1.10/play_audio
 ```
 
-`RMS lev dB` in that output is the number the panel reports, and `Pk lev dB`
-near 0 is the clipping it warns about. The comparison that matters is between
-the two readings, not either one on its own: a single measurement from one
-microphone in an unknown room does not answer "was there sound", and "was there
-*more* sound than a moment ago" is answerable.
+Then measure it again while the clip plays. Start listening **first** and play
+into a window that is already open — a capture subscription takes a moment to
+begin delivering, and a clip started before that is partly over before anything
+is listening:
 
-`head -c 32000` is two seconds at 8 kHz — adjust it with the rate, and note that
-`/audio.pcm` never ends on its own.
+```
+curl -s -u root:YOUR_PASSWORD http://192.168.1.10/audio.pcm | head -c 48000 > during.pcm &
+sleep 1
+curl -s -u root:YOUR_PASSWORD --data-binary @test.pcm http://192.168.1.10/play_audio
+wait
+sox -t raw -r 8000 -e signed -b 16 -c 1 during.pcm -n stats
+```
+
+`RMS lev dB` is the number the panel reports, and the two of them are the
+measurement: a rise of at least 6 dB between them is what credits the speaker. A
+single reading from one microphone in an unknown room does not answer "was there
+sound"; "was there *more* sound than a moment ago" is answerable. `Pk lev dB`
+near 0 is the clipping the panel warns about.
+
+Sizes are 16-bit mono, so bytes are rate × 2 × seconds: at 8 kHz that makes
+`32000` two seconds and `48000` three. Scale both with `audio.srate`. The second
+window opens a second before the clip does, so it carries a moment of room as
+well — which understates the rise rather than inventing one. `/audio.pcm` never
+ends on its own, which is what `head -c` is for.
 
 ### Why it measures the way it does
 
@@ -193,16 +205,15 @@ the verdict.
 before, a noisy room reads as a working speaker, and the test says yes to a
 camera whose speaker is disconnected.
 
-**The step size is read off the camera, not assumed.** What a point of
-`audio.volume` is worth in decibels differs per chip and per board, and is not
-something a page can know: on one camera twelve points moved the reading by
-57 dB, which any fixed points-per-decibel turns into an oscillation between the
-two rails that only stops by luck. So the first adjustment is a guess that only
-has to be in the right direction, and every one after it takes its slope from
-the last two measurements — the camera's own curve, in the region being used.
-A clipped reading is the exception: every sample is pinned at the rail, so it
-carries no usable level at all, and the only thing to do is step down hard and
-climb back on evidence.
+**The dial is not linear, and not linear in the same way twice.** What a point
+of `audio.volume` is worth in decibels differs per chip and per board: on one
+camera twelve points moved the reading by 57 dB. Any fixed points-per-decibel is
+therefore wrong somewhere, and where it is wrong it swings between the two rails
+instead of settling — which is why each adjustment is sized from what the
+previous ones measured on the camera in front of it rather than from a table.
+It is also why a run can stop with the level still moving: it is following a
+curve it is learning, and eight rounds is where it gives up and hands you what
+it has.
 
 Measured on a HiSilicon camera with a speaker and microphone fitted: the room
 read −57.4 dBFS, the test sound took it to −8.4, and the level loop converged in
