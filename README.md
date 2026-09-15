@@ -57,6 +57,7 @@ OpenIPC Wiki
 - [Majestic encoder tuning](en/majestic-encoder-tuning.md)
 - [Majestic usage research](en/majestic-research.md)
 - [Majestic plugins](en/majestic-plugins.md)
+- [Raw editor](en/raw-editor.md)
 - [Encrypted recordings on the SD card](en/recording-encryption.md)
 - [Changing the SD card on a running camera](en/sd-card-swap.md)
 - [Web interface](en/web-interface.md)
