@@ -107,7 +107,12 @@ it the server advertises only what it can see locally.
 
 ## Step 3 — Turn on TLS
 
-Skip this for a first test on the LAN; do not skip it for anything permanent.
+Skip this for a first test; do not skip it for anything permanent.
+
+**If you skip it, every `https://` below becomes `http://`** — the port does
+not change, only the scheme. Turning TLS on later means changing it back in two
+places: the camera's destination in Step 4, and whatever you have bookmarked
+from Step 5.
 
 ```yaml
 webrtcEncryption: yes
@@ -192,8 +197,8 @@ so the camera can always reach *it*, whatever your router is doing. That covers
 most homes, and it is why this arrangement is so much less fragile than
 peer-to-peer.
 
-A restrictive corporate or campus firewall that blocks outbound UDP entirely is
-the exception. Then the camera needs a relay it can reach over TCP:
+A network that permits UDP only to certain destinations is the awkward case.
+A relay the camera *is* allowed to reach will carry the video:
 
 ```yaml
 webrtc:
@@ -202,9 +207,17 @@ webrtc:
   turnCredential: another-long-string
 ```
 
-Give `iceServers` a comma-separated list if you have more than one.
-[coturn](https://github.com/coturn/coturn) is the usual server. Note that all
-of your video then flows through it, so put it somewhere with bandwidth.
+Both credentials are required — a relay named without them is dropped from the
+list rather than tried. Give `iceServers` a comma-separated list if you have
+more than one. [coturn](https://github.com/coturn/coturn) is the usual server,
+and all of your video flows through it, so put it somewhere with bandwidth.
+
+**The camera relays over UDP only.** It has no TCP and no TLS transport for
+this, so `turns:` addresses and the `?transport=tcp` suffix are both refused —
+the camera declines such a server and carries on without it rather than
+spending the session trying. A network that blocks outbound UDP outright
+therefore cannot be worked around from the camera's side; you need a route out
+for UDP, or this arrangement is not the one for that site.
 
 ## Things that will surprise you
 
@@ -236,18 +249,22 @@ few seconds after the relay comes back before deciding something is broken.
 address that is not reachable. Check the firewall first, then
 `webrtcAdditionalHosts`.
 
-**"Unauthorized" in the camera's log.** The `token` does not match
+**The camera reports that the relay turned it away.** The `token` does not match
 `authInternalUsers` — check the colon is there and that you have the password
 from Step 2 — or the user you are publishing as has no `publish` permission for
 that exact path. The path in the URL has to match the one in the permission
-character for character.
+character for character. MediaMTX logs its side of the same refusal, which is
+the quicker place to look.
 
 **The player page loads but the video is black.** Usually the H.265 problem
 above. Confirm by pulling the same stream with a player that does not care:
 
 ```
-ffplay rtsp://viewer:pass@cam.example.com:8554/frontdoor
+ffplay rtsp://viewer:a-different-long-string@cam.example.com:8554/frontdoor
 ```
+
+Step 1 does not open 8554, because nothing in this guide needs it — run this on
+the server itself, or open the port while you are testing and close it after.
 
 If that shows a picture and the browser does not, it is the codec.
 
