@@ -40,14 +40,17 @@ rather than measuring something meaningless:
 | *This camera has not said whether its microphone and speaker are switched on* | The camera reports neither switch. That is not the same as reporting them off, and there may be no control to change. | Check the build — `audio:` is absent from FPV builds entirely. |
 | *This camera has both its microphone and its speaker switched off* | `audio.enabled` and `audio.outputEnabled` are both `false`. | Turn both on, and see [Enabling the speaker](majestic-streamer.md#enabling-the-speaker). |
 | *The speaker is switched off, so the camera cannot play the test sound* | `audio.outputEnabled` is `false`. | Turn it on. |
-| *The microphone is switched off, so nothing can measure what the speaker plays* | `audio.enabled` is `false`. **Test the speaker** stays available; the other two do not. | Turn it on if you want a measurement rather than your own ears. |
+| *The microphone is switched off, and the speaker goes off with it* | `audio.enabled` is `false`, and that leaves the speaker off too — see below. | Turn the microphone on. |
 | *This camera has not said what rate it captures at* | `audio.srate` is unset. The stream carries no header, so a guessed rate would play the test sound at the wrong pitch for the wrong length. | Set `audio.srate`. |
 
-One trap the panel does not catch: with the microphone off it still offers the
-speaker test, but audio output needs **both** switches — the speaker is brought
-up as part of the audio block, so `audio.enabled: false` leaves it off whatever
-`audio.outputEnabled` says. On that camera the test will play into a speaker
-that was never powered. Turn both on.
+The microphone row is the one that surprises people, and it is worth knowing
+whether you use the panel or not: audio output needs **both** switches, not just
+its own. The
+speaker is brought up as part of the audio block, so a camera with
+`audio.enabled: false` has no speaker either, whatever `audio.outputEnabled`
+says — see [Enabling the speaker](majestic-streamer.md#enabling-the-speaker).
+The panel refuses all three of its buttons there, rather than offering a speaker
+test that would play into an amplifier nothing had powered.
 
 If your board gates the amplifier behind a GPIO, `audio.speakerPin` has to be
 set too, or the logs stay clean and nothing comes out. That, and the tenth of a
@@ -71,7 +74,6 @@ difference between those two readings:
 | *The microphone is not sending anything* | Its samples are all silence, which is not what a working input produces even in a quiet room. The speaker was not tested, because nothing could listen. |
 | *The test could not be measured* | The camera stopped sending samples partway through, so there is nothing to compare. |
 | *The camera refused to play the test sound* | Repeated in the camera's own words — a speaker switched off, an upgrade in progress and a clip it had no memory for are different problems. |
-| *The camera played the test sound* | The microphone is off, so nothing here could listen. Whether anything came out is something only you can tell from the room. |
 
 A verdict of *did not hear* with a speaker you can hear yourself means the
 microphone is the half at fault. That is worth knowing before you start moving
