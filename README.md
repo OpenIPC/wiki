@@ -160,6 +160,7 @@ OpenIPC Wiki
 
 ### Integrations
 
+- [Self-hosted cloud camera](en/howto-self-hosted-cloud-camera.md)
 - [Integrate Frigate NVR with OpenIPC](en/howto-frigate-integration.md)
 - [HomeKit integration](en/homekit-integration.md)
 - [Home Assistant generic camera](en/home-assitantant-view.md)
