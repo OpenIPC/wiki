@@ -55,7 +55,11 @@ isp:
   #awbMode: auto                # auto|manual|day|cloudy|incandescent|
                                 # flourescent|twilight|shade|warm|custom
   #memMode: reduction           # normal | reduction        (HiSilicon/Goke)
-  #slowShutter: disabled        # disabled|low|medium|high  (HiSilicon/Goke)
+  #slowShutter: medium          # disabled|low|medium|high  (HiSilicon/Goke)
+                                # medium is the DEFAULT, not disabled: a camera
+                                # that sets nothing is already in slow shutter,
+                                # which also fills in the exposure and gain
+                                # limits below that you did not give
   #dis: false                   # digital stabilisation     (HiSilicon/Goke, Ingenic)
   #wdr: 0                       #                           (SigmaStar)
   #edgeGain: false              #                           (SigmaStar)
@@ -77,7 +81,8 @@ isp:
                                 # the longest auto-exposure may use (also caps
                                 # the frame rate). Ingenic: MICROSECONDS, and it
                                 # is the exposure itself -- setting it stops the
-                                # ISP metering   (HiSilicon/Goke, SigmaStar, Ingenic)
+                                # ISP metering
+                                #        (HiSilicon/Goke, SigmaStar, Ingenic T31)
   #aGain: 0                     # analog gain, as a MULTIPLIER (8 means 8x)
                                 #                     (HiSilicon/Goke, SigmaStar)
   #dGain: 0                     # sensor digital gain, as a multiplier

@@ -303,7 +303,7 @@ name says so. Before copying a number from one platform to another:
 | --- | --- | --- | --- | --- |
 | HiSilicon / Goke | the **longest** auto-exposure may use | **milliseconds** | 0–1000 | yes, unless `isp.aeMode: manual` |
 | SigmaStar | the **longest** auto-exposure may use | **milliseconds** | 0–200 | yes |
-| Ingenic (T31 and newer) | **the exposure itself** | **microseconds** | 0–65535 | **no** — setting it stops the metering |
+| Ingenic (T31) | **the exposure itself** | **microseconds** | 0–65535 | **no** — setting it stops the metering |
 
 So `isp.exposure: 20` asks for a 20 millisecond limit on a HiSilicon camera and
 a 20 **microsecond** fixed shutter on an Ingenic one. Three orders of magnitude
@@ -354,9 +354,22 @@ isp:
   ispGain: 1
 ```
 
-With nothing left to spend, auto-exposure sits on the limit, and the raw signal
-becomes proportional to the exposure — measured on the same camera as a straight
-line through 5, 10, 20 and 33 ms with a correlation of 0.99992.
+With nothing left to spend, auto-exposure runs up against the limit and the raw
+signal becomes proportional to the exposure — measured on the same camera as a
+straight line through 5, 10, 20 and 33 ms with a correlation of 0.99992.
+
+**That holds only while the scene is too dark to reach the target at those
+gains.** Auto-exposure is still choosing; pinning the gains removes what it
+would otherwise spend, it does not force it onto the limit. Brighten the scene,
+or raise the limit far enough, and it settles below the limit again and the
+sweep flattens — on the same camera, limits of 200 and 500 ms both produced
+about 135 ms, because that was already bright enough.
+
+`isp_exposureismax` is how you tell which side of that you are on: `1` means
+auto-exposure is against the limit and your number is deciding the picture, `0`
+means it chose something lower and the limit is not what matters. Watch it while
+you sweep. If you want the exposure held regardless of the scene, that is
+`isp.aeMode: manual` below rather than a limit.
 
 #### Telling the camera the exposure instead (HiSilicon and Goke)
 
@@ -386,9 +399,11 @@ auto-exposure's mechanism for buying a longer shutter, so it does nothing here.
 
 #### Ingenic: microseconds, and the key is its own switch
 
-On an Ingenic camera `isp.exposure` **is** the exposure, in microseconds, and
-setting it stops the metering. There is no `isp.aeMode` — `0` is how you switch
-it back off.
+On a T31 `isp.exposure` **is** the exposure, in microseconds, and setting it
+stops the metering. There is no `isp.aeMode` — `0` is how you switch it back off.
+
+**T31 only.** A T40 does not carry this setting at all, and will not offer it.
+The older T20, T21 and T23 do not either.
 
 Measured on a T31 with an SC2332, asking for a value and reading `isp_exptime`
 back: 1 000, 10 000, 30 000 and 60 000 gave 986, 9 976, 29 986 and 59 972 µs.
