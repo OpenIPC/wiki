@@ -103,10 +103,13 @@ credentials as SSH — and sorts them into two levels:
 sockets, firmware upgrade, everything.
 
 **any other system account** — media only. Such an account can fetch snapshots
-and the MJPEG stream, watch over WebSocket video, and work the night-mode
-switches, but it cannot log in to the interface or touch the API. Concretely,
-the paths it is allowed are `/image*`, `/mjpeg*`, `/night/*`, `/ws/video` and
-`/cgi-bin/v*`. It also authenticates for RTSP and for ONVIF.
+and the MJPEG stream, watch over WebSocket video, read what the detectors are
+seeing, and work the night-mode switches, but it cannot log in to the interface
+or touch the rest of the API. Concretely, the paths it is allowed are
+`/image*`, `/mjpeg*`, `/night/*`, `/ws/video`, `/cgi-bin/v*` and
+`/api/v1/analytics*` — the last because boxes drawn over a picture the account
+may already watch reveal nothing further. It also authenticates for RTSP and
+for ONVIF.
 
 The conventional name for such an account is `viewer`, and creating one takes a
 line:
@@ -979,9 +982,13 @@ of holding a second copy of every segment in RAM, so:
   something to fetch.
 
 HLS falls back to keeping segments in memory whenever there is no clip to
-describe: with recording off, and with `records.key` set — which scrambles the
-clips, so their bytes are not what a player needs. It still works; it is just
-the expensive way round.
+describe, or none a player could use: with recording off, with `records.key`
+set — which scrambles the clips, so their bytes are not what a player needs —
+and with `records.metadata` on, which adds a track to the clip that some
+browsers refuse and that nothing on the HLS path would remove. It still works;
+it is just the expensive way round, and `malloc_hls_alloc_bytes` in `/metrics`
+goes from 0 to the size of the window when it happens. Size the camera's memory
+for that before turning either key on.
 
 `records.mode: motion` is refused rather than served badly. Between detections
 nothing is written, so there would be no new byte ranges to describe and the

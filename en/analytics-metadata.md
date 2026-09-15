@@ -19,12 +19,14 @@ motion** in [Majestic streamer](majestic-streamer.md).
 | detector | reported as | where it runs |
 |---|---|---|
 | motion | `motion` | HiSilicon/Goke, Ingenic, SigmaStar — wherever `motionDetect` works |
-| face | `face` | Hi3516CV500 only, in a firmware built with face detection included. Off by default. See [Face detection](#face-detection) |
+| face | `face` | Hi3516CV500 only, and only where the firmware offers it. Off by default. See [Face detection](#face-detection) |
 
 A detector is only a source of events. Nothing downstream is written per
 detector: turn face detection on and its boxes appear in the browser overlay,
-in the ONVIF metadata stream, in recordings and over the endpoints below
-without any further configuration.
+in the ONVIF metadata stream and over the endpoints below without any further
+configuration. They reach **recordings** on the same terms as motion's do —
+only if `records.metadata` is on, which it is not by default. So a camera can
+be reporting faces live while its clips contain no detections at all.
 
 ## Reading it live
 
@@ -60,8 +62,11 @@ so events are dropped rather than buffered, and a session that stays blocked is
 closed.
 
 Both endpoints are behind the camera's normal credentials, and both are
-readable by a media-scoped account as well as by `root`: boxes drawn over a
-picture such an account may already watch reveal nothing further. On a camera
+readable by a **media-scoped account** as well as by `root` — the reasoning
+being that boxes drawn over a picture such an account may already watch reveal
+nothing further. That is an exception to the rule that non-root accounts cannot
+touch the API; see **Who may call the camera** in
+[Majestic streamer](majestic-streamer.md) for the full path list. On a camera
 nobody has claimed yet, both answer **401** like everything else.
 
 ## The format
@@ -185,8 +190,12 @@ A fragment in which nothing was detected still carries one sample saying so,
 which is how a reader tells "the camera saw nothing" from "the camera stopped
 writing".
 
-Cost is small: roughly 90 bytes an event, about 1.6 MB a day at the default
-rate, against the tens of gigabytes a day of 4K video it sits beside.
+Size it from the event rate, not from a single figure. A sample is roughly
+90 bytes, and the camera writes at most `analytics.publishFps` of them a second
+while the recorder is running — so the worst case at the default of 5/s is
+about **39 MB a day** of metadata, and a camera that only records on motion, or
+that mostly sees nothing, writes a small fraction of that. Either way it is
+noise beside the tens of gigabytes a day of 4K video it sits in.
 
 Encrypted clips protect this track with everything else. Leaving it in the
 clear would tell anyone holding the card when and where somebody moved, which
@@ -346,12 +355,22 @@ to the first of a clump.
 
 ## Face detection
 
-**Status: MVP, one platform, off by default, and not in stock firmware.**
+**Status: MVP, one platform, off by default, and not in every firmware.**
 
-Majestic can run CPU face detection (libfacedetection / YuNet) on
-**Hi3516CV500**. It is a build option: a firmware without it compiled in has no
-`faceDetect` settings and advertises no face topic over ONVIF. Nothing about a
-camera changes until you both run such a firmware and switch it on.
+Majestic can detect faces on the camera's own CPU on **Hi3516CV500**. It is an
+optional capability rather than a standard one: a firmware without it offers no
+`faceDetect` settings and advertises no face topic over ONVIF, and nothing
+about a camera changes until you both run a firmware that has it and switch it
+on.
+
+To tell whether yours has it, ask for the settings:
+
+```console
+$ curl -s -u root:PASSWORD http://CAMERA/api/v1/config.json | grep -c faceDetect
+```
+
+`0` means this firmware does not offer it. The **Settings → Events** page shows
+a FaceDetect entry on a camera that does, and none on one that does not.
 
 ```yaml
 faceDetect:

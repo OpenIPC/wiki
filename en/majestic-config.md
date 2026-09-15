@@ -333,18 +333,19 @@ motionDetect:
                                 # scale reported the whole frame as moving,
                                 # for ever, whatever was in front of the camera
 
-# The detections themselves -- where they come out and what they look like --
-# are in en/analytics-metadata.md. These two are properties of the fan-out
-# rather than of any one detector.
+# What the detectors find, and where it comes out, is in
+# en/analytics-metadata.md. This applies to every one of those outputs at once
+# rather than to a single detector.
 #analytics:
-  #publishFps: 5                # 1-30. How often subscribers are told something
-                                # is STILL there. A transition is never dropped:
-                                # movement starting and stopping always get
-                                # through
+  #publishFps: 5                # 1-30. How often a detection that is STILL
+                                # there is re-sent to the live endpoints, the
+                                # browser overlay, the ONVIF metadata stream and
+                                # the recording. Movement starting and stopping
+                                # always get through whatever this is set to
 
-# CPU face detection. Hi3516CV500 only, and only in a firmware built with it
-# included -- otherwise this section does not exist. Runs inference only on
-# frames where motion fired, so motionDetect.enabled must be on too.
+# On-camera face detection. Hi3516CV500 only, and only where the firmware
+# offers it -- otherwise this section does not exist. Reported only on frames
+# where motion fired, so motionDetect.enabled must be on too.
 #faceDetect:
   #enabled: false
   #confidence: 50               # 0-100, minimum score to report a face
