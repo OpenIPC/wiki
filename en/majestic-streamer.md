@@ -1291,7 +1291,9 @@ curl -u viewer:PASSWORD -o /dev/null -w '%{http_code}\n' http://192.168.1.10/ima
 ```
 
 `404` means this firmware has no raw endpoint at all. `501` means it has one and
-`isp.rawMode` is `none`. `200` means you already have the file.
+`isp.rawMode` is `none`. `503` means a capture is already running and this one
+was refused — wait for the first to finish and ask again. `200` means you
+already have the file.
 
 **It is on by default.** `isp.rawMode` is `slow` unless you changed it, so a
 camera that has never been configured for this still answers. `/image.yuv420`
@@ -1315,13 +1317,19 @@ with.
 #### On a board with little RAM, read this before you ask for one
 
 A raw frame is not a thumbnail. The uncompressed file is the whole sensor
-readout, and the streamer needs that much memory *while it is serving the
-request*. Measured on the 5 MP camera above, peak memory rose by about 4.8 MB
-for a single capture. Ask for two at the same time and it needs it twice over.
+readout, and the camera needs that much memory *while it is serving the
+request*. Ask for two at the same time and it needs it twice over.
 
-Older firmware needed roughly twice that — about 9 MB — because the frame was
-copied into a send buffer as well as read from the sensor. If your camera
-predates that change, assume the larger figure.
+How much depends on the build. Measured on the 5 MP camera above, watching the
+streamer's resident memory across one capture:
+
+| build date from `majestic -v` | peak memory rise |
+|---|---|
+| 2026-09-15 and earlier | about 9 MB |
+| after 2026-09-15 | about 4.8 MB |
+
+Check yours with `majestic -v` — the date is the third field. If you are unsure,
+budget the larger figure.
 
 That is fine on a 128 MB board and fatal on a small one. Measured on a
 Hi3518EV200 with 27 MB of RAM and roughly 10 MB free: several overlapping
@@ -1340,9 +1348,9 @@ memory for.
 So on anything memory-constrained:
 
 - **Take one at a time.** Wait for each capture to finish before asking for the
-  next. Current firmware refuses an overlapping request with **503** when
-  `isp.rawMode` is `slow`, rather than attempting it — but older builds do not,
-  and that is where the kill above came from.
+  next. Builds after 2026-09-15 refuse an overlapping request with **503** when
+  `isp.rawMode` is `slow`, rather than attempting it. Earlier ones attempt it,
+  which is where the kill above came from.
 - **Do not point a monitoring script at `/image.dng`.** It is a diagnostic
   endpoint, not a stream. Anything that polls it on a timer will eventually
   overlap with itself.
@@ -1353,12 +1361,12 @@ So on anything memory-constrained:
   that `curl` pulls in 1.2 s over a LAN took 4.5 to 5.7 s from a browser, and
   once, on a loaded camera, 142 s. A client that gives up and retries while the
   first request is still running is how you arrive at the paragraph above.
-- **A download that stalls will be cut off.** Current firmware gives a raw
-  transfer 15 seconds and then closes the connection, because the frame is
-  served straight out of a video buffer and holding one indefinitely starves
-  the encoder. A truncated `.dng` on a slow or congested link is that, not
-  corruption — retry it on a better connection, or fetch it from the camera
-  itself over the loopback interface.
+- **A download that stalls will be cut off.** Builds after 2026-09-15 give a
+  raw transfer 15 seconds and then close the connection; the camera will not
+  hold a capture open indefinitely for one slow reader. A short `.dng` on a
+  congested link is that, not corruption — check the size against
+  `Content-Length`, then retry on a better connection, or fetch it on the
+  camera itself over the loopback interface, where it takes about a second.
 
 If the streamer disappears while you are working with raw frames, this is the
 first thing to check: `logread | grep -i 'out of memory'`.
