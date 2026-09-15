@@ -1676,6 +1676,12 @@ can find a level by ear without interrupting anyone watching the stream. On the
 other SoCs a volume change still rebuilds the pipeline, which drops every
 stream for a moment.
 
+To find one without walking over to the camera, the web interface has a
+[soundcheck](audio-soundcheck.md) under **Camera → Settings**, in the **Audio**
+section: it plays a test sound through the speaker, measures what the microphone
+sends back, and settles on a level from the difference. It needs a camera that
+applies a level live, which is the same two families.
+
 ### How to create an audio file to play on camera's speaker over network
 
 Using [sox][sox] program convert any source audio file to raw [PCM][pcm]:
