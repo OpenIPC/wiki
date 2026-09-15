@@ -860,6 +860,10 @@ something shifting in frame does not chop one event into several clips. A long
 event still rotates on `records.split`, so an afternoon of movement does not
 become one enormous file.
 
+To have the camera run a script of yours when each clip is finished — or to get
+a clip at all on a camera with no card — see
+[When something moves](motion-events.md).
+
 #### Don't raise `gopSize` above `preRollSec`
 
 A recording can only begin at a keyframe, and `gopSize` is how many seconds
@@ -891,9 +895,13 @@ Motion: no run-up — none of the 5s held opens at a keyframe.
 Set video0.gopSize at or below records.preRollSec (5s) to keep it.
 ```
 
-The run-up is also limited by RAM — five seconds at 4 Mbit is about 2.5 MB, so
-a 32 MB camera holds fewer seconds than you asked for and logs what it could
-actually keep.
+The run-up is also limited by RAM. It gets the seconds you asked for at the
+stream's own bitrate, capped at an eighth of the board's memory and never more
+than 8 MB — so five seconds at 4 Mbit, about 2.4 MB, fits comfortably on a
+32 MB camera and is trimmed on a 16 MB one, which logs what it could actually
+keep. `records_preroll_bytes` reports what it is holding at any moment, and `0`
+while nothing is armed: the run-up is kept only while motion recording wants
+it, not at all times.
 
 #### Checking it
 
@@ -904,7 +912,8 @@ curl -s http://<camera>/metrics | grep records_
 `records_motion_clips_total` counts clips closed by an event. If that and
 `records_fragments_written_total` are both zero, nothing is triggering — start
 with `motionDetect.enabled` and `sensitivity`. `records_fragments_skipped_total`
-climbing by several per event is the `gopSize` problem above.
+climbing by several per event is the `gopSize` problem above, and
+`records_preroll_bytes` says what the run-up is holding right now.
 
 Majestic warns once, when recording is switched on, if `records.mode` is
 `motion` while `motionDetect.enabled` is off — a camera that has quietly
