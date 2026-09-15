@@ -27,10 +27,11 @@ it looks:
   looks again on a fixed interval, so even once a new card is in, recording
   restarts roughly half a minute later rather than at once.
 - **On firmware older than September 2026, it also cost you the slot.** The
-  mount outlived the card, so the *next* card was silently never mounted — the
-  camera looked fine, streamed fine, and recorded nothing until somebody
-  rebooted it. Nothing was logged either, because the hotplug helper runs with
-  nowhere to write messages. Newer firmware releases the mount when the card
+  mount outlived the card, so the *next* card was never mounted — the camera
+  looked fine, streamed fine, and recorded nothing until somebody rebooted it.
+  There was no error on screen and nothing in the system log to find
+  afterwards, so do not go hunting for the line that explains it: on those
+  builds there isn't one. Newer firmware releases the mount when the card
   leaves, and says so when it cannot; on an older build, a reboot clears it.
 
 ### The guided swap
