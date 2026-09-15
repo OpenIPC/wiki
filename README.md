@@ -59,6 +59,7 @@ OpenIPC Wiki
 - [Majestic plugins](en/majestic-plugins.md)
 - [Raw editor](en/raw-editor.md)
 - [What the camera detects, and how to read it](en/analytics-metadata.md)
+- [When something moves: clips, hooks and your own scripts](en/motion-events.md)
 - [Encrypted recordings on the SD card](en/recording-encryption.md)
 - [Changing the SD card on a running camera](en/sd-card-swap.md)
 - [Web interface](en/web-interface.md)
