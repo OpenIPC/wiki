@@ -55,7 +55,11 @@ isp:
   #awbMode: auto                # auto|manual|day|cloudy|incandescent|
                                 # flourescent|twilight|shade|warm|custom
   #memMode: reduction           # normal | reduction        (HiSilicon/Goke)
-  #slowShutter: disabled        # disabled|low|medium|high  (HiSilicon/Goke)
+  #slowShutter: medium          # disabled|low|medium|high  (HiSilicon/Goke)
+                                # medium is the DEFAULT, not disabled: a camera
+                                # that sets nothing is already in slow shutter,
+                                # which also fills in the exposure and gain
+                                # limits below that you did not give
   #dis: false                   # digital stabilisation     (HiSilicon/Goke, Ingenic)
   #wdr: 0                       #                           (SigmaStar)
   #edgeGain: false              #                           (SigmaStar)
@@ -66,12 +70,34 @@ isp:
   #suspendWhenIdle: false       # HiSilicon/Goke: stop the sensor and ISP when
                                 # nothing wants frames -- see majestic-streamer.md
   #suspendIdleSeconds: 5        # grace period before it does, 1-300
-  # Manual exposure and gain. Each is skipped when absent, so leaving it out
-  # keeps the automatic behaviour.
-  #exposure: 0                  #                (HiSilicon/Goke, SigmaStar, Ingenic)
-  #aGain: 0                     #                (HiSilicon/Goke, SigmaStar)
-  #dGain: 0                     #                (HiSilicon/Goke)
-  #ispGain: 0                   #                (HiSilicon/Goke)
+  # Exposure and gain. Zero, or absent, leaves the sensor default alone.
+  # The SAME KEY MEANS DIFFERENT THINGS per vendor -- see "Exposure and gain"
+  # in majestic-streamer.md before copying a number between platforms.
+  #
+  # TWO OF THESE NEED A SEPTEMBER 2026 OR NEWER BUILD. aeMode does not exist
+  # before that and is rejected. The three gains were written in the sensor's
+  # own fixed-point units on HiSilicon/Goke, where 8x was 8192 -- on an older
+  # build, 8 asks for 8/1024 of unity and not for eight times. Check with
+  # curl http://localhost/api/v1/config.schema.json if you are unsure.
+  #aeMode: auto                 # auto | manual  (HiSilicon/Goke, 2026-09+)
+                                # auto: the four below are limits auto-exposure
+                                # works inside. manual: they are the values, and
+                                # the picture stops following the light
+  #exposure: 0                  # HiSilicon/Goke and SigmaStar: MILLISECONDS,
+                                # the longest auto-exposure may use (also caps
+                                # the frame rate). Ingenic: MICROSECONDS, and it
+                                # is the exposure itself -- setting it stops the
+                                # ISP metering
+                                #        (HiSilicon/Goke, SigmaStar, Ingenic T31)
+  #aGain: 0                     # analog gain, as a MULTIPLIER (8 means 8x) on a
+                                # 2026-09+ build; see the note above for older
+                                #                     (HiSilicon/Goke, SigmaStar)
+  #dGain: 0                     # sensor digital gain, as a multiplier
+                                #                          (HiSilicon/Goke)
+  #ispGain: 0                   # ISP digital gain, as a multiplier. Applied
+                                # after the raw data is read, so it brightens
+                                # the picture and not a RAW snapshot
+                                #                          (HiSilicon/Goke)
 
 image:
   mirror: false

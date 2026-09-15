@@ -297,6 +297,178 @@ root@openipc-ssc377d:~# wget -q -O - http://localhost/night/toggle
 *
 ```
 
+### Exposure and gain
+
+`isp.exposure` does not mean the same thing on every camera, and nothing in the
+name says so. Before copying a number from one platform to another:
+
+| your camera | what `isp.exposure` is | unit | range | does auto-exposure keep running? |
+| --- | --- | --- | --- | --- |
+| HiSilicon / Goke | the **longest** auto-exposure may use | **milliseconds** | 0–1000 | yes, unless `isp.aeMode: manual` |
+| SigmaStar | the **longest** auto-exposure may use | **milliseconds** | 0–200 | yes |
+| Ingenic (T31) | **the exposure itself** | **microseconds** | 0–65535 | **no** — setting it stops the metering |
+
+So `isp.exposure: 20` asks for a 20 millisecond limit on a HiSilicon camera and
+a 20 **microsecond** fixed shutter on an Ingenic one. Three orders of magnitude
+apart, and one of them switches automatic exposure off.
+
+Zero, or leaving the key out, means "leave the sensor default alone" everywhere.
+
+#### Why your exposure sweep looks like it does nothing
+
+This is the most common report about this section, and the setting is usually
+working exactly as intended.
+
+On HiSilicon, Goke and SigmaStar these are **limits handed to auto-exposure**,
+not the exposure. Auto-exposure goes on metering inside them, and it holds the
+picture at its target brightness by spending gain instead. Raise the exposure
+limit and it simply uses less gain; the picture barely moves.
+
+Measured on a 5 MP IMX335 attached to a Goke GK7205V300, changing only
+`isp.exposure` and reading the camera's own gauges back:
+
+| `isp.exposure` | `isp_exptime` | `isp_again` | picture |
+| ---: | ---: | ---: | --- |
+| 1 | 1 000 µs | 31.6× | darker — the gain ran out |
+| 10 | 10 000 µs | 13.3× | unchanged |
+| 100 | 33 304 µs | 4.1× | unchanged |
+| 1 000 | 33 304 µs | 4.0× | unchanged |
+| 1 000 000 | 33 304 µs | 3.8× | unchanged |
+
+The last row is there to show how flat the curve is, not as something to repeat:
+values above the maximum in the table at the top are refused now, which they
+were not when this was measured. Anything from about 100 upwards demonstrates
+the same thing.
+
+Two things are happening. **Above about 33 ms the exposure stops growing** —
+that is the frame period at `video0.fps: 30`, so everything from 100 upwards
+asks for something the frame rate cannot give. And **the gain falls to
+compensate** for the rest, from 31.6× down to 3.8×, holding the brightness
+steady. A sweep from 1 to 1 000 000 is really a sweep from 1 ms to 33 ms, and
+auto-exposure absorbs almost all of it.
+
+There is a second trap. Setting `isp.exposure` **on its own** also hands
+auto-exposure a 32× analog gain allowance, because `isp.slowShutter` defaults to
+`medium` and that mode fills in the limits you did not give. The thing that
+cancels the experiment switches on with the experiment.
+
+To make the exposure actually drive the picture, pin the gains as well:
+
+```yaml
+isp:
+  exposure: 20      # milliseconds
+  aGain: 1          # 1x
+  dGain: 1
+  ispGain: 1
+```
+
+With nothing left to spend, auto-exposure runs up against the limit and the raw
+signal becomes proportional to the exposure — measured on the same camera as a
+straight line through 5, 10, 20 and 33 ms with a correlation of 0.99992.
+
+**That holds only while the scene is too dark to reach the target at those
+gains.** Auto-exposure is still choosing; pinning the gains removes what it
+would otherwise spend, it does not force it onto the limit. Brighten the scene,
+or raise the limit far enough, and it settles below the limit again and the
+sweep flattens — on the same camera, limits of 200 and 500 ms both produced
+about 135 ms, because that was already bright enough.
+
+`isp_exposureismax` is how you tell which side of that you are on: `1` means
+auto-exposure is against the limit and your number is deciding the picture, `0`
+means it chose something lower and the limit is not what matters. Watch it while
+you sweep. If you want the exposure held regardless of the scene, that is
+`isp.aeMode: manual` below rather than a limit.
+
+#### Telling the camera the exposure instead (HiSilicon and Goke)
+
+Since **majestic's September 2026 builds**:
+
+```yaml
+isp:
+  aeMode: manual
+  exposure: 20      # milliseconds, held
+  aGain: 1          # and 1x, held
+  dGain: 1
+  ispGain: 1
+```
+
+`manual` makes the same four keys the **values** rather than the limits. The ISP
+stops metering and the picture no longer follows the light. `auto` is the
+default and is what a camera has always done.
+
+**Set all four.** A key you leave out is not left metering — it takes the ISP's
+own value for it. Measured on the Goke camera above: in a dark room with only
+`isp.exposure` given, the gain sat at 1× while automatic exposure had been using
+about 31× a moment earlier.
+
+The frame period still bounds the shutter. At 30 fps, manual exposures of 50,
+100 and 200 ms all delivered the same 33 ms. `isp.slowShutter` is
+auto-exposure's mechanism for buying a longer shutter, so it does nothing here.
+
+#### Ingenic: microseconds, and the key is its own switch
+
+On a T31 `isp.exposure` **is** the exposure, in microseconds, and setting it
+stops the metering. There is no `isp.aeMode` — `0` is how you switch it back off.
+
+**T31 only.** A T40 does not carry this setting at all, and will not offer it.
+The older T20, T21 and T23 do not either.
+
+Measured on a T31 with an SC2332, asking for a value and reading `isp_exptime`
+back: 1 000, 10 000, 30 000 and 60 000 gave 986, 9 976, 29 986 and 59 972 µs.
+It tracks one-to-one, rounded to whole sensor integration lines. The maximum is
+65 535 µs, a little over 65 ms.
+
+#### The gains are multipliers
+
+**This changed in majestic's September 2026 builds, and it will change what an
+existing camera does.** `isp.aGain`, `isp.dGain` and `isp.ispGain` are plain
+multipliers now: `aGain: 8` means eight times. They previously had to be written
+in the sensor's own fixed-point units on HiSilicon and Goke, where eight times
+was `8192`.
+
+**If you set any of them by hand, divide your value by 1024.** A camera left
+with the old spelling runs at maximum gain until you do — the number is out of
+range, and it is clamped rather than ignored. SigmaStar has always used plain
+multipliers and is unaffected. Ingenic has none of these three keys.
+
+`isp.ispGain` is worth one note: it is applied after the raw data has been read,
+so it brightens the picture and the JPEG but leaves a
+[RAW snapshot](#raw-sensor-data-as-adobe-dng) exactly as it was.
+
+#### Reading back what the camera actually did
+
+Do not infer it — the camera reports it:
+
+```
+curl -s -u root:PASSWORD http://192.168.1.10/metrics | grep '^isp_'
+```
+
+`root`, not a viewer account: `/metrics` is not one of the paths a media-only
+account may reach (see [User levels in the system](#user-levels-in-the-system)).
+
+- `isp_exptime` — the exposure in use, in microseconds. This is the number to
+  compare against what you asked for.
+- `isp_again`, `isp_dgain`, `isp_ispdgain` — the gains in use, in the sensor's
+  own units rather than the multipliers you set.
+- `isp_avelum` — the brightness auto-exposure is steering towards.
+- `isp_exposureismax` — **read this one first.** `1` means auto-exposure is
+  pressed against a limit, so your setting is what is deciding the picture. `0`
+  means it chose something below the limit and your setting is not what matters
+  right now.
+
+If the `isp_` lines are missing altogether, the image pipeline is asleep — see
+[Stopping the sensor and ISP when nothing is watching](#stopping-the-sensor-and-isp-when-nothing-is-watching).
+Open a stream, or a snapshot, and ask again.
+
+If your camera is a HiSilicon or Goke one, a
+[RAW snapshot](#raw-sensor-data-as-adobe-dng) carries the same information in its
+own tags, so `exiftool -ExposureTime -ISO shot.dng` says what was used for that
+one frame. SigmaStar and Ingenic cameras have no such endpoint and answer 404 —
+`/metrics` above is the readback for them. Two cautions if you are measuring from the raw data: subtract the
+file's `BlackLevel` first, because the pedestal is a large share of a dark
+frame; and do not use the ISO tag to normalise, because it includes the ISP
+digital gain, which is not in the raw pixels at all.
+
 ### Auto day/night detection
 
 For how the filter itself is wired and driven — and why a swapped pair gives you
