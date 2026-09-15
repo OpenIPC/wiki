@@ -779,10 +779,17 @@ curl -X POST http://localhost/api/v1/records/standdown
 curl -X POST http://localhost/api/v1/records/resume
 ```
 
-The pause closes the open clip properly and releases the card, which is what
-makes the card removable. It expires on its own after ten minutes, because a
-pause that outlives its reason is a camera quietly not recording. `stoodDown`
-in the reply is what actually happened rather than what was asked for.
+The pause closes the open clip properly and lets go of it, which is what makes
+the card **possible to unmount** — it does not unmount anything itself, and a
+paused camera still has the card mounted. Nothing is safe to pull until an
+`umount` has actually succeeded. It expires on its own after ten minutes,
+because a pause that outlives its reason is a camera quietly not recording.
+
+`stoodDown` in the reply is what actually happened rather than what was asked
+for, and it is also how you tell whether this camera has the feature at all: a
+build without it answers **200 with an empty body** rather than an error, so
+the status code will not tell you and a script that trusts one will think it
+paused a camera it did not.
 
 This is what [changing the SD card on a running
 camera](sd-card-swap.md) is built on, and that page is the guided version.
