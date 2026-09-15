@@ -66,12 +66,26 @@ isp:
   #suspendWhenIdle: false       # HiSilicon/Goke: stop the sensor and ISP when
                                 # nothing wants frames -- see majestic-streamer.md
   #suspendIdleSeconds: 5        # grace period before it does, 1-300
-  # Manual exposure and gain. Each is skipped when absent, so leaving it out
-  # keeps the automatic behaviour.
-  #exposure: 0                  #                (HiSilicon/Goke, SigmaStar, Ingenic)
-  #aGain: 0                     #                (HiSilicon/Goke, SigmaStar)
-  #dGain: 0                     #                (HiSilicon/Goke)
-  #ispGain: 0                   #                (HiSilicon/Goke)
+  # Exposure and gain. Zero, or absent, leaves the sensor default alone.
+  # The SAME KEY MEANS DIFFERENT THINGS per vendor -- see "Exposure and gain"
+  # in majestic-streamer.md before copying a number between platforms.
+  #aeMode: auto                 # auto | manual        (HiSilicon/Goke)
+                                # auto: the four below are limits auto-exposure
+                                # works inside. manual: they are the values, and
+                                # the picture stops following the light
+  #exposure: 0                  # HiSilicon/Goke and SigmaStar: MILLISECONDS,
+                                # the longest auto-exposure may use (also caps
+                                # the frame rate). Ingenic: MICROSECONDS, and it
+                                # is the exposure itself -- setting it stops the
+                                # ISP metering   (HiSilicon/Goke, SigmaStar, Ingenic)
+  #aGain: 0                     # analog gain, as a MULTIPLIER (8 means 8x)
+                                #                     (HiSilicon/Goke, SigmaStar)
+  #dGain: 0                     # sensor digital gain, as a multiplier
+                                #                          (HiSilicon/Goke)
+  #ispGain: 0                   # ISP digital gain, as a multiplier. Applied
+                                # after the raw data is read, so it brightens
+                                # the picture and not a RAW snapshot
+                                #                          (HiSilicon/Goke)
 
 image:
   mirror: false
