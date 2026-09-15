@@ -16,3 +16,7 @@ defconfig
 rootfs
 ipctool
 ffplay
+MediaMTX
+coturn
+OvenMediaEngine
+NATted
