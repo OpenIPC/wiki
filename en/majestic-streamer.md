@@ -1416,6 +1416,11 @@ astrophotography-style stacking — anywhere you want the numbers rather than a
 pretty picture. For a picture, `/image.jpg` has had the camera's own tuning
 applied and will look far better with no work at all.
 
+To look at one without leaving the browser, the web interface has a
+[raw editor](raw-editor.md) under **Camera → Raw**: it develops the frame on
+your own machine, measures the sensor, and can calibrate the camera's colour
+from a chart.
+
 ### How to play audio stream
 
 Use [ffplay][ffplay] utility from [ffmpeg][ffmpeg] package.
