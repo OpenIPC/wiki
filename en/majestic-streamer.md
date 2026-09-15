@@ -332,6 +332,11 @@ Measured on a 5 MP IMX335 attached to a Goke GK7205V300, changing only
 | 1 000 | 33 304 µs | 4.0× | unchanged |
 | 1 000 000 | 33 304 µs | 3.8× | unchanged |
 
+The last row is there to show how flat the curve is, not as something to repeat:
+values above the maximum in the table at the top are refused now, which they
+were not when this was measured. Anything from about 100 upwards demonstrates
+the same thing.
+
 Two things are happening. **Above about 33 ms the exposure stops growing** —
 that is the frame period at `video0.fps: 30`, so everything from 100 upwards
 asks for something the frame rate cannot give. And **the gain falls to
@@ -429,11 +434,14 @@ so it brightens the picture and the JPEG but leaves a
 
 #### Reading back what the camera actually did
 
-Do not infer it. Every camera reports it:
+Do not infer it — the camera reports it:
 
 ```
-curl -s -u viewer:PASSWORD http://192.168.1.10/metrics | grep '^isp_'
+curl -s -u root:PASSWORD http://192.168.1.10/metrics | grep '^isp_'
 ```
+
+`root`, not a viewer account: `/metrics` is not one of the paths a media-only
+account may reach (see [User levels in the system](#user-levels-in-the-system)).
 
 - `isp_exptime` — the exposure in use, in microseconds. This is the number to
   compare against what you asked for.
@@ -445,9 +453,15 @@ curl -s -u viewer:PASSWORD http://192.168.1.10/metrics | grep '^isp_'
   means it chose something below the limit and your setting is not what matters
   right now.
 
-A [RAW snapshot](#raw-sensor-data-as-adobe-dng) carries the same information in
-its own tags, so `exiftool -ExposureTime -ISO shot.dng` says what was used for
-that frame. Two cautions if you are measuring from the raw data: subtract the
+If the `isp_` lines are missing altogether, the image pipeline is asleep — see
+[Stopping the sensor and ISP when nothing is watching](#stopping-the-sensor-and-isp-when-nothing-is-watching).
+Open a stream, or a snapshot, and ask again.
+
+If your camera is a HiSilicon or Goke one, a
+[RAW snapshot](#raw-sensor-data-as-adobe-dng) carries the same information in its
+own tags, so `exiftool -ExposureTime -ISO shot.dng` says what was used for that
+one frame. SigmaStar and Ingenic cameras have no such endpoint and answer 404 —
+`/metrics` above is the readback for them. Two cautions if you are measuring from the raw data: subtract the
 file's `BlackLevel` first, because the pedestal is a large share of a dark
 frame; and do not use the ISO tag to normalise, because it includes the ISP
 digital gain, which is not in the raw pixels at all.

@@ -73,7 +73,13 @@ isp:
   # Exposure and gain. Zero, or absent, leaves the sensor default alone.
   # The SAME KEY MEANS DIFFERENT THINGS per vendor -- see "Exposure and gain"
   # in majestic-streamer.md before copying a number between platforms.
-  #aeMode: auto                 # auto | manual        (HiSilicon/Goke)
+  #
+  # TWO OF THESE NEED A SEPTEMBER 2026 OR NEWER BUILD. aeMode does not exist
+  # before that and is rejected. The three gains were written in the sensor's
+  # own fixed-point units on HiSilicon/Goke, where 8x was 8192 -- on an older
+  # build, 8 asks for 8/1024 of unity and not for eight times. Check with
+  # curl http://localhost/api/v1/config.schema.json if you are unsure.
+  #aeMode: auto                 # auto | manual  (HiSilicon/Goke, 2026-09+)
                                 # auto: the four below are limits auto-exposure
                                 # works inside. manual: they are the values, and
                                 # the picture stops following the light
@@ -83,7 +89,8 @@ isp:
                                 # is the exposure itself -- setting it stops the
                                 # ISP metering
                                 #        (HiSilicon/Goke, SigmaStar, Ingenic T31)
-  #aGain: 0                     # analog gain, as a MULTIPLIER (8 means 8x)
+  #aGain: 0                     # analog gain, as a MULTIPLIER (8 means 8x) on a
+                                # 2026-09+ build; see the note above for older
                                 #                     (HiSilicon/Goke, SigmaStar)
   #dGain: 0                     # sensor digital gain, as a multiplier
                                 #                          (HiSilicon/Goke)
