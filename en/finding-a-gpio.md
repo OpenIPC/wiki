@@ -83,9 +83,17 @@ find, then run it again if you want another.
 #### Which pins move the day/night filter?
 
 The filter is the one thing on these pads the camera can see through its own
-lens, so this hunt watches the picture instead, and drives pads **in pairs** —
-an IR-cut filter is an H-bridge across two pads and no single-pad operation moves
-it. [How an IR-cut filter is driven](ircut-filter.md) explains the mechanism.
+lens, so this hunt watches the picture instead, and drives pads **in pairs**. The
+usual arrangement is an H-bridge across two pads, and no single-pad operation
+moves one of those — which is why pairs, and why this hunt cannot find a filter
+wired to a single pad. [How an IR-cut filter is driven](ircut-filter.md) explains
+the bridge itself.
+
+**Which kind you have is a fact about the board**, and the quickest answer is
+[the board table](gpio-settings.md): a row with both an IRCUT1 and an IRCUT2 is a
+two-pad bridge, a row with only IRCUT1 is a single-pad filter. If your board is
+not listed and the pair hunt comes up empty, a single pad is one of the reasons —
+set that one by hand and let **Test the filter** adjudicate it.
 
 It tries the pairs [the board table](gpio-settings.md) records for your SoC
 first, so a board already listed there is usually found in seconds. **It needs
@@ -118,10 +126,19 @@ A pad is skipped when any of these is true:
   sensor, the PTZ motor driver
 - it is on the camera's own leave-alone list (below)
 
-Where the camera **cannot** ask one of those questions — no way to see which pads
-the PTZ driver is on, for instance — it refuses to drive anything at all rather
-than treating unknown as free. That is the honest answer, and the page says which
-question it could not ask.
+**Two of those questions stop the hunt outright if they cannot be answered**:
+which pads a kernel driver holds, and which pads the PTZ motor driver is on. Not
+knowing is not the same as there being nothing there, so the camera refuses to
+drive anything at all rather than treating unknown as free, and the page says
+which question it could not ask. Setting a pin by hand still works — that writes
+a number into a field and moves nothing.
+
+**Not being able to ask the chip what a pad is carrying does not stop it.** The
+hunts still run on the checks that do work; there are simply fewer pads ruled out
+in advance, and the page says so instead of showing you a count that implies a
+check it never made. This is the one to keep in mind on a part whose pads cannot
+be read: nothing has changed about the risk except how much of it was screened
+off for you.
 
 > **This still drives pads whose job is unknown.** One of them may reset the
 > network, cut power to the sensor, or stop the camera answering. That risk
@@ -134,12 +151,19 @@ question it could not ask.
 
 It is a hunt across hardware nobody documented, so assume it will, at least once.
 
-**The camera stops answering.** The pad being driven is written to flash *before*
-any register is touched, so the record survives the pad that caused it. On the
-next start the camera reads that record, sees an attempt it never came back from,
-and puts those pins on a **leave-alone list** — permanently, without anybody
-having to reopen the page. Nothing will drive them again, not the hunt and not
-anything else.
+**The camera stops answering.** Restart it. It comes back knowing what it was
+driving and puts that on a **leave-alone list** — permanently. Nothing will touch
+it again, not the hunt and not anything else. You do not have to be watching for
+this to work, and you do not have to reopen the page: the reboot may have been
+hours before you next look, and the exclusion is already in place when you get
+there.
+
+**What lands on the list is what was being driven**, which differs by hunt: the
+single-pin hunt excludes the one pin it was holding, and the pair hunt excludes
+**both** pins of the pair. The pair hunt cannot tell which of the two did it — it
+drives them together — so it rules out both rather than guess, and neither is
+offered again in any later pair. If you have reason to believe one of them was
+innocent, take that one back by hand from the list below.
 
 **The connection drops but the camera is fine.** This is the awkward one: from
 the camera's side nothing went wrong, so it has no record. Your browser does — it
@@ -181,19 +205,32 @@ Worth knowing before you spend twenty minutes on it:
   and confirm it with **Test the filter**.
 - **Pads that are already carrying something.** If what you soldered went onto
   the serial console's pad, the hunt will refuse it — correctly. Move the wire.
-- **Anything on a camera whose chip cannot be asked** what its pads are doing.
-  The hunts still run, on the checks that do work, with fewer pads ruled out in
-  advance.
 
 ---
 
 ### Without the web interface
 
-**On the vendor firmware, before you flash.** `ipctool gpio scan` recognises the
-IR-cut pads because the stock application leaves them configured as driven
-outputs. After conversion that evidence is gone. If you still have the original
-firmware on the camera, this is the cheapest answer there is — see
-[Using ipctool](example-ipctool.md).
+**On the vendor firmware, before you flash.** This is the cheapest answer there
+is, and it stops being available the moment you convert the camera: the stock
+application leaves the IR-cut pads configured as driven outputs, and after
+conversion nothing has claimed them and that evidence is gone.
+
+Run `ipctool gpio scan` and **cover and uncover the lens with your palm a couple
+of times** while it runs — that is what makes the stock firmware switch the
+filter, and the pads it drives are what the scan then reports. The
+[FAQ's pink-tint entry](faq.md#camera-image-has-a-pink-tint) has the whole
+routine including getting the tool onto a camera you have not flashed yet. Read
+it as the **stock-firmware** route: the same commands on a converted camera find
+nothing, for the reason in the paragraph above.
+
+**Asking about muxing from a shell.** `ipctool reginfo` prints every pad with its
+current function marked, which is the same question the Pins page answers when it
+greys a pad out — and it works on a converted camera too, when you want the answer
+without a browser.
+
+`ipctool gpio mux <pin>` asks about one pad. Give it a second argument and it
+**changes** the pad's function rather than reporting it, so leave that off unless
+that is what you mean.
 
 **From a shell on a converted camera.** The same hunts are HTTP, so they script:
 

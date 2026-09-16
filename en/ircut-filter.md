@@ -20,11 +20,14 @@ have found, [Board specific GPIO settings list](gpio-settings.md).
 
 ---
 
-### It takes two pads, not one
+### Usually two pads, not one
 
-The filter is moved by an H-bridge across **two** GPIO pads. No single-pad
-operation actuates it. Measured on a XiongMai 85H50AI (Hi3516EV300, pads 11 and
-10), every state one pad can reach:
+The usual arrangement moves the filter with an H-bridge across **two** GPIO pads,
+and no single-pad operation actuates one of those. (Some boards drive a filter
+from a single pad instead — `nightMode.irCutSingleInvert` exists for them — but
+the two-pad bridge is what you will meet most of the time, and it is what the
+tables below record.) Measured on a XiongMai 85H50AI (Hi3516EV300, pads 11 and
+10), every state one pad can reach on such a board:
 
 | what you do | what the filter does |
 |---|---|
@@ -111,14 +114,23 @@ warning — worded to say which it is.
 
 > **The hunt drives pads whose job is unknown**, and one of them may reset the
 > network, cut power to the sensor or stop the camera answering. That risk cannot
-> be removed, only made survivable: the pads being driven are written to flash
-> before any register is touched, so a camera that has to be restarted comes back
-> knowing which pair did it and leaves them alone from then on. Pads a kernel
-> driver holds, and pads the chip says are already carrying something, are
-> refused outright. Prefer entering known pins from the table when you have
-> them — and see [Finding out what a pin is wired to](finding-a-gpio.md) for
-> what the hunt refuses, what it cannot find, and how to recover when a pad does
-> take the camera down.
+> be removed, only made survivable: a camera that has to be restarted comes back
+> knowing which pair took it down, and leaves **both** of those pads alone from
+> then on — it drives them together, so it cannot tell which of the two did it.
+>
+> Pads a kernel driver holds, and pads the chip says are already carrying
+> something, are refused outright. Two questions stop the hunt **before it
+> starts** if the camera cannot answer them — which pads a kernel driver holds,
+> and which pads the PTZ motor driver is on — and it says which one it could not
+> ask rather than treating unknown as free. **A chip that cannot be asked what a
+> pad carries does not stop it**, though: the hunt runs with that check missing
+> and fewer pads screened off, which is worth knowing before you start one on a
+> part whose pads cannot be read.
+>
+> Prefer entering known pins from the table when you have them — and see
+> [Finding out what a pin is wired to](finding-a-gpio.md) for what the hunt
+> refuses, what it cannot find, and how to recover when a pad does take the
+> camera down.
 
 ### Doing it by hand
 
