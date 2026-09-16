@@ -253,10 +253,17 @@ a **Test the filter** button that moves it and reports "wired correctly", "wired
 backwards" or "stuck" — quicker than reasoning about it, and it does not require
 waiting for nightfall. See [How an IR-cut filter is driven](ircut-filter.md).
 
-**This table is read by software as well as by people.** The web interface's pin
-scan tries the pairs recorded here before anything else, so a board listed below
-is normally found within seconds while an unlisted one falls back to a much
-longer sweep. Adding a board here helps the next person twice over.
+**This table is read by software as well as by people.** The filter hunt on
+**Settings → Pins** tries the pairs recorded here before anything else, so a
+board listed below is normally found within seconds while an unlisted one falls
+back to a much longer sweep. Adding a board here helps the next person twice
+over.
+
+**If your board is not here, the camera can work it out.** That is what
+[Finding out what a pin is wired to](finding-a-gpio.md) is for: it covers the
+hunt for the filter pair, the hunt for everything else — a wireless card, a card
+slot, a second network port — what the camera refuses to drive and why, and how
+to recover when a pad does take it down.
 
 [^1]: 00014914 firmware
 [^2]: 00014911 firmware
