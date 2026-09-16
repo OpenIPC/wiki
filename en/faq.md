@@ -269,13 +269,44 @@ Enable and configure Core Dump in the menu **Majestic** > **Majestic Debugging**
 
 You need to specify GPIO pins to control the infrared filter.
 Settings for some cameras can be found in [this table][1].
-If your camera is not in the table then you need to use [ipctool utility][2].
 
-The OpenIPC firmware will automatically download the latest version of the
-utility to the /tmp directory when `ipctool` is invoked first time.
+If your camera is not in that table, **how you find the pins depends on which
+firmware is on the camera right now**, because the two routes work for opposite
+reasons.
 
-On stock firmware, you will need to download the utility to the camera yourself
-using any tools available in the system: wget, curl, tftp etc.
+##### Already running OpenIPC
+
+Open **Settings → Pins** in the web interface and press *Which pins move the
+day/night filter?*. The camera drives pads itself and watches its own picture for
+the filter to move, then hands the pair it finds to **Day / Night** with the Save
+bar up. It needs daylight — at night nothing looks like it moved.
+
+**If it finds nothing, one pad may be the reason.** This hunt drives pads in
+pairs, because the usual filter is an H-bridge across two of them — so it cannot
+actuate a filter wired to a *single* pad, and on such a board it runs to the end
+and reports nothing. The board table tells you which kind you have: a row with
+both an IRCUT1 and an IRCUT2 is a two-pad bridge, a row with only IRCUT1 is a
+single-pad filter. For a single pad, set it by hand on **Day / Night**, turn on
+`Single IRcut is inverted` if the picture is backwards, and let **Test the
+filter** adjudicate.
+
+[Finding out what a pin is wired to][4] covers the rest: what the camera refuses
+to drive and why, how to recover if a pad does take it down, and the second hunt
+for everything that is not a filter — a wireless card, a card slot, a second
+network port.
+
+`ipctool gpio scan` is **not** the tool for this case; see below for why.
+
+##### Still on the stock firmware
+
+`ipctool gpio scan` is the cheapest answer there is, and it stops working the
+moment you convert the camera: it recognises the filter pads because the stock
+application leaves them configured as driven outputs, and after conversion
+nothing has claimed them and that evidence is gone. **So do this before you
+flash, if you still can.**
+
+You will need to download the [ipctool utility][2] to the camera yourself using
+any tools available in the system: wget, curl, tftp etc.
 
 For example, download the ipctool utility to TFTP server on the local network,
 then download it to the camera:
@@ -297,7 +328,9 @@ mount -o nolock 95.217.179.189:/srv/ro /tmp/utils/
 
 After the utility is downloaded to the camera, run the `ipctool gpio scan`
 command in the terminal and open-close the camera lens a couple of times with
-your palm.
+your palm. Covering the lens is what makes the stock application switch the
+filter, and the pads it drives while doing so are what the scan reports — without
+it there is nothing for the scan to see.
 
 Watch the output of ipctool to determine the pins responsible for controlling
 the IR filter curtain.
@@ -305,7 +338,14 @@ the IR filter curtain.
 Enter the values obtained in the settings for the night mode Majestic. If the
 pink tint still persists, you may need to enable sensor signal inversion.
 
-Don't forget to add the camera model and found GPIO values to the table!
+Don't forget to add the camera model and found GPIO values to the table! It
+helps the next person, and the filter hunt reads that table too — it tries the
+pairs recorded for your SoC first.
+
+> On a camera that is already converted, `ipctool` is still worth having for
+> other questions: the OpenIPC firmware downloads it to `/tmp` on its own the
+> first time `ipctool` is invoked, and `ipctool reginfo` prints every pad with
+> its current function marked.
 
 #### Is it possible to display the data for setting the auto focus of lenses
 instead of the current sample_af in the standard /metrics?
@@ -341,3 +381,4 @@ to log in interactively first. See
 [1]: https://openipc.org/wiki/en/gpio-settings.html
 [2]: https://github.com/OpenIPC/ipctool/releases/download/latest/ipctool
 [3]: https://github.com/OpenIPC/firmware/releases/tag/latest
+[4]: https://openipc.org/wiki/en/finding-a-gpio.html
