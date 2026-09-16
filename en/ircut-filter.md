@@ -51,8 +51,8 @@ them, it is holding the filter shut.
 
 You can tell which you have in one step: close the filter, then release both pads
 to inputs and look at the picture. If it goes pink, the filter is brake-held. If
-it stays correct, it latches. The WebUI does exactly this as part of its pin scan
-and reports the answer.
+it stays correct, it latches. The WebUI does exactly this as part of its filter
+hunt and reports the answer.
 
 ### The metrics do not read the way you expect
 
@@ -86,19 +86,19 @@ what the kernel reports, so it is the right size on every SoC) with four things
 to connect: the filter's closing coil, its opening coil, the infrared lamp and
 the daylight sensor. Click a pad, pick what it is.
 
-Two buttons matter:
+**Test the filter** moves it and compares the picture in both positions. This is
+the only way to tell "wired backwards" from "not wired" without waiting for
+nightfall, and it will tell you which you have. If it says **wired backwards**,
+swap the two coils on the map. On a board with a single coil pad, turn on
+`Single IRcut is inverted` instead.
 
-- **Find them for me** drives candidate pairs and watches the picture for the
-  filter to move. It tries the pairs this wiki's
-  [GPIO table](gpio-settings.md) has recorded first, so a board already listed
-  there is usually found in seconds. **It needs daylight** — the test reads the
-  picture, and at night nothing looks like it moved.
-- **Test the filter** moves it and compares the picture in both positions. This
-  is the only way to tell "wired backwards" from "not wired" without waiting for
-  nightfall, and it will tell you which you have.
-
-If the test says **wired backwards**, swap the two coils on the map. On a board
-with a single coil pad, turn on `Single IRcut is inverted` instead.
+**If you do not know the pins at all**, press **Find them on the Pins page**.
+Finding a pin by driving it is not a day/night job — it drives pads across the
+whole chip and has to know what each one is already carrying — so it lives with
+the pins, on **Settings → Pins**, alongside the hunt for everything that is not a
+filter. [Finding out what a pin is wired to](finding-a-gpio.md) covers both.
+Whatever it finds arrives back here as a proposal with the Save bar up, because
+the test above is only honest about wiring the camera has actually been given.
 
 The dashboard also raises a banner on its own when the configuration cannot work
 — no pin set, thresholds with no hysteresis, or day and night disagreeing for
@@ -109,19 +109,23 @@ and the Day / Night page says so as an observation. Only an older majestic, or
 a SoC that reports no exposure state, still gets the "nothing to watch"
 warning — worded to say which it is.
 
-> **The scan drives pads whose job is unknown**, and one of them may reset the
+> **The hunt drives pads whose job is unknown**, and one of them may reset the
 > network, cut power to the sensor or stop the camera answering. That risk cannot
 > be removed, only made survivable: the pads being driven are written to flash
 > before any register is touched, so a camera that has to be restarted comes back
-> knowing which pair did it and excludes them. Pads a kernel driver holds are
-> refused outright. Prefer entering known pins from the table when you have them.
+> knowing which pair did it and leaves them alone from then on. Pads a kernel
+> driver holds, and pads the chip says are already carrying something, are
+> refused outright. Prefer entering known pins from the table when you have
+> them — and see [Finding out what a pin is wired to](finding-a-gpio.md) for
+> what the hunt refuses, what it cannot find, and how to recover when a pad does
+> take the camera down.
 
 ### Doing it by hand
 
 The pin numbers other people have found are in
 [Board specific GPIO settings list](gpio-settings.md); `IRCUT1` is `irCutPin1`
 and `IRCUT2` is `irCutPin2`. If your board is not listed, adding it there helps
-the next person **and** the scanner, which uses that table as its search order.
+the next person **and** the hunt, which uses that table as its search order.
 
 If you are still on the vendor firmware, run `ipctool` **before** you flash: the
 stock application leaves the IR-cut pads configured as driven outputs, which is
