@@ -780,8 +780,26 @@ When movement starts, `majestic` runs `/usr/sbin/motion.sh` with the bounding
 box of everything that moved, in main-stream pixels, as four arguments:
 
 ```
-/usr/sbin/motion.sh [left] [top] [right] [bottom]
+/usr/sbin/motion.sh [x] [y] [width] [height]
 ```
+
+The last two are the box's **size**, not its far corner.
+
+Cameras built before September 2026 sent the far corner there instead —
+every make except SigmaStar — and the two readings cannot be told apart from
+the numbers alone, since `100 200 500 700` is a plausible box under either. So
+if your camera predates that, settle it once rather than guessing: put a
+one-line script at that path which logs what it was given, wave at the camera,
+and look at the numbers.
+
+```sh
+printf '%s\n' "$*" >> /tmp/motion-args.log
+```
+
+Small third and fourth numbers, roughly the size of the thing you waved, are a
+size. Numbers nearly as large as the frame, and always larger than the first
+two, are a far corner — subtract the first two from them and the rest of this
+page applies.
 
 The script is run on the transition, not per frame, and no more than once every
 five seconds. For the detections themselves — every box rather than one box
