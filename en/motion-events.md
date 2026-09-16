@@ -46,10 +46,23 @@ camera without a card has. The second one is late and carries the file.
 
 Called on the transition into movement, not per frame.
 
-The last two are the box's **size**, not its far corner. They were the far
-corner on HiSilicon cameras for three months, which is what a camera built
-before September 2026 still sends — a script that measures what moved should
-sanity-check that `x + width` lands inside the frame before trusting it.
+The last two are the box's **size**, not its far corner.
+
+Cameras built before September 2026 sent the far corner there instead —
+every make except SigmaStar — and the two readings cannot be told apart from
+the numbers alone, since `100 200 500 700` is a plausible box under either. So
+if your camera predates that, settle it once rather than guessing: put a
+one-line script at that path which logs what it was given, wave at the camera,
+and look at the numbers.
+
+```sh
+printf '%s\n' "$*" >> /tmp/motion-args.log
+```
+
+Small third and fourth numbers, roughly the size of the thing you waved, are a
+size. Numbers nearly as large as the frame, and always larger than the first
+two, are a far corner — subtract the first two from them and the rest of this
+page applies.
 
 ### When a clip is finished
 
@@ -196,14 +209,10 @@ the size of what moved, which is what the early hook gives you:
 ```sh
 #!/bin/sh
 # /usr/sbin/motion.sh — run by the camera when movement starts.
+# On a camera older than September 2026 the last two may be the far corner
+# rather than the size — check yours once, as described above, and subtract
+# here if that is what it sends.
 x=$1; y=$2; w=$3; h=$4
-
-# A camera from before September 2026 sends the box's far corner here instead
-# of its size, and the giveaway is a box that runs off the edge of the frame.
-if [ $(( x + w )) -gt 4000 ]; then
-    w=$(( w - x ))
-    h=$(( h - y ))
-fi
 
 # Roughly cat-sized in main-stream pixels, measured on your own camera by
 # waving at it and watching the boxes in the web interface. A person at the
