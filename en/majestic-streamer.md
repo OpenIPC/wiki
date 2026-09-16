@@ -780,8 +780,13 @@ When movement starts, `majestic` runs `/usr/sbin/motion.sh` with the bounding
 box of everything that moved, in main-stream pixels, as four arguments:
 
 ```
-/usr/sbin/motion.sh [left] [top] [right] [bottom]
+/usr/sbin/motion.sh [x] [y] [width] [height]
 ```
+
+The last two are the box's **size**, not its far corner. They were the far
+corner on HiSilicon cameras for three months, which is what a camera built
+before September 2026 still sends — a script that measures what moved should
+sanity-check that `x + width` lands inside the frame before trusting it.
 
 The script is run on the transition, not per frame, and no more than once every
 five seconds. For the detections themselves — every box rather than one box

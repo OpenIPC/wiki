@@ -41,10 +41,15 @@ camera without a card has. The second one is late and carries the file.
 ### When movement starts
 
 ```sh
-/usr/sbin/motion.sh [left] [top] [right] [bottom]
+/usr/sbin/motion.sh [x] [y] [width] [height]
 ```
 
 Called on the transition into movement, not per frame.
+
+The last two are the box's **size**, not its far corner. They were the far
+corner on HiSilicon cameras for three months, which is what a camera built
+before September 2026 still sends — a script that measures what moved should
+sanity-check that `x + width` lands inside the frame before trusting it.
 
 ### When a clip is finished
 
@@ -191,9 +196,14 @@ the size of what moved, which is what the early hook gives you:
 ```sh
 #!/bin/sh
 # /usr/sbin/motion.sh — run by the camera when movement starts.
-left=$1; top=$2; right=$3; bottom=$4
-w=$(( right - left ))
-h=$(( bottom - top ))
+x=$1; y=$2; w=$3; h=$4
+
+# A camera from before September 2026 sends the box's far corner here instead
+# of its size, and the giveaway is a box that runs off the edge of the frame.
+if [ $(( x + w )) -gt 4000 ]; then
+    w=$(( w - x ))
+    h=$(( h - y ))
+fi
 
 # Roughly cat-sized in main-stream pixels, measured on your own camera by
 # waving at it and watching the boxes in the web interface. A person at the
