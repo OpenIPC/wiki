@@ -98,6 +98,27 @@ isp:
                                 # after the raw data is read, so it brightens
                                 # the picture and not a RAW snapshot
                                 #                          (HiSilicon/Goke)
+  # A motorised lens aperture, and — on the oldest HiSilicon parts — the thing
+  # that decides who owns a PWM channel. See "Iris control" in Majestic
+  # streamer before setting any of it.
+  #iris:
+  #  type: none                 # none | DC | P             (HiSilicon/Goke)
+                                # P is accepted by the schema and implemented
+                                # nowhere; it is refused with a message.
+                                # On hi3516cv100/hi3518ev100 this key is the
+                                # ONLY one of the group that exists, and it is
+                                # what tells a camera with a real iris apart
+                                # from one whose PWM belongs to its lamp
+  #  manual: false              # hold the aperture instead of metering it
+                                # The eight keys below exist from hi3516cv200
+                                # upwards, but not on hi3516cv6xx
+  #  holdValue: 610             # where to hold it, per-mille, 0-1000
+  #  kp: 7000                   # the controller that drives the aperture:
+  #  ki: 100                    # proportional, integral and derivative terms,
+  #  kd: 3000                   # 0-100000 / 0-1000 / 0-100000
+  #  minPwmDuty: 250            # how far it may close, per-mille, 0-1000
+  #  maxPwmDuty: 950            # how far it may open, per-mille, 0-1000
+  #  openPwmDuty: 800           # where it parks when opening, 0-1000
 
 image:
   mirror: false
@@ -342,6 +363,10 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
   #backlightPwmFreq: 400        # Hz, 50-20000
   #backlightPwmMin: 10          # duty floor, % — LEDs have an ignition threshold
   #backlightPwmMax: 100         # duty ceiling, %
+                                # On hi3516cv100/hi3518ev100 setting a channel
+                                # here also takes that channel away from the
+                                # ISP's own aperture control — see isp.iris
+                                # above if this camera has a motorised lens
 
 # Motion runs /usr/sbin/motion.sh, and — with records.mode below — can record a
 # clip per event. There is no "exclude" key: roi says where motion counts, and
