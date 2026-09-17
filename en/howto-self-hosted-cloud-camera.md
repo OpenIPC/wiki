@@ -306,3 +306,5 @@ your credentials are all fine, and points the finger back at the camera.
   broadcasting rather than watching
 - [A doorbell from a camera](howto-doorbell-from-camera.md) — two-way audio,
   which this path does not do
+- [Two-way audio](majestic-streamer.md#two-way-audio-talkback) — the ways that
+  do, including the `Talk` button on the WebUI's own `Preview` page

@@ -2143,19 +2143,28 @@ with everything else reading that channel. The preview watches the substream for
 that reason. `videoN.adjustBitrate` turns the adaptation off per channel if the
 rate is committed to something else, such as a recorder.
 
-For **talking back**, use the debug page at `http://192.168.1.10/webrtc`. Its
-`talk` button sends your browser's microphone to the camera speaker. Two things
-have to be true or nothing is heard:
+For **talking back**, `Preview` has a **Talk** toggle. Switch it on and the
+browser asks for your microphone, then re-offers the session with that audio
+added; the toggle reads `Talking` once the camera has taken it. There is no
+separate page for this any more — the standalone `/webrtc` diagnostic the
+earlier firmware carried is gone, and a camera answers 404 for it.
 
-- `audio.outputEnabled` must be on, or the camera answers the offer with audio
-  in one direction only and says so in its log.
+Talk appears only while `Preview` is actually using WebRTC. On the MSE fallback
+there is no peer connection to add a microphone to, so the control reports that
+it is unavailable rather than pretending.
+
+Two things have to be true or nothing is heard:
+
+- `audio.outputEnabled` must be on. Without it the camera answers with audio in
+  one direction only and says so in its log, and the toggle switches itself
+  back off with "the camera is not accepting audio" — it releases the
+  microphone rather than sitting there transmitting into nothing.
 - Browsers only grant microphone access in a secure context, so over plain HTTP
-  the button reads "needs HTTPS" — put the camera behind TLS or a
-  TLS-terminating reverse proxy.
-
-That page is a diagnostic rather than a viewer: it shows the ICE and DTLS state,
-what the camera has sent, and what it has received from you. The WebUI has no
-talkback control yet.
+  the toggle refuses with "a browser only grants microphone access over HTTPS".
+  Put the camera behind TLS or a TLS-terminating reverse proxy. This applies to
+  the page you have open and to nothing else: it is a rule the browser enforces
+  about its own origin, and it has no bearing on the camera's other audio
+  paths.
 
 #### SIP
 
