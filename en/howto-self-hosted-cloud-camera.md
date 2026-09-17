@@ -174,9 +174,9 @@ Four things about that entry:
 - **`enabled: false`** parks a destination without deleting it, which is handy
   while you are getting the server right.
 - **Audio needs no key at all.** A camera with `audio.enabled: true` publishes
-  its microphone alongside the video. `audioSource: none` turns that off for
-  this destination; `audioCodec: alaw` pins G.711 for a server that will not
-  take Opus. There is no talkback — the camera sends, it does not listen.
+  its microphone alongside the video; `audioSource: none` turns that off for
+  this destination. There is no talkback — the camera sends, it does not
+  listen.
 
 Each entry in `servers` is its own connection, so the camera can publish here
 and to somewhere else at the same time, and can keep its RTSP server running
@@ -232,6 +232,14 @@ that never mentions audio publishes the microphone, so a camera with audio
 enabled starts carrying sound the moment you update to a firmware that can.
 On a metered uplink that is a bill you did not ask for. `audioSource: none`
 on the entry keeps it quiet.
+
+**`audioCodec` is an instruction; leaving it out is not.** WebRTC carries Opus
+and G.711 and nothing else, so a camera recording AAC still publishes Opus
+here — a codec inherited from `audio.codec` is substituted for one this path
+can carry, rather than refused. Naming one on the entry means it, and that is
+the one way to end up with no sound: `audioCodec: aac` is silence where
+inheriting the same value was not. Set `alaw` for a server that will not take
+Opus; otherwise leave it out.
 
 **H.265 and browsers do not get along.** These cameras often default to H.265
 because it halves the bitrate, and the camera will happily publish it. Browser
