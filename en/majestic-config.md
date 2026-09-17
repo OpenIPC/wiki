@@ -453,8 +453,12 @@ records:
   #    enabled: false                                     # keep the destination without dialling it; absent means on
   #    channel: sub                                       # main|sub; absent means main
   #    naluSize: 4000                                     # RTP packet size for this destination alone
-  #    audioSource: auto                                  # auto|mic|silence|file|none; silence/file feed a track when there is no microphone
-  #    audioCodec: ""                                     # RTMP audio codec (aac|alaw|ulaw|pcm); empty follows audio.codec
+  #    audioSource: auto                                  # auto|mic|silence|file|none; silence/file feed a track when there is no
+                                                          # microphone, and are refused by WHIP, which has no way to carry them
+  #    audioCodec: ""                                     # opus|aac|alaw|ulaw|pcm; empty follows audio.codec. WHIP carries
+                                                          # opus or alaw/ulaw, RTMP what FLV can frame; a codec named here
+                                                          # is an instruction, and one the destination cannot carry
+                                                          # means no audio rather than a substitution
   #    audioFile: ""                                      # ADTS .aac looped when audioSource is file
   #thinEnhance: false                                     # send the SVC-T base layer only. Belongs to the
                                                           # section, not to an entry: it applies to everything
