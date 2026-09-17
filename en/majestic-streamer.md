@@ -463,11 +463,17 @@ Open a stream, or a snapshot, and ask again.
 If your camera is a HiSilicon or Goke one, a
 [RAW snapshot](#raw-sensor-data-as-adobe-dng) carries the same information in its
 own tags, so `exiftool -ExposureTime -ISO shot.dng` says what was used for that
-one frame. SigmaStar and Ingenic cameras have no such endpoint and answer 404 —
-`/metrics` above is the readback for them. Two cautions if you are measuring from the raw data: subtract the
-file's `BlackLevel` first, because the pedestal is a large share of a dark
-frame; and do not use the ISO tag to normalise, because it includes the ISP
-digital gain, which is not in the raw pixels at all.
+one frame. On builds **before 2026-09-17** that tag was read a moment after the
+frame rather than beside it, so on those it can be up to a second out of date —
+which matters only if something was moving in that second, but that is exactly
+the case when you are sweeping a setting and capturing as you go. It describes
+the frame it is in on current firmware. SigmaStar and Ingenic cameras have no
+such endpoint and answer 404 — `/metrics` above is the readback for them.
+
+Two cautions if you are measuring from the raw data: subtract the file's
+`BlackLevel` first, because the pedestal is a large share of a dark frame; and
+do not use the ISO tag to normalise, because it includes the ISP digital gain,
+which is not in the raw pixels at all.
 
 ### Auto day/night detection
 
@@ -1598,11 +1604,52 @@ finished with it, just not yet compressed.
 | `none` | Off. `/image.dng` answers **501**, and the memory the raw frame would have needed is left to the rest of the pipeline. |
 
 On a 5 MP IMX335 attached to a Goke GK7205V300, three snapshots per mode over
-the loopback interface: `slow` took 0.745 s, `fast` 0.733 s. That difference is
-inside the noise of moving a 4.9 MB file, so on this hardware `fast` bought
-nothing worth the permanently reserved frame. Measure before assuming otherwise
-on yours — [Memory tuning](memory-tuning.md) explains what that frame competes
-with.
+the loopback interface on a 2026-09-17 build: `slow` took 0.241 to 0.264 s,
+`fast` 0.228 to 0.241 s, for a 7.2 MB file. That difference is inside the noise
+of moving it, so on this hardware `fast` bought nothing worth the permanently
+reserved frame. Measure before assuming otherwise on yours — [Memory
+tuning](memory-tuning.md) explains what that frame competes with.
+
+#### Asking for less than the whole frame
+
+Two query parameters, on builds from **2026-09-17**, and between them they are
+the answer to most of the memory and speed trouble below. An older build ignores
+them and sends the whole frame, so check what arrived rather than assuming.
+
+```
+curl -u viewer:PASSWORD -o roi.dng "http://192.168.1.10/image.dng?crop=0x0x640x480"
+curl -u viewer:PASSWORD -o avg.dng "http://192.168.1.10/image.dng?crop=800x600x1024x768&frames=4"
+```
+
+- **`crop=LEFTxTOPxWIDTHxHEIGHT`** cuts a rectangle out of the sensor frame.
+  The camera snaps it outward to keep the colour filter in phase — cutting at an
+  odd column would silently change every pixel's colour — so you may get back a
+  slightly larger rectangle than you asked for.
+- **`frames=N`**, 2 to 16, averages that many consecutive frames into one file.
+  Noise falls as the square root of the count, which is worth having when you
+  are measuring a dark scene. It **needs a crop**: averaging whole frames does
+  not fit in memory, and the camera refuses with **400** and says so rather than
+  failing in some more interesting way.
+
+The reply says what you actually got, so a script never has to guess:
+
+```
+X-Frame-Width: 640
+X-Frame-Height: 480
+X-Frames-Averaged: 1
+```
+
+Measured on the 5 MP camera above, a 2026-09-17 build:
+
+| request | file | on the camera | over a LAN |
+| --- | ---: | ---: | ---: |
+| whole frame | 7 558 767 B | 0.25 s | 1.11 s |
+| `crop=0x0x640x480` | 461 295 B | **0.03 s** | **0.37 s** |
+| `crop=800x600x1024x768&frames=4` | 1 180 143 B | 0.37 s | 0.73 s |
+
+If you are sampling a fixed region on a timer — a sky patch, a test target, one
+corner of a scene — the crop is the difference between an endpoint you have to
+be careful with and one you can simply use.
 
 #### On a board with little RAM, read this before you ask for one
 
@@ -1610,8 +1657,11 @@ A raw frame is not a thumbnail. The uncompressed file is the whole sensor
 readout, and the camera needs that much memory *while it is serving the
 request*. Ask for two at the same time and it needs it twice over.
 
-How much depends on the build. Measured on the 5 MP camera above, watching the
-streamer's resident memory across one capture:
+How much depends on the frame and on the build. The rise tracks the size of the
+frame being served, so a camera in a larger sensor mode costs more than the
+figures below: the same 5 MP camera in a 2592x1944 12-bit mode, whose frame is
+7.2 MB rather than 4.9 MB, was measured at 7 388 kB. Watching the streamer's
+resident memory across one capture:
 
 | build date from `majestic -v` | peak memory rise |
 |---|---|
@@ -1641,22 +1691,29 @@ So on anything memory-constrained:
   next. Builds after 2026-09-15 refuse an overlapping request with **503** when
   `isp.rawMode` is `slow`, rather than attempting it. Earlier ones attempt it,
   which is where the kill above came from.
-- **Do not point a monitoring script at `/image.dng`.** It is a diagnostic
-  endpoint, not a stream. Anything that polls it on a timer will eventually
-  overlap with itself.
+- **Do not point a monitoring script at the whole frame.** It is a diagnostic
+  endpoint, not a stream, and anything that polls it on a timer will eventually
+  overlap with itself. If you do need it on a timer, ask for a
+  [crop](#asking-for-less-than-the-whole-frame): a 640x480 region is a
+  sixteenth of the memory. Measured on the camera below, peak resident memory
+  across a capture rose 7 388 kB for the whole frame and 456 kB for that crop.
 - **Set `isp.rawMode` to `none`** when you are not using it, and turn it back
   on for the session you need it in. With `slow` the cost is only paid per
   request, but it is still paid.
-- **Expect the transfer to be slow, and do not race it.** The same 4.9 MB frame
-  that `curl` pulls in 1.2 s over a LAN took 4.5 to 5.7 s from a browser, and
-  once, on a loaded camera, 142 s. A client that gives up and retries while the
-  first request is still running is how you arrive at the paragraph above.
+- **Do not race the transfer.** What is left of the time is now almost all
+  network: a 7.2 MB frame that takes 0.25 s on the camera itself takes about
+  1.1 s over a LAN, and browsers have been measured at 4.5 to 5.7 s and once,
+  on a loaded camera, 142 s. A client that gives up and retries while the first
+  request is still running is how you arrive at the paragraph above. (Builds
+  before 2026-09-17 spent about a second longer per capture inside the camera,
+  before a single byte left it.)
 - **A download that stalls will be cut off.** Builds after 2026-09-15 give a
   raw transfer 15 seconds and then close the connection; the camera will not
   hold a capture open indefinitely for one slow reader. A short `.dng` on a
   congested link is that, not corruption — check the size against
   `Content-Length`, then retry on a better connection, or fetch it on the
-  camera itself over the loopback interface, where it takes about a second.
+  camera itself over the loopback interface, where the same frame takes about a
+  quarter of a second.
 
 If the streamer disappears while you are working with raw frames, this is the
 first thing to check: `logread | grep -i 'out of memory'`.
@@ -1691,10 +1748,34 @@ white balance of 1:1:1 and a black level of zero. If that is what you have, a
 raw converter has nothing real to work from and the first render will show a
 colour cast and milky blacks.
 
-Either way the measurements themselves are exact — the geometry, the bit
-packing and the [CFA][cfa] pattern are correct, and the file loads without
-complaint. If the colour looks wrong, shoot a grey card and set the white
-balance from it, or build a camera profile for your sensor.
+The geometry and the [CFA][cfa] pattern have always been right, and the file
+loads without complaint on any firmware. If the colour looks wrong, shoot a grey
+card and set the white balance from it, or build a camera profile for your
+sensor.
+
+#### 12-bit sensors: check your build date before you trust the numbers
+
+This one is easy to miss because the file opens perfectly and the picture looks
+normal. On builds **before 2026-09-17**, a camera whose sensor delivers **12-bit**
+raw wrote every second pixel four bits short: the even-numbered pixel of each
+pair came back rounded down to a multiple of 16, while the odd one was intact.
+
+It shows up as a faint one-column-in-two pattern worth about a quarter of a
+percent — small enough to pass for sensor noise, large enough to matter if you
+are measuring. Anything derived from those files carries it: means, noise
+figures, flat fields, defective-pixel counts, stacked frames.
+
+Check which kind of camera you have:
+
+```
+exiftool -BitsPerSample shot.dng
+```
+
+**10-bit sensors were never affected**, so if that says 10 there is nothing to
+redo. If it says 12 and the file came off a build older than 2026-09-17, take it
+again on current firmware before drawing conclusions from it. On a fixed build
+both column parities agree; you can confirm it on your own file by comparing the
+mean of the even columns against the odd ones within one colour of the mosaic.
 
 One thing no firmware can give you: a raw frame carries the scene as the sensor
 saw it, so if the camera's own white balance was wrong when you took it, the
