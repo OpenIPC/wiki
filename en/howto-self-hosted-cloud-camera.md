@@ -31,7 +31,9 @@ seconds an HLS-based setup costs you.
 
 - **A camera running Lite or Ultimate.** The FPV build has WebRTC compiled out,
   so it cannot do this. Check with `majestic -v` on the camera — the first word
-  is the flavour.
+  is the flavour. For sound as well as picture you want a build from
+  **17 September 2026** or later; before that this path was video only, and an
+  older camera will publish a working video stream and no audio.
 - **A server with a public address.** The cheapest VPS will do; this is a relay,
   not a transcoder, and the video passes through untouched.
 - **A domain name** pointing at that server, if you want the browser to stop
@@ -161,7 +163,7 @@ Leave `token` out entirely for an endpoint that wants no credential. An empty
 one is not the same thing, and a server that reads a blank credential as a
 failed one will turn the camera away.
 
-Three things about that entry:
+Four things about that entry:
 
 - **The URL ends in `/whip`.** MediaMTX publishes at
   `http(s)://host:8889/<path>/whip`. Other servers spell it differently —
@@ -171,6 +173,10 @@ Three things about that entry:
   own path.
 - **`enabled: false`** parks a destination without deleting it, which is handy
   while you are getting the server right.
+- **Audio needs no key at all.** A camera with `audio.enabled: true` publishes
+  its microphone alongside the video; `audioSource: none` turns that off for
+  this destination. There is no talkback — the camera sends, it does not
+  listen.
 
 Each entry in `servers` is its own connection, so the camera can publish here
 and to somewhere else at the same time, and can keep its RTSP server running
@@ -221,10 +227,19 @@ for UDP, or this arrangement is not the one for that site.
 
 ## Things that will surprise you
 
-**No sound.** This path carries video only, whatever a destination's audio
-settings say. The camera's own web page and its RTSP stream both have audio;
-this one does not, yet. If you are building a doorbell or anything you need to
-*hear*, use [the doorbell guide](howto-doorbell-from-camera.md) for now.
+**Sound arrives on its own, which may not be what you wanted.** A destination
+that never mentions audio publishes the microphone, so a camera with audio
+enabled starts carrying sound the moment you update to a firmware that can.
+On a metered uplink that is a bill you did not ask for. `audioSource: none`
+on the entry keeps it quiet.
+
+**`audioCodec` is an instruction; leaving it out is not.** WebRTC carries Opus
+and G.711 and nothing else, so a camera recording AAC still publishes Opus
+here — a codec inherited from `audio.codec` is substituted for one this path
+can carry, rather than refused. Naming one on the entry means it, and that is
+the one way to end up with no sound: `audioCodec: aac` is silence where
+inheriting the same value was not. Set `alaw` for a server that will not take
+Opus; otherwise leave it out.
 
 **H.265 and browsers do not get along.** These cameras often default to H.265
 because it halves the bitrate, and the camera will happily publish it. Browser
@@ -289,3 +304,5 @@ your credentials are all fine, and points the finger back at the camera.
 - [Majestic Streamer](majestic-streamer.md) — Lite, Ultimate and FPV
 - [Live streaming to Telegram](howto-streaming-telegram.md) — the RTMP path, for
   broadcasting rather than watching
+- [A doorbell from a camera](howto-doorbell-from-camera.md) — two-way audio,
+  which this path does not do
