@@ -85,6 +85,14 @@ things in the panel say which you are looking at:
   logarithmic scale, against the curve noise alone would produce. Where the
   bars follow the curve there is nothing there; the tails are what is left.
 
+**On a 12-bit camera, check your firmware date first.** Builds before
+2026-09-17 wrote every second pixel of a raw frame four bits short, which is
+precisely the kind of neighbour-to-neighbour disagreement this panel counts —
+enough to report a healthy sensor as a defective one. See [12-bit
+sensors](majestic-streamer.md#12-bit-sensors-check-your-build-date-before-you-trust-the-numbers)
+for how to tell whether it applies to your camera. 10-bit sensors were never
+affected.
+
 To get an answer you can act on:
 
 1. **Point it at something plain** — a blank wall, or the lens cap. The flatter
