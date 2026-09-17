@@ -639,6 +639,15 @@ on an active-low driver the duty still reads as brightness, 0 for dark and 100
 for full, and the lamp is still left off at the moments the camera is not
 deciding.
 
+A duty of 0 is a real off rather than a very low brightness. Dimmer hardware
+cannot emit a pulse of no width at all — asked for one it emits its shortest,
+which is far too brief to measure and quite bright enough to see on an
+illuminator with a driver behind it — so at zero the camera stops driving the
+pad instead of asking for an impossible pulse. That applies in day mode and at
+start-up, not only at shutdown. On an active-low lamp the same promise is kept
+the other way round, by continuing to hold the pad rather than letting go of
+it, because there it is releasing the pad that would light the lamp.
+
 At night the lamp lights at the maximum and then trims itself to the ambient
 light every couple of seconds — brighter when the scene is starving, dimmer
 when the lamp overshoots — between the two duty bounds. The lamp's own light
