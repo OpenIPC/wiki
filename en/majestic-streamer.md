@@ -1588,8 +1588,10 @@ curl -u viewer:PASSWORD -o /dev/null -w '%{http_code}\n' http://192.168.1.10/ima
 
 `404` means this firmware has no raw endpoint at all. `501` means it has one and
 `isp.rawMode` is `none`. `503` means a capture is already running and this one
-was refused — wait for the first to finish and ask again. `200` means you
-already have the file.
+was refused — wait for the first to finish and ask again. `400` means the query
+was rejected, which on this endpoint means a malformed or empty
+[`crop`, or `frames` without one](#asking-for-less-than-the-whole-frame); the
+body says which. `200` means you already have the file.
 
 **It is on by default.** `isp.rawMode` is `slow` unless you changed it, so a
 camera that has never been configured for this still answers. `/image.yuv420`
@@ -1624,20 +1626,41 @@ curl -u viewer:PASSWORD -o avg.dng "http://192.168.1.10/image.dng?crop=800x600x1
 - **`crop=LEFTxTOPxWIDTHxHEIGHT`** cuts a rectangle out of the sensor frame.
   The camera snaps it outward to keep the colour filter in phase — cutting at an
   odd column would silently change every pixel's colour — so you may get back a
-  slightly larger rectangle than you asked for.
+  slightly larger rectangle, at a slightly different origin, than you asked for.
+  The rule is below.
 - **`frames=N`**, 2 to 16, averages that many consecutive frames into one file.
   Noise falls as the square root of the count, which is worth having when you
   are measuring a dark scene. It **needs a crop**: averaging whole frames does
   not fit in memory, and the camera refuses with **400** and says so rather than
   failing in some more interesting way.
 
-The reply says what you actually got, so a script never has to guess:
+The reply gives the size you actually got, and the count it averaged:
 
 ```
 X-Frame-Width: 640
 X-Frame-Height: 480
 X-Frames-Averaged: 1
 ```
+
+**It does not give the origin**, so if you asked for one that had to move, work
+out where it landed from the rule rather than assuming it is where you put it.
+The rule is fixed and depends only on the bit depth:
+
+| `BitsPerSample` | rectangle snaps to a multiple of |
+|---|---|
+| 10 | 4 |
+| 12 | 2 |
+| 14 | 4 |
+
+The near edges round **down** to that multiple and the far edges round **up**,
+so the rectangle only ever grows, and it is then clipped to the picture. The
+origin you get is therefore `left - (left % N)`, and likewise for `top`.
+
+Verified on a 12-bit camera, where N is 2: asking for `crop=101x101x641x481`
+returned `642x482`, and locating that image inside a full frame of the same
+scene put it at 100,100 — both edges moved outward by one, exactly as the rule
+says. Ask for an already-aligned rectangle and nothing moves at all, which is
+the simplest way to avoid the arithmetic.
 
 Measured on the 5 MP camera above, a 2026-09-17 build:
 
