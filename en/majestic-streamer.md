@@ -629,10 +629,11 @@ something else on the board already owns — majestic says so in the log and
 falls back to driving `backlightPin` as a plain switch, rather than leaving you
 in the dark.
 
-On hi3516cv100 and hi3518ev100, setting a channel here also takes that channel
+On hi3516cv100 and hi3518ev100, setting a channel here normally also takes it
 away from the image processor's own aperture control, which those chips bring
-up enabled — see "Iris control, and who owns a PWM channel" below if this
-camera has a motorised lens.
+up enabled — unless `isp.iris.type` is `DC`, which reserves it for the lens
+instead. See "Iris control, and who owns a PWM channel" below if this camera
+has a motorised lens.
 
 With a channel set, `backlightPin` is ignored, but `backlightInvert` is not:
 on an active-low driver the duty still reads as brightness, 0 for dark and 100
@@ -686,22 +687,29 @@ other. The symptom is a lamp that ignores the camera: the reported duty moves,
 `night_light_duty` on `/metrics` says 43% or 0%, and the illuminator stays at
 whatever brightness it was.
 
-Majestic settles it by ownership. If `nightMode.backlightPwmChannel` names a
-channel, the camera is using PWM for its lamp, and the aperture controller is
-switched off at start-up so that the lamp has the channel to itself. If no
-dimmable lamp is configured, nothing is changed and the controller is left
-exactly as the chip brought it up — so a camera that really does have a
-motorised lens and has never set `isp.iris.type` keeps working after an
-upgrade.
+Majestic settles it by ownership, and the rule is read in this order:
 
-That leaves one case to state explicitly: a camera on these chips with **both**
-a motorised lens and a dimmable lamp. Set `isp.iris.type: DC` and the aperture
-keeps its channel; the lamp then needs a different one, or a plain switched
-lamp on `backlightPin`. Two things cannot share one PWM channel, and saying
-which one matters is the only way the camera can know.
+1. **`isp.iris.type: DC` wins.** You have said there is a lens to drive, so the
+   aperture controller is left alone whatever else is configured. A lamp then
+   needs a channel of its own, or a plain switched lamp on `backlightPin` —
+   two things cannot share one PWM channel, and which of them matters is the
+   one thing the camera cannot work out for itself.
+2. **Otherwise, a dimmable lamp takes the channel.** With
+   `nightMode.backlightPwmChannel` naming one, the aperture controller is
+   switched off at start-up so the lamp has it.
+3. **Otherwise nothing is changed.** No `DC`, no dimmable lamp, and the
+   controller is left exactly as the chip brought it up — so a camera that
+   really does have a motorised lens and never set `isp.iris.type` keeps
+   working across an upgrade.
 
-This is start-up work. Adding a dimmable lamp to a camera that booted without
-one takes a restart to take effect, not just a Night mode save.
+One timing caveat, and it is the exception to this page's general rule that a
+setting applies to the running streamer. The lamp itself does start straight
+away: save a channel and Night mode restarts with the dimmer in hand. But
+switching the aperture controller off is start-up work, so on a camera that
+booted *without* a dimmable lamp the two will contend for the channel until
+the camera is restarted — the lamp will look erratic rather than dead. Setting
+it and rebooting once is the whole of the workaround; a camera that ships with
+its lamp configured never sees this.
 
 ### Stopping the sensor and ISP when nothing is watching
 

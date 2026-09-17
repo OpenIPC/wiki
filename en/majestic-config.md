@@ -365,8 +365,9 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
   #backlightPwmMax: 100         # duty ceiling, %
                                 # On hi3516cv100/hi3518ev100 setting a channel
                                 # here also takes that channel away from the
-                                # ISP's own aperture control — see isp.iris
-                                # above if this camera has a motorised lens
+                                # ISP's own aperture control, unless
+                                # isp.iris.type is DC — see isp.iris above if
+                                # this camera has a motorised lens
 
 # Motion runs /usr/sbin/motion.sh, and — with records.mode below — can record a
 # clip per event. There is no "exclude" key: roi says where motion counts, and
