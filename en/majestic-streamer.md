@@ -435,6 +435,71 @@ multipliers and is unaffected. Ingenic has none of these three keys.
 so it brightens the picture and the JPEG but leaves a
 [RAW snapshot](#raw-sensor-data-as-adobe-dng) exactly as it was.
 
+#### Telling auto-exposure where to look
+
+`isp.meterRect` is the window auto-exposure measures. Empty — the default —
+means the whole picture.
+
+`isp.meterRect: 960x1494x50x14`
+
+The same spelling as [`motionDetect.roi`](#motion-detection), `osd.privacyMasks`
+and `video0.crop`: x and y of the top left point, then width and height, in
+pixels of the sensor's own frame. Unlike those, **only one rectangle is used** —
+auto-exposure has a single window. A comma-separated list is accepted and the
+first is the one that counts, which the camera says in its log rather than
+leaving you to wonder about the others.
+
+Reach for it when the subject is much brighter or much darker than the rest of
+the scene, and the camera is exposing for the scene. A lit number plate at night
+is the case it was written for: it clips to white at the exposure the rest of the
+frame needs, and metering the plate alone drops the shutter until the plate is
+readable and lets the background go dark.
+
+**The ISP will not meter a window smaller than 256 × 120.** A smaller rectangle
+is grown around its own centre to that minimum, clamped to stay inside the
+picture, and the camera logs both the rectangle you asked for and the one it is
+using. A number plate measured at 50 × 14 px is therefore metered as an area
+about forty-four times larger — still far more selective than the whole frame,
+but worth knowing before you conclude the setting did nothing.
+
+Removing the key, or setting it to an empty string, puts metering back to the
+whole picture without a restart.
+
+Measured on a hi3516ev300 with an IMX335 over a car park at night, reading
+`isp_exptime` back each time:
+
+| what auto-exposure metered | exposure it settled on | at its limit? |
+| --- | --- | --- |
+| the whole frame (default) | 99 956 µs | yes |
+| 256 × 120 on the dark number plate | 99 956 µs | yes — unchanged |
+| 256 × 120 on the brightly lit road | **33 274 µs** | no |
+
+Both results are the setting working. Metering something dark asks for *more*
+exposure, and auto-exposure was already pressed against its slow-shutter
+ceiling, so nothing moved. Metering something bright is where it pays.
+
+**Where it works:** gen-4 HiSilicon and Goke — hi3516cv500 (and the av300/dv300
+that share its SDK), hi3516ev200, hi3516ev300, gk7205v200, gk7205v300 and
+gk7205v500. Older parts have no AE crop in their statistics configuration at
+all, and hi3516cv6xx is excluded. Cameras without it do not offer the key.
+
+#### Which end of the histogram auto-exposure protects
+
+`isp.aeStrategy` takes one of three words:
+
+| value | what it does |
+| --- | --- |
+| `default` | leaves the ISP's own choice alone — this is the default |
+| `highlight` | holds the bright end down, for a scene whose subject is the brightest thing in it |
+| `lowlight` | favours the dark end |
+
+`highlight` is the companion to the metering rectangle above: together they are
+"expose for the bright thing I pointed at". `default` restores whatever the
+sensor's tuning chose, which is not necessarily either of the other two.
+
+Available on HiSilicon and Goke from gen 2 upward — everything except the oldest
+hi3518 parts, and excluding hi3516cv6xx.
+
 #### Reading back what the camera actually did
 
 Do not infer it — the camera reports it:
@@ -474,6 +539,40 @@ Two cautions if you are measuring from the raw data: subtract the file's
 `BlackLevel` first, because the pedestal is a large share of a dark frame; and
 do not use the ISO tag to normalise, because it includes the ISP digital gain,
 which is not in the raw pixels at all.
+
+### Dehaze, sharpening and noise reduction
+
+Three blocks of the image pipeline that majestic used to switch on at every
+start with no way to turn them off. They are settings now, and **every default
+is exactly what the camera did before**, so nothing changes on a camera you do
+not touch.
+
+| key | default | what "off" means |
+| --- | --- | --- |
+| `isp.dehaze` | `125` | `0` disables the block |
+| `isp.sharpen` | `true` | leaves the ISP's own sharpening as the sensor's tuning set it, rather than flattening it |
+| `isp.nr` | `true` | keeps whatever noise reduction the sensor's IQ profile configured, instead of replacing it wholesale |
+
+`isp.dehaze` is a contrast stretch. It earns its keep in haze. A night scene
+never asked for it, and pays for it in shadow detail.
+
+`isp.sharpen` is worth turning off wherever the subject is small. Overshoot
+around a character a few pixels tall is indistinguishable from the character.
+Scored against ground truth on 78-pixel-wide number plates, adding sharpening
+cost about two points of recognition accuracy rather than buying any — measured
+on sharpening applied afterwards rather than on this block itself, so treat it
+as a reason to try the switch, not as a figure for what the switch is worth.
+
+`isp.nr` matters less for how the picture looks than for whose tuning is in
+effect: leaving it on replaces the noise-reduction profile the sensor shipped
+with, at every start.
+
+All three take effect on the next pipeline rebuild rather than live, so the
+camera restarts its video when you change them.
+
+**Where they work:** hi3516ev200, hi3516ev300, gk7205v200, gk7205v300 and
+gk7205v500 — the parts whose pipeline majestic configures this way. Cameras that
+do not do it do not offer the keys, and there is nothing there to turn off.
 
 ### Auto day/night detection
 
@@ -1812,8 +1911,10 @@ applied and will look far better with no work at all.
 
 To look at one without leaving the browser, the web interface has a
 [raw editor](raw-editor.md) under **Camera → Raw**: it develops the frame on
-your own machine, measures the sensor, and can calibrate the camera's colour
-from a chart.
+your own machine, measures the sensor, calibrates the camera's colour from a
+chart, and — on a camera whose owner has
+[opted in](raw-editor.md#plates) — reads number plates out of the frame and
+says what is stopping the ones it cannot.
 
 ### How to play audio stream
 
