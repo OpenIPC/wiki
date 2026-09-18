@@ -314,6 +314,15 @@ apart, and one of them switches automatic exposure off.
 
 Zero, or leaving the key out, means "leave the sensor default alone" everywhere.
 
+**It does not have to be a whole number.** On HiSilicon, Goke and SigmaStar the
+value is read as a decimal, so `isp.exposure: 0.5` is half a millisecond —
+1/2000 s — and that is how you ask for the short shutter a moving subject needs.
+A whole millisecond is 1/1000 s, which for a number plate on a car is already
+too long. The HiSilicon range in the table is a ceiling and a floor rather than
+a set of steps: anything down to a microsecond is accepted, though the sensor's
+own frame period is what you will really get at the top end. On Ingenic the
+value is in microseconds and is rounded to one, so decimals there do nothing.
+
 #### Why your exposure sweep looks like it does nothing
 
 This is the most common report about this section, and the setting is usually
