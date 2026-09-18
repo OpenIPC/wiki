@@ -583,9 +583,11 @@ SigmaStar boards
 
 ### Memory allocator: MMA
 
-SigmaStar SoCs put every ISP, scaler and encoder buffer in the **MMA** heap
-(`mi_sys`'s multimedia allocator), a contiguous region U-Boot carves out of DRAM
-before Linux starts. It is why a camera with 256 MB of RAM reports about 90 MB:
+SigmaStar SoCs put every ISP, scaler and encoder buffer in the **MMA** heap —
+the vendor multimedia allocator's pool, a contiguous region U-Boot carves out of
+DRAM before Linux starts. It is why a camera with 256 MB of RAM reports about 90 MB —
+this is what one owner's ssc377qe printed, in
+[firmware#2443](https://github.com/OpenIPC/firmware/issues/2443):
 
 ```
 Memory: 89592K/262144K available (2404K kernel code, 347K rwdata, 1068K rodata,
@@ -655,18 +657,15 @@ which counts as ordinary memory until something asks for a contiguous buffer.
 cat /proc/mi_modules/mi_sys_mma/mma_heap_name0
 ```
 
-The header line gives the heap size and what is still free. Two formats exist
-depending on the `mi.ko` generation — `avail` on infinity6c, `chunk_mgr_avail`
-on infinity6e — and both are bytes, in hex:
+The first two lines are a header and a row for the heap. Read two of its
+columns, both byte counts in hex: **`length`**, the size of the heap, and the
+last column, how much of it is still free — named `avail` on infinity6c and
+`chunk_mgr_avail` on infinity6e, depending on the firmware generation. What the
+pipeline is using is the difference between them.
 
-```
-           heap_name            pa_start              length               avail
-      mma_heap_name0            23a00000             4600000             1dfa5c0
-```
-
-Below the header, every allocation is attributed to the subsystem and pid
-holding it (`mi_vpe`, `mi_venc`, `mi_rgn`, …), which is how the figures below
-were measured.
+Everything below that row is one line per allocation, each attributed to the
+part of the video pipeline and the process holding it, which is how the figures
+below were measured.
 
 > **Exercise the camera before you read it.** A pipeline that has just started
 > and never served a snapshot reports far less than its steady state. Pull a
@@ -689,16 +688,17 @@ your value back happily — but `board_late_init()` calls `setenv()` on both
 **unconditionally, on every boot, before `bootcmd` runs**. Anything you write
 there is overwritten before the kernel command line is assembled:
 
+Set `memsz` to anything you like and reboot, and all three of these disagree
+with each other:
+
 ```bash
-fw_setenv memsz 0x3800000
-reboot
-# ... after the reboot:
-fw_printenv memsz                    # memsz=0x3800000      <-- your value
-cat /proc/cmdline                    # ... sz=0x4600000 ...  <-- the stock one
-free                                 # unchanged
+fw_printenv memsz      # your value, still in flash where you wrote it
+cat /proc/cmdline      # the stock size, which is what the kernel was given
+free                   # unchanged, because the heap never moved
 ```
 
-`/proc/cmdline` is the only honest answer about what the kernel was given.
+`/proc/cmdline` is the only honest answer of the three. Check it, and not the
+environment, whenever you want to know how the heap is actually sized.
 
 #### Changing the split
 
