@@ -1748,6 +1748,14 @@ curl -u viewer:PASSWORD -o avg.dng "http://192.168.1.10/image.dng?crop=800x600x1
   not fit in memory, and the camera refuses with **400** and says so rather than
   failing in some more interesting way.
 
+**`X-Frames-Averaged` can come back lower than you asked for**, and it is not an
+error: a frame whose geometry does not match the first is left out rather than
+averaged into it — a reload can move it — so a burst of sixteen may honestly
+report fourteen. The result is a smaller stack, not a broken one. A build too
+old for the parameter reports **1**, because it sent one ordinary frame and
+ignored the rest of the request. Read the header rather than assuming the count:
+both cases answer 200 with a perfectly good file.
+
 The reply gives the size you actually got, and the count it averaged:
 
 ```
