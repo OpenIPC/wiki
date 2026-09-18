@@ -1385,6 +1385,107 @@ saves the settings that go with the choice. Doing it by hand means changing the
 port's role and the `usbcam`/`uvcgadget` keys together, in that order; the page
 exists so that ordering is not yours to get right.
 
+### How many people can watch at once
+
+A viewer whose connection is slower than the stream makes the camera hold the
+video it has not managed to send. That is normal, and brief, on a link that
+recovers. It stops being brief when the viewer goes away without closing the
+connection — a laptop that sleeps, a browser tab a phone has frozen, a recorder
+on a link that has dropped — because then nothing is ever read and the camera
+goes on holding frames for someone who will never take them.
+
+Each way of watching has always had a ceiling on what the camera will hold for
+one viewer. Since the 2026-09-18 build there is also a ceiling on the **total**
+across all of them, worked out from the board's memory when the camera starts.
+
+It matters most on a small board. With no total ceiling, enough stalled viewers
+exhaust the camera's memory, Linux kills the streamer, and a few minutes later
+the watchdog resets the board. From outside that looks like a camera rebooting
+on its own every minute or two, with nothing in the logs you can collect over
+the network — the explanation is in the kernel's own log, which the reset
+destroys.
+
+#### What it works out to
+
+The allowance follows the memory a board still has free once video is running,
+and not the memory it reports in total — on some parts most of that total is
+reserved for video before Linux ever sees a request for it. What it comes to is
+worth reading off the table rather than predicting: `live_backlog_budget_bytes`
+on `/metrics` is what your own camera settled on.
+
+Measured at boot on cameras of each class, at the default `system.buffer`:
+
+| board | RAM Linux reports | free with video running | viewers |
+|---|---|---|---|
+| Hi3518EV200, Hi3516EV200, GK7205V200 | 27 MB | 10–13 MB | 3–4 |
+| Hi3516EV300 booting `mem=128M` with a 96 MB video reservation | 121 MB | 16 MB | 5 |
+| Hi3516CV300 | 59 MB | 43 MB | 13 |
+| GK7205V300, Hi3516AV300 | 121 MB and up | 100 MB and up | 16, and the allowance is not what limits it — see below |
+
+On a board with room to spare, memory stops being the constraint and a ceiling
+of **16 simultaneous connections per protocol** applies instead: the web
+interface's live preview refuses a seventeenth, and so does RTSP. `/mjpeg` and
+`/video.mp4` have no count of their own and are held to the memory allowance
+alone. On such a board `live_backlog_sessions` reads higher than the number of
+connections you can actually make, because it answers what the memory would
+allow rather than what the protocols will accept.
+
+The third column is the one to read, and the second is a trap. The Hi3516EV300
+row has twice the total memory of the Hi3516CV300 row and less than half the
+room, because most of its RAM is reserved for video before Linux ever sees a
+request for it.
+
+#### The lever is `system.buffer`
+
+`system.buffer` is how much the camera will hold for one viewer, in KiB.
+Default 1024; anything outside 64–8192 is brought into that range. It is also
+what decides how many viewers fit: a smaller figure per viewer buys more of
+them.
+
+So lowering it admits more viewers, each with less tolerance for a stuttering
+link. On a 27 MB board, `system.buffer: 256` takes a camera from three or four
+simultaneous viewers to nine or ten. `live_backlog_sessions` reports what any
+particular setting has bought, so you can check rather than estimate.
+
+#### What you see when it is full
+
+The camera trims before it refuses, and refuses before it disconnects anybody.
+
+- A viewer who falls behind is sent keyframes only until they catch up, so a
+  short hiccup costs smoothness rather than the session.
+- A connection that will not fit is refused when it is made: **503** from the
+  web interface's live preview, from `/mjpeg` and from `/video.mp4`, and **453
+  Not Enough Bandwidth** from an RTSP `SETUP` that asks for interleaved TCP.
+  The refusal is immediate and explicit — a client that gets one has been told,
+  not silently dropped.
+- Only if the camera is still over its allowance does it disconnect the single
+  viewer holding the most unsent video, one per second, until it is back inside
+  it.
+
+RTSP over UDP does not count against the allowance: its video does not pass
+through the camera's send buffer, so a UDP client that stops listening costs
+the camera nothing to hold.
+
+#### Checking it
+
+`/metrics` publishes the whole picture:
+
+| metric | what it says |
+|---|---|
+| `live_backlog_budget_bytes` | the allowance this board worked out for itself |
+| `live_backlog_used_bytes` | how much of it is being held right now |
+| `live_backlog_reserved_bytes` | how much is spoken for by viewers already connected |
+| `live_backlog_sessions` | how many viewers the allowance can hold |
+| `live_backlog_pressure` | 0 while there is room, rising to 4 when the camera is trimming hard |
+| `live_backlog_refused_total` | connections refused since boot |
+| `live_backlog_shed_total` | viewers disconnected to stay inside the allowance |
+
+If people are being refused, compare `live_backlog_reserved_bytes` with
+`live_backlog_budget_bytes` and lower `system.buffer`. If
+`live_backlog_shed_total` is climbing, someone is connecting and not reading —
+and an idle browser tab left on a preview counts as a viewer just as much as
+somebody actually watching.
+
 ### Live HLS
 
 `hls.enabled` turns on an HLS stream at `/master.m3u8`, with a player page at
