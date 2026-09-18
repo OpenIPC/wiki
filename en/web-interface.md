@@ -30,6 +30,31 @@ camera comes back with none — see [Factory reset and the unclaimed
 camera](first-boot.md), which also covers why `scp` and `ssh camera command` are
 refused until the camera has been claimed.
 
+### Settings that live on the camera
+
+`/etc/webui/webui.conf` is where the web interface keeps decisions that belong
+to the camera rather than to a browser. It is a shell file, read by every page:
+
+```
+webui_theme="dark"
+webui_lpr_base="https://cdn.jsdelivr.net/gh/OpenIPC/lpr-wasm@v0.1.0/dist/"
+```
+
+- `webui_theme` — `light`, `dark` or `auto`. Set from **Access** in the
+  interface; there is no reason to edit it by hand.
+- `webui_lpr_base` — where the [raw editor](raw-editor.md#plates) fetches the
+  number plate reader from. There is no default: the models are non-commercial
+  use only, so each owner opts in. Absent, no Plates tab is built at all.
+
+`/etc` rather than somewhere under `/var/www`, because updating the web
+interface replaces the whole of `/var/www` and a choice made there would not
+survive it.
+
+> Web interface builds before 2026-09-18 rewrote this file from scratch when you
+> changed the theme, which deleted `webui_lpr_base` along with it. If your Plates
+> tab disappears after changing the theme, that is what happened: add the line
+> again, and update the web interface.
+
 ### Updating the web interface from the web interface
 
 In some cases, especially if it seems that something is not working, you might
