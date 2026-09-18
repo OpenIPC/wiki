@@ -391,6 +391,16 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
   #backlightPwmFreq: 400        # Hz, 50-20000
   #backlightPwmMin: 10          # duty floor, % — LEDs have an ignition threshold
   #backlightPwmMax: 100         # duty ceiling, %
+  #backlightPwmGamma: 1.0       # 1.0 drives the duty asked for. Above it, the
+                                # dim end of the range gets finer control, for
+                                # an illuminator that is already bright at low
+                                # duty. The two limits above do not move, and
+                                # nor does off. Range 0.2-4.0
+  #backlightHighlightPct: 0     # 0 leaves the lamp to the scene's average
+                                # brightness alone. Above 0, the lamp dims
+                                # while more than this share of the picture has
+                                # run out of room — watch isp_highlight to pick
+                                # a number
                                 # On hi3516cv100/hi3518ev100 setting a channel
                                 # here also takes that channel away from the
                                 # ISP's own aperture control, unless
