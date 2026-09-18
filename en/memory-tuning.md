@@ -610,18 +610,32 @@ OpenIPC's U-Boot builds its bootargs from two variables
 the matching `infinity6`, `infinity6b0` and `infinity6e` files — fills both in
 from the DRAM size it detects at boot:
 
-| DRAM | `memlx` (LX_MEM) | `memsz` (MMA heap) | `MemTotal` that leaves |
-|---|---|---|---|
-| 256 MB | 256 MB | `0x0A000000` — 160 MB | 91640 kB |
-| 128 MB | 128 MB | `0x4600000` — 70 MB | 53848 kB |
-| 64 MB | 64 MB | `0x2000000` — 32 MB | ~27 MB |
+`infinity6`, `infinity6b0` and `infinity6c` share one set of sizes:
 
-The first two are measured; the 64 MB row is arithmetic. `infinity6e` has 512 MB
-and 1 GB rows as well, and `infinity6`, `infinity6b0` and `infinity6e` set
-`LX_MEM` a fraction under the full DRAM size where `infinity6c` uses all of it —
-the MMA sizes are the same across all four.
+| DRAM | `memsz` (MMA heap) | `MemTotal` that leaves |
+|---|---|---|
+| 256 MB | `0xA000000` — 160 MB | 91640 kB (measured, infinity6c) |
+| 128 MB | `0x4600000` — 70 MB | 53848 kB (measured, infinity6c) |
+| 64 MB | `0x2000000` — 32 MB | ~27 MB (arithmetic) |
 
-The `Memory:` line above accounts for itself exactly on a 256 MB board:
+`infinity6e` is the exception. It reserves slightly *less*, and it has rows for
+512 MB and 1 GB that the others do not:
+
+| DRAM | `memsz` (MMA heap) | `MemTotal` that leaves |
+|---|---|---|
+| 1 GB | `0x1FE9C000` — 510 MB | |
+| 512 MB | `0x0FE9C000` — 255 MB | |
+| 256 MB | `0x9E9C000` — 158 MB | 92768 kB (measured) |
+| 128 MB | `0x4E9C000` — 79 MB | |
+| 64 MB | `0x1E9C000` — 31 MB | |
+
+So two 256 MB cameras can report different totals — 91640 kB on an infinity6c
+and 92768 kB on an infinity6e — purely because the families reserve 160 MB and
+158 MB respectively. `LX_MEM` differs cosmetically too: `infinity6c` hands Linux
+all of DRAM, the other three a fraction under it.
+
+The `Memory:` line at the top of this section accounts for itself exactly — it
+is a 256 MB infinity6c:
 
 ```
  262144K  DRAM, all of it given to Linux by LX_MEM=0x10000000
@@ -688,20 +702,34 @@ free                                 # unchanged
 
 #### Changing the split
 
-Rewrite `bootargs` itself so the size is literal. Leave every other token
-byte-identical — in particular leave `LX_MEM=${memlx}` and `${rootmtd}` as
-placeholders, so that `mtdparts` is never retyped by hand:
+Rewrite `bootargs` itself so the size is literal. Substitute only the heap size
+and leave every other token byte-identical — in particular leave
+`LX_MEM=${memlx}` and `${rootmtd}` as placeholders, so that `mtdparts` is never
+retyped by hand:
 
 ```bash
 fw_printenv -n bootargs > /root/bootargs.orig          # keep the original
 
-fw_printenv -n bootargs | sed 's/sz=${memsz}/sz=0x06000000/' > /tmp/ba
+sed 's/\(mma_heap=[^ ]*,sz=\)[^ ,]*/\10x06000000/' /root/bootargs.orig > /tmp/ba
+diff /root/bootargs.orig /tmp/ba                       # must show sz= and nothing else
 fw_setenv bootargs "$(cat /tmp/ba)"
 fw_printenv -n bootargs                                # read it back BEFORE rebooting
 reboot
 ```
 
 To undo it: `fw_setenv bootargs "$(cat /root/bootargs.orig)"`.
+
+> **Copy `bootargs.orig` off the camera as well.** `firstboot`, and any
+> `sysupgrade -n`, wipe the overlay that `/root` lives on — while the U-Boot
+> environment you just changed survives untouched. That is the one combination
+> that leaves a camera booting a value you can no longer look up.
+
+**Run the `diff`, do not skip it.** The substitution matches the `sz=` inside
+`mma_heap` whatever it holds, so it works on an installation whose `bootargs`
+still carries `${memsz}` and on an older one that was set up with a literal size
+and `mma_memblock_remove=1`. But a `bootargs` shaped differently again will pass
+through unchanged, `fw_setenv` will write it back happily, and the camera will
+reboot with the size it already had. An empty `diff` means nothing was replaced.
 
 The bootargs stored in the environment keep their `${...}` placeholders; U-Boot
 expands them at boot through `setenv setargs setenv bootargs ${bootargs}; run
