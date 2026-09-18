@@ -1360,9 +1360,11 @@ destroys.
 
 #### What it works out to
 
-The allowance is whichever is smaller: a share of the board's total memory, or
-40% of what is genuinely free once video is running. The second is the one that
-matters on parts that reserve a large block of the same RAM for video.
+The allowance follows the memory a board still has free once video is running,
+and not the memory it reports in total — on some parts most of that total is
+reserved for video before Linux ever sees a request for it. What it comes to is
+worth reading off the table rather than predicting: `live_backlog_budget_bytes`
+on `/metrics` is what your own camera settled on.
 
 Measured at boot on cameras of each class, at the default `system.buffer`:
 
@@ -1371,7 +1373,15 @@ Measured at boot on cameras of each class, at the default `system.buffer`:
 | Hi3518EV200, Hi3516EV200, GK7205V200 | 27 MB | 10–13 MB | 3–4 |
 | Hi3516EV300 booting `mem=128M` with a 96 MB video reservation | 121 MB | 16 MB | 5 |
 | Hi3516CV300 | 59 MB | 43 MB | 13 |
-| GK7205V300, Hi3516AV300 | 121 MB and up | 100 MB and up | not the limiting factor here; the per-protocol session limits apply first |
+| GK7205V300, Hi3516AV300 | 121 MB and up | 100 MB and up | 16, and the allowance is not what limits it — see below |
+
+On a board with room to spare, memory stops being the constraint and a ceiling
+of **16 simultaneous connections per protocol** applies instead: the web
+interface's live preview refuses a seventeenth, and so does RTSP. `/mjpeg` and
+`/video.mp4` have no count of their own and are held to the memory allowance
+alone. On such a board `live_backlog_sessions` reads higher than the number of
+connections you can actually make, because it answers what the memory would
+allow rather than what the protocols will accept.
 
 The third column is the one to read, and the second is a trap. The Hi3516EV300
 row has twice the total memory of the Hi3516CV300 row and less than half the
@@ -1381,13 +1391,14 @@ request for it.
 #### The lever is `system.buffer`
 
 `system.buffer` is how much the camera will hold for one viewer, in KiB.
-Default 1024; anything outside 64–8192 is brought into that range. It now also
-decides how many viewers fit, because the allowance is divided by it plus a
-small fixed margin for a keyframe.
+Default 1024; anything outside 64–8192 is brought into that range. It is also
+what decides how many viewers fit: a smaller figure per viewer buys more of
+them.
 
 So lowering it admits more viewers, each with less tolerance for a stuttering
 link. On a 27 MB board, `system.buffer: 256` takes a camera from three or four
-simultaneous viewers to nine or ten.
+simultaneous viewers to nine or ten. `live_backlog_sessions` reports what any
+particular setting has bought, so you can check rather than estimate.
 
 #### What you see when it is full
 
