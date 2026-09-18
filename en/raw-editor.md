@@ -181,8 +181,10 @@ worse than no tab.
 **Everything runs in your browser, not on the camera.** The camera serves the
 raw frame and nothing else; about nine megabytes of model, plus the runtime that
 executes it, is fetched once and cached. It needs WebAssembly in a worker, which
-any current desktop browser has and some locked-down ones do not — where it is
-missing the tab says so rather than failing later.
+any current desktop browser has and some locked-down ones do not. A browser
+without it gets no Plates tab either — the same silence as an unconfigured
+camera, and worth knowing if the tab is missing on one machine and present on
+another looking at the same camera.
 
 **Find the plates** develops the frame at full size and scans it in overlapping
 tiles. Tiles, not the whole picture at once: shrunk to fit the detector, a
