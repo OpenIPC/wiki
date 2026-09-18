@@ -14,3 +14,24 @@ dated similar to _majestic-2022-12-14.log_
 ```
 ssh root@192.168.1.10 "killall majestic; sleep 2; majestic" > majestic-$(date +"%F").log
 ```
+
+### If it reboots while people are watching
+
+The log above will not show you this one, and that is the tell. If the camera
+survives on its own and only reboots when someone has the live view open — or
+reboots a minute or two after every boot because a browser tab reconnects by
+itself — the streamer is being killed for running the board out of memory, and
+the reboot that follows is the watchdog doing its job. Nothing reaches the log
+you are piping over the network, because the reset takes the machine with it.
+
+Two things distinguish it from a crash:
+
+- it follows viewers rather than uptime, so it stops if you close every live
+  view and leave the camera alone;
+- the camera answers normally for the first seconds after each boot.
+
+On builds from 2026-09-18 onward the camera bounds this itself and refuses
+viewers it cannot afford instead of dying. On an older build, keep fewer live
+views open, or lower `system.buffer` before you look any further. See
+[How many people can watch at once](majestic-streamer.md#how-many-people-can-watch-at-once)
+for what a given board can hold and how to read it off `/metrics`.
