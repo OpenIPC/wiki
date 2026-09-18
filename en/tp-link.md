@@ -8,7 +8,7 @@ TP-Link
 | TP-Link Tapo C110       | TP33A        |              | 25Q64      | SSW101B     | 2AXJ4C110     |
 | TP-Link Tapo C110 (V1)  | SSC335       | SC3335       | 25Q64      | SSW101B     |               |
 | TP-Link Tapo C110 (V2)  | SSC333       | SC3338       | 25Q64      | SSW101B     | TE7KC110      |
-| TP-Link Tapo C120       | SSC377       |              | 25Q128     | RTL8188FTV  | 2AXJ4C120     |
+| TP-Link Tapo C120       | SSC377       | SC430AI      | 25Q128     | RTL8188FTV  | 2AXJ4C120     |
 | TP-Link Tapo C125       | SSC377D      |              | 25Q64      | SW6355      | 2AXJ4C125     |
 | TP-Link Tapo C200       | RTS3903      | SC2232H      | 25Q64      | RTL8188FTV  | TE7C200       |
 | TP-Link Tapo C200V2     | RTS3903N     |              | 25Q64      | RTL8188FTV  | 2AXJ4C200V2   |

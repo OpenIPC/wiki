@@ -30,6 +30,7 @@ or even that it will be included with the final binary for that SoC. Some additi
 - [Rockchip RV11xx](https://github.com/OpenIPC/firmware/tree/master/general/package/rockchip-osdrv-rv11xx/files/sensor)
 - [Sigmastar MSC313E](https://github.com/OpenIPC/firmware/tree/master/general/package/sigmastar-osdrv-msc313e/files/sensor)
 - [Sigmastar SSC335](https://github.com/OpenIPC/firmware/tree/master/general/package/sigmastar-osdrv-ssc335/files/sensor)
+- [Sigmastar Infinity6C (SSC377)](https://github.com/OpenIPC/sensors/tree/master/sigmastar/infinity6c)
 - [Xiongmai XM510](https://github.com/OpenIPC/firmware/tree/master/general/package/xiongmai-osdrv-xm510/files/sensor)
 - [Xiongmai XM530](https://github.com/OpenIPC/firmware/tree/master/general/package/xiongmai-osdrv-xm530/files/sensor)
 
