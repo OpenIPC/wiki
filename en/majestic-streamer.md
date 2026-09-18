@@ -1252,6 +1252,12 @@ camera](sd-card-swap.md) is built on, and that page is the guided version.
 Most cameras have one. Some have two, and where they do, everything below
 addresses them the same way.
 
+> This section is about a second *source* inside one camera. A second
+> **device** that looks at the same scene — a narrow camera beside a wide one —
+> is a different thing, watched from the first camera's live view once the two
+> are calibrated against each other: see
+> [Two cameras, one scene](two-cameras-one-scene.md).
+
 There are two ways a camera comes to have a second source. A few boards carry a
 **second sensor** of their own. And on builds with the USB dual-role package, a
 **USB (UVC) webcam** plugged into the camera's USB port is published as a second

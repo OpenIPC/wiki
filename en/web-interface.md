@@ -55,6 +55,16 @@ survive it.
 > tab disappears after changing the theme, that is what happened: add the line
 > again, and update the web interface.
 
+### Another camera's picture on the live view
+
+Where two cameras look at the same place, the live view of one can draw where
+the other looks and, on a click, lay the other camera's live video over that
+part of its own picture, aligned with it. The **Peer** control appears on the
+live view's bar once the camera has a calibration for a camera it can see on
+the network; the first click inside the outline asks for the other camera's
+password, once. The whole setup is in
+[Two cameras, one scene](two-cameras-one-scene.md).
+
 ### Updating the web interface from the web interface
 
 In some cases, especially if it seems that something is not working, you might

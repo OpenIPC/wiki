@@ -627,6 +627,32 @@ cloud:
   #turnUsername:
   #turnCredential:
 
+# (2026-09+ build) Where this camera stands and which other cameras see its
+# scene. Nothing in the video pipeline reads it; it is kept here so the live
+# view can draw where a peer looks and lay its picture over this one. Every
+# key applies on save without a restart. See "Two cameras, one scene".
+#calibration:
+  #height: 0                    # metres above the ground plane; 0 = not said
+  #tilt: 0                      # degrees; 0 along the ground, 90 straight down
+  #roll: 0                      # degrees; positive = horizon higher on the right
+  #azimuth: 0                   # compass bearing of the lens, 0 north, 90 east
+  #latitude: 0                  # of the camera; both 0 = not said
+  #longitude: 0
+  #lens:                        # focal length in main-stream pixels per zoom
+  #  - mag: "2.1"               #   readout (as GET /zoom reports it); empty
+  #    focal: 3487              #   for a lens that does not zoom
+  #    cx: 1296                 #   principal point; absent = frame centre
+  #    cy: 972
+  #peers:                       # cameras that see the same scene
+  #  - peer: tele               #   by the name the camera switcher lists it under
+  #    mag: ""                  #   this camera's zoom readout when measured
+  #    peerMag: ""              #   the other camera's; empty for a fixed lens
+  #    size: 2592x1944          #   the other camera's MAIN stream, WxH, both even
+  #    homography: "5.21,-0.87,-2577,1.17,5.03,-5408,0.000186,-0.000156,1"
+                                #   nine numbers, row by row, the last one 1;
+                                #   a point on the ground here -> the same
+                                #   point there, in main-stream pixels
+
 # fpv.enabled switches the SigmaStar FPV path on, and also disables
 # userspace 3A. The encoder knobs it used to gate now live per channel,
 # under video0/video1 with the rest of them.
@@ -639,6 +665,8 @@ cloud:
 - [Majestic streamer](majestic-streamer.md) — endpoints, HTTP API, build flavours
 - [A second camera](majestic-streamer.md#a-second-camera) — what `usbcam` and
   `uvcgadget` do, stream ids, and how to watch a USB webcam
+- [Two cameras, one scene](two-cameras-one-scene.md) — what `calibration.peers`
+  is, how to measure a row, and what the live view does with it
 - [On-screen display and privacy masks](majestic-streamer.md#on-screen-display-and-privacy-masks)
   — which streams get the overlay, and what masks do on each SoC family
 - [Majestic encoder tuning](majestic-encoder-tuning.md) — `refEnhance`, `refPred`, `svct`, ROI
