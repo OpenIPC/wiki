@@ -98,6 +98,34 @@ isp:
                                 # after the raw data is read, so it brightens
                                 # the picture and not a RAW snapshot
                                 #                          (HiSilicon/Goke)
+  # Exposure is a DECIMAL on HiSilicon/Goke and SigmaStar, so 0.5 is half a
+  # millisecond -- 1/2000 s. Ingenic rounds to a microsecond.
+  #
+  # WHERE auto-exposure looks, and which end of the histogram it protects.
+  # Both need a September 2026 or newer build, and neither exists on every
+  # part -- an absent key is how a camera says it cannot. See "Telling
+  # auto-exposure where to look" in majestic-streamer.md.
+  #meterRect: ""                # XxYxWxH, like motionDetect.roi. Empty meters
+                                # the whole picture. Only the FIRST rectangle
+                                # is used. The window has a minimum of 256x120
+                                # and a smaller one is grown around its centre
+                                # (hi3516cv500/av300/dv300, hi3516ev200/ev300,
+                                #  gk7205v200/v300/v500)
+  #aeStrategy: default          # default | highlight | lowlight
+                                # (HiSilicon/Goke, not the oldest hi3518 parts
+                                #  and not hi3516cv6xx)
+  # Three parts of the picture the camera used to set at every start with no
+  # way to say otherwise. Every default below is what it did before, so
+  # leaving them absent changes nothing. Only dehaze is an off switch: false
+  # on the other two means "stop overriding the sensor's own tuning", which
+  # may itself sharpen or denoise. Changing any of them restarts the video.
+  # September 2026 or newer.
+  #dehaze: 125                  # 0-255; 0 switches dehazing off
+                                # (hi3516ev200/ev300, gk7205v200/v300/v500)
+  #sharpen: true                # false stops the camera applying its own
+                                # (hi3516ev200/ev300, gk7205v200/v300/v500)
+  #nr: true                     # false leaves the sensor's noise reduction
+                                # (hi3516ev200/ev300, gk7205v200/v300/v500)
   # A motorised lens aperture, and — on the oldest HiSilicon parts — the thing
   # that decides who owns a PWM channel. See "Iris control" in Majestic
   # streamer before setting any of it.

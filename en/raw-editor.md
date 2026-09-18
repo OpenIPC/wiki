@@ -210,7 +210,11 @@ too: clicking a marked plate selects its row.
 
 Points auto-exposure at the plate you picked — see
 [telling auto-exposure where to look](majestic-streamer.md#telling-auto-exposure-where-to-look)
-for the setting itself. This is the one to reach for when a plate is *lit* —
+for the setting itself, **including which cameras have it**. Fewer have it than
+can serve a raw frame, so this card can appear on a camera that cannot act on
+it; pressing the button then says which setting the firmware is missing and
+changes nothing, rather than applying half a configuration. This is the one to
+reach for when a plate is *lit* —
 by headlights, or by a lamp — and clips to white while the rest of the scene is
 dark. Metering the plate instead of the whole frame drops the shutter until the
 plate is exposed properly and lets the rest of the picture go dark, which is the
