@@ -1,6 +1,14 @@
 # OpenIPC Wiki
 [Table of Content](../README.md)
 
+Every camera reserves a slice of its RAM for video buffers, and on most boards that
+slice is larger than the pipeline needs. How it is reserved depends on the SoC:
+[HiSilicon](#hisilicon-boards) uses MMZ over `mem=`/CMA, [SigmaStar](#sigmastar-boards)
+uses a static MMA heap sized by U-Boot. The
+[streamer settings](#streamer-memory-settings) that decide how much the pipeline puts
+*into* that region are the same settings on either, though the figures there were
+measured on HiSilicon and Goke parts.
+
 HiSilicon boards
 ----------------
 
@@ -567,3 +575,166 @@ the `insert_audio` call and the individual `modprobe open_aio`, `open_ai`,
 
 > **Note:** `open_osal`, `open_sys_config`, `open_base`, and `open_sys` are core
 > modules required by all other subsystems and must not be removed.
+
+---
+
+SigmaStar boards
+----------------
+
+### Memory allocator: MMA
+
+SigmaStar SoCs put every ISP, scaler and encoder buffer in the **MMA** heap
+(`mi_sys`'s multimedia allocator), a contiguous region U-Boot carves out of DRAM
+before Linux starts. It is why a camera with 256 MB of RAM reports about 90 MB:
+
+```
+Memory: 89592K/262144K available (2404K kernel code, 347K rwdata, 1068K rodata,
+        124K init, 114K bss, 170504K reserved, 2048K cma-reserved)
+```
+
+Unlike HiSilicon's CMA-backed MMZ, **MMA is a static carve-out**. The pages are
+reserved whether or not video is running, and the kernel cannot borrow them back
+while the camera is idle. Shrinking the reservation is the only lever there is.
+
+#### Where the size comes from
+
+OpenIPC's U-Boot builds its bootargs from two variables
+(`include/configs/sstar-common.h`):
+
+```
+... LX_MEM=${memlx} mma_heap=mma_heap_name0,miu=0,sz=${memsz} cma=2M
+```
+
+`LX_MEM` is how much DRAM Linux manages and `sz` is the MMA heap reserved
+*inside* it. `board_late_init()` in `arch/arm/cpu/armv7/infinity6c/chip.c` — and
+the matching `infinity6`, `infinity6b0` and `infinity6e` files — fills both in
+from the DRAM size it detects at boot:
+
+| DRAM | `memlx` (LX_MEM) | `memsz` (MMA heap) | `MemTotal` that leaves |
+|---|---|---|---|
+| 256 MB | 256 MB | `0x0A000000` — 160 MB | 91640 kB |
+| 128 MB | 128 MB | `0x4600000` — 70 MB | 53848 kB |
+| 64 MB | 64 MB | `0x2000000` — 32 MB | ~27 MB |
+
+The first two are measured; the 64 MB row is arithmetic. `infinity6e` has 512 MB
+and 1 GB rows as well, and `infinity6`, `infinity6b0` and `infinity6e` set
+`LX_MEM` a fraction under the full DRAM size where `infinity6c` uses all of it —
+the MMA sizes are the same across all four.
+
+The `Memory:` line above accounts for itself exactly on a 256 MB board:
+
+```
+ 262144K  DRAM, all of it given to Linux by LX_MEM=0x10000000
+-163840K  mma_heap sz=0x0A000000
+-  2048K  cma=2M, reported separately as "cma-reserved"
+-  4057K  kernel image (2404 code + 347 rwdata + 1068 rodata + 124 init + 114 bss)
+-  2607K  mem_map, page tables, early allocations
+= 89592K  available
+```
+
+`MemTotal` in `/proc/meminfo` is 91640 kB — the 89592K plus the 2 MB of CMA,
+which counts as ordinary memory until something asks for a contiguous buffer.
+
+#### Reading what the pipeline actually uses
+
+```bash
+cat /proc/mi_modules/mi_sys_mma/mma_heap_name0
+```
+
+The header line gives the heap size and what is still free. Two formats exist
+depending on the `mi.ko` generation — `avail` on infinity6c, `chunk_mgr_avail`
+on infinity6e — and both are bytes, in hex:
+
+```
+           heap_name            pa_start              length               avail
+      mma_heap_name0            23a00000             4600000             1dfa5c0
+```
+
+Below the header, every allocation is attributed to the subsystem and pid
+holding it (`mi_vpe`, `mi_venc`, `mi_rgn`, …), which is how the figures below
+were measured.
+
+> **Exercise the camera before you read it.** A pipeline that has just started
+> and never served a snapshot reports far less than its steady state. Pull a
+> handful of stills and connect a client first.
+
+Measured with majestic running its normal configuration:
+
+| Board | Sensor and streams | Heap | Used | Spare |
+|---|---|---|---|---|
+| ssc377d (infinity6c, 128 MB) | imx335, video0 2560x1920 + JPEG | 70 MB | **40 MB** | 30 MB |
+| ssc30kq (infinity6e, 256 MB) | imx335, video0 full-res + video1 704x576 + JPEG 1280x720 | 158 MB | **56 MB** | 102 MB |
+
+A 5 MP pipeline needs something in the region of 40–56 MB. The 256 MB profile
+reserves about three times that.
+
+#### The trap: `memsz` is reset on every boot
+
+`memlx` and `memsz` live in the saved environment, and `fw_printenv` will read
+your value back happily — but `board_late_init()` calls `setenv()` on both
+**unconditionally, on every boot, before `bootcmd` runs**. Anything you write
+there is overwritten before the kernel command line is assembled:
+
+```bash
+fw_setenv memsz 0x3800000
+reboot
+# ... after the reboot:
+fw_printenv memsz                    # memsz=0x3800000      <-- your value
+cat /proc/cmdline                    # ... sz=0x4600000 ...  <-- the stock one
+free                                 # unchanged
+```
+
+`/proc/cmdline` is the only honest answer about what the kernel was given.
+
+#### Changing the split
+
+Rewrite `bootargs` itself so the size is literal. Leave every other token
+byte-identical — in particular leave `LX_MEM=${memlx}` and `${rootmtd}` as
+placeholders, so that `mtdparts` is never retyped by hand:
+
+```bash
+fw_printenv -n bootargs > /root/bootargs.orig          # keep the original
+
+fw_printenv -n bootargs | sed 's/sz=${memsz}/sz=0x06000000/' > /tmp/ba
+fw_setenv bootargs "$(cat /tmp/ba)"
+fw_printenv -n bootargs                                # read it back BEFORE rebooting
+reboot
+```
+
+To undo it: `fw_setenv bootargs "$(cat /root/bootargs.orig)"`.
+
+The bootargs stored in the environment keep their `${...}` placeholders; U-Boot
+expands them at boot through `setenv setargs setenv bootargs ${bootargs}; run
+setargs`, which is why substituting one of them works and why the rest can be
+left alone.
+
+Every byte taken off the heap goes back to Linux, one for one:
+
+| Board | Heap | `MemTotal` | Heap still free |
+|---|---|---|---|
+| ssc30kq, 256 MB, stock | 158 MB | 92768 kB | 102 MB |
+| ssc30kq, 256 MB, `sz=0x06000000` | 96 MB | **156880 kB** | 40 MB |
+| ssc377d, 128 MB, stock | 70 MB | 53848 kB | 30 MB |
+| ssc377d, 128 MB, `sz=0x3800000` | 56 MB | **68184 kB** | 16 MB |
+
+Both kept streaming, served snapshots at full sensor resolution and logged no
+allocation failures.
+
+#### Choosing a size
+
+Take the measured peak and leave real headroom over it — on a 256 MB board
+`sz=0x06000000` (96 MB) is a reasonable starting point for a single 5 MP sensor,
+and on a 128 MB board `sz=0x3800000` (56 MB).
+
+Measure with **everything you actually use** switched on. The heap is sized once,
+at startup, and overlays, a second stream, LDC and parameterised snapshots all
+come out of it. The [streamer settings](#streamer-memory-settings) that decide
+how much the pipeline puts into the region apply here as much as on HiSilicon —
+`video1.enabled`, `jpeg.enabled` and `jpeg.tuned` are each worth a whole frame.
+
+> **Running short does not fail loudly.** The vendor allocator returns an error
+> deep inside the stack, so the symptom is a stream that never starts or a
+> snapshot that is never answered — and it can appear only at a later mode
+> change, such as a night-mode switch or a resolution change, rather than at
+> boot. Keep the original `bootargs` somewhere you can paste it back from, and
+> test the camera through a full day/night cycle before you trust a new value.
