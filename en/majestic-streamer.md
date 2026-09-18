@@ -777,6 +777,53 @@ day threshold, so only real dawn ends the night. The current percentage is the
 `night_light_duty` gauge on `/metrics`, and the dashboard's day/night line
 shows it as "lamp 43%".
 
+#### When the lamp burns out what you were trying to see
+
+That trim steers by how hard the camera is working to expose the scene, which
+is a judgement about the picture's **average**. It is also, exactly, the
+quantity auto-exposure spends its time holding constant — so a bright lamp
+close to a person or a number plate can wash that subject out while the
+average stays where AE wants it and the lamp never notices. Measured on one
+camera, scene and lighting fixed, taking the lamp from 1% to 100%: the share
+of the subject at the top of the scale went from 34% to 53%, the *background*
+got about a third darker as AE compensated, and the average moved four counts
+out of 255.
+
+Two settings answer that, both doing nothing until you set them.
+
+```yaml
+nightMode:
+  backlightHighlightPct: 25   # 0 = off
+  backlightPwmGamma: 1.65     # 1.0 = off
+```
+
+`backlightHighlightPct` watches the other end of the picture — the share of it
+sitting in the top sixteenth of the brightness scale — and holds the lamp to a
+lower ceiling while more than that share is there. It only ever lowers: a
+genuinely dark, distant scene still reaches full output when nothing is
+clipping. Backing off takes a few seconds and recovering takes rather longer,
+on purpose, so a passing headlight cannot walk the lamp down and the lamp
+cannot hunt against its own reflection. The share you should allow depends on
+your scene and your lens, which is why there is no default worth shipping:
+watch the `isp_highlight` gauge with the lamp at full and at its dimmest to see
+the range your illuminator actually produces, then set the threshold below
+where the subject visibly blows out. `night_light_cap` shows the ceiling
+currently being held.
+
+`backlightPwmGamma` deals with a different problem: on many illuminators the
+light is nowhere near proportional to the current. One measured board gave
+about 9% of its useful light at 1% duty and 20% at 10%, which leaves a
+controller stepping a few percent at a time with almost no usable travel at the
+dim end. Above 1.0 the setting spreads the travel out down there. Both duty
+bounds stay exactly where you put them and off stays off, so it cannot push the
+lamp under `backlightPwmMin` and reintroduce flicker. There is no correct value
+in general — it describes a particular lamp and its driver — and the board
+above worked out at about 1.65.
+
+Where the camera's ISP cannot report the brightness distribution, `isp_highlight`
+is simply absent and the guard stays inactive rather than guessing; the gamma
+setting works regardless.
+
 ### Iris control, and who owns a PWM channel
 
 A DC iris is a motorised aperture: the camera drives a coil through a PWM
