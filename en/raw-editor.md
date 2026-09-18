@@ -172,11 +172,20 @@ echo 'webui_lpr_base="https://cdn.jsdelivr.net/gh/OpenIPC/lpr-wasm@v0.1.0/dist/"
 
 That file is where the camera's own decisions about the web interface live —
 see [settings that live on the camera](web-interface.md#settings-that-live-on-the-camera),
-which is also worth reading if a Plates tab you had disappears. Any source will
-do — a mirror of your own, or a copy on the local network — as long as it is
-`http` or `https` and holds the same files. With nothing set, no Plates tab is
-built at all, which is the intended behaviour: a tab that could never work is
-worse than no tab.
+which is also worth reading if a Plates tab you had disappears. With nothing set,
+no Plates tab is built at all, which is the intended behaviour: a tab that could
+never work is worse than no tab.
+
+**What you put there is code your browser will run**, not just data: the source
+serves the script as well as the models. So use `https` and a source you trust:
+anything that can change the files in transit can run code on a page you are
+signed in to. Plain `http` is accepted — a mirror on a network you control is a
+reasonable use of it — but on anything else it is a bad trade. A mirror of your
+own is otherwise the right answer for a camera that must not reach the public
+internet; it has to serve the files cross-origin, since the page comes from the
+camera and the files do not. Note that the reader also pulls its runtime from a
+public CDN wherever the models come from, so **a mirror alone does not make the
+camera self-contained** — an air-gapped camera needs a mirror of that too.
 
 **Everything runs in your browser, not on the camera.** The camera serves the
 raw frame and nothing else; about nine megabytes of model, plus the runtime that
@@ -245,12 +254,11 @@ it could possibly recover.
 
 #### What to expect
 
-On a lab camera — an IMX335 over a car park — a plate 50 px wide read in
-daylight at up to 1.00 confidence. **The pixels are not usually the problem.
-Blur is**, and it goes over a cliff rather than down a slope. Scored against
-ground truth on 150 plate crops at that sampling, degraded to the noise measured
-on that camera — once for a single frame, once for what a twenty-frame stack
-leaves:
+On a hi3516ev300 with a 5 MP IMX335, in daylight, a plate 50 px wide read at up
+to 1.00 confidence. **The pixels are not usually the problem. Blur is**, and it
+goes over a cliff rather than down a slope. Scored against ground truth on 150
+plate crops at that sampling, degraded to the noise measured on that camera —
+once for a single frame, once for what a twenty-frame stack leaves:
 
 | blur added | one frame | stacked |
 | --- | --- | --- |
@@ -268,9 +276,11 @@ but only where there is blur headroom to spend it on. At +1.6 px neither column
 reads anything, and a plate with no headroom wants the lens seen to, not a
 longer burst.
 
-Sharpening makes it worse, not better, on a subject this small — see
+Sharpening makes it worse, not better, on a subject this small. `isp.sharpen:
+false` stops the camera adding its own — though not any the sensor's tuning
+applies, which is the distinction
 [dehaze, sharpening and noise reduction](majestic-streamer.md#dehaze-sharpening-and-noise-reduction)
-for the setting that turns the camera's own off.
+draws.
 
 ### When it will not open
 

@@ -474,23 +474,23 @@ but worth knowing before you conclude the setting did nothing.
 Removing the key, or setting it to an empty string, puts metering back to the
 whole picture without a restart.
 
-Measured on a hi3516ev300 with an IMX335 over a car park at night, reading
-`isp_exptime` back each time:
+Measured on a hi3516ev300 with a 5 MP IMX335, at night under street lighting,
+reading `isp_exptime` back after each change:
 
-| what auto-exposure metered | exposure it settled on | at its limit? |
+| what auto-exposure metered | `isp_exptime` | `isp_exposureismax` |
 | --- | --- | --- |
-| the whole frame (default) | 99 956 µs | yes |
-| 256 × 120 on the dark number plate | 99 956 µs | yes — unchanged |
-| 256 × 120 on the brightly lit road | **33 274 µs** | no |
+| the whole frame (default) | 99 956 µs | 1 |
+| 256 × 120 on a dark number plate | 99 956 µs | 1 — unchanged |
+| 256 × 120 on brightly lit road surface | **33 274 µs** | 0 |
 
 Both results are the setting working. Metering something dark asks for *more*
 exposure, and auto-exposure was already pressed against its slow-shutter
 ceiling, so nothing moved. Metering something bright is where it pays.
 
-**Where it works:** gen-4 HiSilicon and Goke — hi3516cv500 (and the av300/dv300
-that share its SDK), hi3516ev200, hi3516ev300, gk7205v200, gk7205v300 and
-gk7205v500. Older parts have no AE crop in their statistics configuration at
-all, and hi3516cv6xx is excluded. Cameras without it do not offer the key.
+**Where it works:** hi3516cv500, hi3516av300, hi3516dv300, hi3516ev200,
+hi3516ev300, gk7205v200, gk7205v300 and gk7205v500. A camera that cannot do it
+does not offer the key at all, so `GET /api/v1/get?key=isp.meterRect` answering
+404 is the check.
 
 #### Which end of the histogram auto-exposure protects
 
@@ -506,8 +506,8 @@ all, and hi3516cv6xx is excluded. Cameras without it do not offer the key.
 "expose for the bright thing I pointed at". `default` restores whatever the
 sensor's tuning chose, which is not necessarily either of the other two.
 
-Available on HiSilicon and Goke from gen 2 upward — everything except the oldest
-hi3518 parts, and excluding hi3516cv6xx.
+Available on most HiSilicon and Goke cameras — not the oldest hi3518 parts, and
+not hi3516cv6xx. As above, the key is absent where it would do nothing.
 
 #### Reading back what the camera actually did
 
@@ -551,16 +551,22 @@ which is not in the raw pixels at all.
 
 ### Dehaze, sharpening and noise reduction
 
-Three blocks of the image pipeline that majestic used to switch on at every
-start with no way to turn them off. They are settings now, and **every default
-is exactly what the camera did before**, so nothing changes on a camera you do
-not touch.
+Three parts of the picture the camera used to configure at every start with no
+way to say otherwise. They are settings now, and **every default is exactly what
+the camera did before**, so nothing changes on a camera you do not touch.
 
-| key | default | what "off" means |
+**Only one of the three is an off switch, and it is worth being clear about
+which.**
+
+| key | default | what the other value does |
 | --- | --- | --- |
-| `isp.dehaze` | `125` | `0` disables the block |
-| `isp.sharpen` | `true` | leaves the ISP's own sharpening as the sensor's tuning set it, rather than flattening it |
-| `isp.nr` | `true` | keeps whatever noise reduction the sensor's IQ profile configured, instead of replacing it wholesale |
+| `isp.dehaze` | `125` | `0` switches dehazing off |
+| `isp.sharpen` | `true` | `false` stops the camera applying its own sharpening — it does **not** guarantee an unsharpened picture, because the sensor's tuning may sharpen on its own |
+| `isp.nr` | `true` | `false` likewise leaves whatever noise reduction the sensor's tuning asked for, instead of replacing it |
+
+So `isp.sharpen: false` is "stop overriding the sensor's tuning", not "no
+sharpening". If a picture is still over-sharpened afterwards, that is where it
+is coming from, and it is a property of the sensor profile the firmware ships.
 
 `isp.dehaze` is a contrast stretch. It earns its keep in haze. A night scene
 never asked for it, and pays for it in shadow detail.
@@ -573,15 +579,15 @@ on sharpening applied afterwards rather than on this block itself, so treat it
 as a reason to try the switch, not as a figure for what the switch is worth.
 
 `isp.nr` matters less for how the picture looks than for whose tuning is in
-effect: leaving it on replaces the noise-reduction profile the sensor shipped
-with, at every start.
+effect: left at `true`, the noise reduction the sensor was tuned with is replaced
+at every start.
 
-All three take effect on the next pipeline rebuild rather than live, so the
-camera restarts its video when you change them.
+None of the three is applied live — changing one restarts the video, so expect a
+break in the stream rather than a setting that slides.
 
 **Where they work:** hi3516ev200, hi3516ev300, gk7205v200, gk7205v300 and
-gk7205v500 — the parts whose pipeline majestic configures this way. Cameras that
-do not do it do not offer the keys, and there is nothing there to turn off.
+gk7205v500. Other cameras do not offer the keys, and have nothing there to turn
+off.
 
 ### Auto day/night detection
 
