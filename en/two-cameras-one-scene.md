@@ -22,11 +22,15 @@ video is placed onto exactly that outline.
 
 ![Zoomed into the outline: the other camera's live picture where its part of the scene is](../images/two-cameras/zoomed.webp)
 
-This page is how to set it up and what to expect from it. Three things have to
-be true first: the cameras must see each other on the network, the camera whose
-page you use must know **where** the other one looks (a calibration, measured
-once), and it must hold a credential for the other camera (a pairing, typed
-once). The rest is a click.
+> The pictures in these screenshots are blurred on purpose. Everything the
+> interface draws — the outline, its label, the prompt, the bar — is as it
+> appears.
+
+This page is how to set it up and what to expect from it. Two things have to
+be true before the control appears: the cameras must see each other on the
+network, and the camera whose page you use must know **where** the other one
+looks (a calibration, measured once). The first click inside the outline then
+asks for the other camera's password, once (a pairing). The rest is a click.
 
 ### What you need
 
@@ -113,12 +117,17 @@ camera's picture, then in the **other** camera's:
 
 ```
 # x y      x' y'
-1204 742   118 90
-1530 731   1802 22
-1560 1093  1836 1350
-1219 1120  83 1372
-1381 940   960 690
+713 968    300 300
+1091 874   2200 250
+1143 1148  2300 1650
+762 1219   350 1700
+923 1061   1300 1000
+836 1143   800 1350
 ```
+
+(These six points are what the example row above was measured from, so the
+script's answer to them is that row, give or take the rounding to whole
+pixels.)
 
 and run:
 
@@ -235,6 +244,8 @@ curl -u root:PASSWORD -X POST http://<camera-address>/api/v1/calibration/pair \
   first, the video within a second or two. The label says which you are
   seeing — `LIVE`, `connecting…` or `snapshots` — the size of the picture it
   is showing, and how far in you are looking at it.
+
+  ![The other camera's picture placed on the outline, the label reading LIVE](../images/two-cameras/overlay.webp)
 - **Zoom as usual**: the wheel, a rectangle under **Fit**, the **Area** tool,
   a drag to pan. Everything works inside the outline as it does outside it.
   With the other camera's picture up, the page lets you zoom until that
