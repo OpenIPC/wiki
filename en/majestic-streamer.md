@@ -1908,9 +1908,11 @@ refusing connections can be parked without touching the two that have not.
 > servers will not reply to the offer until they have finished gathering their
 > own ICE candidates, and one pointed at a public STUN server spends seconds
 > doing that even when the camera is on the same LAN. The camera waits up to
-> twenty seconds and says which of the two happened — `the endpoint could not be
-> reached` is a network fault, `the server did not answer within 20 s` is the
-> far end. go2rtc is the common case and has a one-line cure; see
+> twenty seconds, and distinguishes the two cases in the log and in what
+> **Outgoing** shows for that destination: an endpoint it never reached is
+> reported as a network fault, one that was reached and stayed silent is
+> reported against the far end. go2rtc is the common case and has a one-line
+> cure; see
 > [Letting the camera publish, instead of being polled](howto-frigate-integration.md#letting-the-camera-publish-instead-of-being-polled).
 
 `thinEnhance` is the one setting that still belongs to the section rather than

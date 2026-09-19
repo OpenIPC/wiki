@@ -217,17 +217,25 @@ would read a restream. Nothing connects to the camera at all.
 On a small board that is worth something concrete. A camera holds unsent video
 for anything reading it over TCP, and that is the memory it runs out of first —
 see [How many people can watch at once](majestic-streamer.md#how-many-people-can-watch-at-once).
-Measured on a 27 MB gk7205v200 serving Frigate two streams:
 
-| how Frigate gets the video | connections to the camera | of its live-client budget |
+Read off `/metrics` on a gk7205v200 with 27 MB of RAM, serving Frigate a
+1920x1080 main stream and a 704x576 sub stream, detect and record one each:
+
+| how Frigate gets the video | connections to the camera | `live_backlog_reserved_bytes` |
 |---|---|---|
-| RTSP, pulled (everything above) | 2 | **2.5 MB** — about half of it |
-| WHIP, pushed | **0** | **none** |
+| RTSP, pulled (everything above) | 2 | **2621440** — about half the budget that board set itself |
+| WHIP, pushed | **0** | **0** |
 
-A WebRTC publish is UDP, so there is no send buffer for a slow link to fill and
-nothing for a stalled reader to grow. It is not free — the camera spends about
-1.4 MB more memory publishing than it does serving RTSP — but it is memory that
-cannot be grown from the far end, which is the failure this avoids.
+That reservation is what each TCP reader is allowed to accumulate if it stops
+reading, and it is charged whether or not anything has gone wrong yet. A WebRTC
+publish is UDP: there is no send buffer for a slow link to fill, so nothing is
+reserved and nothing can be grown from the far end.
+
+It is not free in absolute terms — a publishing session has buffers of its own,
+and the camera's total free memory is lower while it publishes than while it
+serves the same two streams over RTSP. What changes is not how much memory is
+spent but who can spend it: a reader that stalls cannot make the camera hold
+more.
 
 ### Turning off go2rtc's STUN servers, which is not optional
 
@@ -274,7 +282,10 @@ camera pushes into, and go2rtc restreams it onward as RTSP for Frigate's own
 ffmpeg.
 
 Then point the camera at it — one entry per channel, `http(s)://` being what
-picks WHIP:
+picks WHIP. This needs a build with WebRTC in it, which the Lite and Ultimate
+images have; on a build without it the `outgoing` keys are absent from
+`/api/v1/config.schema.json` and the API refuses the address rather than
+accepting a setting nothing would act on.
 
 ```yaml
 outgoing:
