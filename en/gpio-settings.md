@@ -334,3 +334,9 @@ PTZ via OpenIPC `gpio-motors`: `fw_setenv gpio_motors '3 4 72 73 69 59 58 57'`
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS     | DEVICE ID     |
 |-------------|--------|--------|--------------|---------------|
 | Hi3518Ev200 | 61     | 60     | 1 (inverted) | ZG2622MW      |
+
+---
+
+Once you know a board's numbers, record them on the device rather than typing them
+into each script that needs them: see
+[Per-device settings: customizer.sh, muxes.sh and gpio.conf](per-device-settings.md).

@@ -274,3 +274,9 @@ a job:
 For the day/night filter, the two coil pins belong on **Settings → Day / Night**
 instead, where **Test the filter** can adjudicate them — the hunt proposes, the
 test decides. If the test says *wired backwards*, swap the two coils there.
+
+---
+
+What to do with the answer: a pin you have identified belongs in the device's own
+`gpio.conf`, so every script on that camera refers to it by name. See
+[Per-device settings: customizer.sh, muxes.sh and gpio.conf](per-device-settings.md).
