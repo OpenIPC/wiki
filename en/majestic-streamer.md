@@ -1606,7 +1606,7 @@ nothing, which is different from showing that everything is fine.
 
 | metric | what it says |
 |---|---|
-| `venc0_rc_state` | `0` while the channel is meeting what was asked of it, non-zero while it is not, and higher the further from it. The Dashboard and the camera log say which finding it is |
+| `venc0_rc_state` | `0` while the channel is meeting what was asked of it, non-zero while it is not. The Dashboard and the camera log say which finding it is |
 | `venc0_encoded_frames_total` | complete pictures encoded — the delta over time is the frame rate the camera is really achieving |
 | `venc0_keyframes_total` | how many of those were keyframes |
 | `venc0_rcvd_bytes` | bytes produced; the delta over time is the rate the Encoder out tile shows |
