@@ -46,7 +46,8 @@ system:
 # read each key are noted. A key your build does not have answers 404.
 isp:
   #sensorConfig: /etc/sensors/imx222_1080p_line.ini   # path, or just the sensor name
-  antiFlicker: disabled         # disabled | 50 | 60
+  antiFlicker: disabled         # disabled | 50 | 60 -- match your mains, not
+                                # your fps; see "Anti-flicker" in majestic-streamer.md
   #blkCnt: 4
   #drc: 300
   #rawMode: slow                # none | slow | fast
