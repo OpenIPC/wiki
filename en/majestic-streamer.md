@@ -509,6 +509,38 @@ sensor's tuning chose, which is not necessarily either of the other two.
 Available on most HiSilicon and Goke cameras — not the oldest hi3518 parts, and
 not hi3516cv6xx. As above, the key is absent where it would do nothing.
 
+#### Anti-flicker: matching the shutter to mains lighting
+
+Mains-powered lighting — most fluorescent tubes and many LED lamps — brightens
+and dims at twice the mains frequency: 100 times a second on a 50 Hz supply, 120
+on a 60 Hz one. If the shutter is open for anything other than a whole number of
+those half-cycles, each frame catches a different slice of the cycle and the
+picture shows slow rolling bands of brightness, worst on a rotated or
+rolling-shutter frame. `isp.antiFlicker` removes that banding by holding the
+shutter to a whole number of half-periods:
+
+| value | for |
+| --- | --- |
+| `disabled` | daylight, or DC/battery lighting — no constraint, best exposure |
+| `50` | 50 Hz mains (most of the world) |
+| `60` | 60 Hz mains (the Americas, and parts of Asia) |
+
+Set it to the frequency of the mains your **lights** run on, which is your
+region's grid frequency — not the camera's frame rate.
+
+The constraint only applies while auto-exposure wants a shutter *longer* than
+one half-period (10 ms at 50 Hz, 8.3 ms at 60 Hz). When a scene is bright enough
+that auto-exposure wants a shorter shutter, anti-flicker leaves it alone and the
+camera exposes freely — so enabling it does **not** blow out a daylit scene the
+way an unconditional shutter floor would. The trade is that a short,
+unconstrained shutter no longer suppresses banding: a bright mains-lit scene can
+still show it, and correct exposure is chosen over flicker suppression there,
+because the two cannot both be had once gain is already at its floor. If your
+bright scene is lit by mains-powered lamps, check the picture under those lamps
+rather than assuming the banding is gone.
+
+Honoured on HiSilicon/Goke, SigmaStar and Ingenic cameras. Rockchip ignores it.
+
 #### Reading back what the camera actually did
 
 Do not infer it — the camera reports it:
