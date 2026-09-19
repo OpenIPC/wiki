@@ -281,6 +281,9 @@ unset.
 
 ### See also
 
+- [Is the SD card actually storing your footage?](sd-card-diagnostics.md) —
+  before you swap a card because you suspect it, and what to check on the one
+  you put in.
 - [Encrypted recordings on the SD card](recording-encryption.md) — what a thief
   gets if they take the card you just pulled.
 - [Majestic streamer](majestic-streamer.md) — the recorder's own counters, and
