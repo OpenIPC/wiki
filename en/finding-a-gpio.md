@@ -274,3 +274,10 @@ a job:
 For the day/night filter, the two coil pins belong on **Settings → Day / Night**
 instead, where **Test the filter** can adjudicate them — the hunt proposes, the
 test decides. If the test says *wired backwards*, swap the two coils there.
+
+---
+
+What to do with the answer, beyond the settings pages above: a pin that should be
+known to *every* unit of a model belongs in that device's profile rather than being
+re-entered on each camera. See
+[Telling a camera about its own hardware](per-device-settings.md).

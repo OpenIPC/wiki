@@ -334,3 +334,10 @@ PTZ via OpenIPC `gpio-motors`: `fw_setenv gpio_motors '3 4 72 73 69 59 58 57'`
 | Processor   | IRCUT1 | IRCUT2 | IRSTATUS     | DEVICE ID     |
 |-------------|--------|--------|--------------|---------------|
 | Hi3518Ev200 | 61     | 60     | 1 (inverted) | ZG2622MW      |
+
+---
+
+Once you know a board's numbers, put them where the camera will read them — on
+**Settings → Pins** and **Settings → Day / Night** for one camera, or in a device
+profile so every unit of the model comes up knowing them. Both routes:
+[Telling a camera about its own hardware](per-device-settings.md).
