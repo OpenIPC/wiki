@@ -5,13 +5,13 @@ TP-Link Tapo C120
 ---
 
 SoC SSC377, sensor SC430AI (4 MP), 16 MB NOR (XM25QH128C), Wi-Fi RTL8188FTV on USB.
-Firmware: the `ssc377_lite_tp-link-tapo-c120` device in
-[OpenIPC/builder](https://github.com/OpenIPC/builder/pull/162) (16 MB layout, `rtl8188fu` driver, WPA3-capable
-`wpa_supplicant`, IQ file, IR-cut and LED pins). The SC430AI driver is in
-[OpenIPC/sensors](https://github.com/OpenIPC/sensors/tree/master/sigmastar/infinity6c) (PR #7) and the
-loader entry in OpenIPC/firmware#2445; until those and the builder device are merged, build the device
-yourself with `./builder.sh ssc377_lite_tp-link-tapo-c120`. The generic `ssc377_lite` image is an 8 MB
-layout with no Wi-Fi driver and does not fit this camera.
+Firmware: the
+[`ssc377_lite_tp-link-tapo-c120`](https://github.com/OpenIPC/builder/tree/master/devices/ssc377_lite_tp-link-tapo-c120)
+device in OpenIPC/builder — 16 MB layout, `rtl8188fu` driver, WPA3-capable `wpa_supplicant`, the IQ file,
+and the IR-cut and LED pins. Take the image from the builder releases, or build it yourself with
+`./builder.sh ssc377_lite_tp-link-tapo-c120`. The SC430AI sensor driver lives in
+[OpenIPC/sensors](https://github.com/OpenIPC/sensors/tree/master/sigmastar/infinity6c). The generic
+`ssc377_lite` image is an 8 MB layout with no Wi-Fi driver and does not fit this camera.
 
 ![Bottom side](../images/device-tapo-c120-bottom.jpg)
 
