@@ -64,6 +64,7 @@ OpenIPC Wiki
 - [When something moves: clips, hooks and your own scripts](en/motion-events.md)
 - [Encrypted recordings on the SD card](en/recording-encryption.md)
 - [Changing the SD card on a running camera](en/sd-card-swap.md)
+- [Is the SD card actually storing your footage?](en/sd-card-diagnostics.md)
 - [Web interface](en/web-interface.md)
 - [Two cameras, one scene: the other camera's picture on this one](en/two-cameras-one-scene.md)
 - [Factory reset and the unclaimed camera](en/first-boot.md)
