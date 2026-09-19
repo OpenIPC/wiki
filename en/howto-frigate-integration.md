@@ -207,6 +207,121 @@ The Frigate MQTT topics for runtime control are documented in
 This is more brittle than Level 1 — only adopt it if profiling shows
 Frigate's motion stage is genuinely the bottleneck on your host.
 
+## Letting the camera publish, instead of being polled
+
+Everything above has Frigate open connections *to* the camera. It can be turned
+around: the camera publishes into the go2rtc that ships inside Frigate, over
+WHIP, and Frigate's detect and record roles read that stream the same way they
+would read a restream. Nothing connects to the camera at all.
+
+On a small board that is worth something concrete. A camera holds unsent video
+for anything reading it over TCP, and that is the memory it runs out of first —
+see [How many people can watch at once](majestic-streamer.md#how-many-people-can-watch-at-once).
+
+Read off `/metrics` on a gk7205v200 with 27 MB of RAM, serving Frigate a
+1920x1080 main stream and a 704x576 sub stream, detect and record one each:
+
+| how Frigate gets the video | connections to the camera | `live_backlog_reserved_bytes` |
+|---|---|---|
+| RTSP, pulled (everything above) | 2 | **2621440** — about half the budget that board set itself |
+| WHIP, pushed | **0** | **0** |
+
+That reservation is what each TCP reader is allowed to accumulate if it stops
+reading, and it is charged whether or not anything has gone wrong yet. A WebRTC
+publish is UDP: there is no send buffer for a slow link to fill, so nothing is
+reserved and nothing can be grown from the far end.
+
+It is not free in absolute terms — a publishing session has buffers of its own,
+and the camera's total free memory is lower while it publishes than while it
+serves the same two streams over RTSP. What changes is not how much memory is
+spent but who can spend it: a reader that stalls cannot make the camera hold
+more.
+
+### Turning off go2rtc's STUN servers, which is not optional
+
+go2rtc will not answer a WHIP offer until it has finished gathering its own ICE
+candidates, and it ships pointed at two public STUN servers. Publishing to a
+machine on your own LAN therefore waits for two internet round trips that can
+produce nothing useful — the reflexive address they return is your camera as
+seen from outside, which is not how anything on your LAN reaches it.
+
+Measured, offer to answer, against go2rtc 1.9.10:
+
+| go2rtc `webrtc` config | time to answer |
+|---|---|
+| as shipped | ~11 s |
+| `candidates` set | ~5 s |
+| **`ice_servers: []`** | **~0.002 s** |
+
+So set it. Without it the camera spends ten seconds of every start-up waiting,
+and on a camera with no route to the internet at all it waits for the full
+timeout, every session, forever.
+
+```yaml
+go2rtc:
+  webrtc:
+    ice_servers: []          # publish on the LAN; do not go looking outside it
+  streams:
+    openipc_main:            # named, and deliberately empty --
+    openipc_sub:             # the camera fills them by pushing
+
+cameras:
+  openipc:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/openipc_sub
+          input_args: preset-rtsp-restream
+          roles: [detect]
+        - path: rtsp://127.0.0.1:8554/openipc_main
+          input_args: preset-rtsp-restream
+          roles: [record]
+```
+
+A stream with no source under it is not a mistake here: it is the name the
+camera pushes into, and go2rtc restreams it onward as RTSP for Frigate's own
+ffmpeg.
+
+Then point the camera at it — one entry per channel, `http(s)://` being what
+picks WHIP. This needs a build with WebRTC in it, which the Lite and Ultimate
+images have; on a build without it the `outgoing` keys are absent from
+`/api/v1/config.schema.json` and the API refuses the address rather than
+accepting a setting nothing would act on.
+
+```yaml
+outgoing:
+  servers:
+    - url: http://192.168.1.20:1984/api/webrtc?dst=openipc_main
+      channel: main
+    - url: http://192.168.1.20:1984/api/webrtc?dst=openipc_sub
+      channel: sub
+```
+
+where `192.168.1.20` is the machine Frigate runs on. Check it took:
+
+```
+curl -s http://192.168.1.20:1984/api/streams
+```
+
+Each stream should show a producer with `"format_name": "webrtc"` and a byte
+count that climbs. From the camera's side, `/metrics` is the other half of the
+answer: `live_backlog_reserved_bytes` stays at 0, because nothing is being held
+for anybody.
+
+From the encoder starting to both channels publishing takes two to three
+seconds, most of which is the encoder itself.
+
+### What this does not replace
+
+Frigate still needs go2rtc, and this does not remove it — it changes which
+direction the video moves. Frigate's detect and record are ffmpeg processes
+that read RTSP; there is no path by which they consume WebRTC from a camera
+directly, whatever the camera can speak. go2rtc is what turns the pushed stream
+back into something they can read.
+
+It is also not a shape Frigate's own documentation covers, so treat it as the
+option it is: worth it on a board that is short of memory or on a link where
+viewers stall, and not worth the deviation on a camera that has neither problem.
+
 ## Troubleshooting
 
 - **"Connection refused" / repeated reconnects in Frigate.** Confirm the
