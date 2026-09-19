@@ -35,3 +35,29 @@ viewers it cannot afford instead of dying. On an older build, keep fewer live
 views open, or lower `system.buffer` before you look any further. See
 [How many people can watch at once](majestic-streamer.md#how-many-people-can-watch-at-once)
 for what a given board can hold and how to read it off `/metrics`.
+
+### The stream is several times the bitrate I set
+
+The Dashboard's **Encoder out** tile reads well above the rate underneath it —
+four or five times it, not a few per cent — and lowering `bitrate` does not
+help, because the camera was already failing to reach the number it had.
+
+Almost always this is the compression ceiling: `video0.maxQp` is set low enough
+that rate control runs out of room to compress and exceeds the bitrate instead
+of meeting it. A config written before the default rose in September 2026 still
+carries the old value, and updating the firmware does not change a key that has
+been set.
+
+On builds from 2026-09-19 onward the camera diagnoses this itself and names the
+setting, on the Dashboard and beside the Video settings. On an older build,
+check the value by hand:
+
+```
+curl -s -u root:PASSWORD 'http://192.168.1.10/api/v1/config.json' | grep -A1 maxQp
+```
+
+The same watch covers the opposite symptom — a camera delivering far fewer
+frames than its `fps`, which after dark is the sensor slowing down rather than
+anything to do with the encoder. See
+[When the camera exceeds the bitrate you set](majestic-streamer.md#when-the-camera-exceeds-the-bitrate-you-set)
+for both, the measured effect of the ceiling, and the metrics that show it.

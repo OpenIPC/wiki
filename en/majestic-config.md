@@ -164,7 +164,9 @@ video0:
   #size: 1920x1080
   fps: 20
   bitrate: 4096
-  rcMode: vbr                   # cbr | vbr | avbr
+  rcMode: vbr                   # cbr | vbr | avbr — cbr holds `bitrate` as a
+                                # target, vbr treats it as a ceiling, avbr as a
+                                # ceiling it may drift around
   #profile: main                # base | main | high
   gopSize: 1.0
   #gopMode: normal              # normal | dual | smart
@@ -198,8 +200,14 @@ video0:
   #sliceUnits: 4                # macroblock rows per slice (HiSilicon/Goke, SigmaStar)
   #sliceBytes: 0                # target bytes per slice; wins over sliceUnits
                                 # when both are set          (HiSilicon/Goke)
-  # Quantiser bounds. The defaults are per-vendor — read them back from
-  # /api/v1/config.json rather than assuming the numbers here.
+  # Quantiser bounds — how much compression rate control is allowed to use.
+  # maxQp is the important one: set it too low and the encoder runs out of
+  # room to compress and exceeds `bitrate` instead of meeting it. The defaults
+  # are per-vendor and maxQp's rose in September 2026, but a default only
+  # applies to a key you have not set — a config written before then keeps
+  # what it holds, and updating the firmware will not change it. Read them
+  # back from /api/v1/config.json rather than assuming the numbers here. See
+  # "When the camera exceeds the bitrate you set".
   #minQp: 28
   #maxQp: 42
 
