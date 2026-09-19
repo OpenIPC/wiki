@@ -568,19 +568,47 @@ So `isp.sharpen: false` is "stop overriding the sensor's tuning", not "no
 sharpening". If a picture is still over-sharpened afterwards, that is where it
 is coming from, and it is a property of the sensor profile the firmware ships.
 
-`isp.dehaze` is a contrast stretch. It earns its keep in haze. A night scene
-never asked for it, and pays for it in shadow detail.
+`isp.dehaze` is a contrast stretch. It earns its keep in haze — and in overcast
+daylight, which is the case people forget: on the same camera and in the same
+run as the table below, turning it off cost **13.5 DN of contrast, about 8%**,
+for no change in noise and none in edge rise. A night scene is the other story,
+and is where the objection to it comes from: it never asked for the stretch, and
+pays for it in shadow detail. Which is why it is a setting and not a default
+anyone should feel obliged to change.
 
-`isp.sharpen` is worth turning off wherever the subject is small. Overshoot
-around a character a few pixels tall is indistinguishable from the character.
-Scored against ground truth on 78-pixel-wide number plates, adding sharpening
-cost about two points of recognition accuracy rather than buying any — measured
-on sharpening applied afterwards rather than on this block itself, so treat it
-as a reason to try the switch, not as a figure for what the switch is worth.
+`isp.sharpen` is the one where the obvious reading and the measurement point
+opposite ways, so it is worth a paragraph.
+
+Sharpening of the usual kind does not help a small subject: overshoot around a
+character a few pixels tall is indistinguishable from the character, and scored
+against ground truth on 78-pixel-wide number plates, adding it cost about two
+points of recognition accuracy rather than buying any.
+
+But `false` does not remove sharpening, and on the one camera this has been
+measured on it made the picture **worse**. An hi3516ev300 with a 5 MP IMX335, in
+cloudy daylight, 18 paired captures per setting interleaved so a change in the
+light could not be mistaken for a change in the setting:
+
+| | edge rise | noise | contrast |
+| --- | --- | --- | --- |
+| default (`true`) | 1.98 px | 10.2 DN | 174 |
+| `false` | 2.35 px (**+19%**) | 13.3 DN (**+30%**) | 149 (**−14%**) |
+
+Softer, noisier and flatter on every measure. That is what "stop overriding the
+sensor's tuning" bought on that sensor: its own profile was worse than what the
+camera had been putting over the top of it.
+
+Both results stand. If you are chasing a small subject, do not add sharpening on
+top. But do not expect `isp.sharpen: false` to be how you avoid it — try it,
+measure your own camera, and keep whichever picture is better.
 
 `isp.nr` matters less for how the picture looks than for whose tuning is in
 effect: left at `true`, the noise reduction the sensor was tuned with is replaced
-at every start.
+at every start. On the camera measured for the table below the two were nearly
+the same picture — switching it off moved edge rise by 0.10 px and left noise and
+contrast inside the measurement error — so on that sensor this is the one of the
+three with almost nothing riding on it. That is a statement about one sensor's
+profile, not about the key.
 
 None of the three is applied live — changing one restarts the video, so expect a
 break in the stream rather than a setting that slides.
