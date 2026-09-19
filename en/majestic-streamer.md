@@ -528,12 +528,16 @@ shutter to a whole number of half-periods:
 Set it to the frequency of the mains your **lights** run on, which is your
 region's grid frequency — not the camera's frame rate.
 
-The constraint only bites while auto-exposure wants a shutter *longer* than one
-half-period — the dim, artificially-lit conditions where the banding is actually
-visible. In brighter light, where the wanted shutter is already shorter than a
-half-period (10 ms at 50 Hz, 8.3 ms at 60 Hz) and any flicker is far too fast to
-see, the camera exposes freely. So turning anti-flicker on does **not** cost you
-a correct exposure outdoors or under a bright lamp.
+The constraint only applies while auto-exposure wants a shutter *longer* than
+one half-period (10 ms at 50 Hz, 8.3 ms at 60 Hz). When a scene is bright enough
+that auto-exposure wants a shorter shutter, anti-flicker leaves it alone and the
+camera exposes freely — so enabling it does **not** blow out a daylit scene the
+way an unconditional shutter floor would. The trade is that a short,
+unconstrained shutter no longer suppresses banding: a bright mains-lit scene can
+still show it, and correct exposure is chosen over flicker suppression there,
+because the two cannot both be had once gain is already at its floor. If your
+bright scene is lit by mains-powered lamps, check the picture under those lamps
+rather than assuming the banding is gone.
 
 Honoured on HiSilicon/Goke, SigmaStar and Ingenic cameras. Rockchip ignores it.
 
