@@ -42,6 +42,7 @@ OpenIPC Wiki
 - [Installation on Novatek](https://openipc.org/cameras/vendors/novatek)
 - [Installation on SigmaStar](https://openipc.org/cameras/vendors/sigmastar)
 - [Installation on XM510/XM530](https://openipc.org/cameras/vendors/xiongmai)
+- [Backing up your stock firmware](en/backup-stock-firmware.md)
 - [Old installation guides](en/old-installation.md)
 - [Very old full manual](en/old-manual.md)
 
