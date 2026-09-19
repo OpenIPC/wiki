@@ -53,7 +53,7 @@ setting, on the Dashboard and beside the Video settings. On an older build,
 check the value by hand:
 
 ```
-curl 'http://192.168.1.10/api/v1/config.json' | grep -A1 maxQp
+curl -s -u root:PASSWORD 'http://192.168.1.10/api/v1/config.json' | grep -A1 maxQp
 ```
 
 The same watch covers the opposite symptom — a camera delivering far fewer

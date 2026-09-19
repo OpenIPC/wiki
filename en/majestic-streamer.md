@@ -1552,13 +1552,13 @@ gradient to foliage moving in wind.
 > assuming:
 >
 > ```
-> curl 'http://192.168.1.10/api/v1/config.json' | grep -A1 maxQp
+> curl -s -u root:PASSWORD 'http://192.168.1.10/api/v1/config.json' | grep -A1 maxQp
 > ```
 >
 > If it says 30 and the stream is over its rate, raising it is the fix:
 >
 > ```
-> curl 'http://192.168.1.10/api/v1/set?video0.maxQp=42'
+> curl -s -u root:PASSWORD 'http://192.168.1.10/api/v1/set?video0.maxQp=42'
 > ```
 
 Raising the ceiling costs picture quality on the scenes that need it, and that
@@ -1606,16 +1606,19 @@ nothing, which is different from showing that everything is fine.
 
 | metric | what it says |
 |---|---|
-| `venc0_rc_state` | `0` within its rate, `1` drifting past it, `2` over it, `3` receiving far fewer frames than configured |
+| `venc0_rc_state` | `0` while the channel is meeting what was asked of it, non-zero while it is not, and higher the further from it. The Dashboard and the camera log say which finding it is |
 | `venc0_encoded_frames_total` | complete pictures encoded — the delta over time is the frame rate the camera is really achieving |
 | `venc0_keyframes_total` | how many of those were keyframes |
 | `venc0_rcvd_bytes` | bytes produced; the delta over time is the rate the Encoder out tile shows |
 | `venc0_mean_qp`, `venc0_max_qp` | where compression is sitting against its ceiling, on the parts that can report it |
 
-`venc1_*` says the same about the sub stream. `venc0_rc_state` is **absent**
-rather than zero whenever the camera has no opinion — in the first half minute,
-on `avbr`, and on a channel that is switched off — because a zero there would
-read as a measurement that was taken and passed.
+`venc1_*` says the same about the sub stream.
+
+`venc0_rc_state` is **absent** rather than zero whenever the camera has no
+opinion to offer — it has not been watching long enough yet, or this is a
+channel it does not hold to a rate at all. A zero there would read as a
+measurement that was taken and passed. So alert on the value being present and
+non-zero, rather than on any particular number.
 
 Comparing `venc0_mean_qp` against `venc0_max_qp` is the early warning: a
 channel sitting a step or two under its ceiling is one busy scene away from
