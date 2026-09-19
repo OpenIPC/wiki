@@ -37,23 +37,24 @@ to the camera rather than to a browser. It is a shell file, read by every page:
 
 ```
 webui_theme="dark"
-webui_lpr_base="https://cdn.jsdelivr.net/gh/OpenIPC/lpr-wasm@v0.1.0/dist/"
+webui_lpr_base="https://mirror.example/lpr-wasm/dist/"
 ```
 
 - `webui_theme` — `light`, `dark` or `auto`. Set from **Access** in the
   interface; there is no reason to edit it by hand.
 - `webui_lpr_base` — where the [raw editor](raw-editor.md#plates) fetches the
-  number plate reader from. There is no default: the models are non-commercial
-  use only, so each owner opts in. Absent, no Plates tab is built at all.
+  number plate reader from. Absent, it uses the release the firmware was built
+  against, from a public CDN. Set it to point a camera at a mirror of your own.
 
 `/etc` rather than somewhere under `/var/www`, because updating the web
 interface replaces the whole of `/var/www` and a choice made there would not
 survive it.
 
 > Web interface builds before 2026-09-18 rewrote this file from scratch when you
-> changed the theme, which deleted `webui_lpr_base` along with it. If your Plates
-> tab disappears after changing the theme, that is what happened: add the line
-> again, and update the web interface.
+> changed the theme, which deleted `webui_lpr_base` along with it. If a camera
+> goes back to fetching the reader from the public CDN after a theme change —
+> or loses its Plates tab, where it has no route to one — that is what happened:
+> add the line again, and update the web interface.
 
 ### Another camera's picture on the live view
 

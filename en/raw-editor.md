@@ -157,42 +157,43 @@ change makes, for the same reason — a bad colour matrix survives a reboot.
 Finds number plates in the frame, reads them, and — this is the part worth
 having — tells you what is stopping the ones it cannot read.
 
-**The tab is not there by default, and that is a licensing decision rather than
-an oversight.** The models are published under
-[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/): attribution,
-and non-commercial use only. Majestic is a commercial product, so a camera that
-fetched them on its own would be making that choice on behalf of everyone
-running one, including the vendors who ship cameras for a living. Each owner
-opts in instead, once, on the camera:
+**The models are not in the firmware.** They are far too big for a camera's
+flash, so about nine megabytes of model, plus the runtime that executes it, is
+fetched from a CDN the first time you use the tab and cached by the browser
+afterwards. This is the same arrangement as the raw editor itself, and it has
+the same consequence: on a camera with no route to the internet the tab is there
+but cannot read anything, and says so rather than fetching for ever.
+
+**A camera that must not reach a public CDN can be pointed at a mirror of your
+own**, once, on the camera:
 
 ```
-echo 'webui_lpr_base="https://cdn.jsdelivr.net/gh/OpenIPC/lpr-wasm@v0.1.0/dist/"' \
+echo 'webui_lpr_base="https://mirror.example/lpr-wasm/dist/"' \
     >> /etc/webui/webui.conf
 ```
 
 That file is where the camera's own decisions about the web interface live —
 see [settings that live on the camera](web-interface.md#settings-that-live-on-the-camera),
-which is also worth reading if a Plates tab you had disappears. With nothing set,
-no Plates tab is built at all, which is the intended behaviour: a tab that could
-never work is worse than no tab.
+which is also worth reading if a Plates tab you had disappears. Leave it unset
+and the camera uses the release the firmware was built against.
 
 **What you put there is code your browser will run**, not just data: the source
 serves the script as well as the models. So use `https` and a source you trust:
 anything that can change the files in transit can run code on a page you are
 signed in to. Plain `http` is accepted — a mirror on a network you control is a
-reasonable use of it — but on anything else it is a bad trade. A mirror of your
-own is otherwise the right answer for a camera that must not reach the public
-internet; it has to serve the files cross-origin, since the page comes from the
-camera and the files do not. Note that the reader also pulls its runtime from a
-public CDN wherever the models come from, so **a mirror alone does not make the
-camera self-contained** — an air-gapped camera needs a mirror of that too.
+reasonable use of it — but on anything else it is a bad trade. A mirror has to
+serve the files cross-origin, since the page comes from the camera and the files
+do not. An address this check refuses leaves no Plates tab at all rather than
+falling back to the default, because a mirror is named precisely when the public
+CDN is not wanted. Note that the reader also pulls its runtime from a public CDN
+wherever the models come from, so **a mirror alone does not make the camera
+self-contained** — an air-gapped camera needs a mirror of that too.
 
 **Everything runs in your browser, not on the camera.** The camera serves the
-raw frame and nothing else; about nine megabytes of model, plus the runtime that
-executes it, is fetched once and cached. It needs WebAssembly in a worker, which
-any current desktop browser has and some locked-down ones do not. A browser
-without it gets no Plates tab either — the same silence as an unconfigured
-camera, and worth knowing if the tab is missing on one machine and present on
+raw frame and nothing else. It needs WebAssembly in a worker, which any current
+desktop browser has and some locked-down ones do not. A browser without it gets
+no Plates tab either — the same silence as a camera that cannot reach the
+models, and worth knowing if the tab is missing on one machine and present on
 another looking at the same camera.
 
 **Find the plates** develops the frame at full size and scans it in overlapping
