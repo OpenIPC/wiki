@@ -570,7 +570,8 @@ is coming from, and it is a property of the sensor profile the firmware ships.
 
 `isp.dehaze` is a contrast stretch. It earns its keep in haze — and in overcast
 daylight, which is the case people forget: on the same camera and in the same
-run as the table below, turning it off cost **13.5 DN of contrast, about 8%**,
+run as the table under `isp.sharpen` below, turning it off cost **13.5 DN of
+contrast, about 8%**,
 for no change in noise and none in edge rise. A night scene is the other story,
 and is where the objection to it comes from: it never asked for the stretch, and
 pays for it in shadow detail. Which is why it is a setting and not a default
@@ -585,18 +586,49 @@ against ground truth on 78-pixel-wide number plates, adding it cost about two
 points of recognition accuracy rather than buying any.
 
 But `false` does not remove sharpening, and on the one camera this has been
-measured on it made the picture **worse**. An hi3516ev300 with a 5 MP IMX335, in
-cloudy daylight, 18 paired captures per setting interleaved so a change in the
-light could not be mistaken for a change in the setting:
+measured on it made the picture **worse**:
 
 | | edge rise | noise | contrast |
 | --- | --- | --- | --- |
-| default (`true`) | 1.98 px | 10.2 DN | 174 |
-| `false` | 2.35 px (**+19%**) | 13.3 DN (**+30%**) | 149 (**−14%**) |
+| default (`true`) | 1.98 ±0.02 px | 10.2 ±0.8 DN | 174.1 ±1.2 |
+| `false` | 2.35 ±0.03 px (**+19%**) | 13.3 ±1.2 DN (+30%) | 148.9 ±1.6 (**−14%**) |
+| `isp.nr: false` | 2.08 ±0.02 px (+5%) | 11.5 ±0.6 DN | 171.6 ±0.9 |
+| `isp.dehaze: 0` | 2.08 ±0.02 px (+5%) | 9.8 ±0.7 DN | 160.6 ±1.6 (**−8%**) |
 
 Softer, noisier and flatter on every measure. That is what "stop overriding the
 sensor's tuning" bought on that sensor: its own profile was worse than what the
 camera had been putting over the top of it.
+
+#### How those were measured
+
+So you can repeat it on your own camera rather than take the numbers on trust.
+
+An hi3516ev300 with a 5 MP IMX335 on a daylit outdoor scene under overcast, the
+camera left on automatic exposure throughout (it sat at about 3.7 ms and 1×
+analog gain). Everything is read off `/image.jpg` at the sensor's full
+2592 × 1944, because these three blocks act on the processed path and not on a
+[raw frame](#raw-sensor-data-as-adobe-dng).
+
+Six 96 × 96 px patches, chosen **once** from a reference frame by gradient
+energy and then held for the whole run, so every setting is measured on the same
+pixels. Per capture:
+
+- **edge rise** — the 10–90% transition width, in pixels, across the strongest
+  edges in each patch, taken as a median. Smaller is sharper.
+- **noise** — two frames captured back to back and subtracted, with the spread
+  of the difference taken as a median absolute deviation (×1.4826, ÷√2 because
+  both frames carry it). Differencing is what keeps the scene's own texture out
+  of it; a single-frame high-frequency measure reports the tarmac, not the
+  sensor.
+- **contrast** — p95 − p5 over the same patches.
+
+Four settings, 3 interleaved rounds, 6 capture-pairs each, so 18 per setting and
+no setting sitting alone in a particular few minutes of light. 15 s after each
+change before measuring, because these keys restart the video.
+
+The `±` figures are standard errors. The bold changes are 3.5σ to 12σ; the
+unbolded ones are 1–2σ and should be read as "no measurable difference", not as
+small ones.
 
 Both results stand. If you are chasing a small subject, do not add sharpening on
 top. But do not expect `isp.sharpen: false` to be how you avoid it — try it,
@@ -604,7 +636,7 @@ measure your own camera, and keep whichever picture is better.
 
 `isp.nr` matters less for how the picture looks than for whose tuning is in
 effect: left at `true`, the noise reduction the sensor was tuned with is replaced
-at every start. On the camera measured for the table below the two were nearly
+at every start. On the camera measured for the table above the two were nearly
 the same picture — switching it off moved edge rise by 0.10 px and left noise and
 contrast inside the measurement error — so on that sensor this is the one of the
 three with almost nothing riding on it. That is a statement about one sensor's
