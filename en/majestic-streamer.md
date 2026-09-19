@@ -1492,6 +1492,136 @@ If people are being refused, compare `live_backlog_reserved_bytes` with
 and an idle browser tab left on a preview counts as a viewer just as much as
 somebody actually watching.
 
+### When the camera exceeds the bitrate you set
+
+The Dashboard's **Encoder out** tile shows what the encoder is really producing,
+and underneath it the rate you asked for — *of 1.0 set*. Most of the time the
+two agree within a few per cent. When the top number sits at several times the
+bottom one for a minute or more, the camera cannot keep the promise
+`video0.bitrate` makes.
+
+That used to be something you had to notice. Since the 2026-09-19 build the
+camera works it out for itself and says so, on the tile and again beside the
+settings that cause it.
+
+It is worth catching, because a stream running at four times its configured
+rate is not only a bigger stream. It is one the network was never sized for,
+and on a small board it is the usual way into
+[running out of memory for viewers](#how-many-people-can-watch-at-once).
+
+#### What the rate control modes actually promise
+
+`video<N>.rcMode` decides what the number in `video<N>.bitrate` means:
+
+| mode | what the bitrate means |
+|---|---|
+| `cbr` | a target the encoder holds to continuously, spending more compression on a busy scene to stay there |
+| `vbr` | a ceiling. The stream is free to use less on an easy scene, which most of the time it does |
+| `avbr` | a ceiling it is allowed to drift around, trading exactness for a steadier picture |
+
+Only `cbr` and `vbr` are held to their number. `avbr` is expected to wander, so
+the camera does not report it for missing a rate it was never promising.
+
+#### The compression ceiling
+
+`video<N>.maxQp` is the hardest the encoder may compress — a quantiser limit,
+where a higher number means more compression and a coarser picture. Rate control
+works by compressing harder when the scene gets busy, so this setting is the
+room it has to work in.
+
+Set it too low and the encoder runs out of that room. It cannot compress any
+harder, so it exceeds the bitrate instead. **This is the single commonest
+reason a camera goes over its configured rate**, and it is measurable: on a
+hi3516ev300 with an imx335 watching the same outdoor scene at 1920x1080, H.264,
+12 fps, `rcMode: cbr`, `bitrate: 1024`, with only this setting changed:
+
+| `video0.maxQp` | what the camera produced |
+|---|---|
+| 42 | 758 kbit/s — inside its target |
+| 30 | 4237 kbit/s — **four times** its target |
+
+A healthy constant-bitrate channel stays at or under about 118% of its target;
+that was measured across three very different scenes, from a smooth out-of-focus
+gradient to foliage moving in wind.
+
+> **A camera that has been updated may still carry the old ceiling.** The
+> default rose to 42 in September 2026, but a default only applies to a setting
+> you have not set. A `majestic.yaml` written before then — or one saved by an
+> older web interface, which writes the whole form back — keeps whatever it
+> holds, and updating the firmware will not change it. Read it back rather than
+> assuming:
+>
+> ```
+> curl 'http://192.168.1.10/api/v1/config.json' | grep -A1 maxQp
+> ```
+>
+> If it says 30 and the stream is over its rate, raising it is the fix:
+>
+> ```
+> curl 'http://192.168.1.10/api/v1/set?video0.maxQp=42'
+> ```
+
+Raising the ceiling costs picture quality on the scenes that need it, and that
+is the trade: the alternative is a stream that ignores the rate you set. If the
+ceiling is already at 51 there is nothing left to give it, and the bitrate, the
+frame size or the frame rate has to move instead.
+
+#### The other direction: fewer frames than you asked for
+
+The same watch covers the opposite failure, which has nothing to do with the
+encoder. In low light the sensor holds its shutter open longer than one frame
+period and slows down to suit — so a camera set to 12 fps can be delivering
+three, or fewer, with its bitrate comfortably inside budget the whole time.
+
+On the same hi3516ev300 after dark, with `video0.fps` set to 4, the camera was
+producing 1.6 frames a second — counted off `venc0_encoded_frames_total` over
+twenty seconds — while its bitrate stayed comfortably under target throughout.
+
+This is normal after dusk and fixes itself at dawn. It is worth knowing about
+because nothing else on the page shows it: the picture still moves, the bitrate
+looks fine, and only the frame rate has gone. If it happens in daylight, the
+exposure limit is what to look at — see
+[Exposure and gain](#exposure-and-gain).
+
+#### What you see
+
+The camera waits until the condition has held for half a minute before saying
+anything, so a passing keyframe or a busy few seconds does not raise it, and it
+withdraws the moment the stream comes back inside its rate.
+
+- On the **Dashboard**, a line under the Encoder output chart, and the region
+  above the configured rate shaded on the chart itself so an overshoot reads as
+  history rather than as one large number.
+- On **Settings**, beside the Video section for the channel concerned, naming
+  the setting to change.
+- In the camera log, once when it starts and once when it clears — not
+  repeatedly while it lasts.
+
+A camera running a build older than this publishes none of it and shows
+nothing, which is different from showing that everything is fine.
+
+#### Checking it
+
+`/metrics` carries the same picture, per channel:
+
+| metric | what it says |
+|---|---|
+| `venc0_rc_state` | `0` within its rate, `1` drifting past it, `2` over it, `3` receiving far fewer frames than configured |
+| `venc0_encoded_frames_total` | complete pictures encoded — the delta over time is the frame rate the camera is really achieving |
+| `venc0_keyframes_total` | how many of those were keyframes |
+| `venc0_rcvd_bytes` | bytes produced; the delta over time is the rate the Encoder out tile shows |
+| `venc0_mean_qp`, `venc0_max_qp` | where compression is sitting against its ceiling, on the parts that can report it |
+
+`venc1_*` says the same about the sub stream. `venc0_rc_state` is **absent**
+rather than zero whenever the camera has no opinion — in the first half minute,
+on `avbr`, and on a channel that is switched off — because a zero there would
+read as a measurement that was taken and passed.
+
+Comparing `venc0_mean_qp` against `venc0_max_qp` is the early warning: a
+channel sitting a step or two under its ceiling is one busy scene away from
+exceeding its rate, and no amount of watching the bitrate says so until it
+already has.
+
 ### Live HLS
 
 `hls.enabled` turns on an HLS stream at `/master.m3u8`, with a player page at
