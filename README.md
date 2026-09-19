@@ -74,7 +74,7 @@ OpenIPC Wiki
 - [Using ipctool](en/example-ipctool.md)
 - [Board specific GPIO settings list](en/gpio-settings.md)
 - [Finding out what a pin is wired to](en/finding-a-gpio.md)
-- [Per-device settings: customizer.sh, muxes.sh and gpio.conf](en/per-device-settings.md)
+- [Telling a camera about its own hardware](en/per-device-settings.md)
 - [ACMEv2](en/acme-v2.md)
 - [WiFi XM530](en/wifi-xm530.md)
 - [How an IR-cut filter is driven](en/ircut-filter.md)

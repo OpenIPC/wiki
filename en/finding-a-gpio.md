@@ -277,6 +277,7 @@ test decides. If the test says *wired backwards*, swap the two coils there.
 
 ---
 
-What to do with the answer: a pin you have identified belongs in the device's own
-`gpio.conf`, so every script on that camera refers to it by name. See
-[Per-device settings: customizer.sh, muxes.sh and gpio.conf](per-device-settings.md).
+What to do with the answer, beyond the settings pages above: a pin that should be
+known to *every* unit of a model belongs in that device's profile rather than being
+re-entered on each camera. See
+[Telling a camera about its own hardware](per-device-settings.md).

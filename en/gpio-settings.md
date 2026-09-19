@@ -337,6 +337,7 @@ PTZ via OpenIPC `gpio-motors`: `fw_setenv gpio_motors '3 4 72 73 69 59 58 57'`
 
 ---
 
-Once you know a board's numbers, record them on the device rather than typing them
-into each script that needs them: see
-[Per-device settings: customizer.sh, muxes.sh and gpio.conf](per-device-settings.md).
+Once you know a board's numbers, put them where the camera will read them — on
+**Settings → Pins** and **Settings → Day / Night** for one camera, or in a device
+profile so every unit of the model comes up knowing them. Both routes:
+[Telling a camera about its own hardware](per-device-settings.md).

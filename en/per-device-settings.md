@@ -1,15 +1,84 @@
 # OpenIPC Wiki
 [Table of Content](../README.md)
 
-Per-device settings: `customizer.sh`, `muxes.sh` and `gpio.conf`
-================================================================
+Telling a camera about its own hardware
+=======================================
 
 A mainline OpenIPC image is built for an SoC family, not for a camera. It has to boot on
 any board with that chip, so it ships no knowledge of where *your* camera's IR-cut filter
 is wired, which pad powers its SD card, or where it should fetch its next firmware from.
 
-Three files supply exactly that, and they are the reason a supported retail camera comes
-up already knowing its own hardware:
+There are **two ways** to tell it, and which one you want depends on whether you are
+setting up a camera or supporting a model.
+
+| | [Through the camera's own settings](#through-the-cameras-own-settings) | [Through a device profile](#through-a-device-profile) |
+| --- | --- | --- |
+| **Who does it** | whoever has the camera | whoever maintains support for that model |
+| **How** | the web interface, or `cli` over SSH | three files in [OpenIPC/builder](https://github.com/OpenIPC/builder) |
+| **Applies to** | that one camera | every unit of that model, on first boot |
+| **Takes effect** | immediately | before the streamer ever starts |
+| **Survives a reboot** | yes | yes |
+| **Survives a factory reset** | **no** — settings go with the overlay | **yes** — the profile re-applies them |
+| **Needs a rebuild** | no | yes, the image is rebuilt for that device |
+
+They are not alternatives so much as the same settings arriving by different routes: a
+device profile mostly consists of the very writes the web interface would have made, made
+for you before you ever open it. Read the first section if you have a camera in front of
+you; read the second if you want the next hundred units of that model to come up right
+with nobody touching them.
+
+---
+
+Through the camera's own settings
+---------------------------------
+
+Most of what a camera needs to know about its own hardware is an ordinary setting, and
+the web interface is where you set it. Nothing here involves files, a rebuild, or a
+shell.
+
+**Settings → Pins** draws the chip and lets you say what is soldered to each pad — a
+lamp, a button, a sensor bus. You can **Try it** first, and **Keep** it once you are
+happy; a kept choice is saved on the camera rather than needing a boot script to
+re-apply it, which is the part a hand-written `devmem` line never managed.
+
+**Settings → Day / Night** is where the IR-cut filter's two coil pins, the infrared
+lamp and a light sensor go, and it can test the filter and tell you if the coils are
+wired backwards.
+
+If you do not yet know which pad is which, the camera will find out for you — see
+[Finding out what a pin is wired to](finding-a-gpio.md), which covers both hunts, what
+the camera refuses to drive and why, and what to do when it comes up empty.
+
+The same settings are reachable over SSH with `cli`, which is useful for scripting and
+is exactly what a device profile uses:
+
+```sh
+cli -s .nightMode.irCutPin1 63
+cli -s .nightMode.irCutPin2 67
+cli -s .nightMode.backlightPin 72
+cli -g .nightMode.irCutPin1          # read one back
+```
+
+> `cli -s` cannot fail. It stores whatever key path you hand it and exits 0, and a key
+> the streamer does not recognise is simply ignored — for the life of the device. A typo
+> such as a trailing colon costs you the setting silently, so check the spelling of every
+> path you add. [Majestic example config](majestic-config.md) lists the real ones. The
+> web interface does not have this problem: it only offers paths that exist.
+
+**Where these settings live, and what erases them.** They are written into the streamer's
+configuration file, which sits in the writable overlay on top of the read-only root
+filesystem. A reboot keeps them. A **factory reset** clears that overlay, and your
+settings go with it — the camera comes back with whatever its image shipped. That is the
+single biggest practical difference between the two routes, and the reason a model with
+real support behind it uses the second one.
+
+---
+
+Through a device profile
+------------------------
+
+A device profile is how a camera model comes up already knowing its own hardware, with
+nobody opening the web interface at all. It is three files:
 
 | File | Runs | Use it for |
 | --- | --- | --- |
@@ -18,7 +87,7 @@ up already knowing its own hardware:
 | `/usr/share/openipc/gpio.conf` | never — it is sourced | naming the pins, so scripts refer to `$ircut1` rather than `67` |
 
 All three are optional. An image without them boots perfectly well; it simply knows
-nothing about the board it is on.
+nothing about the board it is on, and everything above has to be done by hand.
 
 > **These files belong in [OpenIPC/builder](https://github.com/OpenIPC/builder), not in
 > OpenIPC/firmware.** `general/overlay/` in the firmware tree is copied verbatim into
@@ -27,7 +96,7 @@ nothing about the board it is on.
 > file sits under `devices/<board>/general/overlay/usr/share/openipc/` and reaches only
 > that board. See [Where they live](#where-they-live) below.
 
-## When each one runs
+### When each one runs
 
 `/etc/init.d/S30customizer` is what calls them. `rcS` runs the `S??*` scripts in sorted
 order, so S30 lands after logging and the clock are up and before the hostname, kernel
@@ -51,7 +120,7 @@ starts long afterwards with whatever configuration was written.
 3. If `muxes.sh` exists, run it — **every boot**, with no marker file.
 4. Repair the camera's MAC address if it needs one.
 
-## `customizer.sh` — the one-time setup
+### `customizer.sh` — the one-time setup
 
 This is a plain shell script run once, in full, as root. There is no schema and no
 special vocabulary: whatever you would type at a shell, you can put here.
@@ -87,15 +156,16 @@ cli -s .nightMode.backlightPin 4
 cli -s .audio.enabled true
 ```
 
-> `cli -s` cannot fail. It stores whatever key path you hand it and exits 0, and a key
-> the streamer does not recognise is simply ignored — for the life of the device. A typo
-> such as a trailing colon costs you the setting silently, so check the spelling of every
-> path you add. [Majestic example config](majestic-config.md) lists the real ones.
+These are the same writes described under
+[Through the camera's own settings](#through-the-cameras-own-settings), and they carry
+the same caution: a mistyped path is stored and ignored rather than rejected, so it costs
+you the setting silently. Presetting from a profile makes that worse, not better — there
+is no one at the web interface to notice the switch did nothing.
 
 **Anything else a first boot should do** — creating a limited viewer account, for
 instance. It is a shell script.
 
-### Running it again
+#### Running it again
 
 `/etc/custom.ok` is the marker that stops it re-running. It lives in the writable overlay
 mounted over the root filesystem, so:
@@ -108,7 +178,7 @@ mounted over the root filesystem, so:
 That second point is the one that surprises people: a factory reset does not just forget
 your settings, it re-applies the device's defaults from scratch.
 
-## `muxes.sh` — the every-boot part
+### `muxes.sh` — the every-boot part
 
 Pad multiplexing and GPIO output states are hardware registers. They reset when the
 camera loses power, so unlike the bootloader environment they cannot be set once — which
@@ -135,7 +205,7 @@ The `gpio` helper takes `set` (drive high), `clear` (drive low), `toggle`, `read
 board's numbers, and [Board specific GPIO settings list](gpio-settings.md) for boards
 somebody has already mapped.
 
-## `gpio.conf` — naming the pins
+### `gpio.conf` — naming the pins
 
 A bare `gpio set 38` in three different scripts is three chances to get it wrong, and
 nothing to grep for when the board revision moves a pad. `gpio.conf` gives the pins
@@ -174,9 +244,15 @@ To use it, source it and then refer to the names:
 #!/bin/sh
 . /usr/share/openipc/gpio.conf
 
-# sd card power enable
+# SD card power rail — this board enables it by driving the pad low
 gpio clear $mmc_pwr
 ```
+
+> **Polarity is board-specific, and the name does not tell you which way round it is.**
+> `mmc_pwr` is enabled by `gpio clear` on the board above and by `gpio set` on the one in
+> [the worked example](#a-minimal-worked-example) below; both are real devices. `gpio.conf`
+> records *which pad*, never *which level* — so check your board rather than copying a
+> line, and say in a comment which way yours goes.
 
 Consumers guard the include, because the file is optional:
 
@@ -190,7 +266,7 @@ Both `muxes.sh` and per-device helper scripts such as a reset-button daemon use 
 so does the QR-code Wi-Fi provisioning script in the firmware tree, which blinks `$led1`
 while it scans.
 
-## Where they live
+### Where they live
 
 In [OpenIPC/builder](https://github.com/OpenIPC/builder), under the device's own
 directory, at the same paths they will occupy on the camera:
@@ -248,7 +324,8 @@ alarm_out=-1
 #!/bin/sh
 . /usr/share/openipc/gpio.conf
 
-# SD card power rail — resets on every power cycle
+# SD card power rail — this board enables it high, and it resets on every
+# power cycle, so it has to be re-applied rather than set once
 gpio set $mmc_pwr
 ```
 
@@ -271,7 +348,19 @@ cli -s .nightMode.backlightPin 72
 exit 0
 ```
 
+For a single camera you would reach the same end state without any of these files: set
+the three pins on **Settings → Day / Night**, the sensor and upgrade URL are already
+right for the image you flashed, and the SD-card rail is one line in a startup script or
+a pad you declare on **Settings → Pins**. The profile's value is not that it can do
+something the interface cannot — it is that the hundredth unit of this model does it
+without anyone being there, and does it again after a factory reset.
+
 ## Troubleshooting
+
+**A setting I made in the web interface is gone.** A factory reset clears the overlay,
+and the streamer's configuration lives there. Settings made on the camera do not come
+back; settings carried by a device profile do, because `customizer.sh` runs again on the
+next boot. If you want a setting to survive resets, it has to be in the profile.
 
 **Nothing happened on first boot.** The scripts are only run if they exist at those exact
 paths. Check them on the camera with `ls -l /usr/share/openipc/`, and look for the
@@ -282,7 +371,8 @@ boot log.
 reboot.
 
 **A `cli -s` setting did not take.** Re-read the key path character by character. The
-write succeeds whatever you type, so a wrong path is silent.
+write succeeds whatever you type, so a wrong path is silent. Setting the same thing once
+through the web interface is the quickest way to find out what the path should be.
 
 **A GPIO does not do what you expect.** Confirm the number first with
 [Finding out what a pin is wired to](finding-a-gpio.md) — a pad that is multiplexed to
