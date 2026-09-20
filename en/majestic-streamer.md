@@ -725,11 +725,31 @@ The automatic mode can be tuned, in units that mean the same on every camera
 | `nightMode.autoNightDelay` | 15 | Seconds the scene must stay dark before night. |
 | `nightMode.autoDayDelay` | 60 | Seconds it must stay bright before day. |
 
-Two park switches sit beside the pin settings for when an actuator should stay
-still without losing its wiring: `nightMode.irCutEnabled` and
-`nightMode.backlightEnabled` (both default `true`). Off keeps the pin numbers
-configured but stops driving the filter or the lamp; the web interface says
-"switched off, wiring kept" instead of accusing the wiring.
+#### Who moves the filter and the lamp
+
+Following day and night is not the only thing an actuator can do, so each has a
+mode of its own: `nightMode.irCut` and `nightMode.backlight`, both defaulting to
+`auto`.
+
+| Value | What it means |
+| --- | --- |
+| `auto` | Day and night move it. The default, and what every camera does unless told otherwise. |
+| `manual` | Dusk and dawn leave it alone and you move it yourself — from the web interface, or `/night/ircut` and `/night/light`. |
+| `off` | Nothing moves it at all. It stays wherever it is. |
+
+**None of the three is a way of saying nothing is wired.** All of them keep the
+pin numbers configured; what they choose is who decides. That distinction is
+worth keeping in mind when reading a diagnosis: a filter in `off` sitting open
+in daylight gives you a pink picture, and the cause is the mode rather than
+the wiring.
+
+An IR-cut filter takes a moment to swing, and the picture changes before it gets
+there — so a frame or two can arrive in colour just as day returns.
+`nightMode.transitionDelayMs` (default `0`, range 0-2000) is the pause inside
+the switch that covers it: the picture goes grey before the filter opens and
+back to colour after it shuts, and this is the gap in between. How long a filter
+needs is a property of the board, so raise it only if you actually see the
+coloured frame; 150 was enough on the one camera that wanted it.
 
 #### Legacy raw-gain thresholds
 

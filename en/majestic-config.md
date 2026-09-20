@@ -371,11 +371,15 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
   lightMonitor: false           # on alone = automatic exposure-based day/night
                                 # (sensor pin wins if set; both thresholds win
                                 # over automatic)
-  #irCutEnabled: true           # false parks the filter: pins kept, not driven
+  irCut: auto                   # who moves the filter: auto = day and
+                                # night do; manual = you do, from the web
+                                # interface or /night/ircut; off = nothing
+                                # does. manual and off keep the pins
   #irCutPin1: 1                 # the two coils of one H-bridge, not two
   #irCutPin2: 2                 # switches — order decides which way it moves
   irCutSingleInvert: false      # for a board with a single coil pad
-  #backlightEnabled: true       # false parks the lamp: wiring kept, stays dark
+  backlight: auto               # the same three for the lamp, with
+                                # /night/light as the manual control
   #backlightPin: 65
   backlightInvert: false        # true when the lamp lights on a LOW pad;
                                 # covers the PWM lamp below as well
@@ -391,6 +395,10 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
   #autoDayGain: 2               # automatic mode: day at or below this multiple
   #autoNightDelay: 15           # seconds of darkness before night, 5-600
   #autoDayDelay: 60             # seconds of brightness before day, 5-600
+  #transitionDelayMs: 150       # pause inside a switch, 0-2000 ms: the gap
+                                # between the picture changing and the
+                                # filter moving. Raise it from 0 if a
+                                # coloured frame shows as day returns
   #backlightPwmChannel: none    # a dimmable lamp on a PWM pad; backlightPin
                                 # is then ignored. The channels offered are the
                                 # ones your camera's SoC actually brings out —
