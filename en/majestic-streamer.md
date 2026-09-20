@@ -748,8 +748,9 @@ there — so a frame or two can arrive in colour just as day returns.
 `nightMode.transitionDelayMs` (default `0`, range 0-2000) is the pause inside
 the switch that covers it: the picture goes grey before the filter opens and
 back to colour after it shuts, and this is the gap in between. How long a filter
-needs is a property of the board, so raise it only if you actually see the
-coloured frame; 150 was enough on the one camera that wanted it.
+takes to swing is a property of the board, so there is no number worth
+recommending: leave it at `0` unless you actually see the coloured frame, and
+then raise it in small steps until you stop seeing it.
 
 #### Legacy raw-gain thresholds
 

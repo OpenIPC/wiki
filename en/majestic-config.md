@@ -396,9 +396,9 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
   #autoNightDelay: 15           # seconds of darkness before night, 5-600
   #autoDayDelay: 60             # seconds of brightness before day, 5-600
   #transitionDelayMs: 150       # pause inside a switch, 0-2000 ms: the gap
-                                # between the picture changing and the
-                                # filter moving. Raise it from 0 if a
-                                # coloured frame shows as day returns
+                                # between the picture changing and the filter
+                                # moving. Board-specific — leave it at 0 unless
+                                # a coloured frame shows as day returns
   #backlightPwmChannel: none    # a dimmable lamp on a PWM pad; backlightPin
                                 # is then ignored. The channels offered are the
                                 # ones your camera's SoC actually brings out —
