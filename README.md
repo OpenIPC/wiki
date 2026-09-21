@@ -36,12 +36,12 @@ OpenIPC Wiki
 ### Installation
 
 - [Detailed installation guide](en/installation.md)
-- [Installation on Goke](https://openipc.org/cameras/vendors/goke)
-- [Installation on HiSilicon](https://openipc.org/cameras/vendors/hisilicon)
-- [Installation on Ingenic](https://openipc.org/cameras/vendors/ingenic)
-- [Installation on Novatek](https://openipc.org/cameras/vendors/novatek)
-- [Installation on SigmaStar](https://openipc.org/cameras/vendors/sigmastar)
-- [Installation on XM510/XM530](https://openipc.org/cameras/vendors/xiongmai)
+- [Installation on Goke](https://openipc.org/cameras/vendors/goke?ref=readme)
+- [Installation on HiSilicon](https://openipc.org/cameras/vendors/hisilicon?ref=readme)
+- [Installation on Ingenic](https://openipc.org/cameras/vendors/ingenic?ref=readme)
+- [Installation on Novatek](https://openipc.org/cameras/vendors/novatek?ref=readme)
+- [Installation on SigmaStar](https://openipc.org/cameras/vendors/sigmastar?ref=readme)
+- [Installation on XM510/XM530](https://openipc.org/cameras/vendors/xiongmai?ref=readme)
 - [Backing up your stock firmware](en/backup-stock-firmware.md)
 - [Old installation guides](en/old-installation.md)
 - [Very old full manual](en/old-manual.md)
@@ -190,17 +190,16 @@ OpenIPC Wiki
 - [coupler](https://openipc.org/coupler)
 - [firmware](https://openipc.org/firmware)
 - [ipctool](https://openipc.org/ipctool)
-- [telemetry](https://openipc.org/telemetry)
 - [Firmware Partitions Calculation](https://themactep.com/tools/firmware-partitions-calculation)
 
 ### Our resources
 
-- [OpenIPC](https://openipc.org/)
+- [OpenIPC](https://openipc.org/?ref=readme)
 - [Releases in GitHub](https://github.com/OpenIPC/firmware/releases/tag/latest)
 - [Releases in Telegram](https://t.me/s/openipc_dev)
 - [OpenCollective](https://opencollective.com/openipc)
 - [Twitter](https://twitter.com/OpenIPC)
-- [Telegram](https://openipc.org/our-channels)
+- [Telegram](https://openipc.org/our-channels?ref=readme)
 
 ### Roadmap
 
