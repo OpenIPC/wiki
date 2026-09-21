@@ -521,9 +521,15 @@ let them fail, and logs the reason:
 - `osd.privacyMasks` — privacy masks are **not drawn** on a compressed frame.
   This one matters: without the safeguard the stream would look correct while
   publishing the very area you meant to hide.
-- `image.tuning` and the raw `/image.yuv420` and `/image.webp` endpoints — these
-  read raw pixels, and nothing on these SoCs can turn a compressed frame back
-  into pixels.
+- the raw `/image.yuv420` and `/image.webp` endpoints — these read raw pixels,
+  and nothing on these SoCs can turn a compressed frame back into pixels.
+
+[`image.tuning`](automatic-image-tuning.md) is the one that yields the other
+way round. It also needs raw pixels, but compression is not turned off for it:
+the camera keeps the frames compressed as asked and switches automatic tuning
+off instead, putting your saved picture settings back. Compressing the pool is
+a memory decision on a board that may not have the memory, and it is not
+overridden by a picture feature you can equally well leave off.
 
 Overlays, timestamps, motion detection, digital image stabilisation and low
 delay all work normally alongside it.

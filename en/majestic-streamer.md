@@ -656,7 +656,8 @@ pixels. Per capture:
 
 Four settings, 3 interleaved rounds, 6 capture-pairs each, so 18 per setting and
 no setting sitting alone in a particular few minutes of light. 15 s after each
-change before measuring, because these keys restart the video.
+change before measuring: `isp.sharpen` and `isp.nr` restart the video, and
+`isp.dehaze`, which does not, still wants the exposure left to settle.
 
 The `±` figures are standard errors. The bold changes are 3.5σ to 12σ; the
 unbolded ones are 1–2σ and should be read as "no measurable difference", not as
@@ -674,8 +675,10 @@ contrast inside the measurement error — so on that sensor this is the one of t
 three with almost nothing riding on it. That is a statement about one sensor's
 profile, not about the key.
 
-None of the three is applied live — changing one restarts the video, so expect a
-break in the stream rather than a setting that slides.
+`isp.dehaze` **is** applied live: it is pushed at the running stream, so it can
+be tried at several values without a break. The other two are not — changing
+`isp.sharpen` or `isp.nr` restarts the video, so expect a gap rather than a
+setting that slides.
 
 **Where they work:** hi3516ev200, hi3516ev300, gk7205v200, gk7205v300 and
 gk7205v500. Other cameras do not offer the keys, and have nothing there to turn

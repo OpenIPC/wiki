@@ -11,11 +11,25 @@ nothing done to it at all. Settings chosen on the day of installation are
 chosen for the weather that day.
 
 **Automatic image tuning** watches the picture the camera is actually sending
-and adjusts four settings to follow it. It is **on by default** from the
-September 2026 builds, on HiSilicon and Goke cameras.
+and adjusts up to four settings to follow it. It is **on by default** from the
+September 2026 builds.
 
 It is deliberately undramatic. On a picture that already uses its range it
 does nothing, and on most cameras most of the time that is what it does.
+
+### Which cameras have it
+
+It needs picture statistics the camera measures for itself, which not every
+part provides:
+
+| | |
+| --- | --- |
+| **Tunes all four settings** | hi3516ev200, hi3516ev300, gk7205v200, gk7205v300, gk7205v500 |
+| **Tunes three** — contrast, brightness and saturation; these parts have no `isp.dehaze` | hi3516cv500, hi3516av300, hi3516dv300 |
+| **Stays inert** | everything older, and hi3516cv6xx. The setting may be present, but nothing measures, so nothing is driven. |
+
+On a camera in the last row the panel says so rather than pretending — see
+[When it will not run](#when-it-will-not-run).
 
 ### What it changes, and what it will not touch
 
@@ -65,12 +79,13 @@ the same picture. They should agree.
 
 ### Reading it from outside the browser
 
-Everything the panel shows comes from `/metrics`, so a camera with no browser
-on it can be watched the same way:
+Everything the panel shows comes from `/metrics`, so a camera nobody has a
+browser pointed at can be watched while it is running — with one gap, noted
+below, about telling the reasons for silence apart:
 
 | Metric | Meaning |
 | --- | --- |
-| `image_tune_state` | 0 no usable reading · 1 nothing to do · 2 reaching for more range · 3 held by a clipping budget · 4 stood down for low light · 5 paused while somebody adjusts by hand |
+| `image_tune_state` | which of the situations in the table above the camera is in. The values and what each one means are printed by the camera itself, on the `# HELP` line above the metric — read them from the camera you are scraping rather than from here, so a build that grows a state does not leave this page wrong |
 | `image_tune_span` | the range the picture occupies, p95 − p5 of 0–255 — the thing it is trying to increase |
 | `image_tune_clip_lo_ppm` | share of the picture crushed to black, parts per million |
 | `image_tune_clip_hi_ppm` | share blown to white, parts per million |
@@ -80,12 +95,20 @@ on it can be watched the same way:
 
 Two things about these worth knowing before you graph them:
 
-- They are **absent, not zero**, whenever there is nothing to report — the
-  feature off, or no measurement taken yet. A gauge that disappears makes a
-  scraper draw a gap; one reading 0 makes it draw a decision that was never
-  taken.
-- In state 5 nothing is being measured, so `span` and the clipping figures are
-  the last reading from before the pause. They can be minutes old.
+- They are **absent, not zero**, whenever there is nothing to report. A gauge
+  that disappears makes a scraper draw a gap; one reading 0 makes it draw a
+  decision that was never taken.
+- **Absence on its own does not say why**, and this is the one place where the
+  metrics tell you less than the page does. Switched off, unsupported
+  hardware, and a camera that has given up because it cannot measure all look
+  identical from `/metrics` — the whole set is simply missing. To tell them
+  apart, read `image.tuning` from
+  [`/api/v1/config.json`](majestic-streamer.md): set to `false` and the
+  operator switched it off; set to `true` with no metrics and the camera
+  cannot run it, for one of the reasons below.
+- While the camera is **paused**, nothing is being measured, so `span` and the
+  clipping figures are the last reading from before the pause. They can be
+  minutes old.
 
 ### How often it looks
 
