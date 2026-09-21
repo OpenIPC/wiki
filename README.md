@@ -71,6 +71,7 @@ OpenIPC Wiki
 - [Upgrade firmware](en/sysupgrade.md)
 - [Failsafe mode and recovery](en/failsafe-recovery.md)
 - [Nightly builds, dated releases, and bisect](en/nightly-builds-and-bisect.md)
+- [Automatic image tuning](en/automatic-image-tuning.md)
 - [Image quality tuning](en/image-quality-tuning.md)
 - [Memory tuning](en/memory-tuning.md)
 - [Using ipctool](en/example-ipctool.md)

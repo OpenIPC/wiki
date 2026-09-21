@@ -49,7 +49,13 @@ isp:
   antiFlicker: disabled         # disabled | 50 | 60 -- match your mains, not
                                 # your fps; see "Anti-flicker" in majestic-streamer.md
   #blkCnt: 4
-  #drc: 300
+  #drc: 300                     # dynamic range compression, 0-255 through
+                                # hi3516cv500 and 0-1023 from hi3516ev200
+                                # upwards. Left unset the camera keeps the
+                                # sensor profile's own automatic curve, which
+                                # is usually the better picture -- set it only
+                                # if you have compared. A value above the
+                                # range is refused.
   #rawMode: slow                # none | slow | fast
   #iqProfile: <path/to/file>
   #lowDelay: false
@@ -119,9 +125,12 @@ isp:
   # way to say otherwise. Every default below is what it did before, so
   # leaving them absent changes nothing. Only dehaze is an off switch: false
   # on the other two means "stop overriding the sensor's own tuning", which
-  # may itself sharpen or denoise. Changing any of them restarts the video.
-  # September 2026 or newer.
-  #dehaze: 125                  # 0-255; 0 switches dehazing off
+  # may itself sharpen or denoise. Changing sharpen or nr restarts the video;
+  # dehaze applies to the running stream. September 2026 or newer.
+  #dehaze: 125                  # 0-255; 0 switches dehazing off. Applies
+                                # without restarting the video, so it is worth
+                                # trying at several values. Automatic image
+                                # tuning drives this key -- see image.tuning
                                 # (hi3516ev200/ev300, gk7205v200/v300/v500)
   #sharpen: true                # false stops the camera applying its own
                                 # (hi3516ev200/ev300, gk7205v200/v300/v500)
@@ -153,11 +162,29 @@ image:
   mirror: false
   flip: false
   rotate: 0                     # 0 | 90 | 270
+  # The four below are the picture as you set it. With tuning on they are also
+  # the starting point the camera works from and the values it returns to --
+  # it never writes them back, so this file keeps saying what you set even
+  # while the camera is running something else. hue is never driven.
   contrast: 50
-  hue: 50
   saturation: 50
   luminance: 50
-  #tuning: false                # automatic image tuning
+  hue: 50
+  #tuning: true                 # follow the scene: adjust contrast, luminance,
+                                # saturation and isp.dehaze as the light and
+                                # the weather change, and give them back when
+                                # the scene no longer needs them. ON BY
+                                # DEFAULT from September 2026. Does nothing to
+                                # a picture that already uses its range, and
+                                # stands down as the sensor gain rises,
+                                # because stretching a noisy picture only
+                                # amplifies the noise. Watch it on /metrics
+                                # (image_tune_*) or on Camera -> Settings ->
+                                # Live. Needs an uncompressed main stream to
+                                # measure: see isp.yuvCompression. Changing it
+                                # restarts the video.
+                                # See "Automatic image tuning"
+                                # (HiSilicon/Goke)
 
 video0:
   enabled: true
