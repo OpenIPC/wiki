@@ -89,31 +89,37 @@ edit or convert the file.
 `/tmp` does not. Anywhere under `/etc` does — the camera keeps a writable
 overlay there:
 
+On the camera:
+
 ```console
 $ mkdir -p /etc/sensors/iq
-$ cat > /etc/sensors/iq/tuned.bin        # then paste/scp the file in
 ```
+
+Then from the PC, with the exported file beside you:
+
+```console
+> scp tuned.bin root@<camera>:/etc/sensors/iq/tuned.bin
+```
+
+Copy it, do not retype or paste it — the exact byte count is part of what makes
+the file valid.
 
 ### 3. Point the camera at it
 
 ```console
 $ cli -s .isp.iqProfile /etc/sensors/iq/tuned.bin
-$ /etc/init.d/S95majestic restart
 ```
 
-Or set **Image quality profile** on the camera's settings page.
+Or set **Image quality profile** on the camera's settings page. Either way the
+camera picks the profile up on its own — no restart, and the video keeps
+running.
 
 **The name matters.** A file whose name ends in `.ini` is read as a text
 profile; anything else is read as a PQTools binary profile. Call the file
 `tuned.bin`, `tuned.pq`, anything — just not `something.ini`.
 
-The camera says what it did, in its log:
-
-```
-Loading binary PQ profile /etc/sensors/iq/tuned.bin
-```
-
-and nothing further if it loaded. Check the picture; that is the real test.
+The camera reports which profile it took and whether it loaded. The picture is
+the real test: look at it before and after.
 
 ### 4. To bake it into a firmware image
 
@@ -123,15 +129,13 @@ with that image then comes up on your tuning.
 
 ### If the camera refuses the file
 
-```
-/etc/sensors/iq/tuned.bin is 165456 bytes; this chip's PQ profile is 100904.
-```
+The camera reports a size mismatch — the profile it was given against the size
+a profile for this camera has to be. That means the file came from somewhere
+else: a different SoC, a different SDK generation, or a different build of
+PQTools.
 
-The file was exported for a different SoC, a different SDK revision, or a
-different set of modules. A PQTools binary profile is a register-level dump: it
-is tied to the exact chip it came from, and there is no converting one. Export
-it again from a camera of the same kind, through the PQTools build for that
-kind.
+A binary profile is not portable and cannot be converted. Export it again from
+a camera of the same kind, through the PQTools build for that kind.
 
 What a `.ini` profile does, and does not, carry
 -----------------------------------------------
@@ -142,35 +146,20 @@ camera reads two of them:** the auto-exposure section and the 3D noise
 reduction section. The rest is carried for PQTools' benefit and has no effect
 on the picture.
 
-From the September 2026 builds the camera says so at startup, naming the
-sections it did not read, so an edit that changes nothing is visible as such
-rather than silent.
+So editing a section of one of these files usually changes nothing, and that is
+expected rather than a fault.
 
 If you want the whole of a tune — sharpening, dynamic range, white balance,
 gamma — that is what the binary profile above is for.
 
 ### Which profile a camera picks on its own
 
-With `isp.iqProfile` unset, the camera looks for `/etc/sensors/iq/<sensor>.ini`
-and falls back to `/etc/sensors/iq/default.ini`. Older builds always used
-`default.ini`, which is a fixed link to one sensor's profile per SoC family —
-so an IMX335 camera could be running the IMX307 tuning. If you set
-`isp.iqProfile` explicitly, that always wins.
-
-Auto-exposure without PQTools
------------------------------
-
-Two things people usually reach for PQTools to change are settings in their own
-right, and need none of the above:
-
-| setting | what it does |
-| --- | --- |
-| `isp.aeSpeed` | how fast exposure chases a change in light |
-| `isp.aeTolerance` | how far off target it sits before moving at all |
-| `isp.aeBlackDelay` | frames of hesitation before reacting to the picture getting darker |
-| `isp.aeWhiteDelay` | the same, for the picture getting brighter |
-
-Leave one empty and the camera keeps whatever its image profile asked for.
+With `isp.iqProfile` unset the camera falls back to
+`/etc/sensors/iq/default.ini`, which is a fixed link to one sensor's profile
+per SoC family — so an IMX335 camera may be running the IMX307 tuning even
+though `imx335.ini` is installed beside it. If that is your camera, point
+`isp.iqProfile` at the file named after your own sensor. An explicit setting
+always wins.
 
 [mcr]: https://ssd.mathworks.com/supportfiles/MCR_Runtime/R2012a/MCR_R2012a_win32_installer.exe
 [pqt]: https://openipc.org/utilities
