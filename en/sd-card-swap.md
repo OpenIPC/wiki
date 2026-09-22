@@ -278,12 +278,18 @@ unset.
 - **The dashboard says so.** While a swap is running, the storage banner reads
   as an expected pause rather than a fault, so a deliberate card change does not
   page whoever is watching the camera.
+- **The written total belongs to the card, not to the camera.** The **Written by
+  this camera** line on the Card health panel restarts when you put a different
+  card in, because the count is kept on the card itself. The card you took out
+  keeps its own, and picks it up again if you put it back — in this camera or
+  another one.
 
 ### See also
 
 - [Is the SD card actually storing your footage?](sd-card-diagnostics.md) —
-  before you swap a card because you suspect it, and what to check on the one
-  you put in.
+  before you swap a card because you suspect it, what to check on the one you
+  put in, and [how much this camera has written to
+  it](sd-card-diagnostics.md#written-by-this-camera).
 - [Encrypted recordings on the SD card](recording-encryption.md) — what a thief
   gets if they take the card you just pulled.
 - [Majestic streamer](majestic-streamer.md) — the recorder's own counters, and

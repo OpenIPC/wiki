@@ -539,8 +539,9 @@ records:
                                 # times an hour
   #syncSeconds: 30              # how often the open clip is committed to the
                                 # card, which bounds what a power cut costs.
-                                # 0 disables it; a clip is still committed when
-                                # it is closed
+                                # The card's written total rides the same timer.
+                                # 0 disables it; both are still committed when
+                                # the clip is closed
   #fragmentMs: 1000             # how much video one MP4 fragment holds. Also
                                 # the unit the recorder buffers and drops
   #fragmentBytes: 0             # hard size limit for one fragment; 0 derives it
