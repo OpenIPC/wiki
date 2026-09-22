@@ -11,8 +11,9 @@ almost nothing you would normally look at will surface it, and how to ask the
 card directly.
 
 The **SD card** page in the web interface has a **Card health** panel that
-answers the question in three lines. This page is what each of them means, what
-the two checks underneath actually do, and what to do about each answer.
+answers the question in three lines, and adds a fourth saying how hard the card
+has been worked. This page is what each of them means, what the two checks
+underneath actually do, and what to do about each answer.
 
 If you have arrived here because your recordings are missing, skip to
 [When the archive stopped growing](#when-the-archive-stopped-growing).
@@ -28,6 +29,13 @@ its speed ratings — Class, UHS grade, Video Class, App Class — and say nothi
 whatsoever about wear, remaining life or errors. The SD card page shows those
 ratings because they are worth knowing, but they describe what the card was sold
 as, not what condition it is in now.
+
+Some industrial card ranges answer a vendor health command; consumer cards
+either ignore it or, on some camera slots, hang the process that asks. So the
+one figure available on every card is the one the camera can keep itself: how
+much it has written. That is the fourth line of the panel, and
+[what it is and is not](#written-by-this-camera) is worth reading before
+drawing a conclusion from it.
 
 **A card can fail without reporting an error.** This is the failure worth
 knowing about, because it has no symptom: the card acknowledges every write,
@@ -46,11 +54,12 @@ until it laps itself, at which point new recordings silently destroy old ones
 and the archive stops going back more than a few hours. Nothing about it looks
 wrong: capacity, free space and the file listing all agree with each other.
 
-### The three lines
+### The lines
 
-The panel says which of three states each line's evidence is in. **"Never
-checked" is not the same as "fine"**, and the panel is careful never to print
-the second when it means the first.
+Three of them are verdicts, and the panel says which of three states each one's
+evidence is in. **"Never checked" is not the same as "fine"**, and the panel is
+careful never to print the second when it means the first. The fourth is not a
+verdict at all — see below.
 
 #### Keeping up with the recorder
 
@@ -164,6 +173,60 @@ recording first — the **Change the card…** flow does exactly that, and
 [the swap page](sd-card-swap.md) shows how to do it from a shell. Otherwise,
 just run it again after a few weeks if the card is old.
 
+#### Written by this camera
+
+The other three lines are verdicts. This one is a fact, and the difference
+matters: a card that has taken a great deal of writing is not thereby a card
+with a problem.
+
+> This camera has written 3.4 TB to this card since 2 November.
+
+The camera keeps that total in a small file **on the card itself**, so it
+survives a restart and belongs to the card rather than to the camera. Put a
+different card in and the count starts again from nothing; put the original
+back and it picks up where it left off.
+
+Read it from a shell as `records_card_bytes_written_total`, with
+`records_card_start_time_seconds` as the moment it began:
+
+```sh
+curl -s http://<camera>/metrics | grep '^records_card'
+```
+
+**Three things it is not**, and all three are ways to misread it:
+
+- It is **a lower bound on the card's wear, not a measure of it.** This is what
+  the camera handed the card. What the card's own controller then wrote is more
+  — it moves data around to spread wear, and a small update can cost it a much
+  larger erase. How much more is not knowable from outside.
+- It counts **only what a camera running this firmware wrote**, not everything
+  the card has been through. A card that arrives with a year of somebody else's
+  footage on it reads as new here, and there is no way to ask it otherwise.
+  The line says "this camera" because that is the ordinary case — one card
+  living in one camera. Move a card that already has a count to a second
+  camera and that camera carries on adding to it, so the total then covers
+  both. That is the useful behaviour for a card being tracked, and it is worth
+  knowing before you read the figure as one camera's work.
+- It is **not a prediction, and there is no percentage to be had.** No SD card
+  states its rated endurance anywhere a host can read, so there is nothing to
+  divide the total by. Anything offering you "70% life remaining" for an SD card
+  is deriving it from an assumption about the card, not from the card.
+
+What it is good for is comparison and rate. A card that has taken 40 TB has done
+more work than one that has taken 400 GB, and the total divided by the time it
+covers tells you how fast this camera is consuming whichever card you put in —
+which is the number to reach for when deciding how often to replace one, or
+whether a lower bitrate would buy you a longer-lived card.
+
+The date is left off when the camera has never had a clock it could believe.
+Most of these boards have no battery-backed clock, so until something sets the
+time the total is real and the date it started is simply unknown, which the line
+says by not claiming one.
+
+The count restarts if the file is damaged or deleted — it is checked when read,
+and a damaged one is treated as absent rather than believed. Nothing else is
+affected: it is a record about recording, not part of it.
+
 ### When the archive stopped growing
 
 In rough order of how quickly they settle the question.
@@ -257,6 +320,14 @@ itself is the slower half. Measured on an hi3518ev200, a Class 10 card managed
   how you check one that has recordings on it.
 - **The read-back check re-reads your recordings in its second phase.** That is
   not a bug; see above.
+- **The camera writes a little more to the card than the clips.** Alongside the
+  recordings it keeps a small amount of its own bookkeeping — the written total
+  above, and an index of when it saw movement. They are a few kilobytes, they
+  are not footage, and the camera does not delete them to make room the way it
+  deletes old clips. Removing them by hand costs only what they record.
+- **A card that has taken terabytes is not a worn-out card.** Cameras write
+  continuously; that is the job. The written total is there to be compared and
+  to give you a rate, not to be read as a warning.
 
 ### See also
 

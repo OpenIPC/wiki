@@ -1327,12 +1327,28 @@ records_stood_down 0                # 1 while recording is deliberately paused
 records_fragments_dropped_total 0   # the card could not keep up
 records_write_errors_total 0
 records_fsync_us_max 18825          # a stalling card shows here first
+records_bytes_written_total 471334912       # since this camera last started
+records_card_bytes_written_total 3743551254528   # ...and to this card, ever
+records_card_start_time_seconds 1762041600  # when that count began; 0 = the
+                                    # camera has never had a clock it believed
 ```
 
 `records_state` is a verdict on the storage, so it cannot tell you the
 difference between a card that has gone and a recorder somebody paused on
 purpose. `records_stood_down` is what says the pause was deliberate — worth
 checking before treating a quiet recorder as a fault.
+
+The two `records_card_` figures are kept in a small file on the card rather than
+in the camera, so they survive a restart and travel with the card: move it to
+another camera and the count carries on, put a different card in and it starts
+again. They are committed on the same `records.syncSeconds` timer as the clip,
+so a power cut costs at most one interval of counting, and setting that key to 0
+leaves them to be written when the clip is closed. Read
+`records_card_bytes_written_total` as **a lower bound on the card's wear from
+this camera only**, never as a remaining-life figure — no SD card states its
+rated endurance anywhere a host can read it. [Is the SD card actually storing
+your footage?](sd-card-diagnostics.md#written-by-this-camera) is the longer
+version.
 
 The Recordings page in the web interface reads the same numbers and says so in
 words.
