@@ -141,25 +141,109 @@ What a `.ini` profile does, and does not, carry
 -----------------------------------------------
 
 Cameras ship text profiles in `/etc/sensors/iq/`, one per sensor. These are the
-vendor's tuning files, and they are large — a couple of dozen sections. **The
-camera reads two of them:** the auto-exposure section and the 3D noise
-reduction section. The rest is carried for PQTools' benefit and has no effect
-on the picture.
+vendor's tuning files, and they are large — a couple of dozen sections.
 
-So editing a section of one of these files usually changes nothing, and that is
-expected rather than a fault.
+> **This changed in September 2026.** The camera used to read two sections of
+> such a file and ignore the rest, so editing most of one changed nothing.
+> Builds from late September 2026 read most of it. If you tried this before
+> and it did nothing, try again on a current build.
 
-If you want the whole of a tune — sharpening, dynamic range, white balance,
-gamma — that is what the binary profile above is for.
+On the gen-4 families — hi3516ev200/ev300, hi3516cv500/av300, gk7205v200,
+gk7205v300 and gk7205v500 — sharpening, noise reduction, dynamic range, local
+contrast, dehaze, defect pixels, the auto-exposure route and the metering
+weights are read, along with the ISO-indexed ladders for dynamic range, dehaze
+and gamma. gk7205v210 shares the gk7205v200 build, so it behaves the same.
+
+White balance is not read, and neither is anything on the older families,
+whose profiles are written in a different vocabulary.
+
+Each of those sections appears twice in a vendor profile: once for daylight,
+and once with an `ir_` prefix for when the IR-cut filter is out of the light
+path. The camera switches between the two halves as it moves between its day
+and night settings.
+
+The camera prints a summary at startup naming the profile it read, which half
+of it, and anything in the file it could not use or does not read. If an edit
+appears to change nothing, that summary is the first thing to check.
+
+Two traps worth knowing before editing a ladder:
+
+- **`[dynamic_dehaze]` does nothing until `isp.dehaze` is `-1`** — on the
+  families that have that key, which is hi3516ev200/ev300 and
+  gk7205v200/v300/v500. Any other value puts the dehaze block in manual mode,
+  where the automatic strength the ladder writes is ignored. `-1` hands the
+  block to the profile, and automatic image tuning then leaves that one knob
+  alone and goes on tuning the rest — it takes effect live, without a
+  restart. The default is unchanged, so no camera moves without being told
+  to. Elsewhere the key does not exist and the ladder simply runs.
+- **The ISO counts written in a shipped profile are not always the array
+  lengths.** Some files declare one count and list one more value than that.
+  The camera reads the arrays for what they hold and requires them to agree
+  with each other, rather than trusting the count.
+
+A section whose values do not parse — a row shorter than the chip's table, a
+value out of range — is refused whole rather than applied in part.
+
+`isp.*` settings in `/etc/majestic.yaml` are applied on top of the profile, so
+where both have an opinion the setting wins. See
+[Majestic configuration](majestic-config.md).
+
+### Getting your tuning back out as text
+
+There is no converter from a `.bin` to a `.ini`, and there cannot be one: a
+binary profile carries no record of which named setting any part of it came
+from, so there is nothing for a converter to read.
+
+What works is the other direction — asking the camera what it is currently
+running. From the late-September 2026 nightly builds:
+
+```console
+> curl -u root:PASSWORD -o profile-day.ini \
+      http://<camera>/api/v1/isp/profile.ini
+```
+
+That writes the camera's live image settings out as an `.ini` in the same
+vocabulary the shipped profiles use, and it loads straight back in through
+`isp.iqProfile`. So a PQTools session, or a `.bin` imported once, can be turned
+into text you can read, edit, diff, send to somebody else or bake into an
+image.
+
+Three things are deliberately not in that file, each said in its own comments
+where you would otherwise go looking:
+
+- **The day/night half the camera was not in.** It holds one set of settings,
+  not two, so a camera in its night settings writes out `ir_` sections. To
+  capture both, download once in daylight and once at night — under **two
+  different names**, as above, or the second overwrites the first.
+- **The ISO-indexed ladders**, including the 3D noise reduction table. The
+  camera holds the rung it is running at, not the ladder that produced it, and
+  writing that rung out as a curve would claim one light level's tuning for
+  every light level. Copy those sections across from the profile you started
+  from.
+- **One dynamic-range setting**, for the same reason in a smaller way. Where a
+  ladder is driving it the file says so in place of the number; with no ladder
+  loaded it is ordinary tuning and is written out normally.
+
+One more caveat: the auto-exposure section is what the camera is *running*,
+which is not the profile's values if you have set `isp.aeSpeed`,
+`isp.aeTolerance`, `isp.aeBlackDelay` or `isp.aeWhiteDelay` — those are applied
+on top. The file carries a comment saying so.
+
+Verified on a gk7205v300 with an IMX335 sensor, running the IMX335 profile the
+images ship: nine sections download, load back section for section, and the
+next download is identical.
 
 ### Which profile a camera picks on its own
 
-With `isp.iqProfile` unset the camera falls back to
-`/etc/sensors/iq/default.ini`, which is a fixed link to one sensor's profile
-per SoC family — so an IMX335 camera may be running the IMX307 tuning even
-though `imx335.ini` is installed beside it. If that is your camera, point
-`isp.iqProfile` at the file named after your own sensor. An explicit setting
-always wins.
+With `isp.iqProfile` unset the camera looks for
+`/etc/sensors/iq/<sensor>.ini` matching the sensor it detected, and falls back
+to `/etc/sensors/iq/default.ini`. An explicit setting always wins.
+
+> **This changed in September 2026 too.** The camera used to go straight to
+> `default.ini`, which is a fixed link to one sensor's profile per SoC family
+> — so an IMX335 camera could be running the IMX307 tuning with `imx335.ini`
+> installed beside it. On an older build, point `isp.iqProfile` at the file
+> named after your own sensor.
 
 [mcr]: https://ssd.mathworks.com/supportfiles/MCR_Runtime/R2012a/MCR_R2012a_win32_installer.exe
 [pqt]: https://openipc.org/utilities

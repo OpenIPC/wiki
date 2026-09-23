@@ -127,10 +127,14 @@ isp:
   # on the other two means "stop overriding the sensor's own tuning", which
   # may itself sharpen or denoise. Changing sharpen or nr restarts the video;
   # dehaze applies to the running stream. September 2026 or newer.
-  #dehaze: 125                  # 0-255; 0 switches dehazing off. Applies
-                                # without restarting the video, so it is worth
-                                # trying at several values. Automatic image
-                                # tuning drives this key -- see image.tuning
+  #dehaze: 125                  # -1 to 255; 0 switches dehazing off, and -1
+                                # hands the block to the image profile, which
+                                # is the only way that profile's own dehaze
+                                # curve can run. Applies without restarting
+                                # the video, so it is worth trying at several
+                                # values. Automatic image tuning drives this
+                                # key too, and stands off it at -1 -- see
+                                # image.tuning
                                 # (hi3516ev200/ev300, gk7205v200/v300/v500)
   #sharpen: true                # false stops the camera applying its own
                                 # (hi3516ev200/ev300, gk7205v200/v300/v500)
