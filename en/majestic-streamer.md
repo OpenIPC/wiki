@@ -314,6 +314,12 @@ apart, and one of them switches automatic exposure off.
 
 Zero, or leaving the key out, means "leave the sensor default alone" everywhere.
 
+The top of that HiSilicon range is the frame period rather than the number in
+the table: a camera at 25 fps cannot expose for longer than 40 ms whatever you
+ask for. Slowing the sensor down is how you get past it, and
+[very long exposure](very-long-exposure.md) is that in full — down to seconds
+per frame, for telescopes and other scenes with almost no light in them.
+
 **It does not have to be a whole number.** On HiSilicon, Goke and SigmaStar the
 value is read as a decimal, so `isp.exposure: 0.5` is half a millisecond —
 1/2000 s — and that is how you ask for the short shutter a moving subject needs.
