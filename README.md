@@ -59,6 +59,7 @@ OpenIPC Wiki
 - [Majestic usage research](en/majestic-research.md)
 - [Majestic plugins](en/majestic-plugins.md)
 - [Raw editor](en/raw-editor.md)
+- [Very long exposure: telescopes, X-ray and other dark scenes](en/very-long-exposure.md)
 - [Soundcheck: setting audio levels by ear](en/audio-soundcheck.md)
 - [What the camera detects, and how to read it](en/analytics-metadata.md)
 - [When something moves: clips, hooks and your own scripts](en/motion-events.md)
