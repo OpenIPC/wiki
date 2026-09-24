@@ -46,6 +46,19 @@ change to `isp.exposure` helps, and the camera looks broken.
 
 **Bring both streams down**, not just one, and not just the profile.
 
+### Before you start: which firmware
+
+This page describes firmware from **September 2026 onwards**. On older builds:
+
+- `isp.aeMode` does not exist, so there is no way to stop auto-exposure
+  deciding for you, and it will undo everything below;
+- the gain keys are read as the sensor's own fixed-point units rather than as
+  multipliers, so `isp.aGain: 1` asks for a **1/1024 of unity** rather than 1x
+  — which looks like the camera ignoring you.
+
+If a command below is refused, or the gain numbers behave nothing like the
+text, that is the firmware rather than the camera. Update it first.
+
 ### The recipe
 
 ```
@@ -69,8 +82,19 @@ curl -u root:PASS http://CAMERA/metrics | grep isp_exptime
 ```
 
 `isp_exptime` is in microseconds and is what the sensor really did. If it is
-lower than you asked for, the frame period is the reason — go back and slow the
-streams down further.
+lower than you asked for, a frame period shorter than your request is the
+reason — but there are two different reasons it can be short, and only one of
+them you can fix:
+
+- **the streams are still too fast** — go back and slow both of them down;
+- **the sensor is already as slow as it goes.** Every sensor has a floor, and
+  on the IMX335 at 5 MP it is about 0.13 fps, which is where the 7.7 s in the
+  table comes from. At that point no setting will buy you a longer exposure,
+  and stacking shorter frames is the way forward.
+
+Compare what you asked for against the frame rate you actually set: if
+`isp_exptime` is close to one frame period, the rate is the limit; if it is
+close to the sensor's floor, you have reached the sensor.
 
 Give the camera a few seconds after changing the frame rate or the exposure
 before you trust the number or take a picture. The pipeline needs a frame or
@@ -95,6 +119,16 @@ This needs a restart of the streamer to take effect, because the sensor is
 reprogrammed when the pipeline is built.
 
 ### Getting the picture out
+
+Raw is a **HiSilicon and Goke** feature, and the oldest HiSilicon parts do not
+serve it either. Check before you build anything on it — a camera that cannot
+answers 404:
+
+```
+curl -o /dev/null -s -w '%{http_code}\n' -u root:PASS http://CAMERA/image.dng
+```
+
+`200` and you have it. `404` and this camera never will, whatever else you set.
 
 For anything measured, take the **raw** frame rather than a JPEG:
 
@@ -149,9 +183,19 @@ enclosure runs. It takes ten minutes:
    itself.
 
 If your exposures are near that limit, **stack short frames instead of taking
-one long one**. Ten one-second frames added together collect the same light as
-one ten-second frame, but only one second of dark current each — and you can
-throw away the one an aeroplane flew through.
+one long one**. Ten one-second frames collect the same light as one ten-second
+frame, and none of them individually fills up with dark current, so the
+picture survives where a single long exposure would have been lost.
+
+Be clear about what that does and does not buy you. Adding ten frames adds ten
+frames' worth of dark current too — splitting the exposure does not reduce the
+total. What it gives you is that no single frame saturates, that you can throw
+away the one an aeroplane flew through, and that the random part of the noise
+falls relative to the signal as you add frames.
+
+Removing the dark signal itself is a separate step: take **dark frames** with
+the lens capped at the same exposure, gain and temperature, and subtract them.
+That is what the measurement above is really for.
 
 ### Using it on a telescope
 
@@ -181,5 +225,8 @@ throw away the one an aeroplane flew through.
 | exposure stops at 33 ms | the sensor is still at 30 fps |
 | exposure stops at exactly 1 s | streams are whole numbers; use a fractional `Isp_FrameRate` |
 | `isp_exptime` lower than asked | the frame period is shorter than your request |
+| `isp_exptime` stuck near 7.7 s | the sensor is at its slowest; stack shorter frames instead |
+| `/image.dng` answers 404 | this camera's hardware does not serve raw at all |
+| commands refused, or gain behaving oddly | firmware older than September 2026 |
 | the picture is bright grey with no detail | dark current has filled the frame — shorten the exposure |
 | changing the gain changes nothing | in manual, `isp.dGain` does nothing; use `isp.aGain` |
