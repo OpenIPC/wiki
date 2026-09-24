@@ -157,18 +157,48 @@ At these exposures you usually want gain **out** of the picture, not helping.
 - `isp.dGain` is a ceiling for automatic mode. In manual it does nothing at
   all, and the camera says so in its log once if you set it.
 
-### What actually stops you: heat, not settings
+### Heat, and why it is less of a problem than you expect
 
 A sensor accumulates charge whether or not light is arriving. This is **dark
-current**, it grows with exposure time, and it roughly doubles for every 6–8 °C
-the sensor warms up. Past a certain exposure the frame fills up with it and
-your picture is gone regardless of how dark the room is.
+current**; it grows with exposure time and roughly doubles for every 6–8 °C the
+sensor warms up, and it is the reason long-exposure astronomy cameras are
+cooled. The usual warning is that past some exposure the frame fills with it and
+the picture is gone regardless of how dark the room is.
 
-On the lab IMX335 at room temperature, the floor of the frame rose at up to
-about 41 counts per second, which fills the usable range of a 12-bit frame in
-around 94 seconds. That figure is an **upper bound** — those pixels still saw a
-little light — so the true limit is longer, but it shows the shape of the
-problem: somewhere in the tens of seconds to a few minutes, heat wins.
+Worth checking rather than believing, because on this sensor it is not the
+limit anyone expects.
+
+On the lab IMX335 at room temperature, in a light-tight box, **dark current is
+too small to measure**. Across exposures from 0.1 s to 7 s the average level
+does not rise out of the noise: the fit gives −0.16 ± 0.24 counts per second,
+which is zero within the error, and the scatter between frames comes from the
+black level itself wandering by a count or two rather than from anything the
+sensor collected. Taking the bound at two standard deviations — under 0.63
+counts per second — the frame would need **more than an hour and a half** to
+fill from dark current alone.
+
+So on this sensor, at room temperature, heat is **not** what stops you. That
+was worth measuring rather than assuming: the textbook expectation for a small
+uncooled pixel is far worse, and an earlier estimate here that did not use a
+light-tight box was pessimistic by a factor of about sixty.
+
+**What does grow is the hot pixels.** A small population runs far faster than
+the average, and their number climbs steadily with exposure — on this sensor
+about 50 more pixels per second of exposure, measured as pixels reading over
+1000 counts against a black level of 200:
+
+| exposure | hot pixels | share of the frame |
+| --- | --- | --- |
+| 7 s | 304 | 0.006% |
+| 60 s | ~3,000 | 0.06% |
+| 300 s | ~15,000 | 0.3% |
+| 900 s | ~46,000 | 0.9% |
+
+Under one percent of the frame even at a quarter of an hour, and they are the
+easiest defect to remove: a hot pixel is in the same place in every frame, so a
+dark frame subtracts it exactly. That is what dark frames are really for here —
+not pulling down an average that barely moves, but deleting the handful of
+pixels that do.
 
 **Measure your own**, because it depends on your sensor and how warm your
 enclosure runs. It takes ten minutes:
@@ -182,8 +212,8 @@ enclosure runs. It takes ten minutes:
    of the frame by it and you have the exposure at which the sensor fills
    itself.
 
-If your exposures are near that limit, **stack short frames instead of taking
-one long one**. Ten one-second frames collect the same light as one ten-second
+If your exposures are long enough that hot pixels or a passing aeroplane are a
+risk, **stack short frames instead of taking one long one**. Ten one-second frames collect the same light as one ten-second
 frame, and none of them individually fills up with dark current, so the
 picture survives where a single long exposure would have been lost.
 
@@ -228,5 +258,5 @@ That is what the measurement above is really for.
 | `isp_exptime` stuck near 7.7 s | the sensor is at its slowest; stack shorter frames instead |
 | `/image.dng` answers 404 | this camera's hardware does not serve raw at all |
 | commands refused, or gain behaving oddly | firmware older than September 2026 |
-| the picture is bright grey with no detail | dark current has filled the frame — shorten the exposure |
+| the picture is bright grey with no detail | light is getting in — dark current is not fast enough to do this |
 | changing the gain changes nothing | in manual, `isp.dGain` does nothing; use `isp.aGain` |
