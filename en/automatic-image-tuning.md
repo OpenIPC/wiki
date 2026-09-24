@@ -36,12 +36,16 @@ On a camera in the last row the panel says so rather than pretending — see
 | Setting | Driven |
 | --- | --- |
 | `image.contrast` | yes |
-| `image.luminance` (Brightness) | yes |
 | `image.saturation` | yes |
 | `isp.dehaze` | yes |
+| `image.luminance` (Brightness) | **never** |
 | `image.hue` | **never** |
 | `isp.drc` | **never** |
 | Exposure, gain, white balance, the IR-cut filter | **never** |
+
+Brightness is the black point, and it is yours. The controller reads your
+value and works around it; it has no business choosing one for you, so it
+leaves the setting exactly where you put it.
 
 Your saved values are the **starting point** it works from and the value it
 returns to. It is not trying to replace them: a camera whose settings suit its
@@ -151,8 +155,15 @@ image:
   tuning: false
 ```
 
-Changing it restarts the video. Your saved picture settings are applied on the
-way back up, so the picture returns to exactly what the configuration says.
+It takes effect immediately and the video keeps running — starting or
+stopping the controller costs nothing but a timer.
+
+Switching it off is not the same as the controller deciding your scene no
+longer needs correcting. That returns you to your saved values, as above;
+this just stops, leaving the picture wherever the controller had reached.
+Deliberately — the settings page seeds its sliders from those same numbers,
+so taking over by hand is not a visible jump. Save the settings, or reboot,
+to go back to exactly what the configuration says.
 
 ### Things that will surprise you
 

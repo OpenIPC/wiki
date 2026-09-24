@@ -75,11 +75,18 @@ While you are tuning: `isp.externalTuner`
 -----------------------------------------
 
 The camera tunes itself while you are tuning it, and the two write the same
-settings. Its noise-reduction and dynamic-range ladders follow the gain and
-are pushed about every ten seconds; its automatic tuning moves contrast,
-saturation and dehaze every couple of seconds. So a value you set in PQTools
-can be gone before you have finished looking at it — switch to another tab and
-back, and it reads as though the camera ignored you.
+settings.
+
+- **Four ladders follow the light**, pushed about every ten seconds: dynamic
+  range, dehaze, gamma and 3D noise reduction. Dynamic range and dehaze are
+  keyed on gain, gamma on exposure.
+- **Automatic image tuning** moves contrast, saturation and dehaze every
+  couple of seconds. It does not touch brightness or hue — see
+  [Automatic image tuning](automatic-image-tuning.md).
+
+So a value you set in PQTools can be gone before you have finished looking at
+it — switch to another tab and back, and it reads as though the camera ignored
+you.
 
 Hand the camera over for the length of the session:
 
@@ -103,11 +110,22 @@ day/night change that happened while you had it.
 overwriting you; it does not write anything down. Export your `.bin`, or
 download the text profile, before you clear the key.
 
-Available from the late-September 2026 nightly builds. On an older build the
-nearest thing is to edit the profile instead — set `Enable` to `"0"` in the
-dynamic-range ladder sections of a copy, both the daylight one and its `ir_`
-twin, and point `isp.iqProfile` at that copy. That silences the ladder for
-good rather than for the session.
+Available from the late-September 2026 nightly builds. On an older build it
+takes two steps, and they are not equivalent — one is for the session, the
+other is permanent:
+
+```console
+$ cli -s .image.tuning false
+```
+
+stops automatic image tuning, live and without interrupting the video. Set it
+back to `true` when you are done.
+
+The ladders need the profile edited: set `Enable` to `"0"` in the ladder
+sections you are tuning — each has a daylight section and an `ir_` twin — in a
+**copy** of the profile, and point `isp.iqProfile` at the copy. That silences
+those ladders for as long as the camera runs that file, so keep the original
+and put it back afterwards.
 
 One group needs the text profile edited by hand whatever you do: the
 asymmetric tone-mapping controls on the dynamic-range page — asymmetry, second
