@@ -71,6 +71,52 @@ refuses the file* below).
 
 Download [PQTools for Goke][pqt-gk].
 
+While you are tuning: `isp.externalTuner`
+-----------------------------------------
+
+The camera tunes itself while you are tuning it, and the two write the same
+settings. Its noise-reduction and dynamic-range ladders follow the gain and
+are pushed about every ten seconds; its automatic tuning moves contrast,
+saturation and dehaze every couple of seconds. So a value you set in PQTools
+can be gone before you have finished looking at it — switch to another tab and
+back, and it reads as though the camera ignored you.
+
+Hand the camera over for the length of the session:
+
+```console
+$ cli -s .isp.externalTuner true
+```
+
+No restart, and the video keeps running. While it is set the camera stops
+writing the image pipeline: the ladders stand down, automatic tuning stops,
+and a day/night change does not re-read the profile. Give it back when you are
+done:
+
+```console
+$ cli -s .isp.externalTuner false
+```
+
+The camera takes the picture back within about ten seconds, and reconciles a
+day/night change that happened while you had it.
+
+**Nothing you do in PQTools is saved by this.** It stops the camera
+overwriting you; it does not write anything down. Export your `.bin`, or
+download the text profile, before you clear the key.
+
+Available from the late-September 2026 nightly builds. On an older build the
+nearest thing is to edit the profile instead — set `Enable` to `"0"` in the
+dynamic-range ladder sections of a copy, both the daylight one and its `ir_`
+twin, and point `isp.iqProfile` at that copy. That silences the ladder for
+good rather than for the session.
+
+One group needs the text profile edited by hand whatever you do: the
+asymmetric tone-mapping controls on the dynamic-range page — asymmetry, second
+pole, compress and stretch. The text format has no place to write those as a
+single value; they exist only as an ISO ladder, and a reading taken off a
+camera is one rung of it. So tune them live to find the numbers you want, then
+write them into the ladder rows for the light you tuned under, in both the
+daylight section and its `ir_` twin.
+
 Keeping the picture you tuned
 -----------------------------
 
@@ -121,6 +167,27 @@ profile; anything else is read as a PQTools binary profile. Call the file
 The camera reports which profile it took and whether it loaded. The picture is
 the real test: look at it before and after.
 
+**What a binary profile covers.** All of the imaging settings — it is a
+picture of the whole imaging block, not a list of the ones somebody changed —
+so the camera applies none of its own defaults over the top of it.
+
+> **This changed in late September 2026.** Earlier builds wrote their own
+> sharpening, noise reduction and local contrast over an accepted profile,
+> a moment after accepting it. Those three were silently not yours. If you
+> tuned them and the camera never looked right, that is why; re-import on a
+> current build and they survive.
+
+Two things it does not carry, whatever build you are on:
+
+- **Anything that follows the gain.** A binary profile is one set of values,
+  taken at one moment, so dynamic range and dehaze hold what was imported
+  instead of tracking the light. A text profile carries those as ISO tables,
+  and a camera on a `.bin` has none. Fine on a bench; think before shipping a
+  camera that way.
+- **3D noise reduction**, which is not part of the imaging block the file is a
+  picture of — so the camera writes its own table there, on a `.bin` exactly
+  as it would with no profile at all.
+
 ### 4. To bake it into a firmware image
 
 Put the file in the image's overlay, at the same path, and set
@@ -165,6 +232,22 @@ and night settings.
 The camera prints a summary at startup naming the profile it read, which half
 of it, and anything in the file it could not use or does not read. If an edit
 appears to change nothing, that summary is the first thing to check.
+
+> **The gamma ladder started working in late September 2026, and the picture
+> moves.** Three of the six profiles the EV200 family ships — `f23.ini`,
+> `imx335.ini` and `sc2335.ini` — wrote the two threshold arrays of their
+> gamma sections in different units, one as ISO numbers and one as exposure
+> numbers. There is no reading of such a pair that works, so the camera
+> refused the section and gamma stayed wherever the sensor's own driver left
+> it. Two of those three are what the images actually install.
+>
+> Current builds ignore the array that is in the wrong unit and switch on the
+> other, and the shipped files have been corrected to match, so a camera now
+> runs the gamma curves its profile was tuned with. Measured on a hi3516ev300
+> with an IMX335 against a colour chart: highlights rise about 24 levels of
+> luma, midtones about 13, and the deepest shadow patch falls about 14. It is
+> a contrast curve appearing where none was applied before. If you tuned
+> around its absence, that tuning wants revisiting.
 
 Two traps worth knowing before editing a ladder:
 
@@ -214,7 +297,9 @@ where you would otherwise go looking:
 - **The day/night half the camera was not in.** It holds one set of settings,
   not two, so a camera in its night settings writes out `ir_` sections. To
   capture both, download once in daylight and once at night — under **two
-  different names**, as above, or the second overwrites the first.
+  different names**, as above, or the second overwrites the first. A camera
+  running a `.bin` has no halves at all; the file says so at the top and
+  writes out the one set there is.
 - **The ISO-indexed ladders**, including the 3D noise reduction table. The
   camera holds the rung it is running at, not the ladder that produced it, and
   writing that rung out as a curve would claim one light level's tuning for
@@ -230,8 +315,18 @@ which is not the profile's values if you have set `isp.aeSpeed`,
 on top. The file carries a comment saying so.
 
 Verified on a gk7205v300 with an IMX335 sensor, running the IMX335 profile the
-images ship: nine sections download, load back section for section, and the
-next download is identical.
+images ship: nine sections download and load back section for section.
+
+Exporting again then gives an identical file — from the second export onward.
+The first is the exception, and only on a camera whose profile carries a
+dynamic-range ladder: that first file leaves the ladder-driven setting out and
+says so, and loading it takes the ladder away, so the second file has the
+setting as an ordinary number. From there it is a fixed point. Copy the ladder
+across and it stays where it belongs.
+
+Downloading while `isp.externalTuner` is set gives you that setting too: with
+the ladder stood down, what the camera holds is what you put there, which is
+the one number you were trying to capture.
 
 ### Which profile a camera picks on its own
 
