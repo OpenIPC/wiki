@@ -17,19 +17,21 @@ with a download button and an explanation instead, which is the page working as
 intended rather than a failure.
 
 **Not every camera can do this.** Raw is a **HiSilicon, Goke, SigmaStar and
-Ingenic T31** feature, SigmaStar and the T31 on builds from 2026-09-26; other SoC
-families do not serve it, and neither do the oldest HiSilicon parts or the other
-Ingenic chips.
+Ingenic T31/T23** feature, SigmaStar and the two Ingenic chips on builds from
+2026-09-26; other SoC families do not serve it, and neither do the oldest
+HiSilicon parts or the other Ingenic chips.
 The menu entry is there on every camera regardless, so the page itself is where
 you find out:
 
-- *This firmware does not serve raw frames* — the hardware cannot, and nothing
-  will change that.
+- *This firmware does not serve raw frames* — either the hardware cannot, or, on
+  a SigmaStar, T31 or T23 camera, the firmware predates 2026-09-26 and an
+  upgrade adds it.
 - *Raw capture is switched off for this camera* — it can, but `isp.rawMode` is
   `none`. Turn it on in **Settings**, under **Live**, where the image settings
-  are drawn. A SigmaStar camera shows this out of the box: raw ships switched
-  off there, for the reason given in
-  [On SigmaStar](majestic-streamer.md#on-sigmastar).
+  are drawn. SigmaStar and T23 cameras show this out of the box: raw ships
+  switched off there, for the reasons given in
+  [On SigmaStar](majestic-streamer.md#on-sigmastar) and
+  [On Ingenic T31 and T23](majestic-streamer.md#on-ingenic-t31-and-t23).
 
 The [endpoint's own section](majestic-streamer.md#raw-sensor-data-as-adobe-dng)
 has a one-line check that answers the same question from a shell.

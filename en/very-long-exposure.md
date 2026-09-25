@@ -120,16 +120,18 @@ reprogrammed when the pipeline is built.
 
 ### Getting the picture out
 
-Raw is a **HiSilicon, Goke, SigmaStar and Ingenic T31** feature (SigmaStar and
-the T31 on builds from 2026-09-26), and the oldest HiSilicon parts and the other
-Ingenic chips do not serve it. Check before you
+Raw is a **HiSilicon, Goke, SigmaStar and Ingenic T31/T23** feature (SigmaStar
+and the two Ingenic chips on builds from 2026-09-26), and the oldest HiSilicon
+parts and the other Ingenic chips do not serve it. Check before you
 build anything on it — a camera that cannot answers 404:
 
 ```
 curl -o /dev/null -s -w '%{http_code}\n' -u root:PASS http://CAMERA/image.dng
 ```
 
-`200` and you have it. `404` and this camera never will, whatever else you set.
+`200` and you have it. `404` means this firmware has no raw endpoint: on a
+SigmaStar, T31 or T23 camera, upgrade to a build from 2026-09-26; on anything
+else, no setting will add it.
 `501` means it can but raw is switched off — set `isp.rawMode` to `slow`. That
 is how a SigmaStar camera ships.
 
@@ -259,8 +261,8 @@ That is what the measurement above is really for.
 | exposure stops at exactly 1 s | streams are whole numbers; use a fractional `Isp_FrameRate` |
 | `isp_exptime` lower than asked | the frame period is shorter than your request |
 | `isp_exptime` stuck near 7.7 s | the sensor is at its slowest; stack shorter frames instead |
-| `/image.dng` answers 404 | this camera's hardware does not serve raw at all |
-| `/image.dng` answers 501 | raw is switched off; set `isp.rawMode` to `slow` — SigmaStar ships that way |
+| `/image.dng` answers 404 | no raw endpoint in this firmware — upgrade if it is SigmaStar, T31 or T23; otherwise the hardware does not serve it |
+| `/image.dng` answers 501 | raw is switched off; set `isp.rawMode` to `slow` — SigmaStar and the T23 ship that way |
 | commands refused, or gain behaving oddly | firmware older than September 2026 |
 | the picture is bright grey with no detail | light is getting in — dark current is not fast enough to do this |
 | changing the gain changes nothing | in manual, `isp.dGain` does nothing; use `isp.aGain` |
