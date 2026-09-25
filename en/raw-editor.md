@@ -37,9 +37,9 @@ Where it is available, **Camera → Raw** in the web interface opens it. It take
 a frame straight away, which is several megabytes off the camera and takes a
 few seconds — there is nothing to press first.
 
-![The Develop screen](../images/raw-editor/develop.webp)
+![The Preview screen](../images/raw-editor/preview.webp)
 
-### Develop
+### Preview
 
 The picture. On current firmware the frame arrives with the camera's own white
 balance recorded in it, so the first render is what the camera thought the
@@ -66,14 +66,27 @@ zero as well.
 
 Picking a neutral fixes both, and is the quicker route either way.
 
-### Diagnose
+### Bad pixels
 
-![The Diagnose panel, on a flat frame with scattered defects](../images/raw-editor/diagnose.webp)
+![The Bad pixels panel: five captures, compared](../images/raw-editor/bad-pixels.webp)
 
 Measures the sensor rather than the picture: how many pixels disagree with
 their neighbours by more than the noise explains, the black level the frame
 implies against the one the file claims, what has already clipped, and how
 noisy the rest is.
+
+**Start** runs the whole procedure for you: five captures, compared, with the
+panel telling you at each step what it has seen so far. A pixel that is
+genuinely bad is bad in every one of them; whatever comes and goes was noise,
+or something in the picture. It also says how to make the frame dark first,
+which is the one thing that makes the answer reliable — at night with the
+infrared light off and something opaque over the lens (not a hand: with the
+infrared filter swung out, the sensor sees straight through skin). If you
+cannot, carry on anyway; it takes longer and says so.
+
+The rest of this section is the one-frame-at-a-time version, folded under
+**Advanced — one frame at a time**, for when you want to see the raw scan and
+drive it yourself.
 
 **Read the number with the two things beside it, not on its own.** Pointed at
 an ordinary furnished room the scan will report hundreds of pixels, and almost
@@ -278,7 +291,7 @@ once for a single frame, once for what a twenty-frame stack leaves:
 
 Two things to take from that. Half a pixel of blur is the difference between
 reading nearly everything and reading nothing, which is why the
-[Diagnose card](#is-this-plate-worth-reading) measures how much blur a plate
+[Bad pixels card](#is-this-plate-worth-reading) measures how much blur a plate
 survives rather than how sharp it looks. And the burst is worth a great deal —
 but only where there is blur headroom to spend it on. At +1.6 px neither column
 reads anything, and a plate with no headroom wants the lens seen to, not a
@@ -289,6 +302,15 @@ false` stops the camera adding its own — though not any the sensor's tuning
 applies, which is the distinction
 [dehaze, sharpening and noise reduction](majestic-streamer.md#dehaze-sharpening-and-noise-reduction)
 draws.
+
+### Focus
+
+On a camera whose ISP reports a focus measurement — the Dashboard's ISP card
+shows a **Focus metric** — a fifth tab shows what the camera's autofocus
+measures, zone by zone, live over the captured frame, and lets you try, measure
+and keep the filter it measures with. It is the advanced half of focusing and
+has a page of its own: [Autofocus and manual focus](autofocus.md), which also
+covers the Live page's lens controls, where a camera is actually focused.
 
 ### When it will not open
 
