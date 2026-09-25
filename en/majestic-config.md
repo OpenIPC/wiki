@@ -162,6 +162,28 @@ isp:
   #  minPwmDuty: 250            # how far it may close, per-mille, 0-1000
   #  maxPwmDuty: 950            # how far it may open, per-mille, 0-1000
   #  openPwmDuty: 800           # where it parks when opening, 0-1000
+  # A motorised lens and the focus engine. Needs a HiSilicon/Goke part whose
+  # ISP reports a focus measurement (the Dashboard shows a Focus metric) and
+  # firmware that carries the focus plugin; the lens itself is declared in the
+  # boot environment (ptz_control, ptz_caps). See "Autofocus and manual focus".
+  #autofocus:
+  #  enabled: false             # loads the motor driver and the engine; restart
+  #                             # majestic after changing it
+  #  actuator: pelco-xm         # pelco-xm (XiongMai zoom blocks) | pelco-d
+  #  port: /dev/ttyAMA0         # the UART the lens is on
+  #  speed: 115200              # baud, 1200-115200
+  #  pulse: 500                 # ms one held tick moves the lens, 50-3000; a tap
+  #                             # on the Live page moves a fifth of it
+  #  mode: semi                 # semi: refocus after every zoom | manual: never
+  #                             # on its own. The Autofocus button works in both
+  # The focus filter the measurement comes from, as lists of whole numbers.
+  # Written by the raw editor's Focus tab (Keep it); unset means the firmware's
+  # or the sensor profile's filter is in force, which is the usual state.
+  #af:
+  #  iir1Gain: ""               # seven numbers
+  #  iir1Shift: ""              # four
+  #  iir1Enable: ""             # three, 0 or 1
+  #  iir1Coring: ""             # three: threshold, slope, limit
 
 image:
   mirror: false
@@ -721,3 +743,5 @@ cloud:
   — which streams get the overlay, and what masks do on each SoC family
 - [Majestic encoder tuning](majestic-encoder-tuning.md) — `refEnhance`, `refPred`, `svct`, ROI
 - [Majestic plugins](majestic-plugins.md) — what `system.plugins` turns on
+- [Autofocus and manual focus](autofocus.md) — `isp.autofocus` and `isp.af`, the
+  lens pad on the Live page, and the raw editor's Focus tab
