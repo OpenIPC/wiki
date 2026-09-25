@@ -120,8 +120,9 @@ reprogrammed when the pipeline is built.
 
 ### Getting the picture out
 
-Raw is a **HiSilicon, Goke and SigmaStar** feature (SigmaStar on builds from
-2026-09-26), and the oldest HiSilicon parts do not serve it. Check before you
+Raw is a **HiSilicon, Goke, SigmaStar and Ingenic T31** feature (SigmaStar and
+the T31 on builds from 2026-09-26), and the oldest HiSilicon parts and the other
+Ingenic chips do not serve it. Check before you
 build anything on it — a camera that cannot answers 404:
 
 ```

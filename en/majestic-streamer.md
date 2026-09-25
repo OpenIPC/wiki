@@ -2125,12 +2125,13 @@ system](#user-levels-in-the-system). Over plain `http` the password crosses the
 network in the clear either way, and a media account is the one you can afford
 to spend that way.
 
-This is a **HiSilicon, Goke and SigmaStar** feature — SigmaStar on builds from
-**2026-09-26**. Cameras on other SoC families do not serve it, and neither do the
-oldest HiSilicon parts. It is not tied to a build flavour — Lite, Ultimate and
-FPV all serve it wherever the hardware does. SigmaStar differs from the other two
-in ways worth knowing before you rely on it, starting with being switched off
-out of the box; [On SigmaStar](#on-sigmastar) has the list.
+This is a **HiSilicon, Goke, SigmaStar and Ingenic T31** feature — SigmaStar and
+the T31 on builds from **2026-09-26**. Cameras on other SoC families do not serve
+it, and neither do the oldest HiSilicon parts or the other Ingenic chips. It is
+not tied to a build flavour — Lite, Ultimate and FPV all serve it wherever the
+hardware does. SigmaStar and the T31 differ from the other two in ways worth
+knowing before you rely on them — SigmaStar starts out switched off; see
+[On SigmaStar](#on-sigmastar) and [On Ingenic T31](#on-ingenic-t31).
 
 Rather than match your camera against a model list, ask it. A build that does
 not have the endpoint answers **404**, the same as any path it does not serve:
@@ -2146,8 +2147,8 @@ was rejected, which on this endpoint means a malformed or empty
 [`crop`, or `frames` above 1 without one](#asking-for-less-than-the-whole-frame); the
 body says which. `200` means you already have the file.
 
-**On HiSilicon and Goke it is on by default.** `isp.rawMode` is `slow` unless
-you changed it, so a camera that has never been configured for this still
+**On HiSilicon, Goke and the T31 it is on by default.** `isp.rawMode` is `slow`
+unless you changed it, so a camera that has never been configured for this still
 answers. On SigmaStar the default is `none`, and the endpoint answers **501**
 until you set `slow`; the change takes effect on the next request, with no
 restart. `/image.yuv420`
@@ -2157,8 +2158,8 @@ finished with it, just not yet compressed.
 
 | `isp.rawMode` | what it does |
 |---|---|
-| `slow` | Default on HiSilicon and Goke. The raw path is set up when a snapshot is asked for, so switching to it from `none` takes effect on the very next request, with no restart. On HiSilicon and Goke the frame of video memory a snapshot lands in is still set aside when the streamer starts. |
-| `fast` | The raw path is kept ready rather than set up for each snapshot. The memory that reserves is claimed when the streamer starts, so switching to `fast` on a running camera does not reserve it until the next restart. On SigmaStar it behaves exactly as `slow`. |
+| `slow` | Default on HiSilicon, Goke and the T31. The raw path is set up when a snapshot is asked for, so switching to it from `none` takes effect on the very next request, with no restart. On HiSilicon and Goke the frame of video memory a snapshot lands in is still set aside when the streamer starts. |
+| `fast` | The raw path is kept ready rather than set up for each snapshot. The memory that reserves is claimed when the streamer starts, so switching to `fast` on a running camera does not reserve it until the next restart. On SigmaStar and the T31 it behaves exactly as `slow`. |
 | `none` | Off, and the default on SigmaStar. `/image.dng` answers **501**. On HiSilicon and Goke the frame of video memory `slow` set aside goes back to the rest of the pipeline at the next restart of the streamer, not at once. |
 
 That reserved frame is real and it is large: on a Hi3516AV300 with a 4K IMX415,
@@ -2191,8 +2192,8 @@ curl -u viewer:PASSWORD -o avg.dng "http://192.168.1.10/image.dng?crop=800x600x1
   slightly larger rectangle, at a slightly different origin, than you asked for.
   The rule is below.
 - **`frames=N`**, 1 to 16, averages that many consecutive sensor frames into one
-  file, on HiSilicon and Goke. SigmaStar cannot capture consecutive raw frames,
-  so there it sends one frame and says `X-Frames-Averaged: 1`. Noise falls as the square root of the count, which is worth having when you
+  file, on HiSilicon and Goke. SigmaStar and the T31 cannot capture consecutive
+  raw frames, so there it sends one frame and says `X-Frames-Averaged: 1`. Noise falls as the square root of the count, which is worth having when you
   are measuring a dark scene. It **needs a crop** once N is above 1: averaging
   whole frames does not fit in memory, and the camera refuses with **400** and
   says so rather than failing in some more interesting way.
@@ -2455,6 +2456,50 @@ neutral to within 6%.
 **Mirror and flip keep the colours right.** On the SSC325DE, frames taken with
 `image.mirror` and then `image.flip` switched on matched the original
 mirrored and turned over, and every colour of the mosaic kept its place.
+
+#### On Ingenic T31
+
+Builds from **2026-09-26** serve `/image.dng` on the Ingenic T31. It was checked
+on a T31 with an SC2332 sensor at 1920x1080, 15 frames a second, developing the
+frames next to the camera's own JPEG of the same scene. The other Ingenic chips
+(T20, T21, T23, T40, T41) do not serve it: none has been measured, and the page
+there answers **404**.
+
+**It is on by default**, as on HiSilicon, because taking a frame leaves the video
+alone. Recording the RTSP stream's timestamps showed no gap longer than one frame
+through 200 raw frames taken back to back (twice), 60 taken a second apart, and
+100 through the endpoint itself — the same as with none taken. Each frame takes
+about a tenth of a second and each is a new one.
+
+**The frame is the sensor's own**: 1920x1080 at 10 bits on the SC2332. While a
+request is served, the camera holds two bytes a pixel of it in memory — 4 MB for
+1080p — and lets it go when the request ends.
+
+**The metadata is the camera's real state**: the colour mosaic, the white balance
+in force, the exposure time, the gain as ISO and the black level (65 at 10 bits,
+against a darkest pixel of 67). With those applied, the colour planes of a frame
+came out neutral to within 1.5%.
+
+**`frames=N` is not averaged**, for the same reason as on SigmaStar: each raw
+frame is a separate capture, so consecutive frames cannot be promised. The reply
+carries one frame and `X-Frames-Averaged: 1`.
+
+**Mirror and flip are written into the file.** The T31 turns its picture after
+the raw frame is taken, so the frame keeps the sensor's own orientation and the
+DNG's Orientation tag says how to turn it: 4 with `image.flip` on, 1 with it off.
+A raw converter applies it, so the developed frame matches the camera's picture
+either way. Without it, a camera with `image.flip` on gave a raw frame that
+developed upside down.
+
+From the same builds, the newer HiSilicon and Goke chips (Hi3516EV200/EV300,
+Hi3516CV500/AV300 and the GK7205 family onwards) write the tag too, for a sensor
+that cannot mirror itself and leaves the turning to the camera's image
+processing. That case follows from how those cameras turn the picture; it has
+not been checked on such a sensor. A sensor that does mirror itself delivers the
+raw frame the right way round and the tag stays 1 — checked on a Hi3516AV300
+with an IMX415 and `image.flip` on, where the developed frame matched the
+camera's picture. SigmaStar mirrors in the sensor too (checked on an SSC325DE),
+so its tag is always 1. Older HiSilicon chips keep writing 1 as before.
 
 ### How to play audio stream
 

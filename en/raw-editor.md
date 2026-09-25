@@ -16,9 +16,10 @@ after that the browser caches it. A camera with no route out shows the raw page
 with a download button and an explanation instead, which is the page working as
 intended rather than a failure.
 
-**Not every camera can do this.** Raw is a **HiSilicon, Goke and SigmaStar**
-feature, SigmaStar on builds from 2026-09-26; other SoC families do not serve
-it, and neither do the oldest HiSilicon parts.
+**Not every camera can do this.** Raw is a **HiSilicon, Goke, SigmaStar and
+Ingenic T31** feature, SigmaStar and the T31 on builds from 2026-09-26; other SoC
+families do not serve it, and neither do the oldest HiSilicon parts or the other
+Ingenic chips.
 The menu entry is there on every camera regardless, so the page itself is where
 you find out:
 
