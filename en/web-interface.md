@@ -66,6 +66,15 @@ the network; the first click inside the outline asks for the other camera's
 password, once. The whole setup is in
 [Two cameras, one scene](two-cameras-one-scene.md).
 
+### Focusing a lens by ear on the live view
+
+On a camera that measures focus, the live view's bar has a **By ear** toggle:
+the sharpness reading becomes beeps that come faster and higher as the lens
+nears the sharpest point, a low note when it has gone past, and one held tone
+when it is back on it, so a lens can be set from a ladder without looking at
+the phone. What each sound means, and what resets the reference, is in
+[Autofocus and manual focus](autofocus.md#focusing-by-ear).
+
 ### Updating the web interface from the web interface
 
 In some cases, especially if it seems that something is not working, you might
