@@ -148,7 +148,7 @@ rather than exactly.
 
 ### Calibrate
 
-![The Calibrate screen, with the chart found](../images/raw-editor/calibrate.webp)
+![The Calibrate screen: the chart found, its corners on it, and measured](../images/raw-editor/calibrate.webp)
 
 Measures the camera's colour against a 24-patch chart and can write the result
 back, so the camera's own picture — not just the raw frame — comes out closer.
@@ -159,7 +159,7 @@ any that sit off, and the dots show where each patch will be read from. Then
 **Measure the chart**.
 
 The result reports a mean and worst ΔE — how far each patch landed from where
-it should be. Under 3 is a good fit. A spiky light source, which most LED
+it should be. Under 2 is a good fit for a 3×3 matrix. A spiky light source, which most LED
 lighting is, will not do better whatever the chart, so measure under something
 continuous if the number matters.
 
