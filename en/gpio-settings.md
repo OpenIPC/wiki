@@ -14,10 +14,22 @@ Board specific GPIO settings list
 | SSC337DE    | 78     | 79     |          | 61       |             | 66    |     |         | MC500L8          |                 |
 | SSC338Q     | 23     | 24     |          | 60       | 59          | 10    |     |    8    | MC800S-V3        |      39         |
 | SSC377      | 11     | 80     |          | 9        | 13          |       |     |         | MC-A42P-V1.1     |      12         |
+| SSC37x      |        |        |          |          |             |       |     |         | MTF45-4G_AF      |                 |
 
 ```
 Tested on SSC377D for /dev/ttyS2:
   mux : devmem 0x1F2079B8 16 0x1000
+```
+
+```
+Tested on Anjoy MTF45-4G_AF — the motorised-zoom lens assembly inside the
+MC-F45-4MP-PTZ18x camera (Infinity6C/SSC37x, machine model "SSC027A-S01A"
+in dmesg, GC4023 4 MP sensor, 16 MB NOR). No IR-cut or lamp GPIOs found on
+the module board: mainctrl exports only 10 (input), 12 and 30 (outputs),
+driving 12/30 has no optical effect, PWM0/PWM4 sit idle at duty 0, and
+the stock debug console's IrcutTest/LedNew move neither pins nor image.
+The zoom/focus/iris motors sit behind a lens MCU on /dev/ttyS2 at
+57600 8N1 — see the anjoy-motor driver in the OpenIPC/motors repo.
 ```
 
 
