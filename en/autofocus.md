@@ -187,6 +187,28 @@ the foot of the ladder, and one word: *sharper*, *softer*, *steady*, *on the
 best*, or *no reading*. There is no percentage and no grade: the number has no
 scale between cameras, only against itself in one scene.
 
+#### Listening to part of the picture
+
+By default the sound follows the whole frame. Where the subject is one thing
+in a wide scene, a licence plate under a lamp, a doorway across a yard, press
+**Area** on the card and drag a rectangle over it on the picture. From then on
+the sound follows only what is inside: the cells of the camera's focus grid
+that the rectangle covers, outlined on the picture so you can see what is
+being listened to. The outline is the cells, not your drag, which is why it
+does not match the rectangle exactly. A click instead of a drag, or pressing
+**Area** again, goes back to the whole frame; the best resets either way,
+because a number measured on one part of the picture says nothing about
+another.
+
+![By ear listening to a region: the outline over the subject, the Area button lit](../images/autofocus/live-focus-by-ear-area.webp)
+
+Draw it before you climb: it takes a look at the picture, and the region
+stays until By ear is switched off. Cells with a clipped highlight or almost
+no light are left out of the measurement, so a rectangle drawn over nothing
+but a lamp or a shadow gives silence and a note saying there is nothing in it
+to measure, rather than a tone. The button appears only on cameras that
+report the grid; on the others the sound is the whole frame.
+
 ![By ear on a phone: the card sits under the chip, the pad below](../images/autofocus/live-focus-by-ear-phone.webp)
 
 Two things about phones. The screen has to stay on: a phone that locks itself
