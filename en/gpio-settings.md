@@ -15,6 +15,11 @@ Board specific GPIO settings list
 | SSC338Q     | 23     | 24     |          | 60       | 59          | 10    |     |    8    | MC800S-V3        |      39         |
 | SSC377      | 11     | 80     |          | 9        | 13          |       |     |         | MC-A42P-V1.1     |      12         |
 
+```
+Tested on SSC377D for /dev/ttyS2:
+  mux : devmem 0x1F2079B8 16 0x1000
+```
+
 
 ### Brovotech boards
 
