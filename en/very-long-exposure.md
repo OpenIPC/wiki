@@ -120,15 +120,17 @@ reprogrammed when the pipeline is built.
 
 ### Getting the picture out
 
-Raw is a **HiSilicon and Goke** feature, and the oldest HiSilicon parts do not
-serve it either. Check before you build anything on it — a camera that cannot
-answers 404:
+Raw is a **HiSilicon, Goke and SigmaStar** feature (SigmaStar on builds from
+2026-09-26), and the oldest HiSilicon parts do not serve it. Check before you
+build anything on it — a camera that cannot answers 404:
 
 ```
 curl -o /dev/null -s -w '%{http_code}\n' -u root:PASS http://CAMERA/image.dng
 ```
 
 `200` and you have it. `404` and this camera never will, whatever else you set.
+`501` means it can but raw is switched off — set `isp.rawMode` to `slow`. That
+is how a SigmaStar camera ships.
 
 For anything measured, take the **raw** frame rather than a JPEG:
 
@@ -257,6 +259,7 @@ That is what the measurement above is really for.
 | `isp_exptime` lower than asked | the frame period is shorter than your request |
 | `isp_exptime` stuck near 7.7 s | the sensor is at its slowest; stack shorter frames instead |
 | `/image.dng` answers 404 | this camera's hardware does not serve raw at all |
+| `/image.dng` answers 501 | raw is switched off; set `isp.rawMode` to `slow` — SigmaStar ships that way |
 | commands refused, or gain behaving oddly | firmware older than September 2026 |
 | the picture is bright grey with no detail | light is getting in — dark current is not fast enough to do this |
 | changing the gain changes nothing | in manual, `isp.dGain` does nothing; use `isp.aGain` |

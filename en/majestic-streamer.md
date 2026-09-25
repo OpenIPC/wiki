@@ -2125,9 +2125,12 @@ system](#user-levels-in-the-system). Over plain `http` the password crosses the
 network in the clear either way, and a media account is the one you can afford
 to spend that way.
 
-This is a **HiSilicon and Goke** feature. Cameras on other SoC families do not
-serve it, and neither do the oldest HiSilicon parts. It is not tied to a build
-flavour — Lite, Ultimate and FPV all serve it wherever the hardware does.
+This is a **HiSilicon, Goke and SigmaStar** feature — SigmaStar on builds from
+**2026-09-26**. Cameras on other SoC families do not serve it, and neither do the
+oldest HiSilicon parts. It is not tied to a build flavour — Lite, Ultimate and
+FPV all serve it wherever the hardware does. SigmaStar differs from the other two
+in ways worth knowing before you rely on it, starting with being switched off
+out of the box; [On SigmaStar](#on-sigmastar) has the list.
 
 Rather than match your camera against a model list, ask it. A build that does
 not have the endpoint answers **404**, the same as any path it does not serve:
@@ -2137,23 +2140,32 @@ curl -u viewer:PASSWORD -o /dev/null -w '%{http_code}\n' http://192.168.1.10/ima
 ```
 
 `404` means this firmware has no raw endpoint at all. `501` means it has one and
-`isp.rawMode` is `none`. `503` means a capture is already running and this one
+`isp.rawMode` is `none` — which on a SigmaStar camera is simply how it ships. `503` means a capture is already running and this one
 was refused — wait for the first to finish and ask again. `400` means the query
 was rejected, which on this endpoint means a malformed or empty
-[`crop`, or `frames` without one](#asking-for-less-than-the-whole-frame); the
+[`crop`, or `frames` above 1 without one](#asking-for-less-than-the-whole-frame); the
 body says which. `200` means you already have the file.
 
-**It is on by default.** `isp.rawMode` is `slow` unless you changed it, so a
-camera that has never been configured for this still answers. `/image.yuv420`
+**On HiSilicon and Goke it is on by default.** `isp.rawMode` is `slow` unless
+you changed it, so a camera that has never been configured for this still
+answers. On SigmaStar the default is `none`, and the endpoint answers **501**
+until you set `slow`; the change takes effect on the next request, with no
+restart. `/image.yuv420`
 is the other endpoint people find while looking for raw data, and it is a
 different thing: that one is the processed picture, after the pipeline has
 finished with it, just not yet compressed.
 
 | `isp.rawMode` | what it does |
 |---|---|
-| `slow` | Default. The raw path is set up when a snapshot is asked for, so switching to it from `none` takes effect on the very next request, with no restart. |
-| `fast` | The raw path is kept ready rather than set up for each snapshot. The memory that reserves is claimed when the streamer starts, so switching to `fast` on a running camera does not reserve it until the next restart. |
-| `none` | Off. `/image.dng` answers **501**, and the memory the raw frame would have needed is left to the rest of the pipeline. |
+| `slow` | Default on HiSilicon and Goke. The raw path is set up when a snapshot is asked for, so switching to it from `none` takes effect on the very next request, with no restart. On HiSilicon and Goke the frame of video memory a snapshot lands in is still set aside when the streamer starts. |
+| `fast` | The raw path is kept ready rather than set up for each snapshot. The memory that reserves is claimed when the streamer starts, so switching to `fast` on a running camera does not reserve it until the next restart. On SigmaStar it behaves exactly as `slow`. |
+| `none` | Off, and the default on SigmaStar. `/image.dng` answers **501**. On HiSilicon and Goke the frame of video memory `slow` set aside goes back to the rest of the pipeline at the next restart of the streamer, not at once. |
+
+That reserved frame is real and it is large: on a Hi3516AV300 with a 4K IMX415,
+the video memory pools show one 12.4 MB block held for raw under `slow`, and
+after switching to `none` and restarting, the same 12.4 MB is back in the
+general pool as one more buffer. On a camera that never takes raw frames,
+`none` is memory handed back.
 
 On a 5 MP IMX335 attached to a Goke GK7205V300, three snapshots per mode over
 the loopback interface on a 2026-09-17 build: `slow` took 0.241 to 0.264 s,
@@ -2178,11 +2190,12 @@ curl -u viewer:PASSWORD -o avg.dng "http://192.168.1.10/image.dng?crop=800x600x1
   odd column would silently change every pixel's colour — so you may get back a
   slightly larger rectangle, at a slightly different origin, than you asked for.
   The rule is below.
-- **`frames=N`**, 2 to 16, averages that many consecutive frames into one file.
-  Noise falls as the square root of the count, which is worth having when you
-  are measuring a dark scene. It **needs a crop**: averaging whole frames does
-  not fit in memory, and the camera refuses with **400** and says so rather than
-  failing in some more interesting way.
+- **`frames=N`**, 1 to 16, averages that many consecutive sensor frames into one
+  file, on HiSilicon and Goke. SigmaStar cannot capture consecutive raw frames,
+  so there it sends one frame and says `X-Frames-Averaged: 1`. Noise falls as the square root of the count, which is worth having when you
+  are measuring a dark scene. It **needs a crop** once N is above 1: averaging
+  whole frames does not fit in memory, and the camera refuses with **400** and
+  says so rather than failing in some more interesting way.
 
 **`X-Frames-Averaged` can come back lower than you asked for**, and it is not an
 error: a frame whose geometry does not match the first is left out rather than
@@ -2192,17 +2205,20 @@ old for the parameter reports **1**, because it sent one ordinary frame and
 ignored the rest of the request. Read the header rather than assuming the count:
 both cases answer 200 with a perfectly good file.
 
-The reply gives the size you actually got, and the count it averaged:
+The reply gives the size you actually got, the count it averaged, and — on
+builds from **2026-09-22** — where the rectangle actually landed, spelled the
+same way as the `crop` you sent:
 
 ```
 X-Frame-Width: 640
 X-Frame-Height: 480
 X-Frames-Averaged: 1
+X-Crop-Applied: 0x0x640x480
 ```
 
-**It does not give the origin**, so if you asked for one that had to move, work
-out where it landed from the rule rather than assuming it is where you put it.
-The rule is fixed and depends only on the bit depth:
+Read `X-Crop-Applied` rather than assuming the rectangle is where you put it. An
+older build does not send it; there, work out where the crop landed from the
+rule, which is fixed and depends only on the bit depth:
 
 | `BitsPerSample` | rectangle snaps to a multiple of |
 |---|---|
@@ -2279,8 +2295,10 @@ So on anything memory-constrained:
   sixteenth of the memory. Measured on the camera below, peak resident memory
   across a capture rose 7 388 kB for the whole frame and 456 kB for that crop.
 - **Set `isp.rawMode` to `none`** when you are not using it, and turn it back
-  on for the session you need it in. With `slow` the cost is only paid per
-  request, but it is still paid.
+  on for the session you need it in. With `slow` the working memory is only
+  paid per request, but the frame of video memory it lands in is set aside from
+  the moment the streamer starts, on HiSilicon and Goke — `none` hands that back
+  at the next restart.
 - **Do not race the transfer.** What is left of the time is now almost all
   network: a 7.2 MB frame that takes 0.25 s on the camera itself takes about
   1.1 s over a LAN, and browsers have been measured at 4.5 to 5.7 s and once,
@@ -2288,9 +2306,10 @@ So on anything memory-constrained:
   request is still running is how you arrive at the paragraph above. (Builds
   before 2026-09-17 spent about a second longer per capture inside the camera,
   before a single byte left it.)
-- **A download that stalls will be cut off.** Builds after 2026-09-15 give a
-  raw transfer 15 seconds and then close the connection; the camera will not
-  hold a capture open indefinitely for one slow reader. A short `.dng` on a
+- **A download that stalls will be cut off.** On builds after 2026-09-15, a raw
+  transfer that makes no progress for 15 seconds is closed; the camera will not
+  hold a frame's worth of memory indefinitely for a reader that has stopped. A
+  transfer that is slow but still moving is not cut. A short `.dng` on a
   congested link is that, not corruption — check the size against
   `Content-Length`, then retry on a better connection, or fetch it on the
   camera itself over the loopback interface, where the same frame takes about a
@@ -2374,6 +2393,68 @@ your own machine, measures the sensor, calibrates the camera's colour from a
 chart, and — on a camera whose owner has
 [opted in](raw-editor.md#plates) — reads number plates out of the frame and
 says what is stopping the ones it cannot.
+
+#### On SigmaStar
+
+Builds from **2026-09-26** serve `/image.dng` on SigmaStar as well, and the file
+is the same kind of DNG. It was checked on five cameras — an SSC30KQ and an
+SSC377D with an IMX335, an SSC337 with an SC2336P, and an SSC325 and an SSC325DE
+with an SC2239 — by developing each frame next to the camera's own JPEG of the
+same scene. The differences from HiSilicon and Goke:
+
+**It ships switched off.** `isp.rawMode` defaults to `none`, so the endpoint
+answers **501** until you set it to `slow` (`fast` means the same thing here).
+The reason is what a capture can do to the video. Measured by recording the
+RTSP stream's timestamps while taking raw frames:
+
+| camera | raw frames taken | the video meanwhile | the same video, no raw frames |
+|---|---|---|---|
+| SSC30KQ, freshly booted | 600, one a second | three gaps of 100 ms | no gap |
+| SSC377D | 600, one a second | four stalls of 0.24–0.6 s in ten minutes | no stall in ten minutes |
+| SSC325, SSC325DE, SSC337 | 150 each | no gap | — |
+| SSC30KQ, after 18 hours of uptime or with its memory filling up | a few, or hundreds back to back | the whole video stopped for about 10 s, several times | no gap |
+
+The last row is the reason. The video came back by itself each time, and
+nothing was written to any log. On a freshly booted camera it was never seen
+in more than three thousand captures, so an occasional frame is unlikely to meet it,
+but a camera whose owner never asked for raw frames should not carry the risk.
+Turn it on for the session you need it in.
+
+**The frame is the size the camera's image processor receives**: 2560x1920 on
+the SSC30KQ, 2592x1944 on the SSC377D, 1920x1080 on the others. Bit depth follows the sensor — 10 bits on
+four of the five, 12 on the SSC325DE.
+
+**Memory is taken per request and given back.** Nothing is set aside while the
+streamer runs; a capture borrows two bytes a pixel of video memory for as long
+as it takes — 4 MB for 1080p, 10 MB for 5 MP — and returns it. The same
+one-at-a-time rule and the same **503** apply.
+
+**`frames=N` is not averaged.** Each raw frame is a separate capture, about
+three sensor frames after the one before, and averaging those would smear
+anything that moved while calling it a quieter picture. The reply carries one
+frame and `X-Frames-Averaged: 1`; to average, take several and align them
+yourself.
+
+**Black level is written where it could be verified.** On the SSC30KQ,
+SSC377D and SSC337 the file carries the sensor's real black level, 48, 50 and 60
+at 10 bits, each matching the darkest pixels of a frame. On the SSC325 and
+SSC325DE the camera's own tuning states a black level well above the darkest
+pixels the sensor actually delivers, so the file carries none rather than a
+wrong one. A converter then leaves the shadows slightly lifted; set the black
+point by hand, or with **Black** in the [raw editor](raw-editor.md), if it
+matters.
+
+**The colour matrix is always the generic one**, unless you supply your own in
+`isp.dngColorMatrix` — nine numbers, row by row, as DNG defines ColorMatrix1.
+Some HiSilicon parts write the sensor's own calibration instead. White balance,
+exposure time and ISO are the camera's real values at the moment of capture,
+and ISO includes the camera's digital gain as it does elsewhere. With the
+white balance applied, the colour channels of the IMX335 frames came out
+neutral to within 6%.
+
+**Mirror and flip keep the colours right.** On the SSC325DE, frames taken with
+`image.mirror` and then `image.flip` switched on matched the original
+mirrored and turned over, and every colour of the mosaic kept its place.
 
 ### How to play audio stream
 

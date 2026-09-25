@@ -56,7 +56,8 @@ isp:
                                 # is usually the better picture -- set it only
                                 # if you have compared. A value above the
                                 # range is refused.
-  #rawMode: slow                # none | slow | fast
+  #rawMode: slow                # none | slow | fast; none is the default on
+                                # SigmaStar
   #iqProfile: <path/to/file>
   #lowDelay: false
   #awbMode: auto                # auto|manual|day|cloudy|incandescent|

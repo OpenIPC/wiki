@@ -16,8 +16,9 @@ after that the browser caches it. A camera with no route out shows the raw page
 with a download button and an explanation instead, which is the page working as
 intended rather than a failure.
 
-**Not every camera can do this.** Raw is a **HiSilicon and Goke** feature;
-other SoC families do not serve it, and neither do the oldest HiSilicon parts.
+**Not every camera can do this.** Raw is a **HiSilicon, Goke and SigmaStar**
+feature, SigmaStar on builds from 2026-09-26; other SoC families do not serve
+it, and neither do the oldest HiSilicon parts.
 The menu entry is there on every camera regardless, so the page itself is where
 you find out:
 
@@ -25,7 +26,9 @@ you find out:
   will change that.
 - *Raw capture is switched off for this camera* — it can, but `isp.rawMode` is
   `none`. Turn it on in **Settings**, under **Live**, where the image settings
-  are drawn.
+  are drawn. A SigmaStar camera shows this out of the box: raw ships switched
+  off there, for the reason given in
+  [On SigmaStar](majestic-streamer.md#on-sigmastar).
 
 The [endpoint's own section](majestic-streamer.md#raw-sensor-data-as-adobe-dng)
 has a one-line check that answers the same question from a shell.
