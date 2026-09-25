@@ -2143,7 +2143,7 @@ curl -u viewer:PASSWORD -o /dev/null -w '%{http_code}\n' http://192.168.1.10/ima
 `isp.rawMode` is `none` — which on a SigmaStar camera is simply how it ships. `503` means a capture is already running and this one
 was refused — wait for the first to finish and ask again. `400` means the query
 was rejected, which on this endpoint means a malformed or empty
-[`crop`, or `frames` without one](#asking-for-less-than-the-whole-frame); the
+[`crop`, or `frames` above 1 without one](#asking-for-less-than-the-whole-frame); the
 body says which. `200` means you already have the file.
 
 **On HiSilicon and Goke it is on by default.** `isp.rawMode` is `slow` unless
@@ -2190,9 +2190,9 @@ curl -u viewer:PASSWORD -o avg.dng "http://192.168.1.10/image.dng?crop=800x600x1
   odd column would silently change every pixel's colour — so you may get back a
   slightly larger rectangle, at a slightly different origin, than you asked for.
   The rule is below.
-- **`frames=N`**, 1 to 16, averages that many frames into one file — consecutive
-  sensor frames on HiSilicon and Goke, about three frames apart on SigmaStar.
-  Noise falls as the square root of the count, which is worth having when you
+- **`frames=N`**, 1 to 16, averages that many consecutive sensor frames into one
+  file, on HiSilicon and Goke. SigmaStar cannot capture consecutive raw frames,
+  so there it sends one frame and says `X-Frames-Averaged: 1`. Noise falls as the square root of the count, which is worth having when you
   are measuring a dark scene. It **needs a crop** once N is above 1: averaging
   whole frames does not fit in memory, and the camera refuses with **400** and
   says so rather than failing in some more interesting way.
@@ -2429,8 +2429,11 @@ streamer runs; a capture borrows two bytes a pixel of video memory for as long
 as it takes — 4 MB for 1080p, 10 MB for 5 MP — and returns it. The same
 one-at-a-time rule and the same **503** apply.
 
-**`frames=N` averages frames about three sensor frames apart**, not adjacent
-ones, so the noise still falls with the count but a moving scene blurs sooner.
+**`frames=N` is not averaged.** Each raw frame is a separate capture, about
+three sensor frames after the one before, and averaging those would smear
+anything that moved while calling it a quieter picture. The reply carries one
+frame and `X-Frames-Averaged: 1`; to average, take several and align them
+yourself.
 
 **Black level is written where it could be verified.** On the SSC30KQ,
 SSC377D and SSC337 the file carries the sensor's real black level, 48, 50 and 60
