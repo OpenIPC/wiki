@@ -151,6 +151,51 @@ When a pass cannot run, the toast says why, in the camera's own words:
 | *Autofocus failed: no contrast to focus on.* | The scene has nothing with edges in it, or is too dark to measure. Point it at something, or wait for light. |
 | *Autofocus searched from the wrong end…* | The camera did not know where the zoom was and started its search from the wrong side of the travel. Zoom once, in either direction, and try again. |
 
+### Focusing by ear
+
+An installer up a ladder, turning the two rings of a varifocal lens, cannot
+read a phone. The same sharpness measurement can be heard instead. On a
+camera that reports it, the Live page's control bar has a **By ear** toggle;
+switch it on with the phone or laptop within earshot, turn the volume up, and
+climb.
+
+![The Live page with By ear on: the card with big digits and Start over over the picture](../images/autofocus/live-focus-by-ear.webp)
+
+What you hear:
+
+- **Beeps** that come faster and higher the closer the picture is to the best
+  it has been since you started. Turn the ring one way: while the beeps stay
+  fast and high you are still improving.
+- **A low note** the moment you have gone past the sharpest point. Turn back.
+- **One held tone** when you are back on it, and it stays held while you stay
+  there. That is the sound to stop on.
+- **A rising two-note chime** when a new, clearly sharper point is found after
+  one you had already passed. Keep going: there is more to be had.
+- **A falling note, then silence** when the camera stops answering. The sound
+  never plays a reading older than about a second, so silence means "no
+  reading", not "sharp".
+
+The reference is the best the camera has seen since you started, or since you
+pressed **Start over** on the card. Press it after changing the zoom ring: a
+different zoom has a different best, and the old one can never be reached
+again. Zoom and Autofocus on the pad reset it too, and so does sitting far
+below the best for fifteen seconds, which is what a hand re-zoom looks like
+from the camera's side.
+
+The card shows the same two numbers the sound encodes, in digits readable from
+the foot of the ladder, and one word: *sharper*, *softer*, *steady*, *on the
+best*, or *no reading*. There is no percentage and no grade: the number has no
+scale between cameras, only against itself in one scene.
+
+![By ear on a phone: the card sits under the chip, the pad below](../images/autofocus/live-focus-by-ear-phone.webp)
+
+Two things about phones. The screen has to stay on: a phone that locks itself
+stops the sound, and on the plain `http://` address a camera is usually
+reached on the browser will not keep the screen awake for the page, so turn
+auto-lock off for the job (the card says so once). And on an iPhone the
+ring/silent switch mutes web audio like everything else. Earbuds work; the
+small delay they add does not matter at this pace.
+
 ### How the camera decides it is in focus
 
 This is the short version, and it is enough to understand everything above.
