@@ -14,6 +14,7 @@ Board specific GPIO settings list
 | SSC337DE    | 78     | 79     |          | 61       |             | 66    |     |         | MC500L8          |                 |
 | SSC338Q     | 23     | 24     |          | 60       | 59          | 10    |     |    8    | MC800S-V3        |      39         |
 | SSC377      | 11     | 80     |          | 9        | 13          |       |     |         | MC-A42P-V1.1     |      12         |
+| SSC378QE    | 80     | 81     | 23       | 14       | 13          | 30    |     |         | MC800S5          |      54         |
 
 ```
 Tested on SSC377D for /dev/ttyS2:
