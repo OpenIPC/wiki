@@ -262,9 +262,7 @@ if [ -e /usr/share/openipc/gpio.conf ]; then
 fi
 ```
 
-Both `muxes.sh` and per-device helper scripts such as a reset-button daemon use it, and
-so does the QR-code Wi-Fi provisioning script in the firmware tree, which blinks `$led1`
-while it scans.
+Both `muxes.sh` and per-device helper scripts such as a reset-button daemon use it.
 
 ### Where they live
 

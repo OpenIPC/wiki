@@ -83,6 +83,7 @@ OpenIPC Wiki
 - [ACMEv2](en/acme-v2.md)
 - [WiFi XM530](en/wifi-xm530.md)
 - [How an IR-cut filter is driven](en/ircut-filter.md)
+- [Playing tunes on the IR-cut filter](en/ircut-tunes.md)
 - [Automatic night mode without light sensor](en/auto-night-mode-without-light-sensor.md)
 - [ZeroTier setup](en/zerotier.md)
 - [Motor control](en/motors.md)

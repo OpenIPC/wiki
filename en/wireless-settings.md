@@ -31,6 +31,42 @@ fw_setenv wlanssid MySSID
 fw_setenv wlanpass MyPassword
 ```
 
+### Or show the camera a QR code
+
+Firmware that includes the QR scanner (the `quirc-openipc` package) looks for a code
+after boot on any camera with `wlandev` set: 30 attempts, one snapshot each, so at
+least half a minute and longer on slower cameras. Two kinds of code work:
+
+- the one [OpenIPC's generator](https://openipc.org/tools/qr-code-generator) makes,
+  which holds two lines, `wlanssid=...` and `wlanpass=...`;
+- the one a phone shows when it shares its Wi-Fi network (`WIFI:S:...;P:...;;`).
+
+Spaces and non-Latin characters in the network name or password are fine.
+
+The camera joins the network before it saves anything, and reports what happened by
+clicking its IR-cut filter, which you hear as short buzzing tunes:
+
+| you hear | meaning |
+|---|---|
+| two quick rising notes | the code was read |
+| a rising four-note run | joined and got an address; the settings are saved and the camera reboots |
+| three low buzzes | the network refused the password |
+| high-low, twice | no network by that name answered |
+| a long tone, then a low one | joined, but nothing handed out an address |
+| one low blip | that code is not a Wi-Fi code |
+| three falling notes | no code was seen; scanning has stopped (power-cycle to try again) |
+
+After a failed attempt (wrong password, no such network, no address, or a code that is
+not a Wi-Fi one) the camera reconnects to any network it already had and keeps looking,
+so you can fix the code on your phone and show it again. It tries the same code a
+second time only after 15 seconds. After the three falling notes it has stopped looking;
+power-cycle it to scan again.
+
+These sounds come with firmware built after
+[OpenIPC/firmware#2496](https://github.com/OpenIPC/firmware/pull/2496). Older firmware
+saves whatever code it reads and reboots, with no sound unless the camera has a
+speaker.
+
 ---
 
 ### Adopt custom settings
