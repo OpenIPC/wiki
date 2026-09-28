@@ -16,7 +16,8 @@ drives the filter at all, so it stays wherever it powered up.
 
 This article is the hardware half. For the settings, see
 [Majestic example config](majestic-config.md); for the pin numbers other people
-have found, [Board specific GPIO settings list](gpio-settings.md).
+have found, [Board specific GPIO settings list](gpio-settings.md). The same filter
+can also play tunes: [Playing tunes on the IR-cut filter](ircut-tunes.md).
 
 ---
 
