@@ -45,9 +45,8 @@ cat my-root-ca.pem >> /etc/ssl/certs/ca-certificates.crt
 ```
 
 The edited copy lives on the overlay and hides the bundle of every later firmware update until you
-delete it (`rm /overlay/root/etc/ssl/certs/ca-certificates.crt`, then reboot). A `sysupgrade -n`
-removes it too. Append only a valid PEM certificate: majestic reads the same file and will not start
-if it cannot parse one.
+delete it (`rm /overlay/root/etc/ssl/certs/ca-certificates.crt`, then reboot). Append only a
+valid PEM certificate: majestic reads the same file and will not start if it cannot parse one.
 
 ### What is the difference between Firmware and Builder repositories?
 
