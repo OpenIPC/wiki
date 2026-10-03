@@ -28,8 +28,25 @@ and then look it up in the [FCC ID database](https://fccid.io/).
 - WiFi support (there are no drivers for network cards), integrated into Lite in Builder firmware
 - lame (mp3) and libwebsockets support
 - experimental WebRTC support (only recent Hisi/Goke)
+- the full Mozilla set of root certificates (Lite keeps the CAs most sites use, see below)
 
 $\color{red}{\text{We always recommend using only Lite firmware with 8M}}$
+
+#### HTTPS to a site Lite does not trust
+
+To save flash, Lite ships only the root certificates of the CAs that issue for most public sites:
+Let's Encrypt, Sectigo, DigiCert, GlobalSign, Google, Amazon, GoDaddy and a few others ([full list](https://github.com/OpenIPC/firmware/blob/master/general/scripts/ca-bundle-lite.keep)). GitHub
+(sysupgrade), openipc.org, Telegram, Max, ntfy, Slack and Discord are all covered. If `curl` to some
+other server fails with `curl: (60) mbedTLS: The certificate is not correctly signed by the trusted CA`,
+append that server's root CA to the bundle:
+
+```sh
+cat my-root-ca.pem >> /etc/ssl/certs/ca-certificates.crt
+```
+
+The edited copy lives on the overlay and hides the bundle of every later firmware update until you
+delete it (`rm /overlay/root/etc/ssl/certs/ca-certificates.crt`, then reboot). Append only a
+valid PEM certificate: majestic reads the same file and will not start if it cannot parse one.
 
 ### What is the difference between Firmware and Builder repositories?
 

@@ -168,6 +168,25 @@ $ echo $PATH
 - ZeroTier
 - WireGuard
 - множество фич Majestic в т.ч. стрим на Youtube/Telegram и т.д.
+- полный набор корневых сертификатов Mozilla (в Lite только центры сертификации, которые выпускают сертификаты для большинства сайтов, см. ниже)
+
+#### HTTPS к сайту, которому Lite не доверяет
+
+Ради экономии места на флеше Lite содержит только корневые сертификаты центров сертификации,
+выпускающих сертификаты для большинства публичных сайтов: Let's Encrypt, Sectigo, DigiCert,
+GlobalSign, Google, Amazon, GoDaddy и ещё нескольких ([полный список](https://github.com/OpenIPC/firmware/blob/master/general/scripts/ca-bundle-lite.keep)). GitHub (sysupgrade), openipc.org, Telegram,
+Max, ntfy, Slack и Discord работают. Если `curl` к другому серверу падает с
+`curl: (60) mbedTLS: The certificate is not correctly signed by the trusted CA`, допишите
+корневой сертификат этого сервера в бандл:
+
+```sh
+cat my-root-ca.pem >> /etc/ssl/certs/ca-certificates.crt
+```
+
+Изменённая копия хранится в overlay и перекрывает бандл каждой следующей прошивки, пока её не
+удалить (`rm /overlay/root/etc/ssl/certs/ca-certificates.crt`, затем перезагрузка). Дописывайте
+только корректный PEM-сертификат: majestic читает тот же файл и не запустится, если не сможет его
+разобрать.
 
 ### После установки не работает сеть в u-boot и в linux
 
