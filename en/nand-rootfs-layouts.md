@@ -88,8 +88,9 @@ come back until it reboots.
 
 If the settings can't be read or don't fit in RAM, or the new image and the
 settings together don't fit the flash, the upgrade stops before anything is
-written and the camera reboots as it was. `sysupgrade -r -n` upgrades without
-the settings.
+written and the camera reboots as it was. Adding `-n` to the upgrade,
+`sysupgrade -r -n`, writes the new image and starts it with empty settings
+instead. (`-n` on its own writes no firmware; it only empties `rootfs_data`.)
 
 A power cut while the volumes are being rebuilt costs you the settings, not the
 camera: it boots with its overlay in RAM, as after a factory reset. A cut while

@@ -14,7 +14,7 @@ _Note: By default, sysupgrade will reboot the camera to complete the update. If 
 
 Run it with **no options at all** and it does nothing: it prints the camera's vendor, SoC, model and versions, then tells you to look at `--help`. Very old firmware upgraded on a bare `sysupgrade`; current firmware does not, and nothing is downloaded or written to flash unless you pass one of `-k`, `-r`, `--url`, `--channel`, `--build` or `--archive`.
 
-`-n` is the exception: it writes no firmware. All it does is erase the overlay partition, which is what `firstboot` and the WebUI's Reset firmware button do. See [Factory reset and the unclaimed camera](first-boot.md).
+`-n` is the exception: on its own it writes no firmware. All it does is erase the overlay partition, which is what `firstboot` and the WebUI's Reset firmware button do. See [Factory reset and the unclaimed camera](first-boot.md). Added to an upgrade (`-r -n`, `-k -r -n`), it upgrades as usual and the new firmware starts with an empty overlay.
 
 There are other options available so you can use a local copy of the Linux kernel (uImage) and camera software (rootfs.squashfs).
 
