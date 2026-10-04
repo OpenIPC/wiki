@@ -53,6 +53,11 @@ rm /mnt/mmcblk0p1/UBOOT
 reboot -f
 ```
 
+`ssc338q-fpv.bin` is a whole-chip image that comes with the download above.
+Builds do not produce one; a build gives `openipc.ssc338q-nand-fpv.tgz`
+containing `rootfs.ubi.ssc338q`. See
+[Building a NAND package](nand-rootfs-layouts.md#building-a-nand-package).
+
 #### Buying a device (CamHi vendor)
 - https://aliexpress.com/item/1005002879158570.html
 - https://aliexpress.com/item/1005005750013595.html

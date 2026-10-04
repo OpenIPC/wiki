@@ -9,6 +9,9 @@ Each SoC manufacturer has its own software to adjust picture quality:
 * HiSilicon - PQTools
 * Novatek - isptool
 * Fullhan - Coolview
+* SigmaStar - its own IQ tool, which it gives only to its SDK licensees. OpenIPC
+  has none, so see [SigmaStar: the sensor `.bin` files](#sigmastar-the-sensor-bin-files)
+  for what the camera uses instead
 
 ## HiSilicon based boards
 
@@ -221,6 +224,70 @@ PQTools.
 
 A binary profile is not portable and cannot be converted. Export it again from
 a camera of the same kind, through the PQTools build for that kind.
+
+SigmaStar: the sensor `.bin` files
+----------------------------------
+
+A SigmaStar camera keeps its picture tuning in one binary file per sensor, in
+`/etc/sensors/` — `imx335.bin`, `sc2335.bin` and so on. It is the same kind of
+thing as a HiSilicon profile (colour, gamma, noise reduction, sharpening, the
+exposure route), in SigmaStar's own format.
+
+### Where the files come from
+
+They are not built. They come from camera and SDK vendors, made with
+SigmaStar's own tuning tool, and the firmware carries them as they are, one set
+per chip family:
+
+```
+general/package/sigmastar-osdrv-<family>/files/sensor/configs/<sensor>.bin
+```
+
+in [OpenIPC/firmware](https://github.com/OpenIPC/firmware/tree/master/general/package)
+— `infinity6` (SSC325, SSC325DE), `infinity6b0` (SSC333, SSC335, SSC337 and
+their DE versions), `infinity6c` (SSC377 and SSC378 in all their versions) and
+`infinity6e` (SSC338Q, SSC30KQ, SSC30KD). A build installs every
+file for the family into `/etc/sensors/`, or only the board's own sensor when
+the board sets one. A file is specific to the chip family as well as to the
+sensor, so an `imx335.bin` from `infinity6e` is not a substitute for the
+`infinity6c` one.
+
+The FPV images add their own, tuned for a fast shutter, named
+`<sensor>_<family>.bin` (`imx415_infinity6e.bin`, `imx335_infinity6c.bin`).
+Older guides call these `imx415_fpv.bin` and `imx335_fpv.bin`; those names were
+retired, and current images do not have them.
+
+There is no tool in OpenIPC that makes one of these files, and no way to turn a
+HiSilicon `.ini` or `.bin` into one. If your sensor has none:
+
+- **Take it from the stock firmware.** The vendor's own firmware for your camera
+  almost always carries the file its picture was tuned with. Unpack your
+  [backup](backup-stock-firmware.md) (`binwalk -e` finds the squashfs) and look
+  for a `.bin` named after the sensor, often beside the vendor's other IQ files.
+  [Tapo C120](device-tapo-c120.md) is a worked example.
+- **Borrow a sibling.** A file for another sensor from the same manufacturer
+  and the same chip family is the usual stopgap. Expect the colour to be off;
+  it will not damage anything.
+
+To add one to a build, put it in that `configs/` directory and add the sensor's
+name to the `case` in the family's `load_sigmastar` script, which is what
+[firmware#1825](https://github.com/OpenIPC/firmware/pull/1825) did for the
+SC3336.
+
+### Which file a camera uses
+
+The camera names the file after the sensor it detected — `ipcinfo -s` prints
+that name — and loads `/etc/sensors/<sensor>.bin`. To use another file, point
+`isp.sensorConfig` at it, either as a full path or as a bare sensor name:
+
+```sh
+cli -s .isp.sensorConfig /etc/sensors/imx335.bin
+killall -HUP majestic
+```
+
+The FPV images set `isp.sensorConfig` to their `<sensor>_<family>.bin` file on
+first boot. A file you copy to the camera yourself lands in the overlay, so it
+survives a reboot and an ordinary upgrade, and goes away with `firstboot`.
 
 What a `.ini` profile does, and does not, carry
 -----------------------------------------------

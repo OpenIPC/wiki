@@ -89,6 +89,49 @@ Be sure to use the [FAQ](../en/fpv-faq.md) as well.
 
 * WFB - Wireless Framebuffer (WFB) is a component that enables remote display and control of a device’s graphical interface over a wireless network. 
 
+## Telemetry serial port
+
+Current air-unit images keep their settings in `/etc/wfb.yaml`. The shipped
+defaults are on the read-only image at `/rom/etc/wfb.yaml`, and
+`wifibroadcast reset` copies them back. The telemetry part is three keys:
+
+```yaml
+telemetry:
+  router: msposd     # msposd (MSP DisplayPort OSD) or mavfwd (MAVLink)
+  serial: ttyS2      # the UART wired to the flight controller
+  osd_fps: 20        # msposd only: how often the OSD is redrawn
+```
+
+### Serial speed
+
+The speed is fixed at **115200 baud, 8N1**, for both `msposd` and `mavfwd`.
+`wfb.yaml` has no key for it, and a `baud:` line added there is ignored. Set the
+flight controller's port to 115200 and nothing else is needed.
+
+If the flight controller cannot hold 115200 on that port, msposd shows that it
+is waiting for the serial port (older builds fill the screen with every icon),
+and `msposd -v` shows bytes arriving but no valid messages. Lowering the speed
+on the camera then means editing the start script:
+
+```sh
+sed -i 's/-b 115200/-b 57600/' /usr/bin/wifibroadcast
+wifibroadcast start
+```
+
+Both programs accept 9600, 19200, 38400, 57600, 115200, 230400, 460800, 500000,
+921600 and 1500000.
+
+The edited script is a copy of the shipped one, kept in the settings overlay, so
+mind two things:
+
+- `firstboot` (and `sysupgrade -n`) removes it, and the speed goes back to
+  115200.
+- An ordinary `sysupgrade` keeps it, so your copy goes on hiding whatever newer
+  script the upgrade brought. After upgrading, compare it with the shipped one
+  (`diff /rom/usr/bin/wifibroadcast /usr/bin/wifibroadcast`). If anything
+  besides your `-b` change differs, copy the shipped file back and repeat the
+  `sed`.
+
 ## Filesystem
 
 ### Drone

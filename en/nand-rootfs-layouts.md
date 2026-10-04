@@ -140,6 +140,64 @@ by the bootloader environment and installed once. To switch, reinstall from
 U-Boot (below) and reset the environment's `bootargs` and `bootcmd` to the
 defaults.
 
+### Building a NAND package
+
+There is no separate NAND build or script. A board whose defconfig enables
+UBI produces the NAND package from the ordinary build, next to the NOR one when
+the board has squashfs enabled as well. On a SigmaStar board that looks like
+this:
+
+```
+BR2_TARGET_ROOTFS_UBI=y
+BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
+BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG=y
+BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE="$(BR2_EXTERNAL)/scripts/ubifs/ubinize_sigmastar.cfg"
+BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
+```
+
+The custom config file picks the volume layout. Each vendor has its own under
+`general/scripts/ubifs/` in OpenIPC/firmware.
+
+From [OpenIPC/firmware](https://github.com/OpenIPC/firmware):
+
+```sh
+make BOARD=ssc338q_ultimate
+ls output/images/openipc.*-nand-*.tgz
+```
+
+From [OpenIPC/builder](https://github.com/OpenIPC/builder), for a device
+profile or one of the shared `devices/common` builds such as `ssc338q_fpv`:
+
+```sh
+./builder.sh ssc338q_fpv
+ls archive/ssc338q_fpv/*/
+```
+
+builder runs the same firmware build, so it produces the same
+`openipc.<soc>-nand-<variant>.tgz`. Its `repack.sh` is a different tool: it
+writes Wi-Fi credentials into a whole-flash **NOR** image and has no NAND
+counterpart.
+
+What the package holds depends on the vendor:
+
+| Vendor | Package contents | Kernel |
+|---|---|---|
+| SigmaStar, Rockchip | `rootfs.ubi` only | inside `rootfs.ubi`, as volume `kernel` |
+| GK7205V500 family | `fitImage`, `rootfs.ubifs`, `rootfs.ubi` | `fitImage`, also inside `rootfs.ubi` |
+| Other HiSilicon, Goke | `uImage`, `rootfs.ubi` | `uImage`, written separately |
+
+Every file is named after the SoC, so `rootfs.ubi.ssc338q` and so on. The build
+fails if `rootfs.ubi` is over 16 MiB.
+
+The SigmaStar and Rockchip layout has four volumes rather than three: `kernel`
+(`uImage`, or `zboot.img` on Rockchip), `rootfs` (squashfs), `rootfs_data`, and
+`other`, which fills the rest of the flash.
+
+No build produces a raw image of the whole chip, boot loader included. The
+`ssc338q-fpv.bin` that [the SSC338Q NAND guide](fpv-sigmastar.md) writes with
+`nandwrite` is a one-off image from that guide's download, not the output of a
+build.
+
 ### Installing
 
 From U-Boot, with a TFTP server holding the files. The GK7205V500 family shares
