@@ -23,7 +23,8 @@ supports both:
 | Settings (overlay) | `rootfs_data` volume, UBIFS | `rootfs_data` volume, UBIFS |
 | Where it is used | NAND U-Boot builds of every SoC that [u-boot-xmedia](https://github.com/OpenIPC/u-boot-xmedia) builds | GK7205V500, GK7205V510, GK7205V530 `ultimate` NAND builds |
 
-Both layouts use the same UBI partition with the same three volumes, in this order:
+On the boards u-boot-xmedia builds a NAND bootloader for, both layouts use the same UBI partition with the same three
+volumes, in this order:
 
 ```
 mtdparts=nand:768k(boot),256k(env),-(ubi)
@@ -189,9 +190,12 @@ What the package holds depends on the vendor:
 Every file is named after the SoC, so `rootfs.ubi.ssc338q` and so on. The build
 fails if `rootfs.ubi` is over 16 MiB.
 
-The SigmaStar and Rockchip layout has four volumes rather than three: `kernel`
-(`uImage`, or `zboot.img` on Rockchip), `rootfs` (squashfs), `rootfs_data`, and
-`other`, which fills the rest of the flash.
+SigmaStar and Rockchip packages use a layout of their own, with four volumes
+rather than the three above: `kernel` (`uImage`, or `zboot.img` on Rockchip),
+`rootfs` (squashfs), `rootfs_data`, and `other`, which fills the rest of the
+flash. The three-volume commands under [Installing](#installing) are for the
+boards u-boot-xmedia builds a NAND bootloader for, and are not a way to install
+a SigmaStar or Rockchip package.
 
 No build produces a raw image of the whole chip, boot loader included. The
 `ssc338q-fpv.bin` that [the SSC338Q NAND guide](fpv-sigmastar.md) writes with

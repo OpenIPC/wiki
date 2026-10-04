@@ -91,7 +91,8 @@ Be sure to use the [FAQ](../en/fpv-faq.md) as well.
 
 ## Telemetry serial port
 
-Current air-unit images keep their settings in `/etc/wfb.yaml`. The shipped
+Air-unit images since December 2024 keep their settings in `/etc/wfb.yaml`
+(older ones used `/etc/wfb.conf` and `/etc/telemetry.conf`; see the table below). The shipped
 defaults are on the read-only image at `/rom/etc/wfb.yaml`, and
 `wifibroadcast reset` copies them back. The telemetry part is three keys:
 
@@ -140,23 +141,26 @@ mind two things:
 | File Path            | Description                                          |
 |----------------------|------------------------------------------------------|
 | Config                                                                     |
-| `/etc/wfb.conf`      | Configure settings for the Wireless Framebuffer (WFB). WFB is a component that allows remote display and control of the device's graphical interface over a wireless network.                                    |
+| `/etc/wfb.yaml`      | Radio, link and telemetry settings for wifibroadcast; see [Telemetry serial port](#telemetry-serial-port). Shipped defaults in `/rom/etc/wfb.yaml` |
+| `/etc/wfb.conf`      | *Images before December 2024 only.* Replaced by `/etc/wfb.yaml` |
 | `/etc/drone.key`     | Used to store a secret key that is exchanged with a Groundstation. This key plays a crucial role in securing communications between the drone and the Groundstation.     |
-| `/etc/datalink.conf` | Used to configure settings related to data link communication. This file plays a role in defining how data is managed and transmitted between various components within the system.|
+| `/etc/datalink.conf` | *Images before December 2024 only.* Used to configure settings related to data link communication. This file plays a role in defining how data is managed and transmitted between various components within the system.|
 | `/etc/majestic.yaml` | Majestic Settings                                   |
 | `/etc/mavlink`       | Mavlink Settings                                    |
 | `/etc/openipc_banner`| |
 | `/etc/openipc_donors`| |
-| `/etc/telemetry.conf`| Used to configure settings related to telemetry. Telemetry involves the collection and transmission of data from the device to an external system for monitoring and analysis.|
+| `/etc/telemetry.conf`| *Images before December 2024 only;* now the `telemetry:` block of `/etc/wfb.yaml`. Used to configure settings related to telemetry. Telemetry involves the collection and transmission of data from the device to an external system for monitoring and analysis.|
 | Startup Files                                                             |
 | `/etc/init.d/S95majestic` | Startup script used to manage the initialization and execution of the Majestic service during system boot.      |
-| `/etc/init.d/S98datalink` |  Startup script used to manage the initialization of the Datalink service during system boot.|
+| `/etc/init.d/S98wifibroadcast` | Starts wifibroadcast, msposd or mavfwd through `/usr/bin/wifibroadcast` |
+| `/etc/init.d/S98datalink` |  *Images before December 2024 only.* Startup script used to manage the initialization of the Datalink service during system boot.|
 | Apps                                                                      |
 | `/usr/bin/wfb-cli` | used to interact with or configure the Wireless Framebuffer (WFB) service specifically in the context of a ground station. i.e `wfb-cli gs` |
 | `/usr/bin/msposd` | MSPOSD binary|
 | `/usr/bin/font_hd.png` | font file for msposd |
 | `/usr/bin/font.png` | font file for msposd |
-| `/usr/bin/telemetry` | Telemetry script |
+| `/usr/bin/wifibroadcast` | Starts the radio link and the telemetry router from `/etc/wfb.yaml` |
+| `/usr/bin/telemetry` | *Images before December 2024 only.* Telemetry script |
 | `/usr/bin/majestic` | Majestic binary |
 
 
