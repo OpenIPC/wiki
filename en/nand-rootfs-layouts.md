@@ -1,8 +1,8 @@
 # OpenIPC Wiki
 [Table of Content](../README.md)
 
-NAND flash: squashfs over ubiblock, and UBIFS
-=============================================
+NAND flash layouts
+==================
 
 A camera with SPI NAND flash (usually 128 MiB) cannot run OpenIPC the way a NOR
 camera does. NAND has bad blocks, wears out, and flips bits that ECC has to
@@ -11,142 +11,173 @@ correct, so OpenIPC puts almost everything on NAND inside
 that hides bad blocks, spreads wear, and moves data off a block before its bit
 errors become uncorrectable.
 
-There are two ways to lay a root filesystem out on top of UBI, and OpenIPC
-supports both:
+### The layout on u-boot-xmedia SoCs
 
-| | squashfs over ubiblock | UBIFS |
-|---|---|---|
-| Kernel volume | `uImage` | FIT image (`fitImage`: kernel + device tree, hashed) |
-| Rootfs volume | `rootfs.squashfs`, the same file as on NOR | `rootfs.ubifs` |
-| Kernel command line | `root=/dev/ubiblock0_1 ubi.block=0,1` | `root=ubi0:rootfs rootfstype=ubifs` |
-| Firmware package | the **NOR** package (`openipc.<soc>-nor-<variant>.tgz`) | the **NAND** package (`openipc.<soc>-nand-<variant>.tgz`) |
-| Settings (overlay) | `rootfs_data` volume, UBIFS | `rootfs_data` volume, UBIFS |
-| Where it is used | NAND U-Boot builds of every SoC that [u-boot-xmedia](https://github.com/OpenIPC/u-boot-xmedia) builds | GK7205V500, GK7205V510, GK7205V530 `ultimate` NAND builds |
-
-On the boards u-boot-xmedia builds a NAND bootloader for, both layouts use the same UBI partition with the same three
-volumes, in this order:
+GK7205V500, GK7205V510, GK7205V530, Hi3516EV200, Hi3516EV300, Hi3518EV300 and
+Hi3516DV200 all boot the bootloader built by
+[u-boot-xmedia](https://github.com/OpenIPC/u-boot-xmedia). On NAND they use this
+layout:
 
 ```
-mtdparts=nand:768k(boot),256k(env),-(ubi)
-
-ubi0 volume 0  kernel
-ubi0 volume 1  rootfs
-ubi0 volume 2  rootfs_data   (fills the rest of the flash)
+0x000000  boot   768K   U-Boot
+0x0C0000  env    256K   U-Boot environment
+0x100000  ubi    rest   one UBI device, to the end of the chip:
+            rootfs       UBIFS, the root filesystem with the kernel inside it
+            rootfs_data  UBIFS, your settings (the overlay)
 ```
 
-In both, the root filesystem is mounted **read-only**. Everything you change on
-the camera (settings, files you add) goes into `rootfs_data`, which is mounted on
-top as an overlay. A factory reset (`firstboot`, or `sysupgrade -n`) empties
-`rootfs_data` and leaves the rest alone. What actually differs between the
-layouts is the format of the read-only image underneath, and what that means for
-size, checking and upgrades.
+The kernel isn't kept in a partition or volume of its own. It is a file in the
+root filesystem, `/boot/fitImage`: the kernel and its device tree, each with a
+CRC32 and a SHA-1 hash. U-Boot mounts the root filesystem, loads that file, checks
+both hashes, and refuses to start a kernel the flash has corrupted. During boot
+this looks like:
 
-### Squashfs over ubiblock
+```
+Loading file '/boot/fitImage' to addr 0x42000000...
+   Verifying Hash Integrity ... crc32+ sha1+ OK
+```
 
-The `rootfs` volume holds a squashfs image, byte for byte the same file the NOR
-build of that SoC uses. Squashfs needs a block device, and a UBI volume isn't
-one, so the kernel's `ubiblock` driver presents volume 1 as the read-only block
-device `/dev/ubiblock0_1` (that is what `ubi.block=0,1` asks for), and the kernel
-mounts the squashfs from it.
+No flash is set aside for a kernel, so there is no kernel size to outgrow. The
+`rootfs` volume is exactly as big as its image, and `rootfs_data` takes all the
+rest. Both sizes change on every upgrade (see below), so a bigger kernel or root
+filesystem in a later release simply takes a little more of the flash.
 
-**Pros**
+The root filesystem is mounted **read-only** at `/rom`. Everything you change on
+the camera goes into `rootfs_data`, which is mounted on top as an overlay. A
+factory reset (`firstboot`, or `sysupgrade -n`) empties `rootfs_data` and leaves
+the rest alone.
 
-- **Smallest image.** Squashfs with xz is the densest format OpenIPC builds. In
-  one GK7205V500 `ultimate` build the same root filesystem came to 6.5 MiB as
-  squashfs and 12.1 MiB as UBIFS.
-- **One package for NOR and NAND.** The upgrade downloads the NOR package, about
-  8 MB for that build against 21 MB for the NAND one. It also needs less room in
-  RAM to unpack before flashing, which matters on a camera that gives Linux only
-  32 MiB.
-- **Same rootfs as NOR.** A problem that reproduces on a NOR camera of the same
-  SoC is running the same files.
+The bootloaders are published per flash type in the
+[firmware release](https://github.com/OpenIPC/firmware/releases/tag/latest):
+`u-boot-<soc>-nor.bin` and `u-boot-<soc>-nand.bin`. On these SoCs they replace
+the older `u-boot-<soc>-universal.bin`.
 
-**Cons**
-
-- **No checksums.** Squashfs keeps none. A block that has gone bad shows up as
-  a decompression error in whichever file happens to use it, not as a clear
-  "this image is damaged".
-- **The kernel is a legacy uImage.** U-Boot checks its CRC only if `verify` is
-  not `n`, and OpenIPC's NAND bootloaders without FIT support set `verify=n` on
-  every boot.
-- **An extra block layer.** The kernel needs `ubiblock` built in, and reads go
-  through it and through the squashfs cache.
-
-### UBIFS
-
-The `rootfs` volume holds a UBIFS image, a filesystem that UBI hosts directly
-with no block layer in between. On the GK7205V500 family, the `kernel` volume
-holds a FIT image instead of a uImage: the kernel and its device tree, each with
-a CRC32 and a SHA-1 hash.
-
-**Pros**
-
-- **The filesystem checks itself.** UBIFS stores a CRC with every node it
-  writes, and always checks the nodes that hold the filesystem's structure
-  (directories, inodes, the index) when it reads them. Checking file contents
-  as well is the `chk_data_crc` mount option, which is off by default. Squashfs
-  has no checksums at all.
-- **The kernel is checked before it runs.** U-Boot verifies both FIT hashes and
-  refuses to boot a kernel or device tree that the flash has corrupted, instead
-  of starting it and crashing somewhere later. During boot this looks like:
-
-  ```
-  Verifying Hash Integrity ... crc32+ sha1+ OK
-  ```
-
-- **No block layer.** UBIFS mounts the volume directly.
-
-**Cons**
-
-- **About twice the size.** UBIFS compresses each node on its own (LZO by
-  default), which can't match squashfs with xz. Above: 12.1 MiB against 6.5 MiB.
-- **A separate, bigger package.** The NAND package carries `fitImage`,
-  `rootfs.ubifs` and `rootfs.ubi` (the whole UBI image, for a fresh install).
-  It is about 21 MB to download and needs correspondingly more room in RAM to
-  unpack.
-- **Its own build.** Only the GK7205V500 family has a UBIFS + FIT NAND build
-  today.
-
-### Which one is my camera using?
+### Which layout is my camera using?
 
 ```sh
 cat /proc/cmdline
+ls /boot
 ```
 
-`root=/dev/ubiblock0_1` means squashfs over ubiblock. `root=ubi0:rootfs` means
-UBIFS. `mount` shows the same thing from the other side: `ubi0:rootfs on /rom type ubifs`
-for UBIFS, a squashfs on `/rom` for ubiblock.
+`root=ubi0:rootfs` with `/boot/fitImage` present is the layout above. Anything
+else on one of these SoCs is a retired layout (see the end of this page), and
+the camera needs reinstalling before it can be upgraded.
 
 ### Upgrading with sysupgrade
 
-`sysupgrade` works out the layout from the kernel command line and fetches the
-package that matches it: the NOR package for ubiblock, the NAND package for
-UBIFS. With `--archive` or `--url` you choose the file yourself. It refuses a
-rootfs in the wrong format before writing anything:
+`sysupgrade` recognises the layout and fetches the NAND package,
+`openipc.<soc>-nand-<variant>.tgz`. It writes one image, `rootfs.ubifs`, which
+carries the kernel too, so `-k` and `-r` both mean writing it. A local
+`--kernel=FILE` on its own is refused: the kernel has to come inside a
+`--rootfs=` image.
+
+The root filesystem is in use for as long as the camera runs, and UBI only lets a
+volume be rewritten when nothing else has it open. So the upgrade works much like
+OpenWrt's. The camera stops its services, moves into a small copy of itself in
+RAM and lets go of the flash. Then it:
+
+1. copies your settings out of `rootfs_data` into RAM,
+2. removes `rootfs_data`,
+3. resizes `rootfs` to the new image,
+4. writes the image,
+5. creates `rootfs_data` again on everything that is left,
+6. puts your settings back, and reboots.
+
+Your console and SSH session end when the camera moves into RAM, and it doesn't
+come back until it reboots.
+
+If the settings can't be read or don't fit in RAM, or the new image and the
+settings together don't fit the flash, the upgrade stops before anything is
+written and the camera reboots as it was. `sysupgrade -r -n` upgrades without
+the settings.
+
+A power cut while the volumes are being rebuilt costs you the settings, not the
+camera: it boots with its overlay in RAM, as after a factory reset. A cut while
+the root filesystem itself is being written leaves no kernel to boot, as on any
+camera, and the camera has to be reinstalled from U-Boot.
+
+### Installing
+
+From U-Boot, with a TFTP server holding the files: the bootloader first, then the
+UBI image. openipc.org's installation page for each of these SoCs gives the same
+commands with your addresses filled in.
 
 ```
-This camera boots a UBIFS rootfs, and /tmp/rootfs.squashfs.gk7205v500 is not one. Nothing was written.
+mw.b ${baseaddr} 0xff 0xc0000
+tftpboot ${baseaddr} u-boot-<soc>-nand.bin && nand erase 0x0 0xc0000 && nand write ${baseaddr} 0x0 0xc0000
+reset
 ```
 
-In both layouts the rootfs volume is in use for as long as the camera runs, and
-UBI only lets a volume be rewritten when nothing else has it open. So an upgrade
-that writes the rootfs (`-r`, or a full upgrade) or wipes the settings (`-n`)
-works much like OpenWrt's. The camera stops its services, moves into a small
-copy of itself in RAM, lets go of the flash, writes the volumes, and reboots.
-Your console and SSH session end when that move happens, and the camera does not
-come back until it reboots. A kernel-only upgrade (`-k`) doesn't need any of this.
+```
+tftpboot ${baseaddr} rootfs.ubi.<board> && nand erase.part ubi && nand write.trimffs ${baseaddr} 0x100000 ${filesize}
+reset
+```
 
-**sysupgrade does not convert one layout into the other.** The layout is chosen
-by the bootloader environment and installed once. To switch, reinstall from
-U-Boot (below) and reset the environment's `bootargs` and `bootcmd` to the
-defaults.
+`<board>` is the name in the package: `gk7205v500` for the whole GK7205V500
+family, otherwise the SoC itself.
+
+- **`nand erase.part ubi`** erases the UBI partition by name, so to the end of
+  the chip, whatever its size. Blocks left with old data past the image would be
+  corrupted blocks to UBI when it attaches. The command comes with the current
+  u-boot-xmedia NAND build, which is why the bootloader goes on first.
+- **`nand write.trimffs`**, never a plain `nand write`, for a UBI image. A UBI
+  image pads each block with empty pages. A plain write programs those pages, ECC
+  included, and when UBIFS later writes real data into one of them the page has
+  been programmed twice and its ECC no longer matches. `trimffs` leaves the
+  padding unprogrammed, which is what UBI expects. This is the failure reported
+  in [#2519](https://github.com/OpenIPC/firmware/issues/2519).
+
+The bootloader's own `run urnand` does the second step with `rootfs.ubi.${soc}`,
+so on a GK7205V510 or GK7205V530 it needs the file renamed to that SoC on the
+TFTP server.
+
+Rewriting the bootloader is the one step here that can leave the camera unable to
+start at all. Have a way back before you do it, such as a UART adapter and a tool
+that loads U-Boot over the SoC's boot ROM, like
+[defib](https://github.com/OpenIPC/defib).
+
+### The bootloader
+
+The u-boot-xmedia NAND build boots the layout above and nothing else. Its boot
+command mounts `ubi0:rootfs` and loads `/boot/fitImage`, or `/boot/uImage` on an
+image built without a FIT, and boots it with `root=ubi0:rootfs`.
+
+The environment survives a reinstall. When the bootloader finds an environment
+saved by an earlier OpenIPC bootloader and the new layout is already on the
+flash, it brings that environment up to date once:
+
+- it replaces the old stock boot command;
+- in `bootargs` it replaces only the hard-coded `root=` arguments, keeping
+  everything else, including the memory settings firmware writes there;
+- it removes a saved `verify=n`, so the kernel is always checked.
+
+A boot command you edited yourself is left as it is. Until the new layout is
+written, a camera keeps the boot command it had, so loading this bootloader into
+RAM on a camera you aren't reinstalling changes nothing.
+
+### Retired layouts
+
+Cameras on these layouts keep booting, but `sysupgrade` refuses to upgrade them
+and links to the installation page. They have to be reinstalled as above.
+
+- **Split layout** (HiSilicon): a uImage in a raw `kernel` partition
+  (`hinand:1024k(boot),1024k(env),8192k(kernel),-(ubi)`), a UBIFS root beside it.
+- **Squashfs over ubiblock** on the SoCs above: a uImage in a `kernel` volume,
+  the NOR package's squashfs in a `rootfs` volume (`root=/dev/ubiblock0_1`).
+- **The first FIT layout** (GK7205V500 family): the FIT in a `kernel` volume of
+  its own, a fixed-size UBIFS `rootfs` volume.
+
+All three set flash aside for a kernel, which the current layout does not.
+
+Hi3516AV100, Hi3516AV200, Hi3516DV100, Hi3516CV300 and Hi3518EV200 no longer
+get NAND builds. None of them has a bootloader that can install or boot this
+layout.
 
 ### Building a NAND package
 
-There is no separate NAND build or script. A board whose defconfig enables
-UBI produces the NAND package from the ordinary build, next to the NOR one when
-the board has squashfs enabled as well. On a SigmaStar board that looks like
-this:
+There is no separate NAND build or script. A board whose defconfig enables UBI
+produces the NAND package from the ordinary build, next to the NOR one when the
+board has squashfs enabled as well. On a SigmaStar board that looks like this:
 
 ```
 BR2_TARGET_ROOTFS_UBI=y
@@ -156,7 +187,9 @@ BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE="$(BR2_EXTERNAL)/scripts/ubifs/ubinize_
 BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
 ```
 
-The custom config file picks the volume layout. Each vendor has its own under
+The custom config file picks the volume layout. The u-boot-xmedia SoCs use
+`board/<family>/ubinize-nand.cfg` in their vendor tree, beside the
+`nand-fit.its` their kernel FIT is built from; the other vendors' are under
 `general/scripts/ubifs/` in OpenIPC/firmware.
 
 From [OpenIPC/firmware](https://github.com/OpenIPC/firmware):
@@ -166,8 +199,8 @@ make BOARD=ssc338q_ultimate
 ls output/images/openipc.*-nand-*.tgz
 ```
 
-From [OpenIPC/builder](https://github.com/OpenIPC/builder), for a device
-profile or one of the shared `devices/common` builds such as `ssc338q_fpv`:
+From [OpenIPC/builder](https://github.com/OpenIPC/builder), for a device profile
+or one of the shared `devices/common` builds such as `ssc338q_fpv`:
 
 ```sh
 ./builder.sh ssc338q_fpv
@@ -183,139 +216,23 @@ What the package holds depends on the vendor:
 
 | Vendor | Package contents | Kernel |
 |---|---|---|
+| u-boot-xmedia SoCs (above) | `rootfs.ubifs`, `rootfs.ubi`, `fitImage` | `/boot/fitImage` inside the root filesystem; the `fitImage` beside it is what `sysupgrade` reads the SoC from |
 | SigmaStar, Rockchip | `rootfs.ubi` only | inside `rootfs.ubi`, as volume `kernel` |
-| GK7205V500 family | `fitImage`, `rootfs.ubifs`, `rootfs.ubi` | `fitImage`, also inside `rootfs.ubi` |
-| Other HiSilicon, Goke | `uImage`, `rootfs.ubi` | `uImage`, written separately |
 
-Every file is named after the SoC, so `rootfs.ubi.ssc338q` and so on. The build
-fails if `rootfs.ubi` is over 16 MiB.
+Every file is named after the build, so `rootfs.ubi.ssc338q` and so on. The
+build fails if `rootfs.ubi` is over 24 MiB on the u-boot-xmedia SoCs (the RAM a
+fresh install loads it into) or over 16 MiB elsewhere.
 
-SigmaStar and Rockchip packages use a layout of their own, with four volumes
-rather than the three above: `kernel` (`uImage`, or `zboot.img` on Rockchip),
-`rootfs` (squashfs), `rootfs_data`, and `other`, which fills the rest of the
-flash. The three-volume commands under [Installing](#installing) are for the
-boards u-boot-xmedia builds a NAND bootloader for, and are not a way to install
-a SigmaStar or Rockchip package.
+SigmaStar and Rockchip packages keep a layout of their own, with four volumes:
+`kernel` (`uImage`, or `zboot.img` on Rockchip), `rootfs` (squashfs),
+`rootfs_data`, and `other`, which fills the rest of the flash. The commands under
+[Installing](#installing) are for the u-boot-xmedia SoCs and are not a way to
+install a SigmaStar or Rockchip package.
 
 No build produces a raw image of the whole chip, boot loader included. The
 `ssc338q-fpv.bin` that [the SSC338Q NAND guide](fpv-sigmastar.md) writes with
 `nandwrite` is a one-off image from that guide's download, not the output of a
 build.
-
-### Installing
-
-From U-Boot, with a TFTP server holding the files. The GK7205V500 family shares
-one build, so its packages name every file after `gk7205v500`. U-Boot's `${soc}`
-is the camera's own SoC, though, so on a GK7205V510 or GK7205V530 rename the
-files on the TFTP server to match (`rootfs.ubi.gk7205v510`, and so on).
-
-The commands below erase from 1 MiB, the end of the `boot` and `env`
-partitions, to the end of the chip. The U-Boot boot log gives the chip size on
-its `Chipsize:` line. The erase length is that size minus 1 MiB:
-
-| Chip | Erase |
-|---|---|
-| 128 MiB | `nand erase 0x100000 0x7f00000` |
-| 256 MiB | `nand erase 0x100000 0xff00000` |
-
-**UBIFS** (GK7205V500 family). The kernel in this package is a FIT image, which
-only a FIT-capable bootloader can start, so check yours first (see
-[The bootloader](#the-bootloader) below). With an older one the install writes
-cleanly and the camera then fails to boot it.
-
-The NAND package's `rootfs.ubi` already contains all three volumes, so on a
-128 MiB chip one command writes it:
-
-```
-run urnand
-```
-
-`urnand` fetches `rootfs.ubi.${soc}` over TFTP, erases the UBI partition, and
-writes the image with `nand write.trimffs`. It erases a fixed 128 MiB layout. On
-any other chip size, run its steps by hand with the erase length from the table
-above (shown here for a 256 MiB chip):
-
-```
-tftpboot ${baseaddr} rootfs.ubi.${soc}
-nand erase 0x100000 0xff00000
-nand write.trimffs ${baseaddr} 0x100000 ${filesize}
-```
- Use `write.trimffs`, not a plain
-`nand write`, if you ever write a UBI image by hand. A UBI image pads each block
-with empty pages. A plain write programs those pages, ECC included. When UBIFS
-later writes real data into one of them, the page has been programmed twice and
-its ECC no longer matches. `trimffs` leaves the padding unprogrammed, which is
-what UBI expects. This is the failure reported in
-[#2519](https://github.com/OpenIPC/firmware/issues/2519).
-
-**Squashfs over ubiblock**: create the three volumes and write the NOR package's
-two files into them. The order matters: `rootfs` must be volume 1. The erase
-line is the 128 MiB one; use the table above for another size.
-
-```
-nand erase 0x100000 0x7f00000
-ubi part ubi
-ubi create kernel 0x400000
-ubi create rootfs 0x1000000
-ubi create rootfs_data
-tftpboot ${baseaddr} uImage.${soc}
-ubi write ${baseaddr} kernel ${filesize}
-tftpboot ${baseaddr} rootfs.squashfs.${soc}
-ubi write ${baseaddr} rootfs ${filesize}
-```
-
-`rootfs_data` is left empty, and the camera formats it as UBIFS on first boot.
-The size you give `rootfs` caps every future upgrade's rootfs, so leave
-headroom.
-
-### The bootloader
-
-On a GK7205V500-family NAND camera, the U-Boot built with FIT support boots
-**both** layouts. Its boot command reads the `kernel` volume first. A FIT image
-gets the UBIFS root, anything else gets the ubiblock root.
-
-That bootloader also brings an environment saved by an older one up to date, once,
-on its first boot. It removes a saved `verify=n` so the FIT hashes are checked. It
-replaces the stock boot command of the older bootloader. And in `bootargs` it
-replaces only the hard-coded `root=` arguments, keeping everything else,
-including the memory settings that firmware writes there. A boot command you
-edited yourself is left as it is.
-
-The NAND bootloaders that u-boot-xmedia builds for other SoCs boot only the
-ubiblock layout.
-
-To tell whether a GK7205V500-family camera already has the FIT-capable U-Boot,
-type `help fdt` at its prompt. The FIT build has the `fdt` command, and an older
-one answers `Unknown command`. To install it, download
-`u-boot-<soc>-nand.bin` for your SoC from the
-[firmware release](https://github.com/OpenIPC/firmware/releases/tag/latest),
-put it on the TFTP server, and write it over the `boot` partition:
-
-```
-mw.b ${baseaddr} ff 0xc0000
-tftpboot ${baseaddr} u-boot-${soc}-nand.bin
-nand erase 0 0xc0000
-nand write ${baseaddr} 0 0xc0000
-reset
-```
-
-Rewriting the bootloader is the one step here that can leave the camera unable
-to start at all. Have a way back before you do it, such as a UART adapter and a
-tool that loads U-Boot over the SoC's boot ROM, like
-[defib](https://github.com/OpenIPC/defib).
-
-### A third layout: HiSilicon with a raw kernel partition
-
-Some HiSilicon NAND installs (Hi3516EV200, Hi3516EV300 `ultimate`) keep the kernel
-outside UBI, in its own flash partition, and use UBI only for the root filesystem:
-
-```
-mtdparts=hinand:1024k(boot),1024k(env),8192k(kernel),-(ubi)
-```
-
-The rootfs there is UBIFS (`rootfs.ubi`, `root=ubi0:rootfs`), but the kernel is
-a uImage in a raw partition that UBI does not manage. `sysupgrade` does not treat
-it as a UBI layout, and its upgrade path is not covered on this page.
 
 ### See also
 

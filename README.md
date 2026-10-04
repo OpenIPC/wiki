@@ -71,7 +71,7 @@ OpenIPC Wiki
 - [Two cameras, one scene: the other camera's picture on this one](en/two-cameras-one-scene.md)
 - [Factory reset and the unclaimed camera](en/first-boot.md)
 - [Upgrade firmware](en/sysupgrade.md)
-- [NAND flash: squashfs over ubiblock, and UBIFS](en/nand-rootfs-layouts.md)
+- [NAND flash layouts](en/nand-rootfs-layouts.md)
 - [Failsafe mode and recovery](en/failsafe-recovery.md)
 - [Nightly builds, dated releases, and bisect](en/nightly-builds-and-bisect.md)
 - [Automatic image tuning](en/automatic-image-tuning.md)
