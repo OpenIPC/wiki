@@ -110,7 +110,7 @@ reset
 ```
 
 ```
-tftpboot ${baseaddr} rootfs.ubi.<board> && nand erase.part ubi && nand write.trimffs ${baseaddr} 0x100000 ${filesize}
+tftpboot ${baseaddr} rootfs.ubi.<board> && nand erase.part ubi && nand write.trimffs ${baseaddr} ubi ${filesize}
 reset
 ```
 
@@ -119,8 +119,9 @@ family, otherwise the SoC itself.
 
 - **`nand erase.part ubi`** erases the UBI partition by name, so to the end of
   the chip, whatever its size. Blocks left with old data past the image would be
-  corrupted blocks to UBI when it attaches. The command comes with the current
-  u-boot-xmedia NAND build, which is why the bootloader goes on first.
+  corrupted blocks to UBI when it attaches. The write names the partition too,
+  so it lands where the erase was. Both come with the current u-boot-xmedia NAND
+  build, which is why the bootloader goes on first.
 - **`nand write.trimffs`**, never a plain `nand write`, for a UBI image. A UBI
   image pads each block with empty pages. A plain write programs those pages, ECC
   included, and when UBIFS later writes real data into one of them the page has
@@ -154,7 +155,7 @@ flash, it brings that environment up to date once:
 
 A boot command you edited yourself is left as it is. Until the new layout is
 written, a camera keeps the boot command it had, so loading this bootloader into
-RAM on a camera you aren't reinstalling changes nothing.
+RAM on a camera you aren't reinstalling doesn't stop it booting what it has.
 
 ### Retired layouts
 
