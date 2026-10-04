@@ -263,7 +263,9 @@ video0:
   # what it holds, and updating the firmware will not change it. Read them
   # back from /api/v1/config.json rather than assuming the numbers here. See
   # "When the camera exceeds the bitrate you set".
-  #minQp: 28
+  #minQp: 28                    # 18 for vbr/avbr on the Hi3516EV200 family
+                                # from 2026-10-05 builds — see "Majestic
+                                # encoder tuning"
   #maxQp: 42
 
 video1:
