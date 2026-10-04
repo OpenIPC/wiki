@@ -24,13 +24,12 @@ By default each P frame predicts from the frame before it, so the chain of
 dependencies runs the whole length of the GOP. Lose one packet and every frame
 after it is wrong until the next keyframe.
 
-Two settings change that. They map directly onto the vendors' shared
-reference-parameter call, whose base period is fixed at 1:
+Two settings change that. The base-layer period is fixed at 1:
 
-| setting | vendor field | meaning |
-|---|---|---|
-| `video<N>.refEnhance` | `u32Enhance` | enhancement-layer period |
-| `video<N>.refPred` | `bEnablePred` | may base-layer frames reference each other |
+| setting | meaning |
+|---|---|
+| `video<N>.refEnhance` | enhancement-layer period |
+| `video<N>.refPred` | may base-layer frames reference each other |
 
 The combination worth knowing about is:
 
@@ -132,8 +131,8 @@ Majestic can do the dropping per RTSP session — append `?thin=1` to the stream
 URL and that session receives the base layer only, while other clients continue
 at full rate.
 
-`svct` and `refEnhance` drive the same hardware registers on the same channel,
-so they are mutually exclusive. Setting both logs a warning and `svct` wins.
+`svct` and `refEnhance` configure the same part of the encoder on the same
+channel, so they are mutually exclusive. Setting both logs a warning and `svct` wins.
 
 ### Rate-control defaults on the Hi3516EV200 family
 
@@ -224,15 +223,93 @@ per-block thresholds read all zero when `adaptiveQp` is off.
 #### What was measured and left alone
 
 - **A longer GOP** saves the most: 20% or more at `gopSize: 2` against 1 s,
-  and about 40% at 5 MP by day, where the keyframe is most of the bitrate. It also delays stream joins and recovery after loss,
-  so it stays your choice. See the reference-structure section above for when
-  a short GOP matters.
+  and about 40% at 5 MP by day, where the keyframe is most of the bitrate. It
+  also delays recovery after loss, so it is not a default. To trade it for disk
+  space, use the [storage saver](#storage-saver--videonstoragesaver) rather
+  than `gopSize` alone: it keeps viewer joins and motion clips fast. See the
+  reference-structure section above for when a short GOP matters.
 - **`rcMode: cbr` and `rcMode: vbr`** both needed more bitrate than AVBR for the
   same quality on this footage. AVBR is the default and remains the best of the
   three.
 - **A fixed QP** is about 8% (1080p) to 11% (5 MP) more efficient than AVBR
   at night, even with the new defaults. It holds no bitrate target, though, so
   it is not a default.
+
+### Storage saver — `video<N>.storageSaver`
+
+For cameras whose recordings are kept for weeks, on an SD card or an NVR disk,
+where the disk costs more than the picture. It serves the same purpose as the
+"H.265+" or "H.265X" modes of other cameras. Off by default, set per stream,
+in builds from October 2026:
+
+```yaml
+video0:
+  storageSaver: off    # off | archive | strong | max
+```
+
+| level | what changes | bitrate for the same picture | frame rate |
+|---|---|---|---|
+| `archive` | a keyframe every 10 s; QP floor of at least 24 | -26% | unchanged |
+| `strong` | `archive`, plus frames skipped while the stream runs above half of `bitrate`; `maxQp` 44 | -36% (-31% by PSNR) | about 17 of 25 fps on busy footage |
+| `max` | `strong`, plus the stream held to about a third of `bitrate`, QP 28-51, and still scenes allowed to go soft | -56% (-58% by PSNR) | 13-25 fps |
+
+*Hi3516EV300 with an IMX335, 1080p H.265 by day, 4 clips recorded from the
+camera's own sensor and encoded identically for every level, each played
+three times over so a 10 s GOP cycles. Bitrate is compared at equal quality
+against the defaults above (1 s GOP), by VMAF. The levels that skip frames are
+also given by PSNR, because VMAF undercharges a repeated frame.*
+
+On a quiet scene the saving is larger. A 5 MP stream of a still room at
+`bitrate: 5102` delivered 1821 kbps with the saver off, 846 kbps with
+`archive`, and 261 kbps at 13 fps with `max`. A camera with the same chip and
+sensor, running its own vendor's H.265X mode on the same scene, delivered
+426 kbps at 8 fps.
+
+**`archive` keeps the picture.** Everything it saves comes from the longer
+keyframe interval. `strong` and `max` sell picture and frame rate for more
+disk: `strong` shows motion at a lower frame rate, and `max` looks visibly
+softer. Choose `max` for footage you will only search, not watch.
+
+What to expect with it on:
+- **Viewers still join quickly.** A new RTSP, WebRTC or web viewer gets a
+  fresh keyframe on connecting: about 0.1 s over RTSP and 0.5 s to the first
+  WebRTC picture, measured. Keyframe requests less than 3 s apart are combined
+  into one, so the long interval cannot be worn down by clients. When several
+  viewers connect at once, the later ones can wait up to 3 s.
+- **`gopSize` becomes a minimum.** The stream uses 10 s, or your `gopSize` if
+  it is longer. ONVIF reports the interval the stream really has. An NVR that
+  writes that value back does not change `gopSize`, and a shorter one does not
+  shorten the interval while the saver is on.
+- **Motion clips start at the trigger.** The recorder asks for a keyframe when
+  motion starts, so a clip opens on the trigger rather than up to 10 s later.
+  The run-up before it (`records.preRollSec`) is kept only if it holds a
+  keyframe; set `preRollSec` to 10 or more to keep it every time.
+- **HLS segments last 10 s**, which adds latency to HLS viewing.
+- **Each level brings its own QP window** unless you set `minQp` or `maxQp`
+  yourself. Set to anything other than its default, your value wins at every
+  level.
+- **Frame skipping needs `isp.lowDelay` off.** With low delay on, `strong` and
+  `max` run without it.
+
+The floor of 24 is there because, with a 10 s keyframe interval on a still
+scene, the rate controller drives the quantiser down to its floor. At the
+Hi3516EV200 family's floor of 18, `archive` delivered twice the bitrate of the
+saver being off, the extra bits going on sensor noise. A floor of 24 brings it
+back to about half.
+
+Setting it restarts that stream's encoder, like the other keys on this page:
+
+```
+curl 'http://localhost/api/v1/set?video0.storageSaver=archive'
+```
+
+To check it took effect, `cat /proc/umap/rc` on the camera shows the GOP
+length in frames (150 at 15 fps). For `strong` and `max` it also shows frame
+dropping switched on, with its threshold in bits per second.
+
+Measured on the Hi3516EV300 only. It is available on the other chips listed
+under [Platform support](#platform-support), where the same numbers are
+expected but have not been measured.
 
 ### The rest of the channel knobs
 
@@ -274,33 +351,35 @@ in the config as a number the encoder was never going to use.
 
 | setting | HiSilicon | SigmaStar |
 |---|---|---|
-| `svct` | gen 2 and later, per channel | per channel |
-| `refEnhance`, `refPred` | gen 2 and later, **per channel** | `video0` only |
+| `svct` | all but the Hi3516CV100 family\*, per channel | per channel |
+| `refEnhance`, `refPred` | all but the Hi3516CV100 family\*, **per channel** | `video0` only |
 | `adaptiveQp` | Hi3516CV500, AV300, DV300; Hi3516EV200, EV300, DV200, Hi3518EV300; Goke GK7205V200, V210, V300, GK7605V100 — per channel | — |
 | `ipQpDelta` | the chips above, and Hi3516CV610 — per channel | — |
+| `storageSaver` | the chips listed for `adaptiveQp` — per channel | — |
 | `noiseLevel`, `intraLine`, `intraQp`, `roiRect`, `roiQp`, `bypass` | — | `video0` only |
 
+\* Hi3516CV100, Hi3518AV100, Hi3518CV100 and Hi3518EV100. Every other HiSilicon
+and Goke chip has these keys.
+
 On HiSilicon each encoder reads its own channel, so `video0` and `video1` can
-carry different reference structures. On SigmaStar the code that applies these
-returns early for anything but the main stream, so only `video0` declares them —
-and they additionally require `fpv.enabled: true`, which brings the 3A side
-effect with it. On HiSilicon there is no FPV module and `refEnhance` on its own
+carry different reference structures. On SigmaStar only the main stream applies
+them, so only `video0` has them — and they additionally require
+`fpv.enabled: true`, which brings the 3A side effect with it. On HiSilicon there is no FPV module and `refEnhance` on its own
 is enough.
 
 A knob absent from your camera's schema is not supported by that build; the API
 answers `404` rather than accepting a setting nothing would apply.
 
 > The reference-structure measurements on this page were all taken on
-> HiSilicon. SigmaStar takes the identical parameters through the identical
-> vendor call, but the behaviour of `refEnhance: 0` with `refPred: false` has
+> HiSilicon. SigmaStar is given the same parameters, but the behaviour of `refEnhance: 0` with `refPred: false` has
 > not been confirmed there on hardware — use the bitrate check above before
 > relying on it.
 
 ### Applying changes
 
-The reference structure is programmed between encoder channel creation and the
-start of encoding; the SDK ignores a later call. That does *not* mean you have
-to restart anything. Setting either key is enough on its own:
+The reference structure can only be set while a stream's encoder is being set
+up, so Majestic sets that encoder up again to apply it. You do not have to
+restart anything yourself. Setting either key is enough on its own:
 
 ```
 curl 'http://localhost/api/v1/set?video0.refEnhance=1'

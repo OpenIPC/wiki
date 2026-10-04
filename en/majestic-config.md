@@ -225,6 +225,11 @@ video0:
   #profile: main                # base | main | high
   gopSize: 1.0
   #gopMode: normal              # normal | dual | smart
+  #bgInterval: 0                # smart only: background keyframe interval in
+                                # frames, a whole number of GOPs; 0 means four
+  #storageSaver: off            # off | archive | strong | max — trades picture
+                                # for disk; keyframes 10 s apart from archive
+                                # up. See "Majestic encoder tuning"
   #adjustBitrate: true          # may a WebRTC viewer on a thin link lower this
                                 # channel's rate; turn off for a channel feeding
                                 # an NVR, a recorder or an outgoing publisher
@@ -554,7 +559,7 @@ records:
   # "motion" writes one clip per detection and nothing in between, and needs
   # motionDetect.enabled. See "Recording on motion" in majestic-streamer.md —
   # in particular, set video0.gopSize at or below preRollSec or the run-up is
-  # mostly discarded.
+  # mostly discarded (with video0.storageSaver on, preRollSec 10 or more).
   #mode: continuous             # continuous | motion
   #preRollSec: 5                # seconds kept from BEFORE the trigger, in RAM
   #postRollSec: 10              # seconds kept after movement stops
