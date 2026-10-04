@@ -16,8 +16,9 @@ sensor driver and its register tables, the partition layout and the board's own
 identity, and those are what let someone add support for a board later — long
 after the camera itself has been reflashed or thrown away.
 
-Pick the first route below that your camera allows. They all produce the same
-thing: one binary file the size of the flash chip.
+Pick the first route below that your camera allows. They all produce one binary
+file the size of the flash chip, except a NAND backup taken from the bootloader
+(route G), which comes as 16 pieces.
 
 ## Which route
 
@@ -30,7 +31,7 @@ them gets no backup and no error worth reading.
 | --- | --- |
 | Stock firmware runs and you have a shell on it | [A, from the running system](#a-from-the-running-system) — NOR or NAND |
 | You have OpenIPC's `ipctool` on it | [B, ipctool](#b-with-ipctool) |
-| SPI NAND, and no shell on the stock firmware | [G, boot something that has one](#g-nand-without-a-stock-shell) |
+| SPI NAND, and no shell on the stock firmware | [G, NAND from the bootloader](#g-nand-without-a-stock-shell) |
 | **SPI NOR**, bootloader console, camera on the network | [C, U-Boot over TFTP](#c-u-boot-over-tftp) |
 | **SPI NOR**, bootloader console, no working network | [D, U-Boot to an SD card](#d-u-boot-to-an-sd-card), or [E, over the serial line](#e-u-boot-over-the-serial-line) |
 | No console at all, or the camera is already dead | [F, an external programmer](#f-an-external-programmer) |
@@ -238,9 +239,21 @@ xxd -revert -plain fulldump.hex fulldump.bin
 
 ## G. NAND without a stock shell
 
-Routes C, D and E are `sf` commands, and `sf` drives SPI **NOR**. There is no
-`sf` equivalent for NAND in these bootloaders, so on a NAND camera the way in is
-to boot something that has a Linux shell and then use route A from there.
+Routes C, D and E are `sf` commands, and `sf` drives SPI **NOR**.
+
+On HiSilicon and Goke cameras the bootloader has `nand` instead, and a **128 MiB**
+chip can be backed up from it over TFTP. The bootloader prints the size as it
+starts (`Chipsize:128 MiB`, or `NAND: 128 MiB`). The chip does not fit in RAM, so
+it goes out in 16 pieces of 8 MiB, one file each. Bad blocks make the pieces something
+other than one image of the chip: they go back piece by piece, onto the same
+camera. The commands, the restore and the reasons are in
+[NAND flash layouts](nand-rootfs-layouts.md#backing-up-the-stock-firmware).
+openipc.org's installation page for the SoC gives them with your addresses
+filled in.
+
+Those commands stop at 128 MiB. On a bigger chip, or where the bootloader offers
+no way to read NAND, boot something that has a Linux shell and use route A from
+there.
 
 On SigmaStar parts the IPL will boot a U-Boot from an SD card before it touches
 flash, which is enough to bring up an initramfs with `nanddump` in it. The
