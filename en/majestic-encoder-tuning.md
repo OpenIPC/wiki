@@ -168,15 +168,18 @@ Bitrate needed for the same picture quality, against the old defaults:
 \* 1080p H.265 was measured with keyframe offsets of 2 and 8 rather than 6.
 The range spans the two.
 
-The new defaults won on every clip measured, and the encoder's frame rate was
-unchanged.
+Every configuration in the table won on every clip it was measured on, and the
+encoder's frame rate was unchanged. The exact new combination, with an offset
+of 6, was measured on 1080p H.264 and on both 5 MP sets. 1080p H.265 was
+measured only with the neighbouring offsets.
 
 What each change contributes:
 - **`adaptiveQp: false`** gives the bulk of the daytime gain. The encoder's
   texture-driven block adjustment costs more bits than it saves at equal VMAF.
-- **`ipQpDelta: 6`** helps most at night. In a mostly still scene every P frame
-  refers back to the keyframe, so a better keyframe carries through the whole
-  GOP. At 5 MP the best value differs: about 4 by day, 8 at night. 6 is never
+- **`ipQpDelta: 6`** helps most at night. Each P frame predicts from the one
+  before it, so in a mostly still scene the detail coded into the keyframe is
+  carried forward frame to frame rather than coded again. A better keyframe
+  lifts the whole GOP for little extra cost. At 5 MP the best value differs: about 4 by day, 8 at night. 6 is never
   far from either.
 - **The lower `minQp` floor** does not change efficiency. It changes what a
   generous bitrate buys: with a floor of 28, AVBR given 4 Mbps at 1080p stopped
@@ -184,10 +187,16 @@ What each change contributes:
 
 #### Other chips
 
-On every other HiSilicon and Goke part the defaults are unchanged: `adaptiveQp`
-on, `ipQpDelta` 2, `minQp` 28. The keys still work there, but switching
+On the other chips that have these keys (see
+[Platform support](#platform-support)), the defaults are unchanged:
+`adaptiveQp` on, `ipQpDelta` 2, `minQp` 28. The keys work there, but switching
 adaptive QP off or raising the keyframe offset has only been measured on the
-chips above. Try it on your own footage, with the bitrate check below.
+chips above. Try it on your own footage first. Older chips do not have the keys
+at all; a build without them answers `404` to setting one.
+
+A default only applies to a key your configuration does not set. A
+`majestic.yaml` that already names `minQp: 28` keeps it after the update; remove
+the line to take the new default.
 
 #### Setting them
 
@@ -218,8 +227,9 @@ per-block thresholds read all zero when `adaptiveQp` is off.
   and about 40% at 5 MP by day, where the keyframe is most of the bitrate. It also delays stream joins and recovery after loss,
   so it stays your choice. See the reference-structure section above for when
   a short GOP matters.
-- **The other rate-control modes** (CBR, VBR, QVBR, CVBR) all needed more
-  bitrate than AVBR for the same quality on this footage.
+- **`rcMode: cbr` and `rcMode: vbr`** both needed more bitrate than AVBR for the
+  same quality on this footage. AVBR is the default and remains the best of the
+  three.
 - **A fixed QP** is about 8% (1080p) to 11% (5 MP) more efficient than AVBR
   at night, even with the new defaults. It holds no bitrate target, though, so
   it is not a default.
@@ -266,8 +276,8 @@ in the config as a number the encoder was never going to use.
 |---|---|---|
 | `svct` | gen 2 and later, per channel | per channel |
 | `refEnhance`, `refPred` | gen 2 and later, **per channel** | `video0` only |
-| `adaptiveQp` | gen 4 (Hi3516CV500 and EV200 families, Goke GK7205V200 family), per channel | — |
-| `ipQpDelta` | gen 4 and later, per channel | — |
+| `adaptiveQp` | Hi3516CV500, AV300, DV300; Hi3516EV200, EV300, DV200, Hi3518EV300; Goke GK7205V200, V210, V300, GK7605V100 — per channel | — |
+| `ipQpDelta` | the chips above, and Hi3516CV610 — per channel | — |
 | `noiseLevel`, `intraLine`, `intraQp`, `roiRect`, `roiQp`, `bypass` | — | `video0` only |
 
 On HiSilicon each encoder reads its own channel, so `video0` and `video1` can
