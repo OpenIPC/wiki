@@ -283,8 +283,16 @@ What to expect with it on:
 - **Motion clips start at the trigger.** The recorder asks for a keyframe when
   motion starts, so a clip opens on the trigger rather than up to 10 s later.
   The run-up before it (`records.preRollSec`) is kept only if it holds a
-  keyframe; set `preRollSec` to 10 or more to keep it every time.
-- **HLS segments last 10 s**, which adds latency to HLS viewing.
+  keyframe, and keyframes are now 10 s apart, or `gopSize` apart if that is
+  longer. Set `preRollSec` at or above that interval to keep the run-up; the
+  recording guide's advice to keep `gopSize` at or below `preRollSec` is not
+  enough on its own with the saver on. The run-up is held in RAM, so on a
+  small camera the memory cap can still shorten it — see
+  [Recording on motion](majestic-streamer.md).
+- **HLS segments get longer.** A segment runs from one keyframe to the next on
+  the stream HLS describes, so with the saver on that stream it lasts 10 s, or
+  `gopSize` if longer. Players with low-latency HLS stay close to live; others
+  start further behind and fetch larger segments.
 - **Each level brings its own QP window** unless you set `minQp` or `maxQp`
   yourself. Set to anything other than its default, your value wins at every
   level.

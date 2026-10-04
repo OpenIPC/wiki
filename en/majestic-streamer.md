@@ -1264,6 +1264,11 @@ bring it back to `preRollSec` or below. Raising `preRollSec` past `gopSize`
 works too, but it is the expensive direction: the run-up is held in RAM, and
 the limit below applies.
 
+With `video0.storageSaver` on, the keyframes are 10 s apart however short
+`gopSize` is (or `gopSize` apart, if that is longer), so compare `preRollSec`
+with that interval instead — see
+[Storage saver](majestic-encoder-tuning.md#storage-saver--videonstoragesaver).
+
 The camera says so when it happens:
 
 ```
@@ -1841,7 +1846,8 @@ written. At `gopSize: 30` the segments are thirty seconds long, which makes a
 player slow to start and each segment large; at `gopSize: 1` they are a second.
 Parts make the *live edge* independent of that, but segment size is not, so a
 camera serving HLS to players without low-latency support wants a shorter GOP
-than one that is only recording.
+than one that is only recording. With `storageSaver` on for that stream, the
+segments last 10 s, or `gopSize` if longer.
 
 `hls.segments` sets how many finished segments the playlist offers, 2 to 8. It
 is only a memory cost in the fall-back cases above.
