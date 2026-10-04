@@ -147,15 +147,38 @@ one build, so its packages name every file after `gk7205v500`. U-Boot's `${soc}`
 is the camera's own SoC, though, so on a GK7205V510 or GK7205V530 rename the
 files on the TFTP server to match (`rootfs.ubi.gk7205v510`, and so on).
 
-**UBIFS** (GK7205V500 family): the NAND package's `rootfs.ubi` already contains
-all three volumes, so one command writes it:
+The commands below erase from 1 MiB, the end of the `boot` and `env`
+partitions, to the end of the chip. The U-Boot boot log gives the chip size on
+its `Chipsize:` line. The erase length is that size minus 1 MiB:
+
+| Chip | Erase |
+|---|---|
+| 128 MiB | `nand erase 0x100000 0x7f00000` |
+| 256 MiB | `nand erase 0x100000 0xff00000` |
+
+**UBIFS** (GK7205V500 family). The kernel in this package is a FIT image, which
+only a FIT-capable bootloader can start, so check yours first (see
+[The bootloader](#the-bootloader) below). With an older one the install writes
+cleanly and the camera then fails to boot it.
+
+The NAND package's `rootfs.ubi` already contains all three volumes, so on a
+128 MiB chip one command writes it:
 
 ```
 run urnand
 ```
 
 `urnand` fetches `rootfs.ubi.${soc}` over TFTP, erases the UBI partition, and
-writes the image with `nand write.trimffs`. Use `write.trimffs`, not a plain
+writes the image with `nand write.trimffs`. It erases a fixed 128 MiB layout. On
+any other chip size, run its steps by hand with the erase length from the table
+above (shown here for a 256 MiB chip):
+
+```
+tftpboot ${baseaddr} rootfs.ubi.${soc}
+nand erase 0x100000 0xff00000
+nand write.trimffs ${baseaddr} 0x100000 ${filesize}
+```
+ Use `write.trimffs`, not a plain
 `nand write`, if you ever write a UBI image by hand. A UBI image pads each block
 with empty pages. A plain write programs those pages, ECC included. When UBIFS
 later writes real data into one of them, the page has been programmed twice and
@@ -164,7 +187,8 @@ what UBI expects. This is the failure reported in
 [#2519](https://github.com/OpenIPC/firmware/issues/2519).
 
 **Squashfs over ubiblock**: create the three volumes and write the NOR package's
-two files into them. The order matters: `rootfs` must be volume 1.
+two files into them. The order matters: `rootfs` must be volume 1. The erase
+line is the 128 MiB one; use the table above for another size.
 
 ```
 nand erase 0x100000 0x7f00000
@@ -197,6 +221,26 @@ edited yourself is left as it is.
 
 The NAND bootloaders that u-boot-xmedia builds for other SoCs boot only the
 ubiblock layout.
+
+To tell whether a GK7205V500-family camera already has the FIT-capable U-Boot,
+type `help fdt` at its prompt. The FIT build has the `fdt` command, and an older
+one answers `Unknown command`. To install it, download
+`u-boot-<soc>-nand.bin` for your SoC from the
+[firmware release](https://github.com/OpenIPC/firmware/releases/tag/latest),
+put it on the TFTP server, and write it over the `boot` partition:
+
+```
+mw.b ${baseaddr} ff 0xc0000
+tftpboot ${baseaddr} u-boot-${soc}-nand.bin
+nand erase 0 0xc0000
+nand write ${baseaddr} 0 0xc0000
+reset
+```
+
+Rewriting the bootloader is the one step here that can leave the camera unable
+to start at all. Have a way back before you do it, such as a UART adapter and a
+tool that loads U-Boot over the SoC's boot ROM, like
+[defib](https://github.com/OpenIPC/defib).
 
 ### A third layout: HiSilicon with a raw kernel partition
 
