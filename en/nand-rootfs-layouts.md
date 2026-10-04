@@ -97,6 +97,90 @@ camera: it boots with its overlay in RAM, as after a factory reset. A cut while
 the root filesystem itself is being written leaves no kernel to boot, as on any
 camera, and the camera has to be reinstalled from U-Boot.
 
+### Backing up the stock firmware
+
+Save what the camera came with before the first install. A camera's vendor
+firmware is often available nowhere else, and installing OpenIPC overwrites it.
+openipc.org's installation page for the SoC gives these commands with your
+addresses and file names filled in, and an SD card variant for cameras without
+Ethernet.
+
+A 128 MiB NAND chip doesn't fit in the camera's RAM, so the backup reads it in 16
+pieces of 8 MiB and sends each one to the TFTP server as a file of its own. From
+the camera's U-Boot, whatever bootloader it has, with a TFTP server that accepts
+uploads (tftpd-hpa needs `-c`), run these one line at a time:
+
+```
+setenv ipaddr 192.168.1.10; setenv serverip 192.168.1.254
+nand read 0x42000000 0x0 0x800000 && tftpput 0x42000000 0x800000 backup-00.bin
+nand read 0x42000000 0x800000 0x800000 && tftpput 0x42000000 0x800000 backup-01.bin
+...
+nand read 0x42000000 0x7000000 0x800000 && tftpput 0x42000000 0x800000 backup-14.bin
+if nand read 0x42000000 0x7800000 0x800000; then tftpput 0x42000000 0x800000 backup-15.bin; elif nand read 0x42000000 0x7800000 0x7e0000; then tftpput 0x42000000 0x7e0000 backup-15.bin; elif nand read 0x42000000 0x7800000 0x7c0000; then tftpput 0x42000000 0x7c0000 backup-15.bin; elif nand read 0x42000000 0x7800000 0x7a0000; then tftpput 0x42000000 0x7a0000 backup-15.bin; elif nand read 0x42000000 0x7800000 0x780000; then tftpput 0x42000000 0x780000 backup-15.bin; fi
+```
+
+The offsets step by `0x800000`. `0x42000000` is RAM on all the SoCs above. A
+U-Boot without `tftpput` uploads with `tftp 0x42000000 backup-00.bin 0x800000`;
+the size as the third argument is what makes `tftp` upload.
+
+- **Bad blocks.** `nand read` skips bad blocks. A piece with a bad block in its
+  range holds 8 MiB of the good blocks from its offset, so it runs past its own
+  end into the next piece's range. The pieces are therefore not one image of the
+  chip. Don't join them, and don't write them with a programmer. They go back
+  piece by piece onto the camera they came from, whose bad blocks are in the same
+  places. Keep all 16 together.
+- **The last piece** has no blocks after it to run on to. With a bad block in it,
+  an 8 MiB read would pass the end of the chip, which U-Boot refuses. So its
+  line tries one block (128 KiB) less at a time, for up to four bad blocks. If
+  no `backup-15.bin` arrives, there are more than four. Count the ones `nand
+  bad` lists from `0x7800000` on, and run the read and `tftpput` with `0x20000`
+  less per bad block. Restore it with a `nand write.trimffs` of that same size.
+- **The chip size.** These commands cover a 128 MiB chip, the size U-Boot prints
+  as it starts (`Chipsize:128 MiB`, or `NAND: 128 MiB`). On a bigger chip they
+  leave out everything past the first 128 MiB.
+
+### Restoring the backup
+
+The pieces go back in order, from U-Boot, with the 16 files on the TFTP server:
+
+```
+setenv ipaddr 192.168.1.10; setenv serverip 192.168.1.254
+tftpboot 0x42000000 backup-00.bin && nand erase 0x0 0x1000000 && nand write 0x42000000 0x0 0x100000 && nand write.trimffs 0x42100000 0x100000 0x700000
+tftpboot 0x42000000 backup-01.bin && nand erase 0x800000 0x1000000 && nand write.trimffs 0x42000000 0x800000 ${filesize}
+...
+tftpboot 0x42000000 backup-14.bin && nand erase 0x7000000 0x1000000 && nand write.trimffs 0x42000000 0x7000000 ${filesize}
+mw.b 0x42000000 0xff 0x800000; if tftpboot 0x42000000 backup-15.bin && nand erase 0x7800000 0x800000; then if nand write.trimffs 0x42000000 0x7800000 0x800000; then echo restored; elif nand write.trimffs 0x42000000 0x7800000 0x7e0000; then echo restored; elif nand write.trimffs 0x42000000 0x7800000 0x7c0000; then echo restored; elif nand write.trimffs 0x42000000 0x7800000 0x7a0000; then echo restored; elif nand write.trimffs 0x42000000 0x7800000 0x780000; then echo restored; fi; fi
+```
+
+- **Each line erases two pieces' worth**, its own range and the next one. A
+  piece that skipped bad blocks on the way out runs into the next range on the
+  way back, and that range has to be erased before the write. The next line
+  erases it again and writes the same data there.
+- **The first 1 MiB of piece 0 goes on with a plain `nand write`**, as an
+  install's bootloader step does. That MiB holds the bootloader and its
+  environment. The boot ROM does not accept a bootloader with unprogrammed
+  pages in it: written with `write.trimffs`, the camera never gets as far as
+  U-Boot.
+- **Everything after it uses `write.trimffs`**, the rest of piece 0
+  (`0x42100000` is 1 MiB into the loaded file) and every later piece, because
+  most of it is UBI (see [Installing](#installing)). It needs a bootloader that
+  has it, and the u-boot-xmedia one does.
+- **The split at 1 MiB assumes no bad block below `0x100000`.** `nand bad`
+  lists them. If one is there, the plain write runs past `0x100000`, so write
+  piece 0 with a plain `nand write 0x42000000 0x0 ${filesize}` instead.
+- **The last line** writes the longest piece that fits before the end of the
+  chip. A write that doesn't fit fails before it writes anything.
+
+This was checked end to end on a Hi3516EV300 with a 128 MiB SPI NAND that has five
+bad blocks:
+
+1. Back up the chip.
+2. Erase all of it with `nand erase.chip`.
+3. Restore it.
+4. Back it up again.
+
+All 16 pieces of the second backup were identical to the first.
+
 ### Installing
 
 From U-Boot, with a TFTP server holding the files: the bootloader first, then the
@@ -104,15 +188,18 @@ UBI image. openipc.org's installation page for each of these SoCs gives the same
 commands with your addresses filled in.
 
 ```
-mw.b ${baseaddr} 0xff 0xc0000
-tftpboot ${baseaddr} u-boot-<soc>-nand.bin && nand erase 0x0 0xc0000 && nand write ${baseaddr} 0x0 0xc0000
+mw.b 0x42000000 0xff 0xc0000
+tftpboot 0x42000000 u-boot-<soc>-nand.bin && nand erase 0x0 0xc0000 && nand write 0x42000000 0x0 0xc0000
 reset
 ```
 
 ```
-tftpboot ${baseaddr} rootfs.ubi.<board> && nand erase.part ubi && nand write.trimffs ${baseaddr} ubi ${filesize}
+tftpboot 0x42000000 rootfs.ubi.<board> && nand erase.part ubi && nand write.trimffs 0x42000000 ubi ${filesize}
 reset
 ```
+
+The address is written out rather than taken from `${baseaddr}`. The first step
+runs on the camera's stock bootloader, which usually has no such variable.
 
 `<board>` is the name in the package: `gk7205v500` for the whole GK7205V500
 family, otherwise the SoC itself.
@@ -133,8 +220,8 @@ The bootloader's own `run urnand` does the second step with `rootfs.ubi.${soc}`,
 so on a GK7205V510 or GK7205V530 it needs the file renamed to that SoC on the
 TFTP server.
 
-Rewriting the bootloader is the one step here that can leave the camera unable to
-start at all. Have a way back before you do it, such as a UART adapter and a tool
+Rewriting the bootloader, and restoring piece 0 of a backup, are the steps here
+that can leave the camera unable to start at all. Have a way back before you do it, such as a UART adapter and a tool
 that loads U-Boot over the SoC's boot ROM, like
 [defib](https://github.com/OpenIPC/defib).
 
