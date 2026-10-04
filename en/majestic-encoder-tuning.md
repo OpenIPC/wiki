@@ -135,6 +135,95 @@ at full rate.
 `svct` and `refEnhance` drive the same hardware registers on the same channel,
 so they are mutually exclusive. Setting both logs a warning and `svct` wins.
 
+### Rate-control defaults on the Hi3516EV200 family
+
+From builds dated 2026-10-05, on the Hi3516EV200, Hi3516EV300, Hi3518EV300
+and Hi3516DV200, the encoder spends the same bitrate noticeably better. The
+defaults behind that change in three places:
+
+| setting | default before | default now | effect |
+|---|---|---|---|
+| `video<N>.adaptiveQp` | on | **off** | one quantiser across the whole frame, not one that varies block by block with texture |
+| `video<N>.ipQpDelta` | 2 | **6** | the keyframe is coded 6 QP better than the P frames that follow it |
+| `video<N>.minQp` (VBR and AVBR) | 28 | **18** | lowest QP the rate controller may use |
+
+#### What it buys
+
+Measured on a Hi3516EV300 with an IMX335, using footage recorded from the
+camera's own sensor:
+- AVBR at a 1 s GOP; the night clips under slow shutter.
+- Each setting was encoded from that identical recorded footage, so no
+  difference comes from the scene changing between runs.
+- Compared by VMAF at equal quality.
+- Day and night 1080p used 6 clips each; day and night 5 MP used 3 clips each.
+
+Bitrate needed for the same picture quality, against the old defaults:
+
+| stream | day | night |
+|---|---|---|
+| 1080p H.265 | -12% to -15%\* | -3% to -7%\* |
+| 1080p H.264 | -15% | -7.5% |
+| 2592x1944 H.265 | -8% | -6% |
+
+\* 1080p H.265 was measured with keyframe offsets of 2 and 8 rather than 6.
+The range spans the two.
+
+The new defaults won on every clip measured, and the encoder's frame rate was
+unchanged.
+
+What each change contributes:
+- **`adaptiveQp: false`** gives the bulk of the daytime gain. The encoder's
+  texture-driven block adjustment costs more bits than it saves at equal VMAF.
+- **`ipQpDelta: 6`** helps most at night. In a mostly still scene every P frame
+  refers back to the keyframe, so a better keyframe carries through the whole
+  GOP. At 5 MP the best value differs: about 4 by day, 8 at night. 6 is never
+  far from either.
+- **The lower `minQp` floor** does not change efficiency. It changes what a
+  generous bitrate buys: with a floor of 28, AVBR given 4 Mbps at 1080p stopped
+  improving at about 2.3 Mbps. With 18 it uses more of what it is given.
+
+#### Other chips
+
+On every other HiSilicon and Goke part the defaults are unchanged: `adaptiveQp`
+on, `ipQpDelta` 2, `minQp` 28. The keys still work there, but switching
+adaptive QP off or raising the keyframe offset has only been measured on the
+chips above. Try it on your own footage, with the bitrate check below.
+
+#### Setting them
+
+```
+curl 'http://localhost/api/v1/set?video0.adaptiveQp=true'
+curl 'http://localhost/api/v1/set?video0.ipQpDelta=4'
+```
+
+Like the reference-structure keys, a change restarts that stream's encoder:
+viewers reconnect, but Majestic is not restarted, and the other stream is left
+alone. `ipQpDelta` accepts -10..30; a value outside that is refused with `400`.
+It applies to the normal GOP mode. The dual-P and smart-P GOP modes keep their
+own offsets.
+
+To check what the encoder is running with, read the driver's own status file
+on the camera:
+
+```
+cat /proc/umap/rc
+```
+
+It lists the QP window (`MinQp`, `MinIQp`) and `IpQpDelta` per channel. The
+per-block thresholds read all zero when `adaptiveQp` is off.
+
+#### What was measured and left alone
+
+- **A longer GOP** saves the most: 20% or more at `gopSize: 2` against 1 s,
+  and about 40% at 5 MP by day, where the keyframe is most of the bitrate. It also delays stream joins and recovery after loss,
+  so it stays your choice. See the reference-structure section above for when
+  a short GOP matters.
+- **The other rate-control modes** (CBR, VBR, QVBR, CVBR) all needed more
+  bitrate than AVBR for the same quality on this footage.
+- **A fixed QP** is about 8% (1080p) to 11% (5 MP) more efficient than AVBR
+  at night, even with the new defaults. It holds no bitrate target, though, so
+  it is not a default.
+
 ### The rest of the channel knobs
 
 | setting | type | effect |
@@ -177,6 +266,8 @@ in the config as a number the encoder was never going to use.
 |---|---|---|
 | `svct` | gen 2 and later, per channel | per channel |
 | `refEnhance`, `refPred` | gen 2 and later, **per channel** | `video0` only |
+| `adaptiveQp` | gen 4 (Hi3516CV500 and EV200 families, Goke GK7205V200 family), per channel | — |
+| `ipQpDelta` | gen 4 and later, per channel | — |
 | `noiseLevel`, `intraLine`, `intraQp`, `roiRect`, `roiQp`, `bypass` | — | `video0` only |
 
 On HiSilicon each encoder reads its own channel, so `video0` and `video1` can
