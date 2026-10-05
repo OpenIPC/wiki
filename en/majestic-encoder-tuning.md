@@ -239,31 +239,57 @@ per-block thresholds read all zero when `adaptiveQp` is off.
 
 For cameras whose recordings are kept for weeks, on an SD card or an NVR disk,
 where the disk costs more than the picture. It serves the same purpose as the
-"H.265+" or "H.265X" modes of other cameras. Off by default, set per stream,
-in builds from October 2026:
+"H.264+", "H.265+" or "H.265X" modes of other cameras, and works the same way
+whether the stream is H.264 or H.265. Off by default, set per stream, in
+builds from October 2026:
 
 ```yaml
 video0:
   storageSaver: off    # off | archive | strong | max
 ```
 
-| level | what changes | bitrate for the same picture | frame rate |
-|---|---|---|---|
-| `archive` | a keyframe every 10 s; QP floor of at least 24 | -26% | unchanged |
-| `strong` | `archive`, plus frames skipped while the stream runs above half of `bitrate`; `maxQp` 44 | -36% (-31% by PSNR) | about 17 of 25 fps on busy footage |
-| `max` | `strong`, plus the stream held to about a third of `bitrate`, QP 28-51, and still scenes allowed to go soft | -56% (-58% by PSNR) | 13-25 fps |
+| level | what changes | frame rate |
+|---|---|---|
+| `archive` | a keyframe every 10 s; QP floor of at least 24 | unchanged |
+| `strong` | `archive`, plus `maxQp` 44, and by day frames skipped while the stream runs above half of `bitrate` | about 17 of 25 fps on busy footage by day; unchanged at night |
+| `max` | `archive`, plus frames skipped at a low threshold day and night, the stream held to about a third of `bitrate`, QP 28-51, and still scenes allowed to go soft | 13-25 fps by day, about 6 of 11 at night |
 
-*Hi3516EV300 with an IMX335, 1080p H.265 by day, 4 clips recorded from the
-camera's own sensor and encoded identically for every level, each played
-three times over so a 10 s GOP cycles. Bitrate is compared at equal quality
-against the defaults above (1 s GOP), by VMAF. The levels that skip frames are
-also given by PSNR, because VMAF undercharges a repeated frame.*
+Bitrate needed for the same picture, against the defaults above (1 s GOP),
+by VMAF, with PSNR in brackets:
+
+| level | H.265 day | H.265 night | H.264 day | H.264 night |
+|---|---|---|---|---|
+| `archive` | -26% (-27%) | -21% (-25%) | -19% (-21%) | -27% (-28%) |
+| `strong` | -36% (-31%) | about as `archive`\* | -28% (-25%) | about as `archive`\* |
+| `max` | -56% (-58%) | -46% (-40%) | -53% (-53%)\*\* | -47% (-28%) |
+
+*Hi3516EV300 with an IMX335, 1080p. 4 day clips at 25 fps and 4 night clips
+at 11 fps under slow shutter, recorded from the camera's own sensor and
+encoded identically for every level, each played several times over so a
+10 s GOP cycles. The levels that skip frames are also given by PSNR, because
+VMAF undercharges a repeated frame. \* Not measured as such: at night
+`strong` runs as `archive` with a `maxQp` of 44 instead of 42. \*\* Two of
+the four clips.*
+
+`strong` stops skipping frames at night — while slow shutter holds the sensor
+below the stream's frame rate — and so saves what `archive` saves there. With
+the rate already reduced, skipping a third of what is left gave back nearly
+all of its gain. It resumes when the sensor returns to full rate.
 
 On a quiet scene the saving is larger. A 5 MP stream of a still room at
-`bitrate: 5102` delivered 1821 kbps with the saver off, 846 kbps with
-`archive`, and 261 kbps at 13 fps with `max`. A camera with the same chip and
-sensor, running its own vendor's H.265X mode on the same scene, delivered
-426 kbps at 8 fps.
+`bitrate: 5102`:
+
+| | H.265 | H.264 |
+|---|---|---|
+| saver off | 1821 kbps | 2114 kbps |
+| `archive` | 846 kbps | 443 kbps |
+| `max` | 261 kbps at 13 fps | 224 kbps at 15 fps |
+| another vendor's camera, same chip and sensor, same scene, in its H.265X / H.264+ mode | 426 kbps at 8 fps | 428 kbps at 10.5 fps |
+
+That vendor's H.264+ and H.265X turn out to be the same recipe on this chip,
+close to `max`. Its other H.264 option, a "smart" mode built on a 1 s
+keyframe interval with a 10 s background frame, delivered 654 kbps on that
+scene and saved the least on the bench of anything measured.
 
 **`archive` keeps the picture.** Everything it saves comes from the longer
 keyframe interval. `strong` and `max` sell picture and frame rate for more
