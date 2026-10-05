@@ -148,6 +148,18 @@ video0:
   bitrate: 0        # Automatic; any other number is used exactly as written
 ```
 
+To check whether a camera's build has it, look for the per-stream gauge that
+only those builds publish. It also shows the rate each stream is running at:
+
+```
+curl -s http://<camera>/metrics | grep bitrate_kbps
+venc0_bitrate_kbps 4288
+venc1_bitrate_kbps 512
+```
+
+No `venc0_bitrate_kbps` line means the build still uses the fixed 4096/1024
+default.
+
 | stream | old default | Automatic, kbit/s |
 |---|---|---|
 | 5 MP, 20 fps, H.265 | 4096 | 4992 |
@@ -170,7 +182,7 @@ kbit/s = 4096 × (pixels / 1920x1080)^k × (0.35 + 0.65 × fps / 30) × codec ×
 ```
 
 - **k** is 1.0 below 1080p and 0.75 above it.
-- **codec** is 1.0 for H.264, 0.8 for H.265 and 2.5 for MJPEG.
+- **codec** is 1.0 for H.264 and 0.8 for H.265.
 - **rc** is 0.6 for CBR and 1.0 otherwise.
 - The result is never below 128 kbit/s, and is rounded to 64.
 
