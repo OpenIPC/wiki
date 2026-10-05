@@ -239,36 +239,116 @@ per-block thresholds read all zero when `adaptiveQp` is off.
 
 For cameras whose recordings are kept for weeks, on an SD card or an NVR disk,
 where the disk costs more than the picture. It serves the same purpose as the
-"H.265+" or "H.265X" modes of other cameras. Off by default, set per stream,
-in builds from October 2026:
+"H.264+", "H.265+" or "H.265X" modes of other cameras, and works the same way
+whether the stream is H.264 or H.265. Off by default, set per stream, in
+builds from October 2026:
 
 ```yaml
 video0:
   storageSaver: off    # off | archive | strong | max
 ```
 
-| level | what changes | bitrate for the same picture | frame rate |
-|---|---|---|---|
-| `archive` | a keyframe every 10 s; QP floor of at least 24 | -26% | unchanged |
-| `strong` | `archive`, plus frames skipped while the stream runs above half of `bitrate`; `maxQp` 44 | -36% (-31% by PSNR) | about 17 of 25 fps on busy footage |
-| `max` | `strong`, plus the stream held to about a third of `bitrate`, QP 28-51, and still scenes allowed to go soft | -56% (-58% by PSNR) | 13-25 fps |
+| level | what changes | frame rate |
+|---|---|---|
+| `archive` | a keyframe every 10 s; QP floor of at least 24 | unchanged |
+| `strong` | `archive`, plus `maxQp` 44, and by day frames skipped while the stream runs above half of `bitrate` | about 17 of 25 fps on busy footage by day; unchanged at night |
+| `max` | `archive`, plus frames skipped at a low threshold day and night, the stream held to about a third of `bitrate`, QP 28-51, and still scenes allowed to go soft | 13-25 fps by day, about 6 of 11 at night |
 
-*Hi3516EV300 with an IMX335, 1080p H.265 by day, 4 clips recorded from the
-camera's own sensor and encoded identically for every level, each played
-three times over so a 10 s GOP cycles. Bitrate is compared at equal quality
-against the defaults above (1 s GOP), by VMAF. The levels that skip frames are
-also given by PSNR, because VMAF undercharges a repeated frame.*
+Bitrate needed for the same picture, against the defaults above (1 s GOP),
+as BD-BR by VMAF, with PSNR in brackets — see
+[Reading the numbers](#reading-the-numbers-rd-curves-and-bd-br) for what that
+means and how it was measured:
+
+| level | H.265 day | H.265 night | H.264 day | H.264 night |
+|---|---|---|---|---|
+| `archive` | -27% (-27%) | -21% (-25%) | -19% (-21%) | -27% (-28%) |
+| `strong` | -36% (-30%) | about as `archive`\* | -28% (-25%) | about as `archive`\* |
+| `max` | -53% (-51%†) | -46% (-40%†) | -53%† (-53%†) | -47% (-28%†) |
+| the vendor's H.265X / H.264+ | -13% (+2%) | -38% (-9%) | -6% (+5%†) | -32% (-1%†) |
+| the vendor's Smart H.264 | | | -2% (-9%) | -17% (-19%) |
+
+*Hi3516EV300 with an IMX335, 1080p. 4 day clips at 25 fps and 4 night clips
+at 11 fps under slow shutter, recorded from the camera's own sensor and
+encoded identically for every level, each played several times over so a
+10 s GOP cycles. The levels that skip frames are also given by PSNR, because
+VMAF undercharges a repeated frame. \* Not measured as such: at night
+`strong` runs as `archive` with a `maxQp` of 44 instead of 42. † From fewer
+than the four clips: on the others the two curves share no quality range.
+The vendor rows are its recipes, cloned on the same encoder — see
+[Against Xiongmai's modes](#against-xiongmais-h265x-h264-and-smart-h264).*
+
+![Rate-distortion curves of the storage saver levels against the defaults: H.265 and H.264, day and night](../images/majestic-saver-rd-all.webp)
+
+`strong` stops skipping frames at night — once slow shutter has lowered the
+stream's frame rate by 15% or more — and so saves what `archive` saves there. With
+the rate already reduced, skipping a third of what is left gave back nearly
+all of its gain. It resumes when the sensor returns to full rate.
 
 On a quiet scene the saving is larger. A 5 MP stream of a still room at
-`bitrate: 5102` delivered 1821 kbps with the saver off, 846 kbps with
-`archive`, and 261 kbps at 13 fps with `max`. A camera with the same chip and
-sensor, running its own vendor's H.265X mode on the same scene, delivered
-426 kbps at 8 fps.
+`bitrate: 5102`:
 
-**`archive` keeps the picture.** Everything it saves comes from the longer
-keyframe interval. `strong` and `max` sell picture and frame rate for more
-disk: `strong` shows motion at a lower frame rate, and `max` looks visibly
-softer. Choose `max` for footage you will only search, not watch.
+| | H.265 | H.264 |
+|---|---|---|
+| saver off | 1821 kbps | 2114 kbps |
+| `archive` | 846 kbps | 443 kbps |
+| `max` | 261 kbps at 13 fps | 224 kbps at 15 fps |
+| a Xiongmai camera, same chip and sensor, same scene, in its H.265X / H.264+ mode | 426 kbps at 8 fps | 428 kbps at 10.5 fps |
+
+Xiongmai's H.264+ and H.265X turn out to be the same recipe on this chip.
+Its other H.264 option, a "smart" mode built on a 1 s keyframe interval with a
+10 s background frame, delivered 654 kbps on that scene.
+
+#### Against Xiongmai's H.265X, H.264+ and Smart H.264
+
+A live capture shows bitrate, not picture quality, so Xiongmai's two recipes
+were cloned on the bench: the same encoder, the same clips, the same rate
+ladder, with every setting read off its encoder while it ran in each mode on
+its own firmware.
+- **H.265X / H.264+:**
+  - a keyframe every 10 s, held as a long-term reference that later frames
+    predict from;
+  - the bitrate cut to 31% of what is configured;
+  - QP 28-44, still-scene QP 33, motion sensitivity 30, keyframe offset 2;
+  - frames skipped above about 13.5% of the reduced rate.
+- **Smart H.264:** a keyframe every 1 s plus a background frame every 10 s,
+  QP 30-51, and no frame skipping.
+
+![RD curves by day: archive and max against the vendor's H.265X, H.264+ and Smart H.264, by VMAF and by PSNR](../images/majestic-saver-rd-vendor.webp)
+
+Bitrate the storage saver needs for the same picture as the vendor's H.265X
+(on H.265) or H.264+ (on H.264), VMAF with PSNR in brackets:
+
+| level | H.265 day | H.265 night | H.264 day | H.264 night |
+|---|---|---|---|---|
+| `archive` | -22% (-34%) | +16% (-22%†) | -25% (-35%) | -1% (-32%†) |
+| `max` | -33% (-35%) | -8% (-16%) | -28% (-30%) | -16% (-17%) |
+| frames kept: the vendor's mode | 50% | 51% | 53% | 54% |
+| frames kept: `max` | 59% | 57% | 56% | 56% |
+
+- **By day, both levels beat the vendor's mode on both metrics.** `archive`
+  keeps every frame and still needs a fifth to a third fewer bits.
+- **At night, VMAF and PSNR disagree about `archive`.** The vendor's mode
+  skips half the frames and VMAF hardly notices, so by VMAF `archive` needs
+  16% more bits than it on H.265. PSNR, which does count repeated frames, has
+  `archive` 22% cheaper. `archive` keeps every frame, so it is the choice
+  when motion at night matters.
+- **`max` beats the vendor's mode everywhere**, by both metrics, while keeping
+  more of the frames.
+- **The vendor's Smart H.264 saves the least** of anything measured: 2% by
+  day, 17% at night. Its 1 s keyframe interval keeps most of the cost the long
+  GOP removes.
+
+**`archive` keeps the picture at the quality an archive normally runs at.**
+Its saving comes from the longer keyframe interval, with one limit: its QP
+floor of 24 caps how good the picture can get. At ordinary archive bitrates
+that ceiling is out of reach. At high bitrates it binds: on H.264 at night
+`archive` tops out near VMAF 78, where the defaults go on to 86 at two and a
+half times the bitrate. For footage that must stay that sharp, set `minQp`
+lower yourself (your value wins) or leave the saver off.
+
+`strong` and `max` sell picture and frame rate for more disk: `strong` shows
+motion at a lower frame rate by day, and `max` looks visibly softer. Choose
+`max` for footage you will only search, not watch.
 
 What to expect with it on:
 - **Viewers still join quickly.** A new RTSP, WebRTC or web viewer gets a
@@ -318,6 +398,79 @@ dropping switched on, with its threshold in bits per second.
 Measured on the Hi3516EV300 only. It is available on the other chips listed
 under [Platform support](#platform-support), where the same numbers are
 expected but have not been measured.
+
+#### Reading the numbers: RD curves and BD-BR
+
+Every saving on this page that is given at equal quality is a
+**Bjøntegaard delta bitrate** (BD-BR): how much more or less bitrate a
+setting needs, on average, to deliver the *same* picture quality as the
+reference. The quiet-room table is different: it gives the bitrates actually
+delivered on one live scene, where quality was not measured. It is the standard way to compare encoders,
+and it answers the question a disk budget asks. For a longer introduction,
+see [What is BDBR?](https://www.vmetrix.tech/2026/01/26/what-is-bdbr/).
+
+**Rate-distortion curves.** Each level was encoded at four target bitrates
+(256, 512, 1024 and 2048 kbps), and every encode was scored against its
+source. Plotting delivered bitrate against quality gives one curve per level.
+A curve that sits higher, or further left, delivers more quality per bit.
+
+![Classic RD curves, H.265 by day: VMAF against delivered bitrate, with a line at VMAF 55](../images/majestic-saver-rd-classic.webp)
+
+The curves look close together, and that is misleading. Draw a horizontal
+line at a quality you care about — VMAF 55 here — and read the bitrate where
+each curve crosses it. The defaults need about 775 kbps for that picture;
+`archive` needs about 573 kbps, 26% less.
+
+**Quality-based curves.** One crossing is one point, and the gap changes along
+the curve. Swapping the axes makes the question explicit: for each quality, how
+many bits does each setting need? With bitrate on a log scale, a constant
+percentage saving is a constant vertical gap.
+
+![Quality-based RD curves: delivered bitrate (log) needed for each VMAF, the gap between the defaults and archive shaded](../images/majestic-saver-rd-quality.webp)
+
+**BD-BR** is the mean of that gap over the quality range both curves cover —
+the shaded area divided by its width, converted back from log-rate to a
+percentage. -26.8% means `archive` needs, on average, 26.8% fewer bits than
+the defaults for the same VMAF. A positive number would mean it needs more.
+
+How these particular numbers were produced:
+- **Identical input.** Clips were recorded from the camera's own sensor at
+  near-lossless quality, then fed back through the hardware encoder, one
+  configuration at a time. Every level sees byte-identical frames, so no
+  difference comes from the scene changing between runs. Clips are played
+  three or four times over so that a 10 s keyframe interval actually cycles.
+- **Metrics.** VMAF with its NEG model, which gives no credit for sharpening
+  and is the right one for comparing encoders; PSNR of the luma as a second
+  opinion. Every frame is scored, with no subsampling.
+- **Interpolation.** Log-bitrate is fitted as a function of quality with a
+  monotone piecewise-cubic (PCHIP) curve rather than Bjøntegaard's original
+  cubic polynomial. With four points a polynomial can overshoot between them,
+  and PCHIP cannot. The integral is taken only over the quality range both
+  curves cover.
+- **Averaging.** BD-BR is computed per clip and then averaged over the clips.
+  The curves in the figures are the means of the four clips' points, for
+  display. Where two curves share no quality range on a clip, there is nothing to
+  integrate and that clip is left out; those figures carry a † in the
+  tables.
+- **Frame skipping.** `strong` and `max` repeat frames under load. VMAF barely
+  penalises a repeated frame, so those levels are also judged by PSNR. Where
+  the two metrics disagree sharply, the PSNR figure is the warning that counts.
+  `strong` at night is the case in point: while it still skipped frames there,
+  it measured -29% by VMAF but only -1.4% by PSNR on H.265 (-34% and -13% on
+  H.264). That measurement is why it no longer skips frames at night, and why
+  the table gives it as about `archive` there.
+
+Two features of the curves matter in practice:
+- **The defaults cannot go lower.** Their two lowest points sit almost on top
+  of each other: asked for 256 kbps, they still deliver about 435. Rate control
+  is already at its QP ceiling of 42, and with a keyframe every second that is
+  as few bits as the picture can take. With a 10 s interval there is room to go
+  much lower.
+- **`archive` tops out on H.264 at night.** The quality floor of 24 caps how
+  good the picture can get, so the curve flattens near VMAF 78 while the
+  defaults go on to 86 at two and a half times the bitrate. Below that ceiling `archive`
+  saves 27%. Above it the saver is the wrong tool, but an archive stream rarely
+  runs there.
 
 ### The rest of the channel knobs
 
