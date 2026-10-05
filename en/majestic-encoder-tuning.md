@@ -255,7 +255,9 @@ video0:
 | `max` | `archive`, plus frames skipped at a low threshold day and night, the stream held to about a third of `bitrate`, QP 28-51, and still scenes allowed to go soft | 13-25 fps by day, about 6 of 11 at night |
 
 Bitrate needed for the same picture, against the defaults above (1 s GOP),
-by VMAF, with PSNR in brackets:
+as BD-BR by VMAF, with PSNR in brackets — see
+[Reading the numbers](#reading-the-numbers-rd-curves-and-bd-br) for what that
+means and how it was measured:
 
 | level | H.265 day | H.265 night | H.264 day | H.264 night |
 |---|---|---|---|---|
@@ -270,6 +272,8 @@ encoded identically for every level, each played several times over so a
 VMAF undercharges a repeated frame. \* Not measured as such: at night
 `strong` runs as `archive` with a `maxQp` of 44 instead of 42. \*\* Two of
 the four clips.*
+
+![Rate-distortion curves of the storage saver levels against the defaults: H.265 and H.264, day and night](../images/majestic-saver-rd-all.webp)
 
 `strong` stops skipping frames at night — once slow shutter has lowered the
 stream's frame rate by 15% or more — and so saves what `archive` saves there. With
@@ -344,6 +348,74 @@ dropping switched on, with its threshold in bits per second.
 Measured on the Hi3516EV300 only. It is available on the other chips listed
 under [Platform support](#platform-support), where the same numbers are
 expected but have not been measured.
+
+#### Reading the numbers: RD curves and BD-BR
+
+Every saving on this page is a **Bjøntegaard delta bitrate** (BD-BR): how much
+more or less bitrate a setting needs, on average, to deliver the *same*
+picture quality as the reference. It is the standard way to compare encoders,
+and it answers the question a disk budget asks. For a longer introduction,
+see [What is BDBR?](https://www.vmetrix.tech/2026/01/26/what-is-bdbr/).
+
+**Rate-distortion curves.** Each level was encoded at four target bitrates
+(256, 512, 1024 and 2048 kbps), and every encode was scored against its
+source. Plotting delivered bitrate against quality gives one curve per level.
+A curve that sits higher, or further left, delivers more quality per bit.
+
+![Classic RD curves, H.265 by day: VMAF against delivered bitrate, with a line at VMAF 55](../images/majestic-saver-rd-classic.webp)
+
+The curves look close together, and that is misleading. Draw a horizontal
+line at a quality you care about — VMAF 55 here — and read the bitrate where
+each curve crosses it. The defaults need about 775 kbps for that picture;
+`archive` needs about 573 kbps, 26% less.
+
+**Quality-based curves.** One crossing is one point, and the gap changes along
+the curve. Swapping the axes makes the question explicit: for each quality, how
+many bits does each setting need? With bitrate on a log scale, a constant
+percentage saving is a constant vertical gap.
+
+![Quality-based RD curves: delivered bitrate (log) needed for each VMAF, the gap between the defaults and archive shaded](../images/majestic-saver-rd-quality.webp)
+
+**BD-BR** is the mean of that gap over the quality range both curves cover —
+the shaded area divided by its width, converted back from log-rate to a
+percentage. -26.5% means `archive` needs, on average, 26.5% fewer bits than
+the defaults for the same VMAF. A positive number would mean it needs more.
+
+How these particular numbers were produced:
+- **Identical input.** Clips were recorded from the camera's own sensor at
+  near-lossless quality, then fed back through the hardware encoder, one
+  configuration at a time. Every level sees byte-identical frames, so no
+  difference comes from the scene changing between runs. Clips are played
+  three or four times over so that a 10 s keyframe interval actually cycles.
+- **Metrics.** VMAF with its NEG model, which gives no credit for sharpening
+  and is the right one for comparing encoders; PSNR of the luma as a second
+  opinion. Every frame is scored, with no subsampling.
+- **Interpolation.** Log-bitrate is fitted as a function of quality with a
+  monotone piecewise-cubic (PCHIP) curve rather than Bjøntegaard's original
+  cubic polynomial. With four points a polynomial can overshoot between them,
+  and PCHIP cannot. The integral is taken only over the quality range both
+  curves cover.
+- **Averaging.** BD-BR is computed per clip and then averaged over the clips.
+  The curves in the figures are the means of the four clips' points, for
+  display. Where two curves share no quality range on a clip, there is nothing to
+  integrate and that clip is left out; that is the "two of the four clips" in
+  the table.
+- **Frame skipping.** `strong` and `max` repeat frames under load. VMAF barely
+  penalises a repeated frame, so those levels are also judged by PSNR. Where
+  the two metrics disagree sharply, as for `strong` at night (-29% by VMAF,
+  -1.4% by PSNR on H.265), the PSNR figure is the warning that counts.
+
+Two features of the curves matter in practice:
+- **The defaults cannot go lower.** Their two lowest points sit almost on top
+  of each other: asked for 256 kbps, they still deliver about 435. Rate control
+  is already at its QP ceiling of 42, and with a keyframe every second that is
+  as few bits as the picture can take. With a 10 s interval there is room to go
+  much lower.
+- **`archive` tops out on H.264 at night.** The quality floor of 24 caps how
+  good the picture can get, so the curve flattens near VMAF 78 while the
+  defaults go on to 86 at two and a half times the bitrate. Below that ceiling `archive`
+  saves 27%. Above it the saver is the wrong tool, but an archive stream rarely
+  runs there.
 
 ### The rest of the channel knobs
 
