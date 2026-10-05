@@ -152,7 +152,7 @@ To check whether a camera's build has it, look for the per-stream gauge that
 only those builds publish. It also shows the rate each stream is running at:
 
 ```
-curl -s http://<camera>/metrics | grep bitrate_kbps
+curl -s -u root:<password> http://<camera>/metrics | grep bitrate_kbps
 venc0_bitrate_kbps 4288
 venc1_bitrate_kbps 512
 ```
