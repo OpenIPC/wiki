@@ -271,8 +271,8 @@ VMAF undercharges a repeated frame. \* Not measured as such: at night
 `strong` runs as `archive` with a `maxQp` of 44 instead of 42. \*\* Two of
 the four clips.*
 
-`strong` stops skipping frames at night — while slow shutter holds the sensor
-below the stream's frame rate — and so saves what `archive` saves there. With
+`strong` stops skipping frames at night — once slow shutter has lowered the
+stream's frame rate by 15% or more — and so saves what `archive` saves there. With
 the rate already reduced, skipping a third of what is left gave back nearly
 all of its gain. It resumes when the sensor returns to full rate.
 
