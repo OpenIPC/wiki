@@ -264,7 +264,8 @@ means and how it was measured:
 | `archive` | -27% (-27%) | -21% (-25%) | -19% (-21%) | -27% (-28%) |
 | `strong` | -36% (-30%) | about as `archive`\* | -28% (-25%) | about as `archive`\* |
 | `max` | -53% (-51%†) | -46% (-40%†) | -53%† (-53%†) | -47% (-28%†) |
-| the vendor's H.265X / H.264+ | -13% (+2%) | -38% (-9%) | -6% (+5%†) | -32% (-1%†) |
+| the vendor's H.265X / H.264+, still-scene state | -13% (+2%) | -38% (-9%) | -6% (+5%†) | -32% (-1%†) |
+| the vendor's H.265X / H.264+, busy-scene state | +22% (+18%) | -15% (-15%) | +32% (+28%) | -16% (-11%) |
 | the vendor's Smart H.264 | | | -2% (-9%) | -17% (-19%) |
 
 *Hi3516EV300 with an IMX335, 1080p. 4 day clips at 25 fps and 4 night clips
@@ -307,35 +308,56 @@ its own firmware.
 - **H.265X / H.264+:**
   - a keyframe every 10 s, held as a long-term reference that later frames
     predict from;
-  - the bitrate cut to 31% of what is configured;
-  - QP 28-44, still-scene QP 33, motion sensitivity 30, keyframe offset 2;
-  - frames skipped above about 13.5% of the reduced rate.
+  - the configured bitrate ignored: the firmware sets one from how much motion
+    it sees, the same at every resolution. For the main stream that is 1600
+    kbps for a still scene, then 2000, 2400, 3800 and 3200 as motion grows;
+  - in a still or nearly still scene, QP 28-44, still-scene QP 33, motion
+    sensitivity 30, keyframe offset 2, and frames skipped above 13.5% of the
+    rate;
+  - once the scene is busy, no frame skipping, and QP 28-51.
 - **Smart H.264:** a keyframe every 1 s plus a background frame every 10 s,
   QP 30-51, and no frame skipping.
 
-![RD curves by day: archive and max against the vendor's H.265X, H.264+ and Smart H.264, by VMAF and by PSNR](../images/majestic-saver-rd-vendor.webp)
+![RD curves by day: archive and max against the vendor's H.265X and H.264+ in their still-scene and busy-scene states, and Smart H.264, by VMAF and by PSNR](../images/majestic-saver-rd-vendor.webp)
 
-Bitrate the storage saver needs for the same picture as the vendor's H.265X
-(on H.265) or H.264+ (on H.264), VMAF with PSNR in brackets:
+Both states were cloned and swept over the same rate ladder, since which one
+the vendor's camera is in depends on the scene. Bitrate the storage saver
+needs for the same picture as the vendor's H.265X (on H.265) or H.264+ (on
+H.264), VMAF with PSNR in brackets:
 
-| level | H.265 day | H.265 night | H.264 day | H.264 night |
+| level | against | H.265 day | H.265 night | H.264 day | H.264 night |
+|---|---|---|---|---|---|
+| `archive` | still-scene recipe | -22% (-34%) | +16% (-22%†) | -25% (-35%) | -1% (-32%†) |
+| `archive` | busy-scene recipe | -39% (-36%) | -8% (-15%) | -40% (-39%) | -13% (-18%) |
+| `max` | still-scene recipe | -33% (-35%) | -8% (-16%) | -28% (-30%) | -16% (-17%) |
+| `max` | busy-scene recipe | -68% (-62%) | -31% | -74% (-65%) | -37% (-27%†) |
+
+| frames kept | H.265 day | H.265 night | H.264 day | H.264 night |
 |---|---|---|---|---|
-| `archive` | -22% (-34%) | +16% (-22%†) | -25% (-35%) | -1% (-32%†) |
-| `max` | -33% (-35%) | -8% (-16%) | -28% (-30%) | -16% (-17%) |
-| frames kept: the vendor's mode | 50% | 51% | 53% | 54% |
-| frames kept: `max` | 59% | 57% | 56% | 56% |
+| the vendor's still-scene recipe | 50% | 51% | 53% | 54% |
+| the vendor's busy-scene recipe | 100% | 100% | 100% | 100% |
+| `max` | 59% | 57% | 56% | 56% |
+| `archive` | 100% | 100% | 100% | 100% |
 
-- **By day, both levels beat the vendor's mode on both metrics.** `archive`
-  keeps every frame and still needs a fifth to a third fewer bits.
-- **At night, VMAF and PSNR disagree about `archive`.** The vendor's mode
-  skips half the frames and VMAF hardly notices, so by VMAF `archive` needs
-  16% more bits than it on H.265. PSNR, which does count repeated frames, has
-  `archive` 22% cheaper. `archive` keeps every frame, so it is the choice
-  when motion at night matters.
-- **`max` beats the vendor's mode everywhere**, by both metrics, while keeping
-  more of the frames.
-- **The vendor's Smart H.264 saves the least** of anything measured: 2% by
-  day, 17% at night. Its 1 s keyframe interval keeps most of the cost the long
+- **By day, both levels beat the vendor's mode in either state, on both
+  metrics.** Against the busy-scene recipe, where both keep every frame,
+  `archive` needs 36-40% fewer bits.
+- **At night, VMAF and PSNR disagree about `archive` against the still-scene
+  recipe.** That recipe skips half the frames and VMAF hardly notices, so by
+  VMAF `archive` needs 16% more bits than it on H.265. PSNR, which does count
+  repeated frames, has `archive` 22% cheaper. Against the busy-scene recipe,
+  which keeps every frame, `archive` wins on both metrics.
+- **`max` beats the vendor's mode in either state, by both metrics, with one
+  exception: H.265 at night against the busy state.** There only VMAF can be
+  compared, because the PSNR curves share no range. `max` also keeps fewer
+  frames there (57% against 100%), and VMAF barely notices a repeated frame,
+  so that -31% is VMAF's word alone.
+- **In its busy state the vendor's mode needs more bits than our plain
+  defaults by day** (18-32% more on H.265 and H.264), and saves 11-16% at
+  night: dropping frame skipping and raising the QP ceiling leaves little of
+  the long GOP's gain.
+- **The vendor's Smart H.264 saves little** against our defaults: 2% by day,
+  17% at night. Its 1 s keyframe interval keeps most of the cost the long
   GOP removes.
 
 **`archive` keeps the picture at the quality an archive normally runs at.**
