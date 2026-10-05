@@ -366,14 +366,43 @@ means and how it was measured:
 *Hi3516EV300 with an IMX335, 1080p. 4 day clips at 25 fps and 4 night clips
 at 11 fps under slow shutter, recorded from the camera's own sensor and
 encoded identically for every level, each played several times over so a
-10 s GOP cycles. The levels that skip frames are also given by PSNR, because
-VMAF undercharges a repeated frame. \* Not measured as such: at night
+10 s GOP cycles. VMAF and whole-picture PSNR both undercharge a skipped
+frame, so the levels that skip are judged again below on the part of the
+picture that moves. \* Not measured as such: at night
 `strong` runs as `archive` with a `maxQp` of 44 instead of 42. † From fewer
 than the four clips: on the others the two curves share no quality range.
 The vendor rows are its recipes, cloned on the same encoder — see
 [Against Xiongmai's modes](#against-xiongmais-h265x-h264-and-smart-h264).*
 
 ![Rate-distortion curves of the storage saver levels against the defaults: H.265 and H.264, day and night](../images/majestic-saver-rd-all.webp)
+
+**Judged on what moves.** A skipped frame repeats the previous picture. Where
+the scene stands still — most of a surveillance view — the repeat is nearly
+right, so whole-picture VMAF and PSNR barely charge for it, and a level that
+skips frames looks cheaper than it is. Scoring only the parts of the picture
+that move in the original footage removes that discount. In decibels of luma
+PSNR on the moving parts at equal bitrate, positive = better than the
+defaults:
+
+| level | H.265 day | H.265 night | H.264 day | H.264 night | frames kept |
+|---|---|---|---|---|---|
+| `archive` | +2.1 dB | +3.0 dB | +1.9 dB | +2.6 dB | all |
+| `strong` | -0.5 dB | -4.5 dB‡ | -0.3 dB | -2.6 dB‡ | 63-74% |
+| the vendor's H.265X / H.264+, still-scene state | -1.6 dB | -4.4 dB | -1.9 dB | -4.7 dB | 50-54% |
+
+*‡ Measured with frame skipping on at night. The released level stops skipping
+frames there and runs as `archive` with `maxQp` 44. `max` is not in the table
+because it never runs at the defaults' bitrates, so there is no equal rate to
+compare at.*
+
+- **`archive` is the level to choose.** It keeps every frame and, where the
+  scene moves, gives a better picture than the defaults for the same bitrate.
+- **`strong` saves its extra bits by showing motion less well.** By day the
+  moving parts come out about as the defaults would at the same bitrate; its
+  VMAF figure above overstates it.
+- **The vendor's still-scene mode does the same, more so.** VMAF credits it
+  with 6-38% saved, while the moving parts are 1.6-4.7 dB worse than the
+  defaults at equal bitrate.
 
 `strong` stops skipping frames at night — once slow shutter has lowered the
 stream's frame rate by 15% or more — and so saves what `archive` saves there. With
@@ -390,7 +419,8 @@ On a quiet scene the saving is larger. A 5 MP stream of a still room at
 | `max` | 261 kbps at 13 fps | 224 kbps at 15 fps |
 | a Xiongmai camera, same chip and sensor, same scene, in its H.265X / H.264+ mode | 426 kbps at 8 fps | 428 kbps at 10.5 fps |
 
-Xiongmai's H.264+ and H.265X turn out to be the same recipe on this chip.
+Xiongmai's H.264+ and H.265X turn out to be the same recipe on this chip,
+differing only in the codec.
 Its other H.264 option, a "smart" mode built on a 1 s keyframe interval with a
 10 s background frame, delivered 654 kbps on that scene.
 
@@ -399,7 +429,8 @@ Its other H.264 option, a "smart" mode built on a 1 s keyframe interval with a
 A live capture shows bitrate, not picture quality, so Xiongmai's two recipes
 were cloned on the bench: the same encoder, the same clips, the same rate
 ladder, with every setting read off its encoder while it ran in each mode on
-its own firmware.
+its own firmware — V5.00.R02, built 2021-03-03, on a Hi3516EV300 + IMX335
+camera, the same chip and sensor as the bench.
 - **H.265X / H.264+:**
   - a keyframe every 10 s, held as a long-term reference that later frames
     predict from;
@@ -412,6 +443,15 @@ its own firmware.
   - once the scene is busy, no frame skipping, and QP 28-51.
 - **Smart H.264:** a keyframe every 1 s plus a background frame every 10 s,
   QP 30-51, and no frame skipping.
+
+Users report that newer Xiongmai firmware also offers "H.265AI", which lowers
+the frame rate when nothing moves. The firmware measured here has no such
+mode, so it is not compared. The idea itself was tried on the storage saver's
+own encoder: on a still 5 MP scene with a keyframe every 10 s, running at 1
+fps instead of 15 cut `archive` by 46% on H.265 and 11% on H.264, and `max`
+not at all (-5% and +3%). With the frame rate low, the keyframes carry 70-93%
+of the bits, and fewer frames per second does not make them smaller. At full
+frame rate `max` already delivers what 1 fps would.
 
 ![RD curves by day: archive and max against the vendor's H.265X and H.264+ in their still-scene and busy-scene states, and Smart H.264, by VMAF and by PSNR](../images/majestic-saver-rd-vendor.webp)
 
@@ -439,14 +479,19 @@ H.264), VMAF with PSNR in brackets:
   `archive` needs 36-40% fewer bits.
 - **At night, VMAF and PSNR disagree about `archive` against the still-scene
   recipe.** That recipe skips half the frames and VMAF hardly notices, so by
-  VMAF `archive` needs 16% more bits than it on H.265. PSNR, which does count
-  repeated frames, has `archive` 22% cheaper. Against the busy-scene recipe,
-  which keeps every frame, `archive` wins on both metrics.
+  VMAF `archive` needs 16% more bits than it on H.265. PSNR has `archive` 22%
+  cheaper, and on the moving parts of the picture `archive` is 6 dB better at
+  equal bitrate on both codecs. Against the busy-scene recipe, which keeps
+  every frame, `archive` wins on both metrics.
 - **`max` beats the vendor's mode in either state, by both metrics, with one
   exception: H.265 at night against the busy state.** There only VMAF can be
   compared, because the PSNR curves share no range. `max` also keeps fewer
   frames there (57% against 100%), and VMAF barely notices a repeated frame,
-  so that -31% is VMAF's word alone.
+  so that -31% is VMAF's word alone. On the moving parts of the picture,
+  against the still-scene recipe, `max` is level with it at night (+0.0 to
+  +0.2 dB at equal bitrate) and slightly ahead by day (+0.3 to +0.4 dB): both
+  skip frames, and most of `max`'s lead by VMAF is in the parts that stand
+  still.
 - **In its busy state the vendor's mode needs more bits than our plain
   defaults by day** (18-32% more on H.265 and H.264), and saves 11-16% at
   night: dropping frame skipping and raising the QP ceiling leaves little of
@@ -569,9 +614,20 @@ How these particular numbers were produced:
   display. Where two curves share no quality range on a clip, there is nothing to
   integrate and that clip is left out; those figures carry a † in the
   tables.
-- **Frame skipping.** `strong` and `max` repeat frames under load. VMAF barely
-  penalises a repeated frame, so those levels are also judged by PSNR. Where
-  the two metrics disagree sharply, the PSNR figure is the warning that counts.
+- **Frame skipping.** `strong` and `max` repeat frames under load, and so does
+  the vendor's still-scene recipe. VMAF barely penalises a repeated frame, and
+  whole-picture PSNR only partly, since most of a surveillance view stands
+  still. Those levels are therefore also judged on the moving parts alone. The
+  original footage is cut into 16x16-pixel blocks, and for each frame a
+  block's change is the mean absolute difference of its luma from the same
+  block in the previous frame. A block counts as moving when that change is
+  more than three times the median change of all blocks over the clip, and at
+  least 2 levels, so sensor noise does not count as motion. Moving-parts PSNR
+  is then the luma PSNR over the moving blocks only, with the squared error
+  summed over all of them across the clip. That curve hardly rises with
+  bitrate for a level that skips frames, so it is compared as quality at equal
+  bitrate (BD-PSNR) rather than as bitrate at equal quality. Where the metrics
+  disagree sharply, the moving-parts figure is the warning that counts.
   `strong` at night is the case in point: while it still skipped frames there,
   it measured -29% by VMAF but only -1.4% by PSNR on H.265 (-34% and -13% on
   H.264). That measurement is why it no longer skips frames at night, and why
