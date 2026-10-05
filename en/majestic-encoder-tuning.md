@@ -388,7 +388,7 @@ defaults:
 |---|---|---|---|---|---|
 | `archive` | +2.1 dB | +3.0 dB | +1.9 dB | +2.6 dB | all |
 | `strong` | -0.5 dB | -4.5 dB‡ | -0.3 dB | -2.6 dB‡ | 63-74% |
-| the vendor's H.265X / H.264+, still-scene state | -1.6 dB | -4.4 dB | -1.9 dB | -4.7 dB | 50-53% |
+| the vendor's H.265X / H.264+, still-scene state | -1.6 dB | -4.4 dB | -1.9 dB | -4.7 dB | 50-54% |
 
 *‡ Measured with frame skipping on at night. The released level stops skipping
 frames there and runs as `archive` with `maxQp` 44. `max` is not in the table
@@ -617,13 +617,17 @@ How these particular numbers were produced:
 - **Frame skipping.** `strong` and `max` repeat frames under load, and so does
   the vendor's still-scene recipe. VMAF barely penalises a repeated frame, and
   whole-picture PSNR only partly, since most of a surveillance view stands
-  still. Those levels are therefore also judged on the moving parts alone:
-  luma PSNR over the 16x16 blocks whose content changes from the previous
-  frame of the original footage by more than three times the clip's typical
-  change, so sensor noise does not count as motion. That curve hardly rises
-  with bitrate for a level that skips frames, so it is compared as quality at
-  equal bitrate (BD-PSNR) rather than as bitrate at equal quality. Where the
-  metrics disagree sharply, the moving-parts figure is the warning that counts.
+  still. Those levels are therefore also judged on the moving parts alone. The
+  original footage is cut into 16x16-pixel blocks, and for each frame a
+  block's change is the mean absolute difference of its luma from the same
+  block in the previous frame. A block counts as moving when that change is
+  more than three times the median change of all blocks over the clip, and at
+  least 2 levels, so sensor noise does not count as motion. Moving-parts PSNR
+  is then the luma PSNR over the moving blocks only, with the squared error
+  summed over all of them across the clip. That curve hardly rises with
+  bitrate for a level that skips frames, so it is compared as quality at equal
+  bitrate (BD-PSNR) rather than as bitrate at equal quality. Where the metrics
+  disagree sharply, the moving-parts figure is the warning that counts.
   `strong` at night is the case in point: while it still skipped frames there,
   it measured -29% by VMAF but only -1.4% by PSNR on H.265 (-34% and -13% on
   H.264). That measurement is why it no longer skips frames at night, and why
