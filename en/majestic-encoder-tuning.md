@@ -264,7 +264,8 @@ means and how it was measured:
 | `archive` | -27% (-27%) | -21% (-25%) | -19% (-21%) | -27% (-28%) |
 | `strong` | -36% (-30%) | about as `archive`\* | -28% (-25%) | about as `archive`\* |
 | `max` | -53% (-51%†) | -46% (-40%†) | -53%† (-53%†) | -47% (-28%†) |
-| the vendor's H.265X / H.264+ | -13% (+2%) | -38% (-9%) | -6% (+5%†) | -32% (-1%†) |
+| the vendor's H.265X / H.264+, still-scene state | -13% (+2%) | -38% (-9%) | -6% (+5%†) | -32% (-1%†) |
+| the vendor's H.265X / H.264+, busy-scene state | +22% (+18%) | -15% (-15%) | +32% (+28%) | -16% (-11%) |
 | the vendor's Smart H.264 | | | -2% (-9%) | -17% (-19%) |
 
 *Hi3516EV300 with an IMX335, 1080p. 4 day clips at 25 fps and 4 night clips
@@ -346,8 +347,11 @@ H.264), VMAF with PSNR in brackets:
   VMAF `archive` needs 16% more bits than it on H.265. PSNR, which does count
   repeated frames, has `archive` 22% cheaper. Against the busy-scene recipe,
   which keeps every frame, `archive` wins on both metrics.
-- **`max` beats the vendor's mode everywhere**, in either state and by both
-  metrics.
+- **`max` beats the vendor's mode in either state, by both metrics, with one
+  exception: H.265 at night against the busy state.** There only VMAF can be
+  compared, because the PSNR curves share no range. `max` also keeps fewer
+  frames there (57% against 100%), and VMAF barely notices a repeated frame,
+  so that -31% is VMAF's word alone.
 - **In its busy state the vendor's mode needs more bits than our plain
   defaults by day** (18-32% more on H.265 and H.264), and saves 11-16% at
   night: dropping frame skipping and raising the QP ceiling leaves little of
