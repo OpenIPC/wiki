@@ -218,7 +218,9 @@ video0:
   codec: h264                   # h264 | h265
   #size: 1920x1080
   fps: 20
-  bitrate: 4096
+  #bitrate: 0                   # kbit/s; 0 = Automatic, picked from the size,
+                                # fps, codec and rcMode. A number fixes it.
+                                # See "Majestic encoder tuning"
   rcMode: vbr                   # cbr | vbr | avbr — cbr holds `bitrate` as a
                                 # target, vbr treats it as a ceiling, avbr as a
                                 # ceiling it may drift around

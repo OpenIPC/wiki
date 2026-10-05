@@ -134,6 +134,101 @@ at full rate.
 `svct` and `refEnhance` configure the same part of the encoder on the same
 channel, so they are mutually exclusive. Setting both logs a warning and `svct` wins.
 
+### Automatic bitrate — `video<N>.bitrate: 0`
+
+Every stream used to get the same default rate: 4096 kbit/s for the main
+stream and 1024 for the substream, whatever the stream was. That starves a
+5 MP H.264 stream at 25 fps, and gives a 704x576 substream about twice what
+it needs. In builds from October 2026 the default is **0, "Automatic"**. The
+camera picks the rate from what the stream actually is: its size and frame
+rate as the sensor settled them, its codec and its rate control.
+
+```yaml
+video0:
+  bitrate: 0        # Automatic; any other number is used exactly as written
+```
+
+To check whether a camera's build has it, look for the per-stream gauge that
+only those builds publish. It also shows the rate each stream is running at:
+
+```
+curl -s -u root:<password> http://<camera>/metrics | grep bitrate_kbps
+venc0_bitrate_kbps 4288
+venc1_bitrate_kbps 512
+```
+
+No `venc0_bitrate_kbps` line means the build still uses the fixed 4096/1024
+default.
+
+| stream | old default | Automatic, kbit/s |
+|---|---|---|
+| 5 MP, 20 fps, H.265 | 4096 | 4992 |
+| 5 MP, 25 fps, H.264 | 4096 | 7104 |
+| 1080p, 25 fps, H.264 / H.265 | 4096 | 3648 / 2944 |
+| 720p, 25 fps, H.264 | 4096 | 1600 |
+| 704x576, 15 fps, H.264 (substream) | 1024 | 512 |
+| 640x360, 15 fps, H.264 / H.265 (substream) | 1024 | 320 / 256 |
+
+The table is for `rcMode: vbr` and `avbr`. With `cbr` the figure is 0.6 of
+these: CBR spends its whole rate, while VBR and AVBR treat the number as a
+ceiling and stay well under it on most scenes.
+
+![Automatic bitrate against picture size at 25 and 10 fps, with the vendor sample formula, the old fixed defaults and the rates measured to hold the same quality](../images/majestic-auto-bitrate.webp)
+
+#### How the rate is chosen
+
+```
+kbit/s = 4096 × (pixels / 1920x1080)^k × (0.35 + 0.65 × fps / 30) × codec × rc
+```
+
+- **k** is 1.0 below 1080p and 0.75 above it.
+- **codec** is 1.0 for H.264 and 0.8 for H.265.
+- **rc** is 0.6 for CBR and 1.0 otherwise.
+- The result is never below 128 kbit/s, and is rounded to 64.
+
+The anchor, 4096 kbit/s for H.264 at 1080p and 30 fps, is the figure both
+HiSilicon's sample encoder and Xiongmai's firmware recommend. The shape is
+measured. The same day footage was encoded at 1080p, 720p and 640x360, at 25,
+12 and 5 fps, and 5 MP footage at 2592x1944 down to 640x480. Each was encoded
+at four configured rates and scored (see
+[Reading the numbers](#reading-the-numbers-rd-curves-and-bd-br)), and the
+question was what configured rate each needs for the same VMAF and PSNR:
+- **Resolution.** The rate grows with the pixel count below 1080p, and with
+  its 0.75 power above. Both vendors scale by the square root throughout. On
+  this footage the square root missed by a factor of 2.3 on average, giving a
+  substream three to four times the bits its size needs. This law missed by
+  1.2.
+- **Frame rate.** About a third of the rate does not depend on the frame
+  rate: keyframes and the detail in them are paid for per second, not per
+  frame. HiSilicon's sample uses half; Xiongmai scales linearly.
+- **Codec.** H.265 needed 0.72-0.78 of H.264's rate at 720p and 1080p, and
+  nearer 0.9 at 5 MP, so it gets 0.8.
+- **Rate control.** The same picture needed 0.6 of the AVBR figure under CBR,
+  because AVBR used only 50-84% of its ceiling.
+
+#### What to expect
+
+- **A number you write is never replaced.** 4096 included: it is used as
+  written whatever the stream becomes.
+- **An existing configuration keeps its number.** A `majestic.yaml` that
+  already names `bitrate: 4096` keeps it after the update. Remove the line, or
+  set 0, to take Automatic.
+- **Changing the size, frame rate, codec or rate control moves the rate with
+  it.** Switching to 0 takes effect without restarting the stream.
+- **What the camera reports is the rate in force.** ONVIF's `BitrateLimit`,
+  HLS and recording all use the rate the encoder actually runs at. So does the
+  `/metrics` gauge `venc0_bitrate_kbps` (and `venc1_bitrate_kbps`), the one
+  place that shows what Automatic came to, since the configuration still says 0.
+  An NVR that writes the reported value back does not fix it: Automatic stays
+  Automatic unless a different number is sent.
+- **The [storage saver](#storage-saver--videonstoragesaver) works on top.**
+  `max` holds the stream to about a third of whatever the rate is, Automatic or
+  not.
+- **All platforms** pick the rate the same way, for the size and frame rate
+  their encoder actually runs. A platform whose encoder is VBR whatever
+  `rcMode` says gets the VBR figure. The measurements were taken on a
+  Hi3516EV300 with an IMX335.
+
 ### Rate-control defaults on the Hi3516EV200 family
 
 From builds dated 2026-10-05, on the Hi3516EV200, Hi3516EV300, Hi3518EV300
