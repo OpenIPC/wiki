@@ -338,10 +338,17 @@ Bitrate the storage saver needs for the same picture as the vendor's H.265X
   day, 17% at night. Its 1 s keyframe interval keeps most of the cost the long
   GOP removes.
 
-**`archive` keeps the picture.** Everything it saves comes from the longer
-keyframe interval. `strong` and `max` sell picture and frame rate for more
-disk: `strong` shows motion at a lower frame rate, and `max` looks visibly
-softer. Choose `max` for footage you will only search, not watch.
+**`archive` keeps the picture at the quality an archive normally runs at.**
+Its saving comes from the longer keyframe interval, with one limit: its QP
+floor of 24 caps how good the picture can get. At ordinary archive bitrates
+that ceiling is out of reach. At high bitrates it binds: on H.264 at night
+`archive` tops out near VMAF 78, where the defaults go on to 86 at two and a
+half times the bitrate. For footage that must stay that sharp, set `minQp`
+lower yourself (your value wins) or leave the saver off.
+
+`strong` and `max` sell picture and frame rate for more disk: `strong` shows
+motion at a lower frame rate by day, and `max` looks visibly softer. Choose
+`max` for footage you will only search, not watch.
 
 What to expect with it on:
 - **Viewers still join quickly.** A new RTSP, WebRTC or web viewer gets a
@@ -394,9 +401,11 @@ expected but have not been measured.
 
 #### Reading the numbers: RD curves and BD-BR
 
-Every saving on this page is a **Bjøntegaard delta bitrate** (BD-BR): how much
-more or less bitrate a setting needs, on average, to deliver the *same*
-picture quality as the reference. It is the standard way to compare encoders,
+Every saving on this page that is given at equal quality is a
+**Bjøntegaard delta bitrate** (BD-BR): how much more or less bitrate a
+setting needs, on average, to deliver the *same* picture quality as the
+reference. The quiet-room table is different: it gives the bitrates actually
+delivered on one live scene, where quality was not measured. It is the standard way to compare encoders,
 and it answers the question a disk budget asks. For a longer introduction,
 see [What is BDBR?](https://www.vmetrix.tech/2026/01/26/what-is-bdbr/).
 
@@ -445,8 +454,11 @@ How these particular numbers were produced:
   tables.
 - **Frame skipping.** `strong` and `max` repeat frames under load. VMAF barely
   penalises a repeated frame, so those levels are also judged by PSNR. Where
-  the two metrics disagree sharply, as for `strong` at night (-29% by VMAF,
-  -1.4% by PSNR on H.265), the PSNR figure is the warning that counts.
+  the two metrics disagree sharply, the PSNR figure is the warning that counts.
+  `strong` at night is the case in point: while it still skipped frames there,
+  it measured -29% by VMAF but only -1.4% by PSNR on H.265 (-34% and -13% on
+  H.264). That measurement is why it no longer skips frames at night, and why
+  the table gives it as about `archive` there.
 
 Two features of the curves matter in practice:
 - **The defaults cannot go lower.** Their two lowest points sit almost on top
