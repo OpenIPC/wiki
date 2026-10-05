@@ -261,17 +261,21 @@ means and how it was measured:
 
 | level | H.265 day | H.265 night | H.264 day | H.264 night |
 |---|---|---|---|---|
-| `archive` | -26% (-27%) | -21% (-25%) | -19% (-21%) | -27% (-28%) |
-| `strong` | -36% (-31%) | about as `archive`\* | -28% (-25%) | about as `archive`\* |
-| `max` | -56% (-58%) | -46% (-40%) | -53% (-53%)\*\* | -47% (-28%) |
+| `archive` | -27% (-27%) | -21% (-25%) | -19% (-21%) | -27% (-28%) |
+| `strong` | -36% (-30%) | about as `archive`\* | -28% (-25%) | about as `archive`\* |
+| `max` | -53% (-51%†) | -46% (-40%†) | -53%† (-53%†) | -47% (-28%†) |
+| the vendor's H.265X / H.264+ | -13% (+2%) | -38% (-9%) | -6% (+5%†) | -32% (-1%†) |
+| the vendor's Smart H.264 | | | -2% (-9%) | -17% (-19%) |
 
 *Hi3516EV300 with an IMX335, 1080p. 4 day clips at 25 fps and 4 night clips
 at 11 fps under slow shutter, recorded from the camera's own sensor and
 encoded identically for every level, each played several times over so a
 10 s GOP cycles. The levels that skip frames are also given by PSNR, because
 VMAF undercharges a repeated frame. \* Not measured as such: at night
-`strong` runs as `archive` with a `maxQp` of 44 instead of 42. \*\* Two of
-the four clips.*
+`strong` runs as `archive` with a `maxQp` of 44 instead of 42. † From fewer
+than the four clips: on the others the two curves share no quality range.
+The vendor rows are its recipes, cloned on the same encoder — see
+[Against Xiongmai's modes](#against-xiongmais-h265x-h264-and-smart-h264).*
 
 ![Rate-distortion curves of the storage saver levels against the defaults: H.265 and H.264, day and night](../images/majestic-saver-rd-all.webp)
 
@@ -288,12 +292,51 @@ On a quiet scene the saving is larger. A 5 MP stream of a still room at
 | saver off | 1821 kbps | 2114 kbps |
 | `archive` | 846 kbps | 443 kbps |
 | `max` | 261 kbps at 13 fps | 224 kbps at 15 fps |
-| another vendor's camera, same chip and sensor, same scene, in its H.265X / H.264+ mode | 426 kbps at 8 fps | 428 kbps at 10.5 fps |
+| a Xiongmai camera, same chip and sensor, same scene, in its H.265X / H.264+ mode | 426 kbps at 8 fps | 428 kbps at 10.5 fps |
 
-That vendor's H.264+ and H.265X turn out to be the same recipe on this chip,
-close to `max`. Its other H.264 option, a "smart" mode built on a 1 s
-keyframe interval with a 10 s background frame, delivered 654 kbps on that
-scene and saved the least on the bench of anything measured.
+Xiongmai's H.264+ and H.265X turn out to be the same recipe on this chip.
+Its other H.264 option, a "smart" mode built on a 1 s keyframe interval with a
+10 s background frame, delivered 654 kbps on that scene.
+
+#### Against Xiongmai's H.265X, H.264+ and Smart H.264
+
+A live capture shows bitrate, not picture quality, so Xiongmai's two recipes
+were cloned on the bench: the same encoder, the same clips, the same rate
+ladder, with every setting read off its encoder while it ran in each mode on
+its own firmware.
+- **H.265X / H.264+:**
+  - a keyframe every 10 s, held as a long-term reference that later frames
+    predict from;
+  - the bitrate cut to 31% of what is configured;
+  - QP 28-44, still-scene QP 33, motion sensitivity 30, keyframe offset 2;
+  - frames skipped above about 13.5% of the reduced rate.
+- **Smart H.264:** a keyframe every 1 s plus a background frame every 10 s,
+  QP 30-51, and no frame skipping.
+
+![RD curves by day: archive and max against the vendor's H.265X, H.264+ and Smart H.264, by VMAF and by PSNR](../images/majestic-saver-rd-vendor.webp)
+
+Bitrate the storage saver needs for the same picture as the vendor's H.265X
+(on H.265) or H.264+ (on H.264), VMAF with PSNR in brackets:
+
+| level | H.265 day | H.265 night | H.264 day | H.264 night |
+|---|---|---|---|---|
+| `archive` | -22% (-34%) | +16% (-22%†) | -25% (-35%) | -1% (-32%†) |
+| `max` | -33% (-35%) | -8% (-16%) | -28% (-30%) | -16% (-17%) |
+| frames kept: the vendor's mode | 50% | 51% | 53% | 54% |
+| frames kept: `max` | 59% | 57% | 56% | 56% |
+
+- **By day, both levels beat the vendor's mode on both metrics.** `archive`
+  keeps every frame and still needs a fifth to a third fewer bits.
+- **At night, VMAF and PSNR disagree about `archive`.** The vendor's mode
+  skips half the frames and VMAF hardly notices, so by VMAF `archive` needs
+  16% more bits than it on H.265. PSNR, which does count repeated frames, has
+  `archive` 22% cheaper. `archive` keeps every frame, so it is the choice
+  when motion at night matters.
+- **`max` beats the vendor's mode everywhere**, by both metrics, while keeping
+  more of the frames.
+- **The vendor's Smart H.264 saves the least** of anything measured: 2% by
+  day, 17% at night. Its 1 s keyframe interval keeps most of the cost the long
+  GOP removes.
 
 **`archive` keeps the picture.** Everything it saves comes from the longer
 keyframe interval. `strong` and `max` sell picture and frame rate for more
@@ -378,7 +421,7 @@ percentage saving is a constant vertical gap.
 
 **BD-BR** is the mean of that gap over the quality range both curves cover —
 the shaded area divided by its width, converted back from log-rate to a
-percentage. -26.5% means `archive` needs, on average, 26.5% fewer bits than
+percentage. -26.8% means `archive` needs, on average, 26.8% fewer bits than
 the defaults for the same VMAF. A positive number would mean it needs more.
 
 How these particular numbers were produced:
@@ -398,8 +441,8 @@ How these particular numbers were produced:
 - **Averaging.** BD-BR is computed per clip and then averaged over the clips.
   The curves in the figures are the means of the four clips' points, for
   display. Where two curves share no quality range on a clip, there is nothing to
-  integrate and that clip is left out; that is the "two of the four clips" in
-  the table.
+  integrate and that clip is left out; those figures carry a † in the
+  tables.
 - **Frame skipping.** `strong` and `max` repeat frames under load. VMAF barely
   penalises a repeated frame, so those levels are also judged by PSNR. Where
   the two metrics disagree sharply, as for `strong` at night (-29% by VMAF,
