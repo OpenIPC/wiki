@@ -428,10 +428,11 @@ rtsp:
   #audioCodec: ""               # override audio.codec for RTSP only
   #naluSize: 1200               # RTP packet size, for RTSP clients and for the
                                 # udp:// destinations that do not set their own
-  #keyframeOnSkip: false        # a viewer that falls behind (a slow link, a
-                                # busy camera) is skipped to the next keyframe,
-                                # which can be a whole GOP away; true asks the
-                                # encoder for one as soon as it has caught up
+  #keyframeOnSkip: false        # an RTSP-over-TCP viewer that falls behind (a
+                                # slow link, a busy camera) is skipped to the
+                                # next keyframe, which can be a whole GOP away;
+                                # true asks the encoder for one as soon as it
+                                # has caught up. UDP viewers are not affected
 
 nightMode:                      # see en/ircut-filter.md for how the filter is
                                 # actually driven, and what the metrics mean
@@ -645,9 +646,11 @@ hls:
 mdns:
   enabled: true                 # answers for openipc.local and <hostname>.local
 
-# A pan/tilt head's moving picture. Needs a head whose motor driver reports
-# when it starts and stops (the gpiostep heads do), and an up-to-date focus
-# plugin; otherwise the keys are inert. Both apply from the next move.
+# A pan/tilt head's moving picture: works for heads the camera moves itself
+# (the Live page's PTZ pad, ONVIF), with firmware from October 2026 onwards;
+# where the section is missing, the build does not have it. Both keys apply
+# from the next move. To check it works: isp_exptime on /metrics drops to
+# exposureCapMs or below while the head moves, and comes back once it stops.
 #ptz:
 #  motionAware: false           # while the head moves, hold exposure short so
                                 # the picture smears less; when it stops, start
