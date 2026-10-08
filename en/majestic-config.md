@@ -428,6 +428,10 @@ rtsp:
   #audioCodec: ""               # override audio.codec for RTSP only
   #naluSize: 1200               # RTP packet size, for RTSP clients and for the
                                 # udp:// destinations that do not set their own
+  #keyframeOnSkip: false        # a viewer that falls behind (a slow link, a
+                                # busy camera) is skipped to the next keyframe,
+                                # which can be a whole GOP away; true asks the
+                                # encoder for one as soon as it has caught up
 
 nightMode:                      # see en/ircut-filter.md for how the filter is
                                 # actually driven, and what the metrics mean
@@ -640,6 +644,20 @@ hls:
 
 mdns:
   enabled: true                 # answers for openipc.local and <hostname>.local
+
+# A pan/tilt head's moving picture. Needs a head whose motor driver reports
+# when it starts and stops (the gpiostep heads do), and an up-to-date focus
+# plugin; otherwise the keys are inert. Both apply from the next move.
+#ptz:
+#  motionAware: false           # while the head moves, hold exposure short so
+                                # the picture smears less; when it stops, start
+                                # the new view on a keyframe if the GOP is
+                                # longer than 2 s (e.g. under storageSaver)
+#  exposureCapMs: 4             # the longest exposure while moving, 0-1000;
+                                # shorter is sharper but darker until auto-
+                                # exposure raises the gain. 0 leaves it alone
+                                # (HiSilicon/Goke; elsewhere only the keyframe
+                                # applies)
 
 onvif:
   enabled: true
