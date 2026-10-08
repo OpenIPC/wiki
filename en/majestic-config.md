@@ -647,10 +647,11 @@ mdns:
   enabled: true                 # answers for openipc.local and <hostname>.local
 
 # A pan/tilt head's moving picture: works for heads the camera moves itself
-# (the Live page's PTZ pad, ONVIF), with firmware from October 2026 onwards;
-# where the section is missing, the build does not have it. Both keys apply
-# from the next move. To check it works: isp_exptime on /metrics drops to
-# exposureCapMs or below while the head moves, and comes back once it stops.
+# (the Live page's PTZ pad, ONVIF), with a Majestic build from October 2026
+# onwards; where the keys are missing, the build does not have them. Both
+# apply from the next move. To check it works: isp_exptime on /metrics (in
+# microseconds) drops to exposureCapMs x 1000 or below while the head moves,
+# and comes back once it stops.
 #ptz:
 #  motionAware: false           # while the head moves, hold exposure short so
                                 # the picture smears less; when it stops, start
