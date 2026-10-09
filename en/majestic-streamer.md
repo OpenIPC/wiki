@@ -534,16 +534,44 @@ shutter to a whole number of half-periods:
 Set it to the frequency of the mains your **lights** run on, which is your
 region's grid frequency — not the camera's frame rate.
 
-The constraint only applies while auto-exposure wants a shutter *longer* than
-one half-period (10 ms at 50 Hz, 8.3 ms at 60 Hz). When a scene is bright enough
-that auto-exposure wants a shorter shutter, anti-flicker leaves it alone and the
-camera exposes freely — so enabling it does **not** blow out a daylit scene the
-way an unconditional shutter floor would. The trade is that a short,
-unconstrained shutter no longer suppresses banding: a bright mains-lit scene can
-still show it, and correct exposure is chosen over flicker suppression there,
-because the two cannot both be had once gain is already at its floor. If your
-bright scene is lit by mains-powered lamps, check the picture under those lamps
-rather than assuming the banding is gone.
+On HiSilicon and Goke cameras the shutter is held to whole half-periods for as
+long as anti-flicker is on, bright scene or not, so a brightly lit room under
+mains lamps is free of banding too. That has a cost in a scene brighter than
+any lamp makes: daylight that wants a shutter of a few milliseconds cannot have
+one shorter than 10 ms (8.3 ms at 60 Hz), gain is already at its minimum, and
+the picture would come out overexposed. Daylight does not flicker, so in that
+case the camera finds out instead of guessing:
+
+- When the picture stays well over its target brightness at the shortest
+  whole-period shutter, the camera tries a shorter shutter for a moment and
+  looks for the lamp's bands in what it sees. The picture dims once, for under
+  half a second.
+- **Bands found** — the light is mains lighting. Anti-flicker stays on. The
+  camera does not check that scene again for an hour, or until it is clearly
+  brighter than when the lamp was found.
+- **No bands** — the light is steady. Anti-flicker steps aside and the scene
+  exposes freely, without the overexposure. It comes back on by itself once the
+  scene darkens enough to need a shutter of about a period again.
+
+Both changes are written to the camera's log. The check runs on hi3516ev200,
+hi3516ev300, hi3518ev300, hi3516dv200, hi3516cv500, hi3516av300, hi3516dv300
+and the Goke gk7205v200/v300/v500 families. Older HiSilicon parts and
+hi3516cv6xx cannot run it; there anti-flicker steps aside only when the picture
+is about three times brighter than its target, a level no lamp-lit room has
+reached in testing.
+
+This is how builds from 2026-10-10 behave. A build dated 2026-10-09 already
+holds the shutter but has no check: it steps aside at three times the target on
+every camera. Builds from 2026-09-20 to 2026-10-08 instead let the shutter run
+free in any bright scene, which avoided overexposure but also let the banding
+back into a bright lamp-lit room, the case anti-flicker is for. If you set
+`disabled` on one of those builds to keep a daylit picture from blowing out,
+`50` or `60` is now the better setting.
+
+The bands are counted in sensor lines, so the camera has to run at the frame
+rate its sensor driver expects. A sensor clocked at the wrong rate makes the
+bands roll however this is set — on hi3516ev200-family cameras with an SP2305
+sensor, firmware built before 2026-10-09 did exactly that.
 
 Honoured on HiSilicon/Goke, SigmaStar and Ingenic cameras. Rockchip ignores it.
 
