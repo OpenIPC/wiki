@@ -534,44 +534,49 @@ shutter to a whole number of half-periods:
 Set it to the frequency of the mains your **lights** run on, which is your
 region's grid frequency — not the camera's frame rate.
 
-On HiSilicon and Goke cameras the shutter is held to whole half-periods for as
-long as anti-flicker is on, bright scene or not, so a brightly lit room under
-mains lamps is free of banding too. That has a cost in a scene brighter than
-any lamp makes: daylight that wants a shutter of a few milliseconds cannot have
-one shorter than 10 ms (8.3 ms at 60 Hz), gain is already at its minimum, and
-the picture would come out overexposed. Daylight does not flicker, so in that
-case the camera finds out instead of guessing:
+On HiSilicon and Goke cameras running a build from 2026-10-10 or later,
+anti-flicker keeps working in a brightly lit room under mains lamps too: the
+shutter stays at a whole number of half-cycles however bright the scene is, so
+the banding stays away.
 
-- When the picture stays well over its target brightness at the shortest
-  whole-period shutter, the camera tries a shorter shutter for a moment and
-  looks for the lamp's bands in what it sees. The picture dims once, for under
-  half a second.
-- **Bands found** — the light is mains lighting. Anti-flicker stays on. The
-  camera does not check that scene again for an hour, or until it is clearly
-  brighter than when the lamp was found.
-- **No bands** — the light is steady. Anti-flicker steps aside and the scene
-  exposes freely, without the overexposure. It comes back on by itself once the
-  scene darkens enough to need a shutter of about a period again.
+That would overexpose a scene brighter than lamps make — daylight that wants a
+shutter of a few milliseconds cannot get one shorter than 10 ms (8.3 ms at
+60 Hz), and gain is already at its minimum. Daylight does not flicker, so when
+a scene is that bright the camera checks whether its light does. If it does
+not, anti-flicker steps aside and the scene is exposed normally; it comes back
+by itself once the scene darkens. If the light does flicker, anti-flicker stays
+on. You may see the picture dim once, for under half a second, when the camera
+checks.
 
-Both changes are written to the camera's log. The check runs on hi3516ev200,
-hi3516ev300, hi3518ev300, hi3516dv200, hi3516cv500, hi3516av300, hi3516dv300
-and the Goke gk7205v200/v300/v500 families. Older HiSilicon parts and
-hi3516cv6xx cannot run it; there anti-flicker steps aside only when the picture
-is about three times brighter than its target, a level no lamp-lit room has
-reached in testing.
+The check is available on hi3516ev200, hi3516ev300, hi3518ev300, hi3516dv200,
+hi3516cv500, hi3516av300, hi3516dv300 and the Goke gk7205v200/v300/v500
+families. Older HiSilicon parts and hi3516cv6xx cannot run it; there
+anti-flicker steps aside only when the picture is about three times brighter
+than its target, a level no lamp-lit room has reached in testing.
 
-This is how builds from 2026-10-10 behave. A build dated 2026-10-09 already
-holds the shutter but has no check: it steps aside at three times the target on
-every camera. Builds from 2026-09-20 to 2026-10-08 instead let the shutter run
-free in any bright scene, which avoided overexposure but also let the banding
-back into a bright lamp-lit room, the case anti-flicker is for. If you set
-`disabled` on one of those builds to keep a daylit picture from blowing out,
-`50` or `60` is now the better setting.
+To see which way the camera went, read the shutter from `/metrics` (see
+below). With `50` in effect, `isp_exptime` sits within a fraction of a percent
+of 10000 microseconds, or of a whole multiple of it in a dimmer scene — 9997
+and 39879 on the hi3516ev300 this was measured on (8333 and its multiples at
+`60`). A value well below 10000 in a bright scene means anti-flicker has
+stepped aside for steady light. The camera log
+also records each time anti-flicker steps aside or comes back on — open it in
+the web interface, or run `logread` over SSH, and look for messages that
+mention anti-flicker.
 
-The bands are counted in sensor lines, so the camera has to run at the frame
-rate its sensor driver expects. A sensor clocked at the wrong rate makes the
-bands roll however this is set — on hi3516ev200-family cameras with an SP2305
-sensor, firmware built before 2026-10-09 did exactly that.
+Older builds behave differently. A build dated 2026-10-09 already holds the
+shutter but has no check: on every camera it steps aside at about three times
+the target brightness. Builds from 2026-09-20 to 2026-10-08 let the shutter run
+free in any bright scene, which avoided overexposure but brought the banding
+back in a bright lamp-lit room. If you set `disabled` on one of those builds to
+stop a daylit picture blowing out, update to a build from 2026-10-10 or later
+first, then set `50` or `60` again; on the older builds that advice does not
+hold.
+
+Anti-flicker only works when the sensor runs at the frame rate it is meant
+to. On hi3516ev200-family cameras with an SP2305 sensor, firmware built before
+2026-10-09 ran the sensor slightly fast, and the bands kept rolling whatever
+this was set to; firmware from 2026-10-09 corrects it.
 
 Honoured on HiSilicon/Goke, SigmaStar and Ingenic cameras. Rockchip ignores it.
 
