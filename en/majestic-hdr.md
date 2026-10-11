@@ -21,6 +21,7 @@ place.
 isp:
   hdr: hlg           # off (default) | hlg
   wdrMode: always    # optional, where the chip and sensor support WDR
+  antiFlicker: 50    # under mains lighting: 50 or 60 to match your mains
 ```
 
 Or through the HTTP API:
@@ -43,9 +44,11 @@ the sensor's ordinary range, so the highlights clip where SDR's would.
 ### What changes when it is on
 
 - **The picture itself is HDR.** The camera renders it with the HLG transfer
-  curve instead of the SDR one. Brightness is aimed so that diffuse white
-  (paper, a white wall) sits at HLG's reference white, and the range above it
-  is kept for highlights.
+  curve instead of the SDR one:
+  - mid-tones sit about where they do in SDR;
+  - surface texture (wood grain, flooring, wallpaper) keeps its contrast;
+  - the range above reference white is kept for real highlights, such as a
+    lamp, a window or a sunlit wall.
 - **Every stream is labelled HLG,** so players know what they are getting:
   - RTSP, WebRTC and the web interface's live view
   - HLS: the master playlist says `VIDEO-RANGE=HLG`
@@ -54,6 +57,12 @@ the sensor's ordinary range, so the highlights clip where SDR's would.
   for an SDR screen:** `isp.drc`, `isp.dehaze` and the
   [automatic picture tuning](automatic-image-tuning.md) (`image.tuning`). Settings you made stay saved and come back when HDR is
   switched off.
+- **Anti-flicker keeps working,** when it is turned on (`isp.antiFlicker: 50`
+  or `60`, matching your mains; it is off by default). Under a lamp that
+  flickers with the mains, the shutter stays on a whole number of mains
+  half-cycles (10 ms at 50 Hz), as it does in SDR. If that leaves the scene
+  brighter than the camera wants, it darkens the mid-tones in the curve
+  instead, and the lamp itself still reaches the display's peak.
 - **A 2592×1944 stream becomes 2592×1920,** cropped evenly top and bottom; see
   [Chrome on a Mac](#chrome-on-a-mac-and-the-25921944-frame) below.
 
@@ -109,25 +118,69 @@ To check which way Chrome is showing a video, start it with
 
 ### What it looks like, measured
 
-Measured on a Goke GK7205V300 camera with a Sony IMX335 sensor, in 2:1 line
-WDR, indoors under flicker-free LED bulbs. Both streams were configured and
-encoded at the full 2592×1944. The measurements were taken before the
-2592×1920 crop above existed; taking 12 lines off the top and bottom does not
-move these levels. Values are the code level of the H.265 stream (0–1). The light levels in brackets assume the 1000 cd/m² HLG
-reference display; an HDR screen scales the whole range to its own peak.
+**Setup.** A Goke GK7205V300 camera with a Sony IMX335 sensor, 2:1 line WDR,
+`isp.antiFlicker: 50`, indoors. Each run alternates HLG and SDR on the same
+camera in random order, with two full-resolution frames for each, several
+rounds per run; the tables give the averages.
 
-| | SDR (`isp.hdr: off`) | HLG (`isp.hdr: hlg`) |
-|---|---|---|
-| White bed sheet (diffuse white) | 0.62 | 0.77 (≈230 cd/m², HLG reference white is 0.75) |
-| Darkest 10% of the frame | 0.32 | 0.34 (≈20 cd/m²) |
-| Brightest 1% | 0.90 | 0.91 (≈540 cd/m²) |
-| Brightest 0.1% | 0.99 | 0.98 (≈900 cd/m², the display's peak) |
-| Clipped pixels | 0.45% | 0.19% |
+**What is measured.** Every number is light on the screen:
+- SDR is shown with its white at 203 cd/m², where HDR puts SDR white;
+- HLG is shown on the 1000 cd/m² reference display.
+
+**Texture** is the fine contrast inside a surface, in stops. Higher means more
+visible grain.
+- Each surface is one hand-picked rectangle of 250–560 pixels a side, the same
+  in every frame.
+- Each frame's brightness is converted to light on screen and to log2, and a
+  Gaussian blur (sigma 4 pixels) is subtracted, which leaves the fine detail.
+- The RMS of that detail over the two frames' average is the measured
+  contrast.
+- The camera's noise is the part that differs between the two frames. It is
+  subtracted in quadrature, so what remains is detail present in both.
+
+**Above reference white** is the share of the frame brighter than 203 cd/m².
+SDR cannot go above its own white, so its column is empty; its pixels at white
+are counted under *clipped*.
+
+**Daylight:**
+
+| | floor | wooden door | patterned glass | wallpaper | median | above reference white | brightest 0.1% | clipped |
+|---|---|---|---|---|---|---|---|---|
+| SDR | 0.25 | 0.58 | 2.75 | 0.48 | 26 cd/m² | — | 203 cd/m² | 0.49% |
+| HLG | 0.34 | 0.54 | 3.04 | 0.66 | 48 cd/m² | 5.3% | 969 cd/m² | 0.10% |
+
+**A 200 W LED floodlight on, its light flickering at twice the mains
+frequency:**
+
+| | floor | wooden door | patterned glass | wallpaper | median | above reference white | brightest 0.1% | clipped |
+|---|---|---|---|---|---|---|---|---|
+| SDR | 0.38 | 0.25 | 2.78 | 0.74 | 32 cd/m² | — | 203 cd/m² | 5.8% |
+| HLG | 0.54 | 0.46 | 3.17 | 0.79 | 44 cd/m² | 14.5% | 1000 cd/m² | 0.21% |
 
 In the HLG picture:
-- the brightest 1% of the scene is 26 times brighter than the darkest 10%;
-- it clips less than the SDR picture does;
-- the brightest highlights reach the display's maximum.
+- surfaces carry at least as much texture as in SDR, except the dark wooden
+  door in daylight, at 93% of SDR's;
+- the brightest highlights reach the display's maximum;
+- it clips far less than SDR does, and a lamp in frame stays brighter than the
+  glow around it;
+- under the flickering lamp, with `isp.antiFlicker: 50`, the picture is as
+  steady as SDR's.
+
+### Why there is no Dolby Vision
+
+iPhones record HLG as Dolby Vision profile 8.4: an HLG picture plus a layer
+of per-frame metadata that Dolby-capable players use to fit the picture to
+their screen. Majestic does not, for these reasons:
+- **Profile 8.4 needs 10-bit video.** These chips encode 8-bit only, so a
+  conforming stream cannot be made. The 8-bit Dolby Vision profile (9) is
+  H.264 on an SDR picture, not HLG.
+- **Chrome does not play Dolby Vision** that is not encrypted, so the web
+  interface's live view would ignore the layer anyway. Other players were not
+  tested.
+- **It is a licensed format.** Producing it requires a licence from Dolby.
+- **HLG is designed to work without metadata.** The display adapts it to its
+  own peak brightness. HDR10+, the open format with dynamic metadata, needs
+  PQ and 10-bit video, so it is out of reach for the same reason.
 
 ### Limits
 
@@ -140,4 +193,6 @@ In the HLG picture:
   configured size, not the HDR crop.
 - **Tested hardware.** Only GK7205V300 + IMX335 was measured. The other chip
   families above have the same image pipeline, but their pictures were not.
-- **Availability.** Requires a Majestic build from mid-October 2026 or later.
+- **Availability.** Requires the 2026-10-11 nightly or a later build;
+  `majestic -v` prints the build date. Earlier builds do not have
+  `isp.hdr`.
