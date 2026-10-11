@@ -465,16 +465,38 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
   #autoDayGain: 2               # automatic mode: day at or below this multiple
   #autoNightDelay: 15           # seconds of darkness before night, 5-600
   #autoDayDelay: 60             # seconds of brightness before day, 5-600
+  #switchBy: picture            # what automatic mode switches on: picture,
+                                # sun, pictureNearSun, clock, pictureNearClock.
+                                # The sun and clock hand back to the picture
+                                # whenever they cannot answer
+  #sunNightAngle: -6            # degrees below the horizon that mean night:
+                                # 0 sunset, -6 civil, -12 nautical; -12 to 6.
+                                # Needs calibration.latitude/longitude
+  #sunDayAngle: -6              # day again from here; empty = sunNightAngle
+  #nightFrom: "20:00"           # the clock modes, local 24-hour time
+  #dayFrom: "07:00"
+  #windowMinutes: 120           # the NEAR modes: no day from this long after
+                                # dusk until this long before dawn, 10-360
   #transitionDelayMs: 150       # pause inside a switch, 0-2000 ms: the gap
                                 # between the picture changing and the filter
                                 # moving. Board-specific — leave it at 0 unless
                                 # a coloured frame shows as day returns
-  #backlightPwmChannel: none    # a dimmable lamp on a PWM pad; backlightPin
+  #colorNight: false           # a colour night: the filter stays in and the
+                                # white lamp lights it instead of the IR one
+  #irLightPwmChannel: none      # a dimmable IR lamp on a PWM pad; backlightPin
                                 # is then ignored. The channels offered are the
                                 # ones your camera's SoC actually brings out —
                                 # the WebUI lists them. Where one channel
                                 # reaches several pins the others are spelled
                                 # pwm2@gpio68
+  #whiteLightPwmChannel: none   # a white lamp on a PWM pad, the same spellings
+  #whiteLight: auto             # auto = it lights a colour night; motion =
+                                # at night on movement; sun = while the sun is
+                                # below sunNightAngle; manual = /night/white;
+                                # off. With colorNight, the night is in colour
+                                # while it is lit and grey otherwise
+  #whiteHoldSec: 60             # motion: how long it stays on after the last
+                                # movement, 5-600 s
   #backlightPwmFreq: 400        # Hz, 50-20000
   #backlightPwmMin: 10          # duty floor, % — LEDs have an ignition threshold
   #backlightPwmMax: 100         # duty ceiling, %
@@ -741,7 +763,8 @@ cloud:
   #tilt: 0                      # degrees; 0 along the ground, 90 straight down
   #roll: 0                      # degrees; positive = horizon higher on the right
   #azimuth: 0                   # compass bearing of the lens, 0 north, 90 east
-  #latitude: 0                  # of the camera; both 0 = not said
+  #latitude: 0                  # of the camera; both 0 = not said. Also where
+                                # nightMode.switchBy: sun looks for the sun
   #longitude: 0
   #lens:                        # focal length in main-stream pixels per zoom
   #  - mag: "2.1"               #   readout (as GET /zoom reports it); empty
