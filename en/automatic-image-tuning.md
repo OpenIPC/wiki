@@ -126,7 +126,7 @@ than pixel by pixel, so its cost does not grow with sensor resolution.
 
 ### When it will not run
 
-Two cases, and they look different on the page.
+Three cases. The first two look different on the page.
 
 **The camera's own picture statistics are not available**, which is the case on
 older HiSilicon parts. It gives up immediately and the panel reads *No answer —
@@ -145,6 +145,11 @@ isp:
 
 if you want tuning on that camera. `off` is not one of the values and is
 refused with HTTP 400.
+
+**HDR video is on** (`isp.hdr: hlg`). Tuning shapes the picture for an SDR
+screen, so it stands aside while the camera makes an HLG picture, and resumes
+when `isp.hdr` is set back to `off`. Changing `yuvCompression` will not help
+here. See [HDR video (HLG)](majestic-hdr.md).
 
 ### Switching it off
 

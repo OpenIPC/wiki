@@ -48,6 +48,8 @@ isp:
   #sensorConfig: /etc/sensors/imx222_1080p_line.ini   # path, or just the sensor name
   antiFlicker: disabled         # disabled | 50 | 60 -- match your mains, not
                                 # your fps; see "Anti-flicker" in majestic-streamer.md
+  #hdr: off                     # off | hlg -- HDR video for HDR screens
+                                # (HiSilicon/Goke); see majestic-hdr.md
   #blkCnt: 4
   #drc: 300                     # dynamic range compression, 0-255 through
                                 # hi3516cv500 and 0-1023 from hi3516ev200
