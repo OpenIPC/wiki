@@ -287,6 +287,7 @@ each:
 /night/ircut
 /night/light
 /night/white       the white lamp, when nightMode.whiteLight is manual
+/api/v1/sun        tonight's dusk and dawn at every angle, for a place
 ```
 Example for disable and enable night mode
 ```
@@ -809,6 +810,9 @@ below the horizon is about the same amount of light everywhere.
 | `nightMode.dayFrom` | 07:00 | And day from this one. A night may cross midnight. |
 | `nightMode.windowMinutes` | 120 | The two NEAR modes: how long after dusk, and before dawn, the picture may still bring day. 10-360. |
 
+The set times are shown only for the two clock modes, and the window only for
+the two NEAR modes.
+
 **The sun and the clock never decide alone.** The picture takes over whenever
 they cannot answer, and the log says why, once:
 
@@ -838,6 +842,28 @@ time:
 
 A gauge that cannot be known is left out, never shown as `0`: an elevation of 0
 is the sun on the horizon.
+
+**On the Day / Night page** this is chosen rather than typed:
+
+- **Switch day and night by:** the five choices above.
+- **Where the camera is:** coordinates, or a map link pasted from Google,
+  Apple, Yandex, OpenStreetMap or Bing. The camera's time zone offers its city
+  as a first guess.
+- **The angle:** chosen on a strip drawn like the twilight diagram, with
+  tonight's dusk and dawn under each line. A line the sun does not reach tonight
+  is struck through, and the page says so in words.
+
+The times come from the camera itself:
+
+```
+curl -u root:password 'http://camera/api/v1/sun?lat=55.75&lon=37.62'
+```
+
+It answers with every whole angle from +6 to -12, each with this night's dusk
+and dawn as `HH:MM` on the camera's own clock, or `null` where the sun does not
+get there. It also gives today's highest and lowest sun and where the sun is
+now. Without `lat` and `lon` it answers about the saved place. It needs the
+owner's credentials and is not available through a share.
 
 ```yaml
 nightMode:
