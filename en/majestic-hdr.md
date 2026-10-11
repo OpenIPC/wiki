@@ -11,15 +11,16 @@ than ordinary white: a sunlit wall, a lamp, a window. In normal SDR video they
 are all compressed into the same top few levels. Shadows and mid-tones stay
 where they were.
 
-It is one setting, and it is worth having together with WDR, which is what
-captures the extra range in the first place.
+It is one setting. Where the chip and sensor can do WDR, it is worth having
+together with it, because WDR is what captures the extra range in the first
+place.
 
 ### Turning it on
 
 ```yaml
 isp:
-  wdrMode: always    # recommended: WDR captures the range HDR then shows
   hdr: hlg           # off (default) | hlg
+  wdrMode: always    # optional, where the chip and sensor support WDR
 ```
 
 Or through the HTTP API:
@@ -35,6 +36,10 @@ RTSP clients reconnect. `isp.hdr: off` returns to the normal SDR picture.
 GK7205V200/V300, GK7205V500 and Hi3516CV500/AV300/DV300 families. A build
 that does not offer the key answers 404 to it.
 
+**WDR is not on every one of them.** The GK7205V200 has no WDR mode (see
+[FPV](fpv.md)). There `isp.hdr: hlg` still gives an HLG picture, but from
+the sensor's ordinary range, so the highlights clip where SDR's would.
+
 ### What changes when it is on
 
 - **The picture itself is HDR.** The camera renders it with the HLG transfer
@@ -46,8 +51,8 @@ that does not offer the key answers 404 to it.
   - HLS: the master playlist says `VIDEO-RANGE=HLG`
   - MP4 recordings and `/video.mp4`
 - **Some picture controls stand aside, because each would reshape the picture
-  for an SDR screen:** `isp.drc`, `isp.dehaze` and the automatic picture tuning
-  (`image.tuning`). Settings you made stay saved and come back when HDR is
+  for an SDR screen:** `isp.drc`, `isp.dehaze` and the
+  [automatic picture tuning](automatic-image-tuning.md) (`image.tuning`). Settings you made stay saved and come back when HDR is
   switched off.
 - **A 2592×1944 stream becomes 2592×1920,** cropped evenly top and bottom; see
   [Chrome on a Mac](#chrome-on-a-mac-and-the-25921944-frame) below.
@@ -64,6 +69,12 @@ also need a player that honours the HLG label:
 | Chrome (macOS) | yes | yes | yes | yes |
 | Safari (macOS) | yes | yes | yes | **no** |
 
+- **WebRTC needs a browser that decodes the stream's codec.** H.265 over
+  WebRTC depends on the machine's hardware decoder, and Chrome may connect
+  and show nothing at all (see
+  [self-hosted cloud camera](howto-self-hosted-cloud-camera.md#things-that-will-surprise-you)).
+  That is a codec problem, not an HDR one: "yes" above means a picture that
+  plays is shown as HDR.
 - **Safari over WebRTC** discards the colour labelling of every stream it
   receives, HDR or not, and shows the picture as SDR. In Safari, use the
   web interface's MSE transport or HLS.
@@ -98,9 +109,11 @@ To check which way Chrome is showing a video, start it with
 
 ### What it looks like, measured
 
-Measured on a Goke GK7205V300 camera with a Sony IMX335 sensor at 2592×1944, in
-2:1 line WDR, indoors under flicker-free LED bulbs. Values are the code level of
-the H.265 stream (0–1). The light levels in brackets assume the 1000 cd/m² HLG
+Measured on a Goke GK7205V300 camera with a Sony IMX335 sensor, in 2:1 line
+WDR, indoors under flicker-free LED bulbs. Both streams were configured and
+encoded at the full 2592×1944. The measurements were taken before the
+2592×1920 crop above existed; taking 12 lines off the top and bottom does not
+move these levels. Values are the code level of the H.265 stream (0–1). The light levels in brackets assume the 1000 cd/m² HLG
 reference display; an HDR screen scales the whole range to its own peak.
 
 | | SDR (`isp.hdr: off`) | HLG (`isp.hdr: hlg`) |
