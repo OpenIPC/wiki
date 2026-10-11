@@ -286,6 +286,7 @@ each:
 ```
 /night/ircut
 /night/light
+/night/white       the white lamp, when nightMode.whiteLight is manual
 ```
 Example for disable and enable night mode
 ```
@@ -753,7 +754,8 @@ configured:
 3. neither — the automatic exposure-based mode above.
 
 The `night_mode_source` gauge on `/metrics` names which one has the wheel
-(1 sensor pin, 2 thresholds, 4 automatic), and **Settings → Day / Night** in
+(1 sensor pin, 2 thresholds, 4 automatic, 5 the sun, 6 set times — the last two
+are below), and **Settings → Day / Night** in
 the web interface shows the decision live: the watched value charted with the
 switching bands shaded, and a countdown when a switch is pending.
 
@@ -766,6 +768,85 @@ The automatic mode can be tuned, in units that mean the same on every camera
 | `nightMode.autoDayGain` | 2 | Return to day when gain stays at or below this multiple. |
 | `nightMode.autoNightDelay` | 15 | Seconds the scene must stay dark before night. |
 | `nightMode.autoDayDelay` | 60 | Seconds it must stay bright before day. |
+
+#### By the sun, or by the clock
+
+**Since October 2026, automatic mode can switch on where the sun is, or at set
+times, instead of on the picture.** The picture is a poor witness to dusk on
+exactly the cameras that light their own scene. A white lamp lights the band the
+exposure is measured in, so "it got brighter" usually means "I switched the lamp
+on", and the camera flips back and forth. The sun's position depends on nothing
+the camera does.
+
+`nightMode.switchBy` picks one of five:
+
+| Value | What decides |
+| --- | --- |
+| `picture` | The exposure-based mode above. The default. |
+| `sun` | The sun's height above the horizon. |
+| `pictureNearSun` | The picture, except that it cannot bring day in the dark hours: from `windowMinutes` after dusk until `windowMinutes` before dawn. |
+| `clock` | Two set times, `nightFrom` and `dayFrom`, local time. |
+| `pictureNearClock` | The picture, with no day from `windowMinutes` after `nightFrom` until `windowMinutes` before `dayFrom`. |
+
+`pictureNearSun` is the one to try first on a camera whose lamp makes it flap. A
+storm at noon still brings night; what it refuses is a day in the middle of the
+night, which can only be the camera's own light.
+
+**The sun needs to know where the camera is.** That is `calibration.latitude`
+and `calibration.longitude` — the same two settings the scene calibration uses —
+in degrees, south and west negative. Both `0` means "not said".
+
+**The setting is an angle, not "sunset plus some minutes".** Twilight lasts very
+different times at different latitudes and seasons: civil twilight is 37 minutes
+in Moscow in October, 61 in June and 21 in Singapore. A given angle of the sun
+below the horizon is about the same amount of light everywhere.
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `nightMode.sunNightAngle` | -6 | Night once the sun is this many degrees below the horizon. 0 is sunset, -6 civil dusk, -12 nautical dusk; the range is -12 to 6. |
+| `nightMode.sunDayAngle` | empty | Day again once the sun is back up to this. Empty means the same angle. A higher number keeps the camera in night a little longer in the morning. |
+| `nightMode.nightFrom` | 20:00 | The clock modes: night from this time, 24-hour. |
+| `nightMode.dayFrom` | 07:00 | And day from this one. A night may cross midnight. |
+| `nightMode.windowMinutes` | 120 | The two NEAR modes: how long after dusk, and before dawn, the picture may still bring day. 10-360. |
+
+**The sun and the clock never decide alone.** The picture takes over whenever
+they cannot answer, and the log says why, once:
+
+- **No place:** the latitude and longitude are not set.
+- **No clock:** the camera booted with no battery-backed clock and has not heard
+  from a time server yet.
+- **The angle is not reached today.** This one matters more than it looks. North
+  of about 54° there is no nautical night around midsummer at all, north of
+  about 60° no civil night, and beyond the Arctic Circle the sun may not set.
+  A camera in Moscow told "night at -12°" would otherwise stay in day mode
+  through every night of June, and nothing would look wrong. Astronomical dusk
+  (-18°) is not offered: a camera cannot tell it from nautical, and in a town
+  street lighting outweighs the sky.
+- **Set times that do not read as 24-hour times**, such as `25:00`.
+
+`/metrics` shows the camera's own answer, so nothing has to work it out a second
+time:
+
+| Gauge | Meaning |
+| --- | --- |
+| `night_sun_state` | 0 the sun can answer; 1 no place; 2 no clock; 3 it does not get down to the night angle today; 4 nor up to the day angle. |
+| `night_sun_elevation_millidegrees` | The sun's height, thousandths of a degree, negative below the horizon. |
+| `night_sun_next_night_seconds`, `night_sun_next_day_seconds` | Until the sun next crosses the night angle going down, and the day angle going up. Absent when it will not within a day and a half. |
+| `night_clock_next_night_seconds`, `night_clock_next_day_seconds` | The same for the set times. |
+| `night_window_closed` | 1 while the picture may not bring day. Absent when the sun or the clock cannot say, rather than claiming the window is open. |
+| `night_days_refused_total` | How many days it asked for in the dark hours and was refused. |
+
+A gauge that cannot be known is left out, never shown as `0`: an elevation of 0
+is the sun on the horizon.
+
+```yaml
+nightMode:
+  lightMonitor: true
+  switchBy: pictureNearSun
+calibration:
+  latitude: 55.75
+  longitude: 37.62
+```
 
 #### Who moves the filter and the lamp
 
@@ -860,7 +941,7 @@ from
 
 ```yaml
 nightMode:
-  backlightPwmChannel: pwm1   # none = switched lamp on backlightPin
+  irLightPwmChannel: pwm1     # none = switched lamp on backlightPin
   backlightPwmFreq: 400       # Hz
   backlightPwmMin: 10         # duty floor, % — LEDs have an ignition threshold
   backlightPwmMax: 100
@@ -979,6 +1060,49 @@ Where the camera's ISP cannot report the brightness distribution, `isp_highlight
 is simply absent and the guard stays inactive rather than guessing; the gamma
 setting works regardless.
 
+### Two lamps: infrared and white
+
+Some cameras carry a white lamp beside the infrared one, each on its own PWM
+channel:
+
+```yaml
+nightMode:
+  irLightPwmChannel: pwm8
+  whiteLightPwmChannel: pwm9
+  colorNight: false           # true = a colour night: the filter stays in
+                              # and the white lamp lights it, not the IR one
+```
+
+`colorNight: true` keeps the IR-cut filter in at night, keeps the picture in
+colour with the daytime image settings, and lights the white lamp instead of the
+infrared one.
+
+**Since October 2026 the white lamp can also be its own actuator**, with
+`nightMode.whiteLight`:
+
+| Value | What the white lamp does |
+| --- | --- |
+| `auto` | Follows day and night: it lights a colour night and is dark otherwise. The default, and the only behaviour before the key existed. |
+| `motion` | Lights at night when something moves, and goes out `whiteHoldSec` seconds (default 60, 5-600) after the last movement. Needs `motionDetect.enabled`. |
+| `sun` | Lights while the sun is below `sunNightAngle`, whatever the picture says — the "on at dusk, whatever the scene" behaviour some cameras run on a timer. Needs the latitude and longitude; without them it follows day and night. Pair it with `switchBy: sun`: if the picture decides day and night, it is then judging dusk under a lamp already lit for it. |
+| `manual` | Moved by hand only: `/night/white` toggles it. It stays as you left it across a settings change. |
+| `off` | Never lit. The night is then an infrared one, even with `colorNight` on. |
+
+**With `colorNight: true` and any of `motion`, `sun` or `manual`, the night is in
+colour exactly while the white lamp is lit.** The rest of the night is grey under
+the infrared lamp. So a camera can watch in infrared all night, and switch to a
+colour picture lit by the white lamp when someone walks in. Each change runs in
+the same order as a dusk or a dawn, so infrared never reaches a colour picture.
+The filter really does move each time, which is worth knowing on a busy scene.
+
+Before it believes a day, the camera puts its own light out for a few seconds to
+check the scene. That check now puts the white lamp out too, so a white lamp lit
+at night cannot buy a day and then lose it again when it goes out.
+
+`night_white_light` on `/metrics` is 1 while the white lamp is lit and 0 while it
+is dark. It is absent under `auto`, where the lamp is the night's own and
+`night_light` already says what it is doing.
+
 ### Iris control, and who owns a PWM channel
 
 A DC iris is a motorised aperture: the camera drives a coil through a PWM
@@ -1017,7 +1141,7 @@ Majestic settles it by ownership, and the rule is read in this order:
    two things cannot share one PWM channel, and which of them matters is the
    one thing the camera cannot work out for itself.
 2. **Otherwise, a dimmable lamp takes the channel.** With
-   `nightMode.backlightPwmChannel` naming one, the aperture controller is
+   `nightMode.irLightPwmChannel` or `whiteLightPwmChannel` naming one, the aperture controller is
    switched off at start-up so the lamp has it.
 3. **Otherwise nothing is changed.** No `DC`, no dimmable lamp, and the
    controller is left exactly as the chip brought it up — so a camera that
@@ -1193,7 +1317,20 @@ two, are a far corner — subtract the first two from them and the rest of this
 page applies.
 
 The script is run on the transition, not per frame, and no more than once every
-five seconds. For the detections themselves — every box rather than one box
+five seconds.
+
+**The camera's own light is not movement.** A lamp switching, the IR-cut filter
+moving, or the picture changing between colour and grey alters every pixel, for
+as long as the exposure takes to settle. Measured on an IMX415 camera, each
+day/night switch produced seven to ten motion starts by itself. So for eight
+seconds after any such change, a new movement is not reported — not to
+`motion.sh`, not to recordings, not over ONVIF. Movement already under way when
+the light changes goes on being reported, so a subject being recorded is not
+lost to the camera's own lamp. The cost is a subject that starts moving again
+inside those eight seconds: it is reported when they end, so a motion clip whose
+post-roll ran out in the meantime closes and a new one opens. The camera cannot
+tell that start from its own lamp's. `md_onsets_blanked_total` on `/metrics`
+counts the changes of light that held a start back, once each. For the detections themselves — every box rather than one box
 round all of them, live over a websocket, inside recordings, over ONVIF, and as
 a per-day index — see [What the camera detects](analytics-metadata.md).
 
