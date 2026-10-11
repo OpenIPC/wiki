@@ -56,6 +56,7 @@ OpenIPC Wiki
 - [Majestic streamer](en/majestic-streamer.md)
 - [Majestic example config](en/majestic-config.md)
 - [Majestic encoder tuning](en/majestic-encoder-tuning.md)
+- [Majestic HDR video (HLG)](en/majestic-hdr.md)
 - [Majestic usage research](en/majestic-research.md)
 - [Majestic plugins](en/majestic-plugins.md)
 - [Raw editor](en/raw-editor.md)
