@@ -45,7 +45,7 @@ The pad sits over the picture, at the bottom right.
 **The rest of the pad:**
 - **Handle** (six dots: bottom left of the pad on a phone, above it on a larger screen): drag it to move the pad to another corner of the picture. The corner is remembered by your browser. From the keyboard, Enter or Space moves it to the next corner.
 - **×** (top right, on a phone): folds the pad to a single button, so it covers less of the picture.
-- **Settings** (top left, when there is something to set): today that is **Follow person**, on a camera whose detector can see people.
+- **Settings** (top left, when there is something to set): today that is **Follow**, on a camera that can detect something to follow (see [Follow](#follow)).
 
 A pad with eight buttons (the stepped motors driven through `gpio-motors`) keeps its buttons; the knob replaces the Pelco-style pad of serial and gpiostep heads.
 
@@ -83,6 +83,26 @@ A picture standing still doesn't steer: neither the uncompressed still (**Detail
 
 The first time these gestures are available, the page says so once: *Drag the picture to turn the camera; double-tap to centre a spot.*
 
+### Follow
+
+**Follow** turns the head on its own to keep what the camera sees in the middle of the picture. Switch it on from the pad's settings, or as `ptz.track` on the **PTZ** settings tab, and choose there what it follows:
+
+| Setting | Follows |
+|---|---|
+| `ptz.trackPeople` (on by default) | people |
+| `ptz.trackAnimals` | cats and dogs, for a pet left at home |
+| `ptz.trackVehicles` | cars, trucks, buses, motorcycles, bicycles |
+
+What it follows is separate from what object detection alerts on. Following needs no alerts: it starts the detector on its own, and following a cat raises no animal alert, event or recording. Switching it on or off restarts the detector, not the video.
+
+It starts on someone seen in two frames in a row, so a single frame in which the detector mistakes something for a person doesn't swing the head. Once it has picked someone it keeps them: the nearest box of the same kind in the next frames, never one of another kind, until they have been gone for five seconds. A cat it is following is not swapped for a person walking past. The followed subject is outlined on the Live picture.
+
+It looks, then turns: once the head has stopped and the picture has settled it decides, and turns by the number of steps that brings the subject to the middle. Where the head reports its frame in steps (`frame=` below) it turns both axes in the same move, the shorter one more slowly so both arrive together, and so goes straight at the subject. Otherwise it turns one axis per move. Any move from the pad, ONVIF or DVRIP pauses following for `ptz.trackResumeSec` (15 s by default).
+
+On a camera with a neural processor (GK7205V5x0) it can follow people, animals and vehicles, including someone standing still. On one that detects on its CPU it follows people only. That detector only looks where something moved, so while the head follows someone, it also keeps looking where they are, and someone who stops is not lost.
+
+At night it pairs with the white lamp: with `nightMode.whiteLight: detect` the person it follows is also lit in colour (see [The white lamp on a sighting](majestic-streamer.md#the-white-lamp-on-a-sighting)).
+
 ### What a camera needs
 
 | Feature | Needs |
@@ -91,6 +111,7 @@ The first time these gestures are available, the page says so once: *Drag the pi
 | Speed by distance | A motor that keeps a speed: `speeds=` on the capability line |
 | Eight directions | The diagonals on the capability line: `upleft`, `upright`, `downleft`, `downright` |
 | Double-tap and drag | Counted moves (`steps=`) and the frame size in steps (`frame=WxH`); a picture that isn't rotated 90° or 270° |
+| Follow | Counted moves (`steps=`) and object detection (`follow=` on the capability line); `frame=` for both axes in one move |
 
 The diagonals, two-axis counted moves and `frame=` come with [majestic-af](https://github.com/OpenIPC/majestic-af), the motor plugin. A firmware whose majestic-af predates them gets the knob in four directions and no double-tap or drag. Updating the web interface alone doesn't add them.
 
@@ -128,6 +149,7 @@ The pad and the gestures use only the camera's own endpoints:
 On the capability line:
 - **`verbs=`** lists what the head can do. The four diagonals turn pan and tilt together.
 - **`frame=WxH`** is the steps per frame, from the board's description.
+- **`follow=`** lists what this camera can detect and so follow, for example `follow=human,vehicle,animal`, or `follow=human` where it detects on its CPU. It is absent where the camera can detect nothing.
 
 A counted pan move and a counted tilt move sent one after the other run together: the head turns both, and each stops on its own count. That is how a double-tap reaches a spot diagonally. A counted move on the same axis replaces the one running there.
 
@@ -138,6 +160,8 @@ A counted pan move and a counted tilt move sent one after the other run together
 - `GET /ptz` has no `frame=`: either the board's `gpiostep.conf` has no frame keys, or the firmware's majestic-af predates them.
 - A picture rotated 90° or 270° turns them off as well.
 - If the page loaded while the camera wasn't answering, it asks again on its own over the next two minutes, and at the next touch of the picture.
+
+**There is no Follow switch on the pad.** `GET /ptz` needs both `steps=` and `follow=`. No `follow=` means one of two things: the firmware's majestic predates Follow choosing what it follows (update the firmware first), or the camera has nothing to detect with (no neural processor and no CPU detector model in its firmware).
 
 **The knob only goes in four directions.** `GET /ptz` doesn't list the diagonals. The motor plugin predates them; on Pelco heads they need a current majestic-af too.
 

@@ -493,10 +493,15 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
   #whiteLight: auto             # auto = it lights a colour night; motion =
                                 # at night on movement; sun = while the sun is
                                 # below sunNightAngle; manual = /night/white;
-                                # off. With colorNight, the night is in colour
-                                # while it is lit and grey otherwise
-  #whiteHoldSec: 60             # motion: how long it stays on after the last
-                                # movement, 5-600 s
+                                # off; detect = at night when object detection
+                                # sees one of the classes below. With
+                                # colorNight, the night is in colour while it
+                                # is lit and grey otherwise
+  #whiteHoldSec: 60             # motion, detect: how long it stays on after
+                                # the last movement or sighting, 5-600 s
+  #whitePeople: true            # detect: what lights it. Needs no alerts
+  #whiteAnimals: false          # (objectDetect.enabled may stay false); the
+  #whiteVehicles: false         # WebUI offers what the camera can detect
   #backlightPwmFreq: 400        # Hz, 50-20000
   #backlightPwmMin: 10          # duty floor, % — LEDs have an ignition threshold
   #backlightPwmMax: 100         # duty ceiling, %
@@ -686,6 +691,15 @@ mdns:
                                 # exposure raises the gain. 0 leaves it alone
                                 # (HiSilicon/Goke; elsewhere only the keyframe
                                 # applies)
+#  track: false                 # Follow: turn the head to keep what object
+                                # detection sees in the middle of the picture.
+                                # Needs a head that counts steps; raises no
+                                # alerts of its own
+#  trackPeople: true            # what it follows; the WebUI offers what the
+#  trackAnimals: false          # camera can detect
+#  trackVehicles: false
+#  trackSpeed: 70               # percent of the head's top speed, 1-100
+#  trackResumeSec: 15           # after an operator moves the head, 0-600 s
 
 onvif:
   enabled: true

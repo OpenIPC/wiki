@@ -1113,9 +1113,10 @@ infrared one.
 | `sun` | Lights while the sun is below `sunNightAngle`, whatever the picture says — the "on at dusk, whatever the scene" behaviour some cameras run on a timer. Needs the latitude and longitude; without them it follows day and night. Pair it with `switchBy: sun`: if the picture decides day and night, it is then judging dusk under a lamp already lit for it. |
 | `manual` | Moved by hand only: `/night/white` toggles it. It stays as you left it across a settings change. |
 | `off` | Never lit. The night is then an infrared one, even with `colorNight` on. |
+| `detect` | Lights at night when the camera **sees** someone, not when anything moves, and goes out `whiteHoldSec` seconds after the last sighting. Described below. |
 
-**With `colorNight: true` and any of `motion`, `sun` or `manual`, the night is in
-colour exactly while the white lamp is lit.** The rest of the night is grey under
+**With `colorNight: true` and any of `motion`, `sun`, `manual` or `detect`, the
+night is in colour exactly while the white lamp is lit.** The rest of the night is grey under
 the infrared lamp. So a camera can watch in infrared all night, and switch to a
 colour picture lit by the white lamp when someone walks in. Each change runs in
 the same order as a dusk or a dawn, so infrared never reaches a colour picture.
@@ -1124,6 +1125,50 @@ The filter really does move each time, which is worth knowing on a busy scene.
 Before it believes a day, the camera puts its own light out for a few seconds to
 check the scene. That check now puts the white lamp out too, so a white lamp lit
 at night cannot buy a day and then lose it again when it goes out.
+
+#### The white lamp on a sighting
+
+`motion` lights the white lamp for anything that moves: leaves, rain, headlights
+on the street, the insects the lamp itself draws in. And it lets the lamp go out
+under someone who has stopped moving. `whiteLight: detect` waits for object
+detection to see one of the things you choose instead:
+
+```yaml
+nightMode:
+  whiteLightPwmChannel: pwm9   # your board's white lamp, as in the example above
+  colorNight: true
+  whiteLight: detect      # "When someone is seen at night" in the WebUI
+  whitePeople: true       # the default
+  whiteAnimals: false     # cats and dogs
+  whiteVehicles: false    # cars, trucks, buses, motorcycles, bicycles
+  whiteHoldSec: 60        # after the last sighting, 5-600 s
+```
+
+The night stays grey under the infrared lamp, with the filter out, until the
+camera sees a person (or whatever you chose). Then the white lamp comes on and
+the picture turns colour. Someone who stays in view keeps it lit, standing still
+or not, because every frame that sees them counts again. `whiteHoldSec` seconds
+after the last sighting the night goes back to infrared. By day both lamps are
+dark and the filter is in, as always.
+
+It does not need object detection's alerts: choosing `detect` starts the
+detector on its own, even with `objectDetect.enabled: false`, and what it sees
+for the lamp raises no alert, event or recording. Choosing it or leaving it
+restarts the night and the detector, not the video.
+
+**What it needs.** A white lamp on a PWM channel (`whiteLightPwmChannel`) and a
+camera that can run object detection. Where either is missing the WebUI doesn't
+offer the mode, and the API refuses it. The classes offered are the ones the
+camera can detect. A camera with a neural processor (GK7205V5x0) sees people,
+cats and dogs, and vehicles, including someone standing still. On one that
+detects on its CPU it is people only, found where something moved. An older
+majestic doesn't know `detect`, warns, and treats it as `auto`, which lights the
+white lamp all night.
+
+**The demo camera.** The Zenointel SD-2N-4G's profile ships this as its night,
+with `whiteHoldSec: 10`. Its pan/tilt head also follows the person it sees (see
+[Follow](ptz-live.md#follow)), so whoever walks in is lit, in colour, and kept in
+the middle of the picture.
 
 `night_white_light` on `/metrics` is 1 while the white lamp is lit and 0 while it
 is dark. It is absent under `auto`, where the lamp is the night's own and
