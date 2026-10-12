@@ -95,7 +95,7 @@ The first time these gestures are available, the page says so once: *Drag the pi
 
 What it follows is separate from what object detection alerts on. Following needs no alerts: it starts the detector on its own, and following a cat raises no animal alert, event or recording. Switching it on or off restarts the detector, not the video.
 
-Once it has picked someone it keeps them: the nearest box of the same kind in the next frames, never one of another kind, until they have been gone for five seconds. A cat it is following is not swapped for a person walking past. The followed subject is outlined on the Live picture.
+It starts on someone seen in two frames in a row, so a single frame in which the detector mistakes something for a person doesn't swing the head. Once it has picked someone it keeps them: the nearest box of the same kind in the next frames, never one of another kind, until they have been gone for five seconds. A cat it is following is not swapped for a person walking past. The followed subject is outlined on the Live picture.
 
 It looks, then turns: once the head has stopped and the picture has settled it decides, and turns by the number of steps that brings the subject to the middle. Where the head reports its frame in steps (`frame=` below) it turns both axes in the same move, the shorter one more slowly so both arrive together, and so goes straight at the subject. Otherwise it turns one axis per move. Any move from the pad, ONVIF or DVRIP pauses following for `ptz.trackResumeSec` (15 s by default).
 
