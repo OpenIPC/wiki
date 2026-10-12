@@ -1135,6 +1135,7 @@ detection to see one of the things you choose instead:
 
 ```yaml
 nightMode:
+  whiteLightPwmChannel: pwm9   # your board's white lamp, as in the example above
   colorNight: true
   whiteLight: detect      # "When someone is seen at night" in the WebUI
   whitePeople: true       # the default

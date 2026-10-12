@@ -161,7 +161,7 @@ A counted pan move and a counted tilt move sent one after the other run together
 - A picture rotated 90° or 270° turns them off as well.
 - If the page loaded while the camera wasn't answering, it asks again on its own over the next two minutes, and at the next touch of the picture.
 
-**There is no Follow switch on the pad.** `GET /ptz` needs both `steps=` and `follow=`. No `follow=`: the camera has nothing to detect with (no neural processor and no CPU detector model in its firmware).
+**There is no Follow switch on the pad.** `GET /ptz` needs both `steps=` and `follow=`. No `follow=` means one of two things: the firmware's majestic predates Follow choosing what it follows (update the firmware first), or the camera has nothing to detect with (no neural processor and no CPU detector model in its firmware).
 
 **The knob only goes in four directions.** `GET /ptz` doesn't list the diagonals. The motor plugin predates them; on Pelco heads they need a current majestic-af too.
 
