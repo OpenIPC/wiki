@@ -67,6 +67,43 @@ These sounds come with firmware built after
 saves whatever code it reads and reboots, with no sound unless the camera has a
 speaker.
 
+### Cable and Wi-Fi together
+
+On a camera with an Ethernet port, setting up Wi-Fi does not take the cable away.
+With `wlandev` set and a network saved in `wlanssid`, both come up and the cable is
+preferred:
+
+- The cable gets an address by DHCP whenever it is plugged in. Wi-Fi joins too, with
+  its routes ranked behind the cable's, so traffic and DNS go over the cable.
+- Pull the cable and traffic moves to Wi-Fi within a few seconds (about 4 s on a
+  Hi3516EV300). Plug it back in and traffic moves back to the cable with nothing lost.
+- A camera that boots with no cable runs on Wi-Fi alone, with no wait. Plugging a
+  cable in later works the same as at boot.
+- Plugged straight into a laptop with no DHCP server, the cable falls back to
+  `netaddr_fallback` (192.168.2.10 unless you set another).
+- With `wlandev` set but no network saved yet, the cable has DHCP, and the camera
+  waits for a [QR code](#or-show-the-camera-a-qr-code).
+
+To keep the older layout, where Wi-Fi is the only network path and the cable stays on
+a fixed service address, set:
+
+```shell
+fw_setenv netmode wifi
+```
+
+Each interface's route priority can be changed with a `metric N` line in its stanza
+under `/etc/network/interfaces.d/`. The lower the metric, the more preferred the
+interface.
+
+Two things it does not do yet. It switches when the cable's *link* goes, not when the
+cable is still connected but the network behind it stops working. And while the cable
+is up, the camera's Wi-Fi address answers reliably only from the Wi-Fi network itself.
+
+This needs firmware built after
+[OpenIPC/firmware#2573](https://github.com/OpenIPC/firmware/pull/2573). Older
+firmware puts the cable on the static `netaddr_fallback` address as soon as a Wi-Fi
+network is saved, and leaves it there.
+
 ---
 
 ### Adopt custom settings
