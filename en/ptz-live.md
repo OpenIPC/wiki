@@ -134,6 +134,7 @@ A counted pan move and a counted tilt move sent one after the other run together
 ### Troubleshooting
 
 **There is a knob but no double-tap or drag.**
+- `GET /ptz` has no `steps=`: the motor cannot count its steps (a Pelco head only switches moves on and off), so it can't do either. That is the head, not a setting.
 - `GET /ptz` has no `frame=`: either the board's `gpiostep.conf` has no frame keys, or the firmware's majestic-af predates them.
 - A picture rotated 90° or 270° turns them off as well.
 - If the page loaded while the camera wasn't answering, it asks again on its own over the next two minutes, and at the next touch of the picture.

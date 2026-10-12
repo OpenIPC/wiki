@@ -24,7 +24,7 @@ This is a simple and direct method to control a stepper motor by setting off GPI
 
 ## Steering from the web interface
 
-On a camera whose pan/tilt head is driven through majestic, the **Live** page has a knob to steer with, double-tap to centre a spot and drag-the-picture to steer. See [Pan and tilt from the Live page](ptz-live.md).
+On a camera whose pan/tilt head is driven through majestic, the **Live** page has a knob to steer with. Where the camera also reports counted moves and how many steps make a frame, it adds double-tap to centre a spot and dragging the picture to steer. See [Pan and tilt from the Live page](ptz-live.md) for what each needs.
 
 ## Configuring ONVIF
 
