@@ -26,9 +26,11 @@ only when no DHCP server answers on the cable. The default is 192.168.2.10. See
 [Cable and Wi-Fi together](../en/wireless-settings.md#cable-and-wi-fi-together).
 
 ### netmode
+Firmware built after [OpenIPC/firmware#2573](https://github.com/OpenIPC/firmware/pull/2573).
 Set to `wifi` to make Wi-Fi the only network path on a camera with both a cable port
 and a configured Wi-Fi: the cable stays on `netaddr_fallback` with no DHCP. Unset,
-the cable is preferred and Wi-Fi takes over when it is unplugged.
+the cable is preferred and Wi-Fi takes over when it is unplugged. It takes effect at
+the next boot. Older firmware always behaves as `wifi` does.
 
 ### osmem
 Mandatory setting, available in all OpenIPC bootloaders

@@ -69,6 +69,11 @@ speaker.
 
 ### Cable and Wi-Fi together
 
+This needs firmware built after
+[OpenIPC/firmware#2573](https://github.com/OpenIPC/firmware/pull/2573). Older
+firmware puts the cable on the static `netaddr_fallback` address as soon as a Wi-Fi
+network is saved, and leaves it there.
+
 On a camera with an Ethernet port, setting up Wi-Fi does not take the cable away.
 With `wlandev` set and a network saved in `wlanssid`, both come up and the cable is
 preferred:
@@ -81,15 +86,21 @@ preferred:
   cable in later works the same as at boot.
 - Plugged straight into a laptop with no DHCP server, the cable falls back to
   `netaddr_fallback` (192.168.2.10 unless you set another).
-- With `wlandev` set but no network saved yet, the cable has DHCP, and the camera
-  waits for a [QR code](#or-show-the-camera-a-qr-code).
+- With `wlandev` set but no network saved yet, the cable has DHCP. If the firmware
+  includes the QR scanner (`quirc-openipc`), the camera also waits for a
+  [QR code](#or-show-the-camera-a-qr-code).
 
 To keep the older layout, where Wi-Fi is the only network path and the cable stays on
 a fixed service address, set:
 
 ```shell
 fw_setenv netmode wifi
+reboot
 ```
+
+The setting takes effect at the next boot, as do `wlandev`, `wlanssid` and
+`wlanpass`. `fw_setenv netmode` (with no value) and a reboot bring back the
+cable-preferred layout.
 
 Each interface's route priority can be changed with a `metric N` line in its stanza
 under `/etc/network/interfaces.d/`. The lower the metric, the more preferred the
@@ -98,11 +109,6 @@ interface.
 Two things it does not do yet. It switches when the cable's *link* goes, not when the
 cable is still connected but the network behind it stops working. And while the cable
 is up, the camera's Wi-Fi address answers reliably only from the Wi-Fi network itself.
-
-This needs firmware built after
-[OpenIPC/firmware#2573](https://github.com/OpenIPC/firmware/pull/2573). Older
-firmware puts the cable on the static `netaddr_fallback` address as soon as a Wi-Fi
-network is saved, and leaves it there.
 
 ---
 
