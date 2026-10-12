@@ -89,6 +89,7 @@ OpenIPC Wiki
 - [Automatic night mode without light sensor](en/auto-night-mode-without-light-sensor.md)
 - [ZeroTier setup](en/zerotier.md)
 - [Motor control](en/motors.md)
+- [Pan and tilt from the Live page: the knob, double-tap to centre, drag to steer](en/ptz-live.md)
 
 ### FPV
 
