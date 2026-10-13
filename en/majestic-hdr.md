@@ -15,6 +15,10 @@ It is one setting. Where the chip and sensor can do WDR, it is worth having
 together with it, because WDR is what captures the extra range in the first
 place.
 
+For footage meant to be **graded** rather than watched, use
+[cinema capture](majestic-cinema.md) instead: a fixed, invertible log curve,
+per-frame metadata and timecode.
+
 ### Turning it on
 
 ```yaml
