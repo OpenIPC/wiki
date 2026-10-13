@@ -681,7 +681,18 @@ mdns:
 # apply from the next move. To check it works: isp_exptime on /metrics (in
 # microseconds) drops to exposureCapMs x 1000 or below while the head moves,
 # and comes back once it stops.
+# The motor itself (the same block; before the 2026-10-14 nightly these
+# were under isp.autofocus, and timeoutMs was onvif.ptzTimeoutMs):
 #ptz:
+#  enabled: false               # motorized lens or head; the default comes
+                                # from the board's ptz_control
+#  actuator: pelco-xm           # pelco-xm | pelco-d | ms41908 | gpiostep
+#  port: /dev/ttyAMA0           # serial port, for the two Pelco protocols
+#  baud: 115200                 # 1200-115200
+#  address: 1                   # Pelco device address, 0-255 (DIP switches)
+#  pulse: 500                   # ms one PTZ button press drives the motor
+#  focusMode: semi              # semi: refocus after a zoom; manual: never
+#  timeoutMs: 120000            # ONVIF DefaultPTZTimeout, 1000-120000
 #  motionAware: false           # while the head moves, hold exposure short so
                                 # the picture smears less; when it stops, start
                                 # the new view on a keyframe if the GOP is
@@ -813,5 +824,5 @@ cloud:
   — which streams get the overlay, and what masks do on each SoC family
 - [Majestic encoder tuning](majestic-encoder-tuning.md) — `refEnhance`, `refPred`, `svct`, ROI
 - [Majestic plugins](majestic-plugins.md) — what `system.plugins` turns on
-- [Autofocus and manual focus](autofocus.md) — `isp.autofocus` and `isp.af`, the
+- [Autofocus and manual focus](autofocus.md) — `ptz` and `isp.af`, the
   lens pad on the Live page, and the raw editor's Focus tab
