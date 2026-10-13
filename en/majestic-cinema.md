@@ -14,10 +14,9 @@ footage that is meant to be graded rather than watched:
   and colour matrix per frame, a sidecar per clip, SMPTE timecode, and RAW
   reference stills.
 
-It is available on the HiSilicon and Goke chips whose ISP Majestic drives
-directly in its fourth-generation SDK (the Hi3516EV200/EV300 and Gk7205V200/
-V300 families, and Hi3516CV500). Everything below was measured on a Gk7205V300
-and a Hi3516EV300, both with a Sony IMX335.
+It is available on Hi3516EV200, Hi3516EV300, Gk7205V200, Gk7205V300 and
+Hi3516CV500 cameras. Everything below was measured on a Gk7205V300 and a
+Hi3516EV300, both with a Sony IMX335.
 
 ### Turning it on
 
@@ -43,17 +42,19 @@ for **grading**.
 
 ### The picture: OpenIPC Log
 
-The ISP's gamma stage writes a fixed log curve, **OpenIPC Log v1**:
+The camera writes its picture through a fixed log curve, **OpenIPC Log v1**:
 
 ```
 y = 1 + log2(x) / 13                 for x >= 2^-11
 a straight line below that, meeting the log in value and slope
 ```
 
-`x` is the ISP's linear signal (0..1, 1 being the top of its range) and `y`
-the code value (0..1; times 255 for 8 bits). Black sits at y = 0.043 (code
-11), nothing is folded, and every stop gets the same share of the 8 bits:
-255 / 13 = 19.6 codes. To go back to light:
+`x` is the camera's linear signal (0..1, 1 being the top of its range) and
+`y` the code value (0..1; times 255 for 8 bits). The eleven stops from
+x = 2^-11 up each get the same share of the 8 bits, 255 / 13 = 19.6 codes.
+Below x = 2^-11 the curve is a straight line down to black at y = 0.043
+(code 11), so the deepest shadows are linear rather than logarithmic and
+nothing is folded. To go back to light:
 
 ```
 x = 2^((y - 1) * 13)                              for y >= 1 - 11/13
@@ -62,9 +63,10 @@ x = 2^-11 - (1 - 11/13 - y) * 13 * ln 2 * 2^-11   below it, and 0 below black
 
 What else the mode holds still, because post cannot undo it:
 
-- **Global tone only:** no local contrast (DRC), no LDCI, no dehaze.
-- **Nothing retunes the picture during a take:** the automatic ISO-dependent
-  tuning, the noise-reduction ladders and the tone controller all stand down.
+- **The same curve everywhere in the frame:** no local contrast boost, no
+  local brightening of shadows or dimming of highlights, no dehaze.
+- **Nothing retunes the picture during a take:** the camera stops adjusting
+  sharpness, noise reduction and contrast as the light or gain changes.
 - **A constant frame rate:** slow shutter is overridden. Auto exposure runs at
   a fixed rate with the exposure capped at one frame period, and a dark scene
   gets gain instead of a longer frame.
@@ -89,16 +91,18 @@ camera's own log curve. The samples are **full range**:
 Each frame was decoded through the inverse curve and compared, block by
 block, with a RAW frame of the same moment:
 
-| `isp.wdrMode` | slope (1 = exact) | mean error per stop |
+| `isp.wdrMode` | slope (1 = ideal) | mean error per stop |
 |---|---|---|
 | `none` | **0.99** | within ±0.01 stop across the mid-tones, −0.05 at the top |
 | `always` (2:1 line WDR) | 0.91 | −0.22 to +0.15 stop, −0.75 at the top |
 
-Without WDR the formula is exact. With WDR it is not: the chip fuses the two
+Without WDR the published inverse matches the RAW to within a few hundredths
+of a stop in the mid-tones and 0.05 stop in the top stop, which is as close as
+this measurement resolves. With WDR it does not: the chip fuses the two
 exposures and compresses them before the curve, and how far off the result is
 depends on the exposure ratio the camera picks from the light. Under a mains-
 flickering lamp it got worse, not better, and no single inverse covered every
-case. **For footage that must be graded exactly, use `isp.wdrMode: none`.**
+case. **For footage that must be graded accurately, use `isp.wdrMode: none`.**
 
 ### White balance you can hold
 
@@ -122,7 +126,7 @@ not written beside encrypted recordings. Schema `openipc-cinema/1`:
 | `camera` | platform, sensor, firmware build |
 | `transfer` | `openipc-log` with its parameters and formula |
 | `signal` | 8-bit, `bt709`, the transfer code in the stream, and `range` as the stream signals it |
-| `tone` | what is off: local contrast, LDCI, dehaze, automatic tuning |
+| `tone` | which picture adjustments are off: local contrast, local tone, dehaze, automatic retuning |
 | `exposure_at_start` | WDR on or off, long and short exposure (µs), analog, digital and ISP gain, ISO |
 | `white_balance` | mode, red and blue gains against green, colour temperature, the 3×3 colour matrix in force |
 | `black_level_12bit` | per Bayer channel |
@@ -169,8 +173,9 @@ for scripts: ffmpeg exposes the SEI, and any KLV parser decodes the payload.
 ### Timecode
 
 Footage carries **SMPTE 12M time-of-day timecode** at the sensor's frame rate,
-counted without dropping, on the camera's local time. Cameras that agree on
-the clock (NTP) agree on the timecode.
+counted without dropping, on the camera's local time. Cameras agree on the
+timecode when they agree on the clock (NTP) **and** are set to the same time
+zone.
 
 - **Recordings (H.264 and H.265):** a QuickTime timecode track that the video
   track references. Its one sample is the clip's start, from the capture time
