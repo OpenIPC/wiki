@@ -16,9 +16,9 @@ VGA and HDMI outputs and SATA bay can be brought up under OpenIPC.
 | Network  | 10/100 Ethernet                               |
 | Other    | USB 2.0 host                                  |
 
-The stock firmware identifies the board as `NBD6808T-PL` (in
-`/usr/bin/ProductDefinition`). As an NVR it records and displays streams from
-network cameras; the stock firmware loads no video-input driver.
+The stock firmware identifies the board as `NBD6808T-PL`. As an NVR it records
+and displays streams from network cameras; the stock firmware loads no
+video-input driver.
 
 ## Serial console and the stock bootloader
 
@@ -46,14 +46,28 @@ defaults are `ipaddr=192.168.1.10` and `serverip=192.168.1.1`, so a PC on
 
 ```
 sf probe 0
+mw.b 0x82000000 0xff 0x800000
 sf read 0x82000000 0x0 0x800000
 crc32 0x82000000 0x800000
 tftp 0x82000000 nbd6808t-pl-stock.bin 0x800000
 ```
 
-Compare the CRC32 of the uploaded file with the value `crc32` printed, and take
-a second read for comparison before relying on it. See also
-[backup-stock-firmware](backup-stock-firmware.md).
+This is the [U-Boot over TFTP](backup-stock-firmware.md#c-u-boot-over-tftp)
+method with this board's values. `mw.b` fills the buffer with `0xFF` first, so
+a read that silently comes up short leaves bytes that are recognisably not
+flash contents instead of leftover RAM.
+
+Before relying on the file:
+
+- Compare its CRC32 with the value `crc32` printed.
+- Take a second, independent read (fill, read and upload again under another
+  name) and check that the two files are identical.
+- Check that each partition in the table below starts with its filesystem's
+  signature: `hsqs` at 0x30000, 0x220000 and 0x5D0000 (squashfs), the cramfs
+  magic `45 3d cd 28` at 0x770000, and the jffs2 magic `85 19` at 0x780000.
+  A dump that is `0xFF` where one of these should be was not read in full.
+
+See also [Check the dump before you trust it](backup-stock-firmware.md#check-the-dump-before-you-trust-it).
 
 Stock flash layout (from the stock `bootargs`):
 
