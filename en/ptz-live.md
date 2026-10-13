@@ -38,7 +38,7 @@ The pad sits over the picture, at the bottom right.
 - **Four:** otherwise it steers in four, whichever axis the thumb is further along.
 - **On a line between two directions,** the camera keeps the one it had rather than flipping between them.
 
-**A quick tap on an arrow** is still a nudge: a short move, a fifth of the configured step (`isp.autofocus.pulse`), for the last bit of aiming.
+**A quick tap on an arrow** is still a nudge: a short move, a fifth of the configured step (`ptz.pulse`), for the last bit of aiming.
 
 **The keyboard.** With the picture focused, the arrow keys steer at the motor's own speed. Enter or Space on an arrow is a single nudge.
 
@@ -143,7 +143,7 @@ The pad and the gestures use only the camera's own endpoints:
 | Request | Does |
 |---|---|
 | `GET /ptz` | The capability line, for example `actuator=gpiostep pulse=500 state=ready verbs=stop,up,down,left,right,upleft,upright,downleft,downright speeds=1-100 steps=1 frame=134x62` |
-| `POST /ptz?move=<verb>&ms=<ms>&speed=<1-100>` | Turns for `ms` milliseconds (the default is `isp.autofocus.pulse`). Repeat it to keep turning; `move=stop` stops. `speed` only where `speeds=` is offered. |
+| `POST /ptz?move=<verb>&ms=<ms>&speed=<1-100>` | Turns for `ms` milliseconds (the default is `ptz.pulse`). Repeat it to keep turning; `move=stop` stops. `speed` only where `speeds=` is offered. |
 | `POST /ptz?move=<verb>&steps=<1-1000>&speed=<1-100>` | Turns exactly that many steps and stops by itself. Only where `steps=` is offered. |
 
 On the capability line:

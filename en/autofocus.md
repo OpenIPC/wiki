@@ -403,18 +403,23 @@ much as of the filter. Tune for the scene the camera will actually watch.
 
 ### Settings reference
 
-Majestic's own keys, on the **Settings** page under **ISP / Exposure →
-Autofocus**, and the
-[`/api/v1/config`](majestic-streamer.md) endpoint:
+Majestic's own keys, on the **Settings** page under **Image → PTZ**, and the
+[`/api/v1/config`](majestic-streamer.md) endpoint. They are one `ptz` block
+from the 2026-10-14 nightly onwards. Older builds kept the motor keys under
+`isp.autofocus`, with `speed` for the baud rate and `mode` for the focus mode,
+and the ONVIF timeout as `onvif.ptzTimeoutMs`. A newer build does not read the
+old names, so set the new ones after upgrading.
 
 | Setting | Key | What it does |
 |---|---|---|
-| Motorized lens | `isp.autofocus.enabled` | Loads the motor driver and the engine. Restart majestic after changing it. |
-| Focus motor protocol | `isp.autofocus.actuator` | `pelco-xm` (XiongMai zoom blocks, the default) or `pelco-d`. |
-| Focus motor serial port | `isp.autofocus.port` | The UART the lens is on, `/dev/ttyAMA0` on the 85H50AI. |
-| Focus motor port baud rate | `isp.autofocus.speed` | 115200 on the 85H50AI; 9600 is common for Pelco-D. |
-| PTZ button step (ms) | `isp.autofocus.pulse` | How long one held tick moves the lens, 50–3000 ms, default 500. A tap moves a fifth of it. |
-| Focus mode | `isp.autofocus.mode` | `semi` (default) refocuses after every zoom; `manual` never refocuses on its own. |
+| Motorized lens | `ptz.enabled` | Loads the motor driver and the engine. |
+| Motor protocol | `ptz.actuator` | `pelco-xm` (XiongMai zoom blocks, the default), `pelco-d`, `ms41908` (SPI lens stepper) or `gpiostep` (GPIO pan/tilt head). |
+| Motor serial port | `ptz.port` | The UART the lens is on, `/dev/ttyAMA0` on the 85H50AI. |
+| Motor port baud rate | `ptz.baud` | 115200 on the 85H50AI; 9600 is common for Pelco-D. |
+| Pelco device address | `ptz.address` | 0–255, default 1. The receiver address set on a Pelco-D head's DIP switches; the XiongMai lens board ignores it. |
+| PTZ button step (ms) | `ptz.pulse` | How long one held tick moves the lens, 50–3000 ms, default 500. A tap moves a fifth of it. |
+| Focus mode | `ptz.focusMode` | `semi` (default) refocuses after every zoom; `manual` never refocuses on its own. |
+| ONVIF move timeout | `ptz.timeoutMs` | How long an ONVIF move with no Timeout of its own runs without a Stop, 1000–120000 ms. |
 | AF focus filter … | `isp.af.iir1*` | Written by the designer's **Keep it**. Unset means the firmware or sensor profile's filter is in force. |
 
 The boot environment, set with `fw_setenv` and read by the web interface to
