@@ -64,6 +64,9 @@ root@openipc:~# sysupgrade --force_ver \
   перезагрузится, ничего не записав.
 - Профилю устройства нужен ещё и `--force_soc`, а также его собственный образ:
   `https://github.com/OpenIPC/builder/releases/download/latest/<soc>_ultimate_<устройство>-nor.tgz`.
+  Настройки сохраняются, а с ними и заданный профилем адрес будущих обновлений,
+  который по-прежнему указывает на старый вариант. Перенаправьте его на новый:
+  `fw_setenv upgrade <URL, с которого только что прошились>`.
 
 Настройки сохраняются, как при любом sysupgrade. После перезагрузки проверьте
 `grep BUILD_OPTION /etc/os-release`.
@@ -84,12 +87,15 @@ root@openipc:~# sysupgrade --force_ver \
 На компьютере, подставив адрес и пароль камеры:
 
 ```console
-$ ssh root@192.0.2.10 "cat /dev/mtd0 /dev/mtd1 /dev/mtd2 /dev/mtd3 /dev/mtd4" > camera-backup.bin
+$ ssh root@192.0.2.10 'for m in $(sed -n "s/^mtd\([0-9]*\):.*/\1/p" /proc/mtd); do cat /dev/mtdblock$m; done' > camera-backup.bin
 $ ls -l camera-backup.bin
 -rw-r--r-- 1 user user 16777216 ... camera-backup.bin
 ```
 
-Размер должен быть ровно 16777216 байт. Сохраните этот файл. В нём вся камера:
+Команда читает все разделы из `/proc/mtd` в том порядке, в каком они лежат на
+чипе (почему не подойдёт маска оболочки, объяснено в
+[Backing up firmware](../en/backup-stock-firmware.md)). Размер должен быть
+ровно 16777216 байт. Сохраните этот файл. В нём вся камера:
 по нему можно вернуть что угодно, а мы можем в точности воспроизвести проблему
 (см. [Если что-то пошло не так](#если-что-то-пошло-не-так)).
 
@@ -134,8 +140,18 @@ $ curl -LO https://github.com/OpenIPC/firmware/releases/download/latest/openipc.
 $ python3 upgrade_bundle.py --layout nor16m -f openipc.hi3516ev300-nor-ultimate.tgz -o ultimate.bundle
 ```
 
-Для профиля устройства возьмите образ из релизов builder и укажите камере,
-откуда брать будущие обновления:
+Посмотрите, откуда камера сейчас берёт обновления:
+
+```console
+root@openipc:~# fw_printenv upgrade
+```
+
+Если ничего не выведено (`## Error: "upgrade" not defined`), камера определяет
+источник обновлений по самой прошивке, и пакета выше достаточно. Если выведен
+адрес, он указывает на вариант, с которого вы уходите, и пакет должен его
+заменить, иначе следующий `sysupgrade -k -r` вернёт старый вариант. У профиля
+устройства этот адрес есть всегда. Возьмите его образ из релизов builder и
+передайте новый адрес через `-e`:
 
 ```console
 $ python3 upgrade_bundle.py --layout nor16m -f hi3516ev300_ultimate_xm-85h50ai-nor.tgz \
@@ -211,12 +227,25 @@ BUILD_OPTION=ultimate
 **На разметке 16 МБ** (на ней вы окажетесь после 2B): сделайте 2A с образом
 lite. В больших разделах lite работает без проблем.
 
-**Чтобы вернуть в точности разметку 8 МБ**, например для профиля устройства,
-который есть только в lite: сделайте 2B с `--layout nor8m` и образом lite:
+**Чтобы вернуть в точности разметку 8 МБ**, сделайте 2B с `--layout nor8m` и
+образом lite. Для камеры на общей прошивке:
 
 ```console
 $ python3 upgrade_bundle.py --layout nor8m -f openipc.hi3516ev300-nor-lite.tgz -o lite.bundle
 ```
+
+Для профиля устройства нужен его собственный образ lite из релизов builder,
+и адрес обновлений надо вернуть на него. Общий образ лишил бы плату драйверов
+и настроек профиля:
+
+```console
+$ python3 upgrade_bundle.py --layout nor8m -f hi3516ev300_lite_xm-85h50ai-nor.tgz \
+    -e upgrade=https://github.com/OpenIPC/builder/releases/download/latest/hi3516ev300_lite_xm-85h50ai-nor.tgz \
+    -o lite.bundle
+```
+
+Как и по пути туда, сначала проверьте `fw_printenv upgrade`. Если на общей
+камере там указан адрес, передайте через `-e` адрес lite.
 
 Раздел настроек снова вырастает до 8,7 МБ, так что настройки поместятся всегда.
 

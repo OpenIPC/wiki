@@ -64,6 +64,9 @@ Use your SoC in the file name, and `-nor-lite.tgz` to go back.
   update` and reboots having written nothing.
 - A device profile also needs `--force_soc`, and its own image:
   `https://github.com/OpenIPC/builder/releases/download/latest/<soc>_ultimate_<device>-nor.tgz`.
+  Its settings are kept, and with them the address the profile set for future
+  upgrades, which still names the old variant. Point it at the new one:
+  `fw_setenv upgrade <the URL you just flashed from>`.
 
 Settings are kept, as with any sysupgrade. After the reboot, check
 `grep BUILD_OPTION /etc/os-release`.
@@ -85,12 +88,14 @@ runs:
 On your computer, with the camera's address and password:
 
 ```console
-$ ssh root@192.0.2.10 "cat /dev/mtd0 /dev/mtd1 /dev/mtd2 /dev/mtd3 /dev/mtd4" > camera-backup.bin
+$ ssh root@192.0.2.10 'for m in $(sed -n "s/^mtd\([0-9]*\):.*/\1/p" /proc/mtd); do cat /dev/mtdblock$m; done' > camera-backup.bin
 $ ls -l camera-backup.bin
 -rw-r--r-- 1 user user 16777216 ... camera-backup.bin
 ```
 
-It must be exactly 16777216 bytes. Keep it. It is the whole camera: with it,
+That reads every partition `/proc/mtd` lists, in its order, which is the
+order on the chip ([Backing up firmware](backup-stock-firmware.md) explains
+why a shell glob would not do). It must come to exactly 16777216 bytes. Keep it. It is the whole camera: with it,
 anything can be put back, and with it we can reproduce a problem exactly
 (see [Something went wrong](#something-went-wrong)).
 
@@ -136,8 +141,18 @@ $ curl -LO https://github.com/OpenIPC/firmware/releases/download/latest/openipc.
 $ python3 upgrade_bundle.py --layout nor16m -f openipc.hi3516ev300-nor-ultimate.tgz -o ultimate.bundle
 ```
 
-For a device profile, take its image from the builder releases instead, and
-tell the camera where its future upgrades come from:
+See where the camera takes its upgrades from now:
+
+```console
+root@openipc:~# fw_printenv upgrade
+```
+
+If that prints nothing (`## Error: "upgrade" not defined`), the camera finds its
+upgrades from the firmware it runs, and the bundle above is all you need. If
+it prints an address, it names the variant you are leaving, and the bundle has
+to replace it, or the next `sysupgrade -k -r` would bring that variant back.
+A device profile always has one. Take its image from the builder releases, and
+give the new address with `-e`:
 
 ```console
 $ python3 upgrade_bundle.py --layout nor16m -f hi3516ev300_ultimate_xm-85h50ai-nor.tgz \
@@ -213,12 +228,25 @@ From now on the camera upgrades like any other 16 MB-layout camera:
 **On the 16 MB layout** (where 2B left you): use 2A with the lite image. Lite
 runs fine in the bigger partitions.
 
-**To return to the 8 MB layout exactly**, for instance a device profile that
-only exists in lite, use 2B with `--layout nor8m` and the lite image:
+**To return to the 8 MB layout exactly**, use 2B with `--layout nor8m` and
+the lite image. For a camera on the generic firmware:
 
 ```console
 $ python3 upgrade_bundle.py --layout nor8m -f openipc.hi3516ev300-nor-lite.tgz -o lite.bundle
 ```
+
+For a device profile, its own lite image from the builder releases, with the
+address set back to it. The generic image would drop the profile's drivers and
+settings for the board:
+
+```console
+$ python3 upgrade_bundle.py --layout nor8m -f hi3516ev300_lite_xm-85h50ai-nor.tgz \
+    -e upgrade=https://github.com/OpenIPC/builder/releases/download/latest/hi3516ev300_lite_xm-85h50ai-nor.tgz \
+    -o lite.bundle
+```
+
+As on the way there, check `fw_printenv upgrade` first. If it names an address
+on a generic camera, pass the lite one with `-e`.
 
 The settings partition grows back to 8.7 MB, so the settings always fit.
 
