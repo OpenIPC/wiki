@@ -755,8 +755,8 @@ configured:
 3. neither — the automatic exposure-based mode above.
 
 The `night_mode_source` gauge on `/metrics` names which one has the wheel
-(1 sensor pin, 2 thresholds, 4 automatic, 5 the sun, 6 set times — the last two
-are below), and **Settings → Day / Night** in
+(1 sensor pin, 2 thresholds, 3 a photocell on the ADC, 4 automatic, 5 the sun,
+6 set times — 3, 5 and 6 are below), and **Settings → Day / Night** in
 the web interface shows the decision live: the watched value charted with the
 switching bands shaded, and a countdown when a switch is pending.
 
@@ -931,6 +931,34 @@ curl http://localhost/api/v1/config --data-binary @- <<'EOF'
 EOF
 ```
 
+#### A photocell on the ADC
+
+Some boards carry a photoresistor wired to an analog input of the SoC rather
+than to a GPIO pad. On those the two thresholds can be read from it instead of
+from the sensor gain:
+
+```yaml
+nightMode:
+  lightMonitor: true
+  adcReadout: true
+  minThreshold: 300             # in the ADC's own units
+  maxThreshold: 380
+  #adcInvert: false             # true when the reading RISES with light
+```
+
+The ADC keys appear only on cameras that have one: Ingenic, GrainMedia, and
+**since October 2026 Hi3516CV100 / Hi3518CV100 / Hi3518EV100**, whose SAR ADC
+(10-bit, 0-1023) is read through `/dev/ADC_CH0` from the `hi_adc` driver in the
+firmware. `night_mode_source` reads `3` while the photocell has the wheel, and
+`night_adc_raw` shows the reading, so pick the thresholds from what it says in
+your own daylight and darkness.
+
+Without `adcInvert` the comparison runs the way gain does: a high reading is
+dark. A divider wired the other way round reads high in daylight; turn
+`adcInvert` on for that and the thresholds swap over. To look at the raw value
+by hand, `dd if=/dev/ADC_CH0 bs=4 count=1 2>/dev/null | od -An -td4` (a read
+needs at least four bytes, which is why busybox `hexdump` is refused).
+
 ### A lamp wired the other way round
 
 Some boards drive the illuminator **active-low**: the pad has to be held low to
@@ -957,6 +985,34 @@ equivalent for the two IR-cut coils and none is needed: they are one H-bridge,
 and which way the filter moves is decided by which pad you put in `irCutPin1`.
 A single-pad filter has `irCutSingleInvert`, and the daylight sensor has
 `lightSensorInvert`.
+
+### A filter pad that is also the lamp's switch
+
+On some cheap domes one of the two IR-cut pads doubles as the enable of the IR
+lamp's driver — the Hi3518EV100 GF_YTJ010E board, for one, where pad 7 is both
+a filter coil and the lamp (high = dark). After moving the filter majestic
+normally brakes the bridge with **both pads low**, and on such a board that
+lights the lamp all day.
+
+```yaml
+nightMode:
+  irCutPin1: 6
+  irCutPin2: 7
+  irCutParkAtLevel: true        # default false
+```
+
+With it on (since October 2026), the filter is still moved by the usual
+150 ms pulse, but afterwards both pads rest **high by day and low by night**,
+the way the vendor firmware leaves them. Both pads at the same level is a brake
+either way, so no current flows through the coil; what changes is which level
+the lamp's enable sees. It also holds across a settings save and the start-up
+click. Two-pad filters only — a single-pad filter ignores it.
+
+Before this setting, the same board could be run by declaring the shared pad as
+a single-pad filter (`irCutPin1: 7`, `irCutSingleInvert: true`, no
+`irCutPin2`) and the other pad as the lamp (`backlightPin: 6`,
+`backlightInvert: true`). That works only because of the order the two pads
+happen to be written in.
 
 ### PWM backlight: a dimmable lamp
 

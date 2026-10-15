@@ -42,6 +42,12 @@ of them on its own proves nothing. They are the two ends of one bridge, and the
 direction of travel is decided by *which* of them is driven high while the other
 is held low.
 
+"Both low" is one brake, "both high" is another. On a board where one of the two
+pads also switches the IR lamp, which of the two the filter rests in decides
+whether the lamp is lit; `nightMode.irCutParkAtLevel` rests it high by day and
+low by night — see
+[A filter pad that is also the lamp's switch](majestic-streamer.md#a-filter-pad-that-is-also-the-lamps-switch).
+
 ### Two kinds of filter, and telling them apart
 
 **Latching (bistable).** A pulse moves it and it stays where it was put. The pads
