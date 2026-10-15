@@ -751,7 +751,8 @@ configured:
 
 1. `lightSensorPin` set — the hardware light sensor decides (as always);
 2. both `minThreshold` and `maxThreshold` set — the legacy raw-gain
-   thresholds decide (below);
+   thresholds decide (below), or, with `adcReadout` on a camera that has an
+   ADC photocell, the photocell's reading against the same two thresholds;
 3. neither — the automatic exposure-based mode above.
 
 The `night_mode_source` gauge on `/metrics` names which one has the wheel
@@ -947,17 +948,16 @@ nightMode:
 ```
 
 The ADC keys appear only on cameras that have one: Ingenic, GrainMedia, and
-**since October 2026 Hi3516CV100 / Hi3518CV100 / Hi3518EV100**, whose SAR ADC
-(10-bit, 0-1023) is read through `/dev/ADC_CH0` from the `hi_adc` driver in the
-firmware. `night_mode_source` reads `3` while the photocell has the wheel, and
-`night_adc_raw` shows the reading, so pick the thresholds from what it says in
-your own daylight and darkness.
+**since October 2026 Hi3516CV100 / Hi3518CV100 / Hi3518EV100** (readings 0-1023,
+with a firmware recent enough to ship the ADC driver for that family). A light
+sensor pin, if one is set, still outranks the photocell. `night_mode_source`
+reads `3` while the photocell has the wheel, and `night_adc_raw` shows the
+reading, so pick the thresholds from what it says in your own daylight and
+darkness.
 
 Without `adcInvert` the comparison runs the way gain does: a high reading is
 dark. A divider wired the other way round reads high in daylight; turn
-`adcInvert` on for that and the thresholds swap over. To look at the raw value
-by hand, `dd if=/dev/ADC_CH0 bs=4 count=1 2>/dev/null | od -An -td4` (a read
-needs at least four bytes, which is why busybox `hexdump` is refused).
+`adcInvert` on for that and the thresholds swap over.
 
 ### A lamp wired the other way round
 
@@ -1011,8 +1011,9 @@ click. Two-pad filters only — a single-pad filter ignores it.
 Before this setting, the same board could be run by declaring the shared pad as
 a single-pad filter (`irCutPin1: 7`, `irCutSingleInvert: true`, no
 `irCutPin2`) and the other pad as the lamp (`backlightPin: 6`,
-`backlightInvert: true`). That works only because of the order the two pads
-happen to be written in.
+`backlightInvert: true`). It does give the right result on that board, but
+nothing in those settings says the two pads belong together, so prefer
+`irCutParkAtLevel` where your build has it.
 
 ### PWM backlight: a dimmable lamp
 

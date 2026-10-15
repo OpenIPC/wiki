@@ -464,7 +464,8 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
   lightSensorInvert: false
   #adcReadout: false            # read the thresholds from a photocell on the
                                 # SoC's ADC instead of the gain (Ingenic,
-                                # GrainMedia, Hi3516CV100/Hi3518EV100) — they
+                                # GrainMedia, Hi3516CV100/Hi3518CV100/
+                                # Hi3518EV100) — they
                                 # are then in ADC units; the key only exists
                                 # where there is an ADC
   #adcInvert: false             # true when the ADC reading rises with light
