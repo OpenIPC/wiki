@@ -4,8 +4,12 @@
 ## Troubleshooting: Network does not work on hi35xx
 If network is not working on your hi35xx device after installing OpenIPC (no link), you may have to tune the MII (Media Independent Interface) settings.  
 For U-Boot, this is done by setting values for `phyaddru`, `phyaddrd` and `mdio_intf`.
-Possible values for `phyaddru` and `phyaddrd` are: `0-3`, possible values for `mdio_intf` are: `rmii`, `rgmii`,  `gmii`.  
-For the Linux kernel / OS, values can be set through the `extras` boot variables `hieth.phyaddru`, `hieth.phyaddrd`, `hieth.mdioifu` and `hieth.mdioifd`.
+Possible values for `phyaddru` and `phyaddrd` are: `0-3`. Which values `mdio_intf` takes depends on the SoC:
+
+- **hi3516cv100 / hi3518cv100 / hi3518ev100:** `mii` or `rmii`. The U-Boot for these chips also sets the PHY clock from it: 25 MHz for `mii`, 50 MHz for `rmii` ([board.c](https://github.com/OpenIPC/u-boot-hi3516cv100/blob/master/board/hi3518/board.c)). Its default is `rmii`, so a board wired for MII has no network in U-Boot until it is set to `mii`.
+- **Chips with the gigabit MAC (higmac):** `rgmii` or `gmii`.
+
+For the Linux kernel / OS, values can be set through the `extras` boot variable as `hieth.phyaddru`, `hieth.phyaddrd`, `hieth.mdioifu` and `hieth.mdioifd`. The kernel does not read U-Boot's `mdio_intf`, so a board that needs MII has to be told twice: `mdio_intf=mii` for U-Boot, and `hieth.mdioifu=0 hieth.mdioifd=0` in `extras` for Linux, where 0 is MII and 1 is RMII. The kernel's defaults on hi3516cv100 are `mdioifu=1 mdioifd=1 phyaddru=1 phyaddrd=2`, i.e. RMII; `cat /sys/module/hieth/parameters/*` shows what it is running with.
 
 Often the correct values can be found in your stock firmware. Viewing the boot logs or running [ipctool](https://github.com/OpenIPC/ipctool) on your stock firmware may provide clues.
 
@@ -81,11 +85,26 @@ Some known combinations for specific boards:
 
 *For Linux network:*
 ```
-   setenv hieth.mdioifu 0
-   setenv hieth.mdioifd 0
-   setenv hieth.phyaddru 1
-   setenv hieth.phyaddrd 2
-   saveenv
+    setenv extras 'hieth.mdioifu=0 hieth.mdioifd=0 hieth.phyaddru=1 hieth.phyaddrd=2'
+    saveenv
+```
+
+### Hi3518EV100 (HI3518ERBCV100) and Hi3518CV100 boards wired for MII (e.g. ZModo ZP-IBI13)
+
+The Linux settings are reported working in [OpenIPC/firmware#1333](https://github.com/OpenIPC/firmware/issues/1333). The U-Boot ones follow from what its network driver reads (`mdio_intf`, `phyaddru`, `phyaddrd`) and have not yet been confirmed on these boards.
+
+*For U-boot network:*
+```
+    setenv mdio_intf mii
+    setenv phyaddru 1
+    setenv phyaddrd 2
+    saveenv
+```
+
+*For Linux network:*
+```
+    setenv extras 'hieth.mdioifu=0 hieth.mdioifd=0 hieth.phyaddru=1 hieth.phyaddrd=2'
+    saveenv
 ```
 
 ### CamHi/HiChip/Xin, HI3518EV200
@@ -113,7 +132,7 @@ Some known combinations for specific boards:
 
 ### JVT (board IP2001 2014-09-22), HI3516CV100
 
-*For U-boot network:*
+*For Linux network:*
 ```
     setenv extras 'hieth.phyaddru=1 hieth.mdioifu=0'
     saveenv
@@ -121,7 +140,7 @@ Some known combinations for specific boards:
 
 ### Harex (5013A-CF/5020A-FF), HI3516CV100
 
-*For U-boot network:*
+*For Linux network:*
 ```
     setenv extras 'hieth.phyaddru=1 hieth.mdioifu=0'
     saveenv
@@ -129,7 +148,7 @@ Some known combinations for specific boards:
 
 ### Brovotech 600102005-BV-H0205, HI3516CV100 + IMX122
 
-*For U-boot network:*
+*For Linux network:*
 ```
     setenv extras 'hieth.mdioifu=0 hieth.mdioifd=0'
     saveenv
