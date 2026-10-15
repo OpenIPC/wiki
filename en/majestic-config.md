@@ -199,7 +199,7 @@ image:
   saturation: 50
   luminance: 50
   hue: 50
-  #tuning: true                 # follow the scene: adjust contrast, luminance,
+  #tuning: true                 # follow the scene: adjust contrast,
                                 # saturation and isp.dehaze as the light and
                                 # the weather change, and give them back when
                                 # the scene no longer needs them. ON BY

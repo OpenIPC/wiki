@@ -11,7 +11,7 @@ nothing done to it at all. Settings chosen on the day of installation are
 chosen for the weather that day.
 
 **Automatic image tuning** watches the picture the camera is actually sending
-and adjusts up to four settings to follow it. It is **on by default** from the
+and adjusts up to three settings to follow it. It is **on by default** from the
 September 2026 builds.
 
 It is deliberately undramatic. On a picture that already uses its range it
@@ -24,8 +24,8 @@ part provides:
 
 | | |
 | --- | --- |
-| **Tunes all four settings** | hi3516ev200, hi3516ev300, gk7205v200, gk7205v300, gk7205v500 |
-| **Tunes three** — contrast, brightness and saturation; these parts have no `isp.dehaze` | hi3516cv500, hi3516av300, hi3516dv300 |
+| **Tunes all three** — contrast, saturation and `isp.dehaze` | hi3516ev200, hi3516ev300, gk7205v200, gk7205v300, gk7205v500 |
+| **Tunes two** — contrast and saturation; these parts have no `isp.dehaze` | hi3516cv500, hi3516av300, hi3516dv300 |
 | **Stays inert** | everything older, and hi3516cv6xx. The setting may be present, but nothing measures, so nothing is driven. |
 
 On a camera in the last row the panel says so rather than pretending — see
@@ -95,7 +95,7 @@ below, about telling the reasons for silence apart:
 | `image_tune_clip_hi_ppm` | share blown to white, parts per million |
 | `image_tune_headroom` | how much of its range the sensor gain leaves it, percent — 100 in good light, 0 when it has given up for the night |
 | `image_tune_scene_dist` | how far the picture has drifted since its last decision, tenths of a percent |
-| `image_tune_dehaze`, `image_tune_contrast`, `image_tune_luminance`, `image_tune_saturation` | where it is holding each setting, which is **not** what the settings page shows |
+| `image_tune_dehaze`, `image_tune_contrast`, `image_tune_saturation` | where it is holding each setting, which is **not** what the settings page shows |
 
 Two things about these worth knowing before you graph them:
 
