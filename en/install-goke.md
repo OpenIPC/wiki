@@ -4,6 +4,10 @@
 For XM boards with SoC GK7202V300, GK7205V200, GK7205V300 ONLY!!!
 -----------------------------------------------------------------
 
+These SoCs can also run the [NOR split layout](nor-split-layout.md): kernel and
+root filesystem in one partition, with no 2 MiB kernel slot to outgrow. It needs
+the OpenIPC `u-boot-<soc>-nor.bin` bootloader.
+
 ### Supported sensors
 
 Please look up your sensor in [the list of supported devices][1].
