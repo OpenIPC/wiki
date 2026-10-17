@@ -65,6 +65,26 @@ mem=32M ... mmz_allocator=cma mmz=anonymous,0,0x42000000,96M
 Boards with only 64MB of RAM typically use `mem=32M` with 32MB for MMZ.  Boards
 with 128MB use `mem=32M` with 96MB for MMZ.
 
+On the **gk7205v500 family**, the firmware decides between the two at boot. A
+command line that names no allocator is rewritten for the next boot so that
+Linux sees the whole DDR and the media region becomes a CMA zone inside it
+(`mem=128M ... mmz_allocator=cma mmz=anonymous,0,0x42000000,96M` on a 128 MB
+board), which gives Linux about four times the memory it had. Boards with 64 MB
+or less are left on the fixed split: the media region is 32 MB either way there,
+and CMA would lend Linux only what a wide-sensor pipeline leaves free
+([OpenIPC/firmware#2620](https://github.com/OpenIPC/firmware/pull/2620)).
+
+A 64 MB board switched to CMA before that keeps it. To put it back on the fixed
+split, remove the allocator **and** give `mem=` back its 32M — removing the
+allocator alone leaves Linux all 64 MB and the media region nothing:
+
+```bash
+fw_printenv bootargs
+fw_setenv bootargs "$(fw_printenv -n bootargs | sed -e 's/mem=[0-9]*M/mem=32M/' -e 's/ mmz_allocator=[^ ]*//' -e 's/ mmz=[^ ]*//')"
+fw_printenv bootargs   # check it before you reboot
+reboot
+```
+
 #### Kernel 6.6+ (neo)
 
 Starting with the `hi3516ev300_neo` build (Linux 6.6 LTS), MMZ uses the
@@ -246,10 +266,10 @@ from tuning the pool directly:
 
 | Setting | What it does | Typical saving |
 |---|---|---|
-| [`jpeg.enabled: false`](#jpegenabled--snapshots-and-the-mjpeg-stream) | no snapshots at all, and no frame reserved for them | **one frame** |
+| [`jpeg.enabled: false`](#jpegenabled--snapshots-and-the-mjpeg-stream) | no snapshots at all | **one frame** where a frame is reserved for snapshots; current HiSilicon and Goke builds reserve none, except on hi3516cv100 and hi3516cv6xx |
 | [`video1.enabled: false`](#one-frame-per-channel) | drops the second stream and its frame | **one frame** |
 | [`isp.yuvCompression: seg`](#ispyuvcompression--compressing-the-frame-pool) | stores the pooled frames compressed | 2–6 MB, some SoCs |
-| [`jpeg.tuned`](#jpegtuned--parameterised-snapshots) | caps parameterised snapshots to a size you choose | avoids a full frame |
+| [`jpeg.tuned`](#jpegtuned--parameterised-snapshots) | caps parameterised snapshots to a size you choose | avoids a full frame; ignored on HiSilicon and Goke parts that reserve nothing for snapshots |
 | [`isp.blkCnt`](#ispblkcnt--how-many-frames-are-pooled) | overrides the frame count outright | one frame per step |
 | [`isp.memMode`](#ispmemmode--what-reduction-actually-changes) | encoder-side buffers, not the pool | a few MB |
 
@@ -274,7 +294,9 @@ logread | grep 'VB sizing'
 ##### One frame per channel
 
 Two things go into that figure. One block per encoding channel — video0, video1
-if enabled, and the JPEG/MJPEG channel if `jpeg.enabled` is on. Plus whatever
+if enabled, and the JPEG/MJPEG channel if `jpeg.enabled` is on, on the parts that
+still reserve one for snapshots (see [`jpeg.enabled`](#jpegenabled--snapshots-and-the-mjpeg-stream)).
+Plus whatever
 the capture path holds: nothing if it feeds the scaler directly, two blocks if
 it writes raw frames through memory, four if it writes processed frames through
 memory.
@@ -302,9 +324,19 @@ SoC, and it is why two cameras with the same chip can need different amounts:
 | hi3516ev300 + 2592x1520 sensor | raw through memory | 2 | 4 |
 | hi3516av300 + 3840x2160 sensor | processed through memory | 4 | 6 |
 
-A sensor wider than the capture pipe's limit — 2304 pixels on most parts — has
-to go through memory, and that costs whole frames. It is the single largest
-reason a 5 MP camera needs more than a 1080p one, beyond the frames being bigger.
+A sensor wider than the capture pipe's limit has to go through memory, and that
+costs whole frames. It is the single largest reason a 5 MP camera needs more than
+a 1080p one, beyond the frames being bigger. The limit belongs to the chip:
+
+| Chip | Widest sensor that goes straight through |
+|---|---|
+| hi3516ev200, hi3516ev300, gk7205v200, gk7205v300 | 2304 |
+| gk7205v500, gk7205v510, gk7205v530 | 3072 |
+
+On the gk7205v500 family, builds before mid-October 2026 applied the 2304
+limit, so a 2560-wide sensor such as the SC401AI went through memory and held
+three extra frames. On a 64 MB board that is the difference between a main
+stream and none; see [Wide sensors on 64 MB boards](#wide-sensors-on-64-mb-boards).
 
 ##### When you would override it
 
@@ -360,11 +392,60 @@ Exercise the camera before reading it — take several snapshots, connect a clie
 The same file attributes each block to the subsystem holding it, which is how
 the table above was measured.
 
+#### Wide sensors on 64 MB boards
+
+A 64 MB camera usually gives the media region 32 MB (`osmem=32M`). With a
+1080p sensor that is comfortable; with a wider one, every frame is bigger and
+the region has to be counted. The case that prompted this section is a
+gk7205v500 with an SC401AI at 2560x1440 — a frame there is about 5.5 MB — running
+a main and a sub stream ([OpenIPC/majestic#350](https://github.com/OpenIPC/majestic/issues/350),
+[OpenIPC/firmware#2587](https://github.com/OpenIPC/firmware/issues/2587)).
+
+Roughly where 32 MB goes on that camera, main stream H.265 at 2560x1440 and a
+sub stream at 800x448:
+
+| | Frames in the pool | Pool | Noise-reduction reference | Main encoder | Sub stream, buffers, ISP | Total |
+|---|---|---|---|---|---|---|
+| capture through memory (builds before mid-October 2026) | 6 | ~34 MB | | | | does not fit — **no main stream** |
+| capture straight through, automatic pool | 4 | ~23 MB | ~4 MB | ~6 MB | ~3 MB | ~36 MB — does not fit |
+| capture straight through, one frame given back | 3 | ~18 MB | ~4 MB | ~6 MB | ~3 MB | **~31 MB — fits** |
+
+These are estimates, built from per-frame and per-encoder figures measured on a
+gk7205v200 and an hi3516ev300; they have not been measured on a gk7205v500 yet.
+
+What the streamer does about the middle row is automatic. When the pool leaves
+the image pipeline or the main encoder no room, it gives one frame back and
+rebuilds the pipeline at the smaller size, once per frame it can spare, down to
+the least the pipeline can stream on. Video comes up a few seconds late, and the
+log says what was given back and that a restart tries the larger pool again. A
+pool at that floor behaves as described under
+[`isp.blkCnt`](#ispblkcnt--how-many-frames-are-pooled): video runs, and a snapshot
+can occasionally find no free frame.
+
+If it still does not fit:
+
+- **`video1.enabled: false`** returns a frame and the sub stream's encoder — the
+  largest saving available.
+- **A smaller `video0.size`** makes the main encoder smaller, but not the frames
+  in the pool: they follow the sensor, not the stream.
+- On the gk7205v500 family, prefer the fixed split to CMA on 64 MB — see
+  [Kernel 4.9](#kernel-49-legacy). It does not change how big the region is, but
+  allocations in it never wait on Linux to move pages out first.
+
 #### `jpeg.enabled` — snapshots and the MJPEG stream
 
-Controls whether the camera serves JPEG at all, and it is the single biggest
-saving available on a small board: with it off, no frame is reserved for the
-snapshot channel.
+Controls whether the camera serves JPEG at all. How much memory that is worth
+depends on the platform:
+
+- **HiSilicon and Goke, except hi3516cv100 and the hi3516cv6xx family** (builds
+  from late September 2026 on): **nothing is reserved for snapshots.** A JPEG is
+  made from a frame the video stream already has, and memory is taken only while
+  snapshots are being served — on a gk7205v200 with a 1080p sensor, about 2 MB
+  for the JPEG encoder once the first one is asked for. Turning `jpeg.enabled`
+  off there frees no frame; it only refuses the requests.
+- **hi3516cv100, the hi3516cv6xx family, and older HiSilicon/Goke builds**: a
+  full frame is reserved for the snapshot channel from start-up, and turning it
+  off is the single biggest saving on a small board.
 
 ```bash
 curl 'http://localhost/api/v1/set?jpeg.enabled=false'
@@ -382,22 +463,23 @@ leave it on. Video over RTSP is unaffected either way.
 
 Measured, on cameras with one h264 stream and no snapshot ever taken:
 
-| SoC | Sensor | Pool with JPEG on | Off | Freed |
-|---|---|---|---|---|
-| gk7205v200 | 1920x1080 | 12156 KB | 9116 KB | **3.0 MB** |
-| hi3516ev300 | 2592x1520 | 28860 KB | 23088 KB | **5.6 MB** |
+| SoC | Sensor | Build | Media memory with JPEG on | Off | Freed |
+|---|---|---|---|---|---|
+| gk7205v200 | 1920x1080 | before late Sep 2026 | 12156 KB (pool) | 9116 KB | **3.0 MB** |
+| hi3516ev300 | 2592x1520 | before late Sep 2026 | 28860 KB (pool) | 23088 KB | **5.6 MB** |
+| gk7205v200 | 1920x1080 | current | 16632 KB (all of it) | 16632 KB | none |
 
-On a gk7205v200, whose whole media region is 24 MB, that is an eighth of it.
-
-The startup log states both halves, so the saving is never a mystery and neither
-are the refusals:
-
-```
-JPEG off: no block reserved for it, and /image.jpg and the MJPEG stream will
-be refused. Set jpeg.enabled to true to restore them
-```
+On the current build the gk7205v200 goes to 18680 KB while it serves snapshots
+— the JPEG encoder — and with JPEG off it stays at 16632 KB and answers **503**.
 
 #### `jpeg.tuned` — parameterised snapshots
+
+On the HiSilicon and Goke parts that reserve nothing for snapshots (see
+[`jpeg.enabled`](#jpegenabled--snapshots-and-the-mjpeg-stream)), this setting
+is **ignored**: a snapshot of any size, crop or quality is made the same way as a
+plain one and takes memory only while it is being made. The streamer says so at
+start-up when the key is still set. The rest of this section applies to the
+other platforms.
 
 `/image.jpg` accepts `width`, `height`, `qfactor`, `gray` and `crop`, which are
 served by a **second** snapshot encoder on its own geometry. That encoder needs
