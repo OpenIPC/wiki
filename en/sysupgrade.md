@@ -20,6 +20,12 @@ There are other options available so you can use a local copy of the Linux kerne
 
 __ATTENTION! Upgrading firmware can lead to "bricking" your camera. Make sure you are prepared both morally and skill wise. Have your rescue SD card and/or UART adapter ready. Be prepared to de-solder and reprogram flash chip as the last resort. Do not upgrade production cameras unless you really have to!__
 
+On GK7205V200, GK7205V300, GK7202V300 and GK7605V100 with the OpenIPC
+`u-boot-<soc>-nor.bin` bootloader, `sysupgrade -k -r` installs the
+[NOR split layout](nor-split-layout.md) from `openipc.<soc>-nor-<variant>-split.tgz`
+and carries your settings across. The offsets in *From U-Boot* below are for the
+fixed-slot layout.
+
 ### Using sysupgrade
 `sysupgrade -k -r` gives you the latest release for your camera, as described above; if you wish to revert to a previous image, or load your own updates, then use any of the options described below. 
 
