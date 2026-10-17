@@ -198,22 +198,38 @@ exactly the rectangle you named.
 #### `width`, `height` and `qfactor`, and everything on Lite
 
 A different size or a different quality cannot be had without encoding the frame
-again, and there is exactly one encoder to do that with. Two conditions apply:
+again, and there is exactly one encoder to do that with.
 
-- **HiSilicon and Goke only.** Elsewhere the parameters are refused with `501` —
-  set `jpeg.size` and `jpeg.qfactor` in the config instead.
-- `jpeg.tuned` must name the largest size you intend to ask for, e.g.
-  `jpeg.tuned: 1920x1080`, and Majestic must be restarted after setting it. It
-  is `off` by default, because the frame buffers it reserves are paid for
-  whether or not anyone ever asks for a snapshot, and nothing shipped on the
-  camera does — ONVIF, netip and the web interface all take the plain one. A
-  request larger than the cap is refused and says so.
+**HiSilicon and Goke only.** Elsewhere the parameters are refused with `501` —
+set `jpeg.size` and `jpeg.qfactor` in the config instead.
+
+On **current HiSilicon and Goke builds** (other than hi3516cv100 and the
+hi3516cv6xx family) nothing has to be set first and nothing is restarted. The
+snapshot is cut from the frame the video stream already has:
+
+- a size larger than that frame comes back at the frame's own size rather than
+  being refused, and anything under 32x32 is refused with `400`;
+- with `crop`, the rectangle comes back at 1:1 and `width`/`height` are not
+  applied to it;
+- `jpeg.tuned` is ignored.
+
+Measured on a gk7205v300 with a 2592x1944 sensor and `jpeg.tuned` unset:
+`width=640&height=360` gave 640x360, `qfactor=30` the full frame at that
+quality, `width=4000&height=3000` 2592x1944, `width=16&height=16` a `400`.
+
+On **hi3516cv100, the hi3516cv6xx family and older builds**, a second
+condition applies: `jpeg.tuned` must name the largest size you intend to ask
+for, e.g. `jpeg.tuned: 1920x1080`, and Majestic must be restarted after setting
+it. It is `off` by default, because the frame buffers it reserves are paid for
+whether or not anyone ever asks for a snapshot, and nothing shipped on the
+camera does — ONVIF, netip and the web interface all take the plain one. A
+request larger than the cap is refused and says so.
 
 Two clients asking for *different* sizes or qualities at the same time is
 answered with `409`; asking for the same ones shares a single capture.
 
 On **Lite and FPV** there is no such rearranging built in, so `crop` and `gray`
-are served the same way as the rest, under the same two conditions.
+are served the same way as the rest, under the same conditions.
 
 #### When it says no
 
@@ -2361,9 +2377,11 @@ still snapshots on `/image.jpg` alike; `jpeg.fps` is the MJPEG stream only,
 since a snapshot is taken when it is asked for. Leaving `jpeg.size` unset
 follows the `video0` resolution.
 
-`jpeg.enabled` governs JPEG service as a whole, not just the stream. Turning it
-off reserves no frame for the snapshot channel — which is the single biggest
-memory saving on a small board — but then `/image.jpg` answers **503**, `/mjpeg`
+`jpeg.enabled` governs JPEG service as a whole, not just the stream. Where a
+frame is reserved for the snapshot channel, turning it off frees it — the single
+biggest memory saving on a small board. Current HiSilicon and Goke builds,
+other than hi3516cv100 and the hi3516cv6xx family, reserve none, so there it
+saves nothing. Either way `/image.jpg` then answers **503**, `/mjpeg`
 answers "MJPEG is unavailable", and the JPEG track is dropped from the RTSP
 description. ONVIF snapshot URIs and the web interface preview both fetch
 `/image.jpg`, so they stop working too. See

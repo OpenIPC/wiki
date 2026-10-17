@@ -75,13 +75,15 @@ and CMA would lend Linux only what a wide-sensor pipeline leaves free
 ([OpenIPC/firmware#2620](https://github.com/OpenIPC/firmware/pull/2620)).
 
 A 64 MB board switched to CMA before that keeps it. To put it back on the fixed
-split, remove the allocator **and** give `mem=` back its 32M — removing the
-allocator alone leaves Linux all 64 MB and the media region nothing:
+split, remove the allocator **and** give `mem=` a literal 32M — removing the
+allocator alone leaves Linux all 64 MB and the media region nothing. That holds
+whatever `mem=` says now, a number or a variable such as `${osmem}`, which may
+itself have been set to the whole DDR:
 
 ```bash
 fw_printenv bootargs
-fw_setenv bootargs "$(fw_printenv -n bootargs | sed -e 's/mem=[0-9]*M/mem=32M/' -e 's/ mmz_allocator=[^ ]*//' -e 's/ mmz=[^ ]*//')"
-fw_printenv bootargs   # check it before you reboot
+fw_setenv bootargs "$(fw_printenv -n bootargs | sed -E -e 's/(^| )mem=[^ ]*/\1mem=32M/' -e 's/ mmz_allocator=[^ ]*//' -e 's/ mmz=[^ ]*//')"
+fw_printenv bootargs   # mem=32M, and no mmz_allocator= or mmz=, before you reboot
 reboot
 ```
 
@@ -304,10 +306,12 @@ memory.
 Every channel costs a whole frame whether or not it is producing one at the
 moment, because the pool is fixed when the streamer starts — a channel raised on
 demand still needs its block sitting there waiting. That is why switching a
-channel off is worth more than any amount of tuning: `video1.enabled: false` and
-`jpeg.enabled: false` each return a full frame.
+channel off is worth more than any amount of tuning: `video1.enabled: false`
+returns a full frame, and so does `jpeg.enabled: false` on the parts that still
+reserve one for snapshots — not on current HiSilicon and Goke builds, which
+reserve none (see [`jpeg.enabled`](#jpegenabled--snapshots-and-the-mjpeg-stream)).
 
-Both of those free their frame for the *next* start rather than immediately:
+Either frees it for the *next* start rather than immediately:
 the pool keeps whatever size it was given when the streamer came up, so
 switching a stream off on a running camera does not hand its block back. The
 figures above are what you measure after a restart. The same holds for
@@ -476,10 +480,12 @@ On the current build the gk7205v200 goes to 18680 KB while it serves snapshots
 
 On the HiSilicon and Goke parts that reserve nothing for snapshots (see
 [`jpeg.enabled`](#jpegenabled--snapshots-and-the-mjpeg-stream)), this setting
-is **ignored**: a snapshot of any size, crop or quality is made the same way as a
-plain one and takes memory only while it is being made. The streamer says so at
-start-up when the key is still set. The rest of this section applies to the
-other platforms.
+is **ignored**, and so is everything below about caps and restarts: a snapshot
+of any size, crop or quality is made the same way as a plain one, takes memory
+only while it is being made, and needs nothing set first. The streamer says so
+at start-up when the key is still set. What such a request gets is described
+in [Majestic streamer](majestic-streamer.md#width-height-and-qfactor-and-everything-on-lite).
+The rest of this section applies to the other platforms.
 
 `/image.jpg` accepts `width`, `height`, `qfactor`, `gray` and `crop`, which are
 served by a **second** snapshot encoder on its own geometry. That encoder needs
