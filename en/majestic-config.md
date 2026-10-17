@@ -289,9 +289,11 @@ video1:
 
 jpeg:
   enabled: true                 # JPEG as a whole. false frees the snapshot
-                                # channel's frame, but /image.jpg then answers
-                                # 503 and /mjpeg is unavailable -- ONVIF
-                                # snapshots and the WebUI preview with them
+                                # channel's frame where one is reserved (not
+                                # on current HiSilicon/Goke builds), but
+                                # /image.jpg then answers 503 and /mjpeg is
+                                # unavailable -- ONVIF snapshots and the WebUI
+                                # preview with them
   qfactor: 50
   fps: 5                        # MJPEG stream only
   #size: 160x120                # applies to /mjpeg AND /image.jpg
@@ -299,8 +301,11 @@ jpeg:
                                 # snapshot's own frame rather than the main
                                 # stream's
   rtsp: false                   # also publish MJPEG over RTSP (max 2040 px/axis)
-  #tuned: off                   # HiSilicon/Goke only: largest /image.jpg?width=...
-                                # to serve, e.g. 1920x1080. Needs a restart.
+  #tuned: off                   # hi3516cv100, hi3516cv6xx and older HiSilicon/
+                                # Goke builds: largest /image.jpg?width=... to
+                                # serve, e.g. 1920x1080. Needs a restart.
+                                # Ignored on current HiSilicon/Goke builds,
+                                # which need no cap
   #toProgressive: false         # Ultimate only: send /image.jpg progressively,
                                 # so a slow link paints a whole coarse picture
                                 # first instead of a sharp band at a time. Same
