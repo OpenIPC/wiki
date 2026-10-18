@@ -413,9 +413,14 @@ sub stream at 800x448:
 | capture through memory (builds before mid-October 2026) | 6 | ~34 MB | | | | does not fit — **no main stream** |
 | capture straight through, automatic pool | 4 | ~23 MB | ~4 MB | ~6 MB | ~3 MB | ~36 MB — does not fit |
 | capture straight through, one frame given back | 3 | ~18 MB | ~4 MB | ~6 MB | ~3 MB | **~31 MB — fits** |
+| [memory-saving main stream](#memory-saving-main-stream), if the chip accepts it (builds from 18 October 2026) | 3, incl. the spare | ~18.5 MB | ~4 MB | ~6 MB | ~3 MB | **~31 MB — fits first time** |
 
 These are estimates, built from per-frame and per-encoder figures measured on a
 gk7205v200 and an hi3516ev300; they have not been measured on a gk7205v500 yet.
+The memory-saving row costs the same as giving a frame back, but gets there
+without the failed start and keeps the spare frame that snapshots draw on. It
+applies only if the chip accepts the mode for these streams; if it declines, the
+camera is on the whole-frame rows above and the automatic fallback below.
 
 What the streamer does about the middle row is automatic. When the pool leaves
 the image pipeline or the main encoder no room, it gives one frame back and
@@ -435,6 +440,60 @@ If it still does not fit:
 - On the gk7205v500 family, prefer the fixed split to CMA on 64 MB — see
   [Kernel 4.9](#kernel-49-legacy). It does not change how big the region is, but
   allocations in it never wait on Linux to move pages out first.
+
+#### Memory-saving main stream
+
+On the gk7205v200, gk7205v300, gk7201v200 and the gk7205v500 family (v500,
+v510, v530), builds from 18 October 2026 have a memory-saving mode for the main
+stream. It takes about one frame's worth less media memory, the way the stock
+Xiongmai firmware on these boards fits a 4 MP camera into its media region.
+
+Nothing needs switching on. The camera uses it when all of these hold:
+
+- the main stream is at the sensor's own size, with no crop and no rotation;
+- the capture goes straight through (the sensor is no wider than the chip's
+  limit in [the table above](#one-frame-per-channel)) and the sensor runs one
+  exposure, not WDR;
+- the sub stream (`video1`) is on;
+- none of these is in use: motion detection, privacy masks, `image.flip` or
+  `image.mirror`, `isp.yuvCompression`, or an object detector the camera can
+  actually run (on NPU-equipped parts).
+
+Measured on lab cameras with the sub stream on:
+
+| Camera | Main stream | Media memory, mode off | Mode on |
+|---|---|---|---|
+| gk7205v200 + IMX307 | 1080p25 | 21676 KB | **19016 KB** |
+| gk7205v300 + IMX335 (1080p mode) | 1080p50 | 20984 KB | **18612 KB** |
+| gk7205v510 + MIS2008 | 1080p25 | 20328 KB | **17668 KB** |
+| gk7201v200 + MIS2008, 64 MB | 1080p20 | 21860 KB | **19316 KB** |
+
+Both streams kept their frame rates. A 2560-wide sensor such as the SC401AI
+has not been measured yet; there a frame is about 5.5 MB.
+
+What changes for the built-in camera while the mode is on:
+
+- `/image.jpg` and `/mjpeg` are made from the **sub stream**, at its size,
+  whatever `jpeg.size` says. A request for a larger picture gets the sub
+  stream's. Snapshots of another source chosen with `?channel=` are not
+  affected.
+- `/image.yuv420` returns the sub stream's frame, at its size.
+- [Automatic image tuning](automatic-image-tuning.md) (`image.tuning`) cannot
+  measure the picture. Its panel reads *No reading*, then *No answer*, as it
+  does on a camera whose main stream is compressed.
+
+Turning `video1`, `image.flip`, `image.mirror`, a privacy mask or object
+detection on or off on a running camera moves it in or out of the mode by
+itself. That rebuilds the pipeline, so the streams drop for a moment. Motion
+detection, as everywhere, takes effect only after a reload. Full-size snapshots
+and raw YUV come back as soon as a condition stops holding; turning `video1` off
+is the simplest way.
+
+The chip can decline the mode when the streams are more than its encoder can
+keep up with. A gk7205v300 accepted it for a 1080p50 main stream beside a
+640x360 sub stream at 10 fps, and declined it beside a 720p50 sub stream. When
+it declines, the main stream works exactly as it did before, with no failed
+start.
 
 #### `jpeg.enabled` — snapshots and the MJPEG stream
 

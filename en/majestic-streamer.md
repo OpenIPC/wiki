@@ -170,6 +170,13 @@ snapshot comes from — see [A second camera](#a-second-camera).
 They fall into two groups, and which group a parameter is in decides what the
 camera has to do to serve it.
 
+On a camera whose main stream is in its
+[memory-saving mode](memory-tuning.md#memory-saving-main-stream) (some Goke
+boards, with the sub stream on), snapshots of the built-in camera are made from
+the sub stream instead. Sizes are then fitted to the sub stream's picture, and a
+plain `/image.jpg` comes at the sub stream's size. A source chosen with
+`?channel=` is not affected.
+
 #### `crop` and `gray`, on Ultimate
 
 An **Ultimate** build cuts a crop out of the captured frame, or drops its
@@ -2375,7 +2382,9 @@ renamed camera stays reachable under both.
 `jpeg.size` and `jpeg.qfactor` apply to the MJPEG stream on `/mjpeg` **and** to
 still snapshots on `/image.jpg` alike; `jpeg.fps` is the MJPEG stream only,
 since a snapshot is taken when it is asked for. Leaving `jpeg.size` unset
-follows the `video0` resolution.
+follows the `video0` resolution, except on a camera in the
+[memory-saving mode](memory-tuning.md#memory-saving-main-stream), where
+snapshots and MJPEG come at the sub stream's size whatever `jpeg.size` asks.
 
 `jpeg.enabled` governs JPEG service as a whole, not just the stream. Where a
 frame is reserved for the snapshot channel, turning it off frees it — the single
@@ -2427,7 +2436,9 @@ Use `convert` command from ImageMagick software. Run it like this:
 convert -verbose -sampling-factor 4:2:0 -size 1920x1080 -depth 8 image.yuv image.png
 ```
 where `1920x1080` is the picture resolution of video0, and `.png` is the target
-image format.
+image format. On a camera in the
+[memory-saving mode](memory-tuning.md#memory-saving-main-stream),
+`/image.yuv420` returns the sub stream's frame, so use `video1`'s size there.
 
 ### Raw sensor data, as Adobe DNG
 
