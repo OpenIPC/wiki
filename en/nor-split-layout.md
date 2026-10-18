@@ -99,9 +99,17 @@ for before it installs a `firmware.bin`.
    on the first run. Run `sysupgrade -k -r` once more to move to the split
    layout.
 
-[defib](https://github.com/OpenIPC/defib) can also set a camera up on the split
-layout from scratch over UART: `defib install` with the `-split` package. That
-erases the settings.
+To set a camera up on the split layout from scratch, erasing its settings:
+
+- **[openipc.org](https://openipc.org):** open your SoC's page
+  (`/cameras/vendors/goke/socs/<soc>`, e.g.
+  [GK7205V300](https://openipc.org/cameras/vendors/goke/socs/gk7205v300)).
+  It installs the `u-boot-<soc>-nor.bin` bootloader. Where the `-split` package
+  is published for your edition, it links that package and writes
+  `firmware.bin` at `0x50000` with the rest of the chip erased. Editions
+  without one, such as OpenIPC/builder's FPV builds, keep the two-image install.
+- **[defib](https://github.com/OpenIPC/defib):** `defib install` with the
+  `-split` package, over UART.
 
 ### Upgrades and your settings
 
