@@ -119,12 +119,34 @@ To set a camera up on the split layout from scratch, erasing its settings:
 ### Upgrades and your settings
 
 `sysupgrade -k -r`, `--url`, `--channel` and `--archive` work as on any other
-camera. Because the overlay starts wherever the new image ends, `sysupgrade`
-does more than write the image:
+camera.
 
-1. It packs the overlay into RAM.
-2. It writes `firmware.bin`.
-3. It stages the settings where the new `rootfs_data` will start:
+A new image that is bigger than the running one needs no repartitioning. The
+image is not written into `rootfs`, whose size is that of the running image. It
+is written into `firmware`, which always runs from `0x50000` to the end of the
+chip. `kernel`, `rootfs` and `rootfs_data` are not a partition table on the
+flash. The kernel works them out from the image on every boot, from the uImage
+header and the squashfs size. On an 8 MB camera:
+
+```
+mtd2: 007b0000 "firmware"      the image is written here, 7872K
+mtd3: 001e0000 "kernel"        worked out at boot from the image
+mtd4: 005d0000 "rootfs"
+mtd5: 000d0000 "rootfs_data"
+```
+
+An image 100K bigger than the running one moves the start of `rootfs_data` on by
+two 64 KiB blocks, and the overlay is 128K smaller after the reboot. Because the
+overlay starts wherever the new image ends, `sysupgrade` does more than write the
+image:
+
+1. It checks that the new image leaves room for the settings, and refuses
+   before writing anything if it does not.
+2. It packs the overlay into RAM.
+3. It writes `firmware.bin` into `firmware`, over the old image and the old
+   overlay.
+4. It works out where the new `rootfs_data` will start (the uImage and the
+   squashfs, each rounded up to 64 KiB), and stages the settings there:
 
    ```
    Writing /tmp/firmware.bin.gk7205v300 at 0x50000
