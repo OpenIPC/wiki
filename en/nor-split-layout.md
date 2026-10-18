@@ -18,32 +18,38 @@ has to fit the chip:
 0x000000  u-boot    256K  U-Boot
 0x040000  env        64K  U-Boot environment
 0x050000  firmware  rest  one image, divided by the kernel at boot:
-            kernel       a FIT: the kernel and its device tree, each with
-                         a CRC32 and a SHA-1 hash
+            kernel       a uImage: the kernel with its device tree
+                         appended, and a CRC32 in the header
             rootfs       the squashfs, from the next 64 KiB block
             rootfs_data  your settings (the overlay), from the end of the
                          squashfs to the end of the chip
 ```
 
-The image is `firmware.bin`. The kernel's `mtdsplit` finds where the FIT ends and
-the squashfs begins, and adds the `kernel`, `rootfs` and `rootfs_data`
-partitions itself. A bigger or smaller image simply moves where `rootfs_data`
-starts.
+The image is `firmware.bin`. The layout lives in the kernel, not on the command
+line: the device tree names `u-boot`, `env` and `firmware`, and the kernel's
+`mtdsplit` finds where the uImage ends and the squashfs begins, then adds the
+`kernel`, `rootfs` and `rootfs_data` partitions itself. A bigger or smaller
+image simply moves where `rootfs_data` starts.
 
-U-Boot checks both hashes before it starts the kernel, so a kernel the flash has
-corrupted is refused instead of crashing:
-
-```
-   Verifying Hash Integrity ... crc32+ sha1+ OK
-```
+Because of that, the kernel ignores whatever `mtdparts=` and `root=` the
+bootloader passes when the flash holds a split image. Any U-Boot that can read
+a uImage from `0x50000` boots it, the factory one included. When the flash holds
+the fixed slots instead, the command line is honoured as before.
 
 ### What it needs
 
-**The OpenIPC U-Boot for your SoC**, `u-boot-<soc>-nor.bin` from the
-[firmware release](https://github.com/OpenIPC/firmware/releases/tag/latest).
-Only this bootloader boots the layout. It still boots the fixed slots too. It
-looks at what is at `0x50000` on every boot and sets the partitions to match.
-The older `u-boot-<soc>-universal.bin` boots fixed slots only.
+**A bootloader that loads a uImage from `0x50000`.** The OpenIPC U-Boot,
+`u-boot-<soc>-nor.bin` from the
+[firmware release](https://github.com/OpenIPC/firmware/releases/tag/latest), is
+the simplest: it looks at what is at `0x50000` on every boot, boots either
+layout, and checks the uImage CRC before it starts the kernel:
+
+```
+   Verifying Checksum ... OK
+```
+
+The older `u-boot-<soc>-universal.bin` and the factory bootloader work too (see
+[Keeping the factory U-Boot](#keeping-the-factory-u-boot)).
 
 **The split firmware package** for your SoC,
 `openipc.<soc>-nor-<variant>-split.tgz` from the same release, holding
@@ -57,8 +63,12 @@ cat /proc/cmdline
 cat /proc/mtd
 ```
 
-On the split layout the command line has `mtdparts=sfc:256k(u-boot),64k(env),-(firmware)`,
-and `/proc/mtd` shows `firmware` with the three partitions the kernel added:
+On the split layout `/proc/mtd` shows `firmware` with the three partitions the
+kernel added, and the kernel log says where they came from:
+
+```
+sfc: split NOR layout, device tree partitions
+```
 
 ```
 dev:    size   erasesize  name
@@ -70,15 +80,11 @@ mtd4: 00dd0000 00010000 "rootfs"
 mtd5: 00730000 00010000 "rootfs_data"
 ```
 
-`openipc_nor_fit=1` on the command line means the bootloader can boot the split
-layout, whichever layout the camera is on now. That's what `sysupgrade` looks
-for before it installs a `firmware.bin`.
-
 ### Moving a camera to the split layout
 
-1. **Install the OpenIPC U-Boot.** Run this from the U-Boot console with a TFTP
-   server, using the file for your SoC. It erases the boot partition only
-   (`0x40000`), and leaves the environment where it is:
+1. **Optionally, install the OpenIPC U-Boot.** Run this from the U-Boot console
+   with a TFTP server, using the file for your SoC. It erases the boot partition
+   only (`0x40000`), and leaves the environment where it is:
 
    ```
    tftp ${baseaddr} u-boot-gk7205v300-nor.bin
@@ -88,12 +94,11 @@ for before it installs a `firmware.bin`.
    reset
    ```
 
-   The camera boots its fixed slots as before. `cat /proc/cmdline` now shows
-   `openipc_nor_fit=1`.
+   The camera boots its fixed slots as before.
 
-2. **Upgrade with `sysupgrade -k -r`.** On a bootloader that boots the layout,
-   `sysupgrade` downloads the `-split` package and writes `firmware.bin` at
-   `0x50000`. Your settings move with it (see below).
+2. **Upgrade with `sysupgrade -k -r`.** `sysupgrade` downloads the `-split`
+   package and writes `firmware.bin` at `0x50000`. Your settings move with it
+   (see below).
 
    A camera whose firmware predates the split layout installs the plain package
    on the first run. Run `sysupgrade -k -r` once more to move to the split
@@ -145,8 +150,7 @@ the following before writing anything, and the camera keeps running:
 
 - a `firmware.bin` for another SoC;
 - an image that leaves no room for the settings;
-- the plain package on a camera already on the split layout;
-- a split image on a bootloader without `openipc_nor_fit=1`.
+- the plain package on a camera already on the split layout.
 
 ### Writing the image from U-Boot
 
@@ -161,6 +165,30 @@ sf erase 0x50000 0xfb0000
 sf write ${baseaddr} 0x50000 ${filesize}
 reset
 ```
+
+### Keeping the factory U-Boot
+
+The factory bootloader of these cameras (XM U-Boot 2016.11) has no FIT support
+and its own idea of the partitions, but it reads a uImage from flash and boots
+it. Only `bootcmd` has to change, to read the first 2 MiB at `0x50000`; the
+kernel finds the rest by itself:
+
+```
+setenv bootcmd 'setenv setargs setenv bootargs ${bootargs};run setargs;sf probe 0;sf read 0x42000000 0x50000 0x200000;bootm 0x42000000'
+saveenv
+```
+
+Then write `firmware.bin` as in [Writing the image from U-Boot](#writing-the-image-from-u-boot).
+The factory `root=/dev/mtdblock1` and `mtdparts=` stay on the command line and
+are ignored:
+
+```
+VFS: root=/dev/mtdblock1 ignored, the flash names its own root
+```
+
+The factory U-Boot keeps its environment at `0x30000`, inside its own 256K,
+while `fw_printenv` on the camera reads `0x40000`. Change the boot settings
+from the U-Boot console, not with `fw_setenv`. `sysupgrade` works as usual.
 
 ### Going back to fixed slots
 
