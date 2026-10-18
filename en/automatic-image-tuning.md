@@ -126,7 +126,7 @@ than pixel by pixel, so its cost does not grow with sensor resolution.
 
 ### When it will not run
 
-Three cases. The first two look different on the page.
+Four cases. The first two look different on the page.
 
 **The camera's own picture statistics are not available**, which is the case on
 older HiSilicon parts. It gives up immediately and the panel reads *No answer —
@@ -145,6 +145,13 @@ isp:
 
 if you want tuning on that camera. `off` is not one of the values and is
 refused with HTTP 400.
+
+**The main stream is in its memory-saving mode** (some Goke boards; see
+[Memory tuning](memory-tuning.md#memory-saving-main-stream)). The main stream
+cannot be read in this mode, and the sub stream's smaller picture would hide
+the clipping it watches for, so it does not try: the panel reads *No reading*, then
+*No answer*, as for a compressed main stream. It resumes when the camera leaves
+that mode, for example with `video1` off.
 
 **HDR video is on** (`isp.hdr: hlg`). Tuning shapes the picture for an SDR
 screen, so it stands aside while the camera makes an HLG picture, and resumes
