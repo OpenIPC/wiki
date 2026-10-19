@@ -108,7 +108,7 @@ There are two variants of using OpenIPC firmware on the board under consideratio
 ### Installation using IP Cam DMS (no flash soldering)
 
 * Download, unzip the archive and run the [IP Cam DMS](https://team.openipc.org/ipcam_dms/IPCam_DMS_20201121_EN.zip) program, which allows you to control the camera using the camera manufacturer's protocol.
-* Download the [special archive](https://github.com/OpenIPC/coupler/releases/download/latest/000659A7_fpv_IPC_GK7205V200_50H20AI_S38.bin) and perform a firmware upgrade, which will effectively make a seamless transition from the original firmware to OpenIPC.
+* Download the [special archive](https://github.com/OpenIPC/coupler/releases/download/xiongmai/000659A7_fpv_IPC_GK7205V200_50H20AI_S38.bin) and perform a firmware upgrade, which will effectively make a seamless transition from the original firmware to OpenIPC.
 
 > Note! Despite the fact it is the easiest way to flash firmware it has few disadvantages:
 > * It won't backup a stock firmware. There are chances you need the backup to extract some important parameters from the stock firmware. So even if you are 100% sure you don't need the stock firmware it's still a good idea to have a backup.
