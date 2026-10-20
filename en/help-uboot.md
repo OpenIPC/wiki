@@ -395,9 +395,10 @@ Before anything else, try this password at the prompt:
 
 It is an OEM-level default baked into a bootloader codebase shared by several
 vendors, and it has been confirmed working on Goke GK7205V300, Goke GK7205V500
-and Novatek NT98566 boards. Two older strings occasionally seen on
-Xiongmai-derived firmware are `HI2105CHIP` and `ubootpwd`, though they are much
-less likely to work on recent builds.
+and Novatek NT98566 boards. Two more strings are worth a try on older builds,
+though they are much less likely to work on recent ones: `ubootpwd`, occasionally
+seen on Xiongmai-derived firmware, and `HI2105CHIP`, the default on cameras built
+around the CamHi app ecosystem (not a Xiongmai password).
 
 If none of them are accepted, move on to side-loading — it does not care what
 password the vendor set.
