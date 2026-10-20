@@ -21,7 +21,7 @@ and only their sum has to fit the chip. These SoCs use it:
 
 ```
 0x000000  u-boot    boot      U-Boot (on Hi3516CV6xx/Hi3519DV500 the signed
-                              boot image: GSL, DDR table and U-Boot)
+                              boot image, with the board's memory setup)
           env       env       U-Boot environment
 firmware  firmware  rest      one image, divided by the kernel at boot:
             kernel       a uImage: the kernel with its device tree (appended
@@ -126,6 +126,16 @@ at `0xc0000`.
    tftp ${baseaddr} u-boot-gk7205v300-nor.bin
    sf probe 0
    sf erase 0x0 0x40000
+   sf write ${baseaddr} 0x0 ${filesize}
+   reset
+   ```
+
+   On Hi3519DV500, with the image for your board:
+
+   ```
+   tftp ${baseaddr} boot-hi3519dv500-dmeb-nor.bin
+   sf probe 0
+   sf erase 0x0 0x80000
    sf write ${baseaddr} 0x0 ${filesize}
    reset
    ```

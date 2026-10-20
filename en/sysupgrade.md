@@ -24,8 +24,9 @@ On GK7205V200, GK7205V300, GK7202V300 and GK7605V100 with the OpenIPC
 `u-boot-<soc>-nor.bin` bootloader, and on Hi3516CV610, Hi3516CV608 and
 Hi3519DV500, `sysupgrade -k -r` installs the
 [NOR split layout](nor-split-layout.md) from `openipc.<soc>-nor-<variant>-split.tgz`
-and carries your settings across. The offsets in *From U-Boot* below are for the
-fixed-slot layout.
+and carries your settings across (Hi3516CV610 and Hi3516CV608 share one package,
+`openipc.hi3516cv6xx-nor-<variant>-split.tgz`). The offsets in *From U-Boot* below
+are for the fixed-slot layout.
 
 ### Using sysupgrade
 `sysupgrade -k -r` gives you the latest release for your camera, as described above; if you wish to revert to a previous image, or load your own updates, then use any of the options described below. 
