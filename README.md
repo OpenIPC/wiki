@@ -75,7 +75,7 @@ OpenIPC Wiki
 - [Upgrade firmware](en/sysupgrade.md)
 - [Moving between lite and ultimate without a UART](en/lite-ultimate-migration.md)
 - [NAND flash layouts](en/nand-rootfs-layouts.md)
-- [NOR split layout (GK7205V200 family)](en/nor-split-layout.md)
+- [NOR split layout (GK7205V200 family, Hi3516CV6xx, Hi3519DV500)](en/nor-split-layout.md)
 - [Failsafe mode and recovery](en/failsafe-recovery.md)
 - [Nightly builds, dated releases, and bisect](en/nightly-builds-and-bisect.md)
 - [Automatic image tuning](en/automatic-image-tuning.md)
