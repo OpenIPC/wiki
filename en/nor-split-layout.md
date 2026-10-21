@@ -17,6 +17,8 @@ and only their sum has to fit the chip. These SoCs use it:
 |-----|-----------|---------------|------------|----------|
 | GK7205V200, GK7205V300, GK7202V300, GK7605V100 | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin` | `-split` and the fixed-slot one |
 | Hi3516CV300, Hi3516EV100 | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin` | `-split` and the fixed-slot one |
+| Hi3516EV200, Hi3518EV300, Hi3516DV200 | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin` | `-split` and the fixed-slot one |
+| Hi3516EV300 | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin` | `-split` only (neo: fixed slots) |
 | Hi3516CV610, Hi3516CV608 | 256K boot + 64K env | `0x50000` | `boot-<soc>[-<board>]-nor.bin` | `-split` only |
 | Hi3519DV500 | 512K boot + 256K env | `0xC0000` | `boot-hi3519dv500-<board>-nor.bin` | `-split` only |
 
@@ -295,6 +297,8 @@ On the GK7205V200 family: write `uImage.<soc>` at `0x50000` and
 `rootfs.squashfs.<soc>` at the fixed rootfs slot, as in
 [Upgrade firmware](sysupgrade.md) (*From U-Boot*). On a U-Boot environment from
 this bootloader, `run ur; run uk` does the same. The bootloader sees the uImage
-at `0x50000` and boots the fixed slots again. Hi3516CV300 and Hi3516EV100 go
-back the same way. Hi3516CV6xx and Hi3519DV500 are built only for the split
-layout.
+at `0x50000` and boots the fixed slots again. Hi3516CV300, Hi3516EV100,
+Hi3516EV200, Hi3518EV300 and Hi3516DV200 go back the same way. Hi3516CV6xx,
+Hi3519DV500 and Hi3516EV300 (lite and ultimate) are built only for the split
+layout: Hi3516EV300's kernel fills the 2 MiB kernel slot, so no fixed-slot
+package of it can ship beside the split one.
