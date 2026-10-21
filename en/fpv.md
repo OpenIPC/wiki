@@ -141,10 +141,13 @@ When working with a hot air soldering gun it is desirable to remove the lens and
 
 ```
   setenv ipaddr 192.168.1.33; setenv serverip 192.168.1.17; saveenv
-  run setnor16m
-  #
-  run uknor16m; run urnor16m
+  run ur; run uk
+  reset
 ```
+
+  This U-Boot finds the flash layout itself: `run ur` writes the root
+  filesystem first, and a rootfs over 5 MiB selects the 16 MB slots, then
+  `run uk` writes the kernel (see the note further down).
 
 ### Installation on the camera (general finalization)
 
@@ -247,13 +250,14 @@ You can see that QGS is also already displaying video. The delay in 4.0.11 is qu
 
 ### Pour the image onto an empty flash using defib (if you don't have a programmer)
 
-Run [defib](https://github.com/OpenIPC/defib) with the board turned off; it
-downloads `u-boot-gk7205v200-nor.bin` and loads it into RAM:
+Start [defib](https://github.com/OpenIPC/defib) with the board turned off, then
+power the board on. defib downloads `u-boot-gk7205v200-nor.bin`, loads it into
+RAM, stops its autoboot (`-b`) and opens the console (`-t`):
 ```
-defib burn -c gk7205v200 -p /dev/ttyUSB0 ; screen -L /dev/ttyUSB0 115200
+defib burn -c gk7205v200 -p /dev/ttyUSB0 -b -t
 ```
 
-turn on the board power and wait for U-Boot to be filled and the command line to appear. Then we execute the following commands, where `192.168.0.8` is the TFTP server address and `192.168.0.200` is the temporary IP address of the camera.
+Wait for the U-Boot command line to appear. Then we execute the following commands, where `192.168.0.8` is the TFTP server address and `192.168.0.200` is the temporary IP address of the camera.
 
 ```
 setenv ipaddr 192.168.0.200
