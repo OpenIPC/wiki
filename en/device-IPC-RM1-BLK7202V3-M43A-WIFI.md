@@ -147,7 +147,7 @@ curl -v -u user:pass -H "Content-Type: application/json" -X POST --data-binary @
 
 # Flashing
 Stock firmware is pwd locked and LAN interface does not present, so I'm guessing following methods are available to flash this board:
-- [burn](https://github.com/OpenIPC/burn)  + [u-boot-gk7202v300-universal.bin](https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-gk7202v300-universal.bin) and then upload FW via X/Y/ZMODEM (e.g. **loady**. Tip: use **baud** option for speed up) or from SD card (power supply required, [see above](#SD-Card))
+- [defib](https://github.com/OpenIPC/defib) (start `defib burn -c gk7202v300 -p /dev/ttyUSB0 -b -t`, then power the camera on; it loads [u-boot-gk7202v300-nor.bin](https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-gk7202v300-nor.bin)) and then upload FW via X/Y/ZMODEM (e.g. **loady**. Tip: use **baud** option for speed up) or from SD card (power supply required, [see above](#SD-Card))
 - load full image thru stock web interface (untested)
 - flash programmer
 - somehow get into stock bootloader

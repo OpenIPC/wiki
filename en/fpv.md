@@ -135,16 +135,19 @@ When working with a hot air soldering gun it is desirable to remove the lens and
 <img src="https://github.com/OpenIPC/wiki/blob/master/images/fpv-imx307-spinor.jpg?raw=true" alt="Logo"/>
 </p>
 
-* Fill [U-Boot](https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-gk7205v200-universal.bin) into a new 16 megabyte flash (at the beginning of the memory) and solder it to the board. Verify that U-Boot starts and you get to the prompt.
+* Fill [U-Boot](https://github.com/OpenIPC/firmware/releases/download/latest/u-boot-gk7205v200-nor.bin) into a new 16 megabyte flash (at the beginning of the memory) and solder it to the board. Verify that U-Boot starts and you get to the prompt.
 * On the workstation, install a TFTP server, download and unzip to the [archive](https://github.com/OpenIPC/firmware/releases/download/latest/openipc.gk7205v200-nor-fpv.tgz) directory with the FPV firmware
 * Give commands in U-Boot (where `192.168.1.17` is your TFTP server and `192.168.1.33` is the temporarily assigned address to the camera):
 
 ```
   setenv ipaddr 192.168.1.33; setenv serverip 192.168.1.17; saveenv
-  run setnor16m
-  #
-  run uknor16m; run urnor16m
+  run ur; run uk
+  reset
 ```
+
+  This U-Boot finds the flash layout itself: `run ur` writes the root
+  filesystem first, and a rootfs over 5 MiB selects the 16 MB slots, then
+  `run uk` writes the kernel (see the note further down).
 
 ### Installation on the camera (general finalization)
 
@@ -245,34 +248,39 @@ You can see that QGS is also already displaying video. The delay in 4.0.11 is qu
 
 ![Tcpdump](../images/fpv-tcpdump.jpg)
 
-### Pour the image onto an empty flash using burn (if you don't have a programmer)
+### Pour the image onto an empty flash using defib (if you don't have a programmer)
 
-Run [burn](https://github.com/OpenIPC/burn) with the board turned off:
+Start [defib](https://github.com/OpenIPC/defib) with the board turned off, then
+power the board on. defib downloads `u-boot-gk7205v200-nor.bin`, loads it into
+RAM, stops its autoboot (`-b`) and opens the console (`-t`):
 ```
-./burn --chip gk7205v200 --file=u-boot-gk7205v200-universal.bin -d ; screen -L /dev/ttyUSB0 115200
+defib burn -c gk7205v200 -p /dev/ttyUSB0 -b -t
 ```
 
-turn on the board power and wait for U-Boot to be filled and the command line to appear. Then we execute the following commands, where `192.168.0.8` is the TFTP server address and `192.168.0.200` is the temporary IP address of the camera.
+Wait for the U-Boot command line to appear. Then we execute the following commands, where `192.168.0.8` is the TFTP server address and `192.168.0.200` is the temporary IP address of the camera.
 
 ```
 setenv ipaddr 192.168.0.200
 setenv serverip 192.168.0.8
 
 sf probe 0; sf lock 0
-mw.b 0x42000000 ff 1000000; tftpboot 0x42000000 u-boot-gk7205v200-universal.bin; sf probe 0
+mw.b 0x42000000 ff 1000000; tftpboot 0x42000000 u-boot-gk7205v200-nor.bin; sf probe 0
 sf erase 0x0 0x50000; sf write 0x42000000 0x0 ${filesize}
 reset
-
-run setnor16m
 
 setenv ipaddr 192.168.0.200
 setenv serverip 192.168.0.8
 
-run uknor16m ; run urnor16m
+run ur ; run uk
 
 saveenv
 reset
 ```
+
+`run ur` writes `rootfs.squashfs.gk7205v200` first: a rootfs over 5 MiB selects
+the 16 MB slots (kernel 3 MiB at `0x50000`, rootfs 10 MiB at `0x350000`), and
+`run uk` then writes `uImage.gk7205v200`. This U-Boot finds the layout on the
+flash at every boot, so there is no `setnor16m` to run.
 
 ### Further refinements
 

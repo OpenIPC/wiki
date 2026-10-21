@@ -21,8 +21,10 @@ There are other options available so you can use a local copy of the Linux kerne
 __ATTENTION! Upgrading firmware can lead to "bricking" your camera. Make sure you are prepared both morally and skill wise. Have your rescue SD card and/or UART adapter ready. Be prepared to de-solder and reprogram flash chip as the last resort. Do not upgrade production cameras unless you really have to!__
 
 On GK7205V200, GK7205V300, GK7202V300 and GK7605V100 with the OpenIPC
-`u-boot-<soc>-nor.bin` bootloader, and on Hi3516CV610, Hi3516CV608 and
-Hi3519DV500, `sysupgrade -k -r` installs the
+`u-boot-<soc>-nor.bin` bootloader, on Hi3516CV300 and Hi3516EV100 (with that
+bootloader or the older OpenIPC U-Boot 2010.06, which boots the split image as
+well), and on Hi3516CV610, Hi3516CV608 and Hi3519DV500, `sysupgrade -k -r`
+installs the
 [NOR split layout](nor-split-layout.md) from `openipc.<soc>-nor-<variant>-split.tgz`
 and carries your settings across (Hi3516CV610 and Hi3516CV608 share one package,
 `openipc.hi3516cv6xx-nor-<variant>-split.tgz`). The offsets in *From U-Boot* below

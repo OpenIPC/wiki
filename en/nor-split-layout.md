@@ -16,6 +16,7 @@ and only their sum has to fit the chip. These SoCs use it:
 | SoC | Boot area | Firmware from | Bootloader | Packages |
 |-----|-----------|---------------|------------|----------|
 | GK7205V200, GK7205V300, GK7202V300, GK7605V100 | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin` | `-split` and the fixed-slot one |
+| Hi3516CV300, Hi3516EV100 | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin` | `-split` and the fixed-slot one |
 | Hi3516CV610, Hi3516CV608 | 256K boot + 64K env | `0x50000` | `boot-<soc>[-<board>]-nor.bin` | `-split` only |
 | Hi3519DV500 | 512K boot + 256K env | `0xC0000` | `boot-hi3519dv500-<board>-nor.bin` | `-split` only |
 
@@ -281,11 +282,19 @@ The same goes for a vendor U-Boot on Hi3516CV6xx or Hi3519DV500, as long as it
 reads the kernel from the firmware offset: 2 MiB from `0x50000`, or 6 MiB from
 `0xc0000` on Hi3519DV500. Its boot image has to match the board's DDR, as above.
 
+On Hi3516CV300 and Hi3516EV100 the older OpenIPC U-Boot 2010.06
+(`u-boot-<soc>-universal.bin`) boots the split image unchanged: its `bootcmdnor`
+reads 3 MiB from `0x50000`, and the kernel ignores the `root=` and the fixed
+`mtdparts=` it passes. A Hi3516CV300 board with that U-Boot and its 16 MB
+`mtdparts` booted `firmware.bin` from `0x50000` this way. For the scan, `fwupd`
+and SD/USB recovery, install `u-boot-<soc>-nor.bin` (U-Boot 2022.10).
+
 ### Going back to fixed slots
 
 On the GK7205V200 family: write `uImage.<soc>` at `0x50000` and
 `rootfs.squashfs.<soc>` at the fixed rootfs slot, as in
 [Upgrade firmware](sysupgrade.md) (*From U-Boot*). On a U-Boot environment from
 this bootloader, `run ur; run uk` does the same. The bootloader sees the uImage
-at `0x50000` and boots the fixed slots again. Hi3516CV6xx and Hi3519DV500 are
-built only for the split layout.
+at `0x50000` and boots the fixed slots again. Hi3516CV300 and Hi3516EV100 go
+back the same way. Hi3516CV6xx and Hi3519DV500 are built only for the split
+layout.
