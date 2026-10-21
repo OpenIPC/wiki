@@ -20,7 +20,8 @@ after a clean: is the dirt actually gone, or did you just move it around?
 
 - **Firmware from `nightly-20261021` or later** (see
   [Nightly builds](nightly-builds-and-bisect.md) for how builds are named and
-  how to check yours).
+  how to check yours). The [too dark](#too-dark-to-measure) warning, and depth
+  read from the dark part of a pattern only, came in `nightly-20261022`.
 - **A web interface from 2026-10-21 or later** for the **Dust** tab with
   everything on this page. The tab first appeared earlier that day; a web
   interface from between the two lacks the motion figure and warnings
@@ -75,7 +76,7 @@ changes between the frames the camera takes can fake one.
 | a clear sky | as good, as long as it is clear |
 | a street, trees, a busy room | big specks are found; faint ones hide in the texture, and a comparison says **not judged** there rather than guessing |
 | a cloudy sky, traffic, leaves in wind | the picture moves between frames, and a moving picture is the one thing that can fake a speck. The camera says how much moved and warns (below) |
-| darkness | noise. Measure in daylight |
+| darkness: dusk, or night without the camera's own light | lamps, lit windows and dark shapes. The camera says the picture is [too dark](#too-dark-to-measure) and certifies nothing |
 
 On a hi3516ev300 with an IMX335 carrying eleven specks, measured thirteen
 times over a morning against a wall seen through a window, every speck was
@@ -86,7 +87,9 @@ certain in all but one.
 ### Reading the answer
 
 **Light taken** is the depth of the speck: 20% means the darkest part of its
-pattern lets through 80% of the light it should. The eleven specks on the
+pattern lets through 80% of the light it should. It is read from the dark part
+of a pattern only, so a lamp — bright, round and fixed, but taking nothing —
+reports the little it takes, or is not reported at all. The eleven specks on the
 camera above took between 4% and 27%. Below about 1.2% nothing is reported;
 the tab shows that limit as *smallest it can see*.
 
@@ -96,7 +99,8 @@ the rest but never called new dirt. A spot is less certain when it:
 - is cut by the edge of the frame;
 - is brighter than it is dark — a lamp, a reflection; dust takes light away;
 - is round, but only just;
-- lies where the picture moved between the frames.
+- lies where the picture moved between the frames;
+- was found in a picture [too dark to measure](#too-dark-to-measure).
 
 The tab also says **how much of the picture moved between frames**. On a still
 scene it reads 0%, and that figure is what makes a clean result worth
@@ -105,13 +109,35 @@ reads 100%. Spots where the picture moved are less certain and are not judged,
 and when more than a fifth of it moved the camera adds a warning, shown in an
 amber box: measure again with the camera on something still.
 
+#### Too dark to measure
+
+In daylight the camera's exposure holds the picture at a steady brightness. At
+dusk, or at night without the camera's own infrared light, it runs out of
+exposure and gain, and the picture falls far below that. What is round in such
+a picture is lamps, lit windows and dark shapes: on a car park at dusk one
+measurement found 34 spots and none of them was dust.
+
+So when the picture is too dark the camera says so instead of guessing:
+
+- the answer says the picture is **too dark to measure**, in the amber box,
+  before anything else;
+- every spot is less certain, and a comparison judges nothing;
+- **Save as before** is refused, so that a clean is never judged against
+  lamps;
+- **Which glass?** is refused, once the filter is back, rather than calling
+  every spot cover glass for not having been seen to move.
+
+A night picture lit by the camera's own infrared is bright enough: on the
+camera above it found all eleven specks, as in daylight. Darkness costs sensitivity,
+not correctness: measure in daylight.
+
 #### After a clean
 
 | verdict | means |
 |---|---|
 | **cleared** | nothing even a third as deep is left where the speck was, round or not |
 | **still there** | a round, dark pattern at least a third as deep is still at its place |
-| **not judged** | the place could hide one: the picture is busy there, something bright or not round lies across it, or the scene moved there. Point the camera at something plainer and compare again |
+| **not judged** | the place could hide one: the picture is busy there, something bright or not round lies across it, the scene moved there, or the picture is too dark. Point the camera at something plainer, in daylight, and compare again |
 | **new** | a certain spot that the "before" did not have |
 
 A spot that stays after a clean is either dirt the clean did not reach, or a
@@ -122,7 +148,9 @@ settles it.
 The comparison also refuses to judge when the light is too different from the
 "before" on the processed picture (more than a factor of two in gain or
 brightness): the tone curve moves how dark a speck reads, so the verdicts would
-be the tone curve's. On raw it always compares.
+be the tone curve's. On raw it always compares. A "before" that was itself
+measured in too dark a picture (an older firmware saved one) is never compared:
+its spots come back not judged, with a warning to save a new one in daylight.
 
 ### What a speck looks like
 
@@ -153,6 +181,8 @@ it back. A speck on the filter moves with it; one on the cover glass does not.
 A spot is put on the filter only when it is seen to go when the filter moves. A
 spot the other position could not judge counts as not having moved, so on a
 busy scene "cover glass" means "not seen to move" rather than "seen to stay".
+
+In a picture [too dark to measure](#too-dark-to-measure) it is refused.
 
 It takes about fifteen seconds. During that time:
 
@@ -226,6 +256,7 @@ curl -s http://127.0.0.1/api/v1/optics/dust
 - `attenuationPct` is the light taken; `marginal` marks a less certain spot.
 - `source` is `raw` or `luma` (the processed picture).
 - `movingPct` is how much of the picture moved between the frames.
+- `dark` is `true` when the picture was too dark to measure.
 - `warnings`, present only when there is something to say, is a list of
   sentences for a person.
 
@@ -234,7 +265,7 @@ A comparison adds a `baseline` object: `taken`, `comparable`, the counts
 `cleared`, `remains` or `unjudged` — and `nowPct`, what is left there now),
 `new`, and its own `warnings`. **Which glass?** gives each spot a `site`
 (`glass`, `filter` or `window`) with `inPct` and `outPct`, and under `ircut`
-each position's `frames`, `luma` and `movingPct`.
+each position's `frames`, `luma`, `movingPct` and `dark`.
 
 | status | why |
 |---|---|
@@ -242,6 +273,7 @@ each position's `frames`, `luma` and `movingPct`.
 | 403 | a `POST` or `DELETE` sent from a page on another site |
 | 404 | `?compare=1` with no "before" saved |
 | 409 | the "before" was measured on the other source (raw or processed) or at another frame size; save a new one |
+| 422 | the picture is too dark: a "before" is not saved, and **Which glass?** is not answered. The reason is in the status line |
 | 501 | this camera can give neither a raw nor a processed frame for it, or (for **Which glass?**) has no filter it can move |
 | 503 | busy: another measurement, a raw snapshot or a firmware upgrade is running. Ask again in a moment |
 
