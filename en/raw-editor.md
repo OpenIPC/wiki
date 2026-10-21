@@ -315,6 +315,15 @@ and keep the filter it measures with. It is the advanced half of focusing and
 has a page of its own: [Autofocus and manual focus](autofocus.md), which also
 covers the Live page's lens controls, where a camera is actually focused.
 
+### Dust
+
+The one tab where the camera does the measuring rather than the editor: it
+finds the specks on the glass in front of the sensor from the live scene, rings
+them over the frame, and after a clean says which of them are gone. **Which
+glass?** tells dust on the IR-cut filter from dust on the sensor's cover glass.
+How to use it, what to point the camera at and how to read the answer are in
+[Dust on the sensor glass](sensor-dust.md).
+
 ### When it will not open
 
 The editor is fetched from the internet on first use. If it does not arrive the
