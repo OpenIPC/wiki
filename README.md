@@ -61,6 +61,7 @@ OpenIPC Wiki
 - [Majestic usage research](en/majestic-research.md)
 - [Majestic plugins](en/majestic-plugins.md)
 - [Raw editor](en/raw-editor.md)
+- [Dust on the sensor glass: finding it, and proving a clean took it away](en/sensor-dust.md)
 - [Autofocus and manual focus](en/autofocus.md)
 - [Very long exposure: telescopes, X-ray and other dark scenes](en/very-long-exposure.md)
 - [Soundcheck: setting audio levels by ear](en/audio-soundcheck.md)
