@@ -25,6 +25,11 @@ after a clean: is the dirt actually gone, or did you just move it around?
   everything on this page. The tab first appeared earlier that day; a web
   interface from between the two lacks the motion figure and warnings
   described below.
+- **A route to the internet the first time you open the raw page.** The Dust
+  tab is part of the [raw editor](raw-editor.md), which the web interface
+  fetches on first use and the browser then caches. Without it the raw page
+  offers the frame as a download instead, and there is no Dust tab; the
+  [endpoint](#from-a-shell) works regardless.
 - **Raw capture switched on**, ideally. The camera measures on the raw frame
   where it can, and falls back to the processed picture where it cannot (see
   [Raw first](#raw-first-the-processed-picture-is-not-a-measurement) for why
@@ -60,10 +65,9 @@ filter from one on the sensor's own cover glass. See
 
 ### Choosing what to point it at
 
-A speck is found by its shape: whatever else it looks like, its pattern is the
-same in every direction about one centre. That is what the camera looks for,
-so anything in the picture that is soft and round competes with it, and
-anything that changes between frames confuses it.
+Whatever else a speck looks like, it is soft, round and fixed. Anything in the
+picture that is also soft and round can be taken for one, and a picture that
+changes between the frames the camera takes can fake one.
 
 | pointed at | what you get |
 |---|---|
@@ -126,14 +130,12 @@ Most specks draw a **dark disc**, often slightly triangular or hexagonal: the
 lens's aperture blades are in the shape. A small speck very close to the sensor
 draws **rings** instead — a dark core, a bright ring, a dark outer ring — the
 way light diffracts round a small obstacle. A ring-shaped speck can be as
-noticeable as a disc and yet barely darker than its surroundings on average,
-which is why the camera does not look for darkness.
+noticeable as a disc and yet barely darker than its surroundings on average.
+The camera reports both kinds.
 
-On the camera above, one such speck took ±4–5% of the light at its strongest
-and survived a thorough clean. A first version of this analysis, which looked
-for dark discs, never reported it; it was found by eye on a white wall
-afterwards, and is the reason the camera looks for round patterns of either
-sign instead.
+On the camera above, one such speck took ±4–5% of the light at its strongest,
+survived a thorough clean, and was reported as certain in four runs out of
+four on a white wall afterwards.
 
 ### Which glass: the IR-cut filter
 
@@ -159,10 +161,14 @@ It takes about fifteen seconds. During that time:
   daylight with the filter out, that is the infrared-tinted colour of a camera
   with no filter, for those seconds.
 
-The filter is put back where the day/night logic wants it at that moment, so a
-switch to night that came due meanwhile is honoured. If something else moved
-the filter during the measurement, the answer is refused rather than labelled
-with the wrong position.
+Where the filter is put back depends on
+[who moves it](majestic-streamer.md#who-moves-the-filter-and-the-lamp). With
+`nightMode.irCut: auto` it goes where day and night want it at that moment, so
+a switch to night that came due meanwhile is honoured. With `manual` it goes
+back where it was before the measurement. A filter that does not take the drive is tried again. If
+something else moved the filter during the measurement — a day/night switch,
+an operator — it is left where they put it, and the answer is refused rather
+than labelled with the wrong position.
 
 On the camera above, all eleven specks came back on the cover glass, in four
 runs out of four.
@@ -185,9 +191,8 @@ image tuning — and they decide how dark a speck looks:
 | **raw**, the same morning, eleven captures | **14.7–16.5%** | **12.7–13.3%** | **7.2–7.5%** |
 | **raw** at gain 13.8× | **15.4%** | **13.5%** | **7.4%** |
 
-(Measured with the first, dark-disc version of the analysis; what the table
-shows — how far processing moves a speck's depth — does not depend on it.) On
-raw the depth is the light the speck takes, whatever the gain and whatever the
+(Measured with an earlier build; what the table shows — how far processing
+moves a speck's depth — does not depend on the build.) On raw the depth is the light the speck takes, whatever the gain and whatever the
 tone curve does. On the processed picture it is whatever the tone curve
 made of it, which is also why a "before" taken on one cannot be compared with
 a measurement on the other.
@@ -248,10 +253,15 @@ Measured on the camera above (a 5 MP sensor, one Cortex-A7 core):
   the video, not instead of it: an RTSP client's longest gap between frames was
   0.20 s during a measurement against 0.13 s idle.
 - **About 17 MB** of memory while it runs, all of it given back afterwards.
-- **An occasional lost video frame.** Taking a raw frame now and then costs
-  the video one frame at capture: on this camera, 1 raw snapshot in 15 did. A
-  measurement takes three, so roughly one measurement in five drops a single
-  frame. That is the raw capture's cost, the same as for any raw snapshot.
+- **An occasional lost video frame**, on this camera. Taking a raw frame now
+  and then cost the video one frame at capture: 1 raw snapshot in 15 did. A
+  measurement takes three, so roughly one measurement in five dropped a single
+  frame. That is the raw capture's cost, the same as for any raw snapshot, and
+  it is not the same on every chip: on some SigmaStar and Ingenic cameras a raw
+  capture stalls the video for much longer. See
+  [On SigmaStar](majestic-streamer.md#on-sigmastar) and
+  [On Ingenic T31 and T23](majestic-streamer.md#on-ingenic-t31-and-t23)
+  before measuring on one of those.
 - **Which glass?** takes about 15 s and about 27 MB.
 
 ### What it cannot do
