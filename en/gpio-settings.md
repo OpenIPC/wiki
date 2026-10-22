@@ -199,6 +199,14 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 | SSC335DE    | 61     | 79     |       |   4   |       |      |         |              |    | Rostelecom IPC8232SWC-WE-B, C1L-2WN-G             |
 | SSC335      | 61     | 79     |       |       |  76   |      |         |              |    | Uniarch UV-IPC-D122-PF28, Uniarch IPC-B122-APF28K |
 
+### Uniojo
+
+| Processor   | IRCUT1 | IRCUT2 | IRSTATUS      | USB_ENA | TESTED BOARDS |
+|-------------|--------|--------|---------------|---------|---------------|
+| Hi3518Ev200 | 2      |        | 62 (inverted) | 54      | T5826HCA-M01  |
+
+> Note: Single-pin IR-cut filter and IR LEDs on GPIO 2. Daylight photodiode on GPIO 62 (active-low / inverted). GPIO 54 powers the USB Wi-Fi module (RTL8188FU). See [Uniojo T5826HCA-M01](device-uniojo-t5826hca.md).
+
 ### Wansview
 
 | Processor   | IRCUT1 | IRCUT2 | IR LEDs | RESET | ETH_GR_BL | ETH_ORANGE| DEVICE ID                   |
