@@ -28,6 +28,9 @@ Electronic LCD displays and LED pulse counting are not supported yet.
 - **A supported camera.** The reader takes uncompressed frames from the main
   stream, which HiSilicon and SigmaStar cameras can hand over. On other
   cameras the meter shows the state *this camera cannot hand over a frame*.
+- **A Majestic build that reads meters.** On one that does not, the WebUI
+  has no **Meters** section under **Events**, and `meters` settings in
+  `/etc/majestic.yaml` are ignored.
 - **The drum model file**, `/usr/share/majestic/drum.qnet` by default. It is
   shipped in the firmware together with a Majestic that reads meters. If the
   file is missing, the camera logs that it cannot load the model and the
@@ -65,8 +68,11 @@ meters:
     dial1: 0.0001,860,440,30    # x0.0001: tenths of a litre
 ```
 
-The changes take effect on the next reading, without a restart. Up to **four
-meters** are read per camera.
+Changes made in the WebUI or through the API take effect on the next
+reading, with no restart, and a meter whose own row is unchanged keeps its
+history. After editing `/etc/majestic.yaml` by hand, make Majestic re-read it
+with `killall -HUP majestic`; that briefly restarts the video as well. Up to
+**four meters** are read per camera.
 
 | Key | Required | Meaning |
 |---|---|---|
@@ -237,30 +243,37 @@ number:
 
 ### How well it reads
 
-The drum reader was trained on synthetic drums rendered into real meter faces
-at many angles and lighting conditions, and on openly licensed (CC BY 4.0)
-meter photographs. It was then tested on real pictures it had never seen:
+**How it was measured.** Each figure is the share of single drums read right
+from single pictures the reader had never seen, against the digit a person
+read off the same picture. The first three rows are crops from recorded
+snapshots of real meters, taken across several days
+and lit as found. The last two are the test splits of two public photo
+collections on Roboflow Universe (CC BY 4.0), water meters of many makes and
+car-style odometers, which hold drums of every digit at every stage of a
+roll.
 
 | Test set | Digits read right |
 |---|---:|
-| Water meter, daylight, 2 MP camera | 100% of 21 |
-| Electricity meter, daylight, 2 MP camera | 100% of 18 |
+| Water meter, daylight | 100% of 21 |
+| Electricity meter, daylight | 100% of 18 |
 | The same electricity meter under IR, lamps reflecting on the glass | 58% of 24 |
-| Open water-meter photographs, many meter models | 87% of 9,234 |
-| Open odometer photographs | 90% of 2,034 |
+| Public water-meter photographs, many meter models | 87% of 9,234 |
+| Public odometer photographs | 90% of 2,034 |
 
-These are single digits read from single frames. The rules above turn that
-into a correct running reading. Over a night of an electricity meter, the
-reading over time was right at every checked moment, where single frames
-alone got 25 of 54. Over a day of a water meter with dials, the reading went
-from 121.848 to 122.047 m³ to the litre, never going backwards.
+A meter's reading is better than these single digits, because the rules
+above hold it to what a meter can do. Two runs show this:
 
-On a SigmaStar SSC325 camera (a single Cortex-A7, 1080p) reading an
-electricity meter every 20 seconds, one drum's thin "9" was misread as "1" in
-about half the frames. The settling rule sat that out, and the camera
-reported the correct 29864.0 kWh and held it. Reading one drum takes about
-2.5 ms of one Cortex-A7 core, so reading meters costs the camera almost
-nothing between readings.
+- **Recorded water-meter snapshots, read offline with the same rules.** Over
+  one day, the water meter's snapshots, dials included, gave a reading that
+  went from 121.848 to 122.047 m³ to the litre and never went backwards.
+- **Live, on a camera.** A SigmaStar SSC325 camera (a single Cortex-A7,
+  1080p main stream) read an electricity meter every 20 seconds. One drum's
+  thin "9" read as "1" in about half the frames. The settling rule sat that
+  out: the camera reported 29864.0 kWh, which is what the drums showed, held
+  it, and its `margin` grew from 0.5 to 3.9 over two minutes.
+
+Reading one drum takes about 2.5 ms of one Cortex-A7 core, so meters cost
+the camera almost nothing between readings.
 
 ### Placing the camera
 
@@ -293,8 +306,10 @@ through in the four hours before:
 delta(majestic_meter_value{meter="cold"}[4h]) > 0.002 and on() hour() == 5
 ```
 
-Alert when the camera stops reading:
+Alert when the camera stops reading. The second line catches a meter that
+has never been read at all, which has no sample to be old:
 
 ```
 majestic_meter_age_seconds > 600
+absent(majestic_meter_age_seconds{meter="cold"})
 ```
