@@ -19,9 +19,10 @@ For XM vendor boards with NT98562 and NT98566 SoC ONLY!!!
 
 You need a UART console and a TFTP server on the camera's network.
 
-1. Back up the whole flash first, with a programmer or with
-   `cat /dev/mtdblockN` from the stock firmware's shell. U-Boot on these boards
-   cannot send a backup over the network.
+1. Back up the whole flash first and keep the copy off the camera, as described
+   in [Backing up stock firmware](backup-stock-firmware.md). U-Boot on these
+   boards cannot send a backup over the network, so use a programmer or the
+   stock firmware's shell.
 2. Download the archive for your SoC, for example
    https://github.com/OpenIPC/firmware/releases/download/latest/openipc.nt98562-nor-lite.tgz,
    and put the `uImage.<soc>` and `rootfs.squashfs.<soc>` files from it in the
@@ -40,25 +41,28 @@ setenv bootcmd 'setenv setargs setenv bootargs ${bootargs};run setargs;sf probe 
 setenv uk 'mw.b 0x01000000 ff 1000000;tftp 0x01000000 uImage.${soc} && sf probe 0 && sf erase 0x50000 0x200000 && sf write 0x01000000 0x50000 ${filesize}'
 setenv ur 'mw.b 0x01000000 ff 1000000;tftp 0x01000000 rootfs.squashfs.${soc} && sf probe 0 && sf erase 0x250000 0x500000 && sf write 0x01000000 0x250000 ${filesize}'
 saveenv
-run uk
-run ur
-reset
+run uk && run ur && reset
 ```
 
-   Both `run` steps must finish with `Written: OK` before you `reset`. If a
-   download fails, the step stops before erasing anything; fix the TFTP side
-   and run it again.
-4. On the first boot, run `firstboot` once to format the settings partition.
-5. The camera then starts unclaimed. Open its web page to set the root password
-   and accept the Majestic licence, or log in over SSH or the console, which
-   asks for the same.
+   Each `run` must end with `Written: OK`. If a download or a write fails, the
+   line stops there: nothing more is erased and the camera does not reset. Fix
+   the TFTP side and run the line again.
+4. The settings partition still holds what the stock firmware left there and
+   has to be formatted once. A freshly flashed camera is unclaimed and has no
+   shell, so log in as `root` on the console or over SSH with no password,
+   answer the one-time setup prompt, and run `firstboot`. It formats the
+   partition and reboots.
+5. `firstboot` also erases the password you just set, so the camera comes back
+   unclaimed. Claim it for good: open its web page to set the root password and
+   accept the licence, or log in over SSH or the console again. See
+   [Factory reset and the unclaimed camera](first-boot.md).
 
 ### Follow-up quick updates
 
 From the U-Boot prompt, with the new files in the TFTP root:
 
 ```
-run uk; run ur; reset
+run uk && run ur && reset
 ```
 
 Or run `sysupgrade` on a running camera.
