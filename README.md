@@ -175,6 +175,7 @@ OpenIPC Wiki
 - [XiongMai IPG-53H20AF](en/device-ipg-53h20af.md)
 - [XiongMai NBD6808T-PL NVR (Hi3520DV200)](en/device-xm-nbd6808t-pl.md)
 - [LSC Smart Connect Video Doorbell (2021)](en/device-lsc-smart-connect-video-doorbell-2021.md)
+- [Uniojo T5826HCA-M01](en/device-uniojo-t5826hca.md)
 
 ### Software
 
