@@ -201,6 +201,7 @@ the detail:
 | `dials` | One entry per configured dial: its `multiplier`, the `needle` position (0 to 10) and the `clarity` of the needle |
 | `perHour` | As in the metrics |
 | `margin` | How far this reading came ahead of the next most likely one. The higher, the surer; a margin that stays near 0 means the view is poor |
+| `viewMatch` | How alike the window is to what it showed when the meter settled: about 1 the same, near 0 nothing like it (see [If the camera moves](#if-the-camera-moves)) |
 | `at`, `age` | When it was read (Unix time), and how long ago in seconds |
 | `state` | Present only while there is no fresh reading, and says why |
 
@@ -214,6 +215,9 @@ The `state` values you may see:
 | `the window is degenerate` | The four corners do not make a usable box |
 | `another capture is in progress` | A snapshot was being taken at the same moment; the camera retries next time |
 | `this camera cannot hand over a frame` | The camera's SoC is not supported |
+| `the window looks different: checking again` | One reading did not look like the meter; the next one decides |
+| `the view moved: the drums are -192,-29 px from the window; mark it again` | The camera has moved; the drums are now that many pixels from where the window was marked (right and down are positive) |
+| `the window no longer shows the meter; mark it again` | The window shows something else entirely: the camera was turned or taken down, or the meter is covered |
 
 ### How a reading is made, and why you can trust it
 
@@ -240,6 +244,51 @@ number:
 - **Drums between digits.** A drum spends part of its time rolling between
   two digits, and the reader recognises that half-way position as such. With
   dials, the dial settles which of the two digits the drum is on.
+
+### If the camera moves
+
+The window stays where it was marked. If the camera is knocked, turned or
+taken down, the window covers something else, and the camera would happily
+read digits into plastic, a label or the wall. Left alone, a misread that
+every frame repeats would after five readings become the meter's history.
+
+So once a meter has settled, the camera remembers what the window and the
+meter face around it looked like. Every reading starts by checking the
+picture against that:
+
+- **The picture is where the window is:** the reading goes ahead.
+- **It is found nearby, somewhere else** (up to about four drums to either
+  side, or a window's height up or down): the camera reports
+  `the view moved` and by how many pixels.
+- **It is nowhere near:** the camera reports that the window no longer shows
+  the meter.
+
+One odd reading is held back and reported as *checking again*; two in a row
+are reported as above. While the camera says so, it reads nothing: the last
+good reading stays, and its age keeps growing, so an alert on
+`majestic_meter_age_seconds` fires. **Mark the window again** where the
+drums are now (any change to the meter's settings starts afresh), or put the
+camera back, and reading resumes on its own.
+
+A change of exposure or gain does not count as a different picture, and
+neither do the drums turning as the meter counts. The same meter under IR at
+night can look quite different from daylight, though. The camera tells this
+apart: if the picture looks different but the drums still read the count it
+already holds, it is the same meter in other light, and the camera learns
+that look as well. A moved camera's drums never read the right count.
+
+What the window looked like is kept on the camera, so a camera moved while
+it was switched off is caught on its first reading after it starts.
+
+**Measured:**
+- A still camera's readable frames over a day and a night all matched (0.53
+  and up).
+- A camera taken off its meter and pointed at the room never matched above
+  0.03.
+- A camera whose view had shifted by 192 px was found 197 px away.
+- On a SigmaStar SSC325 camera, mirroring the picture was caught in two
+  readings, both while it ran and after a restart. The camera settled again
+  as soon as the mirror was turned off.
 
 ### How well it reads
 
