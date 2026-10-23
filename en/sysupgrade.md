@@ -20,15 +20,19 @@ There are other options available so you can use a local copy of the Linux kerne
 
 __ATTENTION! Upgrading firmware can lead to "bricking" your camera. Make sure you are prepared both morally and skill wise. Have your rescue SD card and/or UART adapter ready. Be prepared to de-solder and reprogram flash chip as the last resort. Do not upgrade production cameras unless you really have to!__
 
-On GK7205V200, GK7205V300, GK7202V300 and GK7605V100 with the OpenIPC
-`u-boot-<soc>-nor.bin` bootloader, on Hi3516CV300 and Hi3516EV100 (with that
-bootloader or the older OpenIPC U-Boot 2010.06, which boots the split image as
-well), and on Hi3516CV610, Hi3516CV608 and Hi3519DV500, `sysupgrade -k -r`
-installs the
+On NOR flash: on GK7205V200, GK7205V300, GK7202V300 and GK7605V100 with the
+OpenIPC `u-boot-<soc>-nor.bin` bootloader, on Hi3516CV300 and Hi3516EV100 (with
+that bootloader or the older OpenIPC U-Boot 2010.06, which boots the split image
+as well), on Hi3516EV200, Hi3518EV300 and Hi3516DV200, on Hi3516EV300 lite and
+ultimate (neo keeps fixed slots), on
+GK7205V500, GK7205V510 and GK7205V530, and on Hi3516CV610, Hi3516CV608 and
+Hi3519DV500, `sysupgrade -k -r` installs the
 [NOR split layout](nor-split-layout.md) from `openipc.<soc>-nor-<variant>-split.tgz`
 and carries your settings across (Hi3516CV610 and Hi3516CV608 share one package,
-`openipc.hi3516cv6xx-nor-<variant>-split.tgz`). The offsets in *From U-Boot* below
-are for the fixed-slot layout.
+`openipc.hi3516cv6xx-nor-<variant>-split.tgz`; the GK7205V500 family shares
+`openipc.gk7205v500-nor-<variant>-split.tgz`). The offsets in *From U-Boot* below
+are for the fixed-slot layout. NAND cameras upgrade from the NAND package
+instead, as in [NAND flash layouts](nand-rootfs-layouts.md).
 
 ### Using sysupgrade
 `sysupgrade -k -r` gives you the latest release for your camera, as described above; if you wish to revert to a previous image, or load your own updates, then use any of the options described below. 
