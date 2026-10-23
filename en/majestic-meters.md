@@ -276,6 +276,9 @@ night can look quite different from daylight, though. The camera tells this
 apart: if the picture looks different but the drums still read the count it
 already holds, it is the same meter in other light, and the camera learns
 that look as well. A moved camera's drums never read the right count.
+Learning needs that count, though: a camera restarted at night, having only
+seen its meter by day, reports that the window no longer shows the meter
+until daylight returns, and learns the night look the following night.
 
 What the window looked like is kept on the camera, so a camera moved while
 it was switched off is caught on its first reading after it starts.
