@@ -25,8 +25,9 @@ OpenIPC `u-boot-<soc>-nor.bin` bootloader, on Hi3516CV300 and Hi3516EV100 (with
 that bootloader or the older OpenIPC U-Boot 2010.06, which boots the split image
 as well), on Hi3516EV200, Hi3518EV300 and Hi3516DV200, on Hi3516EV300 lite and
 ultimate (neo keeps fixed slots), on
-GK7205V500, GK7205V510 and GK7205V530, and on Hi3516CV610, Hi3516CV608 and
-Hi3519DV500, `sysupgrade -k -r` installs the
+GK7205V500, GK7205V510 and GK7205V530, on GK7201V200, on Hi3516CV200 and
+Hi3518EV200, and on Hi3516CV610, Hi3516CV608 and Hi3519DV500,
+`sysupgrade -k -r` installs the
 [NOR split layout](nor-split-layout.md) from `openipc.<soc>-nor-<variant>-split.tgz`
 and carries your settings across (Hi3516CV610 and Hi3516CV608 share one package,
 `openipc.hi3516cv6xx-nor-<variant>-split.tgz`; the GK7205V500 family shares
