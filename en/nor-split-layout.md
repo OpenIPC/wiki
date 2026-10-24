@@ -24,7 +24,7 @@ and only their sum has to fit the chip. These SoCs use it:
 | Hi3516CV200, Hi3518EV200 | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin`, or the older `-universal.bin` (U-Boot 2010.06), which boots the split image as well | `-split` and the fixed-slot one |
 | Hi3516CV500, Hi3516DV300, Hi3516AV300 | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin` | `-split` and the fixed-slot one |
 | Hi3536DV100 | 256K boot + 64K env | `0x50000` | `u-boot-hi3536dv100-nor.bin` | `-split` and the fixed-slot one |
-| Hi3516AV100, Hi3516DV100 | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin` (OpenIPC/u-boot#62 or later: earlier builds lack `sf`) | `-split` and the fixed-slot one |
+| Hi3516AV100, Hi3516DV100 | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin` from OpenIPC/u-boot#62 on (earlier builds lack `sf` and boot nothing), or the older `-universal.bin` (U-Boot 2010.06), which boots the split image as well | `-split` and the fixed-slot one |
 | Hi3516CV610, Hi3516CV608 | 256K boot + 64K env | `0x50000` | `boot-<soc>[-<board>]-nor.bin` | `-split` only |
 | Hi3519DV500 | 512K boot + 256K env | `0xC0000` | `boot-hi3519dv500-<board>-nor.bin` | `-split` only |
 
