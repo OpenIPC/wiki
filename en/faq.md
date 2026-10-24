@@ -141,7 +141,7 @@ sf probe 0; sf erase 0xd50000 0x2b0000; reset
 
 ### How to connect to camera with SSH using keys / no password 
 
-See seperate wiki page [here](en/sshusingkeys.md)
+See seperate wiki page [here](sshusingkeys.md)
 
 ### How to find information about the camera hardware and software?
 
