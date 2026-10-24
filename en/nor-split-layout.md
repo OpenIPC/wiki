@@ -22,6 +22,9 @@ and only their sum has to fit the chip. These SoCs use it:
 | GK7205V500, GK7205V510, GK7205V530 | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin` | `-split` and the fixed-slot one, both `gk7205v500` |
 | GK7201V200 | 256K boot + 64K env | `0x50000` | `u-boot-gk7201v200-nor.bin` | `-split` and the fixed-slot one |
 | Hi3516CV200, Hi3518EV200 | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin`, or the older `-universal.bin` (U-Boot 2010.06), which boots the split image as well | `-split` and the fixed-slot one |
+| Hi3516CV500, Hi3516DV300, Hi3516AV300 | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin` | `-split` and the fixed-slot one |
+| Hi3536DV100 | 256K boot + 64K env | `0x50000` | `u-boot-hi3536dv100-nor.bin` | `-split` and the fixed-slot one |
+| Hi3516AV100, Hi3516DV100 | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin` (OpenIPC/u-boot#62 or later: earlier builds lack `sf`) | `-split` and the fixed-slot one |
 | Hi3516CV610, Hi3516CV608 | 256K boot + 64K env | `0x50000` | `boot-<soc>[-<board>]-nor.bin` | `-split` only |
 | Hi3519DV500 | 512K boot + 256K env | `0xC0000` | `boot-hi3519dv500-<board>-nor.bin` | `-split` only |
 
@@ -302,7 +305,8 @@ On the GK7205V200 family: write `uImage.<soc>` at `0x50000` and
 this bootloader, `run ur; run uk` does the same. The bootloader sees the uImage
 at `0x50000` and boots the fixed slots again. Hi3516CV300, Hi3516EV100,
 Hi3516EV200, Hi3518EV300, Hi3516DV200, the GK7205V500 family, GK7201V200,
-Hi3516CV200 and Hi3518EV200 go back the same way. Hi3516CV6xx,
+Hi3516CV200, Hi3518EV200, the Hi3516CV500 family, Hi3536DV100 and the
+Hi3516AV100 family go back the same way. Hi3516CV6xx,
 Hi3519DV500 and Hi3516EV300 (lite and ultimate) are built only for the split
 layout: Hi3516EV300's kernel fills the 2 MiB kernel slot, so no fixed-slot
 package of it can ship beside the split one.
