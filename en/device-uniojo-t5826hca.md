@@ -79,13 +79,11 @@ nightMode:
 
 ### Persistent Pin Multiplexer Setup
 
-To ensure GPIO 62 is always configured in digital GPIO mode across reboots, add the multiplexer configuration line to `/etc/init.d/S95majestic` in the `start()` function:
+To ensure GPIO 62 is always configured in digital GPIO mode across reboots, add the multiplexer configuration line to `/usr/share/openipc/muxes.sh`:
 
 ```sh
-start() {
-	devmem 0x200f00f8 32 1 2>/dev/null
-	echo -n "Starting $DAEMON: "
-    ...
+echo "devmem 0x200f00f8 32 1" >> /usr/share/openipc/muxes.sh
+chmod +x /usr/share/openipc/muxes.sh
 ```
 
 ---
