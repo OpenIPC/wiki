@@ -205,7 +205,7 @@ Tested on GK7205V300 for /dev/ttyАМА1:
 |-------------|--------|--------|---------------|---------|---------------|
 | Hi3518Ev200 | 2      |        | 62 (inverted) | 54      | T5826HCA-M01  |
 
-> Note: Single-pin IR-cut filter and IR LEDs on GPIO 2. Daylight photodiode on GPIO 62 (active-low / inverted). GPIO 54 powers the USB Wi-Fi module (RTL8188FU). See [Uniojo T5826HCA-M01](device-uniojo-t5826hca.md).
+> Note: Single-pin IR-cut filter and IR LEDs on GPIO 2. GPIO 62 pin multiplexer register `0x200f00f8` must be set to `1` (`devmem 0x200f00f8 32 1`) to enable digital GPIO input mode for the daylight photodiode sensor. GPIO 54 powers the USB Wi-Fi module (RTL8188FU). See [Uniojo T5826HCA-M01](device-uniojo-t5826hca.md).
 
 ### Wansview
 

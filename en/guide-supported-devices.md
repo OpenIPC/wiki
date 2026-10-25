@@ -67,7 +67,7 @@ _If you have another supported device to add, please do it [here][2]._
 | H3C        | C2041              | T31X        | JXK04  | XM25QH128C   | Yes | RTL8188FTV     | No   | Yes  |
 | MEGVII     | SmartEye-D1A-24A-P | T31X        | JXK04  | FM25Q128A    | Yes | No             | No   | Yes  |
 | Uniview    | IPC-D122-PF28      | SSC335      | SC2335 | XM25QH64C    | Yes | No             | No   | No   |
-| Uniojo     | [T5826HCA-M01][8]  | HI3518EV200 | JXF22  | 16MB         | No  | RTL8188FU      | WiFi | Yes  |
+| Uniojo     | [T5826HCA-M01][8]  | HI3518EV200 | JXF22  | EN25QH128A   | No  | RTL8188FU      | No   | Yes  |
 
 
 | Processor   | Sensor           | Vendor     | SKU          | Board identification            |
