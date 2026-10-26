@@ -28,7 +28,8 @@ ultimate (neo keeps fixed slots), on
 GK7205V500, GK7205V510 and GK7205V530, on GK7201V200, on Hi3516CV200 and
 Hi3518EV200, on Hi3516CV500, Hi3516DV300 and Hi3516AV300, on Hi3536DV100, on
 Hi3516AV100 and Hi3516DV100, on Hi3519V101 and Hi3516AV200, on Hi3536CV100,
-on GK7206V12A, and on Hi3516CV610, Hi3516CV608 and Hi3519DV500,
+on GK7206V12A, on Hi3516CV100, Hi3518CV100 and Hi3518EV100, on Hi3520DV200,
+on GK7102 and GK7102S, and on Hi3516CV610, Hi3516CV608 and Hi3519DV500,
 `sysupgrade -k -r` installs the
 [NOR split layout](nor-split-layout.md) from `openipc.<soc>-nor-<variant>-split.tgz`
 and carries your settings across (Hi3516CV610 and Hi3516CV608 share one package,

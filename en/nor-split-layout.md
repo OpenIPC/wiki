@@ -28,6 +28,9 @@ and only their sum has to fit the chip. These SoCs use it:
 | Hi3519V101, Hi3516AV200 | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin` | `-split` and the fixed-slot one |
 | Hi3536CV100 | 256K boot + 64K env | `0x50000` | `u-boot-hi3536cv100-nor.bin` | `-split` and the fixed-slot one |
 | GK7206V12A | 256K boot + 64K env | `0x50000` | the bootloader the camera already runs OpenIPC with: it reads the 2 MiB kernel slot at `0x50000`, which the split kernel fits. No OpenIPC U-Boot is published for it yet | `-split` and the fixed-slot one |
+| Hi3516CV100, Hi3518CV100, Hi3518EV100 | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin`; builds from OpenIPC/u-boot#77 on add the scan, `fwupd` and recovery, and earlier ones boot the split image as well | `-split` and the fixed-slot one |
+| Hi3520DV200 | 256K boot + 64K env | `0x50000` | `u-boot-hi3520dv200-nor.bin`; builds from OpenIPC/u-boot#77 on add the scan, `fwupd` and recovery, and earlier ones boot the split image as well | `-split` and the fixed-slot one |
+| GK7102, GK7102S | 256K boot + 64K env | `0x50000` | the OpenIPC U-Boot the camera runs, which loads the kernel from `0x50000`; it has no split scan, `fwupd` or recovery for it yet | `-split` and the fixed-slot one |
 | Hi3516CV610, Hi3516CV608 | 256K boot + 64K env | `0x50000` | `boot-<soc>[-<board>]-nor.bin` | `-split` only |
 | Hi3519DV500 | 512K boot + 256K env | `0xC0000` | `boot-hi3519dv500-<board>-nor.bin` | `-split` only |
 
@@ -309,8 +312,8 @@ this bootloader, `run ur; run uk` does the same. The bootloader sees the uImage
 at `0x50000` and boots the fixed slots again. Hi3516CV300, Hi3516EV100,
 Hi3516EV200, Hi3518EV300, Hi3516DV200, the GK7205V500 family, GK7201V200,
 Hi3516CV200, Hi3518EV200, the Hi3516CV500 family, Hi3536DV100, the
-Hi3516AV100 family, Hi3519V101, Hi3516AV200, Hi3536CV100 and GK7206V12A go
-back the same way. Hi3516CV6xx,
+Hi3516AV100 family, Hi3519V101, Hi3516AV200, Hi3536CV100, GK7206V12A, the
+Hi3516CV100 family, Hi3520DV200, GK7102 and GK7102S go back the same way. Hi3516CV6xx,
 Hi3519DV500 and Hi3516EV300 (lite and ultimate) are built only for the split
 layout: Hi3516EV300's kernel fills the 2 MiB kernel slot, so no fixed-slot
 package of it can ship beside the split one.
