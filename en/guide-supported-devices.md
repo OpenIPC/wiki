@@ -67,6 +67,7 @@ _If you have another supported device to add, please do it [here][2]._
 | H3C        | C2041              | T31X        | JXK04  | XM25QH128C   | Yes | RTL8188FTV     | No   | Yes  |
 | MEGVII     | SmartEye-D1A-24A-P | T31X        | JXK04  | FM25Q128A    | Yes | No             | No   | Yes  |
 | Uniview    | IPC-D122-PF28      | SSC335      | SC2335 | XM25QH64C    | Yes | No             | No   | No   |
+| Uniojo     | [T5826HCA-M01][8]  | HI3518EV200 | JXF22  | EN25QH128A   | No  | RTL8188FU      | No   | Yes  |
 
 
 | Processor   | Sensor           | Vendor     | SKU          | Board identification            |
@@ -100,6 +101,7 @@ _If you have another supported device to add, please do it [here][2]._
 | Hi3518Ev200 | AR0130_i2c_dc    | XM         |              | BLK18EV-0732-0035-38X38-V1.01   |
 | Hi3518Ev200 | JXF22_i2c_dc     | XM         |              | BLK18EV-0002-2035-38X38-V1.01   |
 | Hi3518Ev200 | JXF22_i2c_dc     | XM         |              | BLK18EV-0022-0130-38X38-V1.01   |
+| Hi3518Ev200 | JXF22_i2c_mipi   | Uniojo     | T5826HCA     | T5826HCA-M01                    |
 | Hi3518Ev200 | OV2735_i2c_dc    | Dahua      | DH-IPC-C22P  | E305654 JX02 94V-0              |
 | Hi3518Ev200 | OV9732_          | XM         |              | BLK18EV-0732-0035-38X38-V1.01   |
 | Hi3518Ev200 | OV9732_i2c_dc    | Longse/HS  | LS-IP100/40  | 3518EV200-OV9732-V1.0           |
@@ -120,6 +122,7 @@ _If you have another supported device to add, please do it [here][2]._
 [5]: http://www.hnamg.cn/h-col-139.html
 [6]: https://github.com/OpenIPC/device-mjsxj03hl
 [7]: https://github.com/OpenIPC/device-mjsxj02hl
+[8]: device-uniojo-t5826hca.md
 
 
 [^2]: WiFi can be enabled with 8MB flash using a custom build, or by upgrading to a 16MB flash and using Ultimate firmware.
