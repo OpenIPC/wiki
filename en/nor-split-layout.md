@@ -30,7 +30,7 @@ and only their sum has to fit the chip. These SoCs use it:
 | GK7206V12A | 256K boot + 64K env | `0x50000` | the bootloader the camera already runs OpenIPC with: it reads the 2 MiB kernel slot at `0x50000`, which the split kernel fits. No OpenIPC U-Boot is published for it yet | `-split` and the fixed-slot one |
 | Hi3516CV100, Hi3518CV100, Hi3518EV100 | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin`; builds from OpenIPC/u-boot#77 on add the scan, `fwupd` and recovery, and earlier ones boot the split image as well | `-split` and the fixed-slot one |
 | Hi3520DV200 | 256K boot + 64K env | `0x50000` | `u-boot-hi3520dv200-nor.bin`; builds from OpenIPC/u-boot#77 on add the scan, `fwupd` and recovery, and earlier ones boot the split image as well | `-split` and the fixed-slot one |
-| GK7102, GK7102S | 256K boot + 64K env | `0x50000` | the OpenIPC U-Boot the camera runs, which loads the kernel from `0x50000`; it has no split scan, `fwupd` or recovery for it yet | `-split` and the fixed-slot one |
+| GK7102, GK7102S | 256K boot + 64K env | `0x50000` | `u-boot-<soc>-nor.bin`; builds from OpenIPC/u-boot#87 on add the scan, `fwupd` and recovery, and earlier ones boot the split image as well | `-split` and the fixed-slot one |
 | Hi3516CV610, Hi3516CV608 | 256K boot + 64K env | `0x50000` | `boot-<soc>[-<board>]-nor.bin` | `-split` only |
 | Hi3519DV500 | 512K boot + 256K env | `0xC0000` | `boot-hi3519dv500-<board>-nor.bin` | `-split` only |
 
