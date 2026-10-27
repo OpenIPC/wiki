@@ -202,6 +202,7 @@ the detail:
 | `perHour` | As in the metrics |
 | `margin` | How far this reading came ahead of the next most likely one. The higher, the surer; a margin that stays near 0 means the view is poor |
 | `viewMatch` | How alike the window is to what it showed when the meter settled: about 1 the same, near 0 nothing like it (see [If the camera moves](#if-the-camera-moves)) |
+| `followed` | Present once the window has followed a moved camera: how far, as `[x, y]` pixels at the window's centre, from where it was marked |
 | `at`, `age` | When it was read (Unix time), and how long ago in seconds |
 | `state` | Present only while there is no fresh reading, and says why |
 
@@ -216,7 +217,9 @@ The `state` values you may see:
 | `another capture is in progress` | A snapshot was being taken at the same moment; the camera retries next time |
 | `this camera cannot hand over a frame` | The camera's SoC is not supported |
 | `the window looks different: checking again` | One reading did not look like the meter; the next one decides |
+| `the window looks different: trying where the view went` | The meter was found nearby; the next reading checks whether the window can follow it there |
 | `the view moved: the drums are -192,-29 px from the window; mark it again` | The camera has moved; the drums are now that many pixels from where the window was marked (right and down are positive) |
+| `... they read another count there; mark it again` | Something like the meter was found nearby, but its drums do not read this meter's count (a mirrored picture, a look-alike), so the window did not follow it |
 | `the window no longer shows the meter; mark it again` | The window shows something else entirely: the camera was turned or taken down, or the meter is covered |
 
 ### How a reading is made, and why you can trust it
@@ -266,9 +269,20 @@ picture against that:
 One odd reading is held back and reported as *checking again*; two in a row
 are reported as above. While the camera says so, it reads nothing: the last
 good reading stays, and its age keeps growing, so an alert on
-`majestic_meter_age_seconds` fires. **Mark the window again** where the
-drums are now (any change to the meter's settings starts afresh), or put the
-camera back, and reading resumes on its own.
+`majestic_meter_age_seconds` fires.
+
+**A camera turned a little needs no new marking.** When the meter is found
+nearby, the next reading also looks through a window placed where it went.
+If the meter's face is there and its drums read a count this meter could
+have reached (no lower than its last reading, no higher than `maxPerHour`
+allows since), the window follows the camera there and reading carries on,
+usually within half a minute. The API's `followed` says by how much. Both
+checks are needed: a mirrored picture still looks like the meter, but its
+digits read backwards, so it is not followed.
+
+Otherwise, **mark the window again** where the drums are now (any change to
+the meter's window starts afresh), or put the camera back, and reading
+resumes on its own.
 
 A change of exposure or gain does not count as a different picture, and
 neither do the drums turning as the meter counts. The same meter under IR at
@@ -276,14 +290,20 @@ night can look quite different from daylight, though. The camera tells this
 apart: if the picture looks different but the drums still read the count it
 already holds, it is the same meter in other light, and the camera learns
 that look as well. A moved camera's drums never read the right count.
-Learning needs that count, though: a camera restarted at night, having only
-seen its meter by day, reports that the window no longer shows the meter
-until daylight returns, and learns the night look the following night.
 
-What the window looked like is kept on the camera, so a camera moved while
-it was switched off is caught on its first reading after it starts.
+**Across restarts.** What the window looked like and the meter's last count
+are both kept on the camera. A restarted camera takes the count back, so it
+reads from its first round, checks a camera moved while it was switched off
+(and follows it, as above), and learns other light at once. The count is
+kept when the meter settles and then about hourly, and is trusted only once
+the camera's clock has been set: a count older than 90 days, or stamped
+before the clock was set, is not used, and the meter settles afresh.
 
 **Measured:**
+- On a SigmaStar SSC325 camera restarted with its window marked 60 px left
+  and 12 px up of the drums, the window followed them (by 63 and 11 px) and
+  the meter read again 30 seconds after the start. Mirrored, the same camera
+  tried the window where the mirror put the drums and refused it every time.
 - A still camera's readable frames over a day and a night all matched (0.53
   and up).
 - A camera taken off its meter and pointed at the room never matched above
