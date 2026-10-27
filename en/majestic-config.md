@@ -70,7 +70,10 @@ isp:
                                 # that sets nothing is already in slow shutter,
                                 # which also fills in the exposure and gain
                                 # limits below that you did not give
-  #dis: false                   # digital stabilisation     (HiSilicon/Goke, Ingenic)
+  #dis: false                   # digital stabilisation (HiSilicon/Goke, Ingenic,
+                                # SigmaStar SSC338Q/SSC30KQ/SSC377). On SigmaStar
+                                # it steadies slow sway and makes fast vibration
+                                # worse; see majestic-stabilisation.md
   #wdr: 0                       #                           (SigmaStar)
   #edgeGain: false              #                           (SigmaStar)
   #iqServer: false              #                           (SigmaStar)
