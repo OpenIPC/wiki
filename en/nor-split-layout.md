@@ -273,15 +273,27 @@ the following before writing anything, and the camera keeps running:
 
 ### Recovery from U-Boot
 
-With the OpenIPC U-Boot on any board in the table but GK7206V12A, whose
-OpenIPC U-Boot is not published, `run fwupd` fetches `firmware.bin.<soc>` from
-the TFTP server in `serverip` (after `run srcmmc`, from an SD card) and writes
-it over the whole firmware area. Without that file it installs the fixed-slot pair, `rootfs.squashfs.<soc>`
-and `uImage.<soc>`, as before. On GK7102 and GK7102S a `firmware.bin` too big
-for the chip falls back to the pair too.
+The OpenIPC U-Boot recovers a split camera from a TFTP server or an SD card,
+given a build with the split scan: any `u-boot-<soc>-nor.bin` or boot image the
+table names, except that the Hi3516CV100 family and Hi3520DV200 need one from
+OpenIPC/u-boot#77 on, and GK7102 and GK7102S one from #87 on. Earlier builds for
+those boot the split image, but their `fwupd` installs only the fixed-slot pair
+and they do not check the split kernel. GK7206V12A has no OpenIPC U-Boot
+published.
+
+`run fwupd` fetches `firmware.bin.<soc>` from the TFTP server in `serverip`
+(after `run srcmmc`, from an SD card) and writes it over the whole firmware
+area. Where the SoC also ships the fixed-slot package, a missing file makes it
+install that pair instead, `rootfs.squashfs.<soc>` and `uImage.<soc>`; on GK7102
+and GK7102S so does a file too big for the chip. The split-only SoCs
+(Hi3516EV300, Hi3516CV6xx, Hi3519DV500) need `firmware.bin.<soc>` on the server.
+
+Either way the settings are gone: the overlay is part of the firmware area. On a
+camera that still boots, upgrade with `sysupgrade` instead, which carries them.
 
 The bootloader also checks the split kernel's CRC on every boot. A kernel that
-fails it counts as missing firmware, and the camera runs `fwupd` by itself:
+fails it counts as missing firmware, and the camera runs `fwupd` by itself, with
+the same result:
 
 ```
 Firmware is absent/corrupt (kernel at 0x50000 fails its CRC)
