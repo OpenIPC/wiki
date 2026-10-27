@@ -38,6 +38,10 @@ and carries your settings across (Hi3516CV610 and Hi3516CV608 share one package,
 are for the fixed-slot layout. NAND cameras upgrade from the NAND package
 instead, as in [NAND flash layouts](nand-rootfs-layouts.md).
 
+If a split upgrade between 2026-10-21 and 10-24 brought a camera back on
+defaults, that was a `sysupgrade` bug of those days, fixed in 1.0.77; see
+[Upgrades and your settings](nor-split-layout.md#upgrades-and-your-settings).
+
 ### Using sysupgrade
 `sysupgrade -k -r` gives you the latest release for your camera, as described above; if you wish to revert to a previous image, or load your own updates, then use any of the options described below. 
 

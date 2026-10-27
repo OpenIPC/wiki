@@ -39,9 +39,10 @@ and only their sum has to fit the chip. These SoCs use it:
                               boot image, with the board's memory setup)
           env       env       U-Boot environment
 firmware  firmware  rest      one image, divided by the kernel at boot:
-            kernel       a uImage: the kernel with its device tree (appended
-                         on 32-bit parts; on Hi3519DV500 a multi-file uImage
-                         carrying it), and a CRC32 in the header
+            kernel       a uImage: the kernel, with its device tree where it
+                         has one (appended on 32-bit parts; on Hi3519DV500 a
+                         multi-file uImage carrying it), and a CRC32 in the
+                         header
             rootfs       the squashfs, from the next 64 KiB block
             rootfs_data  your settings (the overlay), from the end of the
                          squashfs to the end of the chip
@@ -52,6 +53,11 @@ line: the device tree names `u-boot`, `env` and `firmware`, and the kernel's
 `mtdsplit` finds where the uImage ends and the squashfs begins, then adds the
 `kernel`, `rootfs` and `rootfs_data` partitions itself. A bigger or smaller
 image simply moves where `rootfs_data` starts.
+
+The 3.0 and 3.4 kernels of the Hi3516CV100 family, Hi3520DV200 and
+GK7102/GK7102S have no device tree. Their flash driver reads the same two
+headers, the uImage at `0x50000` and the squashfs after it, and registers the
+same partitions, with the boot partition called `boot`.
 
 Because of that, the kernel ignores whatever `mtdparts=` and `root=` the
 bootloader passes when the flash holds a split image. Any U-Boot that can read
@@ -100,8 +106,9 @@ itself; nothing about memory has to be set in the environment.
 `openipc.<soc>-nor-<variant>-split.tgz`, holding `firmware.bin.<soc>`. One
 build serves Hi3516CV610 and Hi3516CV608 (`openipc.hi3516cv6xx-nor-lite-split.tgz`,
 `-ultimate-split.tgz`) and one Hi3519DV500 (`openipc.hi3519dv500-nor-ultimate-split.tgz`;
-there is no Lite). On the GK7205V200 family the plain `openipc.<soc>-nor-<variant>.tgz`
-beside it is the fixed-slot package: `uImage.<soc>` and `rootfs.squashfs.<soc>`.
+there is no Lite). Where the table lists both packages, the plain
+`openipc.<soc>-nor-<variant>.tgz` beside it is the fixed-slot package:
+`uImage.<soc>` and `rootfs.squashfs.<soc>`.
 
 ### Which layout is my camera using?
 
@@ -115,6 +122,12 @@ kernel added, and the kernel log says where they came from:
 
 ```
 sfc: split NOR layout, device tree partitions
+```
+
+The kernels without a device tree name the offsets instead:
+
+```
+hi_sfc: split NOR layout, kernel 0x50000-0x220000, rootfs 0x220000-0x710000, rootfs_data from 0x710000
 ```
 
 ```
@@ -238,12 +251,53 @@ defaults:
 Clearing settings after an upgrade...
 ```
 
+From 2026-10-21 to 10-24, `sysupgrade` (1.0.76 from OpenIPC/firmware#2648
+on) staged an empty settings blob on a split upgrade, and those cameras came
+back on defaults (fixed in #2677). 1.0.77 and later carry the settings; the
+ones lost then cannot be recovered.
+
+The 3.x kernels (the Hi3516CV300 and Hi3519V101 families, Hi3536CV100, and the
+3.0 and 3.4 kernels above) give no partition offsets in sysfs. From 1.0.78
+(OpenIPC/firmware#2683) `sysupgrade` works them out from the order of the
+partitions, and takes them only when `kernel` starts with a uImage and `rootfs`
+with a squashfs; before that it refused the split package on these cameras.
+`sysupgrade` updates itself before an upgrade, so nothing has to be done on the
+camera.
+
 `sysupgrade` reads every write back from the flash before it reboots. It refuses
 the following before writing anything, and the camera keeps running:
 
 - a `firmware.bin` for another SoC;
 - an image that leaves no room for the settings;
 - the plain package on a camera already on the split layout.
+
+### Recovery from U-Boot
+
+The OpenIPC U-Boot recovers a split camera from a TFTP server or an SD card,
+given a build with the split scan: any `u-boot-<soc>-nor.bin` or boot image the
+table names, except that the Hi3516CV100 family and Hi3520DV200 need one from
+OpenIPC/u-boot#77 on, and GK7102 and GK7102S one from #87 on. Earlier builds for
+those boot the split image, but their `fwupd` installs only the fixed-slot pair
+and they do not check the split kernel. GK7206V12A has no OpenIPC U-Boot
+published.
+
+`run fwupd` fetches `firmware.bin.<soc>` from the TFTP server in `serverip`
+(after `run srcmmc`, from an SD card) and writes it over the whole firmware
+area. Where the SoC also ships the fixed-slot package, a missing file makes it
+install that pair instead, `rootfs.squashfs.<soc>` and `uImage.<soc>`; on GK7102
+and GK7102S so does a file too big for the chip. The split-only SoCs
+(Hi3516EV300, Hi3516CV6xx, Hi3519DV500) need `firmware.bin.<soc>` on the server.
+
+Either way the settings are gone: the overlay is part of the firmware area. On a
+camera that still boots, upgrade with `sysupgrade` instead, which carries them.
+
+The bootloader also checks the split kernel's CRC on every boot. A kernel that
+fails it counts as missing firmware, and the camera runs `fwupd` by itself, with
+the same result:
+
+```
+Firmware is absent/corrupt (kernel at 0x50000 fails its CRC)
+```
 
 ### Writing the image from U-Boot
 
