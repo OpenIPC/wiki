@@ -14,6 +14,11 @@ For XM vendor boards with NT98562 and NT98566 SoC ONLY!!!
 - Images: `openipc.nt98562-nor-lite.tgz` and `openipc.nt98566-nor-lite.tgz`.
   The NT98566 image has been checked on hardware; the NT98562 one is built from
   the same tree but has not been tested on a camera yet. Reports are welcome.
+- OpenIPC U-Boot builds for these SoCs, `u-boot-nt98562-nor.bin` and
+  `u-boot-nt98566-nor.bin`, are in the
+  [firmware release](https://github.com/OpenIPC/firmware/releases/tag/latest)
+  since 2026-10-27, built from OpenIPC/u-boot. They have only run in QEMU so
+  far; these instructions keep the vendor U-Boot.
 
 ### Initial device firmware update
 
