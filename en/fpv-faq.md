@@ -10,7 +10,7 @@ Frequently Asked Questions for FPV
 
 ### What’s the lowest possible latency?
 
-With wfb-ng, the project's glass-to-glass tests measured about 60 ms for 720p@60, about 80 ms for 1080p@60 on mid-budget cameras, and about 100 ms for 1080p@30 on the most budget cameras; see the Benefits section of [OpenIPC as FPV system](../en/fpv.md). Lower latency requires encoding and decoding at 120 fps and using a 120 Hz display. Results depend on the camera SoC, sensor, ground station and decoder, so the project does not publish an official figure. With APFPV (video over a regular Wi-Fi access point), latency can be as low as about 25 ms at 720p 120 fps, depending on the ground station.
+With wfb-ng, the project's glass-to-glass tests measured about 60 ms for 720p@60, about 80 ms for 1080p@60 on mid-budget cameras, and about 100 ms for 1080p@30 on the most budget cameras; see [Benefits](../en/fpv.md#benefits) on the OpenIPC as FPV system page. Lower latency requires encoding and decoding at 120 fps and using a 120 Hz display. Results depend on the camera SoC, sensor, ground station and decoder, so treat these as typical figures, not guarantees. With APFPV (video over a regular Wi-Fi access point), latency can be as low as about 25 ms at 720p 120 fps, depending on the ground station.
 
 See the [OpenIPC FAQ](https://docs.openipc.org/resources/faq/) and the [APFPV questions](https://docs.openipc.org/use-cases/fpv/apfpv/gregs_apfpv/) on the docs site.
 
