@@ -159,6 +159,13 @@ On `/metrics`:
 majestic_meter_value{meter="cold",unit="m3"} 301.676450
 majestic_meter_per_hour{meter="cold",unit="m3"} 0.000355
 majestic_meter_age_seconds{meter="cold"} 12
+majestic_meter_state{meter="cold"} 0
+majestic_meter_view_match{meter="cold"} 0.941
+majestic_meter_margin{meter="cold"} 3.912
+majestic_meter_followed_pixels{meter="cold",axis="x"} 0
+majestic_meter_followed_pixels{meter="cold",axis="y"} 0
+majestic_meter_readings_total{meter="cold"} 1440
+majestic_meter_history_restarts_total{meter="cold"} 0
 ```
 
 - `majestic_meter_value`: the reading.
@@ -167,9 +174,34 @@ majestic_meter_age_seconds{meter="cold"} 12
 - `majestic_meter_age_seconds`: how long ago it was read. Alert on this
   rather than on the value: if the reading goes stale, something is in the
   way.
+- `majestic_meter_state`: what the meter is doing.
 
-A meter that has not been read yet has **no** sample rather than a zero, so a
-graph never drops to 0 after a reboot.
+  | Value | Meaning |
+  |---|---|
+  | 0 | Reading |
+  | 1 | Settling |
+  | 2 | The window looks different, and is being checked again |
+  | 3 | The view moved |
+  | 4 | The window no longer shows the meter |
+  | 5 | Nothing legible in the window |
+  | 6 | Anything else, such as not read yet or no frame |
+
+  It is there for every meter, before its first reading too, as are
+  `majestic_meter_followed_pixels`, `majestic_meter_readings_total` and
+  `majestic_meter_history_restarts_total`.
+- `majestic_meter_view_match` and `majestic_meter_margin`: as `viewMatch`
+  and `margin` in the API below.
+- `majestic_meter_followed_pixels`: how far the window has followed a camera
+  that moved.
+- `majestic_meter_readings_total`: readings taken since Majestic started.
+- `majestic_meter_history_restarts_total`: how many times the camera started
+  again from a new number (see below). On a healthy meter this stays at or
+  near zero, so it is worth graphing.
+
+A meter that has not been read yet has **no** `majestic_meter_value`,
+`majestic_meter_per_hour`, `majestic_meter_age_seconds` or
+`majestic_meter_margin` sample rather than a zero, so a graph never drops to
+0 after a reboot.
 
 `GET /api/v1/meters` needs the same login as the rest of the API and gives
 the detail:
@@ -243,7 +275,26 @@ number:
   `typicalPerHour`, without rejecting them.
 - **Recovery.** If the meter is replaced, or the history was started on a
   wrong number, the camera does not stay stuck. After five readings in a row
-  that agree on one other number, it starts again from that number.
+  that agree on one other number, it starts again from that number. The same
+  applies when only the last drum disagrees, for example when the reading
+  has fallen behind the meter.
+- **Carries.** When a meter rolls over, say from 29899.9 to 29900.0,
+  several drums turn at once and a slow meter can take many minutes over it.
+  While a drum is between digits it may be read as either of them, or as
+  neither: a 1 turning into a 2 shows the foot of the 1 under the head of
+  the 2, which can look like a 7.
+  - Neither sends the reading backwards or makes it jump. While a carry
+    may be under way, the reading stays at the last good number and moves
+    on once the drums have turned.
+  - The camera goes on reading every round meanwhile, so
+    `majestic_meter_age_seconds` stays fresh.
+  - If the drums keep showing another number for more than an hour, the
+    camera starts again from it, as under **Recovery**. So a meter that
+    really has stopped at a round number under a wrong reading still gets
+    its number back.
+  - Each time the camera starts again from a new number, it writes the old
+    and new numbers to its log, and the count shows up as
+    `majestic_meter_history_restarts_total` on `/metrics`.
 - **Drums between digits.** A drum spends part of its time rolling between
   two digits, and the reader recognises that half-way position as such. With
   dials, the dial settles which of the two digits the drum is on.
