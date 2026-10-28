@@ -18,13 +18,29 @@ setenv ur 'run ur1 ; run ur2'
 saveenv
 
 setenv soc xm530                 # Your SoC. xm530 for both xm530 and xm550.
-setenv osmem 35M                 # 35M for xm530, 64M for xm550.
+setenv osmem 35M                 # 35M for xm530, 96M for xm550: the same as mem= in bootargs.
 setenv totalmem 64M              # 64M for xm530, 128M for xm550.
 setenv ipaddr 192.168.1.10       # Your camera IP address.
 setenv serverip 192.168.1.254    # Your TFTP server IP address.
 saveenv
 
 run uk; run ur; reset            # Flash kernel, rootfs and reboot device
+```
+
+On an XM550, replace `mem=35M` in `bootargs` with `mem=96M` before `saveenv`.
+
+#### How memory is split
+
+`mem=` in `bootargs` is the memory Linux gets. The rest of `totalmem` is the media memory zone (MMZ), where the video drivers and the camera application keep their frame and stream buffers. Linux cannot use that memory, even when the zone is mostly empty. `/proc/umap/mmz` lists what is allocated in the zone and shows the free space on its last line.
+
+On an XM550 with an IMX335 at 1080p, majestic uses at most 28.4 MB of the zone: H.264 main stream plus snapshots. H.265 uses 19–22 MB. `mem=96M` leaves a 32 MB zone, which gives Linux 32 MB more than `mem=64M`. If you raise resolutions or add streams, check the free space in `/proc/umap/mmz` first.
+
+To change the split on a camera that is already running OpenIPC:
+
+```
+fw_setenv osmem 96M
+fw_setenv bootargs $(fw_printenv -n bootargs | sed 's/mem=[0-9]*M/mem=96M/')
+reboot
 ```
 
 ### Follow-up quick updates
