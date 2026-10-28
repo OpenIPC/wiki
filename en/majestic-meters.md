@@ -254,6 +254,71 @@ The `state` values you may see:
 | `... they read another count there; mark it again` | Something like the meter was found nearby, but its drums do not read this meter's count (a mirrored picture, a look-alike), so the window did not follow it |
 | `the window no longer shows the meter; mark it again` | The window shows something else entirely: the camera was turned or taken down, or the meter is covered |
 
+### On the video
+
+The reading can also be drawn over the picture, for a demo or a camera on a
+public wall: the digit the camera read above each drum, and the value
+underneath. It is an ordinary OSD overlay, set up and switched off on the
+camera's OSD settings like the clock. It is burnt into the video, so
+whoever sees the video sees the meter.
+
+Use an overlay whose template starts with `%{drums:power}` (the name of the
+meter, or `%{drums}` for the first one). Any text after it becomes a caption
+under the value. The extra overlays are numbered 1 to 7 under
+`osd.overlays`, next to the clock's own `osd.template`, and like the clock
+they need the OSD switched on with `osd.enabled`:
+
+```yaml
+osd:
+  enabled: true
+  overlays:
+    2:
+      template: "%{drums:power} read by the camera itself"
+      meterOutline: always
+      meterDigits: confidence
+```
+
+What it draws:
+
+- **A digit above each drum**, as the camera read it. With
+  `meterDigits: confidence` (the default) it is green when the drum was read
+  clearly, amber when the camera was unsure or the drum was half way
+  between two digits, and grey before the first reading. `plain` draws
+  them all white, and `off` leaves them out.
+- **An outline** around the area the camera watches to notice that it has
+  been moved: the drum window with a margin round it. It is green while the
+  meter is read, grey while it settles, and red while the window no longer
+  shows the meter. `meterOutline: always` (the default) draws it all the
+  time, `alert` only while the meter is out of view, and `off` never.
+  Nothing is drawn inside it, so the camera never reads its own overlay.
+- **The value** under the outline, or what the meter is doing instead
+  ("settling", "the view moved"), then the caption.
+
+The overlay's other settings apply as usual: an empty template removes it,
+`size` scales the digits and the text, `font` changes the typeface, and
+`video0.osd`, `video1.osd` and `jpeg.osd` choose the streams that carry it.
+Its position follows the meter, so the anchor and offsets do not move it.
+If you mark the meter's window again somewhere else, the overlay moves
+there the next time the OSD settings are saved, or the camera restarts.
+
+To put only the number in a line of text, use `%{meter}` (the first meter)
+or `%{meter:power}` in any overlay's template, next to the usual date and
+time codes:
+
+```yaml
+osd:
+  enabled: true
+  overlays:
+    3:
+      template: "%{meter:power}"
+```
+
+This prints `29904.4 kWh`, or a dash per digit (`------.- kWh`) before the
+first reading.
+
+Drawing the digits over the drums is available on SigmaStar cameras. On
+other cameras a `%{drums}` overlay prints the value as text instead.
+
 ### How a reading is made, and why you can trust it
 
 A meter only ever counts forward, and only as fast as it can. The camera
