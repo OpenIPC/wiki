@@ -388,6 +388,15 @@ osd:
   #offsetY: "0"
   posX: 16
   posY: 16
+  # Up to seven more lines of text, each with the same keys as above (template,
+  # size, font, anchor, ...). This first block is line 0; an empty template
+  # leaves a line out. A template may hold %{meter:<name>}, a meter's reading,
+  # or start with %{drums:<name>} to draw that meter's digits over it -- see
+  # Utility meters for those and their meterOutline / meterDigits keys.
+  #overlays:
+  #  1:
+  #    template: "Front door"
+  #    anchor: bottom-right
   # Rectangles of the picture to black out, written against the MAIN stream's
   # frame and scaled into each of the others. They cover every stream that is
   # running -- both video channels and the snapshot -- and a rectangle covering

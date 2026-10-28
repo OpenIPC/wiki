@@ -264,10 +264,13 @@ whoever sees the video sees the meter.
 
 Use an overlay whose template starts with `%{drums:power}` (the name of the
 meter, or `%{drums}` for the first one). Any text after it becomes a caption
-under the value:
+under the value. The extra overlays are numbered 1 to 7 under
+`osd.overlays`, next to the clock's own `osd.template`, and like the clock
+they need the OSD switched on with `osd.enabled`:
 
 ```yaml
 osd:
+  enabled: true
   overlays:
     2:
       template: "%{drums:power} read by the camera itself"
@@ -304,6 +307,7 @@ time codes:
 
 ```yaml
 osd:
+  enabled: true
   overlays:
     3:
       template: "%{meter:power}"
