@@ -645,6 +645,75 @@ Two features of the curves matter in practice:
   saves 27%. Above it the saver is the wrong tool, but an archive stream rarely
   runs there.
 
+### Choosing a codec — H.264, H.265 and SVAC3 on the same encoder
+
+`video<N>.codec` picks the compression standard. How much it buys depends on
+the encoder, not only on the standard, so the three were measured on one chip:
+a Hi3516CV608, of the Hi3516CV610 family: the one HiSilicon family Majestic
+runs on whose encoder also does SVAC3.
+
+Bitrate needed for the same picture quality, against H.265:
+
+| clip | H.264 by VMAF | H.264 by PSNR-Y | SVAC3 by VMAF | SVAC3 by PSNR-Y |
+|---|---|---|---|---|
+| indoor, day | +13.5% | +14.1% | -4.2% | -2.3% |
+| indoor, night (high gain) | +10.3% | +15.8% | -5.8% | -0.5% |
+| outdoor surveillance | +19.1% | +21.0% | -0.4% | -1.9% |
+
+![Bitrate H.264 and SVAC3 need for the same VMAF as H.265, across the quality range, on each clip](../images/majestic-codecs-rd-cv608.webp)
+
+What it means in practice:
+- **H.265 over H.264 is the saving worth having:** H.264 needs 10-21% more
+  bitrate for the same picture, on every clip. The gap is widest at low and middle
+  quality, where most streams run. It narrows to nothing above about
+  VMAF 90, where both are spending generously.
+- **SVAC3 is an H.265-class codec on this chip.** Its saving over H.265 is
+  0-6%, within what the clips differ by. Choose SVAC3 for compliance with
+  Chinese public-security standards, not to save bandwidth.
+- **SVAC3 has a fixed chroma bias.** It codes colour somewhat finer than
+  brightness, while the camera's H.265 codes both alike, and this cannot be
+  changed. That is part of why its saving is smaller by PSNR of brightness
+  alone than by a measure that also counts colour: weighting the luma and the
+  two chroma planes 6:1:1, as codec benchmarks commonly do, it is -0.8% to
+  -7.4%.
+
+How it was measured, so you can repeat it on another chip:
+- **Identical input.** Three 1080p clips of 60 frames each:
+  - indoor day and indoor night footage recorded from a Hi3516EV300 + IMX335
+    camera's own sensor at near-lossless quality;
+  - one outdoor clip from the public
+    [VIRAT](https://viratdata.org/) surveillance dataset.
+
+  The raw frames were fed to the hardware encoder one by one, every codec
+  receiving byte-identical frames, so no difference comes from the scene.
+- **Constant quantiser, no rate control.** P frames only, a keyframe every 30
+  frames, the keyframe at the same QP as the P frames. H.264 (High profile)
+  and H.265 (Main) at QP 22, 27, 32, 37 and 42, SVAC3 at QP 26 to 56 in steps
+  of 6, which covers the same quality range on its 0-63 scale.
+- **Decoding and scoring.** H.264 and H.265 decoded with FFmpeg, SVAC3 with
+  the chip vendor's decoder (FFmpeg has none). Every frame scored against
+  its source with VMAF (NEG model, as elsewhere on this page) and PSNR,
+  then BD-BR computed as described under [Reading the numbers](#reading-the-numbers-rd-curves-and-bd-br).
+- **How rough it is.** 60 frames is a short clip and a constant quantiser is
+  not how a camera streams. A difference of a couple of percent is within the
+  noise; the 10-21% between H.264 and H.265 is not.
+
+To score your own encodes the same way:
+
+```
+ffmpeg -i encoded.h265 -pix_fmt yuv420p -f rawvideo decoded.yuv
+ffmpeg -f rawvideo -pix_fmt yuv420p -s 1920x1080 -i decoded.yuv \
+       -f rawvideo -pix_fmt yuv420p -s 1920x1080 -i source.yuv \
+       -lavfi "[0]split[d1][d2];[1]split[r1][r2];[d1][r1]libvmaf=model=version=vmaf_v0.6.1neg;[d2][r2]psnr" \
+       -f null -
+```
+
+Using `svac3` itself: it is offered on the Hi3516CV610 and Hi3516CV608 only,
+and not in lite firmware images. It is served over RTSP only — not in MP4
+recordings, HLS, RTMP or WebRTC.
+Ordinary players such as VLC or FFmpeg cannot decode it. Its viewers are
+the video platforms built for Chinese public-security standards.
+
 ### The rest of the channel knobs
 
 | setting | type | effect |

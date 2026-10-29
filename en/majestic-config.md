@@ -220,7 +220,9 @@ image:
 
 video0:
   enabled: true
-  codec: h264                   # h264 | h265
+  codec: h264                   # h264 | h265 | svac3 (Hi3516CV610/CV608,
+                                # not in lite images, RTSP only).
+                                # See "Majestic encoder tuning"
   #size: 1920x1080
   fps: 20
   #bitrate: 0                   # kbit/s; 0 = Automatic, picked from the size,
