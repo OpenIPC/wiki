@@ -482,10 +482,16 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
   #adcReadout: false            # read the thresholds from a photocell on the
                                 # SoC's ADC instead of the gain (Ingenic,
                                 # GrainMedia, Hi3516CV100/Hi3518CV100/
-                                # Hi3518EV100) — they
+                                # Hi3518EV100, Hi3516EV200/EV300/Hi3518EV300/
+                                # GK7205V200/V300) — they
                                 # are then in ADC units; the key only exists
                                 # where there is an ADC
   #adcInvert: false             # true when the ADC reading rises with light
+  #adcChannel: 0                # which ADC input the photocell is on, where
+                                # there is a choice (Hi3516EV200 family and
+                                # GK7205V200/V300: 0 or 1, read 0-1023 from
+                                # /dev/lsadc); watch night_adc_raw on
+                                # /metrics while covering the sensor
   #monitorDelay: 30             # seconds, 0-60
   #autoNightGain: 16            # automatic mode: night at this gain multiple;
                                 # unset = night when the exposure runs out
