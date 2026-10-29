@@ -491,7 +491,13 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
                                 # there is a choice (Hi3516EV200 family and
                                 # GK7205V200/V300: 0 or 1, read 0-1023 from
                                 # /dev/lsadc); watch night_adc_raw on
-                                # /metrics while covering the sensor
+                                # /metrics while covering the sensor.
+                                # The pad must be in its LSADC function:
+                                # CH0/CH1 share GPIO1_0/GPIO1_1, and
+                                # nothing switches them. Check with
+                                # `devmem 0x120c0000` (CH0) / `0x120c0004`
+                                # (CH1): 0x1001 is LSADC, 0x1000 is GPIO.
+                                # Never switch a pad that drives the IR-cut
   #monitorDelay: 30             # seconds, 0-60
   #autoNightGain: 16            # automatic mode: night at this gain multiple;
                                 # unset = night when the exposure runs out
