@@ -373,7 +373,11 @@ osd:
                                 # get the text is then video0.osd / video1.osd /
                                 # jpeg.osd, each on by default
   font: /usr/share/fonts/truetype/UbuntuMono-Regular.ttf
-  template: "%d.%m.%Y %H:%M:%S"
+  template: "%d.%m.%Y %H:%M:%S"  # strftime, plus readings such as %{temp},
+                                # %{hostname}, %{ip}, %{uptime}, %{ms},
+                                # %{exposure}, %{zoom}, and your own:
+                                # %{file:/path}, %{text:name} -- see
+                                # "What a line can show"
   #size: "1.0"                  # font scale factor
   #weight: normal               # normal | thin
   #outline: true

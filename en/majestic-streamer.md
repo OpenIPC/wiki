@@ -1401,6 +1401,139 @@ stops where erasure would begin, so **on a narrow stream Thin legitimately
 renders at Normal weight**. That is by design, not a broken setting: Thin
 means "as thin as this stream can draw without losing letters".
 
+#### What a line can show
+
+`osd.template` is a strftime pattern (`%d.%m.%Y %H:%M:%S`), plus readings
+written `%{name}` or `%{name:arg}`. `osd.overlays.<n>.template` takes the same
+codes. Up to seven extra lines, each with its own position, size and font, can
+sit beside the clock.
+
+```yaml
+osd:
+  enabled: true
+  template: "%d.%m.%Y %H:%M:%S"
+  overlays:
+    1:
+      template: "CPU %{temp}  up %{uptime}"
+      anchor: bottom-left
+```
+
+| Code | Shows | When there is nothing to show |
+| --- | --- | --- |
+| `%{temp}`, `%{temp:F}` | the chip's own temperature, in whole degrees: `64°C`, `147°F` (the value `ipcinfo -t` prints) | `--°C` |
+| `%{ms}` | the clock's milliseconds, `042`; the line then redraws every frame | — |
+| `%{exposure}` | the shutter auto-exposure is holding, `33.3ms` (HiSilicon/Goke, from the Hi3516CV200 generation on) | `--.-ms` |
+| `%{zoom}` | the lens magnification, `x3.2` (cameras with a motorised zoom lens) | `x?` |
+| `%{hostname}` | the camera's host name | — |
+| `%{ip}` | the address the camera reaches the internet from | `-.-.-.-` |
+| `%{uptime}` | time since boot, `3d 04:12`, or `04:12` under a day | — |
+| `%{file:/path}` | the first line of a file — see [Your own values](#your-own-values-on-the-picture) | `--` |
+| `%{text:name}` | a value sent over HTTP — see [Your own values](#your-own-values-on-the-picture) | `--` |
+| `%{meter:name}`, `%{drums:name}` | a utility meter's reading, or its drums drawn over it — see [Utility meters](majestic-meters.md) | a dash per digit |
+
+- **`%%` is a literal `%`.** That holds in front of a token too: `%%{temp}`
+  prints `%{temp}`.
+- **An unknown code prints as written.** A mistyped `%{tmp}` or `%q` appears
+  on the picture as typed. Firmware before the `%{...}` codes stopped drawing
+  the line at the first unknown code instead.
+- **The `°` needs a recent firmware.** The OSD font in firmware from before
+  the end of October 2026 has no degree sign, and draws an empty box in its
+  place.
+
+Older firmware spelled three of these as single letters. They are gone, and a
+saved template that still uses one shows the letter as typed until it is
+changed:
+
+| Was | Now |
+| --- | --- |
+| `%f` (milliseconds) | `%{ms}` |
+| `%@` (lens zoom) | `%{zoom}` |
+| `%$` (exposure) | `%{exposure}` |
+
+The WebUI's OSD page builds a line from chips — Date, Time, Temperature,
+Shutter, Zoom, Hostname, IP address, Uptime, Your value — and names any code
+the camera would not understand before it is saved. It asks the camera which
+codes it has, so an older camera is only offered what it can print.
+
+#### Your own values on the picture
+
+A sensor wired to the board, a scale, or a number from another system can be
+put on the video. The camera does not run anything for you: a script writes a
+file, or something sends the value over HTTP. Either way, the line is redrawn
+the moment the value changes, not on the next second's tick.
+
+**From a file: `%{file:/path}`.** The token shows the file's first line. It
+watches the file, so the picture changes as soon as the file does, with
+nothing polling. Write the value aside and rename it over the old one, so the
+line never shows half a value. For example, for a DS18B20 sensor read by a
+script like the one in
+[OpenIPC/sandbox](https://github.com/OpenIPC/sandbox/tree/main/scripts/temperature-sensor-ds18b20):
+
+```sh
+mkdir -p /tmp/osd
+while true; do
+    ev_dallas -u > /tmp/osd/outside.tmp && mv /tmp/osd/outside.tmp /tmp/osd/outside
+    sleep 10
+done &
+```
+
+```yaml
+      template: "%H:%M  outside %{file:/tmp/osd/outside}"
+```
+
+The file rules:
+
+- **Which files.** A file is shown if it is at most 4 KiB and is either in
+  RAM (`/tmp`, `/run`) or readable by anyone, as `/etc/hostname` is. Anything
+  else shows `--`, and the log says why. That keeps `/etc/shadow` and the key
+  files off a picture a view-only viewer watches. OpenIPC's shell creates
+  files that only root can read, so write a script's output under `/tmp`.
+- **What is shown.** The first line, with control characters made spaces, up
+  to 127 bytes.
+- **`/proc` and `/sys` work too.** For example
+  `%{file:/sys/class/thermal/thermal_zone0/temp}`. Those are read once a
+  second, because the kernel does not report their changes.
+- **A missing file** shows `--` until it appears.
+- **At most 16 files** across all the lines.
+
+**Pushed over HTTP: `%{text:name}`.**
+
+```sh
+curl -u root:PASSWORD -X PUT --data '12.40 kg' http://CAMERA/api/v1/osd/text/scale
+```
+
+| Request | Does |
+| --- | --- |
+| `PUT` or `POST /api/v1/osd/text/<name>`, the value as the body | sets the value; answers `204` |
+| `DELETE /api/v1/osd/text/<name>` | clears it, so the token shows `--` |
+| `GET /api/v1/osd/text` | every value, as `{"scale": "12.40 kg"}` |
+
+The value rules:
+
+- **Kept in memory only.** A value is never written to the configuration, so
+  a sensor can send one every second without wearing out the flash. It is
+  gone after a restart, so the sender has to send it again.
+- **Names** are `A-Z a-z 0-9 _ -`, up to 32 characters, with 16 at most; a
+  17th is refused with `507`.
+- **Values** are up to 127 bytes; a longer one is refused with `413`.
+- **Who may send.** Sending needs a login. A media-only session, the kind
+  another camera uses to show this one's video, cannot send.
+
+A value that is already on an MQTT broker can be relayed with a loop on the
+camera:
+
+```sh
+mosquitto_sub -h BROKER -t home/scale/weight | while read -r v; do
+    curl -s -u root:PASSWORD -X PUT --data "$v" http://127.0.0.1/api/v1/osd/text/scale
+done
+```
+
+**How wide a value can get.** On SigmaStar and Rockchip, an overlay is sized
+once, from what its line said when it was built, so a value that later grows
+longer is cut off. Start the file or the slot with a value as long as the
+longest you expect. HiSilicon/Goke, Ingenic and Xiongmai resize the overlay as
+the line changes.
+
 A **privacy mask** is not part of that. It is a rectangle of the picture blacked
 out, and it covers every stream that is running — both video channels and the
 snapshot — because a stream showing the picture has to hide the same part of it.
@@ -1429,9 +1562,18 @@ hide part of the scene, and turning a clock off never uncovers anything.
 
 #### What each SoC family can do
 
-Privacy masks are implemented on HiSilicon/Goke, SigmaStar and Ingenic, and
-behave the same way on all three. Other SoCs draw the text overlay but have no
-masks, so `osd.privacyMasks` does nothing there.
+| SoC family | Text lines | Logo (`osd.image`) | Privacy masks | A longer line |
+| --- | --- | --- | --- | --- |
+| HiSilicon/Goke | 8 | yes | yes | the overlay grows |
+| Ingenic | 8 | — | yes | the overlay grows |
+| SigmaStar | 8 | — | yes | cut off: sized once |
+| Xiongmai | 7 on XM530, 8 on XM550 | yes | yes | the overlay is rebuilt |
+| Rockchip | 8 | — | — | cut off: sized once |
+| Fullhan, Novatek, GrainMedia, Allwinner | no OSD | — | — | — |
+
+"Text lines" counts the clock line and the extra `osd.overlays` lines
+together. Where there are masks, they behave the same on every family. Where
+there are none, `osd.privacyMasks` does nothing.
 
 One exception is worth knowing. On SigmaStar, `motionDetect.visualize` and
 privacy masks cannot both be drawn — they need the same hardware, and each wants
