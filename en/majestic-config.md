@@ -392,11 +392,12 @@ osd:
   #offsetY: "0"
   posX: 16
   posY: 16
-  # Up to seven more lines of text, each with the same keys as above (template,
-  # size, font, anchor, ...). This first block is line 0; an empty template
-  # leaves a line out. A template may hold %{meter:<name>}, a meter's reading,
-  # or start with %{drums:<name>} to draw that meter's digits over it -- see
-  # Utility meters for those and their meterOutline / meterDigits keys.
+  # Up to seven more lines of text (six on XM530), each with the same keys as
+  # above (template, size, font, anchor, ...). This first block is line 0; an
+  # empty template leaves a line out. A template may hold %{meter:<name>}, a
+  # meter's reading, or start with %{drums:<name>} to draw that meter's digits
+  # over it on SigmaStar (elsewhere it prints the reading) -- see Utility
+  # meters for those and their meterOutline / meterDigits keys.
   #overlays:
   #  1:
   #    template: "Front door"

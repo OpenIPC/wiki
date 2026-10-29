@@ -45,7 +45,8 @@ Nothing in the list below depends on the flavour. FPV has all of it too.
 H.264 and H.265 encoding on two channels · MJPEG · JPEG, HEIF and YUV
 snapshots · RTSP server, with MJPEG over RTSP · HLS · MP4 recording to a card ·
 ONVIF and WS-Discovery · netip and IPEYE · mDNS · RTP push over `udp://` and
-`unix:` · OSD with privacy masks · motion detection · night mode ·
+`unix:` · OSD with privacy masks, where the SoC has them (see
+[What each SoC family can do](#what-each-soc-family-can-do)) · motion detection · night mode ·
 the web interface, the HTTP API and HTTPS.
 
 #### What the flavours change
@@ -1405,8 +1406,8 @@ means "as thin as this stream can draw without losing letters".
 
 `osd.template` is a strftime pattern (`%d.%m.%Y %H:%M:%S`), plus readings
 written `%{name}` or `%{name:arg}`. `osd.overlays.<n>.template` takes the same
-codes. Up to seven extra lines, each with its own position, size and font, can
-sit beside the clock.
+codes. Up to seven extra lines (six on XM530), each with its own position,
+size and font, can sit beside the clock.
 
 ```yaml
 osd:
@@ -1429,7 +1430,7 @@ osd:
 | `%{uptime}` | time since boot, `3d 04:12`, or `04:12` under a day | — |
 | `%{file:/path}` | the first line of a file — see [Your own values](#your-own-values-on-the-picture) | `--` |
 | `%{text:name}` | a value sent over HTTP — see [Your own values](#your-own-values-on-the-picture) | `--` |
-| `%{meter:name}`, `%{drums:name}` | a utility meter's reading, or its drums drawn over it — see [Utility meters](majestic-meters.md) | a dash per digit |
+| `%{meter:name}`, `%{drums:name}` | a utility meter's reading; `%{drums:name}` draws it digit by digit over the meter's drums on SigmaStar and prints the reading as text elsewhere — see [Utility meters](majestic-meters.md) | a dash per digit |
 
 - **`%%` is a literal `%`.** That holds in front of a token too: `%%{temp}`
   prints `%{temp}`.
@@ -1499,8 +1500,13 @@ The file rules:
 **Pushed over HTTP: `%{text:name}`.**
 
 ```sh
-curl -u root:PASSWORD -X PUT --data '12.40 kg' http://CAMERA/api/v1/osd/text/scale
+curl -u root -X PUT --data-raw '12.40 kg' http://CAMERA/api/v1/osd/text/scale
 ```
+
+`-u root` without a password makes curl ask for it, so it stays out of the
+shell history and the process list. The request is plain HTTP, so send it
+over a network you trust. A script on the camera itself needs no password:
+the camera accepts requests from its own address without a login.
 
 | Request | Does |
 | --- | --- |
@@ -1524,15 +1530,21 @@ camera:
 
 ```sh
 mosquitto_sub -h BROKER -t home/scale/weight | while read -r v; do
-    curl -s -u root:PASSWORD -X PUT --data "$v" http://127.0.0.1/api/v1/osd/text/scale
+    curl -s -X PUT --data-raw "$v" http://127.0.0.1/api/v1/osd/text/scale
 done
 ```
 
-**How wide a value can get.** On SigmaStar and Rockchip, an overlay is sized
-once, from what its line said when it was built, so a value that later grows
-longer is cut off. Start the file or the slot with a value as long as the
-longest you expect. HiSilicon/Goke, Ingenic and Xiongmai resize the overlay as
-the line changes.
+**How wide a value can get.** HiSilicon/Goke, Ingenic and Xiongmai resize the
+overlay as the line changes. SigmaStar and Rockchip size it once, from what the
+line said when it was built, and cut off whatever grows past that:
+
+- **A file** is read as the overlay is built, so make sure it already holds a
+  value as long as the longest you expect before the camera starts.
+- **A pushed value** is gone after a restart, so the overlay is built around
+  `--`. Reserve the room in the template instead, with spaces after the
+  token, as many as the value can be longer than two characters:
+  `"weight %{text:scale}        "`. On the families that resize, the spaces
+  only widen the background plate a little.
 
 A **privacy mask** is not part of that. It is a rectangle of the picture blacked
 out, and it covers every stream that is running — both video channels and the
