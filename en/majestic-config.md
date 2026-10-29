@@ -373,7 +373,11 @@ osd:
                                 # get the text is then video0.osd / video1.osd /
                                 # jpeg.osd, each on by default
   font: /usr/share/fonts/truetype/UbuntuMono-Regular.ttf
-  template: "%d.%m.%Y %H:%M:%S"
+  template: "%d.%m.%Y %H:%M:%S"  # strftime, plus readings such as %{temp},
+                                # %{hostname}, %{ip}, %{uptime}, %{ms},
+                                # %{exposure}, %{zoom}, and your own:
+                                # %{file:/path}, %{text:name} -- see
+                                # "What a line can show"
   #size: "1.0"                  # font scale factor
   #weight: normal               # normal | thin
   #outline: true
@@ -388,11 +392,12 @@ osd:
   #offsetY: "0"
   posX: 16
   posY: 16
-  # Up to seven more lines of text, each with the same keys as above (template,
-  # size, font, anchor, ...). This first block is line 0; an empty template
-  # leaves a line out. A template may hold %{meter:<name>}, a meter's reading,
-  # or start with %{drums:<name>} to draw that meter's digits over it -- see
-  # Utility meters for those and their meterOutline / meterDigits keys.
+  # Up to seven more lines of text (six on XM530), each with the same keys as
+  # above (template, size, font, anchor, ...). This first block is line 0; an
+  # empty template leaves a line out. A template may hold %{meter:<name>}, a
+  # meter's reading, or start with %{drums:<name>} to draw that meter's digits
+  # over it on SigmaStar (elsewhere it prints the reading) -- see Utility
+  # meters for those and their meterOutline / meterDigits keys.
   #overlays:
   #  1:
   #    template: "Front door"
