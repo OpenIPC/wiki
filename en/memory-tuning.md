@@ -18,17 +18,17 @@ HiSilicon SoCs require contiguous physical memory for ISP and video DMA buffers.
 This memory is managed by the MMZ (Media Memory Zone) subsystem inside the
 `open_osal` kernel module.
 
-There are three allocator backends:
+There are four allocator backends:
 
-| | hisi (static) | cma (vendor) | cma (mainline) |
-|---|---|---|---|
-| **Available on** | Kernel 4.9 | Kernel 4.9 | Kernel 6.6+ (neo) |
-| **How it works** | Kernel is given a reduced `mem=` size; the remaining RAM is invisible to Linux and owned entirely by MMZ | Kernel sees all RAM (`mem=128M`); vendor `hi_cma.c` manages a CMA region declared via bootargs; pages are reusable by the kernel when video is idle | Kernel sees all RAM; mainline CMA reserves a region via Device Tree; pages are reusable by the kernel when video is idle |
-| **Memory efficiency** | Low -- the MMZ region is wasted when video is idle (e.g. during boot, firmware updates, network-only workloads) | High -- CMA pages serve normal allocations and are migrated out on demand when video starts | High -- same as vendor CMA |
-| **Allocation latency** | Deterministic -- buffers come from a dedicated pool that is always free | May spike -- CMA must migrate pages out before returning contiguous memory; first allocation can take a few milliseconds | May spike -- same as vendor CMA |
-| **Implementation** | Simple range allocator over a hidden memory region | Vendor `hi_cma.c` integration with the kernel's CMA | Kernel built-in CMA framework (`dma_alloc_from_contiguous`) |
-| **Configuration** | `mmz_allocator=hisi mmz=anonymous,...` | `mmz_allocator=cma mmz=anonymous,...` | Device Tree `reserved-memory` node; no bootargs needed |
-| **Best for** | Memory-constrained (64MB) boards where the kernel must fit in 32MB | 128MB boards on kernel 4.9 (default for hi3516ev300_lite) | 128MB+ boards on kernel 6.6+ (default for neo builds) |
+| | hisi / ot (static) | cma (vendor) | cma (mainline) | hybrid |
+|---|---|---|---|---|
+| **Available on** | Kernel 4.9 (`hisi`); hi3516cv6xx, kernel 5.10 (`ot`, the default there) | Kernel 4.9 | Kernel 6.6+ (neo) | hi3516cv6xx, kernel 5.10 |
+| **How it works** | Kernel is given a reduced `mem=` size; the remaining RAM is invisible to Linux and owned entirely by MMZ | Kernel sees all RAM (`mem=128M`); vendor `hi_cma.c` manages a CMA region declared via bootargs; pages are reusable by the kernel when video is idle | Kernel sees all RAM; mainline CMA reserves a region via Device Tree; pages are reusable by the kernel when video is idle | A fixed carve-out holds the streamer's buffers; a small CMA zone beside it is Linux's until a peak borrows it |
+| **Memory efficiency** | Low -- the MMZ region is wasted when video is idle (e.g. during boot, firmware updates, network-only workloads) | High -- CMA pages serve normal allocations and are migrated out on demand when video starts | High -- same as vendor CMA | Medium-high -- the part of the zone the pipeline does not hold all the time (8 MB by default) serves Linux |
+| **Allocation latency** | Deterministic -- buffers come from a dedicated pool that is always free | May spike -- CMA must migrate pages out before returning contiguous memory; first allocation can take a few milliseconds | May spike -- same as vendor CMA | Deterministic for the pipeline; only a peak past the carve-out waits for CMA |
+| **Implementation** | Simple range allocator over a hidden memory region | Vendor `hi_cma.c` integration with the kernel's CMA | Kernel built-in CMA framework (`dma_alloc_from_contiguous`) | Media buffers go to the fixed carve-out first; one that does not fit there borrows from the CMA share and returns it when freed |
+| **Configuration** | `mmz_allocator=hisi mmz=anonymous,...`; on hi3516cv6xx `set_allocator ot` | `mmz_allocator=cma mmz=anonymous,...` | Device Tree `reserved-memory` node; no bootargs needed | `set_allocator hybrid [osmem] [cma share]` |
+| **Best for** | Memory-constrained (64MB) boards where the kernel must fit in 32MB | 128MB boards on kernel 4.9 (default for hi3516ev300_lite) | 128MB+ boards on kernel 6.6+ (default for neo builds) | 64MB hi3516cv608/cv610 boards that want more Linux memory without CMA's start-up risk |
 
 On kernel 4.9, the `hisi` allocator hides memory from the kernel via `mem=32M`,
 giving MMZ exclusive ownership of the remaining RAM. The `cma` allocator lets
@@ -42,9 +42,17 @@ through the Device Tree. Functionally it behaves the same as vendor CMA --
 the key improvement is that no bootargs are needed, the region is declared
 in the Device Tree and the kernel configures everything automatically.
 
+On hi3516cv6xx (kernel 5.10) the kernel lays out the media memory itself and
+offers a third choice beside the carve-out (`ot`) and `cma`: [`hybrid`](#hybrid-allocator-hi3516cv6xx),
+a fixed carve-out for what the streamer always holds and a small CMA zone that
+Linux uses until a peak needs it.
+
 > **Rule of thumb:** if your board has 128MB+ RAM, use the `cma` allocator
 > (vendor CMA on 4.9, mainline CMA on 6.6+ -- both are the default). If you
 > have 64MB RAM on kernel 4.9, use `mmz_allocator=hisi` with `mem=32M`.
+> On a 64MB hi3516cv6xx, the carve-out (`ot`) is the default;
+> [`hybrid`](#hybrid-allocator-hi3516cv6xx) gives Linux about 8 MB more while
+> streaming, and plain `cma` is not recommended there.
 
 #### Kernel 4.9 (legacy)
 
@@ -234,6 +242,126 @@ saveenv
 Old bootargs with `mmz_allocator=cma mmz=anonymous,...` still work on 6.6 —
 they are silently ignored. There is no need to change U-Boot before upgrading,
 but you will benefit from updating `mem=` to `128M` afterwards.
+
+#### Hybrid allocator (hi3516cv6xx)
+
+The carve-out and CMA each give something up on a 64 MB camera.
+
+- **The carve-out (`ot`)** keeps the whole media zone away from Linux. A 1080p
+  streamer holds 15-18 MB of the 28 MB zone, so about 10 MB sits idle, and Linux
+  runs with 12-13 MB available.
+- **CMA** lends the whole zone to Linux, which then has about 22 MB available
+  while streaming. But every time the streamer starts or rebuilds its pipeline
+  (a restart, a settings change), the kernel has to take that memory back,
+  migrating whatever Linux put there. When userland has filled the zone, that
+  migration can fail to make progress. On a hi3516cv608 about one start in six
+  stalled for good, with no out-of-memory kill and nothing logged, until the
+  watchdog reset the camera.
+
+`hybrid` takes the part of each that works. The media memory is split into two
+zones:
+
+- **a carve-out**, sized for what the streamer holds all the time. Linux never
+  sees it, so the pipeline always finds it free.
+- **a CMA zone** above the OS share, which serves Linux like any other memory
+  until a peak needs it.
+
+The media allocator fills the carve-out first. Only a buffer that does not fit
+there, such as a snapshot in flight on a busy configuration, borrows from the
+CMA zone, and it gives the memory back when it is freed. As long as the
+carve-out holds the whole pipeline, a start or a restart of the streamer never
+has to migrate it out of Linux's memory, which is where CMA got stuck. See
+[Choosing the CMA share](#choosing-the-cma-share) for sizing it that way.
+
+```
+ 0x40000000                  0x42400000     0x42C00000                 0x44000000
+ |-------- Linux (36M) --------|--- CMA (8M) ---|------ carve-out (20M) ------|
+                               Linux's until a   the streamer's pipeline,
+                               peak borrows it   never Linux's
+```
+
+##### Measured
+
+hi3516cv608 + SP2308 (1080p), 64 MB, the same streamer configuration and the
+same memory-pressure tests for each layout, with a 36 MB OS share in all three:
+
+| | `ot` | `cma` | `hybrid` 20M + 8M |
+|---|---|---|---|
+| Available to Linux while streaming | 12-13 MB | 22 MB | 20.9 MB |
+| Streamer start, unloaded | 0.38 s | 0.39 s | 0.39 s |
+| Start with 11 MB of userland in use | 1 of 3 | 3 of 3 | 3 of 3 |
+| 20 pipeline rebuilds | 20 of 20 | 20 of 20 | 20 of 20 |
+| Pipeline migrated out of Linux's memory at a start | never | every start | never |
+| Start with memory exhausted, watchdog off | recovered 3 of 3, after 2-9 min | 5 of 6 in ~10 s, 1 stuck for 22+ min | recovered 12 of 12, after 2-9 min |
+| Self-upgrade with the streamer running | fits, 6.8 MB left | fits, 27.4 MB left | fits, 7.6 MB left |
+
+- At the default configuration every media buffer stays in the carve-out.
+- With the sub stream, snapshots and motion detection on, and snapshots
+  requested back to back, use peaked at 27.0 MB. 4.7 MB of that came from the
+  CMA zone and went back afterwards.
+- When memory is exhausted, `hybrid` still stalls the way `ot` does: there the
+  system itself is out of memory, and the out-of-memory killer has to act.
+  What `hybrid` removes is CMA's own failure, a stall that does not end.
+- The samples are small: a few runs per row, on one board with one sensor.
+
+##### Using it
+
+It needs a firmware that includes
+[OpenIPC/firmware#2740](https://github.com/OpenIPC/firmware/pull/2740): the
+`set_allocator hybrid` command, and the kernel and `open_mmz` that know the
+layout. Switch an existing camera to `hybrid` and reboot:
+
+```bash
+set_allocator hybrid          # OS share as it is now, 8M of CMA
+reboot
+```
+
+Both sizes can be given: `set_allocator hybrid 36M 12M` keeps a 36 MB OS share
+and lends 12 MB. That leaves a 16 MB carve-out on a 64 MB board (28 MB of
+media memory minus 12), less than the 15-18 MB a 1080p pipeline holds: check
+the carve-out against your own pipeline first, as below, or the difference is
+borrowed from CMA at every start. The CMA share is rounded up to whole 4 MB, must be at least
+4 MB, and must leave at least 4 MB for the carve-out. `set_allocator ot` or
+`set_allocator auto` goes back.
+
+After the reboot:
+
+```bash
+cat /sys/module/hisi_mem/parameters/allocator   # hybrid
+cat /sys/module/hisi_mem/parameters/mmz         # cma,0,0x42400000,8M:anonymous,0,0x42c00000,20M
+dmesg | grep -E 'hisi_mem|mmz hybrid'           # 1 CMA and 1 carve-out zones
+grep -E 'CmaTotal|CmaFree' /proc/meminfo        # the CMA share, and how much of it is free
+cat /proc/umap/media-mem                        # which zone each media buffer is in
+```
+
+##### Choosing the CMA share
+
+The carve-out should hold what the streamer uses all the time; the CMA share
+is what is left of the zone. Check the steady use with the streamer running
+your real configuration and a snapshot or two taken:
+
+```bash
+grep 'total size' /proc/umap/media-mem    # used=... is the steady figure
+```
+
+- If the carve-out (the zone minus the CMA share) is larger than that figure,
+  the pipeline never touches CMA, and Linux gets the whole CMA share.
+- If it is smaller, the difference is borrowed from the CMA zone at every
+  start. That works, and was tested, but the more is borrowed at a start, the
+  closer it comes to plain `cma`. Lower the share instead.
+- The 8 MB default suits a 1080p sensor on a 64 MB board, whose pipeline holds
+  15-18 MB. Sensors with wider frames hold more: measure them before you lend
+  more.
+
+##### Limits
+
+- **hi3516cv6xx only.** It needs a kernel and an `open_mmz` that know
+  `hybrid`. A firmware without them ignores the setting and runs both zones as
+  plain CMA.
+- **Not the default.** The default layout stays `ot`. Only hi3516cv608 with a
+  1080p sensor has been measured.
+- **Self-upgrade unpacks into RAM**, not into the media zone as it does under
+  `ot`. Under `hybrid` that left 7.6 MB to flash from.
 
 ---
 
