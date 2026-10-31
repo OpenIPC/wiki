@@ -20,14 +20,14 @@ This memory is managed by the MMZ (Media Memory Zone) subsystem inside the
 
 There are four allocator backends:
 
-| | hisi (static) | cma (vendor) | cma (mainline) | hybrid |
+| | hisi / ot (static) | cma (vendor) | cma (mainline) | hybrid |
 |---|---|---|---|---|
-| **Available on** | Kernel 4.9 | Kernel 4.9 | Kernel 6.6+ (neo) | hi3516cv6xx, kernel 5.10 |
+| **Available on** | Kernel 4.9 (`hisi`); hi3516cv6xx, kernel 5.10 (`ot`, the default there) | Kernel 4.9 | Kernel 6.6+ (neo) | hi3516cv6xx, kernel 5.10 |
 | **How it works** | Kernel is given a reduced `mem=` size; the remaining RAM is invisible to Linux and owned entirely by MMZ | Kernel sees all RAM (`mem=128M`); vendor `hi_cma.c` manages a CMA region declared via bootargs; pages are reusable by the kernel when video is idle | Kernel sees all RAM; mainline CMA reserves a region via Device Tree; pages are reusable by the kernel when video is idle | A fixed carve-out holds the streamer's buffers; a small CMA zone beside it is Linux's until a peak borrows it |
 | **Memory efficiency** | Low -- the MMZ region is wasted when video is idle (e.g. during boot, firmware updates, network-only workloads) | High -- CMA pages serve normal allocations and are migrated out on demand when video starts | High -- same as vendor CMA | Medium-high -- the part of the zone the pipeline does not hold all the time (8 MB by default) serves Linux |
 | **Allocation latency** | Deterministic -- buffers come from a dedicated pool that is always free | May spike -- CMA must migrate pages out before returning contiguous memory; first allocation can take a few milliseconds | May spike -- same as vendor CMA | Deterministic for the pipeline; only a peak past the carve-out waits for CMA |
-| **Implementation** | Simple range allocator over a hidden memory region | Vendor `hi_cma.c` integration with the kernel's CMA | Kernel built-in CMA framework (`dma_alloc_from_contiguous`) | `hisi_mem` lays out both zones; `open_mmz` allocates from the carve-out first and the CMA zone second |
-| **Configuration** | `mmz_allocator=hisi mmz=anonymous,...` | `mmz_allocator=cma mmz=anonymous,...` | Device Tree `reserved-memory` node; no bootargs needed | `set_allocator hybrid [osmem] [cma share]` |
+| **Implementation** | Simple range allocator over a hidden memory region | Vendor `hi_cma.c` integration with the kernel's CMA | Kernel built-in CMA framework (`dma_alloc_from_contiguous`) | Media buffers go to the fixed carve-out first; one that does not fit there borrows from the CMA share and returns it when freed |
+| **Configuration** | `mmz_allocator=hisi mmz=anonymous,...`; on hi3516cv6xx `set_allocator ot` | `mmz_allocator=cma mmz=anonymous,...` | Device Tree `reserved-memory` node; no bootargs needed | `set_allocator hybrid [osmem] [cma share]` |
 | **Best for** | Memory-constrained (64MB) boards where the kernel must fit in 32MB | 128MB boards on kernel 4.9 (default for hi3516ev300_lite) | 128MB+ boards on kernel 6.6+ (default for neo builds) | 64MB hi3516cv608/cv610 boards that want more Linux memory without CMA's start-up risk |
 
 On kernel 4.9, the `hisi` allocator hides memory from the kernel via `mem=32M`,
@@ -147,7 +147,7 @@ as the old `mem=32M`.
 Reducing CMA gives the kernel more room for non-movable allocations:
 
 | CMA size | Non-movable headroom | Video headroom | Status |
-|---|---|---|---|---|
+|---|---|---|---|
 | 96MB (default) | 32MB | 62MB spare | Safe, but wastes non-movable headroom |
 | 64MB | 64MB | 13MB spare | Tested, recommended for single-stream 4MP |
 | 48MB | 80MB | Allocation failures | Too small for 2592x1520 streaming |
@@ -268,9 +268,10 @@ zones:
 
 The media allocator fills the carve-out first. Only a buffer that does not fit
 there, such as a snapshot in flight on a busy configuration, borrows from the
-CMA zone, and it gives the memory back when it is freed. A start or a restart
-of the streamer never has to migrate its pipeline out of Linux's memory, which
-is where CMA got stuck.
+CMA zone, and it gives the memory back when it is freed. As long as the
+carve-out holds the whole pipeline, a start or a restart of the streamer never
+has to migrate it out of Linux's memory, which is where CMA got stuck. See
+[Choosing the CMA share](#choosing-the-cma-share) for sizing it that way.
 
 ```
  0x40000000                  0x42400000     0x42C00000                 0x44000000
@@ -316,7 +317,10 @@ reboot
 ```
 
 Both sizes can be given: `set_allocator hybrid 36M 12M` keeps a 36 MB OS share
-and lends 12 MB. The CMA share is rounded up to whole 4 MB, must be at least
+and lends 12 MB. That leaves a 16 MB carve-out on a 64 MB board (28 MB of
+media memory minus 12), less than the 15-18 MB a 1080p pipeline holds: check
+the carve-out against your own pipeline first, as below, or the difference is
+borrowed from CMA at every start. The CMA share is rounded up to whole 4 MB, must be at least
 4 MB, and must leave at least 4 MB for the carve-out. `set_allocator ot` or
 `set_allocator auto` goes back.
 
@@ -447,7 +451,7 @@ Which of those applies is decided by the sensor's width, not by the model of
 SoC, and it is why two cameras with the same chip can need different amounts:
 
 | Camera | Capture path | Blocks it holds | Pipeline total |
-|---|---|---|---|---|
+|---|---|---|---|
 | gk7205v200 + 1920x1080 sensor | straight through | 0 | 3 |
 | hi3516ev300 + 2592x1520 sensor | raw through memory | 2 | 4 |
 | hi3516av300 + 3840x2160 sensor | processed through memory | 4 | 6 |
@@ -586,7 +590,7 @@ Nothing needs switching on. The camera uses it when all of these hold:
 Measured on lab cameras with the sub stream on:
 
 | Camera | Main stream | Media memory, mode off | Mode on |
-|---|---|---|---|---|
+|---|---|---|---|
 | gk7205v200 + IMX307 | 1080p25 | 21676 KB | **19016 KB** |
 | gk7205v300 + IMX335 (1080p mode) | 1080p50 | 20984 KB | **18612 KB** |
 | gk7205v510 + MIS2008 | 1080p25 | 20328 KB | **17668 KB** |
@@ -822,7 +826,7 @@ The table below shows vendor SDK module names, open-source module names (used by
 both 4.9 and 6.6 kernels in OpenIPC), and approximate sizes.
 
 | Feature | Vendor SDK modules | OpenIPC modules | Size |
-|---|---|---|---|---|
+|---|---|---|---|
 | Audio output | hi3516ev200_ao, hi3516ev200_adec | open_ao, open_adec | 78 KB |
 | Audio input | hi3516ev200_ai, hi3516ev200_aenc | open_ai, open_aenc | 106 KB |
 | Audio codec | hi3516ev200_acodec | open_acodec | 16 KB |
@@ -1016,7 +1020,7 @@ left alone.
 Every byte taken off the heap goes back to Linux, one for one:
 
 | Board | Heap | `MemTotal` | Heap still free |
-|---|---|---|---|---|
+|---|---|---|---|
 | ssc30kq, 256 MB, stock | 158 MB | 92768 kB | 102 MB |
 | ssc30kq, 256 MB, `sz=0x06000000` | 96 MB | **156880 kB** | 40 MB |
 | ssc377d, 128 MB, stock | 70 MB | 53848 kB | 30 MB |
