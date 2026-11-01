@@ -368,14 +368,18 @@ grep 'total size' /proc/umap/media-mem    # used=... is the steady figure
 A camera has no swap, and that decides what happens when its memory runs out.
 The kernel does not kill anything at first. It drops the code of the running
 programs from memory and reads it back from flash the moment it is needed
-again, over and over. On a 64 MB hi3516cv608, a streamer start at that point
-stalled for 1.5 to 9 minutes with the camera unreachable, which the 300 s
-watchdog then ends with a silent reset. This happens with every media-memory
-layout above: the system itself is out of memory.
+again, over and over. On a 64 MB hi3516cv608, with the watchdog off for the
+test, a streamer start at that point stalled for 1.5 to 9 minutes with the
+camera unreachable. With the default 300 s watchdog on, a stall that long ends
+in a silent reset instead. This happens with every media-memory layout above:
+the system itself is out of memory.
 
-zram is a swap device in RAM that stores what it is given compressed. When
-memory runs short, the kernel moves idle program data there, at roughly half
-its size, instead of throwing away code it will have to read back.
+zram is a swap device in RAM that stores what it is given compressed. It takes
+anonymous data, a program's heap and stacks, not its code. When memory runs
+short, the kernel can move idle anonymous data there at roughly half its size,
+and with that room it has less reason to evict the program code it would have
+to read back from flash. Code can still be evicted; there is just less pressure
+to.
 
 Measured on that hi3516cv608 (1080p, OS share 36 MB), a streamer start with
 userland holding all but 4 MB:
