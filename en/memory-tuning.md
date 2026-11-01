@@ -363,6 +363,61 @@ grep 'total size' /proc/umap/media-mem    # used=... is the steady figure
 - **Self-upgrade unpacks into RAM**, not into the media zone as it does under
   `ot`. Under `hybrid` that left 7.6 MB to flash from.
 
+#### Compressed swap (zram, hi3516cv6xx)
+
+A camera has no swap, and that decides what happens when its memory runs out.
+The kernel does not kill anything at first. It drops the code of the running
+programs from memory and reads it back from flash the moment it is needed
+again, over and over. On a 64 MB hi3516cv608, a streamer start at that point
+stalled for 1.5 to 9 minutes with the camera unreachable, which the 300 s
+watchdog then ends with a silent reset. This happens with every media-memory
+layout above: the system itself is out of memory.
+
+zram is a swap device in RAM that stores what it is given compressed. When
+memory runs short, the kernel moves idle program data there, at roughly half
+its size, instead of throwing away code it will have to read back.
+
+Measured on that hi3516cv608 (1080p, OS share 36 MB), a streamer start with
+userland holding all but 4 MB:
+
+| | Seconds to the first picture | What happened to the program holding the memory |
+|---|---|---|
+| without zram | 215, 249 | killed by the out-of-memory killer, minutes in |
+| with zram | 11, 12, 12, 12 | kept running |
+
+The test data there was half compressible, and zram held 12.8 MB of it in
+7.3 MB of RAM. Data that does not compress at all is the uncertain case: two
+such starts came up in 11 and 13 s, but an earlier run with a hand-made setup
+took 222 and 436 s.
+
+Over a two-hour run with the streamer under load (RTSP pulled continuously, a
+snapshot every 10 s, and every 5 minutes the memory held at its limit for 2
+minutes) the stream never dropped, all 713 snapshots succeeded, and nothing was
+killed or restarted.
+
+On hi3516cv6xx **lite** images it is set up at boot by `S36zram`, from the firmware that includes
+[OpenIPC/firmware#2745](https://github.com/OpenIPC/firmware/pull/2745): half of
+the memory Linux has as a zram swap (about 15 MB on a 64 MB camera), lzo-rle,
+swappiness 100. Nothing is stored in it until memory runs short, and while idle
+it costs nothing measurable: the same CPU use and frame rate with it on or off.
+
+```bash
+cat /proc/swaps                     # /dev/zram0, its size and how much is used
+cat /sys/block/zram0/mm_stat        # stored size, compressed size, RAM it takes
+fw_setenv zram 0 && reboot          # turn it off; fw_setenv zram to turn it back on
+```
+
+It writes nothing to flash.
+
+##### Limits
+
+- **hi3516cv6xx lite only** so far, the one image it was measured on. The
+  ultimate image and other families do not set it up yet; a kernel without
+  zram, or an image without the swap tools, ignores the script.
+- **It cannot make memory that is not there.** It makes running short a matter
+  of seconds instead of minutes, as long as what is held can be compressed or
+  moved; a program that keeps growing still ends with the out-of-memory killer.
+
 ---
 
 ### Streamer memory settings
