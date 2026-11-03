@@ -4,7 +4,8 @@
 Every camera reserves a slice of its RAM for video buffers, and on most boards that
 slice is larger than the pipeline needs. How it is reserved depends on the SoC:
 [HiSilicon](#hisilicon-boards) uses MMZ over `mem=`/CMA, [SigmaStar](#sigmastar-boards)
-uses a static MMA heap sized by U-Boot. The
+uses a static MMA heap sized by U-Boot, [Xiongmai](#xiongmai-boards) a media zone
+above `mem=`, optionally lent to Linux through CMA. The
 [streamer settings](#streamer-memory-settings) that decide how much the pipeline puts
 *into* that region are the same settings on either, though the figures there were
 measured on HiSilicon and Goke parts.
@@ -1106,3 +1107,99 @@ how much the pipeline puts into the region apply here as much as on HiSilicon â€
 > change, such as a night-mode switch or a resolution change, rather than at
 > boot. Keep the original `bootargs` somewhere you can paste it back from, and
 > test the camera through a full day/night cycle before you trust a new value.
+
+---
+
+Xiongmai boards
+---------------
+
+### Memory allocator: the media zone (XM530/XM550)
+
+The XM530 and XM550 keep their ISP, video input and encoder buffers in one
+physically contiguous media zone. With OpenIPC's open media memory driver
+(`open_mmz`, from [openxiongmai](https://github.com/OpenIPC/openxiongmai), shipped
+with `open_vi` by the `xiongmai-opensdk` package) there are three ways to lay it
+out. `set_allocator` switches between them at the next boot:
+
+| | `xm` (default) | `cma` | `hybrid` |
+|---|---|---|---|
+| **How it works** | `mem=` gives Linux the OS share; the rest of DDR is the media zone, which Linux never sees | Linux sees all of DDR but 1 MB; the media share is a CMA area that Linux uses until the pipeline takes it | The media share is split: a fixed zone for what the pipeline holds all the time, and a small CMA area beside Linux that the pipeline borrows only when the zone is full |
+| **Memory for Linux while streaming** | Low: the media share sits idle wherever the pipeline does not use it | High | High, like `cma` |
+| **At a streamer start** | Nothing to take back | The pipeline's memory has to be moved out of Linux first, which can fail when Linux has filled it (see below) | Nothing to take back, as long as the zone holds the pipeline |
+| **Command** | `set_allocator xm [osmem]` | `set_allocator cma [osmem]` | `set_allocator hybrid [osmem] [cma share]` |
+| **Needs** | â€” | `open_mmz` and `open_vi` | `open_mmz` and `open_vi`, and firmware with [firmware#2755](https://github.com/OpenIPC/firmware/pull/2755) |
+
+`osmem` is the OS share in MB, the same number for all three: the default is the
+`osmem` variable, or what the camera booted with. A 64 MB XM530 is typically
+`mem=35M`. `hybrid`'s CMA share defaults to 8 MB and is rounded up to whole 4 MB,
+because the kernel aligns a CMA area that way. Each command prints the bootargs it
+wrote and refuses, changing nothing, if the image lacks what that layout needs.
+
+```bash
+set_allocator hybrid          # the OS share as it is now, 8 MB of CMA
+reboot
+```
+
+#### Measured
+
+An XM550 + IMX335 booted as a 64 MB XM530 (35 MB OS share), majestic streaming
+H.265 1080p25 with the open encoder (`system.openEncoder: true`):
+
+| | `xm`, `mem=35M` | `cma` | `hybrid`, 8 MB share |
+|---|---|---|---|
+| Free / cached while streaming | 1.2 / 4 MB | 7 / 7.5 MB | 7.7 / 7.3 MB |
+| 10 restarts each with nothing else, 6 MB and 9 MB of other userland in use | 9 MB does not fit | 30 of 30 | 30 of 30 |
+| Starts while other userland grows into whatever memory is free: camera still up | 2 of 2 | 1 of 4 | 10 of 10 |
+
+- Under `hybrid` the whole pipeline sat in its 21 MB zone and the CMA area stayed
+  Linux's.
+- Under `cma`, the three starts that failed took the camera down: one watchdog
+  reset, one reboot, and, with the watchdog off, one hang until the power was
+  cycled. The H.265 driver could not get memory once the pipeline's had been taken
+  back from Linux. HiSilicon boards fail the same way at a start; see
+  [Hybrid allocator (hi3516cv6xx)](#hybrid-allocator-hi3516cv6xx).
+- Memory that short is exhausted on every layout. There the H.265 encoder cannot
+  get its memory either, and the camera stays up only under `xm` and `hybrid`.
+  Since [openxiongmai#91](https://github.com/OpenIPC/openxiongmai/pull/91), the open
+  encoder waits for free memory before it opens an H.265 session. The stream then
+  pauses and comes back when memory does, about 40 s later at worst, instead of
+  staying dead until a reboot.
+- The samples are small: a few runs per row, on one board with one sensor.
+
+#### Checking it
+
+```bash
+cat /proc/cmdline | tr ' ' '\n' | grep -E '^(mem|cma|mmz_allocator)='
+tail -3 /proc/umap/mmz                    # FREE: what the zone has left; CMA: what is borrowed
+grep -E 'MemFree|^Cached' /proc/meminfo   # Linux's own headroom
+```
+
+On these 3.10 kernels `free` always shows `available` as 0: the kernel predates
+the `MemAvailable` figure it reads. Use `MemFree` and `Cached` instead.
+
+#### Choosing the CMA share
+
+The zone, the media share less the CMA share, should hold what the pipeline uses
+all the time. With your real configuration running, the blocks listed in
+`/proc/umap/mmz` should sit in the zone and the `CMA:` line should stay at or near
+0.
+
+- H.265 1080p with the open encoder fit a 21 MB zone (8 MB share on a 64 MB board).
+- The stock 2560x1440 H.264 stream wanted 872 KB more. Its last three blocks came
+  from CMA, which works but is borrowed again at each start, so lower the share
+  for such a configuration.
+
+#### Going back
+
+```bash
+set_allocator xm              # the fixed zone, mem= the OS share
+reboot
+```
+
+#### Limits
+
+- XM530/XM550 only. The XM510's kernel has no CMA, and `open_mmz` refuses both `cma` and `hybrid` there.
+- `xm` stays the default.
+- The XM530 behaviour was measured on an XM550 limited to an XM530's 64 MB layout,
+  not on an XM530 itself.
+
