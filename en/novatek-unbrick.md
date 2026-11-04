@@ -77,19 +77,26 @@ get its console. Nothing is written to flash.
 
 What you need:
 
-- The camera on the same Ethernet segment as your computer. A direct cable or
-  your normal LAN both work; defib does not have to be the only DHCP server.
+- The camera on the same Ethernet segment as your computer. A direct cable is
+  the safest choice. Your normal LAN works too: defib answers at once, and the
+  ROM takes the first answer. But if your router answers first, the ROM waits
+  on the router for good: `CDRI` repeats on the console and defib sees nothing.
+  Power-cycle the camera to try again, or use a direct cable.
 - The UART console connected, so defib can stop U-Boot's autoboot.
 - Root access on a Linux computer, for UDP ports 67 (DHCP) and 69 (TFTP).
   Stop any TFTP server already running on that computer.
 
 ```shell
 uv tool install git+https://github.com/OpenIPC/defib
-sudo defib burn -c nt98562 -p /dev/ttyUSB0 --nic eth0
+sudo "$(command -v defib)" burn -c nt98562 -p /dev/ttyUSB0 --nic eth0
 ```
 
 Use your SoC (`nt98560`, `nt98561`, `nt98562`, `nt98566`) and your network
-interface. Start defib first, then power the camera on. defib:
+interface. `sudo` may not find a tool installed for your user, hence the full
+path. Only NT98562 has been verified so far; the other three use recovery sets
+built the same way, but nobody has reported them yet.
+
+Start defib first, then power the camera on. defib:
 
 1. Answers DHCP only for the ROM and its loader. Both use a
    `00:00:00:xx:xx:xx` MAC address with a new random ending on every boot, so
@@ -112,15 +119,22 @@ verified on Novatek yet. Check every step with `sf read` and `crc32`.
 Ethernet recovery only starts when the loader at the start of flash (the
 first 64 KiB, `mtd0`) is missing or broken. If the loader is intact but
 U-Boot, the kernel or the root filesystem is damaged, the ROM boots the
-loader every time and never reaches Ethernet. In that case:
+loader every time and never reaches Ethernet.
+
+If U-Boot itself still runs (only the kernel or root filesystem is damaged):
 
 - Stop the vendor U-Boot: press Ctrl-C repeatedly from power-on. The boot
   delay is zero, so a single press is too late, and the "Hit X" message is
   misleading: X does not stop it.
 - If it asks for a password, try `#Ux6@9V&4_Rz` (confirmed on NT98566). See
   [known bootloader passwords](help-uboot.md#known-bootloader-passwords).
-- From the vendor prompt or the stock Linux shell, back up and repair as
-  described in [Installation on Novatek](install-novatek.md).
+- From the vendor prompt or the stock Linux shell, back up and repair.
+  [Installation on Novatek](install-novatek.md) covers XM NT98562 and NT98566
+  boards with NOR flash only, and uses their fixed partition offsets. On any
+  other board, check your own layout before you erase anything.
+
+If U-Boot itself is damaged behind an intact loader, no method is verified
+yet other than a flash programmer. The two below are candidates.
 
 #### Shorting flash pins to make the ROM skip the loader (**unverified**)
 
@@ -172,10 +186,11 @@ loader) above all:
 Ways to take the backup:
 
 - **From the stock Linux shell.** XM firmware gives a root shell on the
-  console. Read each partition with `cat /dev/mtdN` and copy it off, for
-  example over the network or to an SD card.
+  console. On NOR flash, read each partition with `cat /dev/mtdN` and copy it
+  off, for example over the network or to an SD card. On NAND flash, `cat`
+  skips the out-of-band data and bad blocks: follow the NAND procedure in
+  [Backing up stock firmware](backup-stock-firmware.md) instead.
 - **With a flash programmer.**
-- See [Backing up stock firmware](backup-stock-firmware.md) for more.
 
 The flash layout on XM NOR boards:
 
