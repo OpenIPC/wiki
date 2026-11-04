@@ -20,6 +20,8 @@ For XM vendor boards with NT98562 and NT98566 SoC ONLY!!!
   since 2026-10-27, built from OpenIPC/u-boot. They have only run in QEMU so
   far; these instructions keep the vendor U-Boot.
 
+If the camera no longer boots, see [Novatek unbrick](novatek-unbrick.md).
+
 ### Initial device firmware update
 
 You need a UART console and a TFTP server on the camera's network.

@@ -489,6 +489,10 @@ vendor bootloader has armed the flash's status-register block protection —
 watch for `WPS=1` or `Total Lock Blks` in the boot log. The `defib agent` path
 clears those lock bits explicitly before erasing.
 
+> __Novatek is different.__ Its mask ROM takes a UART download only when the
+> boot straps say UART, which camera boards never do. A bricked Novatek board
+> is recovered over Ethernet instead: see [Novatek unbrick](novatek-unbrick.md).
+
 #### Shorting pins on flash chip
 
 If you can't interrupt the boot sequence with a key combination, or if your
