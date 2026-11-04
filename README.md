@@ -123,6 +123,7 @@ OpenIPC Wiki
 - [Majestic does not work, camera reboots](en/trouble-majestic.md)
 - [Load average looks impossibly high](en/trouble-load-average.md)
 - [Sigmastar unbrick instructions](en/sigmastar-unbrick.md)
+- [Novatek unbrick over Ethernet](en/novatek-unbrick.md)
 - [Ingenic T31 unbrick with SD card](en/ingenic-t31-unbrick-with-sd-card.md)
 
 ### Equipment
