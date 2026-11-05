@@ -21,7 +21,11 @@ The camera reads two kinds of display:
   for litres. These are read from the needle's direction and give the reading
   digits beyond the last drum.
 
-Electronic LCD displays and LED pulse counting are not supported yet.
+An electricity meter's **pulse LED** can be counted too, on SigmaStar
+cameras: it gives the power the meter is measuring, second by second, and
+a reading between the drums' steps (see
+[Live power from the pulse LED](#live-power-from-the-pulse-led)).
+Electronic LCD displays are not supported yet.
 
 ### What you need
 
@@ -59,6 +63,7 @@ meters:
     decimals: 1
     unit: kWh
     maxPerHour: 15
+    pulse: 964,724,3200         # the LED's x, y, and its imp/kWh
   - name: cold
     window: 619,333,809,329,809,358,620,362
     drums: 8
@@ -84,6 +89,7 @@ with `killall -HUP majestic`; that briefly restarts the video as well. Up to
 | `maxPerHour` | yes | The most the meter can possibly count in an hour, in its unit |
 | `typicalPerHour` | no | What it usually counts in an hour. It defaults to a tenth of `maxPerHour` |
 | `dial1`..`dial4` | no | One red pointer dial each: `multiplier,x,y,radius` (see below) |
+| `pulse` | no | An electricity meter's pulse LED: `x,y,blinks per unit`, its centre in pixels and the figure printed by it (`3200 imp/kWh` is `3200`). See [Live power from the pulse LED](#live-power-from-the-pulse-led) |
 
 #### Marking the drum window
 
@@ -254,6 +260,105 @@ The `state` values you may see:
 | `... they read another count there; mark it again` | Something like the meter was found nearby, but its drums do not read this meter's count (a mirrored picture, a look-alike), so the window did not follow it |
 | `the window no longer shows the meter; mark it again` | The window shows something else entirely: the camera was turned or taken down, or the meter is covered |
 
+### Live power from the pulse LED
+
+Electronic electricity meters blink an LED once for every small amount of
+energy they count; the rate is printed next to it, such as `3200 imp/kWh`.
+At 3200 imp/kWh one blink is 0.3125 Wh, so the time between two blinks is
+the power: a blink every 3.6 s is 312 W. Give the meter row a `pulse` key
+and the camera counts the blinks, alongside reading the drums:
+
+```yaml
+  - name: power
+    window: 583,271,1057,273,1057,371,583,363
+    drums: 7
+    decimals: 1
+    unit: kWh
+    maxPerHour: 15
+    pulse: 964,724,3200
+```
+
+The LED's `x,y` is its centre in main-stream pixels, measured the same way
+as the drum window. The LED can be one that sits lit and blinks dark, or
+one that sits dark and flashes; both are counted.
+
+On `/metrics`:
+
+```
+majestic_meter_power_watts{meter="power"} 312.4
+majestic_meter_live_value{meter="power",unit="kWh"} 29953.8712
+majestic_meter_pulses_total{meter="power"} 18342
+majestic_meter_pulses_recovered_total{meter="power"} 41
+majestic_meter_pulse_rejected_total{meter="power"} 3
+majestic_meter_pulse_blind_seconds_total{meter="power"} 612.250
+majestic_meter_pulse_agreement{meter="power"} 0.9984
+majestic_meter_pulse_phase_blinks{meter="power"} 144
+majestic_meter_pulse_phase_resets_total{meter="power"} 0
+```
+
+- `majestic_meter_power_watts`: the power, from the blinks of the last ten
+  seconds, or from the last interval alone when the load has just changed.
+  When the blinks stop, it falls towards zero rather than holding the last
+  value. For a meter in a unit other than kWh, use
+  `majestic_meter_pulse_per_hour`.
+- `majestic_meter_live_value`: the reading between the drums' steps. The
+  last drum of a 0.1 kWh meter steps every 320 blinks, so once the camera
+  has seen it step, the blinks since say how far into its digit it is:
+  29953.8712 rather than 29953.8. It is never ahead of the drums. It
+  appears after the first step the camera sees, which can take a while at a
+  low load.
+- `majestic_meter_pulses_total`: blinks counted since Majestic started.
+- `majestic_meter_pulses_recovered_total`: blinks the camera did not see
+  but counted anyway. A busy camera now and then skips a few frames, long
+  enough to miss a blink; an interval twice as long as the ones either side
+  of it, with such a gap in it, is counted as two.
+- `majestic_meter_pulse_rejected_total`: changes at the LED that were not a
+  blink: a lamp switched on, a shadow, a hand.
+- `majestic_meter_pulse_blind_seconds_total`: time the camera could not see
+  the LED well enough to be sure of every blink.
+- `majestic_meter_pulse_agreement`: the blinks counted between two steps
+  of the drums, against what those steps should take; 1 means they agree.
+  It appears once the drums have stepped five times. A value far from 1
+  usually means the `pulse` figure is not the one on the meter.
+- `majestic_meter_pulse_phase_blinks`: how precisely the camera knows when
+  the last drum steps, in blinks. It narrows when the drums are clearly
+  legible, and can stay wide at night.
+- `majestic_meter_pulse_phase_resets_total`: times the blinks and the drums
+  disagreed and the camera started again. On a healthy meter this stays at
+  0, so it is worth an alert.
+
+`GET /api/v1/meters` has the same under each meter's `pulse` object, with
+`counting: false` while the camera cannot see the LED; the camera's log
+says why.
+
+The blinks also help the drums. A last drum caught between two digits is
+hard to read, and on a meter that turns it slowly, it is between digits a
+good part of the time. Where the frames cannot say which digit it shows, the
+camera goes by the blinks; where they clearly can, it goes by the frames.
+
+Measured on a SigmaStar SSC325 facing an Energomera meter at 3200 imp/kWh,
+against a video of the LED recorded at the same time:
+
+| Run | Blinks in the video | Counted by the camera |
+|---|---:|---:|
+| 30 minutes, about 250 W | 397 | 397 |
+| 30 minutes, about 250 W | 397 | 397 |
+| 30 minutes, with a 1.7 kW kettle on and off | 571 | 571 |
+
+Overnight, 7.4 hours: 4416 blinks (1.380 kWh) while the drums went from
+29956.3 to 29957.7 kWh, with the agreement at 0.9984 and no reset. Counting
+costs about 1% of the camera's CPU.
+
+Things to know:
+
+- **SigmaStar cameras only**, for now. Elsewhere the log says the LED is not
+  counted.
+- **The fastest it counts** is about 7 blinks a second, 8.4 kW on a
+  3200 imp/kWh meter. A home's supply rarely reaches that, but a meter
+  printed with a higher rate reaches it sooner.
+- **Keep the LED in view and in focus.** It can be small in the picture, but
+  nothing should cross it, and no lamp should shine on it directly.
+
 ### On the video
 
 The reading can also be drawn over the picture, for a demo or a camera on a
@@ -292,7 +397,9 @@ What it draws:
   time, `alert` only while the meter is out of view, and `off` never.
   Nothing is drawn inside it, so the camera never reads its own overlay.
 - **The value** under the outline, or what the meter is doing instead
-  ("settling", "the view moved"), then the caption.
+  ("settling", "the view moved"), then the caption. For a meter with a
+  `pulse` LED, the value is the live reading and the power is beside it:
+  `29956.3025 kWh  1.58 kW`.
 
 The overlay's other settings apply as usual: an empty template removes it,
 `size` scales the digits and the text, `font` changes the typeface, and
@@ -314,7 +421,10 @@ osd:
 ```
 
 This prints `29904.4 kWh`, or a dash per digit (`------.- kWh`) before the
-first reading.
+first reading. For a meter with a `pulse` LED, `%{power:power}` prints the
+power (`312 W`, `1.72 kW`), and `%{live:power}` the live reading
+(`29953.8712 kWh`). Use one of these lines or the drums overlay, not both:
+each repeats the reading.
 
 Drawing the digits over the drums is available on SigmaStar cameras. On
 other cameras a `%{drums}` overlay prints the value as text instead.
