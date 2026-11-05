@@ -1431,6 +1431,8 @@ osd:
 | `%{file:/path}` | the first line of a file — see [Your own values](#your-own-values-on-the-picture) | `--` |
 | `%{text:name}` | a value sent over HTTP — see [Your own values](#your-own-values-on-the-picture) | `--` |
 | `%{meter:name}`, `%{drums:name}` | a utility meter's reading; `%{drums:name}` draws it digit by digit over the meter's drums on SigmaStar and prints the reading as text elsewhere — see [Utility meters](majestic-meters.md) | a dash per digit |
+| `%{power:name}` | the power an electricity meter's pulse LED says, `312 W`, `1.72 kW` — see [Live power from the pulse LED](majestic-meters.md#live-power-from-the-pulse-led) | `--- W` |
+| `%{live:name}` | the meter's reading between its drums' steps, from the pulse LED, `29953.8712 kWh` | the drums' reading |
 
 - **`%%` is a literal `%`.** That holds in front of a token too: `%%{temp}`
   prints `%{temp}`.

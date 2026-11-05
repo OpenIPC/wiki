@@ -282,17 +282,17 @@ The LED's `x,y` is its centre in main-stream pixels, measured the same way
 as the drum window. The LED can be one that sits lit and blinks dark, or
 one that sits dark and flashes; both are counted.
 
-On `/metrics`:
+On `/metrics` (the values are illustrative):
 
 ```
-majestic_meter_power_watts{meter="power"} 312.4
-majestic_meter_live_value{meter="power",unit="kWh"} 29953.8712
-majestic_meter_pulses_total{meter="power"} 18342
-majestic_meter_pulses_recovered_total{meter="power"} 41
-majestic_meter_pulse_rejected_total{meter="power"} 3
-majestic_meter_pulse_blind_seconds_total{meter="power"} 612.250
-majestic_meter_pulse_agreement{meter="power"} 0.9984
-majestic_meter_pulse_phase_blinks{meter="power"} 144
+majestic_meter_power_watts{meter="power"} 312.5
+majestic_meter_live_value{meter="power",unit="kWh"} 12345.6789
+majestic_meter_pulses_total{meter="power"} 10000
+majestic_meter_pulses_recovered_total{meter="power"} 40
+majestic_meter_pulse_rejected_total{meter="power"} 2
+majestic_meter_pulse_blind_seconds_total{meter="power"} 600.000
+majestic_meter_pulse_agreement{meter="power"} 1.0010
+majestic_meter_pulse_phase_blinks{meter="power"} 20
 majestic_meter_pulse_phase_resets_total{meter="power"} 0
 ```
 
@@ -327,9 +327,35 @@ majestic_meter_pulse_phase_resets_total{meter="power"} 0
   disagreed and the camera started again. On a healthy meter this stays at
   0, so it is worth an alert.
 
-`GET /api/v1/meters` has the same under each meter's `pulse` object, with
-`counting: false` while the camera cannot see the LED; the camera's log
-says why.
+`GET /api/v1/meters` has the same under each meter's `pulse` object:
+
+```json
+"pulse": {
+  "counting": true,
+  "perHour": 0.3125,
+  "watts": 312.5,
+  "live": 12345.6789,
+  "pulses": 10000,
+  "recovered": 40,
+  "rejected": 2,
+  "blindSeconds": 600.0,
+  "agreement": 1.001,
+  "phaseWidth": 20,
+  "phaseResets": 0
+}
+```
+
+| Field | Meaning |
+|---|---|
+| `counting` | `false` while the camera cannot see the LED: the camera has no statistics to count it from, the LED is outside them, or they have not refreshed for two seconds. The camera's log says which |
+| `perHour`, `watts` | The power, in the meter's unit per hour; `watts` for a kWh meter |
+| `live` | The reading between the drums' steps, once the camera has seen one |
+| `pulses`, `recovered`, `rejected`, `blindSeconds` | As `majestic_meter_pulses_total`, `_pulses_recovered_total`, `_pulse_rejected_total` and `_pulse_blind_seconds_total` |
+| `agreement`, `phaseWidth`, `phaseResets` | As `majestic_meter_pulse_agreement`, `_pulse_phase_blinks` and `_pulse_phase_resets_total` |
+
+A field the camera cannot give yet (no power before two blinks, no
+agreement before five steps) is `null`. On a camera that cannot count the
+LED at all, the metrics are left out rather than shown as zeros.
 
 The blinks also help the drums. A last drum caught between two digits is
 hard to read, and on a meter that turns it slowly, it is between digits a
@@ -354,8 +380,11 @@ Things to know:
 - **SigmaStar cameras only**, for now. Elsewhere the log says the LED is not
   counted.
 - **The fastest it counts** is about 7 blinks a second, 8.4 kW on a
-  3200 imp/kWh meter. A home's supply rarely reaches that, but a meter
-  printed with a higher rate reaches it sooner.
+  3200 imp/kWh meter. Above that the camera counts fewer blinks than the
+  meter gives, and the power reads low; the drums are still read right.
+  `maxPerHour` is a different thing, the most the drums can turn in an hour,
+  and on a meter rated for more than 8.4 kW it is higher than what the LED
+  can be counted to.
 - **Keep the LED in view and in focus.** It can be small in the picture, but
   nothing should cross it, and no lamp should shine on it directly.
 
