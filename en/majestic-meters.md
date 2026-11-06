@@ -521,6 +521,16 @@ picture against that:
 - **It is nowhere near:** the camera reports that the window no longer shows
   the meter.
 
+**How alike counts as the same is learnt per meter.** Some meters look very
+different under IR, so the camera's fixed bar for "the same picture" is low.
+A camera whose view normally matches far better than that bar would not
+notice a small knock: a camera nudged by a few dozen pixels, its window now
+half a drum off the digits, can still clear it. So the camera also learns
+how alike each meter's picture usually is, from readings that agree with
+the meter's count, and keeps that across restarts. A reading that falls
+well below what is usual for this meter is not taken as the same picture,
+even if it clears the fixed bar.
+
 One odd reading is held back and reported as *checking again*; two in a row
 are reported as above. While the camera says so, it reads nothing: the last
 good reading stays, and its age keeps growing, so an alert on
@@ -544,7 +554,10 @@ neither do the drums turning as the meter counts. The same meter under IR at
 night can look quite different from daylight, though. The camera tells this
 apart: if the picture looks different but the drums still read the count it
 already holds, it is the same meter in other light, and the camera learns
-that look as well. A moved camera's drums never read the right count.
+that look as well. A moved camera's drums usually read some other count.
+When a small nudge leaves them still reading right, where the picture
+matches best tells the two apart: other light still matches best where the
+window is, a moved camera somewhere else, and that is not learnt.
 
 **Across restarts.** What the window looked like and the meter's last count
 are both kept on the camera. A restarted camera takes the count back, so it
@@ -561,6 +574,11 @@ before the clock was set, is not used, and the meter settles afresh.
   tried the window where the mirror put the drums and refused it every time.
 - A still camera's readable frames over a day and a night all matched (0.53
   and up).
+- On a SigmaStar SSC325 camera that matched 0.91 to 0.95 over 294 frames of
+  day, night and IR, a nudge of about 40 px during a power cut dropped the
+  match to 0.50, which the fixed bar still let through. Against its usual
+  match the camera now reports the view moved, and none of the 295 frames
+  from before the nudge is mistaken for one.
 - A camera taken off its meter and pointed at the room never matched above
   0.03.
 - A camera whose view had shifted by 192 px was found 197 px away.
