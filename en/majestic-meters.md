@@ -554,9 +554,10 @@ neither do the drums turning as the meter counts. The same meter under IR at
 night can look quite different from daylight, though. The camera tells this
 apart: if the picture looks different but the drums still read the count it
 already holds, it is the same meter in other light, and the camera learns
-that look as well. A moved camera's drums never read the right count, and
-a picture that matches best somewhere else, not where the window is, is not
-learnt as other light even if its drums happen to read right.
+that look as well. A moved camera's drums usually read some other count.
+When a small nudge leaves them still reading right, where the picture
+matches best tells the two apart: other light still matches best where the
+window is, a moved camera somewhere else, and that is not learnt.
 
 **Across restarts.** What the window looked like and the meter's last count
 are both kept on the camera. A restarted camera takes the count back, so it
