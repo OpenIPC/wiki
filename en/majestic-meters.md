@@ -408,9 +408,11 @@ Two things the blinks cannot do. They count how far the meter moves, not
 where it started, so the camera needs a correct reading of the drums at
 least once. And after a restart, the camera relies on the count it saved
 until the drums show a digit it reads well. The count is saved when
-Majestic stops, so a restart starts from where it left off; restarted on
+Majestic stops, so a restart picks up where it left off; restarted on
 purpose, the SSC325 above picked up at the same 0.1 kWh and carried on with
-the drums, with no jump.
+the drums, with no jump. A power cut gives no chance to save: the camera
+then starts from the last count kept (at most about an hour old), allows
+for what the meter may have done since, and catches up from the drums.
 
 Measured on a SigmaStar SSC325 facing an Energomera meter at 3200 imp/kWh,
 against a video of the LED recorded at the same time:
