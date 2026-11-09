@@ -67,11 +67,11 @@ isp:
   aibnr: true
 ```
 
-Or from the shell:
+Or from the shell, where `cli` saves the setting and tells Majestic to reload
+it:
 
 ```sh
 cli -s .isp.aibnr true
-killall -1 majestic
 ```
 
 It is also in the web interface's settings, as *AI noise reduction*. It is
@@ -127,28 +127,45 @@ Measured on a Hi3516CV610-family camera with an IMX662 at 1920×1080:
 ### When it cannot run
 
 If noise reduction cannot start, the camera streams exactly as it does with
-the setting off, and the log says why. That happens when:
+the setting off, and Majestic's log says why.
 
-- there is no model for the sensor's resolution,
-- the chip is one without AI noise reduction,
-- a model file is damaged,
-- there is not enough memory.
+**The sensor is in a WDR mode.** Noise reduction waits while WDR is on. Put
+the sensor back in its normal (linear) mode, and noise reduction comes back
+on by itself with that change. There is nothing to toggle.
 
-After a failure the setting stays inactive until it is turned off and on
+**Anything else.** That covers:
+
+- no model for the sensor's resolution,
+- a chip without AI noise reduction,
+- a damaged model file,
+- not enough memory.
+
+In these cases the setting stays inactive until it is turned off and on
 again, or Majestic restarts. That way a broken model cannot leave the camera
-rebuilding its pipeline over and over.
+rebuilding its pipeline over and over. Fix the cause first: add or replace
+the model file, or free memory by lowering the stream sizes. Then turn the
+setting off and on.
 
 ### Checking that it is working
 
-While it runs, the NPU's load shows in:
+From outside the camera:
+
+- **Frame rate:** with the sensor at 30 fps and `aibnrFps` at `0`, the
+  stream's frame rate drops to about 28 while it runs. With `aibnrFps: 25`
+  it runs at 25. At 30 exactly, noise reduction is not running.
+- **Memory:** `free` on the camera shows about 30 MB less at 1080p than
+  with the setting off.
+
+The chip's own driver also reports how busy the NPU is. On HiSilicon it does
+this in the same status files the [encoder tuning](majestic-encoder-tuning.md)
+page reads:
 
 ```sh
 cat /proc/umap/svp_npu
 ```
 
 At 1080p and 30 fps, `hw_utilization` sits in the low 90s. With the setting
-off, or after a failure, it is 0. `/proc/umap/aiisp` shows the rate at which
-frames are being denoised.
+off, or after a failure, it is 0.
 
 ### How much it helps
 

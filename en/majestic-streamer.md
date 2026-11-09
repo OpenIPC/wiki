@@ -85,7 +85,7 @@ On a camera with 8 MB of flash that difference is the feature.
 #### Which cameras get which
 
 Lite is built for every supported SoC. Ultimate is published for GK7205V200,
-GK7205V500, Hi3516CV200, Hi3516CV300 and Hi3516EV200. FPV is published for
+GK7205V500, Hi3516CV200, Hi3516CV300, Hi3516EV200 and the Hi3516CV610 family. FPV is published for
 GK7205V200 and Hi3516EV200 — the two chips the flying builds are actually
 flown on.
 
