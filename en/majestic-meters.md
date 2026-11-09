@@ -294,6 +294,8 @@ majestic_meter_pulse_blind_seconds_total{meter="power"} 600.000
 majestic_meter_pulse_agreement{meter="power"} 1.0010
 majestic_meter_pulse_phase_blinks{meter="power"} 20
 majestic_meter_pulse_phase_resets_total{meter="power"} 0
+majestic_meter_pulse_reader_stalls_total{meter="power"} 0
+majestic_meter_pulse_reads_ahead_total{meter="power"} 3
 ```
 
 - `majestic_meter_power_watts`: the power, from the blinks of the last ten
@@ -326,6 +328,11 @@ majestic_meter_pulse_phase_resets_total{meter="power"} 0
 - `majestic_meter_pulse_phase_resets_total`: times the blinks and the drums
   disagreed and the camera started again. On a healthy meter this stays at
   0, so it is worth an alert.
+- `majestic_meter_pulse_reader_stalls_total`: times the drums stayed on one
+  step while the blinks went two steps past it: the camera reading a digit
+  it cannot read. The blinks carried the reading on meanwhile.
+- `majestic_meter_pulse_reads_ahead_total`: drum readings ahead of what the
+  blinks allow, which were ignored. A few a night is normal.
 
 `GET /api/v1/meters` has the same under each meter's `pulse` object:
 
@@ -341,7 +348,9 @@ majestic_meter_pulse_phase_resets_total{meter="power"} 0
   "blindSeconds": 600.0,
   "agreement": 1.001,
   "phaseWidth": 20,
-  "phaseResets": 0
+  "phaseResets": 0,
+  "readerStalls": 0,
+  "readsAhead": 3
 }
 ```
 
@@ -352,6 +361,7 @@ majestic_meter_pulse_phase_resets_total{meter="power"} 0
 | `live` | The reading between the drums' steps, once the camera has seen one |
 | `pulses`, `recovered`, `rejected`, `blindSeconds` | As `majestic_meter_pulses_total`, `_pulses_recovered_total`, `_pulse_rejected_total` and `_pulse_blind_seconds_total` |
 | `agreement`, `phaseWidth`, `phaseResets` | As `majestic_meter_pulse_agreement`, `_pulse_phase_blinks` and `_pulse_phase_resets_total` |
+| `readerStalls`, `readsAhead` | As `majestic_meter_pulse_reader_stalls_total` and `_pulse_reads_ahead_total` |
 
 A field the camera cannot give yet (no power before two blinks, no
 agreement before five steps) is `null`. On a camera that cannot count the
@@ -361,6 +371,29 @@ The blinks also help the drums. A last drum caught between two digits is
 hard to read, and on a meter that turns it slowly, it is between digits a
 good part of the time. Where the frames cannot say which digit it shows, the
 camera goes by the blinks; where they clearly can, it goes by the frames.
+
+**When the camera misreads a digit.** The digit reader can take one
+meter's digit for another, steadily: on the Energomera in the lab it read
+the meter's 1 and 2 as 7. Without the blinks, a misread repeated for a few
+readings would become the meter's count, here 7 kWh too high. With the
+blinks counted, the camera knows how far the meter can really have gone,
+and holds the drum readings to that:
+
+- A reading further on than the blinks allow is ignored, however often it
+  is repeated, and where the blinks say the meter has moved, the camera
+  goes by them.
+- While the blinks are counted, the reading never goes backwards.
+- If the drums stay on one digit while the blinks say they should have
+  moved on, the camera counts it as a stall and goes on by the blinks.
+
+Overnight on the same SSC325, while the meter's whole-kWh drum turned
+through the 1 and 2 it misreads, the reading stayed within 0.1 kWh of the
+drums, never went back, and the live reading stayed within 0.06 kWh.
+
+Two things the blinks cannot do. They count how far the meter moves, not
+where it started, so the camera needs a correct reading of the drums at
+least once. And after a restart, the camera relies on the count it saved
+until the drums show a digit it reads well.
 
 Measured on a SigmaStar SSC325 facing an Energomera meter at 3200 imp/kWh,
 against a video of the LED recorded at the same time:
