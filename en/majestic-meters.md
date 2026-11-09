@@ -380,12 +380,22 @@ become the meter's count, here 6.5 kWh too high. With the
 blinks counted, the camera knows how far the meter can really have gone,
 and holds the drum readings to that:
 
-- A reading further on than the blinks allow is ignored, however often it
-  is repeated, and where the blinks say the meter has moved, the camera
-  goes by them.
+- The blinks counted since the drums were last read clearly (every drum
+  sure) set how far the reading may move on by itself. Where the blinks say
+  the meter has moved and the drums say nothing better, the camera goes by
+  the blinks.
+- Beyond that is what the meter may have done while the camera could not
+  see the LED: time it was blind, or switched off. A number there is taken
+  only as a wrong history is given up, after five readings agree on it,
+  so a misread is not let through just because the camera was off for a
+  while. A number further on even than that is ignored however often it is
+  repeated.
 - While the blinks are counted, the reading never goes backwards.
 - If the drums stay on one digit while the blinks say they should have
   moved on, the camera counts it as a stall and goes on by the blinks.
+- If the drums keep stepping early against the blinks over two steps,
+  the blinks are the ones that are short (an LED counted too few), and the
+  camera takes its timing from the drums again.
 
 Overnight on the same SSC325, over 14 hours in which the meter's whole-kWh
 drum turned through the 1 and 2 it misreads, the camera's reading was
@@ -397,7 +407,12 @@ live reading stayed within 0.06 kWh of the count.
 Two things the blinks cannot do. They count how far the meter moves, not
 where it started, so the camera needs a correct reading of the drums at
 least once. And after a restart, the camera relies on the count it saved
-until the drums show a digit it reads well.
+until the drums show a digit it reads well. The count is saved when
+Majestic stops, so a restart picks up where it left off; restarted on
+purpose, the SSC325 above picked up at the same 0.1 kWh and carried on with
+the drums, with no jump. A power cut gives no chance to save: the camera
+then starts from the last count kept (at most about an hour old), allows
+for what the meter may have done since, and catches up from the drums.
 
 Measured on a SigmaStar SSC325 facing an Energomera meter at 3200 imp/kWh,
 against a video of the LED recorded at the same time:
@@ -519,9 +534,9 @@ number:
   that agree on one other number, it starts again from that number. The same
   applies when only the last drum disagrees, for example when the reading
   has fallen behind the meter. On a meter whose pulse LED is counted, the
-  new number must also be one the blinks allow: a number further on than
-  the meter can have gone is a misread, and is never taken however long it
-  is repeated (see [When the camera misreads a digit](#live-power-from-the-pulse-led)).
+  new number must also be one the blinks allow, counting the time the
+  camera could not see them: a number further on than the meter can have
+  gone is a misread, and is never taken however long it is repeated (see [When the camera misreads a digit](#live-power-from-the-pulse-led)).
 - **Carries.** When a meter rolls over, say from 29899.9 to 29900.0,
   several drums turn at once and a slow meter can take many minutes over it.
   While a drum is between digits it may be read as either of them, or as
@@ -604,7 +619,7 @@ window is, a moved camera somewhere else, and that is not learnt.
 are both kept on the camera. A restarted camera takes the count back, so it
 reads from its first round, checks a camera moved while it was switched off
 (and follows it, as above), and learns other light at once. The count is
-kept when the meter settles and then about hourly, and is trusted only once
+kept when the meter settles, then about hourly, and when Majestic stops, and is trusted only once
 the camera's clock has been set: a count older than 90 days, or stamped
 before the clock was set, is not used, and the meter settles afresh.
 
