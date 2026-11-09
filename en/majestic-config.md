@@ -70,6 +70,11 @@ isp:
                                 # that sets nothing is already in slow shutter,
                                 # which also fills in the exposure and gain
                                 # limits below that you did not give
+  #aibnr: false                 # AI noise reduction on the NPU, Hi3516CV610
+                                # variants with one, Ultimate firmware only;
+                                # see majestic-ai-noise-reduction.md
+  #aibnrFps: 0                  # sensor frame rate while aibnr is on, 0-60;
+                                # 0 keeps the sensor's own rate
   #dis: false                   # digital stabilisation (HiSilicon/Goke, Ingenic,
                                 # SigmaStar SSC338Q/SSC30KQ/SSC377). On SigmaStar
                                 # it steadies slow sway and makes fast vibration
