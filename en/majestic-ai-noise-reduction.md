@@ -148,24 +148,13 @@ setting off and on.
 
 ### Checking that it is working
 
-From outside the camera:
-
 - **Frame rate:** with the sensor at 30 fps and `aibnrFps` at `0`, the
   stream's frame rate drops to about 28 while it runs. With `aibnrFps: 25`
   it runs at 25. At 30 exactly, noise reduction is not running.
 - **Memory:** `free` on the camera shows about 30 MB less at 1080p than
   with the setting off.
-
-The chip's own driver also reports how busy the NPU is. On HiSilicon it does
-this in the same status files the [encoder tuning](majestic-encoder-tuning.md)
-page reads:
-
-```sh
-cat /proc/umap/svp_npu
-```
-
-At 1080p and 30 fps, `hw_utilization` sits in the low 90s. With the setting
-off, or after a failure, it is 0.
+- **Log:** Majestic's log says whether noise reduction came on, and if it did
+  not, why.
 
 ### How much it helps
 
