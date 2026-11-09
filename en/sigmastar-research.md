@@ -69,3 +69,22 @@ echo 40 > /sys/class/pwm/pwmchip0/pwm0/duty_cycle
 echo 1 > /sys/class/pwm/pwmchip0/pwm0/enable
 ```
 
+#### SSC335 Infinity6B0
+
+The kernel driver uses infinity6b0.dtsi for preparing the padmux.
+* `PWM0`: `PAD_PWM0` (52)
+* `PWM1`: `PAD_PWM1` (53)
+* `PWM[2..10]`: no pad assigned
+
+On kernels before OpenIPC/linux#188 (firmware older than 2026-11-09), switching PWM0 from disabled to enabled moves it back to the DTS pad, so the devmem must follow every enable. Newer kernels keep whatever pad is selected and apply the DTS default only when none is.
+
+On SSC335 the `period` is defined in `Hz` and the `duty_cycle` is defined in percent.
+
+If you want to use pad ID 14 (`PAD_FUART_RX`) as PWM0 you must reconfigure the padmux to `PWM0_MODE_3`:
+```bash
+echo "0" > /sys/class/pwm/pwmchip0/export
+echo "50000" > /sys/class/pwm/pwmchip0/pwm0/period
+echo "40" > /sys/class/pwm/pwmchip0/pwm0/duty_cycle
+echo "1" > /sys/class/pwm/pwmchip0/pwm0/enable
+devmem 0x1F203C1C w $(( ($(devmem 0x1F203C1C w) & ~7) | 3 ))
+```
