@@ -60,6 +60,7 @@ OpenIPC Wiki
 - [Majestic cinema capture: log footage, metadata, timecode, ACES](en/majestic-cinema.md)
 - [Majestic utility meters: water, gas and electricity readings from the picture](en/majestic-meters.md)
 - [Majestic image stabilisation (`isp.dis`)](en/majestic-stabilisation.md)
+- [Majestic AI noise reduction (`isp.aibnr`)](en/majestic-ai-noise-reduction.md)
 - [Majestic usage research](en/majestic-research.md)
 - [Majestic plugins](en/majestic-plugins.md)
 - [Raw editor](en/raw-editor.md)
