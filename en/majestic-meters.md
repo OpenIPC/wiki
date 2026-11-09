@@ -374,8 +374,9 @@ camera goes by the blinks; where they clearly can, it goes by the frames.
 
 **When the camera misreads a digit.** The digit reader can take one
 meter's digit for another, steadily: on the Energomera in the lab it read
-the meter's 1 and 2 as 7. Without the blinks, a misread repeated for a few
-readings would become the meter's count, here 7 kWh too high. With the
+the meter's 1 and 2 as 7, so at 29971.2 kWh the drums were read as
+29977.7. Without the blinks, a misread repeated for a few readings would
+become the meter's count, here 6.5 kWh too high. With the
 blinks counted, the camera knows how far the meter can really have gone,
 and holds the drum readings to that:
 
@@ -386,9 +387,12 @@ and holds the drum readings to that:
 - If the drums stay on one digit while the blinks say they should have
   moved on, the camera counts it as a stall and goes on by the blinks.
 
-Overnight on the same SSC325, while the meter's whole-kWh drum turned
-through the 1 and 2 it misreads, the reading stayed within 0.1 kWh of the
-drums, never went back, and the live reading stayed within 0.06 kWh.
+Overnight on the same SSC325, over 14 hours in which the meter's whole-kWh
+drum turned through the 1 and 2 it misreads, the camera's reading was
+compared with a snapshot of the drums every 30 minutes, and with the blink
+count every 5 minutes from a reading of the drums taken at the start. The
+reading stayed within 0.1 kWh of the drums and never went back, and the
+live reading stayed within 0.06 kWh of the count.
 
 Two things the blinks cannot do. They count how far the meter moves, not
 where it started, so the camera needs a correct reading of the drums at
@@ -514,7 +518,10 @@ number:
   wrong number, the camera does not stay stuck. After five readings in a row
   that agree on one other number, it starts again from that number. The same
   applies when only the last drum disagrees, for example when the reading
-  has fallen behind the meter.
+  has fallen behind the meter. On a meter whose pulse LED is counted, the
+  new number must also be one the blinks allow: a number further on than
+  the meter can have gone is a misread, and is never taken however long it
+  is repeated (see [When the camera misreads a digit](#live-power-from-the-pulse-led)).
 - **Carries.** When a meter rolls over, say from 29899.9 to 29900.0,
   several drums turn at once and a slow meter can take many minutes over it.
   While a drum is between digits it may be read as either of them, or as
@@ -526,9 +533,10 @@ number:
   - The camera goes on reading every round meanwhile, so
     `majestic_meter_age_seconds` stays fresh.
   - If the drums keep showing another number for more than an hour, the
-    camera starts again from it, as under **Recovery**. So a meter that
-    really has stopped at a round number under a wrong reading still gets
-    its number back.
+    camera starts again from it, as under **Recovery**, and with the same
+    limit where the pulse LED is counted. So a meter that really has
+    stopped at a round number under a wrong reading still gets its number
+    back.
   - Each time the camera starts again from a new number, it writes the old
     and new numbers to its log, and the count shows up as
     `majestic_meter_history_restarts_total` on `/metrics`.
