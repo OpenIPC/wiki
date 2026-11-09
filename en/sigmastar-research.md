@@ -71,18 +71,18 @@ echo 1 > /sys/class/pwm/pwmchip0/pwm0/enable
 
 #### SSC335 Infinity6B0
 
-The kernel driver uses infinity6b0.dts for preparing the padmux.
+The kernel driver uses infinity6b0.dtsi for preparing the padmux.
 * `PWM0`: `PAD_PWM0` (52)
 * `PWM1`: `PAD_PWM1` (53)
-* `PWM[2..10]`: not connected
+* `PWM[2..10]`: no pad assigned
 
-As soon as you enable the PWM `echo 1 > /sys/class/pwm/pwmchip0/pwm0/enable` it returns to the DTS setting.
+As soon as you switch the PWM from disabled to enabled `echo 1 > /sys/class/pwm/pwmchip0/pwm0/enable` it returns to the DTS setting.
 
-If you want to use pad 14 (`PAD_FUART_RX`) as PWM0 you must reconfigure the padmux to `PWM0_MODE_3`:
-```
+If you want to use pin 14 (`PAD_FUART_RX`) as PWM0 you must reconfigure the padmux to `PWM0_MODE_3`:
+```bash
 echo "0" > /sys/class/pwm/pwmchip0/export
 echo "50000" > /sys/class/pwm/pwmchip0/pwm0/period
-echo "100" > /sys/class/pwm/pwmchip0/pwm0/duty_cycle
+echo "40" > /sys/class/pwm/pwmchip0/pwm0/duty_cycle
 echo "1" > /sys/class/pwm/pwmchip0/pwm0/enable
-devmem 0x1F203C1C w 3
+devmem 0x1F203C1C w $(( ($(devmem 0x1F203C1C w) & ~7) | 3 ))
 ```
