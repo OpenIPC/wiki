@@ -432,6 +432,8 @@ audio:
   #speakerPinHoldMs: 2000       # how long the amplifier stays powered after
                                 # the last sound; 0 keeps it powered whenever
                                 # audio output is on
+  #input: mic                   # hi3516av100/dv100 only: which codec pin the
+                                # microphone is wired to, mic or line
   #inputChannel: 0
   #jitterBufferMs: 80           # RTSP back-channel: 0 = passthrough (LAN),
                                 # 80 helps over Wi-Fi/WAN
