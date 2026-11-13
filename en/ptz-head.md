@@ -135,7 +135,7 @@ curl -X POST 'http://127.0.0.1/ptz?move=stop'
 
 **The log says `ignoring the pelco-d head: the lens is on ptz.port itself`.** The lens has `ptz.port`, and `ptz.headPort` is empty, names the same port, or isn't known to this firmware. Set `headPort`. If it is set, update the firmware.
 
-**`headstate=ready`, but the head doesn't move.** Test the gateway alone. From another machine, send a Pelco-D frame:
+**`headstate=ready`, but the head doesn't move.** Test the gateway alone. Send a Pelco-D frame from the camera's shell (or from any machine that `range=` lets in):
 
 ```sh
 printf '\xff\x01\x00\x04\x20\x00\x25' | nc 192.168.1.20 4001   # address 1, pan left
