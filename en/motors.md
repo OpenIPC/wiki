@@ -26,6 +26,10 @@ This is a simple and direct method to control a stepper motor by setting off GPI
 
 On a camera whose pan/tilt head is driven through majestic, the **Live** page has a knob to steer with. Where the camera also reports counted moves and how many steps make a frame, it adds double-tap to centre a spot and dragging the picture to steer. See [Pan and tilt from the Live page](ptz-live.md) for what each needs.
 
+## A pan/tilt head beside the lens
+
+A camera whose zoom lens and pan/tilt base are two motors on two wires names the base in `ptz.head`. The base can be on the lens's serial port, on a port of its own, or behind a serial gateway on the network (`ptz.headPort: tcp://<ip>:<port>`). See [A pan/tilt head beside the lens](ptz-head.md).
+
 ## Configuring ONVIF
 
 With [onvif_simple_server](https://github.com/roleoroleo/onvif_simple_server) you can easily gain access to PTZ controls through ONVIF (simple [example](https://github.com/OpenIPC/sandbox/tree/main/scripts/onvif)). Functionality will vary depending on the motor control package you use. See the server's example config in it's repo for all of the available commands. 

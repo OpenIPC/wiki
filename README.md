@@ -97,6 +97,7 @@ OpenIPC Wiki
 - [ZeroTier setup](en/zerotier.md)
 - [Motor control](en/motors.md)
 - [Pan and tilt from the Live page: the knob, double-tap to centre, drag to steer](en/ptz-live.md)
+- [A pan/tilt head beside the lens, on a wire or over the network](en/ptz-head.md)
 
 ### FPV
 
