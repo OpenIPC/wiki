@@ -1041,7 +1041,7 @@ nothing in those settings says the two pads belong together, so prefer
 
 ### PWM backlight: a dimmable lamp
 
-On most HiSilicon and Goke cameras, a lamp wired to a PWM pad can be a dimmer
+On most HiSilicon, Goke and SigmaStar cameras, a lamp wired to a PWM pad can be a dimmer
 instead of a switch — the in-camera version of the `devmem` backlight scripts
 from
 [the sandbox](https://github.com/OpenIPC/sandbox/tree/main/scripts/backlight-control):
@@ -1182,7 +1182,30 @@ nightMode:
 
 `colorNight: true` keeps the IR-cut filter in at night, keeps the picture in
 colour with the daytime image settings, and lights the white lamp instead of the
-infrared one.
+infrared one. `colorToGray`, on by default, is about the infrared night only: it
+makes that picture black and white, and has no say over a night the white lamp
+lights.
+
+**The two lamps can be dimmed differently.** They are different emitters behind
+different drivers, and one may want a frequency or a ceiling the other does not.
+`backlightPwmFreq`, `backlightPwmMin`, `backlightPwmMax` and `backlightPwmGamma`
+are the infrared lamp's, and the white lamp's too, unless it has its own:
+
+```yaml
+nightMode:
+  irLightPwmChannel: pwm1
+  whiteLightPwmChannel: pwm0
+  backlightPwmFreq: 400       # the infrared lamp
+  backlightPwmMax: 100
+  whiteLightPwmFreq: 20000    # the white lamp, where it differs
+  whiteLightPwmMax: 20
+```
+
+Each `whiteLightPwm*` key replaces its `backlightPwm*` counterpart for the white
+lamp alone, and an empty one means "the same as the infrared lamp", so a camera
+that sets none of them runs both lamps exactly as before. `whiteLightPwmMax` is
+also how bright the white lamp is when it lights on its own — by hand, on
+movement, on a sighting or by the sun.
 
 **Since October 2026 the white lamp can also be its own actuator**, with
 `nightMode.whiteLight`:
@@ -1197,8 +1220,8 @@ infrared one.
 | `detect` | Lights at night when the camera **sees** someone, not when anything moves, and goes out `whiteHoldSec` seconds after the last sighting. Described below. |
 
 **With `colorNight: true` and any of `motion`, `sun`, `manual` or `detect`, the
-night is in colour exactly while the white lamp is lit.** The rest of the night is grey under
-the infrared lamp. So a camera can watch in infrared all night, and switch to a
+night is in colour exactly while the white lamp is lit.** The rest of the night is under
+the infrared lamp, and black and white unless you have turned `colorToGray` off. So a camera can watch in infrared all night, and switch to a
 colour picture lit by the white lamp when someone walks in. Each change runs in
 the same order as a dusk or a dawn, so infrared never reaches a colour picture.
 The filter really does move each time, which is worth knowing on a busy scene.

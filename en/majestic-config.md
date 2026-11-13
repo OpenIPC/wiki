@@ -490,7 +490,9 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
   #backlightPin: 65
   backlightInvert: false        # true when the lamp lights on a LOW pad;
                                 # covers the PWM lamp below as well
-  colorToGray: true
+  colorToGray: true             # an infrared night in black and white; a
+                                # night the white lamp lights (colorNight)
+                                # stays in colour
   #overrideDrc: 300
   #minThreshold: 2000           # compared against isp_again, whose units are
   #maxThreshold: 5000           # per-SoC: read your own before choosing
@@ -566,6 +568,14 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
                                 # an illuminator that is already bright at low
                                 # duty. The two limits above do not move, and
                                 # nor does off. Range 0.2-4.0
+                                # The four above are the IR lamp's, and the
+                                # white lamp's unless it has its own:
+  #whiteLightPwmFreq:           # empty = backlightPwmFreq
+  #whiteLightPwmMin:            # empty = backlightPwmMin
+  #whiteLightPwmMax:            # empty = backlightPwmMax; also how bright a
+                                # white lamp lit by hand, motion, detect or
+                                # the sun is
+  #whiteLightPwmGamma:          # empty = backlightPwmGamma
   #backlightHighlightPct: 0     # 0 leaves the lamp to the scene's average
                                 # brightness alone. Above 0, the lamp dims
                                 # while more than this share of the picture has
