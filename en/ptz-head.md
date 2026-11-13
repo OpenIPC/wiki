@@ -36,7 +36,7 @@ Today the head is always Pelco-D: `ptz.head: pelco-d`.
 | `ptz.rs485Pin` | The GPIO that turns an RS-485 transceiver round, on a board that has one (high while a frame goes out). -1 (the default): a plain serial line. |
 | `ptz.panInvert`, `ptz.tiltInvert` | For a head mounted so that the arrows move it the wrong way. |
 
-The WebUI draws the pad only when the U-Boot variable `ptz_control` names the lens: `fw_setenv ptz_control ms41908` or `fw_setenv ptz_control visca`. Set it once on a camera that doesn't have it, then reload the Live page.
+The WebUI draws the pad only when the U-Boot variable `ptz_control` names the lens: `fw_setenv ptz_control ms41908` or `fw_setenv ptz_control visca`. Set it once on a camera that doesn't have it, then reload the Live page. The web interface knows `visca` from November 2026; an older one draws no pad for it.
 
 ### A head on the lens's serial port
 
@@ -97,7 +97,7 @@ socat TCP-LISTEN:4001,reuseaddr,fork,range=192.168.1.10/32 \
 `range=` lets only the camera (here 192.168.1.10) connect. Without it, anyone who can reach the port can turn the head.
 
 How the camera treats the connection:
-- **The address is an IP, not a name.** The connection is made where a stop may be waiting for it, so it must not wait for a DNS lookup. `tcp://gateway.lan:4001` is refused.
+- **The address is an IP, not a name.** `tcp://gateway.lan:4001` is refused; write the gateway's IP address.
 - **The line speed and the RS-485 turnaround are the gateway's.** `headBaud` and `rs485Pin` don't apply over TCP.
 - **A gateway that restarts** closes the connection. The camera connects again for the next frame and sends it there.
 - **A gateway that vanishes without closing** (power, cable) is noticed within about 2 s, and the next frame reconnects. A frame sent in the moment before that may be lost: TCP only confirms that the bytes left the camera, not that the base got them.
@@ -125,22 +125,24 @@ headport=tcp://192.168.1.20:4001 headaddr=1
 To move it from a shell on the camera:
 
 ```sh
-curl -X POST 'http://127.0.0.1/ptz?move=left:2000:60'   # pan left for 2 s at 60 %
+curl -X POST 'http://127.0.0.1/ptz?move=left&ms=2000&speed=60'   # pan left for 2 s at 60 %
 curl -X POST 'http://127.0.0.1/ptz?move=stop'
 ```
 
 ### Troubleshooting
 
-**`headstate=closed`, and the log says `head gateway tcp://…: Connection refused`.** Nothing listens on the gateway's port. Start `socat`, and check its `range=` covers the camera's address. The camera connects on its own within 2 s once it can.
+**`headstate=closed`, and majestic's log says it can't reach the gateway.** Nothing accepts the connection on the gateway's port. Start `socat`, and check that its `range=` covers the camera's address. The camera connects on its own within 2 s once it can.
 
-**The log says `ignoring the pelco-d head: the lens is on ptz.port itself`.** The lens has `ptz.port`, and `ptz.headPort` is empty, names the same port, or isn't known to this firmware. Set `headPort`. If it is set, update the firmware.
+**The capability line has no `head=` at all, though `ptz.head` is set.** majestic didn't take the head, and its log says why. Beside a serial lens such as `visca`, the usual reason is that `ptz.headPort` is empty or names `ptz.port` again: set it to the head's own port. If it is set and the head is still missing, the firmware predates `headPort`: update it.
 
-**`headstate=ready`, but the head doesn't move.** Test the gateway alone. Send a Pelco-D frame from the camera's shell (or from any machine that `range=` lets in):
+**`headstate=ready`, but the head doesn't move.** Test the gateway alone. Send a Pelco-D frame from the camera's shell (or from any machine that `range=` lets in). `-w 1` makes `nc` hang up a second after the frame, so the stop is never left waiting behind it:
 
 ```sh
-printf '\xff\x01\x00\x04\x20\x00\x25' | nc 192.168.1.20 4001   # address 1, pan left
-printf '\xff\x01\x00\x00\x00\x00\x01' | nc 192.168.1.20 4001   # stop
+printf '\xff\x01\x00\x04\x20\x00\x25' | nc -w 1 192.168.1.20 4001   # address 1, pan left
+printf '\xff\x01\x00\x00\x00\x00\x01' | nc -w 1 192.168.1.20 4001   # stop
 ```
+
+If the first command is interrupted, run the stop line anyway: a Pelco-D head keeps turning until it gets one.
 
 If the head doesn't move, look at the gateway's side:
 - the speed (`b9600` against the base's DIP switches);
@@ -150,6 +152,7 @@ If the head doesn't move, look at the gateway's side:
 **The pad has no pan and tilt buttons.**
 - **The head isn't open:** check `headstate=` on the capability line.
 - **No pad at all:** `ptz_control` is unset. The WebUI shows no PTZ pad without it.
+- **`ptz_caps` is set** and leaves out `pan` or `tilt`. The pad draws only the axes it names. Unset it (`fw_unsetenv ptz_caps`), or name all of them.
 - **The WebUI predates `visca`:** older web interfaces don't draw the pad for `visca` at all. Update the firmware.
 
 See also [Motor control](motors.md), [Pan and tilt from the Live page](ptz-live.md) and [Autofocus and manual focus](autofocus.md).

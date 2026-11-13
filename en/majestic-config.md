@@ -742,8 +742,12 @@ mdns:
 #ptz:
 #  enabled: false               # motorized lens or head; the default comes
                                 # from the board's ptz_control
-#  actuator: pelco-xm           # pelco-xm | pelco-d | ms41908 | gpiostep
-#  port: /dev/ttyAMA0           # serial port, for the two Pelco protocols
+#  actuator: pelco-xm           # pelco-xm | pelco-d | ms41908 | gpiostep | visca
+#  port: /dev/ttyAMA0           # serial port, for Pelco and VISCA
+#  head: none                   # none | pelco-d: a pan/tilt base beside the lens
+#  headPort: ""                 # the head's own tty, or tcp://<ip>:<port> for a
+                                # serial gateway (en/ptz-head.md)
+#  headBaud: 0                  # a tty headPort's speed; 0: baud below
 #  baud: 115200                 # 1200-115200
 #  address: 1                   # Pelco device address, 0-255 (DIP switches)
 #  pulse: 500                   # ms one PTZ button press drives the motor

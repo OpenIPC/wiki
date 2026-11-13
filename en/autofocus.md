@@ -413,7 +413,8 @@ old names, so set the new ones after upgrading.
 | Setting | Key | What it does |
 |---|---|---|
 | Motorized lens | `ptz.enabled` | Loads the motor driver and the engine. |
-| Motor protocol | `ptz.actuator` | `pelco-xm` (XiongMai zoom blocks, the default), `pelco-d`, `ms41908` (SPI lens stepper) or `gpiostep` (GPIO pan/tilt head). |
+| Motor protocol | `ptz.actuator` | `pelco-xm` (XiongMai zoom blocks, the default), `pelco-d`, `ms41908` (SPI lens stepper), `gpiostep` (GPIO pan/tilt head) or `visca` (a Sony VISCA zoom block's lens MCU, the XiongMai N51813L). |
+| Pan/tilt head | `ptz.head`, `ptz.headPort`, `ptz.headBaud` | A Pelco-D base beside the lens, on its own wire or over the network. See [A pan/tilt head beside the lens](ptz-head.md). |
 | Motor serial port | `ptz.port` | The UART the lens is on, `/dev/ttyAMA0` on the 85H50AI. |
 | Motor port baud rate | `ptz.baud` | 115200 on the 85H50AI; 9600 is common for Pelco-D. |
 | Pelco device address | `ptz.address` | 0–255, default 1. The receiver address set on a Pelco-D head's DIP switches; the XiongMai lens board ignores it. |
@@ -427,8 +428,8 @@ decide what to draw:
 
 | Variable | Values |
 |---|---|
-| `ptz_control` | `pelco-xm`, `pelco-d`, `gpio`, `motor`. Unset means no lens. Autofocus needs one of the two Pelco variants. |
-| `ptz_caps` | Any of `pan tilt zoom focus`. Unset means all four. |
+| `ptz_control` | `pelco-xm`, `pelco-d`, `ms41908`, `gpiostep`, `visca` (web interface from November 2026), `gpio`, `motor`. Unset means no lens. Autofocus needs one of the two Pelco variants or `ms41908`; a `visca` block focuses itself. |
+| `ptz_caps` | Any of `pan tilt zoom focus`. Unset means all four, or, where majestic drives the lens, the axes it lists in `GET /ptz` (web interface from November 2026). |
 
 The serial port and its baud rate are majestic's settings, above — the older
 `ptz_port` and `ptz_speed` variables belonged to scripts that no longer ship
