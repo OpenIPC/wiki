@@ -171,4 +171,4 @@ A counted pan move and a counted tilt move sent one after the other run together
 
 **The camera stops short of a spot near the edge.** The lens squeezes the edges of the picture. Double-tap again.
 
-See also [Motor control](motors.md) for the kinds of motor OpenIPC drives, and [Autofocus and manual focus](autofocus.md) for the lens buttons on the same pad.
+See also [Motor control](motors.md) for the kinds of motor OpenIPC drives, [A pan/tilt head beside the lens](ptz-head.md) for a head on its own wire or over the network, and [Autofocus and manual focus](autofocus.md) for the lens buttons on the same pad.
