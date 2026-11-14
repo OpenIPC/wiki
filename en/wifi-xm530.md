@@ -10,19 +10,26 @@ boards use a different image and their own profiles in `/etc/wireless/usb`.
 
 The Wi-Fi on these boards is a USB module behind the SoC's USB host
 (`dwc_otg`), powered through a GPIO by `wifi_pdn`. Find out which chip
-yours is before following anything below. With the module powered, the
-USB ID tells you:
+yours is before following anything below.
+
+First the power GPIO: it is `wifi_pdn`'s `value=`, and the factory
+firmware's own `insmod wifi_pdn.ko value=…` line shows it for your board.
+96 is what the boards seen so far use; put yours in place of `$PDN` if it
+differs. With the module powered, its USB ID tells you the chip:
 
 ```sh
+PDN=96
 insmod /lib/modules/3.10.103+/xiongmai/dwc_common_port_lib.ko
 insmod /lib/modules/3.10.103+/xiongmai/dwc_otg.ko
-insmod /lib/modules/3.10.103+/xiongmai/wifi_pdn.ko value=96
+insmod /lib/modules/3.10.103+/xiongmai/wifi_pdn.ko value=$PDN
 sleep 3
-cat /sys/bus/usb/devices/*/idVendor /sys/bus/usb/devices/*/idProduct
+for d in /sys/bus/usb/devices/*; do
+    [ -f "$d/idVendor" ] && echo "$(cat "$d/idVendor"):$(cat "$d/idProduct")"
+done
 ```
 
-`value=` is the power GPIO. 96 is what the boards seen so far use; the
-factory firmware's own `wifi_pdn` line shows yours.
+`1d6b:0002` is the USB host itself; the other line is the Wi-Fi module.
+No second line means the module is not powered: check `$PDN`.
 
 ### XM711
 
@@ -35,6 +42,10 @@ factory firmware.
 ```sh
 wifi xm711
 ```
+
+The script powers the module with `wifi_pdn value=96`. On a board whose
+factory firmware uses another value, edit `value=` in `/usr/bin/wifi`; the
+edit lands in the overlay, so `sysupgrade -n` (or `firstboot`) undoes it.
 
 Do not load `mac80211.ko` as well. The XM711 driver does not use it, and
 the kernel's `mac80211` cannot load against the backported `cfg80211`:
