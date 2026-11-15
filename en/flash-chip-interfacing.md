@@ -47,6 +47,25 @@ Here is an example of a SOIC8 clip wired to a Raspberry Pi Pico:
 and you need to be sure to identify the correct chip before you begin your work.
 
 
+Flash Sockets
+--------------------
+
+A clip works only on leaded SOP8 chips that are still on the board. For WSON
+(leadless) chips, or for a chip you have desoldered, you need a socket. Sockets are
+sold as adapter boards with an 8-pin DIP footprint, so they plug straight into a
+CH341A or a similar programmer. Check that the listing includes that adapter.
+
+| Socket | Worth buying? | What it fits on cameras |
+|--------|---------------|-------------------------|
+| SOP8-208mil  | **Yes, first** | The package of most camera NOR flash: 64 and 128 Mbit (8 and 16 MB) chips such as XM25QH64/128, W25Q128, GD25Q128 |
+| WSON8 8×6 mm | **Yes** | The usual package of SPI NAND (128 MB), and of NOR on some compact boards |
+| WSON6×5 mm   | Later, if needed | Mostly smaller NOR chips, uncommon on cameras |
+| SOP8-150mil  | Skip | Mostly 32 Mbit and smaller, rare on cameras; a SOIC8 clip handles the odd one |
+
+Shop labels such as 推荐 ("recommended") or 店长主推 ("shop's top pick") are
+marketing and say nothing about which socket suits cameras.
+
+
 Picking a Programmer
 --------------------
 
