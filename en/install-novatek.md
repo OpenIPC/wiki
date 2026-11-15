@@ -9,8 +9,11 @@ For XM vendor boards with NT98562 and NT98566 SoC ONLY!!!
 - XM vendor boards whose U-Boot prompt is `nvt@na51089:`. The vendor U-Boot
   stays on flash; only the kernel and the root filesystem are replaced.
 - NOR flash of 8 MB or more. Anything past 8 MB goes to the settings partition.
-- Sensors with video: SC401AI, SC500AI and SC501AI. With any other sensor the
-  camera boots and is reachable on the network, but has no video.
+- Sensors with video: SC401AI, SC500AI, SC501AI and IMX415. With any other
+  sensor the camera boots and is reachable on the network, but has no video.
+- IMX415 (for example the XM IVG-N8S, NT98566) is in images built from
+  2026-11-10 on, and is not detected on its own: set it once from Linux and
+  reboot, see [Setting the sensor](#setting-the-sensor).
 - Images: `openipc.nt98562-nor-lite.tgz` and `openipc.nt98566-nor-lite.tgz`.
   The NT98566 image has been checked on hardware; the NT98562 one is built from
   the same tree but has not been tested on a camera yet. Reports are welcome.
@@ -36,7 +39,9 @@ You need a UART console and a TFTP server on the camera's network.
    TFTP root.
 3. Power the camera on while pressing Ctrl-C on the console until the
    `nvt@na51089:` prompt appears; the boot delay is zero, so a single key press
-   is usually too late. Then enter, with your own addresses and SoC:
+   is usually too late. Some vendor U-Boots print `Hit X to stop autoboot`, but
+   X does nothing there; Ctrl-C is the key. Then enter, with your own addresses
+   and SoC:
 
 ```
 setenv ipaddr 192.168.1.10
@@ -63,6 +68,21 @@ run uk && run ur && reset
    unclaimed. Claim it for good: open its web page to set the root password and
    accept the licence, or log in over SSH or the console again. See
    [Factory reset and the unclaimed camera](first-boot.md).
+
+### Setting the sensor
+
+At first boot the camera looks for the sensor and stores what it finds in the
+U-Boot variable `sensor`. An IMX415 is not found that way, and the camera comes
+up with no video. Set it from Linux, then reboot:
+
+```
+fw_setenv sensor imx415
+reboot
+```
+
+After the reboot, `lsmod | grep nvt_sen` shows `nvt_sen_imx415` and the stream
+is 2560x1440. The same command names any other supported sensor if detection
+picks the wrong one.
 
 ### Follow-up quick updates
 
