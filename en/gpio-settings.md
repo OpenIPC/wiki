@@ -15,11 +15,29 @@ Board specific GPIO settings list
 | SSC338Q     | 23     | 24     |          | 60       | 59          | 10    |     |    8    | MC800S-V3        |      39         |
 | SSC377      | 11     | 80     |          | 9        | 13          |       |     |         | MC-A42P-V1.1     |      12         |
 | SSC378QE    | 80     | 81     | 23       | 14       | 13          | 30    |     |         | MC800S5          |      54         |
+| SSC378DE    | 80     | 81     | 23       | 14       | 13          | 30    |     |         | MC-J86           |      54         |
 
 ```
 Tested on SSC377D for /dev/ttyS2:
   mux : devmem 0x1F2079B8 16 0x1000
 ```
+
+MC-J86 (SSC378DE + SC850SL), read from the stock firmware V3.3.2.4 (2025-01-13):
+
+- IR-cut: the stock kernel has a built-in `/dev/irled` driver ("IRLED driver v2.1 20230707 for mca81")
+  that requests gpio 80 (`PAD_SAR_GPIO1`, "IRCUT B") and 81 (`PAD_SAR_GPIO0`, "IRCUT A"), and gpio 23
+  (`PAD_PM_IRIN`) as the IR-detect input. It also cycles gpio 27 (`PAD_PM_GPIO1`, "wifi_pwr") low and
+  then high at boot. The bare MC-J86 board has no IR-cut filter and no IR LEDs, so these pins only
+  matter on cameras that fit them.
+- The vendor GPIO table for this board (`libtools.so`, board id `0x68b`, shared with D400) lists
+  reset 30 (`PAD_PM_GPIO4`, input) and audio output 54 (`PAD_GPIO14`, speaker amplifier enable).
+  It also lists gpio 26 (`PAD_PM_GPIO0`, output) and gpio 33 (`PAD_PM_GPIO9`, input), whose use is not confirmed.
+- Both lamps are PWM: white light on gpio 13 (`PAD_PWM0`, pwm0, set from the LED brightness setting)
+  and the second lamp, IR light as one owner reported, on gpio 14 (`PAD_PWM1`, pwm1). These pads work as PWM only after a pad-mux write,
+  which the stock `mainctrl` does at start on every SSC378DE board:
+  ```
+  mux : devmem 0x1F207994 16 0x0011    # stock: riu_w 0x103C 0x65 0x0011 (PWM0 mode bit 0, PWM1 mode bit 4)
+  ```
 
 
 ### Brovotech boards
