@@ -36,6 +36,7 @@ OpenIPC Wiki
 ### Installation
 
 - [Detailed installation guide](en/installation.md)
+- [Installation on Asecam/Vatilon](en/install-fullhan.md)
 - [Installation on Goke](https://openipc.org/cameras/vendors/goke?ref=readme)
 - [Installation on HiSilicon](https://openipc.org/cameras/vendors/hisilicon?ref=readme)
 - [Installation on Ingenic](https://openipc.org/cameras/vendors/ingenic?ref=readme)
@@ -180,6 +181,7 @@ OpenIPC Wiki
 - [XiongMai NBD6808T-PL NVR (Hi3520DV200)](en/device-xm-nbd6808t-pl.md)
 - [LSC Smart Connect Video Doorbell (2021)](en/device-lsc-smart-connect-video-doorbell-2021.md)
 - [Uniojo T5826HCA-M01](en/device-uniojo-t5826hca.md)
+- [Asecam/Vatilon PB1](en/device-asecam-vatilon-pb1.md)
 
 ### Software
 
