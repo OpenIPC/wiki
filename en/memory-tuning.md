@@ -96,6 +96,94 @@ fw_printenv bootargs   # mem=32M, and no mmz_allocator= or mmz=, before you rebo
 reboot
 ```
 
+#### Goke gk7205v200 family: the kernel lays memory out
+
+On the **gk7202v300, gk7205v200, gk7205v210, gk7205v300 and gk7605v100**,
+firmware from 18 October 2026 on does not take the layout from the bootloader.
+The kernel measures the DRAM at every boot and splits it itself
+([OpenIPC/linux#99](https://github.com/OpenIPC/linux/pull/99),
+[OpenIPC/firmware#2626](https://github.com/OpenIPC/firmware/pull/2626)), so a
+vendor U-Boot with its own `mem=` still boots with the right split:
+
+| DRAM | Allocator | OS share | Media zone |
+|---|---|---|---|
+| 64 MB | `gk` (fixed split) | 32 MB | the other 32 MB, which Linux never sees |
+| 128 MB or more | `cma` | 32 MB | the rest, a CMA zone Linux uses while video does not |
+
+Such a kernel publishes what it chose. If the directory is missing, the
+kernel is older and the [Kernel 4.9](#kernel-49-legacy) bootargs above apply:
+
+```bash
+cat /sys/module/goke_mem/parameters/dram        # 64 (MB, measured)
+cat /sys/module/goke_mem/parameters/osmem       # 32 (MB, Linux's share)
+cat /sys/module/goke_mem/parameters/allocator   # gk
+cat /sys/module/goke_mem/parameters/mmz         # anonymous,0,0x42000000,32M
+dmesg | grep goke_mem                           # the same, and anything it ignored
+```
+
+`/proc/config.gz` is not in these images, but the kernel is built with CMA on
+every board of the family (`CONFIG_CMA=y`).
+
+To change the split, use `set_allocator`. It writes the bootargs, and the
+change applies at the next boot:
+
+```bash
+set_allocator                 # prints the layout now in effect
+set_allocator gk 40M          # fixed split, Linux 40 MB, media zone 24 MB (on 64 MB)
+set_allocator cma 32M         # Linux sees all the DRAM, the media zone is CMA
+set_allocator auto            # back to the kernel's own choice
+```
+
+- The OS share is rounded up to whole 4 MB and must be at least 32 MB. It
+  also has to leave a media zone of at least 8 MB. A value outside that range
+  is ignored at boot, with a `goke_mem: osmem=... ignored` line in `dmesg`, and
+  the default 32 MB applies.
+- A media zone that is too small costs video, not the boot. Linux, SSH and the
+  web interface still come up, and `set_allocator auto` puts it back.
+- `set_allocator` writes the environment that `fw_setenv` sees. A vendor U-Boot
+  that boots from its own built-in environment never reads it, and nothing
+  changes. After the reboot, check that `/proc/cmdline` carries the new
+  `osmem=`.
+
+**Sizing the zone on a 64 MB board.** The zone has to hold what the
+pipeline takes at its peak, snapshots included. Measured on a gk7205v200 +
+IMX307, 1080p25 H.265, with the media drivers reloaded on each zone size. The
+majestic build is from before the
+[memory-saving mode](#memory-saving-main-stream):
+
+| Streams | Zone | Media memory, start → with snapshots | Result |
+|---|---|---|---|
+| main only | 32 MB (default) | 16632 → 18680 KB | 25 fps, snapshots served |
+| main only | **20 MB** (`set_allocator gk 44M`) | 16632 → 18680 KB | 25 fps, snapshots served |
+| main only | 16 MB | 13596 → 15644 KB | a frame given back; main stream down to about 17 fps, `ERR_VENC_NOMEM` |
+| main + sub (800x448) | **24 MB** (`set_allocator gk 40M`) | 21676 → 23724 KB | both streams 25 fps, snapshots served |
+| main + sub (800x448) | 20 MB | 18636 KB | snapshots answer 503, sub stream down to about 17 fps |
+
+So 20 MB is the smallest zone for one 1080p stream and 24 MB for two, the
+latter with under 1 MB to spare. The memory-saving mode takes about 2.6 MB
+less with the sub stream on, but it has not been run on a reduced zone. Check
+what your own camera uses before you shrink the zone, while it serves
+everything you need from it, snapshots included:
+
+```bash
+cat /proc/media-mem | tail -3     # total, used and remaining in the zone
+```
+
+Each 4 MB taken from the zone is 4 MB more for Linux, and no more than that.
+With the default 32 MB share, Linux reports about 26 MB in total and 12 MB
+available while streaming, so `gk 44M` gives about 38 MB in total and about
+24 MB available. A program that needs 40 MB does not fit beside the
+streamer on 64 MB with either allocator.
+
+**CMA on 64 MB** works on these kernels (`set_allocator cma`), but it is not
+the default, for the same reason as on the [hybrid](#hybrid-allocator-hi3516cv6xx)
+boards. Every start or restart of the streamer has to move Linux's pages out of
+the zone first. On a 64 MB hi3516cv608, a HiSilicon chip, that stalled for good
+about one start in six once userland had filled the zone. A long stall ends in
+a reset, because the watchdog is fed by the streamer. It has not been measured
+on a 64 MB gk7205v200. A fixed split with a smaller zone gives Linux memory that
+is always there, without that risk.
+
 #### Kernel 6.6+ (neo)
 
 Starting with the `hi3516ev300_neo` build (Linux 6.6 LTS), MMZ uses the
