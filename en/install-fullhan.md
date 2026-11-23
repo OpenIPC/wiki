@@ -4,13 +4,8 @@
 For Fullhan/Vatilon PB1 SOC
 -----------------------------------------------------------------
 The Device Info/Device Type on the OEM firmware is PB1.
-These SoCs can also run the [NOR split layout](nor-split-layout.md): kernel and
-root filesystem in one partition, with no 2 MiB kernel slot to outgrow. Any
-U-Boot that loads the kernel from `0x50000` boots it, the factory one with a
-changed `bootcmd` included; the OpenIPC `u-boot-<soc>-nor.bin` adds the layout
-scan, `fwupd` and recovery for it.
 
-### Supported sensors
+### Supported Hardware
 
 IF56N, FH8856 V100, GC4653, 8 MB NOR
 
@@ -56,7 +51,7 @@ Only signed images can be installed from the OEM Camera software, therefore the 
 UBoot must be interrupted before loading the camera software so low level access via a 3.3V USB/Serial converter is required and connected to the SOC UART. You will require a terminal emulator such as minicom set to 115200baud.
 The camera must be opened up to access the UART on the board
 
-The UART coonnector are the 3 small holes just above the blue square under the mounting hole in the picture.
+The UART connector are the 3 small holes just above the blue square under the mounting hole in the picture.
 
 Sewing pins can be poked into the holes for attachment to the USB/Serial converter. 
 ![PB1 Board](../images/vatilon-PB1.png)
@@ -72,7 +67,7 @@ minicom -C /var/tmp/asecam.txt -D /dev/ttyUSB0 -8 -b 115200
 ```
 UBoot and linux boot messages will scroll past. If not, check your connections and terminal settings and try again.
 
-Power cycle the camera and watch for the Press any key message. Only Ctrl C will halt to the UBoot prompt.
+Power cycle the camera and watch for the Press any key message. This is incorrect, in fact only Ctrl C will halt to the UBoot prompt on this firmware.
 
 Once UBoot is halted the firmware install can proceed.
 
@@ -83,7 +78,7 @@ At U-Boot>, use your own addresses on the first line:
 - ipaddr is the camera IP address
 - serverip is the IP address of the TFTP server
 
-Execute each line in turn and ensure that no errors occur and the the TFTP download was successful.
+Execute each line in turn and ensure that no errors occur and the TFTP download was successful.
 Check that each tftp ends with Bytes transferred = ... before running the sf erase and sf write after it. If a transfer fails, run it again. 
 
 DANGER - Do not reset with a half-written partition.
@@ -174,7 +169,7 @@ MMC:   FH_MMC: 0
 MMC FLASH INIT: No card on slot!
 Net:   set to RMII
 FH EMAC
-Hit any key to stop autoboot:  1 ^H^H^H 0
+Hit any key to stop autoboot:  1  <<<<<< This is incorrect, only Ctrl-C will stop the autoboot
 SF: Got idcode 68 40 17 68 40
 use default flash ops...
 spi_flash_probe_default multi wire open flag is 0

@@ -36,7 +36,7 @@ OpenIPC Wiki
 ### Installation
 
 - [Detailed installation guide](en/installation.md)
-- [Installation on Asecam/Vatilon](en/install-fullhan.md)
+- [Installation on Installation on Fullhan (FH8856V100, Vatilon PB1)](en/install-fullhan.md)
 - [Installation on Goke](https://openipc.org/cameras/vendors/goke?ref=readme)
 - [Installation on HiSilicon](https://openipc.org/cameras/vendors/hisilicon?ref=readme)
 - [Installation on Ingenic](https://openipc.org/cameras/vendors/ingenic?ref=readme)
