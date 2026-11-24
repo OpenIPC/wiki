@@ -332,8 +332,7 @@ curl -u root:<password> -X POST http://<camera-ip>/night/white/off
 ```
 The reply is `1` when the lamp is lit, `0` when it is dark and `-1` when there is
 no white lamp the request can reach. `/metrics/night` reports the same state as
-`night_white_light`. These two need a Majestic from 24 November 2026 or later;
-an older one answers `0` and moves nothing.
+`night_white_light`. These two need a Majestic from 24 November 2026 or later.
 
 ### Exposure and gain
 
