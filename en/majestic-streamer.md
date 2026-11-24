@@ -310,7 +310,8 @@ each:
 ```
 /night/ircut
 /night/light
-/night/white       the white lamp, when nightMode.whiteLight is manual
+/night/white       toggles the white lamp, when nightMode.whiteLight is manual
+/night/white/on    lights it, /night/white/off puts it out (POST only)
 /api/v1/sun        tonight's dusk and dawn at every angle, for a place
 ```
 Example for disable and enable night mode
@@ -322,6 +323,17 @@ root@openipc-ssc377d:~# wget -q -O - http://localhost/night/on
 root@openipc-ssc377d:~# wget -q -O - http://localhost/night/toggle
 *
 ```
+Example for lighting the white lamp from another machine, such as Home Assistant
+or Frigate. Asking twice for the same state changes nothing, which a toggle
+cannot promise:
+```
+curl -u root:<password> -X POST http://<camera-ip>/night/white/on
+curl -u root:<password> -X POST http://<camera-ip>/night/white/off
+```
+The reply is `1` when the lamp is lit, `0` when it is dark and `-1` when there is
+no white lamp the request can reach. `/metrics/night` reports the same state as
+`night_white_light`. These two need a Majestic from 24 November 2026 or later;
+an older one answers `0` and moves nothing.
 
 ### Exposure and gain
 
@@ -1215,7 +1227,7 @@ movement, on a sighting or by the sun.
 | `auto` | Follows day and night: it lights a colour night and is dark otherwise. The default, and the only behaviour before the key existed. |
 | `motion` | Lights at night when something moves, and goes out `whiteHoldSec` seconds (default 60, 5-600) after the last movement. Needs `motionDetect.enabled`. |
 | `sun` | Lights while the sun is below `sunNightAngle`, whatever the picture says — the "on at dusk, whatever the scene" behaviour some cameras run on a timer. Needs the latitude and longitude; without them it follows day and night. Pair it with `switchBy: sun`: if the picture decides day and night, it is then judging dusk under a lamp already lit for it. |
-| `manual` | Moved by hand only: `/night/white` toggles it. It stays as you left it across a settings change. |
+| `manual` | Moved by hand only: `POST /night/white/on` and `POST /night/white/off` set it, `/night/white` toggles it. It stays as you left it across a settings change. |
 | `off` | Never lit. The night is then an infrared one, even with `colorNight` on. |
 | `detect` | Lights at night when the camera **sees** someone, not when anything moves, and goes out `whiteHoldSec` seconds after the last sighting. Described below. |
 
