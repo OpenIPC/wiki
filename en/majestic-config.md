@@ -550,7 +550,8 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
   #whiteLightPwmChannel: none   # a white lamp on a PWM pad, the same spellings
   #whiteLight: auto             # auto = it lights a colour night; motion =
                                 # at night on movement; sun = while the sun is
-                                # below sunNightAngle; manual = /night/white;
+                                # below sunNightAngle; manual = /night/white
+                                # and POST /night/white/on or /off;
                                 # off; detect = at night when object detection
                                 # sees one of the classes below. With
                                 # colorNight, the night is in colour while it
