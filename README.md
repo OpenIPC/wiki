@@ -192,6 +192,7 @@ OpenIPC Wiki
 - [Self-hosted cloud camera](en/howto-self-hosted-cloud-camera.md)
 - [Integrate Frigate NVR with OpenIPC](en/howto-frigate-integration.md)
 - [HomeKit integration](en/homekit-integration.md)
+- [Home Assistant over MQTT](en/majestic-mqtt.md)
 - [Home Assistant generic camera](en/home-assitantant-view.md)
 - [Home Assistant PTZ control](en/home-assitantant-PTZ_bashIntegration.md)
 - [Build your own doorbell from any OpenIPC camera](en/howto-doorbell-from-camera.md)

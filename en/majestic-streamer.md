@@ -310,6 +310,7 @@ each:
 ```
 /night/ircut
 /night/light
+/night/light/on    lights the night's lamp, /night/light/off puts it out (POST only)
 /night/white       toggles the white lamp, when nightMode.whiteLight is manual
 /night/white/on    lights it, /night/white/off puts it out (POST only)
 /api/v1/sun        tonight's dusk and dawn at every angle, for a place
@@ -334,7 +335,7 @@ Use a media-only account rather than `root`: it may use `/night/*` and cannot
 change settings.
 The reply is `1` when the lamp is lit, `0` when it is dark and `-1` when there is
 no white lamp the request can reach. `/metrics/night` reports the same state as
-`night_white_light`, and that page needs `root`. These two need a Majestic from 24 November 2026 or later.
+`night_white_light`; it asks for no login. These two need a Majestic from 24 November 2026 or later.
 
 ### Exposure and gain
 
@@ -624,11 +625,10 @@ Honoured on HiSilicon/Goke, SigmaStar and Ingenic cameras. Rockchip ignores it.
 Do not infer it — the camera reports it:
 
 ```
-curl -s -u root:PASSWORD http://192.168.1.10/metrics | grep '^isp_'
+curl -s http://192.168.1.10/metrics | grep '^isp_'
 ```
 
-`root`, not a viewer account: `/metrics` is not one of the paths a media-only
-account may reach (see [User levels in the system](#user-levels-in-the-system)).
+`/metrics` asks for no login, so anyone who can reach the camera's port can read it.
 
 - `isp_exptime` — the exposure in use, in microseconds. This is the number to
   compare against what you asked for.
