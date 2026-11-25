@@ -133,10 +133,8 @@ treats it as a motion event, and the object detector runs only during
 those windows. Best suited to busy scenes where Frigate's motion stage
 otherwise eats CPU.
 
-> Motion detection in Majestic is currently supported on Hisilicon/Goke,
-> Ingenic and Sigmastar SoCs. See
-> [Majestic streamer — Motion detection](majestic-streamer.md) for the
-> source of truth on this list.
+> If you use Home Assistant, the camera can report motion to it without a script:
+> see [Home Assistant over MQTT](majestic-mqtt.md).
 
 ### 3a. Enable motion detection in Majestic
 
@@ -149,7 +147,7 @@ curl http://localhost/api/v1/config --data-binary @- <<'EOF'
   }
 }
 EOF
-killall majestic; sleep 3; majestic &
+killall -HUP majestic
 ```
 
 You should see lines like the following in Majestic's log when something

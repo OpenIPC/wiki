@@ -789,6 +789,16 @@ onvif:
   #password: ""                 # opt-in CLEARTEXT pair, only for clients that
                                 # need WSSE PasswordDigest or HTTP Digest
 
+# Announces the camera to Home Assistant through an MQTT broker. Applies without a
+# restart. See "Home Assistant over MQTT".
+mqtt:
+  enabled: false
+  #server: 192.168.1.20        # an address or a name
+  port: 1883
+  #username: USER              # leave both out for a broker with no login
+  #password: PASSWORD          # kept in the clear
+  #discoveryPrefix: homeassistant
+
 ipeye:
   enabled: false
   #model: ""

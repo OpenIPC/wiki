@@ -24,7 +24,7 @@ and then look it up in the [FCC ID database](https://fccid.io/).
 - QR code recognition support (basic), integrated into Lite in Builder firmware
 - iptables support (firewall)
 - ZeroTier tunnel support
-- MQTT (telemetry) support, integrated into Lite in Builder firmware
+- the Mosquitto command-line client, on most Ultimate images and some Lite ones. Majestic's own [Home Assistant support over MQTT](majestic-mqtt.md) is in both and does not need it
 - WiFi support (there are no drivers for network cards), integrated into Lite in Builder firmware
 - lame (mp3) and libwebsockets support
 - experimental WebRTC support (only recent Hisi/Goke)
