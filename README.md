@@ -169,6 +169,7 @@ OpenIPC Wiki
 
 - [AHD2NET converter](en/device-ahd2net-converter.md)
 - [Chacon IPCAM-RI01](en/device-chacon-ipcam-ri01.md)
+- [Dahua DH-IPC-HFW2449SP-S-IL](en/device-dahua-dh-ipc-hfw2449sp-s-il.md)
 - [Smartwares CIP-37210](en/device-smartwares-cip-37210.md)
 - [Foscam X5](en/device-foscam-x5.md)
 - [TP-Link Tapo C110](en/device-tapo-c110.md)
@@ -272,6 +273,7 @@ In Russian
 - [Полезные ссылки](ru/resources.md)
 - [Обзоры камер разных производителей](ru/reviews.md)
 - [Hikvision DS-2CD2345F-IS](ru/hikvision-ds-2cd2345f-is.md)
+- [Dahua DH-IPC-HFW2449SP-S-IL](ru/dahua-dh-ipc-hfw2449sp-s-il.md)
 - [Ростелеком IPC-HFW1230SP/IPC-HDW1230SP](ru/rostelecom-ipc-hfw1230sp.md)
 - [HiWatch DS-I122](ru/hiwatch-ds-i122.md)
 - [Ростелеком IPC-HDW1230SP v3](ru/rostelecom-ipc-hdw1230sp_v3.md)
