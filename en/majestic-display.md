@@ -124,6 +124,8 @@ Power off first, then boot again so the adapter is detected.
 
 On a board with two sensors, `display.sensor: 1` shows the second camera. The
 picture is scaled to the display's timing. Both streams carry on as before.
+The privacy masks belong to the first camera's picture, so the second camera is
+shown without them, as its streams are.
 
 ### Limits
 
@@ -137,8 +139,6 @@ picture is scaled to the display's timing. Both streams carry on as before.
   Mirror and flip are followed.
 - **LCD panels and MIPI DSI screens are not offered.** Each needs its panel's
   own timing and start-up sequence.
-- **No overlays on the display.** The timestamp, the other text overlays and
-  the **privacy masks** are drawn on the streams only. The display shows the
-  sensor's whole picture, so a masked area **is visible on the monitor**.
-  Switch the display off (`display.enabled: false`) on a camera whose masks
-  must hold everywhere.
+- **Privacy masks cover the display too.** An area hidden on the streams is
+  hidden on the monitor as well, and it follows the masks when they are moved.
+  The timestamp and the other text overlays are drawn on the streams only.

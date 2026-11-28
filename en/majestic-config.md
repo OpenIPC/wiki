@@ -419,7 +419,8 @@ osd:
 
 # (platform-dependent) The live picture on a monitor or a TV. With the
 # defaults it uses the connector found wired and costs nothing where there is
-# none. Privacy masks and overlays are not drawn on it. See "Video output".
+# none. The privacy masks cover it as they cover the streams; the text
+# overlays are not drawn on it. See "Video output".
 display:
   enabled: true
   output: auto                  # auto | hdmi | cvbs | bt1120 | bt656. A CVBS
