@@ -207,3 +207,40 @@ for your board: everything `osmem` gives to Linux is taken from video memory, so
 a board with less RAM, or a heavier stream, needs a smaller value. As an
 example, a 128 MB NT98566 with a 5 MP sensor boots and streams at both the
 default 32M and at 54M.
+
+### SD card (SDIO1) GPIO overrides
+
+On `nt98562` and `nt98566` (firmware built from
+[OpenIPC/firmware#2988](https://github.com/OpenIPC/firmware/pull/2988) and
+[OpenIPC/linux#333](https://github.com/OpenIPC/linux/pull/333), 2026-11-28 or
+later; older images do not load the SD driver at boot), `load_novatek` loads
+`mmc_block` and `mmc_na51055` using the defaults from the camera's own device
+tree passed by the bootloader. Because the bootloader DTB varies from board to
+board (for example, the EVB DTB sets `cd_gpio=9` and `card_power_gpio=233`,
+while other boards may omit `card_power_gpio`), inspect what your board's DTB
+currently provides:
+
+```sh
+hexdump -C /proc/device-tree/mmc@f0420000/cd_gpio
+ls /proc/device-tree/mmc@f0420000/   # card_power_gpio, no_cd_gpio, force_power_cycle if present
+```
+
+If your board wires the microSD slot differently from its bootloader DTB, set
+any of these optional U-Boot environment variables (plain decimal GPIO numbers,
+no leading zeros) and reboot:
+
+| Variable | Values | Meaning |
+|---|---|---|
+| `sd_cd_gpio` | `0` or `<N>` | `0` = no card-detect pin (`no_cd_gpio`); `<N>` = override SDIO1 CD GPIO (keeps the card-detect polarity from the device tree; active-low when the DT has `no_cd_gpio` or omits it) |
+| `sd_power_gpio` | `0` or `<N>` | `0` = no power switch; `<N>` = override SDIO1 card-power GPIO (with 500 ms power cycle on probe) |
+| `sd_power_level` | `0` or `1` | Active level for `sd_power_gpio` (`0` = active-low, `1` = active-high; default from DT is `0`) |
+
+Unset variables keep the device tree defaults without claiming or remuxing any
+DT pins. For example, on Dahua `DH-IPC-HFW2449SP-S-IL` (no CD pin, `GPIO 9`
+active-low SD power):
+
+```sh
+fw_setenv sd_cd_gpio 0
+fw_setenv sd_power_gpio 9
+reboot
+```
