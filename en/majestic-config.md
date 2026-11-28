@@ -417,6 +417,20 @@ osd:
   # SoC family can and cannot do.
   #privacyMasks: 0x0x234x640,2124x0x468x1300
 
+# (platform-dependent) The live picture on a monitor or a TV. With the
+# defaults it uses the connector found wired and costs nothing where there is
+# none. The privacy masks cover it as they cover the streams; the text
+# overlays are not drawn on it. See "Video output".
+display:
+  enabled: true
+  output: auto                  # auto | hdmi | cvbs | bt1120 | bt656. A CVBS
+                                # jack cannot be detected: name it
+  mode: auto                    # auto = 1080p50/60 (HDMI, BT.1120) or pal/ntsc
+                                # (CVBS, BT.656), whichever matches the sensor's
+                                # rate; or 1080p60 ... 480p60, pal, ntsc,
+                                # 1024x768, 1280x1024
+  sensor: 0                     # two-sensor boards: which camera to show
+
 # (build-dependent: absent from FPV builds)
 audio:
   enabled: false

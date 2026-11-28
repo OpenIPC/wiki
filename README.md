@@ -58,6 +58,7 @@ OpenIPC Wiki
 - [Majestic example config](en/majestic-config.md)
 - [Majestic encoder tuning](en/majestic-encoder-tuning.md)
 - [Majestic HDR video (HLG)](en/majestic-hdr.md)
+- [Majestic video output: HDMI, CVBS, BT.1120](en/majestic-display.md)
 - [Majestic cinema capture: log footage, metadata, timecode, ACES](en/majestic-cinema.md)
 - [Majestic utility meters: water, gas and electricity readings from the picture](en/majestic-meters.md)
 - [Majestic image stabilisation (`isp.dis`)](en/majestic-stabilisation.md)
