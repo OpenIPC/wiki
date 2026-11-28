@@ -71,7 +71,9 @@ reboot
 
 Notes:
 - `GPIO 133` (`D_GPIO5`) is shared with Ethernet PHY LED2 in the generic NA51089 EVB device tree and is switched to GPIO mode automatically when requested by `gpio-nvt-na51089`.
-- The dual illuminator uses a **shared power enable + mode selector** circuit, not two independent LED channels. IR and warm white LEDs are mutually exclusive and cannot be turned on at the same time. With `whiteLightInvert: true` (supported in current `majestic`), `GPIO 227` stays high (`1` = IR) by default; turning on warm white light requires both the master enable (`backlightPin` / lamp) and `whiteLight` to be enabled (tracked in [OpenIPC/majestic#396](https://github.com/OpenIPC/majestic/issues/396)).
+- The dual illuminator uses a **shared power enable + mode selector** circuit, not two independent LED channels. IR and warm white LEDs are mutually exclusive and cannot be turned on at the same time.
+- `nightMode.whiteLightShared: true` (majestic builds that have it show **Shared lamp driver** in the WebUI's night mode settings) tells majestic this: `backlightPin` (`GPIO 226`) powers the driver and `whiteLightPin` (`GPIO 227`, with `whiteLightInvert: true`) picks the bank. Either lamp then lights on its own, also the warm white one with the IR lamp off or by day. When both are wanted the warm white one wins, and IR comes back without a dark gap when it goes out. `whiteLight: auto` with `colorNight: true` lights the warm bank for a colour night ([OpenIPC/majestic#396](https://github.com/OpenIPC/majestic/issues/396)).
+- On an older majestic, without that key, warm white light needs both the camera light (`backlightPin`) and `whiteLight` on, and `whiteLight: auto` does not work on this board.
 
 ### Majestic configuration
 
@@ -97,6 +99,7 @@ curl http://localhost/api/v1/config --data-binary @- <<'EOF'
     "backlightPin": 226,
     "whiteLightPin": 227,
     "whiteLightInvert": true,
+    "whiteLightShared": true,
     "whiteLight": "manual"
   }
 }
