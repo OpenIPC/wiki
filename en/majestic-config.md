@@ -562,8 +562,9 @@ nightMode:                      # see en/ircut-filter.md for how the filter is
                                 # reaches several pins the others are spelled
                                 # pwm2@gpio68
   #whiteLightPwmChannel: none   # a white lamp on a PWM pad, the same spellings
-  #whiteLightPin: 67            # a white lamp switched on a plain pin; not
-                                # used while whiteLightPwmChannel is set
+  #whiteLightPin: 67            # a white lamp switched on a plain pin; a
+                                # whiteLightPwmChannel that comes up is used
+                                # instead
   #whiteLightInvert: false      # true when the white lamp lights on a LOW pad
   #whiteLightShared: false      # true for one driver with both lamps:
                                 # backlightPin powers it and whiteLightPin
