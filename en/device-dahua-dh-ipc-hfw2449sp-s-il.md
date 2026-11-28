@@ -51,12 +51,14 @@ run ur && reset
 
 See [Installation on Novatek (SPI NAND)](install-novatek.md#spi-nand-boards-nt98566) for general SPI NAND notes and follow-up `sysupgrade --rootfs=` updates.
 
-### First Boot and Sensor
+### First Boot, Sensor, and microSD
 
-Log in as `root` (over UART, SSH, or web UI) and set a root password. If `SC430AI` is not auto-detected on first boot, set it once and reboot:
+Log in as `root` (over UART, SSH, or web UI) and set a root password. If `SC430AI` is not auto-detected on first boot, set it once. To enable the microSD slot (this board has no card-detect pin and uses `GPIO 9` active-low for SD card power, see [SD card GPIO overrides](install-novatek.md#sd-card-sdio1-gpio-overrides)), set `sd_cd_gpio` and `sd_power_gpio`, then reboot:
 
 ```sh
 fw_setenv sensor sc430ai
+fw_setenv sd_cd_gpio 0
+fw_setenv sd_power_gpio 9
 reboot
 ```
 
@@ -64,6 +66,7 @@ reboot
 
 | Function | GPIO | Notes |
 |---|---|---|
+| microSD power | `GPIO 9` (`C_GPIO9`) | SD card slot power switch (`0` = on, `1` = off); no CD pin (`sd_cd_gpio=0`, `sd_power_gpio=9`) |
 | IR-Cut pin 1 | `GPIO 234` (`DSI_GPIO10`) | H-bridge leg 1 |
 | IR-Cut pin 2 | `GPIO 133` (`D_GPIO5`) | H-bridge leg 2 |
 | Illuminator enable | `GPIO 226` (`DSI_GPIO2`) | Master LED driver power (`1` = on, `0` = off) |
