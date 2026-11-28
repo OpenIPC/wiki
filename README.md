@@ -257,6 +257,7 @@ In Russian
 
 - [Для FPV](ru/fpv.md)
 - [Экшн-камера](ru/action-camera.md)
+- [Распознавание автомобильных номеров в Majestic (SigmaStar SSC378DE)](ru/majestic-lpr.md)
 - [Детектирование и подсчёт объектов с камер на OpenIPC](https://github.com/sw3nlab/webyolofox)
 - Астрокамера
 - Видеорегистратор
