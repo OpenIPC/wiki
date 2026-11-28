@@ -44,6 +44,14 @@ Changing any `display` key restarts only the display. The picture on the
 monitor blanks for a moment. The RTSP, HLS and WebRTC streams, recording and
 everything else carry on without a break.
 
+The exception is turning on a display the camera started without. The camera
+reserves memory for the display's frames only when it will show one, so
+turning it on later restarts the video pipeline once, as most other video
+settings do.
+
+While a picture is on the display, `isp.suspendWhenIdle` does not put the
+sensor to sleep: a monitor counts as someone watching.
+
 ### Keys
 
 | Key | Default | Values |
@@ -60,13 +68,15 @@ the display neither drops nor repeats frames on a steady beat:
 - any other rate gets `1080p60`, or `ntsc`.
 
 Name a mode when the monitor does not take 1080p, or to match a TV:
-- **CVBS** carries `pal` or `ntsc` and nothing else.
+- **CVBS and BT.656** carry `pal` or `ntsc` and nothing else.
 - **HDMI and BT.1120** have no analogue timing. For standard definition they
   take `576p50` or `480p60`.
 - Anything else is refused, and the reason is written to the log.
 
 Majestic does not read the monitor's capabilities (EDID). If the screen stays
 blank, try `720p60` before anything else.
+
+A sensor smaller than the chosen timing is enlarged to fill the screen.
 
 ### Where it is offered
 
