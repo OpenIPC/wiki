@@ -71,7 +71,9 @@ reboot
 
 Особенности:
 - `GPIO 133` (`D_GPIO5`) в общем EVB DTB для NA51089 совмещён с `ETH_LED2` и автоматически переводится в режим GPIO драйвером `gpio-nvt-na51089` при запросе пина.
-- Двойная подсветка построена по схеме **общее питание + переключатель режима**, а не как два независимых канала. Одновременно включить ИК и белый свет нельзя. С параметром `whiteLightInvert: true` (поддерживается в актуальном `majestic`) `GPIO 227` по умолчанию держится в `1` (ИК), а для включения белого света нужно включить и общий выход подсветки (`backlightPin` / лампа), и `whiteLight` (отслеживается в [OpenIPC/majestic#396](https://github.com/OpenIPC/majestic/issues/396)).
+- Двойная подсветка построена по схеме **общее питание + переключатель режима**, а не как два независимых канала. Одновременно включить ИК и белый свет нельзя.
+- Параметр `nightMode.whiteLightShared: true` (сборки majestic, где он есть, показывают **Shared lamp driver** в настройках ночного режима WebUI) сообщает majestic именно это: `backlightPin` (`GPIO 226`) включает питание драйвера, а `whiteLightPin` (`GPIO 227`, с `whiteLightInvert: true`) выбирает группу светодиодов. Тогда каждая лампа включается сама по себе, в том числе белый свет при выключенной ИК-подсветке или днём. Если нужны обе, побеждает белый свет, а когда он гаснет, ИК включается снова без тёмного промежутка. `whiteLight: auto` вместе с `colorNight: true` подсвечивает цветную ночь белым светом ([OpenIPC/majestic#396](https://github.com/OpenIPC/majestic/issues/396)).
+- В более старом majestic, без этого параметра, для белого света нужно включить и подсветку камеры (`backlightPin`), и `whiteLight`, а `whiteLight: auto` на этой плате не работает.
 
 ### Настройка Majestic
 
@@ -97,6 +99,7 @@ curl http://localhost/api/v1/config --data-binary @- <<'EOF'
     "backlightPin": 226,
     "whiteLightPin": 227,
     "whiteLightInvert": true,
+    "whiteLightShared": true,
     "whiteLight": "manual"
   }
 }

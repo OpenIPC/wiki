@@ -249,7 +249,9 @@ curl -X POST 'http://localhost/api/v1/gpio?unavoid=13'
 A hold is a short pulse, for finding out what a pin does; it is not a way to keep
 a lamp on. Give the lamp a setting instead (`nightMode.whiteLightPin`, then
 [`/night/white/on` and `/night/white/off`](majestic-streamer.md#experimental-control-features-not-yet-described-in-endpoints)
-with `nightMode.whiteLight: manual`).
+with `nightMode.whiteLight: manual`). If one pin powers both lamps and another
+picks which one lights, that is `nightMode.whiteLightShared: true`, with the
+power pin as `backlightPin` and the picking pin as `whiteLightPin`.
 
 Driving a pad is a `POST`; reading is a `GET`. A pad the camera will not drive
 comes back with `200` and a sentence saying why, so a script can carry on past it
